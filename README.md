@@ -1,7 +1,9 @@
 # Protokollitaja
 Shooting sport ranking and results display software. Main program and a server from a set of programs.
 
-Main part of the code is quite ugly, as this project was started 2007 when I had just started learning Qt and programming in general. Quality of the code has (hopefully) improved over the years. In addition, variables and comments are in Estonian language.
+Unfortunately, main part of the code is quite ugly, as this project was started 2007 when I had just started learning Qt and programming in general. Quality of the code has (hopefully) improved over the years.
+
+As it was initially developed for national competitions, the program is in Estonian language. Adding translation framework and translation to English is planned sometime in future.
 
 ### Main Features
 * Most ISSF shooting sport diciplines included
@@ -11,10 +13,11 @@ Main part of the code is quite ugly, as this project was started 2007 when I had
 * Connection with electronic targets for live capturing of results
 * Results export to .xls, .csv and *.txt files
 * Results import
-* Sorting of competitors by different properties (Name, date of birth, target no, etc.)
+* Sorting of competitors by different properties (name, date of birth, target no, etc.)
 * Moving/copying competitors between diciplines
 * Connection with [QFinaal](https://github.com/ymeramees/qfinaal)
 * Connection with [Protolehelugeja](https://github.com/ymeramees/protolehelugeja)
+* Simulation of results from electronic targets [Prototester](https://github.com/ymeramees/prototester)
 
 ## Built With
 
