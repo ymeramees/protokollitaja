@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ValikKastClass</class>
+ <widget class="QDialog" name="ValikKastClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>454</width>
+    <height>212</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Protokollitaja - Uus sakk</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="2">
+    <widget class="QComboBox" name="indBox">
+     <property name="toolTip">
+      <string>Siit valige, kas on võistkondlik või individuaalne</string>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>Individuaalne</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Võistkondlik</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <spacer name="horizontalSpacer_5">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="3">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Saki nimi:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QLineEdit" name="sakiNimi">
+     <property name="toolTip">
+      <string>Lühike nimi enda jaoks, mille järgi lehte ära tunda. Nagu Excel'is on Sheet 1, Sheet 2 jne. Ei kuvata tulemuste aknas</string>
+     </property>
+     <property name="text">
+      <string>uus tööleht</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="seeriateSilt">
+     <property name="text">
+      <string>Seeriate arv:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QSpinBox" name="seeriateArv">
+     <property name="toolTip">
+      <string>Seeriate arv võistluses või võistlejate arv võistkonnas</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>12</number>
+     </property>
+     <property name="value">
+      <number>4</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <spacer name="horizontalSpacer_4">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>281</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="3">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Harjutus:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4">
+    <widget class="QComboBox" name="harjutus">
+     <property name="toolTip">
+      <string>Valige harjutus. Tähelpanu! Peale siit millegi valimist vaadake üle, et ka kõik teised asjad ikka õiged oleksid!</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>40l Õhupüss</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>60l Õhupüss</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>40l Õhupüstol</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>60l Õhupüstol</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>30l Lamades</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>60l Lamades</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>3x10l Standard</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>3x20l Standard</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>3x40l Standard</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>60l Vabapüstol</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>30+30l Spordipüstol</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>20+20+20l Spordipüstol</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Olümpiakiirlaskmine</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>20+20l Metssiga</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>30+30l Metssiga</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Muu õhupüss</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Muu õhupüstol</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Muu sportpüss</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Muu spordipüstol</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="laskudeSilt">
+     <property name="text">
+      <string>Laske seerias:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QSpinBox" name="laskudeArv">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+     <property name="minimum">
+      <number>5</number>
+     </property>
+     <property name="maximum">
+      <number>20</number>
+     </property>
+     <property name="value">
+      <number>10</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <spacer name="horizontalSpacer_3">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>73</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="3">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Laskjad:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="4">
+    <widget class="QComboBox" name="laskjad">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <item>
+      <property name="text">
+       <string>M</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>N</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>MJ</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>NJ</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>P</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>T</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>MV</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>NV</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="vSummadeSilt">
+     <property name="text">
+      <string>Vahesummad</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QSpinBox" name="vSummadeArv">
+     <property name="toolTip">
+      <string>Seeriate arv peale mida on vahesumma</string>
+     </property>
+     <property name="maximum">
+      <number>12</number>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2">
+    <widget class="QLabel" name="vSummadeSilt2">
+     <property name="text">
+      <string>seeria järel</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="3" colspan="2">
+    <widget class="QCheckBox" name="kumnendikegaBox">
+     <property name="text">
+      <string>Tulemused kümnendikega</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="3">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Ala nimi tulemuste aknas:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="3" colspan="2">
+    <widget class="QLineEdit" name="nimiTulAknas">
+     <property name="toolTip">
+      <string>Ala nimi, mida kuvatakse tulemustega koos ekraanil</string>
+     </property>
+     <property name="text">
+      <string>40l Õhupüss Mehed</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="5">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="loobuNupp">
+       <property name="text">
+        <string>Loobu</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="okNupp">
+       <property name="text">
+        <string>Olgu</string>
+       </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>loobuNupp</sender>
+   <signal>clicked()</signal>
+   <receiver>ValikKastClass</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>338</x>
+     <y>154</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>108</x>
+     <y>109</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
