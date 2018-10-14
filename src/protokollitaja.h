@@ -42,7 +42,7 @@
 #include "filedownloader.h"
 #include "lehelugejaaken.h"
 #include "liikmetevalikkast.h"
-#include "../QFinaal/uhendumiseaken.h"
+#include "../qfinaal/src/uhendumiseaken.h"
 #include "xlslib.h"
 
 class Protokollitaja : public QMainWindow

@@ -24,6 +24,12 @@ As it was initially developed for national competitions, the program is in Eston
 
 * [Qt](http://www.qt-project.org)
 
+### Installing/Deploying
+On Windows, make sure to copy needed dll's from your Qt installation into respective folders (platforms, printsupport) into the same directory where executable is. This is also needed when building/running from Qt Creator.
+On Linux, this is not needed.
+
+In addition, Data folder is needed. Program will search for autocomplete databases from there. If this folder does not exist it will be created, but autocomplete will not work.
+
 ## License
 
 This project is licensed under the AGPLv3 License - see the [LICENSE.md](LICENSE.md) file for details
