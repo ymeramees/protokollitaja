@@ -1,7 +1,7 @@
 # Protokollitaja
 Shooting sport ranking and results display software. Main program and a server from a set of programs.
 
-Unfortunately, main part of the code is quite ugly, as this project was started 2007 when I had just started learning Qt and programming in general. Quality of the code has (hopefully) improved over the years.
+Unfortunately, main part of the code is quite ugly, as this project was started in 2007 when I had just started learning Qt and programming in general. Quality of the code has (hopefully) improved over the years.
 
 As it was initially developed for national competitions, the program is in Estonian language. Adding translation framework and translation to English is planned sometime in future.
 
@@ -17,7 +17,8 @@ As it was initially developed for national competitions, the program is in Eston
 * Moving/copying competitors between diciplines
 * Connection with [QFinaal](https://github.com/ymeramees/qfinaal)
 * Connection with [Protolehelugeja](https://github.com/ymeramees/protolehelugeja)
-* Simulation of results from electronic targets [Prototester](https://github.com/ymeramees/prototester)
+* Simulation of results from electronic targets with [Prototester](https://github.com/ymeramees/prototester)
+* Check for updates on startup
 
 ## Built With
 
