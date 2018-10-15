@@ -34,7 +34,8 @@ HEADERS += src/lisalaskudeaken.h \
     src/version.h \
     src/laskudeaken.h \
     ../qfinaal/src/uhendumiseaken.h \
-    src/filedownloader.h
+    src/filedownloader.h \
+    src/finalsfileexport.h
 SOURCES += src/lisalaskudeaken.cpp \
     src/liikmetevalikkast.cpp \
     src/voistkond.cpp \
@@ -52,7 +53,8 @@ SOURCES += src/lisalaskudeaken.cpp \
     src/lask.cpp \
     src/laskudeaken.cpp \
     ../qfinaal/src/uhendumiseaken.cpp \
-    src/filedownloader.cpp
+    src/filedownloader.cpp \
+    src/finalsfileexport.cpp
 FORMS += src/lisalaskudeaken.ui \
     src/liikmetevalikkast.ui \
     src/importaken.ui \
@@ -62,7 +64,8 @@ FORMS += src/lisalaskudeaken.ui \
     src/lehelugejaaken.ui \
     src/sifriseade.ui \
     src/laskudeaken.ui \
-    ../qfinaal/src/uhendumiseaken.ui
+    ../qfinaal/src/uhendumiseaken.ui \
+    src/finalsfileexport.ui
 RESOURCES += protokollitaja.qrc
 RC_FILE += src/ikoon.rc
 win32{

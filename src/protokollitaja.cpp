@@ -1439,19 +1439,7 @@ void Protokollitaja::finaaliFail()
                 return;
         }
 
-        finaaliFailiNimi.clear();
-        QString failiAsukoht = seeFail.left(seeFail.lastIndexOf('/') + 1);
-        finaaliFailiNimi = QFileDialog::getSaveFileName(this, tr("Salvesta finaal"), failiAsukoht + seeLeht->ekraaniNimi + ".fnl", tr("Finaali fail (*.fnl)"));
-        if(finaaliFailiNimi.isEmpty()) return;
-
-        QFile fail(finaaliFailiNimi);
-        if(fail.open(QIODevice::ReadOnly))
-            if(QMessageBox::critical(this, "Protokollitaja", tr("Sellise nimega fail on juba olemas. Kas "
-                    "soovite selle üle kirjutada?"), QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel){
-                finaaliFailiNimi.clear();
-                return;
-            }
-        fail.close();
+//        finaaliFailiNimi.clear();
 
         bool rajaNrOlemas = false;   //Kontrollimaks, kas kõigil on raja nr'id olemas või mitte
 //        bool valitud = false;   //Kui mõnel laskuril on linnuke ees, siis lähevad valitud finaali
@@ -1468,6 +1456,7 @@ void Protokollitaja::finaaliFail()
 #ifdef PROOV
         qDebug() << "Protokollitaja::finaaliFail(), Rajanr: " << seeLeht->reasLaskurid[0]->rajaNr->text();
 #endif
+
         QString teateTekst; //Tekst, kus öeldakse, mille järgi laskurid finaali sorteeriti
         if(seeLeht->reasLaskurid[0]->rajaNr->text() != "A" && seeLeht->reasLaskurid[0]->rajaNr->text() != "1" && seeLeht->reasLaskurid[0]->rajaNr->text() != "2"){
             seeLeht->sorteeri(0);   //Kui radade nr'id ei alga A'ga, 1'st või 2'st, siis ilmselt ei ole finaali jaoks radu sisestatud ja tuleb summade järgi reastada
@@ -1477,44 +1466,25 @@ void Protokollitaja::finaaliFail()
 #ifdef PROOV
         qDebug() << "Protokollitaja::finaaliFail(), Rajanr2: " << seeLeht->reasLaskurid[0]->rajaNr->text() << ", perekNimi: " << seeLeht->reasLaskurid[0]->perekNimi->text();
 #endif
-        if(fail.open(QIODevice::WriteOnly)){
-            QDataStream valja(&fail);
+        QVector<QStringList> finalsTable;
 
-            valja << (quint32)0x00FA3058;   //Kontrollarv
-            valja << (qint32)15;            //Millise programmi versiooni failiga on tegu
-            valja.setVersion(QDataStream::Qt_4_3);
-
-            valja << voistluseNimi << seeLeht->ekraaniNimi;
-
-            for(int i = 0; i < seeLeht->laskurid.count() && i < 8; i++){
-                valja << QString("%1%2").arg(seeLeht->leheIndeks).arg(seeLeht->reasLaskurid[i]->id);
-#ifdef PROOV
-        qDebug() << "Protokollitaja::finaaliFail(), reasLaskurid->perekNimi: " << seeLeht->reasLaskurid[i]->perekNimi->text();
-#endif
-                valja << QString("%1 %2.").arg(seeLeht->reasLaskurid[i]->perekNimi->text()).arg(seeLeht->reasLaskurid[i]->eesNimi->text().left(1));
-                valja << (QString)seeLeht->reasLaskurid[i]->getSumma();
-                for(int j = 0; j < 24; j++)
-                    valja << (QString)"00";
-                for(int j = 0; j < 24; j++)
-                    valja << (QString)"00";
-            }
-            fail.close();
-            QMessageBox::information(this, "Protokollitaja", teateTekst, QMessageBox::Ok);
-        }else{
-            QMessageBox::critical(this, "Protokollitaja", tr("Ei õnnestu finaali faili luua! Kontrollige, "
-                                  "kas teil on sinna kausta kirjutamise õigused"), QMessageBox::Ok);
-            finaaliFailiNimi.clear();
-            return;
+        for(int i = 0; i < seeLeht->laskurid.count() && i < 8; i++){
+            QStringList finalsRow;
+            finalsRow << seeLeht->reasLaskurid[i]->rajaNr->text();
+            finalsRow << QString("%1%2").arg(seeLeht->leheIndeks).arg(seeLeht->reasLaskurid[i]->id);
+            finalsRow << QString("%1 %2.").arg(seeLeht->reasLaskurid[i]->perekNimi->text()).arg(seeLeht->reasLaskurid[i]->eesNimi->text().left(1));
+            finalsRow << seeLeht->reasLaskurid[i]->getSumma();
+            finalsTable << finalsRow;
         }
-/*	fail.setFileName("Alg.ini");
-        if(fail.open(QIODevice::WriteOnly | QIODevice::Text)){
-                QTextStream valja(&fail);
-                valja << "Finaal 1.1 seadete fail.\n";
-                valja << "Kui olete midagi siin ära rikkunud, siis lihtsalt kustutage see fail"
-                                " ja programm teeb uue.\n";
-                valja << voistluseNimi << "\n" << seeLeht->ekraaniNimi << "\n"
-                        << "Tulemused" << "\n" << 0;
-        }*/
+
+        FinalsFileExport *finalsFileExport = new FinalsFileExport(finalsTable, seeFail, voistluseNimi, seeLeht->ekraaniNimi, this);
+        if(finalsFileExport->exec() == QDialog::Accepted){
+            //Lisa kood, et lugeda finaalifailinimi
+            finaaliFailiNimi = finalsFileExport->getFinalsFileName();
+            //QMessageBox::information(this, "Protokollitaja", teateTekst, QMessageBox::Ok);
+            QMessageBox::information(this, "Protokollitaja", tr("Finaali fail kirjutatud!\n%1").arg(finaaliFailiNimi), QMessageBox::Ok);
+        }
+        finalsFileExport->deleteLater();
 }
 
 void Protokollitaja::finaalValmis(const int exitCode, const QProcess::ExitStatus exitStatus)
@@ -1670,55 +1640,7 @@ void Protokollitaja::kaivitaFinaal()
 {
     finaaliFail();
     if(finaaliFailiNimi.isEmpty()) return;
-        /*if(tabWidget->count() < 1){
-                QMessageBox::critical(this, "Protokollitaja", "Ei ole ühtegi lehte, mille põhjal finaali teha!",
-                                QMessageBox::Ok);
-                return;
-        }
-        Leht* seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
-        if(seeLeht->voistk){
-                QMessageBox::critical(this, "Protokollitaja", "Tahate võistkondliku arvestuse kohta finaali teha? "
-                                "Mida te endast küll mõtlete? Ühesõnaga selline asi unustage kohe ära.", QMessageBox::Ok);
-                return;
-        }
-        seeLeht->sorteeri(0);
-        QDir dir = asukoht.absolutePath();
-        if(!dir.cd("Tulemused"))
-                dir.mkdir("Tulemused");
-        dir.cd("Tulemused");
-        dir.mkdir(voistluseNimi);
-        dir.cd(voistluseNimi);
-        QFile fail(finaaliFailiNimi);
-        if(fail.open(QIODevice::ReadOnly)){
-                if(QMessageBox::warning(this, "Protokollitaja", tr("Sellise nimega fail on juba olemas. Kas "
-                                "soovite selle üle kirjutada?"), QMessageBox::Ok | QMessageBox::Cancel) ==
-                        QMessageBox::Ok){ //Kui fail on olemas ja ei taheta üle kirjutada, avatakse see fail,
-                    fail.close();         //Ok puhul kirjutatakse üle.
-                    if(fail.open(QIODevice::WriteOnly)){
-                        QDataStream valja(&fail);
 
-                        valja << (quint32)0x00FA3058;	//Kontrollarv
-                        valja << (qint32)12;		//Millise programmi versiooni failiga on tegu
-                        valja.setVersion(QDataStream::Qt_4_3);
-
-                        valja << voistluseNimi << seeLeht->ekraaniNimi;
-
-                        for(int i = 0; i < seeLeht->laskurid.count() && i < 8; i++){
-                            valja << (QString)seeLeht->reasLaskurid[i]->perekNimi->text();
-                            valja << (QString)seeLeht->reasLaskurid[i]->summa->text();
-                            for(int j = 0; j < 10; j++)
-                                valja << (QString)"00";
-                            for(int j = 0; j < 10; j++)
-                                valja << (QString)"00";
-                        }
-                        fail.close();
-                    }else{
-                        QMessageBox::critical(this, "Protokollitaja", "Ei õnnestu finaali faili luua! Kontrollige, "
-                                              "kas teil on sinna kausta kirjutamise õigused olemas", QMessageBox::Ok);
-                        return;
-                    }
-                }else fail.close();
-        }*/
     QFile fail(qApp->applicationDirPath() + "/Data/Alg.ini");
     if(fail.open(QIODevice::WriteOnly | QIODevice::Text)){
         QTextStream valja(&fail);
