@@ -44,6 +44,7 @@ target_wrapper.*
 CMakeLists.txt.user*
 
 #Other
+*.log
 *.fnl
 *.kll
 *.txt

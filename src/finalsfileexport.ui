@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Finaali faili eksport</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../protokollitaja.qrc">
+    <normaloff>:/images/Protokollitaja.ico</normaloff>:/images/Protokollitaja.ico</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -128,7 +132,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../protokollitaja.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

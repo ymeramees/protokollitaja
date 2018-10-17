@@ -35,7 +35,8 @@ HEADERS += src/lisalaskudeaken.h \
     src/laskudeaken.h \
     ../qfinaal/src/uhendumiseaken.h \
     src/filedownloader.h \
-    src/finalsfileexport.h
+    src/finalsfileexport.h \
+    src/startlistwriter.h
 SOURCES += src/lisalaskudeaken.cpp \
     src/liikmetevalikkast.cpp \
     src/voistkond.cpp \
@@ -54,7 +55,8 @@ SOURCES += src/lisalaskudeaken.cpp \
     src/laskudeaken.cpp \
     ../qfinaal/src/uhendumiseaken.cpp \
     src/filedownloader.cpp \
-    src/finalsfileexport.cpp
+    src/finalsfileexport.cpp \
+    src/startlistwriter.cpp
 FORMS += src/lisalaskudeaken.ui \
     src/liikmetevalikkast.ui \
     src/importaken.ui \

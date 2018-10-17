@@ -104,4 +104,5 @@ bool FinalsFileExport::writeFinalsFile()
         finalsFileName.clear();
         return false;
     }
+    return true;
 }
