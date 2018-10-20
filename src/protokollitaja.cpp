@@ -918,35 +918,56 @@ void Protokollitaja::eksportSiusStartList()
         return;
     }
 
-    QString failiNimi = QFileDialog::getSaveFileName(this, "Ekspordi", seeFail.left(seeFail.lastIndexOf("\\")),
-            tr("Comma separated file (*.csv)"));
+    QVector<QStringList> competitorsList;
 
-    if(failiNimi.isEmpty() || leht == 0) return;
+    for(int i = 0; i < leht->laskurid.count(); i++){
+        if(leht->laskurid[i]->linnuke->isChecked()){
+            QStringList row;    //target, ID, first name, name, club, result
+            if(leht->laskurid[i]->rajaNr->text().contains("A") || leht->laskurid[i]->rajaNr->text().contains("B") || leht->laskurid[i]->rajaNr->text().contains("C") || leht->laskurid[i]->rajaNr->text().contains("D") || leht->laskurid[i]->rajaNr->text().contains("E") || leht->laskurid[i]->rajaNr->text().contains("F") || leht->laskurid[i]->rajaNr->text().contains("G") || leht->laskurid[i]->rajaNr->text().contains("H"))
+                QMessageBox::critical(this, "Viga", tr("Raja numbrites on tähti. Kui soovite finaali start listi eksportida, kasutage teist funktsiooni!"), QMessageBox::Ok);
+            row << leht->laskurid[i]->rajaNr->text();
+            row << QString("%1").arg(leht->laskurid[i]->id);
+            row << leht->laskurid[i]->eesNimi->text();
+            row << leht->laskurid[i]->perekNimi->text();
+            row << leht->laskurid[i]->klubi->text();
+            row << leht->laskurid[i]->getSumma().replace(",", ".");
 
-    if(!failiNimi.endsWith(".csv"))
-        failiNimi.append(".csv");
-
-    QFile fail(failiNimi);
-    if(fail.open(QIODevice::WriteOnly | QIODevice::Text)){
-        QTextStream valja(&fail);
-        int eksporditud = 0;
-        for(int i = 0; i < leht->laskurid.count(); i++){
-            if(leht->laskurid[i]->linnuke->isChecked()){
-                if(leht->laskurid[i]->rajaNr->text().contains("A") || leht->laskurid[i]->rajaNr->text().contains("B") || leht->laskurid[i]->rajaNr->text().contains("C") || leht->laskurid[i]->rajaNr->text().contains("D") || leht->laskurid[i]->rajaNr->text().contains("E") || leht->laskurid[i]->rajaNr->text().contains("F") || leht->laskurid[i]->rajaNr->text().contains("G") || leht->laskurid[i]->rajaNr->text().contains("H"))
-                    QMessageBox::critical(this, "Viga", tr("Raja numbrites on tähti. Kui soovite finaali start listi eksportida, kasutage teist funktsiooni!"), QMessageBox::Ok);
-                //ID no;Startno;Name;Firstname;Disp name;Nat;Cat;Group;Team;Bay;Target;Relay;Starttime;BoxTg;Active;Q Tot;Avg;Rank;G1;...;G12;10s;...;0s;Mouches
-                valja << QString(";%1;\"").arg(leht->laskurid[i]->id);
-                valja << leht->laskurid[i]->perekNimi->text() << "\";\"";
-                valja << leht->laskurid[i]->eesNimi->text() << "\";";
-                valja << leht->laskurid[i]->perekNimi->text() << " " << leht->laskurid[i]->eesNimi->text().left(1);
-                valja << ".\";;0;0;" << leht->laskurid[i]->klubi->text() << ";;" << leht->laskurid[i]->rajaNr->text() << ";0;;0;0;";
-                valja << leht->laskurid[i]->getSumma().replace(",", ".") << ";0;\n";
-                eksporditud++;
-            }
+            competitorsList.append(row);
         }
-        fail.close();
-        QMessageBox::information(this, "Protokollitaja", QString("Startlist loodud. Eksporditi %1 laskurit").arg(eksporditud), "Selge");
-    }else QMessageBox::critical(this, "Viga", tr("Ei õnnestu faili kirjutada."), QMessageBox::Ok);
+    }
+
+    StartListWriter *startListWriter = new StartListWriter(competitorsList, seeFail, this);
+    startListWriter->deleteLater();
+
+//    QString failiNimi = QFileDialog::getSaveFileName(this, "Ekspordi", seeFail.left(seeFail.lastIndexOf("\\")),
+//            tr("Comma separated file (*.csv)"));
+
+//    if(failiNimi.isEmpty() || leht == 0) return;
+
+//    if(!failiNimi.endsWith(".csv"))
+//        failiNimi.append(".csv");
+
+//    QFile fail(failiNimi);
+//    if(fail.open(QIODevice::WriteOnly | QIODevice::Text)){
+//        QTextStream valja(&fail);
+//        int eksporditud = 0;
+//        for(int i = 0; i < leht->laskurid.count(); i++){
+//            if(leht->laskurid[i]->linnuke->isChecked()){
+//                if(leht->laskurid[i]->rajaNr->text().contains("A") || leht->laskurid[i]->rajaNr->text().contains("B") || leht->laskurid[i]->rajaNr->text().contains("C") || leht->laskurid[i]->rajaNr->text().contains("D") || leht->laskurid[i]->rajaNr->text().contains("E") || leht->laskurid[i]->rajaNr->text().contains("F") || leht->laskurid[i]->rajaNr->text().contains("G") || leht->laskurid[i]->rajaNr->text().contains("H"))
+//                    QMessageBox::critical(this, "Viga", tr("Raja numbrites on tähti. Kui soovite finaali start listi eksportida, kasutage teist funktsiooni!"), QMessageBox::Ok);
+//                //ID no;Startno;Name;Firstname;Disp name;Nat;Cat;Group;Team;Bay;Target;Relay;Starttime;BoxTg;Active;Q Tot;Avg;Rank;G1;...;G12;10s;...;0s;Mouches
+//                valja << QString(";%1;\"").arg(leht->laskurid[i]->id);
+//                valja << leht->laskurid[i]->perekNimi->text() << "\";\"";
+//                valja << leht->laskurid[i]->eesNimi->text() << "\";";
+//                valja << leht->laskurid[i]->perekNimi->text() << " " << leht->laskurid[i]->eesNimi->text().left(1);
+//                valja << ".\";;0;0;" << leht->laskurid[i]->klubi->text() << ";;" << leht->laskurid[i]->rajaNr->text() << ";0;;0;0;";
+//                valja << leht->laskurid[i]->getSumma().replace(",", ".") << ";0;\n";
+//                eksporditud++;
+//            }
+//        }
+//        fail.close();
+//        QMessageBox::information(this, "Protokollitaja", QString("Startlist loodud. Eksporditi %1 laskurit").arg(eksporditud), "Selge");
+//    }else QMessageBox::critical(this, "Viga", tr("Ei õnnestu faili kirjutada."), QMessageBox::Ok);
 }
 
 void Protokollitaja::eksportFSiusStartList()
@@ -1466,7 +1487,7 @@ void Protokollitaja::finaaliFail()
 #ifdef PROOV
         qDebug() << "Protokollitaja::finaaliFail(), Rajanr2: " << seeLeht->reasLaskurid[0]->rajaNr->text() << ", perekNimi: " << seeLeht->reasLaskurid[0]->perekNimi->text();
 #endif
-        QVector<QStringList> finalsTable;
+        QVector<QStringList> finalsTable; //Each "row": target, ID, screen name, result, first name, name, club
 
         for(int i = 0; i < seeLeht->laskurid.count() && i < 8; i++){
             QStringList finalsRow;
@@ -1474,10 +1495,14 @@ void Protokollitaja::finaaliFail()
             finalsRow << QString("%1%2").arg(seeLeht->leheIndeks).arg(seeLeht->reasLaskurid[i]->id);
             finalsRow << QString("%1 %2.").arg(seeLeht->reasLaskurid[i]->perekNimi->text()).arg(seeLeht->reasLaskurid[i]->eesNimi->text().left(1));
             finalsRow << seeLeht->reasLaskurid[i]->getSumma();
+            finalsRow << seeLeht->reasLaskurid[i]->eesNimi->text();
+            finalsRow << seeLeht->reasLaskurid[i]->perekNimi->text();
+            finalsRow << seeLeht->reasLaskurid[i]->klubi->text();
             finalsTable << finalsRow;
         }
 
         FinalsFileExport *finalsFileExport = new FinalsFileExport(finalsTable, seeFail, voistluseNimi, seeLeht->ekraaniNimi, this);
+        finalsFileExport->setRelay(10 + seeLeht->leheIndeks);
         if(finalsFileExport->exec() == QDialog::Accepted){
             //Lisa kood, et lugeda finaalifailinimi
             finaaliFailiNimi = finalsFileExport->getFinalsFileName();

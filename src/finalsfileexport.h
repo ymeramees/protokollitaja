@@ -2,9 +2,12 @@
 #define FINALSFILEEXPORT_H
 
 #include <QFile>
+#include <QDebug>
 #include <QDialog>
 #include <QFileDialog>
 #include <QMessageBox>
+
+#include "startlistwriter.h"
 
 namespace Ui {
 class FinalsFileExport;
@@ -20,6 +23,8 @@ public:
 
 public slots:
     QString getFinalsFileName();
+    int getRelay();
+    void setRelay(int);
 
 protected:
     void accept();
@@ -34,6 +39,7 @@ private:
 
 private slots:
     bool writeFinalsFile();
+    bool writeFinalsStartListFile();
 };
 
 #endif // FINALSFILEEXPORT_H

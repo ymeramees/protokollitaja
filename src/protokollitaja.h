@@ -41,6 +41,7 @@
 #include "tulemuseaken.h"
 #include "filedownloader.h"
 #include "lehelugejaaken.h"
+#include "startlistwriter.h"
 #include "finalsfileexport.h"
 #include "liikmetevalikkast.h"
 #include "../qfinaal/src/uhendumiseaken.h"

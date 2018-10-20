@@ -27,7 +27,7 @@
       <number>8</number>
      </property>
      <property name="columnCount">
-      <number>4</number>
+      <number>7</number>
      </property>
      <attribute name="horizontalHeaderVisible">
       <bool>true</bool>
@@ -46,6 +46,9 @@
      <row/>
      <row/>
      <row/>
+     <column/>
+     <column/>
+     <column/>
      <column/>
      <column/>
      <column/>
@@ -115,6 +118,20 @@
        </property>
        <property name="value">
         <number>2</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="relayLabel">
+       <property name="text">
+        <string>Vahetus:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="relayNumberBox">
+       <property name="value">
+        <number>10</number>
        </property>
       </widget>
      </item>
