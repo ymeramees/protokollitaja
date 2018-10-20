@@ -1170,9 +1170,14 @@ int Laskur::vaiksemNimega(Laskur *l) const //Tagastab kas laskur on nime järgi 
     return 0;   //Kui jõudis siiani, siis ilmselt on võrdsed
 }
 
-int Laskur::vaiksemRajaga(Laskur *l) const   //Tagastab kas laskur on nime järgi väiksem (-1), suurem (1) või võrdne (0)
+int Laskur::vaiksemRajaga(Laskur *l) const   //Tagastab kas laskur on raja järgi väiksem (-1), suurem (1) või võrdne (0), kusjuures väiksem rajanr on eespool
 {
     bool onnestus1, onnestus2 = false;
+    if(this->rajaNr->text().isEmpty() && !l->rajaNr->text().isEmpty())
+        return -1;  //Kui üks on tühi, läheb see tahapoole
+    else if(!this->rajaNr->text().isEmpty() && l->rajaNr->text().isEmpty())
+        return 1;   //Kui üks on tühi, läheb see tahapoole
+
     this->rajaNr->text().toInt(&onnestus1);
 //        if(verbose)
 //            QTextStream(stdout) << "Laskur::vaiksem(): this->rajaNr->text().toInt(&onnestus1); " << this->rajaNr->text().toInt(&onnestus1) << this->perekNimi->text() << endl;
@@ -1199,12 +1204,20 @@ int Laskur::vaiksemRajaga(Laskur *l) const   //Tagastab kas laskur on nime järg
         if(verbose)
             QTextStream(stdout) << "Laskur::vaiksem(): Arv vs arv" << endl;
         if(this->rajaNr->text().toInt() < l->rajaNr->text().toInt()){
-            if(this->rajaNr->text().isEmpty()) return -1; //Miks see siin sedasi on? See ei saa ju kunagi õige olla, samas nii töötab
-            else return 1;
+            if(this->rajaNr->text().isEmpty()) return -1; //Rajanumbrite puhul on vastupidi, väiksem nr on eespool
+            else{
+                if(verbose)
+                    QTextStream(stdout) << "Laskur::vaiksem(): Arv vs arv, " << this->perekNimi->text() << "<" << l->perekNimi->text() << endl;
+                return 1;
+            }
 //                return true;
         }else if(this->rajaNr->text().toInt() > l->rajaNr->text().toInt()){
-            if(l->rajaNr->text().isEmpty()) return 1; //Miks see siin sedasi on? See ei saa ju kunagi õige olla, samas nii töötab
-            else return -1;
+            if(l->rajaNr->text().isEmpty()) return 1; //Rajanumbrite puhul on vastupidi, väiksem nr on eespool
+            else{
+                if(verbose)
+                    QTextStream(stdout) << "Laskur::vaiksem(): Arv vs arv, " << this->perekNimi->text() << ">" << l->perekNimi->text() << endl;
+                return -1;
+            }
 //                return false;
         }
     }else if(l->rajaNr->text().isEmpty()){

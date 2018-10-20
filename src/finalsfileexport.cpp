@@ -108,9 +108,9 @@ bool FinalsFileExport::writeFinalsFile()
         out << competitionName << eventName;
 
         for(int i = 0; i < ui->finalsCompetitorsTable->rowCount() && i < 8; i++){   //Currently only up to 8 shooters are supported in finals
-            out << ui->finalsCompetitorsTable->itemAt(1, i)->text();
-            out << ui->finalsCompetitorsTable->itemAt(2, i)->text();
-            out << ui->finalsCompetitorsTable->itemAt(3, i)->text();
+            out << ui->finalsCompetitorsTable->item(i, 1)->text();
+            out << ui->finalsCompetitorsTable->item(i, 2)->text();
+            out << ui->finalsCompetitorsTable->item(i, 3)->text();
             for(int j = 0; j < 24; j++)
                 out << (QString)"00";
             for(int j = 0; j < 24; j++)

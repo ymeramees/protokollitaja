@@ -447,7 +447,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
 
                     if(logi->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){ //Muudatuste ja laskude logifail
                         logiValja.setDevice(logi);
-                        logiValja << "///////////////////////////////////////////////" << QDateTime::currentDateTime().toString() <<  "//////////////////////////////////////////////////\n";
+                        logiValja << "///////////////////////////////" << voistluseNimi << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";
                     }else{
                         QMessageBox::warning(this, "Hoiatus", ("Logi faili kirjutamine ei õnnestunud! Kontrollige, et teil oleks kirjutamisõigus sinna kausta, kus asub võistluste fail."), "Selge");
                     }
@@ -758,9 +758,9 @@ void Protokollitaja::eelvaade()
                                 painter.drawText(1375, 175 + i * 41, seeLeht->laskurid[i]->getSumma());
                                 if(seeLeht->laskurid[i]->finaal->text() != "Fin"){
                                         painter.drawText(1450, 175 + i * 41, seeLeht->laskurid[i]->finaal->text());
-                                        kirjaFont.setBold(true);
-                                        painter.setFont(kirjaFont);
-                                        painter.drawText(1520, 175 + i * 41, seeLeht->laskurid[i]->koguSumma->text());
+//                                        kirjaFont.setBold(true);
+//                                        painter.setFont(kirjaFont);
+//                                        painter.drawText(1520, 175 + i * 41, seeLeht->laskurid[i]->koguSumma->text());
                                         kirjaFont.setBold(false);
                                         painter.setFont(kirjaFont);
                                 }else if(seeLeht->laskurid[i]->markus->text() != tr("Märkused") && !seeLeht->
@@ -886,7 +886,7 @@ void Protokollitaja::eksportCSV()
                                 valja << leht->laskurid[i]->getSumma() << ";";
                                 if(leht->laskurid[i]->finaal->text() != "Fin"){
                                         valja << leht->laskurid[i]->finaal->text() << ";";
-                                        valja << leht->laskurid[i]->koguSumma->text() << ";";
+//                                        valja << leht->laskurid[i]->koguSumma->text() << ";";
                                 }
                                 if(leht->laskurid[i]->markus->text() != tr("Märkused") && !leht->laskurid[i]->markus->
                                                 text().contains("V.A", Qt::CaseInsensitive))
@@ -1080,7 +1080,7 @@ void Protokollitaja::eksportTXT()
                                 valja << leht->laskurid[i]->getSumma() << "\t";
                                 if(leht->laskurid[i]->finaal->text() != "Fin"){
                                         valja << leht->laskurid[i]->finaal->text() << "\t";
-                                        valja << leht->laskurid[i]->koguSumma->text() << "\t";
+//                                        valja << leht->laskurid[i]->koguSumma->text() << "\t";
                                 }
                                 if(leht->laskurid[i]->markus->text() != tr("Märkused") && !leht->laskurid[i]->markus->
                                                 text().contains("V.A", Qt::CaseInsensitive))
@@ -1340,11 +1340,11 @@ void Protokollitaja::eksportXLS()
                                         arv = leht->laskurid[j]->finaal->text().replace(',', '.').toDouble(&onnestus);
                                     sheet->number(j + rida, 6 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), arv)->font(tekstiFont);
 
-                                    arv = leht->laskurid[j]->koguSumma->text().toDouble(&onnestus);
-                                    if(!onnestus)
-                                        arv = leht->laskurid[j]->koguSumma->text().replace(',', '.').toDouble(&onnestus);
-                                    sheet->number(j + rida, 6 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), arv)->font(tekstiFont);
-                                    sheet->number(j + rida, 7 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), arv)->font(paiseFont);
+//                                    arv = leht->laskurid[j]->koguSumma->text().toDouble(&onnestus);
+//                                    if(!onnestus)
+//                                        arv = leht->laskurid[j]->koguSumma->text().replace(',', '.').toDouble(&onnestus);
+//                                    sheet->number(j + rida, 6 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), arv)->font(tekstiFont);
+//                                    sheet->number(j + rida, 7 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), arv)->font(paiseFont);
                                 }
                                 if(leht->laskurid[j]->markus->text() != tr("Märkused") && !leht->laskurid[j]->markus->text()
                                     .contains("V.A", Qt::CaseInsensitive)){
@@ -1384,10 +1384,10 @@ void Protokollitaja::eksportXLS()
                                         arv = leht->laskurid[j]->finaal->text().replace(',', '.').toDouble(&onnestus);
                                     sheet->number(j + rida, 6 + leht->seeriateArv, arv)->font(tekstiFont);
 
-                                    arv = leht->laskurid[j]->koguSumma->text().toDouble(&onnestus);
-                                    if(!onnestus)
-                                        arv = leht->laskurid[j]->koguSumma->text().replace(',', '.').toDouble(&onnestus);
-                                    sheet->number(j + rida, 7 + leht->seeriateArv, arv)->font(paiseFont);
+//                                    arv = leht->laskurid[j]->koguSumma->text().toDouble(&onnestus);
+//                                    if(!onnestus)
+//                                        arv = leht->laskurid[j]->koguSumma->text().replace(',', '.').toDouble(&onnestus);
+//                                    sheet->number(j + rida, 7 + leht->seeriateArv, arv)->font(paiseFont);
 
                                     sheet->FindCell(j + rida, 6 + leht->seeriateArv)->halign(xlslib_core::HALIGN_CENTER);
                                     sheet->FindCell(j + rida, 7 + leht->seeriateArv)->halign(xlslib_core::HALIGN_CENTER);
@@ -3916,16 +3916,18 @@ void Protokollitaja::prindi()
                         }
                         painter.setFont(summaF);
                         painter.drawText(2025, 175 + i * 41, seeLeht->laskurid[alg]->getSumma());
-                        painter.setFont(kirjaFont);
+                        //painter.setFont(kirjaFont);
                         if(seeLeht->laskurid[alg]->finaal->text() != "Fin"){
                             //painter.setFont(kirjaFont);
                             painter.drawText(2120, 175 + i * 41, seeLeht->laskurid[alg]->finaal->text());
-                            painter.setFont(summaF);
-                            painter.drawText(2210, 175 + i * 41, seeLeht->laskurid[alg]->koguSumma->text());
+                            //painter.setFont(summaF);
+                            //painter.drawText(2210, 175 + i * 41, seeLeht->laskurid[alg]->koguSumma->text());  //Kogusummat enam ei kasutata
                             painter.setFont(kirjaFont);
                         }else if(seeLeht->laskurid[alg]->markus->text() != tr("Märkused") && !seeLeht->laskurid[alg]->markus->text().contains("V.A", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DNF", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DSQ", Qt::CaseInsensitive)){
+                            painter.setFont(kirjaFont);
                             painter.drawText(2300, 175 + i * 41, seeLeht->laskurid[alg]->markus->text());
                         }
+                        painter.setFont(kirjaFont);
                         i++;
                     }
                     painter.setFont(vanaFont);
@@ -4000,16 +4002,18 @@ void Protokollitaja::prindi()
                         }
                         painter.setFont(summaF);
                         painter.drawText(1375, 175 + i * 41, seeLeht->laskurid[alg]->getSumma());
-                        painter.setFont(kirjaFont);
+                        //painter.setFont(kirjaFont);
                         if(seeLeht->laskurid[alg]->finaal->text() != "Fin"){
                             //painter.setFont(kirjaFont);
                             painter.drawText(1440, 175 + i * 41, seeLeht->laskurid[alg]->finaal->text());
-                            painter.setFont(summaF);
-                            painter.drawText(1520, 175 + i * 41, seeLeht->laskurid[alg]->koguSumma->text());
+                            //painter.setFont(summaF);
+                            //painter.drawText(1520, 175 + i * 41, seeLeht->laskurid[alg]->koguSumma->text());  //Kogusummat enam ei kasutata
                             painter.setFont(kirjaFont);
                         }else if(seeLeht->laskurid[alg]->markus->text() != tr("Märkused") && !seeLeht->laskurid[alg]->markus->text().contains("V.A", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DNF", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DSQ", Qt::CaseInsensitive)){
+                            painter.setFont(kirjaFont);
                             painter.drawText(1460, 175 + i * 41, seeLeht->laskurid[alg]->markus->text());
                         }
+                        painter.setFont(kirjaFont);
                         i++;
                     }
                     painter.setFont(vanaFont);
@@ -4078,16 +4082,18 @@ void Protokollitaja::prindi()
                             painter.drawText(985 + j * 65, 175 + i * 41, seeLeht->laskurid[alg]->seeriad[j]->text());
                         painter.setFont(summaF);
                         painter.drawText(1375, 175 + i * 41, seeLeht->laskurid[alg]->getSumma());
-                        painter.setFont(kirjaFont);
+//                        painter.setFont(kirjaFont);
                         if(seeLeht->laskurid[alg]->finaal->text() != "Fin"){
                             //painter.setFont(kirjaFont);
                             painter.drawText(1450, 175 + i * 41, seeLeht->laskurid[alg]->finaal->text());
-                            painter.setFont(summaF);
-                            painter.drawText(1520, 175 + i * 41, seeLeht->laskurid[alg]->koguSumma->text());
+//                            painter.setFont(summaF);
+//                            painter.drawText(1520, 175 + i * 41, seeLeht->laskurid[alg]->koguSumma->text());  //Kogusummat enam ei kasutata
                             painter.setFont(kirjaFont);
-                        }else if(seeLeht->laskurid[alg]->markus->text() != tr("Märkused") && !seeLeht->laskurid[alg]->markus->text().contains("V.A", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DNF", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DSQ", Qt::CaseInsensitive))
-                            painter.drawText(1460, 175 + i * 41, seeLeht->laskurid[alg]->markus->text());
+                        }else if(seeLeht->laskurid[alg]->markus->text() != tr("Märkused") && !seeLeht->laskurid[alg]->markus->text().contains("V.A", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DNF", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DSQ", Qt::CaseInsensitive)){
+                            painter.setFont(kirjaFont);
+                            painter.drawText(1460, 175 + i * 41, seeLeht->laskurid[alg]->markus->text());}
                         i++;
+                        painter.setFont(kirjaFont);
                     }
                     painter.setFont(vanaFont);
                     this->setFont(vanaFont);
@@ -5105,7 +5111,7 @@ void Protokollitaja::uhenduSiusDataga()
 
     if(siusLogi->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){ //Saabunud võrguliikluse logi
         QTextStream valja(siusLogi);
-        valja << "///////////////////////////////////////////////" << QDateTime::currentDateTime().toString() <<  "//////////////////////////////////////////////////\n";
+        valja << "///////////////////////////////" << voistluseNimi << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";
         siusLogi->close();
     }
     progressTimer->start();
