@@ -28,7 +28,12 @@ ui_*.h
 *.jsc
 Makefile*
 *build-*
-build/
+build/*
+!build/*/
+build/*/*
+!build/*/Data
+build/*/Data/*
+!build/*/Data/Print_template.html
 
 # Qt unit tests
 target_wrapper.*

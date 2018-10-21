@@ -333,9 +333,8 @@ Protokollitaja::Protokollitaja(QWidget *parent)
                         str = sisse.readLine();
                         list = str.split(";");
                         if(list.count() < 2){
-                            QMessageBox::warning(this, "Protokollitaja", tr("Püssilaskurite nimekirjas on tühi rida!"),
-                                    "Selge");
-                            break;
+                            QMessageBox::warning(this, "Protokollitaja", tr("Püssilaskurite nimekirjas on tühi rida!"), "Selge");
+                            continue;
                         }
                         andmebaas.nimekiriPuss << new Andmebaas::LaskuriNimi;
                         andmebaas.nimekiriPuss[andmebaas.nimekiriPuss.count()-1]->eesnimi = list.takeFirst().trimmed();
@@ -358,8 +357,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
                 andmebaas.kirjutusabiPuss = true;
                 fail.close();
         }else{
-                QMessageBox::warning(this, "Hoiatus", ("Püssilaskurite faili ei leitud! Püssilaskurite kirjutusabi"
-                        " pole võimaldatud"), "Selge");
+                QMessageBox::warning(this, "Hoiatus", ("Püssilaskurite faili ei leitud! Püssilaskurite kirjutusabi pole võimaldatud"), "Selge");
                 andmebaas.kirjutusabiPuss = false;
         }
 
@@ -373,9 +371,8 @@ Protokollitaja::Protokollitaja(QWidget *parent)
                         str = sisse.readLine();
                         list = str.split(";");
                         if(list.count() < 2){
-                            QMessageBox::warning(this, "Protokollitaja", ("Püstolilaskurite nimekirjas on tühi rida!"),
-                                                 "Selge");
-                            break;
+                            QMessageBox::warning(this, "Protokollitaja", ("Püstolilaskurite nimekirjas on tühi rida!"), "Selge");
+                            continue;
                         }
                         andmebaas.nimekiriPustol << new Andmebaas::LaskuriNimi;
                         andmebaas.nimekiriPustol[andmebaas.nimekiriPustol.count()-1]->eesnimi = list.takeFirst().trimmed();
@@ -398,8 +395,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
                 andmebaas.kirjutusabiPustol = true;
                 fail.close();
         }else{
-                QMessageBox::warning(this, "Hoiatus", ("Püstolilaskurite faili ei leitud! Püstolilaskurite "
-                                "kirjutusabi pole võimaldatud"), "Selge");
+                QMessageBox::warning(this, "Hoiatus", ("Püstolilaskurite faili ei leitud! Püstolilaskurite kirjutusabi pole võimaldatud"), "Selge");
                 andmebaas.kirjutusabiPustol = false;
         }
 
@@ -4208,8 +4204,14 @@ void Protokollitaja::prindi2()
         else colspan = seeLeht->seeriateArv;    //Tulpade arv ainult seeriatega
         pTekst.replace("colspan=\"6\"", QString("colspan=\"%1\"").arg(colspan));   //Seeriate pealkiri üle kõigi seeriate tulpade
 
+        bool finalsResultExist = false;
+
         //Laskurid tabelis
         for (int i = seeLeht->laskurid.count() - 1; i >= 0 ; i--) {
+
+            if(seeLeht->laskurid[i]->eesNimi->text().isEmpty())
+                continue;
+
             rida = origRida;
 
             if(seeLeht->laskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive)){
@@ -4233,11 +4235,28 @@ void Protokollitaja::prindi2()
             if(seeLeht->laskurid[i]->kumned->text() != "0" && !(seeLeht->laskurid[i]->getSumma().contains(",") || seeLeht->laskurid[i]->getSumma().contains(".")))
                 rida.replace("#summa#", seeLeht->laskurid[i]->getSumma() + "-" + seeLeht->laskurid[i]->kumned->text() + "x");
             else rida.replace("#summa#", seeLeht->laskurid[i]->getSumma());
+
+            if(!seeLeht->laskurid[i]->finaal->text().contains("Fin")){
+                rida.replace("#finaal#", seeLeht->laskurid[i]->finaal->text());
+                finalsResultExist = true;
+            }else{
+                rida.remove("#finaal#");
+            }
+
             if(seeLeht->laskurid[i]->markus->text() != tr("Märkused") && !seeLeht->laskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive) && !seeLeht->laskurid[i]->markus->text().contains("DNF", Qt::CaseInsensitive) && !seeLeht->laskurid[i]->markus->text().contains("DSQ", Qt::CaseInsensitive)){
             rida.replace("#markus#", seeLeht->laskurid[i]->markus->text());
             }else rida.remove("#markus#");
             pTekst.insert(pTekst.indexOf("<tbody>") + 7, rida);
         }
+        if(!finalsResultExist){
+            int start = pTekst.lastIndexOf("<th", pTekst.indexOf(">Finaal<"));
+            int length = pTekst.indexOf("</th>", pTekst.indexOf(">Finaal<")) - start;
+#ifdef PROOV
+            qDebug() << "!finalsResultExist: " << pTekst.mid(start, length);
+#endif
+            pTekst.remove(start, length);
+        }
+
         }else{  //Võistkondliku arvestuse lehe printimine
             //Kõigepealt individuaalarvestuse osa välja lõikamine
             int algus = pTekst.lastIndexOf("<table", pTekst.indexOf("#S1#"));
@@ -4255,6 +4274,10 @@ void Protokollitaja::prindi2()
             pTekst.remove(algus, pikkus);
 
             for(int i = 0; i < seeLeht->voistkonnad.count(); i++){  //Võistkonna lisamine
+
+                if(seeLeht->voistkonnad[i]->nimi->text().isEmpty())
+                    continue;
+
                 rida = origRida;    //Esimene liige
                 rida.replace("#nr#", QString("%1").arg(i + 1));
                 rida.replace("#voistkond#", seeLeht->voistkonnad[i]->nimi->text());
@@ -4543,7 +4566,7 @@ void Protokollitaja::taiendaAndmebaas()
                 QTextStream valja(&fail);
                 valja.setCodec("UTF-8");
                 valja.setAutoDetectUnicode(false);
-                static bool esimene = true;
+//                static bool esimene = true;
                 for(int i = 0; i < tabWidget->count(); i++){
                         Leht* seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
                         if(seeLeht->relv == Ohupuss || seeLeht->relv == Sportpuss || seeLeht->relv == Puss)
@@ -4552,42 +4575,45 @@ void Protokollitaja::taiendaAndmebaas()
                                         int mitukorda = 0;
                                         for(int i = 0; i < andmebaas.nimekiriPuss.count(); i++){
                                                 if(seeLeht->laskurid[j]->eesNimi->text().trimmed() == andmebaas.nimekiriPuss[i]->eesnimi.trimmed() &&
-                                                                seeLeht->laskurid[j]->perekNimi->text().trimmed() == andmebaas.nimekiriPuss[i]->
-                                                                perekonnanimi.trimmed() && seeLeht->laskurid[j]->sunniAasta->text().trimmed() == andmebaas.
-                                                                nimekiriPuss[i]->sunniaasta.trimmed())
-                                                        olemas = true;
+                                                        seeLeht->laskurid[j]->perekNimi->text().trimmed() == andmebaas.nimekiriPuss[i]->perekonnanimi.trimmed() &&
+                                                        seeLeht->laskurid[j]->sunniAasta->text().trimmed() == andmebaas.nimekiriPuss[i]->sunniaasta.trimmed())
+                                                    olemas = true;
                                                 mitukorda++;
                                         }
-                                        if(!olemas){
-                                                QString rida;
-#ifndef Q_WS_WIN
-                                                if(!esimene) rida = "\n";
-#else
-                                                rida = "\n";
-#endif
-                                                rida.append(seeLeht->laskurid[j]->eesNimi->text().trimmed() + ";");
-                                                rida.append(seeLeht->laskurid[j]->perekNimi->text().trimmed() + ";");
-                                                rida.append(seeLeht->laskurid[j]->sunniAasta->text().trimmed() + ";");
-                                                rida.append(seeLeht->laskurid[j]->klubi->text().trimmed());
-                                                valja << rida;
-                                                esimene = false;
-                                                lisatud++;
-                                                rida.remove("\n");
-                                                QStringList list = rida.split(";");
-                                                andmebaas.nimekiriPuss << new Andmebaas::LaskuriNimi;
-                                                andmebaas.nimekiriPuss[andmebaas.nimekiriPuss.count()-1]->eesnimi =
-                                                        list.takeFirst().trimmed();
-                                                andmebaas.nimekiriPuss[andmebaas.nimekiriPuss.count()-1]->perekonnanimi =
-                                                        list.takeFirst().trimmed();
-                                                andmebaas.nimekiriPuss[andmebaas.nimekiriPuss.count()-1]->sunniaasta =
-                                                        list.takeFirst().trimmed();
-                                                andmebaas.nimekiriPuss[andmebaas.nimekiriPuss.count()-1]->klubi =
-                                                        list.takeFirst().trimmed();
+                                        if(!olemas && !seeLeht->laskurid[j]->eesNimi->text().trimmed().isEmpty() &&
+                                                !seeLeht->laskurid[j]->perekNimi->text().trimmed().isEmpty() &&
+                                                !seeLeht->laskurid[j]->sunniAasta->text().trimmed().isEmpty() &&
+                                                !seeLeht->laskurid[j]->klubi->text().trimmed().isEmpty()){
+                                            QString rida;
+//#ifndef Q_WS_WIN
+//                                            if(!esimene) rida = "\n";
+//#else
+                                            rida = "\n";
+//#endif
+                                            rida.append(seeLeht->laskurid[j]->eesNimi->text().trimmed() + ";");
+                                            rida.append(seeLeht->laskurid[j]->perekNimi->text().trimmed() + ";");
+                                            rida.append(seeLeht->laskurid[j]->sunniAasta->text().trimmed() + ";");
+                                            rida.append(seeLeht->laskurid[j]->klubi->text().trimmed());
+                                            valja << rida;
+//                                            esimene = false;
+                                            lisatud++;
+                                            rida.remove("\n");
+                                            QStringList list = rida.split(";");
+                                            andmebaas.nimekiriPuss << new Andmebaas::LaskuriNimi;
+                                            andmebaas.nimekiriPuss[andmebaas.nimekiriPuss.count()-1]->eesnimi =
+                                                    list.takeFirst().trimmed();
+                                            andmebaas.nimekiriPuss[andmebaas.nimekiriPuss.count()-1]->perekonnanimi =
+                                                    list.takeFirst().trimmed();
+                                            andmebaas.nimekiriPuss[andmebaas.nimekiriPuss.count()-1]->sunniaasta =
+                                                    list.takeFirst().trimmed();
+                                            andmebaas.nimekiriPuss[andmebaas.nimekiriPuss.count()-1]->klubi =
+                                                    list.takeFirst().trimmed();
                                         }
                                 }
                 }
                 fail.close();
         }
+
         /*fail.setFileName("./Data/Teine Puss.txt");
         fail.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream valja(&fail);
@@ -4607,7 +4633,7 @@ void Protokollitaja::taiendaAndmebaas()
                 QTextStream valja(&fail);
                 valja.setCodec("UTF-8");
                 valja.setAutoDetectUnicode(false);
-                static bool esimene = true;
+//                static bool esimene = true;
                 for(int i = 0; i < tabWidget->count(); i++){
                         Leht* seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
                         if(seeLeht->relv == Ohupustol || seeLeht->relv == Spordipustol || seeLeht->relv == Pustol)
@@ -4615,36 +4641,38 @@ void Protokollitaja::taiendaAndmebaas()
                                         bool olemas = false;
                                         for(int i = 0; i < andmebaas.nimekiriPustol.count(); i++){
                                                 if(seeLeht->laskurid[j]->eesNimi->text().trimmed() == andmebaas.nimekiriPustol[i]->eesnimi.trimmed() &&
-                                                                seeLeht->laskurid[j]->perekNimi->text().trimmed() == andmebaas.nimekiriPustol[i]->
-                                                                perekonnanimi.trimmed() && seeLeht->laskurid[j]->sunniAasta->text().trimmed() == andmebaas.
-                                                                nimekiriPustol[i]->sunniaasta.trimmed())
-                                                        olemas = true;
+                                                        seeLeht->laskurid[j]->perekNimi->text().trimmed() == andmebaas.nimekiriPustol[i]->perekonnanimi.trimmed() &&
+                                                        seeLeht->laskurid[j]->sunniAasta->text().trimmed() == andmebaas.nimekiriPustol[i]->sunniaasta.trimmed())
+                                                    olemas = true;
                                         }
-                                        if(!olemas){
-                                                QString rida;
-#ifndef Q_WS_WIN
-                                                if(!esimene) rida = "\n";
-#else
-                                                rida = "\n";
-#endif
-                                                rida.append(seeLeht->laskurid[j]->eesNimi->text().trimmed() + ";");
-                                                rida.append(seeLeht->laskurid[j]->perekNimi->text().trimmed() + ";");
-                                                rida.append(seeLeht->laskurid[j]->sunniAasta->text().trimmed() + ";");
-                                                rida.append(seeLeht->laskurid[j]->klubi->text().trimmed());
-                                                valja << rida;
-                                                plisatud++;
-                                                esimene = false;
-                                                rida.remove("\n");
-                                                QStringList list = rida.split(";");
-                                                andmebaas.nimekiriPustol << new Andmebaas::LaskuriNimi;
-                                                andmebaas.nimekiriPustol[andmebaas.nimekiriPustol.count()-1]->eesnimi =
-                                                        list.takeFirst().trimmed();
-                                                andmebaas.nimekiriPustol[andmebaas.nimekiriPustol.count()-1]->perekonnanimi =
-                                                        list.takeFirst().trimmed();
-                                                andmebaas.nimekiriPustol[andmebaas.nimekiriPustol.count()-1]->sunniaasta =
-                                                        list.takeFirst().trimmed();
-                                                andmebaas.nimekiriPustol[andmebaas.nimekiriPustol.count()-1]->klubi =
-                                                        list.takeFirst().trimmed();
+                                        if(!olemas && !seeLeht->laskurid[j]->eesNimi->text().trimmed().isEmpty() &&
+                                                !seeLeht->laskurid[j]->perekNimi->text().trimmed().isEmpty() &&
+                                                !seeLeht->laskurid[j]->sunniAasta->text().trimmed().isEmpty() &&
+                                                !seeLeht->laskurid[j]->klubi->text().trimmed().isEmpty()){
+                                            QString rida;
+//#ifndef Q_WS_WIN
+//                                            if(!esimene) rida = "\n";
+//#else
+                                            rida = "\n";
+//#endif
+                                            rida.append(seeLeht->laskurid[j]->eesNimi->text().trimmed() + ";");
+                                            rida.append(seeLeht->laskurid[j]->perekNimi->text().trimmed() + ";");
+                                            rida.append(seeLeht->laskurid[j]->sunniAasta->text().trimmed() + ";");
+                                            rida.append(seeLeht->laskurid[j]->klubi->text().trimmed());
+                                            valja << rida;
+                                            plisatud++;
+//                                            esimene = false;
+                                            rida.remove("\n");
+                                            QStringList list = rida.split(";");
+                                            andmebaas.nimekiriPustol << new Andmebaas::LaskuriNimi;
+                                            andmebaas.nimekiriPustol[andmebaas.nimekiriPustol.count()-1]->eesnimi =
+                                                    list.takeFirst().trimmed();
+                                            andmebaas.nimekiriPustol[andmebaas.nimekiriPustol.count()-1]->perekonnanimi =
+                                                    list.takeFirst().trimmed();
+                                            andmebaas.nimekiriPustol[andmebaas.nimekiriPustol.count()-1]->sunniaasta =
+                                                    list.takeFirst().trimmed();
+                                            andmebaas.nimekiriPustol[andmebaas.nimekiriPustol.count()-1]->klubi =
+                                                    list.takeFirst().trimmed();
                                         }
                                 }
                 }
