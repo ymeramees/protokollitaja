@@ -2,6 +2,7 @@
 #define FINALSFILEEXPORT_H
 
 #include <QFile>
+#include <QTime>
 #include <QDebug>
 #include <QDialog>
 #include <QFileDialog>
@@ -38,6 +39,8 @@ private:
     Ui::FinalsFileExport *ui;
 
 private slots:
+    void drawStartPositions();
+    bool sortCompetitors();
     bool writeFinalsFile();
     bool writeFinalsStartListFile();
 };

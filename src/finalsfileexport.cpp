@@ -1,7 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
 /// ToDo list:
-/// Kohtade loosimine
-/// Rajanumbrite järgi sorteerimine enne salvestamist
 ///
 /////////////////////////////////////////////////////////////////////////////
 
@@ -13,9 +11,7 @@ FinalsFileExport::FinalsFileExport(QVector<QStringList> inputTable, QString comp
     ui(new Ui::FinalsFileExport)
 {
     ui->setupUi(this);
-
-    //Hide some elements, until they are implemented:
-    ui->ballotButton->hide();
+    connect(ui->drawButton, &QPushButton::clicked, this, drawStartPositions);
 
     this->competitionFileLocation = competitionFileLocation;
     this->competitionName = competitionName;
@@ -68,6 +64,24 @@ void FinalsFileExport::accept()
 
 //}
 
+void FinalsFileExport::drawStartPositions()
+{
+    for(int i = 0; i < ui->finalsCompetitorsTable->rowCount(); i++)
+        ui->finalsCompetitorsTable->item(i, 0)->setText("");
+
+    qsrand(QTime::currentTime().msec());
+
+    QVector<int> positionsToDraw;
+    for(int i = 0; i < ui->finalsCompetitorsTable->rowCount(); i++)
+        positionsToDraw << i;
+
+    for(int i = 0; i < ui->finalsCompetitorsTable->rowCount(); i++){
+        int index = qrand() % positionsToDraw.count();
+        char target = 65 + positionsToDraw.takeAt(index);
+        ui->finalsCompetitorsTable->item(i, 0)->setText(QString("%1").arg(target));
+    }
+}
+
 QString FinalsFileExport::getFinalsFileName()
 {
     return finalsFileName;
@@ -83,8 +97,46 @@ void FinalsFileExport::setRelay(int relay)
     ui->relayNumberBox->setValue(relay);
 }
 
+bool FinalsFileExport::sortCompetitors()
+{
+    bool targetNumbersExist = true;
+    for(int i = 0; i < ui->finalsCompetitorsTable->rowCount(); i++){
+        if(ui->finalsCompetitorsTable->item(i, 0)->text().isEmpty())
+            targetNumbersExist = false;
+    }
+    if(!targetNumbersExist){
+        QMessageBox::warning(this, "Protokollitaja", tr("Kõigil laskuritel ei ole rada märgitud! Lisage numbrid (tähed) käsitsi või kasutage loosimise funktsiooni."), QMessageBox::Ok);
+        return false;
+    }
+
+#ifdef PROOV
+    qDebug() << "Protokollitaja::sortCompetitors()";
+#endif
+    for(int x = 0; x < ui->finalsCompetitorsTable->rowCount(); x++){
+        for(int i = 0; i < (ui->finalsCompetitorsTable->rowCount() - 1); i++){
+            if(ui->finalsCompetitorsTable->item(i, 0)->text().localeAwareCompare(ui->finalsCompetitorsTable->item(i+1, 0)->text()) > 0){
+                QTableWidgetItem* upperItem;
+                QTableWidgetItem* lowerItem;
+                for(int column = 0; column < ui->finalsCompetitorsTable->columnCount(); column++){
+                    upperItem = ui->finalsCompetitorsTable->takeItem(i, column);
+                    lowerItem = ui->finalsCompetitorsTable->takeItem(i + 1, column);
+                    ui->finalsCompetitorsTable->setItem(i, column, lowerItem);
+                    ui->finalsCompetitorsTable->setItem(i + 1, column, upperItem);
+                }
+            }
+        }
+    }
+#ifdef PROOV
+        qDebug() << "Protokollitaja::sortCompetitors(), return true";
+#endif
+    return true;
+}
+
 bool FinalsFileExport::writeFinalsFile()
 {
+    if(!sortCompetitors())
+        return false;
+
     QString fileLocation = competitionFileLocation.left(competitionFileLocation.lastIndexOf('/') + 1);
     finalsFileName = QFileDialog::getSaveFileName(this, tr("Salvesta finaal"), fileLocation + eventName + ".fnl", tr("Finaali fail (*.fnl)"));
     if(finalsFileName.isEmpty()) return false;

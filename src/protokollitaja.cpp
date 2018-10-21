@@ -1460,7 +1460,7 @@ void Protokollitaja::finaaliFail()
                 return;
         }
 
-//        finaaliFailiNimi.clear();
+        finaaliFailiNimi.clear();
 
         bool rajaNrOlemas = false;   //Kontrollimaks, kas kõigil on raja nr'id olemas või mitte
 //        bool valitud = false;   //Kui mõnel laskuril on linnuke ees, siis lähevad valitud finaali
@@ -1492,7 +1492,7 @@ void Protokollitaja::finaaliFail()
         for(int i = 0; i < seeLeht->laskurid.count() && i < 8; i++){
             QStringList finalsRow;
             finalsRow << seeLeht->reasLaskurid[i]->rajaNr->text();
-            finalsRow << QString("%1%2").arg(seeLeht->leheIndeks).arg(seeLeht->reasLaskurid[i]->id);
+            finalsRow << QString("%100%2").arg(seeLeht->leheIndeks).arg(seeLeht->reasLaskurid[i]->id);
             finalsRow << QString("%1 %2.").arg(seeLeht->reasLaskurid[i]->perekNimi->text()).arg(seeLeht->reasLaskurid[i]->eesNimi->text().left(1));
             finalsRow << seeLeht->reasLaskurid[i]->getSumma();
             finalsRow << seeLeht->reasLaskurid[i]->eesNimi->text();
