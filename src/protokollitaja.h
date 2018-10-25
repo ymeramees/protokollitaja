@@ -219,6 +219,7 @@ private slots:
     void peataProgress();   //Sulgeb progressi akna, kui see on ees
     void prindi();
     void prindi2();
+    void readShotInfo(QString data);
     void reasta();
     void reastaP();
     void reastaR();

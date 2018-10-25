@@ -3078,7 +3078,7 @@ void Protokollitaja::loeVorgust()   //Protolehelugejalt tulnud info
             uhendusAutoriseeritud = false;
         }
         else if(sisse.toInt() < 2){
-            saadaVorku(tr("Viga:Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!\nProtolehelugeja on uuem, seega on vaja uuendada Protokollitajat"));
+            saadaVorku(tr("Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!\nProtolehelugeja on uuem, seega on vaja uuendada Protokollitajat"));
             uhendusAutoriseeritud = false;
         }else saadaVorku("Versioon OK");
 
@@ -3088,61 +3088,57 @@ void Protokollitaja::loeVorgust()   //Protolehelugejalt tulnud info
         uuendaVorkuSifriga(sisse.toInt());
     }else if(sisse.startsWith("Laskur:")){  //Saabusid loetud tulemused
         //"Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;seeriad;selle seeria lasud; x; y; summa;aktiivne seeria;harjutus;lasku lehes;kümnendikega lugemine (true/false)
+        readShotInfo(sisse);
+
+//        if(vorguLaskur == 0)
+//            return;
+//        if(!vorguLaskur->onVorguLaskur){    //Kui vahepeal sorteerimisega on pointer valeks läinud, tuleb leida õige laskur
+//            vorguLaskur->setEnabled(true);
+//            for(int i = 0; i < vorguLeht->laskurid.count(); i++){  //Sorteerimine toimub ainult ühel lehel, otsida on vaja seega sealt samalt lehelt
+//                if(vorguLeht->laskurid[i]->onVorguLaskur){
+//                    vorguLaskur = vorguLeht->laskurid[i];
+//                    vorguLaskur->setEnabled(false);
+//                }
+//            }
+//        }
+
+//        sisse.remove(0, 7);
+//        QStringList pakett = sisse.split(";", QString::KeepEmptyParts);
+//        pakett.takeFirst(); //Sifrit pole vaja
+//        pakett.takeFirst(); //Eesnime pole vaja
+//        pakett.takeFirst(); //Perekonnanime pole vaja
+
+//        if(vorguLeht->seeriateArv != pakett.takeFirst().toInt()){   //Seeriate arvu kontroll
+//            saadaVorku("Viga:Seeriate arv ei ühti Protokollitajaga!\n\nTulemusi ei uuendatud!");
+//            vorguLaskur->setEnabled(true);
+//            vorguLaskur = 0;
+//            vorguLeht = 0;
+//            return;
+//        }
+//        pakett.takeFirst(); //Laskude arvu ei ole hetkel vaja
+//        int laskudeArv = 10;
+
+//        bool kasKoik = true;        //Kui kõik seeriad on olemas, siis on ilmselt lehed loetud ja võib muutmist jälle lubada
+//        for(int i = 0; i < vorguLeht->seeriateArv; i++){
+//            vorguLaskur->seeriad[i]->setText(pakett.takeFirst()/*at(4 + i)*/);
+//            for(int j = 0; j < laskudeArv; j++){
+//                vorguLaskur->lasud[i][j]->setLask(pakett.takeFirst());
+//                vorguLaskur->lasud[i][j]->setX(pakett.takeFirst());
+//                vorguLaskur->lasud[i][j]->setY(pakett.takeFirst());
+//            }
+//            if(vorguLaskur->seeriad[i]->text().isEmpty())
+//                kasKoik = false;
+//        }
+//        if(kasKoik){
+//            vorguLaskur->setEnabled(true);
+//        }
 //#ifdef PROOV
-//        qDebug() << "Laskur:" << sisse;
+//        qDebug() << "liida()";
 //#endif
-        if(vorguLaskur == 0)
-            return;
-        if(!vorguLaskur->onVorguLaskur){    //Kui vahepeal sorteerimisega on pointer valeks läinud, tuleb leida õige laskur
-            vorguLaskur->setEnabled(true);
-            for(int i = 0; i < vorguLeht->laskurid.count(); i++){  //Sorteerimine toimub ainult ühel lehel, otsida on vaja seega sealt samalt lehelt
-                if(vorguLeht->laskurid[i]->onVorguLaskur){
-                    vorguLaskur = vorguLeht->laskurid[i];
-                    vorguLaskur->setEnabled(false);
-                }
-            }
-        }
+//        vorguLaskur->liida();
+//        saadaVorku("Summa:" + vorguLaskur->getSumma());
 
-        sisse.remove(0, 7);
-        QStringList pakett = sisse.split(";", QString::KeepEmptyParts);
-        pakett.takeFirst(); //Sifrit pole vaja
-        pakett.takeFirst(); //Eesnime pole vaja
-        pakett.takeFirst(); //Perekonnanime pole vaja
-
-        if(vorguLeht->seeriateArv != pakett.takeFirst().toInt()){   //Seeriate arvu kontroll
-            saadaVorku("Viga:Seeriate arv ei ühti Protokollitajaga!\n\nTulemusi ei uuendatud!");
-            vorguLaskur->setEnabled(true);
-            vorguLaskur = 0;
-            vorguLeht = 0;
-            return;
-        }
-        pakett.takeFirst(); //Laskude arvu ei ole hetkel vaja
-        int laskudeArv = 10;
-
-        bool kasKoik = true;        //Kui kõik seeriad on olemas, siis on ilmselt lehed loetud ja võib muutmist jälle lubada
-        for(int i = 0; i < vorguLeht->seeriateArv; i++){
-            vorguLaskur->seeriad[i]->setText(pakett.takeFirst()/*at(4 + i)*/);
-            for(int j = 0; j < laskudeArv; j++){
-                vorguLaskur->lasud[i][j]->setLask(pakett.takeFirst());
-                vorguLaskur->lasud[i][j]->setX(pakett.takeFirst());
-                vorguLaskur->lasud[i][j]->setY(pakett.takeFirst());
-            }
-            if(vorguLaskur->seeriad[i]->text().isEmpty())
-                kasKoik = false;
-        }
-        if(kasKoik){
-//            for(int i = 0; i < vorguLeht->seeriateArv; i++)
-//                vorguLaskur->seeriad[i]->setEnabled(true);
-//            vorguLaskur->summa->setEnabled(true);
-            vorguLaskur->setEnabled(true);
-        }
-#ifdef PROOV
-        qDebug() << "liida()";
-#endif
-        vorguLaskur->liida();
-        saadaVorku("Summa:" + vorguLaskur->getSumma());
-
-        muudaSalvestamist();
+//        muudaSalvestamist();
     }else if(sisse.startsWith(tr("Käsk:Salvestada"))){  //Palutakse salvestada
         salvesta();
     }else if(sisse.startsWith(tr("Käsk:Vabastada"))){  //Suletakse ühendus ja palutakse vorguLaskur vabastada
@@ -4384,6 +4380,73 @@ void Protokollitaja::prindi2()
 
         delete dokument;
     }
+}
+
+void Protokollitaja::readShotInfo(QString data)
+{
+    //"Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;seeriad;selle seeria lasud; x; y; summa;aktiivne seeria;harjutus;lasku lehes;kümnendikega lugemine (true/false)
+
+    data.remove(0, 7);
+    QStringList dataList = data.split(";", QString::KeepEmptyParts);
+    QString targetNumbersStart = dataList.at(0).left(dataList.at(0).indexOf('-')).trimmed();
+    QString targetNumbersEnd = dataList.at(0).mid(dataList.at(0).indexOf('-') + 1, dataList.at(0).length()).trimmed();
+    dataList.takeFirst(); //Target numbers have been taken already
+    dataList.takeFirst(); //First name not needed
+    dataList.takeFirst(); //Name not needed
+    Laskur *thisCompetitor = 0;
+    Leht* sheet = 0;
+
+#ifdef PROOV
+        qDebug() << "targetNumbersStart: " << targetNumbersStart << ", targetNumbersEnd: " << targetNumbersEnd;
+#endif
+
+    //Locate competitor whose results arrived
+    bool found = false;
+    for(int i = 0; i < tabWidget->count(); i++){
+        sheet = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
+        for(int j = 0; j < sheet->laskurid.count(); j++){
+            if(targetNumbersStart.compare(sheet->laskurid[j]->sifriAlgus->text().trimmed()) == 0 && targetNumbersEnd.compare(sheet->laskurid[j]->sifriLopp->text().trimmed()) == 0){
+                thisCompetitor = sheet->laskurid[j];
+                found = true;
+                logiValja << "#seeLaskur: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << "\n";
+                j = sheet->laskurid.count(); //Loop'ist väljumiseks
+                i = tabWidget->count(); //Loop'ist väljumiseks
+                break;
+            }
+        }
+    }
+
+    if(!found){
+        saadaVorku("Viga:Ei leitud sellist sifrit!\n\nTulemusi ei uuendatud!");
+        return;
+    }else if(sheet->seeriateArv != dataList.takeFirst().toInt()){   //Check number of series
+        saadaVorku("Viga:Seeriate arv ei ühti Protokollitajaga!\n\nTulemusi ei uuendatud!");
+        return;
+    }
+
+    dataList.takeFirst();   //Number of shots currently defaults to 10
+    int numberOfShots = 10;
+
+    for(int i = 0; i < sheet->seeriateArv; i++){
+        QString series = dataList.takeFirst();
+        if(thisCompetitor->seeriad[i]->text() != series){   //Add error message and ask what to do?
+            logiValja << "#lehelugemisel seeria muutus: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " "
+                      << thisCompetitor->perekNimi->text() << ", vana: " << thisCompetitor->seeriad[i]->text() << " uus: " << series << "\n";
+        }
+        thisCompetitor->seeriad[i]->setText(series/*at(5 + i + i * laskudeArv)*/);
+        for(int j = 0; j < numberOfShots; j++){
+            thisCompetitor->lasud[i][j]->setLask(dataList.takeFirst());
+            thisCompetitor->lasud[i][j]->setX(dataList.takeFirst());
+            thisCompetitor->lasud[i][j]->setY(dataList.takeFirst());
+        }
+    }
+#ifdef PROOV
+        qDebug() << "liida()";
+#endif
+        thisCompetitor->liida();
+        saadaVorku("Summa:" + thisCompetitor->getSumma());
+
+    muudaSalvestamist();
 }
 
 void Protokollitaja::reasta()   //Tulemuste järgi reastamine
