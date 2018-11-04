@@ -30,7 +30,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
     protoUuendaja = 0;
     server = 0;
     siusDataSocket = 0;
-    socket = 0;
+//    socket = 0;
     blockSize = 0;
     uhendumiseAken = 0; //SiusDataga ühendumiseks
     lasuVSiusis = 10;   //Loetakse seadete failist üle - ei ole enam kasutuses
@@ -1724,7 +1724,8 @@ void Protokollitaja::kaivitaFinaal()
 void Protokollitaja::kaivitaServer()
 {
     if(server == 0){
-        server = new QTcpServer(this);
+//        server = new QTcpServer(this);
+        server = new ProtolehelugejaServer(this);
         if (!server->listen(QHostAddress::Any, 50005)) {
             QMessageBox::critical(this, tr("Viga"), tr("Unable to start the server: %1.").arg(server->errorString()));
             return;
@@ -1757,9 +1758,11 @@ void Protokollitaja::kaivitaServer()
         if (ipAadress.isEmpty())
             ipAadress = QHostAddress(QHostAddress::LocalHost).toString();
         statusBar()->showMessage(tr("Server käivitatud, ip: %1").arg(ipAadress), 10000);
-        connect(server, SIGNAL(newConnection()), this, SLOT(uusUhendus()));
-    }else QMessageBox::information(this, "Teade", tr("Server töötab, \naadress: %1").arg(ipAadress),
-                                   QMessageBox::Ok);
+//        connect(server, SIGNAL(newConnection()), this, SLOT(uusUhendus()));
+        connect(server, &ProtolehelugejaServer::save, this, salvesta);
+        connect(server, &ProtolehelugejaServer::renewWithTargetNumber, this, uuendaVorkuSifriga);
+        connect(server, &ProtolehelugejaServer::shotInfoRead, this, readShotInfo);
+    }else QMessageBox::information(this, "Teade", tr("Server töötab, \naadress: %1").arg(ipAadress), QMessageBox::Ok);
 }
 
 void Protokollitaja::kasNaitaTul(bool naitamine)
@@ -3028,67 +3031,70 @@ void Protokollitaja::loeUuendusteInfot()
 
 void Protokollitaja::loeVorgust()   //Protolehelugejalt tulnud info
 {
-    QDataStream in(socket);
-    in.setVersion(QDataStream::Qt_4_8);
+    if(verbose)
+        QTextStream(stdout) << "Protokollitaja::loeVorgust()" << endl;
+//    QDataStream in(socket);
+//    in.setVersion(QDataStream::Qt_4_8);
 
-    if (blockSize == 0){
-        if (socket->bytesAvailable() < (int)sizeof(quint16)){
-            return; //Ei ole paketi suurust tähistav quint16 veel kohale jõudnud
-        }
-        in >> blockSize;
-    }
+//    if (blockSize == 0){
+//        if (socket->bytesAvailable() < (int)sizeof(quint16)){
+//            return; //Ei ole paketi suurust tähistav quint16 veel kohale jõudnud
+//        }
+//        in >> blockSize;
+//    }
 
-    if (socket->bytesAvailable() < blockSize){
-        return; //Ei ole kogu pakett veel kohale jõudnud
-    }
+//    if (socket->bytesAvailable() < blockSize){
+//        return; //Ei ole kogu pakett veel kohale jõudnud
+//    }
 
-    QString sisse;
-    int saabunudParool = 0;
-    if(uhendusAutoriseeritud){  //Kui on autoriseeritud ühendus, saadetakse ilmselt muud infot
-        sisse.clear();
-        in >> sisse;
-        blockSize = 0;
-        teatekast.hide();
-#ifdef PROOV
-        qDebug() << "Sisse: " << sisse;
-#endif
-    }else{  //Kui on autoriseerimata ühendus, peab saabuma parool ning seda tuleb kontrollida
-//        in >> sisse;    //Parooli ees on "Parool:"
-        in >> saabunudParool;
-        teatekast.hide();
+//    QString sisse;
+//    int saabunudParool = 0;
+//    if(uhendusAutoriseeritud){  //Kui on autoriseeritud ühendus, saadetakse ilmselt muud infot
+//        sisse.clear();
+//        in >> sisse;
+//        blockSize = 0;
+//        teatekast.hide();
+//#ifdef PROOV
+//        qDebug() << "Sisse: " << sisse;
+//#endif
+//    }else{  //Kui on autoriseerimata ühendus, peab saabuma parool ning seda tuleb kontrollida
+////        in >> sisse;    //Parooli ees on "Parool:"
+//        in >> saabunudParool;
+//        teatekast.hide();
 
-        blockSize = 0;
-        if(parool != 0 && saabunudParool == parool){
-            uhendusAutoriseeritud = true;
-            parool = 0;
-            saadaVorku("OK");
-        }
-        else QMessageBox::information(this, "Teade", tr("Keegi proovis ühenduda vale parooliga! Ühendust ei loodud!"), QMessageBox::Ok);
-        return;
-    }
+//        blockSize = 0;
+//        if(parool != 0 && saabunudParool == parool){
+//            uhendusAutoriseeritud = true;
+//            parool = 0;
+//            saadaVorku("OK");
+//        }
+//        else QMessageBox::information(this, "Teade", tr("Keegi proovis ühenduda vale parooliga! Ühendust ei loodud!"), QMessageBox::Ok);
+//        return;
+//    }
 
-    if(sisse == "Tere"){    //Ühenduse loomise kinnitus
-        teatekast.setText(tr("Ühendus loodud"));
-        teatekast.show();
-        return;
-    }else if(sisse.startsWith("Versioon:")){    //Protolehelugeja ja Protokollitaja omavahelise ühenduse versioon
-        sisse.remove(0, 9);
-        if(sisse.toInt() > 2){
-            saadaVorku(tr("Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!\nProtokollitaja on uuem, seega on vaja uuendada Protolehelugejat või mõlemaid."));
-            uhendusAutoriseeritud = false;
-        }
-        else if(sisse.toInt() < 2){
-            saadaVorku(tr("Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!\nProtolehelugeja on uuem, seega on vaja uuendada Protokollitajat"));
-            uhendusAutoriseeritud = false;
-        }else saadaVorku("Versioon OK");
+//    if(sisse == "Tere"){    //Ühenduse loomise kinnitus
+//        teatekast.setText(tr("Ühendus loodud"));
+//        teatekast.show();
+//        return;
+//    }else if(sisse.startsWith("Versioon:")){    //Protolehelugeja ja Protokollitaja omavahelise ühenduse versioon
+//        sisse.remove(0, 9);
+//        if(sisse.toInt() > 2){
+//            saadaVorku(tr("Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!\nProtokollitaja on uuem, seega on vaja uuendada Protolehelugejat või mõlemaid."));
+//            uhendusAutoriseeritud = false;
+//        }
+//        else if(sisse.toInt() < 2){
+//            saadaVorku(tr("Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!\nProtolehelugeja on uuem, seega on vaja uuendada Protokollitajat"));
+//            uhendusAutoriseeritud = false;
+//        }else saadaVorku("Versioon OK");
 
-        return;
-    }else if(sisse.startsWith("Siffer:")){  //Küsitakse laskurit, kes on selle sifriga
-        sisse.remove(0, 7);
-        uuendaVorkuSifriga(sisse.toInt());
-    }else if(sisse.startsWith("Laskur:")){  //Saabusid loetud tulemused
-        //"Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;seeriad;selle seeria lasud; x; y; summa;aktiivne seeria;harjutus;lasku lehes;kümnendikega lugemine (true/false)
-        readShotInfo(sisse);
+//        return;
+//    }else if(sisse.startsWith("Siffer:")){  //Küsitakse laskurit, kes on selle sifriga
+//        sisse.remove(0, 7);
+//        uuendaVorkuSifriga(sisse.toInt());
+//    }else if(sisse.startsWith("Laskur:")){  //Saabusid loetud tulemused
+//        //"Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;seeriad;selle seeria lasud; x; y; summa;aktiivne seeria;harjutus;lasku lehes;kümnendikega lugemine (true/false)
+//        readShotInfo(sisse);
+
 
 //        if(vorguLaskur == 0)
 //            return;
@@ -3139,12 +3145,14 @@ void Protokollitaja::loeVorgust()   //Protolehelugejalt tulnud info
 //        saadaVorku("Summa:" + vorguLaskur->getSumma());
 
 //        muudaSalvestamist();
-    }else if(sisse.startsWith(tr("Käsk:Salvestada"))){  //Palutakse salvestada
-        salvesta();
-    }else if(sisse.startsWith(tr("Käsk:Vabastada"))){  //Suletakse ühendus ja palutakse vorguLaskur vabastada
-        if(vorguLaskur != 0)
-            vorguLaskur->setEnabled(true);
-    }
+
+
+//    }else if(sisse.startsWith(tr("Käsk:Salvestada"))){  //Palutakse salvestada
+//        salvesta();
+//    }else if(sisse.startsWith(tr("Käsk:Vabastada"))){  //Suletakse ühendus ja palutakse vorguLaskur vabastada
+//        if(vorguLaskur != 0)
+//            vorguLaskur->setEnabled(true);
+//    }
 }
 
 void Protokollitaja::margi()
@@ -4382,8 +4390,12 @@ void Protokollitaja::prindi2()
     }
 }
 
-void Protokollitaja::readShotInfo(QString data)
+void Protokollitaja::readShotInfo(QString data, int socketIndex)
 {
+    if(data.isEmpty() || !data.startsWith("Laskur:")){  //This should not happen
+        logiValja << "Saabus tühi lasuinfo, socketIndex = " << socketIndex;
+        return;
+    }
     //"Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;seeriad;selle seeria lasud; x; y; summa;aktiivne seeria;harjutus;lasku lehes;kümnendikega lugemine (true/false)
 
     data.remove(0, 7);
@@ -4417,10 +4429,10 @@ void Protokollitaja::readShotInfo(QString data)
     }
 
     if(!found){
-        saadaVorku("Viga:Ei leitud sellist sifrit!\n\nTulemusi ei uuendatud!");
+        saadaVorku("Viga:Ei leitud sellist sifrit!\n\nTulemusi ei uuendatud!", socketIndex);
         return;
     }else if(sheet->seeriateArv != dataList.takeFirst().toInt()){   //Check number of series
-        saadaVorku("Viga:Seeriate arv ei ühti Protokollitajaga!\n\nTulemusi ei uuendatud!");
+        saadaVorku("Viga:Seeriate arv ei ühti Protokollitajaga!\n\nTulemusi ei uuendatud!", socketIndex);
         return;
     }
 
@@ -4444,7 +4456,7 @@ void Protokollitaja::readShotInfo(QString data)
         qDebug() << "liida()";
 #endif
         thisCompetitor->liida();
-        saadaVorku("Summa:" + thisCompetitor->getSumma());
+        saadaVorku("Summa:" + thisCompetitor->getSumma(), socketIndex);
 
     muudaSalvestamist();
 }
@@ -4504,36 +4516,39 @@ void Protokollitaja::reastaSi() //Sifrite järgi reastamine
         }
 }
 
-void Protokollitaja::saadaVorku(QString saadetis)
+void Protokollitaja::saadaVorku(QString saadetis, int socketIndex)
 {
-    blockSize = 0;
-    QByteArray block;
-    QDataStream valja(&block, QIODevice::WriteOnly);
-    valja.setVersion(QDataStream::Qt_4_8);
-    valja << (quint16)0;
-    valja << saadetis;
-    valja.device()->seek(0);
-    valja << (quint16)(block.size() - sizeof(quint16));
-    socket->write(block);
-#ifdef PROOV
-        qDebug() << "Valja: " << saadetis;
-#endif
-    block.clear();
+    server->send(saadetis, socketIndex);
+    if(verbose)
+        QTextStream(stdout) << "Protokollitaja::saadaVorku(): " << saadetis << ", socketIndex = " << socketIndex << endl;
+//    blockSize = 0;
+//    QByteArray block;
+//    QDataStream valja(&block, QIODevice::WriteOnly);
+//    valja.setVersion(QDataStream::Qt_4_8);
+//    valja << (quint16)0;
+//    valja << saadetis;
+//    valja.device()->seek(0);
+//    valja << (quint16)(block.size() - sizeof(quint16));
+//    socket->write(block);
+//#ifdef PROOV
+//        qDebug() << "Valja: " << saadetis;
+//#endif
+//    block.clear();
 }
 
-void Protokollitaja::saadaVorku(int saadetis)
-{
-    blockSize = 0;
-    QByteArray block;
-    QDataStream valja(&block, QIODevice::WriteOnly);
-    valja.setVersion(QDataStream::Qt_4_8);
-    valja << (quint16)0;
-    valja << saadetis;
-    valja.device()->seek(0);
-    valja << (quint16)(block.size() - sizeof(quint16));
-    socket->write(block);
-    block.clear();
-}
+//void Protokollitaja::saadaVorku(int saadetis)
+//{
+//    blockSize = 0;
+//    QByteArray block;
+//    QDataStream valja(&block, QIODevice::WriteOnly);
+//    valja.setVersion(QDataStream::Qt_4_8);
+//    valja << (quint16)0;
+//    valja << saadetis;
+//    valja.device()->seek(0);
+//    valja << (quint16)(block.size() - sizeof(quint16));
+//    socket->write(block);
+//    block.clear();
+//}
 
 void Protokollitaja::salvesta()
 {
@@ -4616,8 +4631,9 @@ void Protokollitaja::sulge()
 
 void Protokollitaja::sulgeUhendus()
 {
-    uhendusAutoriseeritud = false;
-    socket = 0;
+    server->closeConnections();
+//    uhendusAutoriseeritud = false;
+//    socket = 0;
 }
 
 void Protokollitaja::taiendaAndmebaas()
@@ -5042,7 +5058,7 @@ void Protokollitaja::uuendaVoistkondi() //Uuendadakse võistkondade tulemusi enn
         }
 }
 
-void Protokollitaja::uuendaVorkuSifriga(int siffer)
+void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
 {
     if(tabWidget->count() > 0){
         int laskudeArv = 10;
@@ -5057,7 +5073,7 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer)
                 if(!leht->laskurid[j]->sifriAlgus->text().isEmpty())
                     if(siffer >= leht->laskurid[j]->sifriAlgus->text().toInt() && siffer < leht->laskurid[j]->sifriLopp->text().toInt()){
                         if(leht->laskurid[j]->onLehelugejaLaskur){
-                            saadaVorku("Viga:Sellele laskurile juba loetakse lehti Protokollitajas!");
+                            saadaVorku("Viga:Sellele laskurile juba loetakse lehti Protokollitajas!", socketIndex);
                             return;
                         }
 //                        if(leht->seeriateArv > 6){
@@ -5094,7 +5110,7 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer)
                                 }
                             }
                         }else{
-                            saadaVorku("Viga:Sellist harjutust ei toetata!\nSeeriate arv liiga suur.");
+                            saadaVorku("Viga:Sellist harjutust ei toetata!\nSeeriate arv liiga suur.", socketIndex);
                             vorguLaskur->onVorguLaskur = false;
                             vorguLaskur = 0;
                             vorguLeht = 0;
@@ -5140,7 +5156,7 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer)
                         else pakett.append("false");
 //                        lehelugejaAken->m_ui.kumnendikegaBox->setChecked(lehelugejaLeht->kumnendikega);
 //                        lehelugejaAken->seadista();
-                        saadaVorku(pakett);
+                        saadaVorku(pakett, socketIndex);
 //                        for(int i = 0; i < leht->seeriateArv; i++){ //Välistamaks, et samal ajal, kui lehti loetakse, muudab keegi käsitsi seeriaid, tuleb muutmine blokeerida
 //                            vorguLaskur->seeriad[i]->setEnabled(false);
 //                        }
@@ -5152,7 +5168,7 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer)
         }
     }
 //    QMessageBox::warning(this, "Hoiatus!", "Sellist sifrit ei leitud!", "Selge");
-    saadaVorku("Hoiatus:Sellist sifrit ei leitud!");
+    saadaVorku("Hoiatus:Sellist sifrit ei leitud!", socketIndex);
     vorguLaskur = 0;
     vorguLeht = 0;
     }
@@ -5332,23 +5348,23 @@ void Protokollitaja::uusTab()
         }
 }
 
-void Protokollitaja::uusUhendus()   //Tuli uus ühendus serverisse
-{
-    qsrand(QTime::currentTime().msec());
-    if(socket != 0)
-        socket->abort();
-    socket = server->nextPendingConnection();
-    connect(socket, SIGNAL(readyRead()), this, SLOT(loeVorgust()));
-    connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
-    connect(socket, SIGNAL(disconnected()), this, SLOT(sulgeUhendus()));
-    parool = 0;
-    while(parool < 1000)
-        parool = qrand() % 9999;    //Parool on vajalik, et ei saaks keegi suvaline ühenduda serveriga ja tulemusi sisestama hakata
-    teatekast.setText(tr("Serverisse on loodud uus ühendus.\n\nParool: %1").arg(parool));
-    teatekast.show();
+//void Protokollitaja::uusUhendus()   //Tuli uus ühendus serverisse
+//{
+//    qsrand(QTime::currentTime().msec());
+//    if(socket != 0)
+//        socket->abort();
+//    socket = server->nextPendingConnection();
+//    connect(socket, SIGNAL(readyRead()), this, SLOT(loeVorgust()));
+//    connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
+//    connect(socket, SIGNAL(disconnected()), this, SLOT(sulgeUhendus()));
+//    parool = 0;
+//    while(parool < 1000)
+//        parool = qrand() % 9999;    //Parool on vajalik, et ei saaks keegi suvaline ühenduda serveriga ja tulemusi sisestama hakata
+//    teatekast.setText(tr("Serverisse on loodud uus ühendus.\n\nParool: %1").arg(parool));
+//    teatekast.show();
 //    QMessageBox::information(this, "Teade", tr("Serverisse on loodud uus ühendus.\n\nParool: %1").arg(parool)
 //                             , QMessageBox::Ok);
-}
+//}
 
 void Protokollitaja::viiLoppu()
 {

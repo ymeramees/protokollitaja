@@ -44,6 +44,7 @@
 #include "startlistwriter.h"
 #include "finalsfileexport.h"
 #include "liikmetevalikkast.h"
+#include "protolehelugejaserver.h"
 #include "../qfinaal/src/uhendumiseaken.h"
 #include "xlslib.h"
 
@@ -73,6 +74,7 @@ public:
     int parool;
     int lasuVSiusis;   //Mitmes lahter on lasu väärtus SiusDatatast tulnud reas
     int lasuNrSiusis;   //Mitmes lahter on lasu jrk number SiusDatatast tulnud reas
+    ProtolehelugejaServer *server;  //For accepting connections from Protolehelugeja
     QFile *logi;    //Siusist tulnud info põhjal tehtud muudatuste logi
     QFile *siusLogi;    //Siusist saabunud võrguliikluse logi
 	QString voistluseNimi;
@@ -145,8 +147,8 @@ public:
 	QPixmap *pilt;
 	QPixmap *pilt2;
 	//QPixmap *lPilt;
-    QTcpServer *server; //Server, kuhu ühendub Protolehelugeja
-    QTcpSocket *socket; //Protolehelugejaga suhtlemiseks
+//    QTcpServer *server; //Server, kuhu ühendub Protolehelugeja
+//    QTcpSocket *socket; //Protolehelugejaga suhtlemiseks
     QTcpSocket *siusDataSocket; //SiusDataga suhtlemiseks
     quint16 blockSize;  //Protolehelugejaga suhtlemisel paketi suurus
     QMessageBox teatekast;
@@ -219,14 +221,14 @@ private slots:
     void peataProgress();   //Sulgeb progressi akna, kui see on ees
     void prindi();
     void prindi2();
-    void readShotInfo(QString data);
+    void readShotInfo(QString data, int socketIndex);
     void reasta();
     void reastaP();
     void reastaR();
     void reastaS();
     void reastaSi();
-    void saadaVorku(QString);
-    void saadaVorku(int);
+    void saadaVorku(QString, int socketIndex);
+//    void saadaVorku(int);
     void salvesta();
     void salvestaKui();
     void seiskaServer();
@@ -241,14 +243,14 @@ private slots:
     void uuendaLiikmeteNimekirja(int);
     void uuendaSeaded();
     void uuendaVoistkondi();
-    void uuendaVorkuSifriga(int);
+    void uuendaVorkuSifriga(int, int socketIndex);
     void uhenduSiusDataga();
     void uhendusSiusigaKatkes();
     void uus();
     void uusLaskur();    //Uue laskuri loomine,  koos uue ID'ga
     void uusLaskur(int);   //Uue laskuri loomine, koos olemasoleva ID'ga (kasutatakse näiteks faili avamisel
     void uusTab();
-    void uusUhendus();
+//    void uusUhendus();
     void viiLoppu();
 
 private:
