@@ -2,12 +2,12 @@
 
 extern bool verbose;
 
-ProtolehelugejaConnection::ProtolehelugejaConnection(QObject *parent) : QObject(parent)
+ProtolehelugejaConnection::ProtolehelugejaConnection(QTcpSocket *parent) : QObject(parent)
 {
     askedTargetNumber = 0;
     blockSize = 0;
     passwd = 0;
-    socket = new QTcpSocket(this);
+    socket = parent;
     connect(socket, &QTcpSocket::readyRead, this, &ProtolehelugejaConnection::readData);
 
     qsrand(QTime::currentTime().msec());
@@ -94,7 +94,7 @@ void ProtolehelugejaConnection::readData()
         if(passwd != 0 && receivedPasswd == passwd){
             authorized = true;
 //            this->setAuthorized(true);
-//            parool = 0;
+            passwd = 0;
             send("OK"/*, socketIndex*/);
         }
         else QMessageBox::information(dynamic_cast<QWidget*>(this->parent()), "Teade", tr("Keegi proovis ühenduda vale parooliga! Ühendust ei loodud!"), QMessageBox::Ok);

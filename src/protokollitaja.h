@@ -209,7 +209,6 @@ private slots:
     void loeSeaded();
     void loeSiusDatast();   //Võtab vastu lasud SiusDatast
     void loeUuendusteInfot();   //Töötleb uuenduste kohta laetud infot
-    void loeVorgust();
     void margi();
     void muudaSalvestamist();
     void muudaTab(const QModelIndex&);

@@ -22,7 +22,6 @@ public slots:
 private:
     QList<ProtolehelugejaConnection*> sockets;
     QMessageBox messageBox;
-//    QSignalMapper *mapper;
     void closeConnection();
     void newConnection();
 

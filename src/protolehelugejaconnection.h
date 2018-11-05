@@ -9,12 +9,12 @@ class ProtolehelugejaConnection : public QObject
 {
     Q_OBJECT
 public:
-    explicit ProtolehelugejaConnection(QObject *parent = 0);
+    explicit ProtolehelugejaConnection(QTcpSocket *parent = 0);
 
 signals:
     void disconnected();
     void renewWithTargetNumber(int myIndex);
-    void save();    //When save is requested by peer
+    void save();    //Save is requested by peer
     void shotInfoRead(int myIndex);
 
 public slots:
