@@ -153,9 +153,9 @@ public:
     quint16 blockSize;  //Protolehelugejaga suhtlemisel paketi suurus
     QMessageBox teatekast;
     Leht *lehelugejaLeht;   //Pointer lehele, millele loetakse parasjagu tulemusi
-    Leht *vorguLeht;    //Pointer lehele, millel oleva laskuri siffer saadeti viimati Protolehelugejale
+//    Leht *vorguLeht;    //Pointer lehele, millel oleva laskuri siffer saadeti viimati Protolehelugejale
     Laskur *lehelugejaLaskur;   //Pointer laskurile, kellele loetakse parasjagu tulemusi
-    Laskur *vorguLaskur;    //Pointer laskurile, kelle siffer saadeti viimati Protolehelugejale
+//    Laskur *vorguLaskur;    //Pointer laskurile, kelle siffer saadeti viimati Protolehelugejale
 	AlguseValik *aValik;
     FileDownloader *allaLaadija;    //Uuenduste info allalaadimiseks
 	ValikKast *valik;

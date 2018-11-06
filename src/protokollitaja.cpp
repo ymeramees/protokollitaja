@@ -514,8 +514,8 @@ void Protokollitaja::algseaded()    //Seadistab algsed väärtused kas programmi
     leheIndeks = 0;
     lehelugejaLeht = 0;
     lehelugejaLaskur = 0;
-    vorguLeht = 0;
-    vorguLaskur = 0;
+//    vorguLeht = 0;
+//    vorguLaskur = 0;
     uhendusAutoriseeritud = false;
     aadressidOtsitud = false;
 
@@ -2237,7 +2237,7 @@ void Protokollitaja::liiguta()
                 }
                 for(int j = 0; j < leht->laskurid.count(); j++){
                     if(leht->laskurid[j]->linnuke->isChecked()){
-                        if(!leht->laskurid[j]->onLehelugejaLaskur && !leht->laskurid[j]->onVorguLaskur && leht->laskurid[j]->isEnabled()){
+                        if(!leht->laskurid[j]->onLehelugejaLaskur && /*!leht->laskurid[j]->onVorguLaskur &&*/ leht->laskurid[j]->isEnabled()){
                             leht2->uusLaskur(leht->laskurid[j]->id);
                             leht2->laskurid[leht2->laskurid.count() - 1]->set(leht->laskurid[j]);
                         }else{
@@ -4662,10 +4662,10 @@ void Protokollitaja::uuendaLehelugejat(QString nimi)
                 if(lehelugejaLeht->seeriateArv > 6){
                     QMessageBox::critical(this, "Viga", tr("Kahjuks see versioon Protokollitajast ei toeta lehelugemist 3x40 lasku standardi harjutustes!"), "Selge");
                     return;
-                }else if(lehelugejaLeht->laskurid[i]->onVorguLaskur){
+                }/*else if(lehelugejaLeht->laskurid[i]->onVorguLaskur){
                     QMessageBox::critical(this, "Viga", tr("Sellele laskurile juba loetakse lehti Lehelugejas!"), "Selge");
                     return;
-                }
+                }*/
                 for(int k = 0; k < lehelugejaAken->seeriad.count(); k++){
                     lehelugejaAken->seeriad[k]->show();
                     lehelugejaAken->seeriad[k]->clear();
@@ -4731,10 +4731,10 @@ void Protokollitaja::uuendaLehelugejatSifriga(int siffer)
                             if(leht->seeriateArv > 6){
                                 QMessageBox::critical(this, "Viga", tr("Kahjuks see versioon Protokollitajast ei toeta lehelugemist 3x40 lasku standardi harjutustes!"), "Selge");
                                 return;
-                            }else if(leht->laskurid[j]->onVorguLaskur){
+                            }/*else if(leht->laskurid[j]->onVorguLaskur){
                                 QMessageBox::critical(this, "Viga", tr("Sellele laskurile juba loetakse lehti Lehelugejas!"), "Selge");
                                 return;
-                            }
+                            }*/
     //                        int siffer = lehelugejaAken->m_ui.sifriEdit->text().toInt();
                             lehelugejaAken->m_ui.logi->append(QString("Siffer: %1").arg(siffer));
                             lehelugejaLeht = leht;
@@ -4936,10 +4936,10 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
 {
     if(tabWidget->count() > 0){
         int laskudeArv = 10;
-        if(vorguLaskur != 0){
-            vorguLaskur->onVorguLaskur = false;    //Vana laskur tuleb "vabastada"
-            vorguLaskur->setEnabled(true);  //Eelmise laskuri võib nüüd vabastada, enne kui uus blokeeritakse
-        }
+//        if(vorguLaskur != 0){
+//            vorguLaskur->onVorguLaskur = false;    //Vana laskur tuleb "vabastada"
+//            vorguLaskur->setEnabled(true);  //Eelmise laskuri võib nüüd vabastada, enne kui uus blokeeritakse
+//        }
     for(int i = 0; i < tabWidget->count(); i++){
         Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
         if(!leht->voistk){
@@ -4959,17 +4959,17 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
 //                        lehelugejaAken->m_ui.logi->append(QString("Siffer: %1").arg(siffer));
                         QString pakett = "Laskur:"; //Protolehelugejasse saadetav pakett
                                 //"Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;seeriad;selle seeria lasud; x; y; summa;aktiivne seeria;harjutus;lasku lehes;kümnendikega lugemine (true/false)
-                        vorguLeht = leht;
+//                        vorguLeht = leht;
 
-                        vorguLaskur = vorguLeht->laskurid[j]; //Pointer laskurile, keda vaja uuendada kui lehed on loetud
-                        vorguLaskur->onVorguLaskur = true; //Uus laskur tuleb "märgistada"
+//                        vorguLaskur = vorguLeht->laskurid[j]; //Pointer laskurile, keda vaja uuendada kui lehed on loetud
+//                        vorguLaskur->onVorguLaskur = true; //Uus laskur tuleb "märgistada"
 //                        lehelugejaAken->m_ui.nimeBox->clear();
 //                        for(int k = 0; k < lehelugejaAken->seeriad.count(); k++){
 //                            lehelugejaAken->seeriad[k]->show();
 //                            lehelugejaAken->seeriad[k]->clear();
 //                        }
-                        pakett.append(vorguLaskur->sifriAlgus->text() + " - " + vorguLaskur->sifriLopp->text() + ";");
-                        pakett.append(vorguLaskur->eesNimi->text() + ";" + vorguLaskur->perekNimi->text() + ";");
+                        pakett.append(leht->laskurid[j]->sifriAlgus->text() + " - " + leht->laskurid[j]->sifriLopp->text() + ";");
+                        pakett.append(leht->laskurid[j]->eesNimi->text() + ";" + leht->laskurid[j]->perekNimi->text() + ";");
 
 //                        for(int k = 0; k < leht->laskurid.count(); k++)
 //                            lehelugejaAken->m_ui.nimeBox->addItem(leht->laskurid[k]->eesNimi->text() + " " +
@@ -4977,21 +4977,21 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
                         pakett.append(QString("%1;%2;").arg(leht->seeriateArv).arg(laskudeArv));    //Laskude arv on hetkel ainult 10
                         if(leht->seeriateArv <= 12){
                             for(int k = 0; k < leht->seeriateArv; k++){
-                                pakett.append(vorguLaskur->seeriad[k]->text() + ";");
+                                pakett.append(leht->laskurid[j]->seeriad[k]->text() + ";");
                                 for(int j = 0; j < laskudeArv; j++){
-                                    pakett.append(QString("%1;%2;%3;").arg(vorguLaskur->lasud[k][j]->getFLask())
-                                                  .arg(vorguLaskur->lasud[k][j]->stringX()).arg(vorguLaskur->lasud[k][j]->stringY()));
+                                    pakett.append(QString("%1;%2;%3;").arg(leht->laskurid[j]->lasud[k][j]->getFLask())
+                                                  .arg(leht->laskurid[j]->lasud[k][j]->stringX()).arg(leht->laskurid[j]->lasud[k][j]->stringY()));
                                 }
                             }
                         }else{
                             saadaVorku("Viga:Sellist harjutust ei toetata!\nSeeriate arv liiga suur.", socketIndex);
-                            vorguLaskur->onVorguLaskur = false;
-                            vorguLaskur = 0;
-                            vorguLeht = 0;
+//                            vorguLaskur->onVorguLaskur = false;
+//                            vorguLaskur = 0;
+//                            vorguLeht = 0;
                             return;
                         }
 //                                lehelugejaAken->seeriad[k]->setText(leht->laskurid[j]->seeriad[k]->text());
-                        pakett.append(vorguLaskur->getSumma() + ";");
+                        pakett.append(leht->laskurid[j]->getSumma() + ";");
 //                        lehelugejaAken->m_ui.summaEdit->setText(leht->laskurid[j]->summa->text());
 //                        lehelugejaAken->m_ui.sifriLabel->setText(leht->laskurid[j]->sifriAlgus->text() + " - " +
 //                                                                 leht->laskurid[j]->sifriLopp->text());
@@ -5005,10 +5005,10 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
                             }
                         }*/
                         //laskude arv lehes
-                        int laskuLehes = leht->seeriateArv * 10 / (vorguLaskur->sifriLopp->text().toInt() -
-                                                                   vorguLaskur->sifriAlgus->text().toInt() + 1);
+                        int laskuLehes = leht->seeriateArv * 10 / (leht->laskurid[j]->sifriLopp->text().toInt() -
+                                                                   leht->laskurid[j]->sifriAlgus->text().toInt() + 1);
                         //mitmes leht (seni lastud lehtede arv)
-                        int lehti = siffer - vorguLaskur->sifriAlgus->text().toInt();
+                        int lehti = siffer - leht->laskurid[j]->sifriAlgus->text().toInt();
                         //lastud laskude arv ja sealt mitmendat seeriat hakatakse lugema
                         k = lehti * laskuLehes / 10;
 //                        for(int j = leht->seeriateArv; j < lehelugejaAken->seeriad.count(); j++)
@@ -5025,7 +5025,7 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
 //                            lehelugejaAken->m_ui.leheCombo->setCurrentIndex(2);
                         pakett.append(QString("%1;").arg(laskuLehes));
 //                        lehelugejaAken->m_ui.laskudeBox->setValue(laskuLehes);
-                        if(vorguLeht->kumnendikega)
+                        if(leht->kumnendikega)
                             pakett.append("true");
                         else pakett.append("false");
 //                        lehelugejaAken->m_ui.kumnendikegaBox->setChecked(lehelugejaLeht->kumnendikega);
@@ -5035,7 +5035,7 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
 //                            vorguLaskur->seeriad[i]->setEnabled(false);
 //                        }
 //                        vorguLaskur->summa->setEnabled(false);
-                        vorguLaskur->setEnabled(false); //Välistamaks, et samal ajal, kui lehti loetakse, muudab keegi käsitsi
+//                        vorguLaskur->setEnabled(false); //Välistamaks, et samal ajal, kui lehti loetakse, muudab keegi käsitsi
                                                         //seeriaid, tuleb muutmine blokeerida
                         return;
                     }
@@ -5043,8 +5043,8 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
     }
 //    QMessageBox::warning(this, "Hoiatus!", "Sellist sifrit ei leitud!", "Selge");
     saadaVorku("Hoiatus:Sellist sifrit ei leitud!", socketIndex);
-    vorguLaskur = 0;
-    vorguLeht = 0;
+//    vorguLaskur = 0;
+//    vorguLeht = 0;
     }
 }
 

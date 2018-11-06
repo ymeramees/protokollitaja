@@ -22,7 +22,7 @@ public slots:
 private:
     QList<ProtolehelugejaConnection*> sockets;
     QMessageBox messageBox;
-    void closeConnection();
+    void closeConnection(int socketIndex);
     void newConnection();
 
 private slots:

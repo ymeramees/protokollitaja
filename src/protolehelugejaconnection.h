@@ -12,9 +12,9 @@ public:
     explicit ProtolehelugejaConnection(QTcpSocket *parent = 0);
 
 signals:
-    void disconnected();
+    void disconnected(int myIndex);
     void renewWithTargetNumber(int myIndex);
-    void save();    //Save is requested by peer
+    void save();    //Saving is requested by peer
     void shotInfoRead(int myIndex);
 
 public slots:

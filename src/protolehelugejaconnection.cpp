@@ -8,12 +8,12 @@ ProtolehelugejaConnection::ProtolehelugejaConnection(QTcpSocket *parent) : QObje
     blockSize = 0;
     passwd = 0;
     socket = parent;
-    connect(socket, &QTcpSocket::readyRead, this, &ProtolehelugejaConnection::readData);
+    connect(socket, &QTcpSocket::readyRead, this, readData);
+    connect(socket, &QTcpSocket::disconnected, this, wasDisconnected);
 
     qsrand(QTime::currentTime().msec());
     while(passwd < 1000)
-        passwd = qrand() % 9999;    //Parool on vajalik, et ei saaks keegi suvaline ühenduda serveriga ja tulemusi sisestama hakata
-//    socket->setPasswd(passwd);
+        passwd = qrand() % 9999;    //Password is needed to make sure it is not too easy to connect and start inserting results
     messageBox.setText(tr("Serverisse on loodud uus ühendus.\n\nParool: %1").arg(passwd));
     messageBox.show();
 }
@@ -25,7 +25,7 @@ void ProtolehelugejaConnection::abort()
 
 void ProtolehelugejaConnection::wasDisconnected()
 {
-    emit disconnected();
+    emit disconnected(myIndex);
 }
 
 int ProtolehelugejaConnection::getAskedTargetNumber()
@@ -62,29 +62,25 @@ void ProtolehelugejaConnection::readData()
 
     if (blockSize == 0){
         if (socket->bytesAvailable() < (int)sizeof(quint16)){
-            return; //Ei ole paketi suurust tähistav quint16 veel kohale jõudnud
+            return; //Packet size info (quint16) not yet received
         }
         in >> blockSize;
     }
 
     if (socket->bytesAvailable() < blockSize){
-        return; //Ei ole kogu pakett veel kohale jõudnud
+        return; //Whole packet not yet received
     }
 
     QString lineIn;
     int receivedPasswd = 0;
-    if(authorized){  //Kui on autoriseeritud ühendus, saadetakse ilmselt muud infot
+    if(authorized){  //If the connection is authorized, some information is being sent
         lineIn.clear();
         in >> lineIn;
         blockSize = 0;
         messageBox.hide();
         if(verbose)
             QTextStream(stdout) << "ProtolehelugejaConnection::readData() lineIn: " << lineIn << endl;
-//#ifdef PROOV
-//        qDebug() << "Sisse: " << lineIn;
-//#endif
-    }else{  //Kui on autoriseerimata ühendus, peab saabuma parool ning seda tuleb kontrollida
-//        in >> sisse;    //Parooli ees on "Parool:"
+    }else{  //If the connection is not authorized, password must be received and checked
         in >> receivedPasswd;
         if(verbose)
             QTextStream(stdout) << "ProtolehelugejaConnection::readData() receivedPasswd: " << receivedPasswd << endl;
@@ -93,47 +89,41 @@ void ProtolehelugejaConnection::readData()
         blockSize = 0;
         if(passwd != 0 && receivedPasswd == passwd){
             authorized = true;
-//            this->setAuthorized(true);
             passwd = 0;
-            send("OK"/*, socketIndex*/);
+            send("OK");
         }
         else QMessageBox::information(dynamic_cast<QWidget*>(this->parent()), "Teade", tr("Keegi proovis ühenduda vale parooliga! Ühendust ei loodud!"), QMessageBox::Ok);
         return;
     }
 
-    if(lineIn == "Tere"){    //Ühenduse loomise kinnitus
+    if(lineIn == "Tere"){    //Confirmation of establishing the connection
         messageBox.setText(tr("Ühendus loodud"));
         messageBox.show();
         return;
-    }else if(lineIn.startsWith("Versioon:")){    //Protolehelugeja ja Protokollitaja omavahelise ühenduse versioon
+    }else if(lineIn.startsWith("Versioon:")){    //Version of the connection protocol between Protokollitaja and Protolehelugeja
         lineIn.remove(0, 9);
         if(lineIn.toInt() > 2){
-            send(tr("Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!\nProtokollitaja on uuem, seega on vaja uuendada Protolehelugejat või mõlemaid.")/*, socketIndex*/);
+            send(tr("Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!\nProtokollitaja on uuem, seega on vaja uuendada Protolehelugejat või mõlemaid."));
             authorized = false;
-//            this->setAuthorized(false);
         }
         else if(lineIn.toInt() < 2){
-            send(tr("Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!\nProtolehelugeja on uuem, seega on vaja uuendada Protokollitajat")/*, socketIndex*/);
+            send(tr("Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!\nProtolehelugeja on uuem, seega on vaja uuendada Protokollitajat"));
             authorized = false;
-//            this->setAuthorized(false);
-        }else send("Versioon OK"/*, socketIndex*/);
+        }else send("Versioon OK");
 
         return;
-    }else if(lineIn.startsWith("Siffer:")){  //Küsitakse laskurit, kes on selle sifriga
+    }else if(lineIn.startsWith("Siffer:")){  //Competitor with these target numbers requested
         lineIn.remove(0, 7);
         askedTargetNumber = lineIn.toInt();
         emit renewWithTargetNumber(myIndex);
-    }else if(lineIn.startsWith("Laskur:")){  //Saabusid loetud tulemused
+    }else if(lineIn.startsWith("Laskur:")){  //Results received
         //"Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;seeriad;selle seeria lasud; x; y; summa;aktiivne seeria;harjutus;lasku lehes;kümnendikega lugemine (true/false)
         lastRecvdLine = lineIn;
         emit shotInfoRead(myIndex);
 
-    }else if(lineIn.startsWith(tr("Käsk:Salvestada"))){  //Palutakse salvestada
+    }else if(lineIn.startsWith(tr("Käsk:Salvestada"))){  //Saving is requested
         emit save();
-    }/*else if(sisse.startsWith(tr("Käsk:Vabastada"))){  //Suletakse ühendus ja palutakse vorguLaskur vabastada
-        if(vorguLaskur != 0)
-            vorguLaskur->setEnabled(true);
-    }*/
+    }
 }
 
 void ProtolehelugejaConnection::send(QString data)
@@ -149,9 +139,6 @@ void ProtolehelugejaConnection::send(QString data)
     out.device()->seek(0);
     out << (quint16)(block.size() - sizeof(quint16));
     socket->write(block);
-//#ifdef PROOV
-//        qDebug() << "Valja: " << data;
-//#endif
     block.clear();
 }
 

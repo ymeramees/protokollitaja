@@ -14,6 +14,7 @@ QString versioon = VER_PRODUCTVERSION_STR; //"0.5.x Beta";
 QString aasta = VER_AASTA;
 QString argument;
 bool verbose = false;
+bool veryVerbose = false;
 //QDir asukoht;
 
 int main(int argc, char *argv[])
@@ -23,6 +24,9 @@ int main(int argc, char *argv[])
         for(int i = 0; i < argc; i++)
             if(QString("%1").arg(argv[i]) == "-v"){
                 QTextStream(stdout) << "-v => kuvatakse debug info" << endl;
+                verbose = true;
+            }else if(QString("%1").arg(argv[i]) == "-vv"){
+                QTextStream(stdout) << "-vv => kuvatakse rohke debug info" << endl;
                 verbose = true;
             }
     QApplication a(argc, argv);
