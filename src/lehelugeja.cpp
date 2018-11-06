@@ -426,7 +426,7 @@ void Lehelugeja::joonistaLeht()
 void Lehelugeja::liidaSeeria()
 {
     float fl = 0;
-    if(ui->kumnendikegaBox->isChecked()){  //Kui on kümnendikega lugemine, on vja liita komakohaga lasu väärtus
+    if(ui->kumnendikegaBox->isChecked()){  //Kui on kümnendikega lugemine, on vaja liita komakohaga lasu väärtus
         for(int i = 0; i < laskudeArv; i++){
             seeria += seeriaLasud[i]->get10Lask();
         }
