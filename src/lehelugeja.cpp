@@ -19,6 +19,7 @@
 extern QString programmiNimi;
 extern QString versioon;
 extern QString aasta;
+extern bool verbose;
 
 #define EOT 0x04
 #define ENQ 0x05 	// Anfrage
@@ -85,6 +86,13 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
     failMenu = ui->menuBar->addMenu("&Fail");
     failMenu->addAction(uhenduServerigaAct);
     failMenu->addAction(valjuAct);
+
+//#ifdef PROOV
+//    QAction *liidaSeeriaAct = new QAction("Liida seeria", this);
+//    liidaSeeriaAct->setStatusTip("Liidab seeria suvaliste tulemustega testimiseks");
+//    connect(liidaSeeriaAct, SIGNAL(triggered()), this, SLOT(liidaSeeria()));
+//    failMenu->addAction(liidaSeeriaAct);
+//#endif
 
     abiMenu = ui->menuBar->addMenu("&Abi");
     abiMenu->addAction(programmistAct);
@@ -425,6 +433,13 @@ void Lehelugeja::joonistaLeht()
 
 void Lehelugeja::liidaSeeria()
 {
+//#ifdef PROOV    //For quick and dirty testing purposes
+//    for(int i = 0; i < laskudeArv; i++){
+//        seeriaLasud[i]->setX(qrand() % 100);
+//        seeriaLasud[i]->setY(qrand() % 100);
+//        seeriaLasud[i]->setLask(qrand() % 10);
+//    }
+//#endif
     float fl = 0;
     if(ui->kumnendikegaBox->isChecked()){  //Kui on kümnendikega lugemine, on vaja liita komakohaga lasu väärtus
         for(int i = 0; i < laskudeArv; i++){
@@ -870,9 +885,9 @@ void Lehelugeja::loeBroadcast()
         QHostAddress protoAadress;
         datagram.resize(udpSocket2->pendingDatagramSize());
         udpSocket2->readDatagram(datagram.data(), datagram.size(), &protoAadress);
-#ifdef PROOV
-            qDebug() << "Saabus broadcast: " << datagram.data();
-#endif
+        if(verbose)
+            QTextStream(stdout) << "Saabus broadcast: " << datagram.data();
+
 //        statusLabel->setText(tr("Received datagram: \"%1\"").arg(datagram.data()));
 //        QMessageBox::information(this, tr("Teade"), tr("Saabus broadcastitud datagram: \"%1\"").arg(datagram.data()), QMessageBox::Ok);
         QString rida(datagram);
@@ -908,9 +923,8 @@ void Lehelugeja::loeBroadcast()
             //Kui eelmine tulemust ei andnud, siis proovida kõiki aadresse
             for(int i = 0; i < ipAadressid.count(); ++i){
                 if(progress->wasCanceled()) return;  //Ühenduse loomise katkestamine
-#ifdef PROOV
-            qDebug() << QString("ipAadressid.at(%1) = %2").arg(i).arg(ipAadressid.at(i));
-#endif
+                if(verbose)
+                    QTextStream(stdout) << QString("ipAadressid.at(%1) = %2").arg(i).arg(ipAadressid.at(i));
                 socket->connectToHost(ipAadressid.at(i), 50005);
                 if(socket->waitForConnected(500)){
                     aadress = ipAadressid.at(i);    //Serveri IP uuendamine
@@ -961,7 +975,7 @@ void Lehelugeja::loeVorgust()   //Protokollitajast tulev info/käsk
 //        in >> sisse;
         blockSize = 0;
         if(sisse == "OK"){
-            saadaVorku("Versioon:2");
+            saadaVorku("Versioon:3");
         }else if(sisse == "Versioon OK"){
             uhendusAutoriseeritud = true;
             saadaVorku("Tere");
@@ -971,6 +985,8 @@ void Lehelugeja::loeVorgust()   //Protokollitajast tulev info/käsk
     if(sisse.startsWith("Laskur:")){    //Saadeti laskur, kellele tulemusi lugema hakata
         //"Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;seeriad;selle seeria lasud; x; y; summa;
         //aktiivne seeria;harjutus;lasku lehes;kümnendikega lugemine (true/false)
+        if(verbose)
+            QTextStream(stdout) << "Protolehelugeja::loeVorgust(): sisse = " << sisse << endl;
         sisse.remove(0, 7);
 
         ui->nimeBox->clear();
@@ -1402,22 +1418,35 @@ void Lehelugeja::seeriaLoetud()
 {
 //    emit lehedLoetud();
     QString pakett = "Laskur:"; //Protokollitajasse saadetav tulemustega pakett
-            //"Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;seeriad;selle seeria lasud; x; y; summa;
+            //OLD: "Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;seeriad;selle seeria lasud; x; y; summa;
             //aktiivne seeria;harjutus;lasku lehes;kümnendikega lugemine (true/false)
+    //NEW: "Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;loetud seeria nr (0-5); loetud seeria; loetud seeria lasud; x; y;
     pakett.append(ui->sifriLabel->text() + ";");
     pakett.append("Eesnimi;Perekonnanimi;");
     pakett.append(QString("%1;").arg(seeriateArv));
     pakett.append(QString("%1;").arg(laskudeArv));
-    for(int i = 0; i < seeriateArv; i++){
-        pakett.append(seeriad[i]->text() + ";");
-        for(int j = 0; j < laskudeArv; j++){
-            pakett.append(QString("%1;%2;%3;").arg(lasud[i][j]->getFLask()).arg(lasud[i][j]->X()).arg(lasud[i][j]->Y()));
-        }
+    pakett.append(QString("%1;").arg(aktiivseSeeriaNr));
+    pakett.append(QString("%1;").arg(aktiivneSeeria->text()));
+
+    for(int j = 0; j < laskudeArv; j++){
+        pakett.append(QString("%1;%2;%3;").arg(lasud[aktiivseSeeriaNr][j]->getFLask())
+                      .arg(lasud[aktiivseSeeriaNr][j]->X())
+                      .arg(lasud[aktiivseSeeriaNr][j]->Y()));
     }
-    pakett.append(ui->summaEdit->text() + ";");
-    pakett.append(";harjutus;;;");  //Paketi kõiki lahtreid ei ole vaja, jäävad tühjaks
-    if(pakett != eelminePakett)
+
+//    for(int i = 0; i < seeriateArv; i++){
+//        pakett.append(seeriad[i]->text() + ";");
+//        for(int j = 0; j < laskudeArv; j++){
+//            pakett.append(QString("%1;%2;%3;").arg(lasud[i][j]->getFLask()).arg(lasud[i][j]->X()).arg(lasud[i][j]->Y()));
+//        }
+//    }
+//    pakett.append(ui->summaEdit->text() + ";");
+//    pakett.append(";harjutus;;;");  //Paketi kõiki lahtreid ei ole vaja, jäävad tühjaks
+    if(pakett != eelminePakett && !aktiivneSeeria->text().isEmpty()){    //Empty series not to be sent
         saadaVorku(pakett);
+        if(verbose)
+            QTextStream(stdout) << "saadaVorku(pakett): " << pakett << "\n";
+    }
     eelminePakett = pakett;
     bool kasKoik = true;    //Kui on kõik seeriad loetud, tuleb muutmine keelata, et vältida ülekirjutamist Protokollitajas
     for(int i = 0; i < seeriateArv; i++)
@@ -1428,9 +1457,6 @@ void Lehelugeja::seeriaLoetud()
             seeriad[i]->setEnabled(false);
         ui->summaEdit->setEnabled(false);
     }
-#ifdef PROOV
-    qDebug() << "Pakett: " << pakett;
-#endif
 //    fookus->start();  //See siin pigem tekitab probleeme
 }
 
