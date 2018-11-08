@@ -92,7 +92,9 @@ void ProtolehelugejaConnection::readData()
             passwd = 0;
             send("OK");
         }
-        else QMessageBox::information(dynamic_cast<QWidget*>(this->parent()), "Teade", tr("Keegi proovis ühenduda vale parooliga! Ühendust ei loodud!"), QMessageBox::Ok);
+        else{ QMessageBox::information(dynamic_cast<QWidget*>(this->parent()), "Teade", tr("Keegi proovis ühenduda vale parooliga! Ühendust ei loodud!"), QMessageBox::Ok);
+            socket->disconnect();
+        }
         return;
     }
 
@@ -102,13 +104,15 @@ void ProtolehelugejaConnection::readData()
         return;
     }else if(lineIn.startsWith("Versioon:")){    //Version of the connection protocol between Protokollitaja and Protolehelugeja
         lineIn.remove(0, 9);
-        if(lineIn.toInt() > 2){
+        if(lineIn.toInt() > 3){
             send(tr("Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!\nProtokollitaja on uuem, seega on vaja uuendada Protolehelugejat või mõlemaid."));
             authorized = false;
+            socket->disconnect();
         }
-        else if(lineIn.toInt() < 2){
+        else if(lineIn.toInt() < 3){
             send(tr("Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!\nProtolehelugeja on uuem, seega on vaja uuendada Protokollitajat"));
             authorized = false;
+            socket->disconnect();
         }else send("Versioon OK");
 
         return;
@@ -117,7 +121,8 @@ void ProtolehelugejaConnection::readData()
         askedTargetNumber = lineIn.toInt();
         emit renewWithTargetNumber(myIndex);
     }else if(lineIn.startsWith("Laskur:")){  //Results received
-        //"Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;seeriad;selle seeria lasud; x; y; summa;aktiivne seeria;harjutus;lasku lehes;kümnendikega lugemine (true/false)
+        //OLD: "Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;seeriad;selle seeria lasud; x; y; summa;aktiivne seeria;harjutus;lasku lehes;kümnendikega lugemine (true/false)
+        //NEW: "Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;loetud seeria nr (0-5); loetud seeria; loetud seeria lasud; x; y
         lastRecvdLine = lineIn;
         emit shotInfoRead(myIndex);
 

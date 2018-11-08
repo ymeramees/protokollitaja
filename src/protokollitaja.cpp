@@ -678,7 +678,7 @@ void Protokollitaja::closeEvent(QCloseEvent *event)
                 if(lehelugejaAken)
                     lehelugejaAken->sulgeUhendus();
                 if(server != 0)
-                    server->close();
+                    server->closeConnections();
             }
 }
 
@@ -4270,7 +4270,8 @@ void Protokollitaja::readShotInfo(QString data, int socketIndex)
         logiValja << "Saabus tühi lasuinfo, socketIndex = " << socketIndex;
         return;
     }
-    //"Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;seeriad;selle seeria lasud; x; y; summa;aktiivne seeria;harjutus;lasku lehes;kümnendikega lugemine (true/false)
+    //OLD: "Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;seeriad;selle seeria lasud; x; y; summa;aktiivne seeria;harjutus;lasku lehes;kümnendikega lugemine (true/false)
+    //NEW: "Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;loetud seeria nr (0-5); loetud seeria; loetud seeria lasud; x; y;
 
     data.remove(0, 7);
     QStringList dataList = data.split(";", QString::KeepEmptyParts);
@@ -4310,22 +4311,47 @@ void Protokollitaja::readShotInfo(QString data, int socketIndex)
         return;
     }
 
+#ifdef PROOV
+        qDebug() << "#seeLaskur: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << "\n";
+#endif
+
     dataList.takeFirst();   //Number of shots currently defaults to 10
     int numberOfShots = 10;
 
-    for(int i = 0; i < sheet->seeriateArv; i++){
-        QString series = dataList.takeFirst();
-        if(thisCompetitor->seeriad[i]->text() != series){   //Add error message and ask what to do?
-            logiValja << "#lehelugemisel seeria muutus: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " "
-                      << thisCompetitor->perekNimi->text() << ", vana: " << thisCompetitor->seeriad[i]->text() << " uus: " << series << "\n";
-        }
-        thisCompetitor->seeriad[i]->setText(series/*at(5 + i + i * laskudeArv)*/);
+    int seriesNo = dataList.takeFirst().toInt();
+    QString series = dataList.takeFirst();
+
+#ifdef PROOV
+        qDebug() << "series = " << series << ", seriesNo = " << seriesNo << "\n";
+#endif
+
+    if(!thisCompetitor->seeriad[seriesNo]->text().isEmpty() && thisCompetitor->seeriad[seriesNo]->text() != series){   //Add error message and ask what to do?
+        saadaVorku("Viga:Sellel seerial on juba tulemus olemas!\n\nTulemusi ei uuendatud, kui tahate üle kirjutada, kustutage Protokollitajast eelmine seeria ära!", socketIndex);
+        logiValja << "#lehelugemisel seeria muutus: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " "
+                  << thisCompetitor->perekNimi->text() << ", vana: " << thisCompetitor->seeriad[seriesNo]->text() << " uus: " << series << "\n";
+    }else if(!series.isEmpty()){    //Only new results will be sent and read
+        thisCompetitor->seeriad[seriesNo]->setText(series);
         for(int j = 0; j < numberOfShots; j++){
-            thisCompetitor->lasud[i][j]->setLask(dataList.takeFirst());
-            thisCompetitor->lasud[i][j]->setX(dataList.takeFirst());
-            thisCompetitor->lasud[i][j]->setY(dataList.takeFirst());
+            thisCompetitor->lasud[seriesNo][j]->setLask(dataList.takeFirst());
+            thisCompetitor->lasud[seriesNo][j]->setX(dataList.takeFirst());
+            thisCompetitor->lasud[seriesNo][j]->setY(dataList.takeFirst());
         }
     }
+
+//    for(int i = 0; i < sheet->seeriateArv; i++){
+//        QString series = dataList.takeFirst();
+//        if(thisCompetitor->seeriad[i]->text() != series){   //Add error message and ask what to do?
+//            logiValja << "#lehelugemisel seeria muutus: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " "
+//                      << thisCompetitor->perekNimi->text() << ", vana: " << thisCompetitor->seeriad[i]->text() << " uus: " << series << "\n";
+//        }else if(!series.isEmpty()){    //Only new results will be sent and read
+//            thisCompetitor->seeriad[i]->setText(series/*at(5 + i + i * laskudeArv)*/);
+//            for(int j = 0; j < numberOfShots; j++){
+//                thisCompetitor->lasud[i][j]->setLask(dataList.takeFirst());
+//                thisCompetitor->lasud[i][j]->setX(dataList.takeFirst());
+//                thisCompetitor->lasud[i][j]->setY(dataList.takeFirst());
+//            }
+//        }
+//    }
 #ifdef PROOV
         qDebug() << "liida()";
 #endif
@@ -4950,6 +4976,7 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
                             saadaVorku("Viga:Sellele laskurile juba loetakse lehti Protokollitajas!", socketIndex);
                             return;
                         }
+                        Laskur *seeLaskur = leht->laskurid[j];
 //                        if(leht->seeriateArv > 6){
 //                            QMessageBox::critical(this, "Viga", tr("Kahjuks see versioon Protokollitajast toetab "
 //                                    "lehelugemist ainult õhupüssi ja õhupüstoli harjutustes!"), "Selge");
@@ -4968,8 +4995,8 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
 //                            lehelugejaAken->seeriad[k]->show();
 //                            lehelugejaAken->seeriad[k]->clear();
 //                        }
-                        pakett.append(leht->laskurid[j]->sifriAlgus->text() + " - " + leht->laskurid[j]->sifriLopp->text() + ";");
-                        pakett.append(leht->laskurid[j]->eesNimi->text() + ";" + leht->laskurid[j]->perekNimi->text() + ";");
+                        pakett.append(seeLaskur->sifriAlgus->text() + " - " + seeLaskur->sifriLopp->text() + ";");
+                        pakett.append(seeLaskur->eesNimi->text() + ";" + seeLaskur->perekNimi->text() + ";");
 
 //                        for(int k = 0; k < leht->laskurid.count(); k++)
 //                            lehelugejaAken->m_ui.nimeBox->addItem(leht->laskurid[k]->eesNimi->text() + " " +
@@ -4977,10 +5004,10 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
                         pakett.append(QString("%1;%2;").arg(leht->seeriateArv).arg(laskudeArv));    //Laskude arv on hetkel ainult 10
                         if(leht->seeriateArv <= 12){
                             for(int k = 0; k < leht->seeriateArv; k++){
-                                pakett.append(leht->laskurid[j]->seeriad[k]->text() + ";");
+                                pakett.append(seeLaskur->seeriad[k]->text() + ";");
                                 for(int j = 0; j < laskudeArv; j++){
-                                    pakett.append(QString("%1;%2;%3;").arg(leht->laskurid[j]->lasud[k][j]->getFLask())
-                                                  .arg(leht->laskurid[j]->lasud[k][j]->stringX()).arg(leht->laskurid[j]->lasud[k][j]->stringY()));
+                                    pakett.append(QString("%1;%2;%3;").arg(seeLaskur->lasud[k][j]->getFLask())
+                                                  .arg(seeLaskur->lasud[k][j]->stringX()).arg(seeLaskur->lasud[k][j]->stringY()));
                                 }
                             }
                         }else{
@@ -4991,7 +5018,7 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
                             return;
                         }
 //                                lehelugejaAken->seeriad[k]->setText(leht->laskurid[j]->seeriad[k]->text());
-                        pakett.append(leht->laskurid[j]->getSumma() + ";");
+                        pakett.append(seeLaskur->getSumma() + ";");
 //                        lehelugejaAken->m_ui.summaEdit->setText(leht->laskurid[j]->summa->text());
 //                        lehelugejaAken->m_ui.sifriLabel->setText(leht->laskurid[j]->sifriAlgus->text() + " - " +
 //                                                                 leht->laskurid[j]->sifriLopp->text());
@@ -5005,10 +5032,10 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
                             }
                         }*/
                         //laskude arv lehes
-                        int laskuLehes = leht->seeriateArv * 10 / (leht->laskurid[j]->sifriLopp->text().toInt() -
-                                                                   leht->laskurid[j]->sifriAlgus->text().toInt() + 1);
+                        int laskuLehes = leht->seeriateArv * 10 / (seeLaskur->sifriLopp->text().toInt() -
+                                                                   seeLaskur->sifriAlgus->text().toInt() + 1);
                         //mitmes leht (seni lastud lehtede arv)
-                        int lehti = siffer - leht->laskurid[j]->sifriAlgus->text().toInt();
+                        int lehti = siffer - seeLaskur->sifriAlgus->text().toInt();
                         //lastud laskude arv ja sealt mitmendat seeriat hakatakse lugema
                         k = lehti * laskuLehes / 10;
 //                        for(int j = leht->seeriateArv; j < lehelugejaAken->seeriad.count(); j++)
