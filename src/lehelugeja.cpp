@@ -878,8 +878,12 @@ void Lehelugeja::loe2()
 void Lehelugeja::loeBroadcast()
 {
 #ifdef PROOV
-            qDebug() << "Loe broadcast:";
+    qDebug() << "Loe broadcast:";
 #endif
+
+    if(socket->state() == QTcpSocket::ConnectedState)   //If already connected, no need to read broadcasts
+        return;
+
     while (udpSocket2->hasPendingDatagrams()){
         QByteArray datagram;
         QHostAddress protoAadress;
@@ -1316,6 +1320,7 @@ void Lehelugeja::saadaParool()
 {
     progress->accept(); //Otsimise progressiaken kinni
     parool = QInputDialog::getInt(this, "Sisestage parool", "Parool:");
+//    saadaVorku(QString("%1").arg(parool));
     QByteArray block;
     QDataStream valja(&block, QIODevice::WriteOnly);
     valja.setVersion(QDataStream::Qt_4_8);
@@ -1324,6 +1329,8 @@ void Lehelugeja::saadaParool()
     valja << parool;
     valja.device()->seek(0);
     valja << (quint16)(block.size() - sizeof(quint16));
+    if(verbose)
+        QTextStream(stdout) << QString("saadaVorku(): %1").arg(parool) << endl;
     socket->write(block);
     block.clear();
 }
@@ -1368,6 +1375,8 @@ void Lehelugeja::saadaVorku(QString saadetis)
     valja << saadetis;
     valja.device()->seek(0);
     valja << (quint16)(block.size() - sizeof(quint16));
+    if(verbose)
+        QTextStream(stdout) << "saadaVorku(): " << block << endl;
     socket->write(block);
     block.clear();
 }
