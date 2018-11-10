@@ -1,12 +1,12 @@
 ﻿#ifndef VERSION_H
 #define VERSION_H
 
-//Muudetud 26.04.2018 - peale mida oli reliis, seega on vaja uuendada
-#define VER_FILEVERSION             0,7,7,0
-#define VER_FILEVERSION_STR         "0.7.7\0"
+//Muudetud 10.11.2018 - peale mida oli reliis, seega on vaja uuendada
+#define VER_FILEVERSION             0,7,8,0
+#define VER_FILEVERSION_STR         "0.7.8\0"
 
-#define VER_PRODUCTVERSION          0,7,7,0
-#define VER_PRODUCTVERSION_STR      "0.7.7\0"
+#define VER_PRODUCTVERSION          0,7,8,0
+#define VER_PRODUCTVERSION_STR      "0.7.8\0"
 
 #define VER_COMPANYNAME_STR         "Ymeramees"
 #define VER_FILEDESCRIPTION_STR     "Protokollitaja 0.7 Beta"
