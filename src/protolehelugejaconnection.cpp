@@ -5,6 +5,7 @@ extern bool verbose;
 ProtolehelugejaConnection::ProtolehelugejaConnection(QTcpSocket *parent) : QObject(parent)
 {
     askedTargetNumber = 0;
+    authorized = false;
     blockSize = 0;
     passwd = 0;
     socket = parent;
