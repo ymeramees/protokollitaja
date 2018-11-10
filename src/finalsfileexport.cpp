@@ -11,7 +11,7 @@ FinalsFileExport::FinalsFileExport(QVector<QStringList> inputTable, QString comp
     ui(new Ui::FinalsFileExport)
 {
     ui->setupUi(this);
-    connect(ui->drawButton, &QPushButton::clicked, this, drawStartPositions);
+    connect(ui->drawButton, &QPushButton::clicked, this, &FinalsFileExport::drawStartPositions);
 
     this->competitionFileLocation = competitionFileLocation;
     this->competitionName = competitionName;

@@ -8,8 +8,8 @@ ProtolehelugejaConnection::ProtolehelugejaConnection(QTcpSocket *parent) : QObje
     blockSize = 0;
     passwd = 0;
     socket = parent;
-    connect(socket, &QTcpSocket::readyRead, this, readData);
-    connect(socket, &QTcpSocket::disconnected, this, wasDisconnected);
+    connect(socket, &QTcpSocket::readyRead, this, &ProtolehelugejaConnection::readData);
+    connect(socket, &QTcpSocket::disconnected, this, &ProtolehelugejaConnection::wasDisconnected);
 
     qsrand(QTime::currentTime().msec());
     while(passwd < 1000)

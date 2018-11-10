@@ -1759,9 +1759,9 @@ void Protokollitaja::kaivitaServer()
             ipAadress = QHostAddress(QHostAddress::LocalHost).toString();
         statusBar()->showMessage(tr("Server käivitatud, ip: %1").arg(ipAadress), 10000);
 //        connect(server, SIGNAL(newConnection()), this, SLOT(uusUhendus()));
-        connect(server, &ProtolehelugejaServer::save, this, salvesta);
-        connect(server, &ProtolehelugejaServer::renewWithTargetNumber, this, uuendaVorkuSifriga);
-        connect(server, &ProtolehelugejaServer::shotInfoRead, this, readShotInfo);
+        connect(server, &ProtolehelugejaServer::save, this, &Protokollitaja::salvesta);
+        connect(server, &ProtolehelugejaServer::renewWithTargetNumber, this, &Protokollitaja::uuendaVorkuSifriga);
+        connect(server, &ProtolehelugejaServer::shotInfoRead, this, &Protokollitaja::readShotInfo);
     }else QMessageBox::information(this, "Teade", tr("Server töötab, \naadress: %1").arg(ipAadress), QMessageBox::Ok);
 }
 

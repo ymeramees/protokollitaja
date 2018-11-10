@@ -5,7 +5,7 @@ extern bool verbose;
 ProtolehelugejaServer::ProtolehelugejaServer(QObject *parent)
     : QTcpServer(parent)
 {
-    connect(this, &QTcpServer::newConnection, this, newConnection);
+    connect(this, &QTcpServer::newConnection, this, &ProtolehelugejaServer::newConnection);
 }
 
 ProtolehelugejaServer::~ProtolehelugejaServer()
@@ -47,16 +47,16 @@ void ProtolehelugejaServer::newConnection()
 {
     if(hasPendingConnections()){
         ProtolehelugejaConnection *socket = new ProtolehelugejaConnection(this->nextPendingConnection());
-        connect(socket, &ProtolehelugejaConnection::disconnected, this, closeConnection);
+        connect(socket, &ProtolehelugejaConnection::disconnected, this, &ProtolehelugejaServer::closeConnection);
         sockets.append(socket);
         socket->setSocketIndex(sockets.length()-1);
 
         if(verbose)
             QTextStream(stdout) << "ProtolehelugejaServer::newConnection(), index = " << socket->getSocketIndex() << endl;
 
-        connect(socket, &ProtolehelugejaConnection::shotInfoRead, this, incomingShotInfo);
-        connect(socket, &ProtolehelugejaConnection::renewWithTargetNumber, this, readTargetNumber);
-        connect(socket, &ProtolehelugejaConnection::save, this, saveRequested);
+        connect(socket, &ProtolehelugejaConnection::shotInfoRead, this, &ProtolehelugejaServer::incomingShotInfo);
+        connect(socket, &ProtolehelugejaConnection::renewWithTargetNumber, this, &ProtolehelugejaServer::readTargetNumber);
+        connect(socket, &ProtolehelugejaConnection::save, this, &ProtolehelugejaServer::saveRequested);
     }
 }
 
