@@ -227,7 +227,6 @@ private slots:
     void reastaS();
     void reastaSi();
     void saadaVorku(QString, int socketIndex);
-//    void saadaVorku(int);
     void salvesta();
     void salvestaKui();
     void seiskaServer();
@@ -249,7 +248,6 @@ private slots:
     void uusLaskur();    //Uue laskuri loomine,  koos uue ID'ga
     void uusLaskur(int);   //Uue laskuri loomine, koos olemasoleva ID'ga (kasutatakse näiteks faili avamisel
     void uusTab();
-//    void uusUhendus();
     void viiLoppu();
 
 private:

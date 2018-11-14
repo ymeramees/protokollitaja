@@ -548,68 +548,7 @@ void Protokollitaja::autosave()
         failiNimi.append("_autosave.kll");
         kirjutaFail(failiNimi);
 
-        /*QFile fail(failiNimi);
-        if(fail.open(QIODevice::WriteOnly)){
-                QDataStream valja(&fail);
-                valja << (quint32)0x00FA3848;	//Kontrollarv
-                valja << (qint32)107;			//Millise programmi versiooni failiga on tegu
-                valja.setVersion(QDataStream::Qt_4_3);
-                valja << voistluseNimi;
-                valja << aegKoht;
-                valja << seaded->ui.kirjutusAbiCombo->currentIndex();
-                valja << seaded->ui.aegCombo->currentIndex();
-                valja << seaded->ui.aegEdit->value();
-                valja << seaded->ui.sakiBox->currentIndex();
-                valja << tabWidget->count();	//Töölehtede arv, et pärast teaks mitu lehte on vaja lugeda
-                for(int i = 0; i < tabWidget->count(); i++){
-                        valja << tabWidget->tabText(i);	//Töölehe nimi
-                        Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
-                        valja << leht->seeriateArv << leht->laskudeArv << leht->vSummadeSamm << leht->abi << leht->ekraaniNimi;
-                        valja << leht->relv << leht->harjutus << leht->kumnendikega << leht->minAeg << leht->maxAeg << leht->voistk;
-                        valja << leht->leheIndeks;
-                        if(leht->voistk){
-                                valja << leht->voistkonnad.count() << leht->jalgitavad.count();
-
-                                for(int i = 0; i  < leht->jalgitavad.count(); i++){
-                                    valja << leht->jalgitavad[i];
-                                }
-                                for(int i = 0; i < leht->voistkonnad.count(); i++){	//Kõigi võistkondade read
-                                        valja << leht->voistkonnad[i]->nimi->text();
-                                        for(int k = 0; k < leht->seeriateArv; k++){	//Kõik võistkonna liikmed
-                                                valja << leht->voistkonnad[i]->voistlejad[k]->eesNimi;
-                                                valja << leht->voistkonnad[i]->voistlejad[k]->perekNimi;
-                                                valja << leht->voistkonnad[i]->voistlejad[k]->klubi;
-                                                valja << leht->voistkonnad[i]->voistlejad[k]->harjutus;
-                                                valja << leht->voistkonnad[i]->voistlejad[k]->summa;
-                                                valja << leht->voistkonnad[i]->voistlejad[k]->silt->text();
-                                        }
-                                        valja << leht->voistkonnad[i]->summa->text();
-                                        valja << leht->voistkonnad[i]->markus->text();
-                                }
-                        }else{
-                                valja << leht->laskurid.count();
-                                for(int i = 0; i < leht->laskurid.count(); i++){	//Kõigi laskurite read
-                                    valja << leht->laskurid[i]->rajaNr->text();
-                                    valja << leht->laskurid[i]->sifriAlgus->text() << leht->laskurid[i]->sifriLopp->text();
-                                    valja << leht->laskurid[i]->id;
-                                    valja << leht->laskurid[i]->eesNimi->text() << leht->laskurid[i]->perekNimi->text();
-                                    valja << leht->laskurid[i]->sunniAasta->text() << leht->laskurid[i]->klubi->text();
-                                    for(int k = 0; k < leht->seeriateArv; k++){	//Kõik seeriad
-                                        valja << leht->laskurid[i]->seeriad[k]->text();
-                                        for(int j = 0; j < leht->laskurid[i]->lasud[k].count(); j++){  //Karistuse lask tuleb ka kirjutada
-                                            valja << leht->laskurid[i]->lasud[k][j]->getFLask();
-                                            valja << leht->laskurid[i]->lasud[k][j]->X();
-                                            valja << leht->laskurid[i]->lasud[k][j]->Y();
-                                        }
-                                    }
-                                    valja << leht->laskurid[i]->getSumma() << leht->laskurid[i]->finaal->text();
-                                    for(int k = 0; k < 10; k++)
-                                        valja << leht->laskurid[i]->lisaLasud[k];
-                                    valja << leht->laskurid[i]->kumned->text();
-                                    valja << leht->laskurid[i]->markus->text();
-                                }
-                        }
-                }
+        /*
         }else QMessageBox::critical(this, "Protokollitaja", tr("Ei õnnestu autosave faili luua. Varukoopia "
                         "tegemine on võimatu"), QMessageBox::Ok);*/
 }
@@ -934,36 +873,6 @@ void Protokollitaja::eksportSiusStartList()
 
     StartListWriter *startListWriter = new StartListWriter(competitorsList, seeFail, this);
     startListWriter->deleteLater();
-
-//    QString failiNimi = QFileDialog::getSaveFileName(this, "Ekspordi", seeFail.left(seeFail.lastIndexOf("\\")),
-//            tr("Comma separated file (*.csv)"));
-
-//    if(failiNimi.isEmpty() || leht == 0) return;
-
-//    if(!failiNimi.endsWith(".csv"))
-//        failiNimi.append(".csv");
-
-//    QFile fail(failiNimi);
-//    if(fail.open(QIODevice::WriteOnly | QIODevice::Text)){
-//        QTextStream valja(&fail);
-//        int eksporditud = 0;
-//        for(int i = 0; i < leht->laskurid.count(); i++){
-//            if(leht->laskurid[i]->linnuke->isChecked()){
-//                if(leht->laskurid[i]->rajaNr->text().contains("A") || leht->laskurid[i]->rajaNr->text().contains("B") || leht->laskurid[i]->rajaNr->text().contains("C") || leht->laskurid[i]->rajaNr->text().contains("D") || leht->laskurid[i]->rajaNr->text().contains("E") || leht->laskurid[i]->rajaNr->text().contains("F") || leht->laskurid[i]->rajaNr->text().contains("G") || leht->laskurid[i]->rajaNr->text().contains("H"))
-//                    QMessageBox::critical(this, "Viga", tr("Raja numbrites on tähti. Kui soovite finaali start listi eksportida, kasutage teist funktsiooni!"), QMessageBox::Ok);
-//                //ID no;Startno;Name;Firstname;Disp name;Nat;Cat;Group;Team;Bay;Target;Relay;Starttime;BoxTg;Active;Q Tot;Avg;Rank;G1;...;G12;10s;...;0s;Mouches
-//                valja << QString(";%1;\"").arg(leht->laskurid[i]->id);
-//                valja << leht->laskurid[i]->perekNimi->text() << "\";\"";
-//                valja << leht->laskurid[i]->eesNimi->text() << "\";";
-//                valja << leht->laskurid[i]->perekNimi->text() << " " << leht->laskurid[i]->eesNimi->text().left(1);
-//                valja << ".\";;0;0;" << leht->laskurid[i]->klubi->text() << ";;" << leht->laskurid[i]->rajaNr->text() << ";0;;0;0;";
-//                valja << leht->laskurid[i]->getSumma().replace(",", ".") << ";0;\n";
-//                eksporditud++;
-//            }
-//        }
-//        fail.close();
-//        QMessageBox::information(this, "Protokollitaja", QString("Startlist loodud. Eksporditi %1 laskurit").arg(eksporditud), "Selge");
-//    }else QMessageBox::critical(this, "Viga", tr("Ei õnnestu faili kirjutada."), QMessageBox::Ok);
 }
 
 void Protokollitaja::eksportFSiusStartList()
@@ -1511,101 +1420,6 @@ void Protokollitaja::finaaliFail()
 void Protokollitaja::finaalValmis(const int exitCode, const QProcess::ExitStatus exitStatus)
 {
     loeFinaaliFail(finaaliFailiNimi);
-        //QString voistluseNimi, alaNimi;
-        /*QDir dir = asukoht.absolutePath();
-        dir.cd("Tulemused");
-        dir.cd(voistluseNimi);
-        QFile seadedFail(asukoht.absolutePath() + "/Alg.ini");
-        if(seadedFail.open(QIODevice::ReadOnly | QIODevice::Text)){
-                QTextStream sisse(&seadedFail);
-                sisse.readLine();
-                sisse.readLine();
-                sisse.readLine();
-                alaNimi = sisse.readLine();
-                failiNimi = dir.filePath(alaNimi + ".fnl");
-                seadedFail.close();
-        }else QMessageBox::critical(this, tr("Protokollitaja"), tr("Ei leia finaali seadete faili, "
-                        "seega ei saa automaatselt tulemusi importida! Fail tuleb teil ise kätte näidata."),
-                        QMessageBox::Ok);
-        if(failiNimi.isEmpty() || failiNimi == ".fnl")
-                failiNimi = QFileDialog::getOpenFileName(this, tr("Ava"), "Tulemused", tr("Finaali fail (*.fnl)"));
-        if(failiNimi.isEmpty() || failiNimi == ".fnl"){
-                QMessageBox::critical(this, tr("Protokollitaja"), tr("Ei leia finaali tulemuste faili, "
-                                        "seega ei saa tulemusi importida!"), QMessageBox::Ok);
-                return;
-        }*/
-        /*QFile fail(finaaliFailiNimi);
-        if(fail.open(QIODevice::ReadOnly)){
-                QDataStream sisse(&fail);
-                while(!sisse.atEnd()){
-                        quint32 kontroll, versioon;
-                        sisse >> kontroll >> versioon;
-                        if(kontroll != 0x00FA3058){
-                                QMessageBox::critical(this, tr("Protokollitaja"), tr("Vigane või vale finaali fail!"),
-                                                QMessageBox::Ok);
-                                return;
-                        }
-                        if(versioon == 13){
-                            sisse >> voistluseNimi >> alaNimi;
-                                QList<QStringList> read;
-                                for(int i = 0; i < 8; i++){
-                                        QStringList rida;
-                                        QString nimi, tulemus;
-                                        sisse >> nimi >> tulemus;
-                                        rida << nimi << tulemus;
-                                        for(int j = 0; j < 20; j++){
-                                                sisse >> nimi;
-                                                rida << nimi;
-                                        }
-                                        read << rida;
-                                }
-                                Leht* seeLeht = 0;
-                                int lisatuteArv = 0;
-                                for(int i = 0; i < tabWidget->count(); i++){
-                                        seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))
-                                                        ->widget());
-                                        if(seeLeht->ekraaniNimi == alaNimi){
-                                                for(int j = 0; j < seeLeht->laskurid.count(); j++)
-                                                        for(int k = 0; k < 8; k++)
-                                                                if(seeLeht->laskurid[j]->perekNimi->text().trimmed() == read[k].at(0) && seeLeht
-                                                                                ->laskurid[j]->summa->text().trimmed() == read[k].at(1)){
-                                                                        int sum = 0;
-                                                                        float arv = 0;
-                                                                        for(int x = 0; x < 20; x++){
-                                                                                arv = read[k].at(x+2).toFloat();
-                                                                                arv *= 10;
-                                                                                QString::number(arv);
-                                                                                sum += arv;
-                                                                                QString::number(sum);
-                                                                        }
-                                                                        seeLeht->laskurid[j]->lisaLasud.clear();
-                                                                        for(int x = 0; x < 10; x++){
-                                                                                if(read[k].at(x + 22) != "00"){
-                                                                                        arv = read[k].at(x + 22).toFloat();
-                                                                                        arv *= 10;
-                                                                                        QString::number(arv);
-                                                                                        seeLeht->laskurid[j]->lisaLasud << arv;
-                                                                                }else seeLeht->laskurid[j]->lisaLasud << -1;
-                                                                        }
-                                                                        seeLeht->laskurid[j]->finaal->setText(QString("%1").arg((float)sum/10));
-                                                                        lisatuteArv++;
-                                                                        seeLeht->laskurid[j]->liida();
-                                                                }
-                                        }
-                                }if(lisatuteArv < 1)
-                                    QMessageBox::warning(this, tr("Protokollitaja"), tr("Ei leidnud ühelegi laskurile "
-                                                    "finaali tulemust."), QMessageBox::Ok);
-                                else{
-                                    voibSulgeda = false;
-                                    QMessageBox::information(this, tr("Protokollitaja"), QString("Lisatud %1'le "
-                                                    "laskurile finaali tulemus.").arg(lisatuteArv), QMessageBox::Ok);
-                                }
-                        }else QMessageBox::critical(this, tr("Protokollitaja"), tr("Vale finaali versiooni fail!"),
-                                        QMessageBox::Ok);
-                }
-        }else{
-                QMessageBox::critical(this, tr("Protokollitaja"), tr("Ei leia finaali faili!"), QMessageBox::Ok);
-        }*/
 }
 
 void Protokollitaja::impordiFinaal()
@@ -1758,7 +1572,6 @@ void Protokollitaja::kaivitaServer()
         if (ipAadress.isEmpty())
             ipAadress = QHostAddress(QHostAddress::LocalHost).toString();
         statusBar()->showMessage(tr("Server käivitatud, ip: %1").arg(ipAadress), 10000);
-//        connect(server, SIGNAL(newConnection()), this, SLOT(uusUhendus()));
         connect(server, &ProtolehelugejaServer::save, this, &Protokollitaja::salvesta);
         connect(server, &ProtolehelugejaServer::renewWithTargetNumber, this, &Protokollitaja::uuendaVorkuSifriga);
         connect(server, &ProtolehelugejaServer::shotInfoRead, this, &Protokollitaja::readShotInfo);
@@ -2144,13 +1957,6 @@ void Protokollitaja::lehelugeja()
             connect(lehelugejaAken, SIGNAL(lehedLoetud()), this, SLOT(lehedLoetud()));
             connect(lehelugejaAken, SIGNAL(uutSifrit(int)), this, SLOT(uuendaLehelugejatSifriga(int)));
             connect(lehelugejaAken, SIGNAL(salvesta()), this, SLOT(salvesta()));
-//            connect(lehelugejaAken->m_ui.seeria1Edit, SIGNAL(editingFinished()), this, SLOT(lehedLoetud()));
-//            connect(lehelugejaAken->m_ui.seeria2Edit, SIGNAL(editingFinished()), this, SLOT(lehedLoetud()));
-//            connect(lehelugejaAken->m_ui.seeria3Edit, SIGNAL(editingFinished()), this, SLOT(lehedLoetud()));
-//            connect(lehelugejaAken->m_ui.seeria4Edit, SIGNAL(editingFinished()), this, SLOT(lehedLoetud()));
-//            connect(lehelugejaAken->m_ui.seeria5Edit, SIGNAL(editingFinished()), this, SLOT(lehedLoetud()));
-//            connect(lehelugejaAken->m_ui.seeria6Edit, SIGNAL(editingFinished()), this, SLOT(lehedLoetud()));
-//            connect(lehelugejaAken->m_ui.sifriEdit, SIGNAL(returnPressed()), this, SLOT(uuendaLehelugejatSifriga()));
         }
 
         if(!leht->voistk && leht->laskurid.count() > 0){
@@ -3222,20 +3028,6 @@ void Protokollitaja::naitaTul()
                 }
 
                 uuendaVoistkondi();
-//                for(int i = 0; i < seeLeht->voistkonnad.count(); i++)
-//                    for(int j = 0; j < seeLeht->voistkonnad[i]->voistlejad.count(); j++)
-//                        for(int m = 0; m < seeLeht->jalgitavad.count(); m++)
-//                            for(int n = 0; n < tabWidget->count(); n++){
-//                                Leht *andmed = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(n))->widget());
-//                                if(andmed->leheIndeks == seeLeht->jalgitavad[m])
-//                                    for(int b = 0; b < andmed->laskurid.count(); b++)
-//                                        if(andmed->laskurid[b]->eesNimi->text() == seeLeht->voistkonnad[i]->voistlejad[j]->eesNimi && andmed->laskurid[b]->perekNimi->text() == seeLeht->voistkonnad[i]->voistlejad[j]->perekNimi && andmed->laskurid[b]->klubi->text() == seeLeht->voistkonnad[i]->voistlejad[j]->klubi){
-//                                            seeLeht->voistkonnad[i]->voistlejad[j]->summa = andmed->laskurid[b]->summa->text();
-//                                            seeLeht->voistkonnad[i]->voistlejad[j]->silt->setText(seeLeht->voistkonnad[i]->voistlejad[j]->perekNimi + ": " + seeLeht->voistkonnad[i]->voistlejad[j]->summa);
-//                                        }
-//                            }
-//                for(int i = 0; i < seeLeht->voistkonnad.count(); i++)
-//                    seeLeht->voistkonnad[i]->liida();
 
                 seeLeht->sorteeri(0);
 
@@ -4338,20 +4130,6 @@ void Protokollitaja::readShotInfo(QString data, int socketIndex)
         }
     }
 
-//    for(int i = 0; i < sheet->seeriateArv; i++){
-//        QString series = dataList.takeFirst();
-//        if(thisCompetitor->seeriad[i]->text() != series){   //Add error message and ask what to do?
-//            logiValja << "#lehelugemisel seeria muutus: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " "
-//                      << thisCompetitor->perekNimi->text() << ", vana: " << thisCompetitor->seeriad[i]->text() << " uus: " << series << "\n";
-//        }else if(!series.isEmpty()){    //Only new results will be sent and read
-//            thisCompetitor->seeriad[i]->setText(series/*at(5 + i + i * laskudeArv)*/);
-//            for(int j = 0; j < numberOfShots; j++){
-//                thisCompetitor->lasud[i][j]->setLask(dataList.takeFirst());
-//                thisCompetitor->lasud[i][j]->setX(dataList.takeFirst());
-//                thisCompetitor->lasud[i][j]->setY(dataList.takeFirst());
-//            }
-//        }
-//    }
 #ifdef PROOV
         qDebug() << "liida()";
 #endif
@@ -4421,34 +4199,7 @@ void Protokollitaja::saadaVorku(QString saadetis, int socketIndex)
     server->send(saadetis, socketIndex);
     if(verbose)
         QTextStream(stdout) << "Protokollitaja::saadaVorku(): " << saadetis << ", socketIndex = " << socketIndex << endl;
-//    blockSize = 0;
-//    QByteArray block;
-//    QDataStream valja(&block, QIODevice::WriteOnly);
-//    valja.setVersion(QDataStream::Qt_4_8);
-//    valja << (quint16)0;
-//    valja << saadetis;
-//    valja.device()->seek(0);
-//    valja << (quint16)(block.size() - sizeof(quint16));
-//    socket->write(block);
-//#ifdef PROOV
-//        qDebug() << "Valja: " << saadetis;
-//#endif
-//    block.clear();
 }
-
-//void Protokollitaja::saadaVorku(int saadetis)
-//{
-//    blockSize = 0;
-//    QByteArray block;
-//    QDataStream valja(&block, QIODevice::WriteOnly);
-//    valja.setVersion(QDataStream::Qt_4_8);
-//    valja << (quint16)0;
-//    valja << saadetis;
-//    valja.device()->seek(0);
-//    valja << (quint16)(block.size() - sizeof(quint16));
-//    socket->write(block);
-//    block.clear();
-//}
 
 void Protokollitaja::salvesta()
 {
