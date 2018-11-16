@@ -38,7 +38,9 @@ HEADERS += src/lisalaskudeaken.h \
     src/finalsfileexport.h \
     src/startlistwriter.h \
     src/protolehelugejaserver.h \
-    src/protolehelugejaconnection.h
+    src/protolehelugejaconnection.h \
+    src/siusdataconnections.h \
+    src/siusdataconnection.h
 SOURCES += src/lisalaskudeaken.cpp \
     src/liikmetevalikkast.cpp \
     src/voistkond.cpp \
@@ -60,7 +62,9 @@ SOURCES += src/lisalaskudeaken.cpp \
     src/finalsfileexport.cpp \
     src/startlistwriter.cpp \
     src/protolehelugejaserver.cpp \
-    src/protolehelugejaconnection.cpp
+    src/protolehelugejaconnection.cpp \
+    src/siusdataconnections.cpp \
+    src/siusdataconnection.cpp
 FORMS += src/lisalaskudeaken.ui \
     src/liikmetevalikkast.ui \
     src/importaken.ui \
@@ -71,7 +75,8 @@ FORMS += src/lisalaskudeaken.ui \
     src/sifriseade.ui \
     src/laskudeaken.ui \
     ../qfinaal/src/uhendumiseaken.ui \
-    src/finalsfileexport.ui
+    src/finalsfileexport.ui \
+    src/siusdataconnections.ui
 RESOURCES += protokollitaja.qrc
 RC_FILE += src/ikoon.rc
 win32{
