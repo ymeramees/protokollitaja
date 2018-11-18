@@ -34,14 +34,12 @@ public:
     bool *kumnendikega;
     bool onLehelugejaLaskur;    //Märgistamaks ära laskurit, kellele parasjagu loetakse lehti
     bool onVorguLaskur; //Märgistamaks ära laskurit, kellele lehelugejas loetakse lehti
-    bool voistlus;  //Kas on proovi või võistluslasud
 	enum {Puudub = 0, Puss = 1, Pustol = 2};
 	int abi;
     int id; //Laskuri ID
     int jrkArv; //Laskuri järjekorra nr lehel
     int keskmLask;
     int laskudeArv;
-    int mitmesVoistlus; //Siusist lugemisel mitmendad võistluslasud (asend või teine pool) tulevad
 	int seeriateArv;
     int vSummadeSamm;
     int *jarjestamine;  //Kas sorteerimine käib kümnete arvu järgi või viimase seeria järgi
@@ -68,7 +66,6 @@ public:
 	QLineEdit *kumned;
 	QLineEdit *markus;
 	QPushButton *lisaLNupp;
-    QString eelmineRida;    //Eelmine Siusist tulnud rida
 	QTimer *arvutaja;
 	LisaLaskudeAken *lisaAken;
     Laskur(Andmebaas*, int, int, int, bool*, bool*, int, int*,int ls = 10, QWidget *parent = 0);
@@ -80,8 +77,17 @@ public:
     void setSumma(QString);
 
 public slots:
+    int competitionStage() const;
+    bool isCompetitionStarted() const;
     void liida(); //laskude summeerimine
-    void siusiReset();   //Siusist lugemise progressi nullimine
+    void nextCompetitionStage();
+    QString previousSiusRow() const;
+    void resetCompetitionStage();
+    void setCompetitionStarted(bool competitionStatus);
+    void setPreviousSiusRow(QString row);
+    void setSiusConnectionIndex(int newIndex);
+    int siusConnectionIndex() const;
+    void siusiReset(int siusConnectionIndex);   //Siusist lugemise progressi nullimine
 
 private slots:
     void enterVajutatud();
@@ -108,10 +114,14 @@ signals:
     void sifrimuutus();
 
 private:
+    bool m_competitionStarted;  //Has competition started
+    int m_competitionStage; //From which competition stage (position, run or half) the incoming shots are
+    int m_siusConnectionIndex = -1;   //Which SiusData connection is used for this competitor
     QAction *idAct;
     QAction *laskudeAkenAct;
     QLineEdit *summa;
     QMenu *popup;
+    QString m_previousSiusRow;
     LaskudeAken *laskudeAken;
     void contextMenuEvent(QContextMenuEvent *event);
 };

@@ -44,6 +44,7 @@
 #include "startlistwriter.h"
 #include "finalsfileexport.h"
 #include "liikmetevalikkast.h"
+#include "siusdataconnections.h"
 #include "protolehelugejaserver.h"
 #include "../qfinaal/src/uhendumiseaken.h"
 #include "xlslib.h"
@@ -161,6 +162,7 @@ public:
 	ValikKast *valik;
 	SeadedKast *seaded;
     SifriSeade *sifriLisaAken;
+    SiusDataConnections *siusDataConnections = nullptr;
 	ImportAken *importAken;
     TulemuseAken *tulemus;
     LehelugejaAken *lehelugejaAken;
@@ -207,7 +209,7 @@ private slots:
     void loefail();
     void loeFinaaliFail(QString);
     void loeSeaded();
-    void loeSiusDatast();   //Võtab vastu lasud SiusDatast
+//    void loeSiusDatast();   //Võtab vastu lasud SiusDatast
     void loeUuendusteInfot();   //Töötleb uuenduste kohta laetud infot
     void margi();
     void muudaSalvestamist();
@@ -221,6 +223,7 @@ private slots:
     void prindi();
     void prindi2();
     void readShotInfo(QString data, int socketIndex);
+    void readSiusInfo(QStringList lines, int socketIndex);
     void reasta();
     void reastaP();
     void reastaR();
@@ -231,6 +234,7 @@ private slots:
     void salvestaKui();
     void seiskaServer();
     void sifriLisa();
+    void statusBarInfoChanged(QString newStatusInfo);
     void sulge();
     void sulgeUhendus();
     void taiendaAndmebaas();
@@ -243,7 +247,7 @@ private slots:
     void uuendaVoistkondi();
     void uuendaVorkuSifriga(int, int socketIndex);
     void uhenduSiusDataga();
-    void uhendusSiusigaKatkes();
+    void uhendusSiusigaKatkes(int connectionIndex);
     void uus();
     void uusLaskur();    //Uue laskuri loomine,  koos uue ID'ga
     void uusLaskur(int);   //Uue laskuri loomine, koos olemasoleva ID'ga (kasutatakse näiteks faili avamisel

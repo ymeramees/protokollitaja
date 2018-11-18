@@ -96,7 +96,7 @@ public slots:
     void uusLaskur(int);
 	void vajutaTab();
     void vajutaTab2(int);
-    void siusiReset();  //siusDatast lugemise progressi nullimine
+    void siusiReset(int connectionIndex);  //siusDatast lugemise progressi nullimine
 	void teataMuudatusest(const QString);
 	void teataMuudatusest();
 

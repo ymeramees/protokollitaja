@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include "siusdataconnection.h"
+
 namespace Ui {
 class SiusDataConnections;
 }
@@ -12,18 +14,23 @@ class SiusDataConnections : public QDialog
     Q_OBJECT
 
 public:
-    explicit SiusDataConnections(QWidget *parent = 0);
+    explicit SiusDataConnections(QFile *siusLog, QTextStream *log, QWidget *parent = 0);
     ~SiusDataConnections();
 
 private:
     Ui::SiusDataConnections *ui;
+    QFile *siusLog = nullptr;
+    QList<SiusDataConnection*> sockets;
+    QTextStream *log = nullptr;
 
 private slots:
     void connectToSiusData();
-    void reConnect();
+//    void reConnect();
 
 signals:
+    void disconnectedFromSius(int socketIndex);
     void linesRead(QStringList lines, int socketIndex);
+    void statusInfo(QString statusInfo);
 };
 
 #endif // SIUSDATACONNECTIONS_H

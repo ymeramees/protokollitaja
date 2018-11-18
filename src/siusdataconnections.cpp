@@ -1,24 +1,48 @@
 #include "siusdataconnections.h"
 #include "ui_siusdataconnections.h"
 
-SiusDataConnections::SiusDataConnections(QWidget *parent) :
+extern bool verbose;
+
+SiusDataConnections::SiusDataConnections(QFile *siusLog, QTextStream *log, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SiusDataConnections)
 {
     ui->setupUi(this);
+    this->siusLog = siusLog;
+    this->log = log;
+
+    connect(ui->connectButton, &QPushButton::clicked, this, &SiusDataConnections::connectToSiusData);
 }
 
 SiusDataConnections::~SiusDataConnections()
 {
+    for(SiusDataConnection *socket : sockets)
+        socket->deleteLater();
+    sockets.clear();
     delete ui;
 }
 
 void SiusDataConnections::connectToSiusData()
 {
+    if(verbose)
+        QTextStream(stdout) << "connectToSiusData()" << endl;
+    bool existing = false;
+    for(SiusDataConnection *socket : sockets)
+        if(socket->address() == ui->addressEdit->text() && socket->port() == ui->portEdit->text().toInt()){
+            existing = true;
+            socket->reconnectToSius();
+        }
 
-}
+    if(verbose)
+        QTextStream(stdout) << "connectToSiusData(): existing = " << existing << endl;
 
-void SiusDataConnections::lineRead()
-{
-
+    if(!existing){
+        SiusDataConnection *socket = new SiusDataConnection(ui->addressEdit->text(), ui->portEdit->text().toInt(), sockets.length(), siusLog, log, this);
+        sockets.append(socket);
+        ui->verticalLayout->addItem(socket);
+        connect(socket, &SiusDataConnection::linesRead, this, &SiusDataConnections::linesRead);
+        connect(socket, &SiusDataConnection::statusInfo, this, &SiusDataConnections::statusInfo);
+        connect(socket, &SiusDataConnection::disconnectedFromSius, this, &SiusDataConnections::disconnectedFromSius);
+    }
+    this->accept();
 }

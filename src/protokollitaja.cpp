@@ -7,8 +7,7 @@
 /// ToDo list:
 /// Print2() on pooleli, asendite pealkirju ei ole
 /// Mitme masinaga lugemise jaoks:
-///     1. Kõikide muutujate pointerid massiiviks (socket, võrgulaskur jne)
-///     2. Laskuris onVõrguLaskur muuta täisarvuks, et salvestada sinna socketi indeks
+///     1. Server sulgemine üle vaadata
 ///
 /////////////////////////////////////////////////////////////////////////////
 
@@ -2566,199 +2565,199 @@ void Protokollitaja::loeSeaded()
     }
 }
 
-void Protokollitaja::loeSiusDatast()
-{
-//    QMessageBox::information(this, "SiusData", QString("Lasu nr siusis: %1\nLasu väärtus siusis: %2").arg(lasuNrSiusis).arg(lasuVSiusis), QMessageBox::Ok);
-//    QMessageBox::critical(this, "Teade", "Seda funktsiooni ei ole veel loodud!", QMessageBox::Ok);
-//    return;
-#ifdef PROOV
-        qDebug() << "Esimene";
-#endif
-    if(siusDataSocket == 0){
-        QMessageBox::critical(this, "Viga", "Ühendus SiusData'ga on loomata!", QMessageBox::Ok);
-        return;
-    }
-    if(siusDataSocket->bytesAvailable() > 5 || siusiBuffer.length() > 0){  //Kui on liiga vähe infot, ei ole mõtet lugeda
-        progress->setLabelText(tr("SiusDatast andmete vastuvõtt..."));
-//        progress->show(); //Seda ei ole iga kord vaja, muutub tüütuks
-
-        while(siusDataSocket->bytesAvailable() > 2){    //Kuni on uut infot, siis lugeda see puhvrisse
-//        QDataStream in(siusDataSocket);
-        //QString info;
-//        siusiBuffer.append(siusDataSocket->readLine());  //Rea algus 5f, lõpp 0d 0a
-          siusiBuffer.append(siusDataSocket->readAll());  //Rea algus 5f, lõpp 0d 0a
-          statusBar()->showMessage(tr("Saabus info, buffer.length(): %1").arg(siusiBuffer.length()), 2000);
-//        in >> info;
-//        QMessageBox::information(this, "SiusData", QString("Saabus info:\n%1").arg(siusiBuffer), QMessageBox::Ok);
-#ifdef PROOV
-        qDebug() << "Saabus info: " << siusiBuffer;
-#endif
+//void Protokollitaja::loeSiusDatast()
+//{
+////    QMessageBox::information(this, "SiusData", QString("Lasu nr siusis: %1\nLasu väärtus siusis: %2").arg(lasuNrSiusis).arg(lasuVSiusis), QMessageBox::Ok);
+////    QMessageBox::critical(this, "Teade", "Seda funktsiooni ei ole veel loodud!", QMessageBox::Ok);
+////    return;
+//#ifdef PROOV
+//        qDebug() << "Esimene";
+//#endif
+//    if(siusDataSocket == 0){
+//        QMessageBox::critical(this, "Viga", "Ühendus SiusData'ga on loomata!", QMessageBox::Ok);
+//        return;
 //    }
-//    QFile file("siusData.txt");
-//    if (file.open(QFile::ReadOnly)){
-//        siusDatast = file.readAll();
-//        QString rida;
-        }
+//    if(siusDataSocket->bytesAvailable() > 5 || siusiBuffer.length() > 0){  //Kui on liiga vähe infot, ei ole mõtet lugeda
+//        progress->setLabelText(tr("SiusDatast andmete vastuvõtt..."));
+////        progress->show(); //Seda ei ole iga kord vaja, muutub tüütuks
 
-//        logi->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append); //Saabunud muudatuste ja laskude logifail
-//        QTextStream logiValja(logi);
+//        while(siusDataSocket->bytesAvailable() > 2){    //Kuni on uut infot, siis lugeda see puhvrisse
+////        QDataStream in(siusDataSocket);
+//        //QString info;
+////        siusiBuffer.append(siusDataSocket->readLine());  //Rea algus 5f, lõpp 0d 0a
+//          siusiBuffer.append(siusDataSocket->readAll());  //Rea algus 5f, lõpp 0d 0a
+//          statusBar()->showMessage(tr("Saabus info, buffer.length(): %1").arg(siusiBuffer.length()), 2000);
+////        in >> info;
+////        QMessageBox::information(this, "SiusData", QString("Saabus info:\n%1").arg(siusiBuffer), QMessageBox::Ok);
+//#ifdef PROOV
+//        qDebug() << "Saabus info: " << siusiBuffer;
+//#endif
+////    }
+////    QFile file("siusData.txt");
+////    if (file.open(QFile::ReadOnly)){
+////        siusDatast = file.readAll();
+////        QString rida;
+//        }
 
-        while(siusiBuffer.contains('_')){
+////        logi->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append); //Saabunud muudatuste ja laskude logifail
+////        QTextStream logiValja(logi);
 
-            progressTimer->start();
+//        while(siusiBuffer.contains('_')){
 
-            if(siusLogi->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){ //Saabunud võrguliikluse logi
-                QTextStream valja(siusLogi);
-//               valja << siusDatast;
-//                valja << siusiBuffer;
-//              valja << siusiBuffer.left(siusiBuffer.indexOf((QChar)10) + QString((QChar)10).length());
-                valja << siusiBuffer.left(siusiBuffer.indexOf('_', 1));
-                siusLogi->close();
-            }
+//            progressTimer->start();
 
-            logiValja << QTime::currentTime().toString("#hh:mm:ss") << " #buffer.length(): " << siusiBuffer.length() << "    buffer.indexOf('_'): " << siusiBuffer.indexOf('_', 1) << "\n";
+//            if(siusLogi->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){ //Saabunud võrguliikluse logi
+//                QTextStream valja(siusLogi);
+////               valja << siusDatast;
+////                valja << siusiBuffer;
+////              valja << siusiBuffer.left(siusiBuffer.indexOf((QChar)10) + QString((QChar)10).length());
+//                valja << siusiBuffer.left(siusiBuffer.indexOf('_', 1));
+//                siusLogi->close();
+//            }
 
-//            if(siusDatast.indexOf(13, 0) == -1) return;    //Ei ole terve rida kohale jõudnud
-            QString rida = "";
-            if(/*!siusiBuffer.contains((QChar)10) || */siusiBuffer.indexOf('_', 1) == -1){
-                logiValja << "#clear()\n";
-                rida = QString("%1").arg(siusiBuffer);
-                siusiBuffer.clear();
-//                return;  //Rea lõppu ei ole, järelikult ei ole terve rida kohale jõudnud, siia ei tohiks tegelikult jõuda
-            }else{
-//            QString rida = siusiBuffer.left(siusiBuffer.indexOf((QChar)10) + QString((QChar)10).length());
-                rida = siusiBuffer.left(siusiBuffer.indexOf('_', 1));
-                siusiBuffer.remove(0, siusiBuffer.indexOf('_', 1));    //Loetud rea eemaldamine
-            }
+//            logiValja << QTime::currentTime().toString("#hh:mm:ss") << " #buffer.length(): " << siusiBuffer.length() << "    buffer.indexOf('_'): " << siusiBuffer.indexOf('_', 1) << "\n";
 
-            if(!rida.contains('_')){
-                logiValja << "#break\n";
-                break; //Et mõttetu reaga edasi ei mindaks
-            }
-            logiValja << "#rida: " << rida;
+////            if(siusDatast.indexOf(13, 0) == -1) return;    //Ei ole terve rida kohale jõudnud
+//            QString rida = "";
+//            if(/*!siusiBuffer.contains((QChar)10) || */siusiBuffer.indexOf('_', 1) == -1){
+//                logiValja << "#clear()\n";
+//                rida = QString("%1").arg(siusiBuffer);
+//                siusiBuffer.clear();
+////                return;  //Rea lõppu ei ole, järelikult ei ole terve rida kohale jõudnud, siia ei tohiks tegelikult jõuda
+//            }else{
+////            QString rida = siusiBuffer.left(siusiBuffer.indexOf((QChar)10) + QString((QChar)10).length());
+//                rida = siusiBuffer.left(siusiBuffer.indexOf('_', 1));
+//                siusiBuffer.remove(0, siusiBuffer.indexOf('_', 1));    //Loetud rea eemaldamine
+//            }
 
-//            siusiBuffer.remove(0, siusiBuffer.indexOf((QChar)10) + QString((QChar)10).length());    //Loetud rea eemaldamine
+//            if(!rida.contains('_')){
+//                logiValja << "#break\n";
+//                break; //Et mõttetu reaga edasi ei mindaks
+//            }
+//            logiValja << "#rida: " << rida;
 
-        //Leiame laskuri, kelle rida praegu just saabus:
-            Laskur *seeLaskur = 0;  //Laskur, kelle rida praegu töödeldakse
-            Leht* leht = 0;
-            QStringList read = rida.split(';');
+////            siusiBuffer.remove(0, siusiBuffer.indexOf((QChar)10) + QString((QChar)10).length());    //Loetud rea eemaldamine
 
-            if(rida.startsWith("_PRCH") || rida.startsWith("_GRPH") || rida.startsWith("_SHOT") || rida.startsWith("_TOTL")){
-                for(int i = 0; i < tabWidget->count(); i++){
-                    leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
-                    for(int j = 0; j < leht->laskurid.count(); j++){
-                        if(read[3].toInt() == leht->laskurid[j]->id){
-                            seeLaskur = leht->laskurid[j];
-                            logiValja << "#seeLaskur: " << seeLaskur->id << " " << seeLaskur->eesNimi->text() << " " << seeLaskur->perekNimi->text() << "\n";
-                            j = leht->laskurid.count(); //Loop'ist väljumiseks
-                            i = tabWidget->count(); //Loop'ist väljumiseks
-                            break;
-                        }
-                    }
-                }
-            }
+//        //Leiame laskuri, kelle rida praegu just saabus:
+//            Laskur *seeLaskur = 0;  //Laskur, kelle rida praegu töödeldakse
+//            Leht* leht = 0;
+//            QStringList read = rida.split(';');
 
-            if(seeLaskur == 0 || leht == 0)
-                break;  //Järelikult ei ole huvitav rida
+//            if(rida.startsWith("_PRCH") || rida.startsWith("_GRPH") || rida.startsWith("_SHOT") || rida.startsWith("_TOTL")){
+//                for(int i = 0; i < tabWidget->count(); i++){
+//                    leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
+//                    for(int j = 0; j < leht->laskurid.count(); j++){
+//                        if(read[3].toInt() == leht->laskurid[j]->id){
+//                            seeLaskur = leht->laskurid[j];
+//                            logiValja << "#seeLaskur: " << seeLaskur->id << " " << seeLaskur->eesNimi->text() << " " << seeLaskur->perekNimi->text() << "\n";
+//                            j = leht->laskurid.count(); //Loop'ist väljumiseks
+//                            i = tabWidget->count(); //Loop'ist väljumiseks
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
 
-            if(rida.startsWith("_GRPH")){
-                if(seeLaskur->eelmineRida.startsWith("_PRCH")){
-                    if(seeLaskur->voistlus && (!leht->harjutus.contains("Lamades") || !leht->harjutus.contains("Õhupüss") || !leht->harjutus.contains("Õhupüstol") || !leht->harjutus.contains("Vabapüstol") || !leht->harjutus.contains("Muu"))){
-                        seeLaskur->mitmesVoistlus++;  //Kui on proovilasud või ainult üks võistlus, ei ole mõtet riskida, et mingil põhjusel mitmesVoistlus suureneb
-                    }
-                    seeLaskur->voistlus = false;    //Tegu on proovilaskudega
-                    logiValja << "#GRPH: proovilasud: " << seeLaskur->id << " " << seeLaskur->eesNimi->text() << " " << seeLaskur->perekNimi->text() << "\n";
-                    logiValja << "#GRPH: mitmesVoistlus = " << seeLaskur->mitmesVoistlus;
-                }else{
-                    seeLaskur->voistlus = true; //Kui eelmine rida ei alga _PRCH'ga, siis on tegu võistluslaskudega
-                    logiValja << "#GRPH: algavad võistluslasud: " << seeLaskur->id << " " << seeLaskur->eesNimi->text() << " " << seeLaskur->perekNimi->text() << "\n";
-                }
-            }else if(rida.startsWith("_SHOT") && seeLaskur->voistlus){   //Võistluslasu rida
-                if(read.count() < 4){
-                    logiValja << "\n#viga!: read lõhki! read.count() < 4\n";
-                    break;
-                }
-                if(read.count() <= lasuNrSiusis){
-                    logiValja << "\n#viga!: read lõhki! read.count() < lasuNrSiusis = " << lasuNrSiusis << "\n";
-                    break;
-                }
-                logiValja << "#" << read[3] << ": " << seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm + read[lasuNrSiusis].toInt() << ". Lask\n";
-                logiValja << "#SHOT: eelmineRida: " << seeLaskur->eelmineRida;
-                logiValja << "#SHOT: buffer: " << siusiBuffer;
-#ifdef PROOV
-                qDebug() << "Read[3]: " << read[3] << ", rida: " << siusiBuffer << "QString((QChar)10).length() = " << QString((QChar)10).length();
-                //qDebug() << "Eelminerida[0]: " << eelmineRida[0];
-#endif
+//            if(seeLaskur == 0 || leht == 0)
+//                break;  //Järelikult ei ole huvitav rida
 
-                if(seeLaskur->seeriateArv > ((seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10) && seeLaskur->lasud[seeLaskur->seeriateArv - 1][seeLaskur->laskudeArv - 1]->getILask() < 0){
-//Kui viimase lasu kast on täis, võib arvata, et tulemused on loetud ja vigade vältimiseks on parem neid mitte üle lugeda.
-                    if(seeLaskur->lasud.count() > (seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10 && seeLaskur->lasud[0].count() > (read[lasuNrSiusis].toInt() - 1) % 10){ //Kontroll kas laskude seeriate arv ning laskude arv ühes seerias on piisav
-                        if(read[11].toInt() == 0){  //Kui [11] on 0, siis järelikult loetakse komakohtadega ja lasu väärtus on [10]'s, kui ei ole 0, siis loetakse täisarvudega
-                            seeLaskur->lasud[(seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10][(read[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(read[10]);
-                        }else seeLaskur->lasud[(seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10][(read[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(read[11]);
-//                                     leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(eelmisedRead[lasuVSiusis]);
-                        seeLaskur->lasud[(seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10][(read[lasuNrSiusis].toInt() - 1) % 10]->setX(read[14]);
-                        seeLaskur->lasud[(seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10][(read[lasuNrSiusis].toInt() - 1) % 10]->setY(read[15]);
-                        seeLaskur->liida();
-                        muudaSalvestamist();
+//            if(rida.startsWith("_GRPH")){
+//                if(seeLaskur->eelmineRida.startsWith("_PRCH")){
+//                    if(seeLaskur->voistlus && (!leht->harjutus.contains("Lamades") || !leht->harjutus.contains("Õhupüss") || !leht->harjutus.contains("Õhupüstol") || !leht->harjutus.contains("Vabapüstol") || !leht->harjutus.contains("Muu"))){
+//                        seeLaskur->mitmesVoistlus++;  //Kui on proovilasud või ainult üks võistlus, ei ole mõtet riskida, et mingil põhjusel mitmesVoistlus suureneb
+//                    }
+//                    seeLaskur->voistlus = false;    //Tegu on proovilaskudega
+//                    logiValja << "#GRPH: proovilasud: " << seeLaskur->id << " " << seeLaskur->eesNimi->text() << " " << seeLaskur->perekNimi->text() << "\n";
+//                    logiValja << "#GRPH: mitmesVoistlus = " << seeLaskur->mitmesVoistlus;
+//                }else{
+//                    seeLaskur->voistlus = true; //Kui eelmine rida ei alga _PRCH'ga, siis on tegu võistluslaskudega
+//                    logiValja << "#GRPH: algavad võistluslasud: " << seeLaskur->id << " " << seeLaskur->eesNimi->text() << " " << seeLaskur->perekNimi->text() << "\n";
+//                }
+//            }else if(rida.startsWith("_SHOT") && seeLaskur->voistlus){   //Võistluslasu rida
+//                if(read.count() < 4){
+//                    logiValja << "\n#viga!: read lõhki! read.count() < 4\n";
+//                    break;
+//                }
+//                if(read.count() <= lasuNrSiusis){
+//                    logiValja << "\n#viga!: read lõhki! read.count() < lasuNrSiusis = " << lasuNrSiusis << "\n";
+//                    break;
+//                }
+//                logiValja << "#" << read[3] << ": " << seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm + read[lasuNrSiusis].toInt() << ". Lask\n";
+//                logiValja << "#SHOT: eelmineRida: " << seeLaskur->eelmineRida;
+//                logiValja << "#SHOT: buffer: " << siusiBuffer;
+//#ifdef PROOV
+//                qDebug() << "Read[3]: " << read[3] << ", rida: " << siusiBuffer << "QString((QChar)10).length() = " << QString((QChar)10).length();
+//                //qDebug() << "Eelminerida[0]: " << eelmineRida[0];
+//#endif
 
-                        logiValja << "#" << seeLaskur->eesNimi->text() << " " << seeLaskur->perekNimi->text() << " lask 1 = " << seeLaskur->lasud[(seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10][(read[lasuNrSiusis].toInt() - 1) % 10]->getFLask() << "\n";
-                    }else logiValja << "\n#viga!: laskur lõhki! (seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10 = " << (seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10 << ", (read[lasuNrSiusis].toInt() - 1) % 10 = " << (read[lasuNrSiusis].toInt() - 1) % 10 << "\n";
-                }
+//                if(seeLaskur->seeriateArv > ((seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10) && seeLaskur->lasud[seeLaskur->seeriateArv - 1][seeLaskur->laskudeArv - 1]->getILask() < 0){
+////Kui viimase lasu kast on täis, võib arvata, et tulemused on loetud ja vigade vältimiseks on parem neid mitte üle lugeda.
+//                    if(seeLaskur->lasud.count() > (seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10 && seeLaskur->lasud[0].count() > (read[lasuNrSiusis].toInt() - 1) % 10){ //Kontroll kas laskude seeriate arv ning laskude arv ühes seerias on piisav
+//                        if(read[11].toInt() == 0){  //Kui [11] on 0, siis järelikult loetakse komakohtadega ja lasu väärtus on [10]'s, kui ei ole 0, siis loetakse täisarvudega
+//                            seeLaskur->lasud[(seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10][(read[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(read[10]);
+//                        }else seeLaskur->lasud[(seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10][(read[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(read[11]);
+////                                     leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(eelmisedRead[lasuVSiusis]);
+//                        seeLaskur->lasud[(seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10][(read[lasuNrSiusis].toInt() - 1) % 10]->setX(read[14]);
+//                        seeLaskur->lasud[(seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10][(read[lasuNrSiusis].toInt() - 1) % 10]->setY(read[15]);
+//                        seeLaskur->liida();
+//                        muudaSalvestamist();
 
-            }/*else if(rida.startsWith("_TOTL")){   //Tulemuse rida, kui seeria ei ole 0, on tegu võistluslasuga
-            logiValja << "#TOTL: rida: " << rida;
-            logiValja << "#TOTL: buffer: " << siusiBuffer;
+//                        logiValja << "#" << seeLaskur->eesNimi->text() << " " << seeLaskur->perekNimi->text() << " lask 1 = " << seeLaskur->lasud[(seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10][(read[lasuNrSiusis].toInt() - 1) % 10]->getFLask() << "\n";
+//                    }else logiValja << "\n#viga!: laskur lõhki! (seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10 = " << (seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10 << ", (read[lasuNrSiusis].toInt() - 1) % 10 = " << (read[lasuNrSiusis].toInt() - 1) % 10 << "\n";
+//                }
 
-            if(read.count() > 12){
-                if(read[12] != "0"){   //Kui tegu on proovilasuga, on see 0, kui võistluslasuga, siis on seal seeria summa
-                    logiValja << "#Võistluslask: rida: " << rida;
-                    logiValja << "#Võistluslask: eelmineRida: " << eelmineRida;
+//            }/*else if(rida.startsWith("_TOTL")){   //Tulemuse rida, kui seeria ei ole 0, on tegu võistluslasuga
+//            logiValja << "#TOTL: rida: " << rida;
+//            logiValja << "#TOTL: buffer: " << siusiBuffer;
 
-                    QStringList eelmisedRead = eelmineRida.split(';');
-                    if(eelmisedRead.count() > 15 && eelmisedRead.count() > lasuNrSiusis){
-                        for(int i = 0; i < tabWidget->count(); i++){
-                            Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
-                            for(int j = 0; j < leht->laskurid.count(); j++){ //Kuna eelmine rida oli juba võistluslask, on vaja see kellelegi lisada
-                                if(read[3].toInt() == leht->laskurid[j]->id && leht->seeriateArv > ((eelmisedRead[lasuNrSiusis].toInt() - 1) / 10) && eelmineRida.startsWith("_SHOT") && leht->laskurid[j]->lasud[leht->seeriateArv - 1][leht->laskurid[j]->laskudeArv - 1]->getILask() < 0){
-                                    //Kui viimase lasu kast on täis, võib arvata, et tulemused on loetud ja vigade vältimiseks on parem neid mitte üle lugeda.
-                                    if(leht->laskurid[j]->lasud.count() > (eelmisedRead[lasuNrSiusis].toInt() - 1) / 10 && leht->laskurid[j]->lasud[0].count() > (eelmisedRead[lasuNrSiusis].toInt() - 1) % 10){
-                                        if(eelmisedRead[11].toInt() == 0){  //Kui [11] on 0, siis järelikult loetakse komakohtadega ja lasu väärtus on [10]'s, kui ei ole 0, siis loetakse täisarvudega
-                                            leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(eelmisedRead[10]);
-                                        }else leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(eelmisedRead[11]);
-//                                 leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(eelmisedRead[lasuVSiusis]);
-                                        leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->setX(eelmisedRead[14]);
-                                        leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->setY(eelmisedRead[15]);
-                                        leht->laskurid[j]->liida();
-                                        muudaSalvestamist();
-                                        logiValja << "#" << leht->laskurid[j]->eesNimi->text() << " " << leht->laskurid[j]->perekNimi->text() << " lask 1 = " << leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->getFLask() << "\n";
-                                        i = tabWidget->count(); //Kuna tulemus sai sisestatud, ei ole mõtet rohkem lehti läbi kammida
-                                        j = leht->laskurid.count();
-#ifdef PROOV
-                                        qDebug() << "read[6]: " << read[12] << "voistlus = true" << "eelmisedRead[10]: " << eelmisedRead[10] << "\n\n";
-#endif
-                                    }else logiValja << "\n#viga!: laskur lõhki! (eelmisedRead[lasuNrSiusis].toInt() - 1) / 10 = " << (eelmisedRead[lasuNrSiusis].toInt() - 1) / 10 << ", (eelmisedRead[lasuNrSiusis].toInt() - 1) % 10 = " << (eelmisedRead[lasuNrSiusis].toInt() - 1) % 10 << "\n";
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }*/
-            if(seeLaskur != 0){
-                seeLaskur->eelmineRida = rida;
-                seeLaskur = 0;  //Et uuel ringil ikka laskurit uuesti kontrollitaks
-            }
+//            if(read.count() > 12){
+//                if(read[12] != "0"){   //Kui tegu on proovilasuga, on see 0, kui võistluslasuga, siis on seal seeria summa
+//                    logiValja << "#Võistluslask: rida: " << rida;
+//                    logiValja << "#Võistluslask: eelmineRida: " << eelmineRida;
 
-            logiValja << "#lõpp\n";
-        }
-    }
-    if(siusiBuffer.length() > 0){   //Kui puhver ei ole tühi, aga millegipärast tuli loopist välja, siis käivitada funktsioon uuesti mõne aja pärast
-        logiValja << "#buffer.length(): " << siusiBuffer.length() << ", uuele ringile minek" << "\n";
-        QTimer::singleShot(170, this, SLOT(loeSiusDatast()));
-    }
-}
+//                    QStringList eelmisedRead = eelmineRida.split(';');
+//                    if(eelmisedRead.count() > 15 && eelmisedRead.count() > lasuNrSiusis){
+//                        for(int i = 0; i < tabWidget->count(); i++){
+//                            Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
+//                            for(int j = 0; j < leht->laskurid.count(); j++){ //Kuna eelmine rida oli juba võistluslask, on vaja see kellelegi lisada
+//                                if(read[3].toInt() == leht->laskurid[j]->id && leht->seeriateArv > ((eelmisedRead[lasuNrSiusis].toInt() - 1) / 10) && eelmineRida.startsWith("_SHOT") && leht->laskurid[j]->lasud[leht->seeriateArv - 1][leht->laskurid[j]->laskudeArv - 1]->getILask() < 0){
+//                                    //Kui viimase lasu kast on täis, võib arvata, et tulemused on loetud ja vigade vältimiseks on parem neid mitte üle lugeda.
+//                                    if(leht->laskurid[j]->lasud.count() > (eelmisedRead[lasuNrSiusis].toInt() - 1) / 10 && leht->laskurid[j]->lasud[0].count() > (eelmisedRead[lasuNrSiusis].toInt() - 1) % 10){
+//                                        if(eelmisedRead[11].toInt() == 0){  //Kui [11] on 0, siis järelikult loetakse komakohtadega ja lasu väärtus on [10]'s, kui ei ole 0, siis loetakse täisarvudega
+//                                            leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(eelmisedRead[10]);
+//                                        }else leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(eelmisedRead[11]);
+////                                 leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(eelmisedRead[lasuVSiusis]);
+//                                        leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->setX(eelmisedRead[14]);
+//                                        leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->setY(eelmisedRead[15]);
+//                                        leht->laskurid[j]->liida();
+//                                        muudaSalvestamist();
+//                                        logiValja << "#" << leht->laskurid[j]->eesNimi->text() << " " << leht->laskurid[j]->perekNimi->text() << " lask 1 = " << leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->getFLask() << "\n";
+//                                        i = tabWidget->count(); //Kuna tulemus sai sisestatud, ei ole mõtet rohkem lehti läbi kammida
+//                                        j = leht->laskurid.count();
+//#ifdef PROOV
+//                                        qDebug() << "read[6]: " << read[12] << "voistlus = true" << "eelmisedRead[10]: " << eelmisedRead[10] << "\n\n";
+//#endif
+//                                    }else logiValja << "\n#viga!: laskur lõhki! (eelmisedRead[lasuNrSiusis].toInt() - 1) / 10 = " << (eelmisedRead[lasuNrSiusis].toInt() - 1) / 10 << ", (eelmisedRead[lasuNrSiusis].toInt() - 1) % 10 = " << (eelmisedRead[lasuNrSiusis].toInt() - 1) % 10 << "\n";
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }*/
+//            if(seeLaskur != 0){
+//                seeLaskur->eelmineRida = rida;
+//                seeLaskur = 0;  //Et uuel ringil ikka laskurit uuesti kontrollitaks
+//            }
+
+//            logiValja << "#lõpp\n";
+//        }
+//    }
+//    if(siusiBuffer.length() > 0){   //Kui puhver ei ole tühi, aga millegipärast tuli loopist välja, siis käivitada funktsioon uuesti mõne aja pärast
+//        logiValja << "#buffer.length(): " << siusiBuffer.length() << ", uuele ringile minek" << "\n";
+//        QTimer::singleShot(170, this, SLOT(loeSiusDatast()));
+//    }
+//}
 
 void Protokollitaja::loeUuendusteInfot()
 {
@@ -4139,6 +4138,84 @@ void Protokollitaja::readShotInfo(QString data, int socketIndex)
     muudaSalvestamist();
 }
 
+void Protokollitaja::readSiusInfo(QStringList lines, int socketIndex)
+{
+    if(verbose)
+        QTextStream(stdout) << "readSiusInfo()" << endl;
+
+    for(QString row : lines){
+        //Search for competitor whose line was received:
+        Laskur *thisCompetitor = 0;
+        Leht* sheet = 0;
+        QStringList rowParts = row.split(';');
+
+        if(row.startsWith("_PRCH") || row.startsWith("_GRPH") || row.startsWith("_SHOT") || row.startsWith("_TOTL")){
+            for(int i = 0; i < tabWidget->count(); i++){
+                sheet = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
+                for(int j = 0; j < sheet->laskurid.count(); j++){
+                    if(rowParts[3].toInt() == sheet->laskurid[j]->id && (socketIndex == sheet->laskurid[j]->siusConnectionIndex() || sheet->laskurid[j]->siusConnectionIndex() == -1)){ //To avoid different Sius connections reading into one competitor
+                        thisCompetitor = sheet->laskurid[j];
+                        thisCompetitor->setSiusConnectionIndex(socketIndex);
+                        logiValja << "#thisCompetitor: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << "\n";
+                        j = sheet->laskurid.count(); //To break out from all loops
+                        i = tabWidget->count(); //To break out from all loops
+                        break;
+                    }
+                }
+            }
+        }
+
+        if(thisCompetitor != 0 && sheet != 0){
+            if(row.startsWith("_GRPH")){
+                if(thisCompetitor->previousSiusRow().startsWith("_PRCH")){
+                    if(thisCompetitor->isCompetitionStarted() && (!sheet->harjutus.contains("Lamades") || !sheet->harjutus.contains("Õhupüss") || !sheet->harjutus.contains("Õhupüstol") || !sheet->harjutus.contains("Vabapüstol") || !sheet->harjutus.contains("Muu"))){
+                        thisCompetitor->nextCompetitionStage();  //If there are sighting shots or only one competition, no point to risk with increasing competition stage
+                    }
+                    thisCompetitor->setCompetitionStarted(false);    //These are sighting shots
+                    logiValja << "#GRPH: proovilasud: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << "\n";
+                    logiValja << "#GRPH: competitionStage = " << thisCompetitor->competitionStage();
+                }else{
+                    thisCompetitor->setCompetitionStarted(true); //If previous row does not start with _PRCH, then these are competition shots
+                    logiValja << "#GRPH: algavad võistluslasud: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << "\n";
+                }
+            }else if(row.startsWith("_SHOT") && thisCompetitor->isCompetitionStarted()){   //Competition shot row
+                if(rowParts.count() < 4){
+                    logiValja << "\n#viga!: rowParts lõhki! rowParts.count() < 4\n";
+                    break;
+                }else if(rowParts.count() <= lasuNrSiusis){
+                    logiValja << "\n#viga!: rowParts lõhki! rowParts.count() < lasuNrSiusis = " << lasuNrSiusis << "\n";
+                    break;
+                }
+
+                logiValja << "#" << rowParts[3] << ": " << thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm + rowParts[lasuNrSiusis].toInt() << ". Lask\n";
+                logiValja << "#SHOT: previousSiusRow(): " << thisCompetitor->previousSiusRow();
+
+                if(thisCompetitor->seeriateArv > ((thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10) && thisCompetitor->lasud[thisCompetitor->seeriateArv - 1][thisCompetitor->laskudeArv - 1]->getILask() < 0){
+                    //If competitor's last shot has data in it, then probably these results have already been read and it is better not to read them again, to avoid mistakes
+                    if(thisCompetitor->lasud.count() > (thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10 && thisCompetitor->lasud[0].count() > (rowParts[lasuNrSiusis].toInt() - 1) % 10){ //Check if series number and number of shots in each series is big enough
+                        if(rowParts[11].toInt() == 0){  //If [11] is 0, then results are being read with decimals and shot value is in  [10]. If not 0, then results are with full rings.
+                            thisCompetitor->lasud[(thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(rowParts[10]);
+                        }else
+                            thisCompetitor->lasud[(thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(rowParts[11]);
+                        thisCompetitor->lasud[(thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->setX(rowParts[14]);
+                        thisCompetitor->lasud[(thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->setY(rowParts[15]);
+                        thisCompetitor->liida();
+                        muudaSalvestamist();
+
+                        logiValja << "#" << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << " lask 1 = " << thisCompetitor->lasud[(thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->getFLask() << "\n";
+                    }else
+                        logiValja << "\n#viga!: laskur lõhki! (thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10 = " << (thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10 << ", (rowParts[lasuNrSiusis].toInt() - 1) % 10 = " << (rowParts[lasuNrSiusis].toInt() - 1) % 10 << "\n";
+                }
+
+            }
+
+            thisCompetitor->setPreviousSiusRow(row);
+
+            logiValja << "#lõpp\n";
+        }
+    }
+}
+
 void Protokollitaja::reasta()   //Tulemuste järgi reastamine
 {
         if(tabWidget->count() < 1) return;
@@ -4271,6 +4348,11 @@ void Protokollitaja::sifriLisa()
     }
 }
 
+void Protokollitaja::statusBarInfoChanged(QString newStatusInfo)
+{
+    statusBar()->showMessage(newStatusInfo, 5000);
+}
+
 void Protokollitaja::sulge()
 {
 #ifdef PROOV
@@ -4282,7 +4364,8 @@ void Protokollitaja::sulge()
 
 void Protokollitaja::sulgeUhendus()
 {
-    server->closeConnections();
+    if(server != 0)
+        server->closeConnections();
 //    uhendusAutoriseeritud = false;
 //    socket = 0;
 }
@@ -4828,7 +4911,24 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
 
 void Protokollitaja::uhenduSiusDataga()
 {
-    if(siusDataSocket == 0){
+    siusLogi = new QFile(QFileInfo(seeFail).dir().absolutePath() + QString("/Protokollitaja sisse logi %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
+
+    if(siusDataConnections == nullptr){
+        siusDataConnections = new SiusDataConnections(siusLogi, &logiValja, this);
+        connect(siusDataConnections, &SiusDataConnections::statusInfo, this, &Protokollitaja::statusBarInfoChanged);
+        connect(siusDataConnections, &SiusDataConnections::linesRead, this, &Protokollitaja::readSiusInfo);
+        connect(siusDataConnections, &SiusDataConnections::disconnectedFromSius, this, &Protokollitaja::uhendusSiusigaKatkes);
+    }
+
+    if(siusLogi->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){ //Saabunud võrguliikluse logi
+        QTextStream valja(siusLogi);
+        valja << "///////////////////////////////" << voistluseNimi << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";
+        siusLogi->close();
+    }
+
+    siusDataConnections->exec();
+
+    /*if(siusDataSocket == 0){
         siusDataSocket = new QTcpSocket(this);
         connect(siusDataSocket, SIGNAL(readyRead()), this, SLOT(loeSiusDatast()));
         connect(siusDataSocket, SIGNAL(disconnected()), SLOT(uhendusSiusigaKatkes()));
@@ -4873,12 +4973,16 @@ void Protokollitaja::uhenduSiusDataga()
         valja << "///////////////////////////////" << voistluseNimi << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";
         siusLogi->close();
     }
-    progressTimer->start();
+    progressTimer->start();*/
 }
 
-void Protokollitaja::uhendusSiusigaKatkes()
+void Protokollitaja::uhendusSiusigaKatkes(int connectionIndex)
 {
     logiValja << "#Ühendus SiusData'ga katkes, buffer.length(): " << siusiBuffer.length() << "\n";
+    for(int i = 0; i < tabWidget->count(); i++){
+        Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
+        leht->siusiReset(connectionIndex);
+    }
 //    teatekast.setText(tr("Ühendus SiusData'ga katkes!"));
 //    teatekast.show();
 }
@@ -5008,5 +5112,6 @@ void Protokollitaja::viiLoppu()
 
 Protokollitaja::~Protokollitaja()
 {
-
+    if(siusDataConnections != nullptr)
+        siusDataConnections->deleteLater();
 }

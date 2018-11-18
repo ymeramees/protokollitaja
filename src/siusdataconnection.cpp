@@ -1,33 +1,50 @@
 #include "siusdataconnection.h"
 
-SiusDataConnection::SiusDataConnection(QString address, int port, int socketIndex, QFile *siusLog, QTextStream *log, QWidget *parent) : QWidget(parent)
+extern bool verbose;
+
+SiusDataConnection::SiusDataConnection(QString address, int port, int socketIndex, QFile *siusLog, QTextStream *log, QWidget *parent) : QHBoxLayout(parent)
 {
-    addressLabel = new QLabel(address, this);
-    myIndex = socketIndex;
-    this->port = port;
+    if(verbose)
+        QTextStream(stdout) << "SiusDataConnection()" << endl;
+    addressLabel = new QLabel(address);
+    m_index = socketIndex;
+    m_port = port;
     this->siusLog = siusLog;
     this->log = log;
 
-    disconnectButton = new QPushButton(tr("Sulge ühendus"), this);
-    connect(disconnectButton, &QPushButton::clicked, this, disconnectFromSius);
+    if(verbose)
+        QTextStream(stdout) << "connectToSiusData()2" << endl;
+    disconnectButton = new QPushButton(tr("Sulge ühendus"));
+    connect(disconnectButton, &QPushButton::clicked, this, &SiusDataConnection::disconnectFromSius);
 
-    reconnectButton = new QPushButton(tr("Ühendu uuesti"), this);
-    connect(reconnectButton, &QPushButton::clicked, this, reconnectToSius);
+    reconnectButton = new QPushButton(tr("Ühendu uuesti"));
+    connect(reconnectButton, &QPushButton::clicked, this, &SiusDataConnection::reconnectToSius);
+
+    this->addWidget(addressLabel);
+    this->addWidget(reconnectButton);
+    this->addWidget(disconnectButton);
 
     siusDataSocket = new QTcpSocket(this);
-    connect(siusDataSocket, &QTcpSocket::connected, addressLabel, &QLabel::setEnabled);
-    connect(siusDataSocket, &QTcpSocket::disconnected, this, wasDisconnected);
+    connect(siusDataSocket, &QTcpSocket::connected, this, &SiusDataConnection::connected);
+    connect(siusDataSocket, &QTcpSocket::readyRead, this, &SiusDataConnection::readFromSius);
+    connect(siusDataSocket, &QTcpSocket::disconnected, this, &SiusDataConnection::wasDisconnected);
 
     siusDataSocket->connectToHost(address, port);
-    if(progress == 0){
-        progress = new QProgressDialog(tr("SiusData'ga ühendumine..."), "Loobu", 0, 0, this);
-        progress->setWindowModality(Qt::WindowModal);
-        connect(progress, SIGNAL(canceled()), this, SLOT(stopProgress())); //To enable to cancel connection process
-    }
+
+    progress = new QProgressDialog(tr("SiusData'ga ühendumine..."), "Loobu", 0, 0);
+    progress->setWindowModality(Qt::WindowModal);
+    connect(progress, SIGNAL(canceled()), this, SLOT(stopProgress())); //To enable to cancel connection process
     progress->show();
+
+    progressTimer = new QTimer(this);
+    progressTimer->setSingleShot(true);
+    progressTimer->setInterval(3000);
+    connect(progressTimer, &QTimer::timeout, this, &SiusDataConnection::stopProgress);
+    progressTimer->start();
 }
 
-SiusDataConnection::~SiusDataConnection(){
+SiusDataConnection::~SiusDataConnection()
+{
     addressLabel->deleteLater();
     disconnectButton->deleteLater();
     reconnectButton->deleteLater();
@@ -36,10 +53,27 @@ SiusDataConnection::~SiusDataConnection(){
     siusDataSocket->deleteLater();
 }
 
+QString SiusDataConnection::address() const
+{
+    return addressLabel->text();
+}
+
+void SiusDataConnection::connected()
+{
+    if(verbose)
+        QTextStream(stdout) << "SiusDataConnection::connected(): " << m_index << endl;
+    addressLabel->setEnabled(true);
+}
+
 void SiusDataConnection::disconnectFromSius()
 {
-    socket->disconnectFromHost();
-    emit disconnectedFromSius(myIndex);
+    siusDataSocket->disconnectFromHost();
+    emit disconnectedFromSius(m_index);
+}
+
+int SiusDataConnection::port() const
+{
+    return m_port;
 }
 
 void SiusDataConnection::readFromSius()
@@ -64,7 +98,7 @@ void SiusDataConnection::readFromSius()
 
         while(siusBuffer.contains('_')){
 
-//            progressTimer->start();   //Is this really needed?
+            progressTimer->start();   //To postpone closing of the progress dialog
 
             if(siusLog->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){ //Log of incoming data
                 QTextStream out(siusLog);
@@ -72,11 +106,11 @@ void SiusDataConnection::readFromSius()
                 siusLog->close();
             }
 
-            log << QTime::currentTime().toString("#hh:mm:ss") << " #buffer.length(): " << siusBuffer.length() << "    buffer.indexOf('_'): " << siusBuffer.indexOf('_', 1) << "\n";
+            *log << QTime::currentTime().toString("#hh:mm:ss") << " #buffer.length(): " << siusBuffer.length() << "    buffer.indexOf('_'): " << siusBuffer.indexOf('_', 1) << "\n";
 
             QString row = "";
             if(siusBuffer.indexOf('_', 1) == -1){
-                log << "#clear()\n";
+                *log << "#clear()\n";
                 row = QString("%1").arg(siusBuffer);
                 siusBuffer.clear();
             }else{
@@ -84,32 +118,46 @@ void SiusDataConnection::readFromSius()
                 siusBuffer.remove(0, siusBuffer.indexOf('_', 1));
             }
 
+            if(verbose)
+                QTextStream(stdout) << "SiusDataConnection::readFromSius() " << m_index << ": " << row << endl;
+
             if(!row.contains('_')){
-                log << "#break\n";
+                *log << "#break\n";
                 break; //Double check not to continue with pointless row
             }
-            log << "#rida: " << row;
+            *log << "#rida: " << row;
             lines.append(row);
 
             QCoreApplication::processEvents();
         }
         if(siusBuffer.length() > 0){   //If there is still data in the buffer, but for some reason reached here, then start the function again after a while
-            log << "#buffer.length(): " << siusBuffer.length() << ", uuele ringile minek" << "\n";
+            *log << "#buffer.length(): " << siusBuffer.length() << ", uuele ringile minek" << "\n";
             QTimer::singleShot(170, this, SLOT(loeSiusDatast()));
         }
 
-        emit linesRead(lines);
+        emit linesRead(lines, m_index);
     }
 }
 
 void SiusDataConnection::reconnectToSius()
 {
-    siusDataSocket->connectToHost(addressLabel->text(), port);
+    siusDataSocket->abort();
+    siusDataSocket->connectToHost(addressLabel->text(), m_port);
+}
+
+void SiusDataConnection::setSocketIndex(int newIndex)
+{
+    m_index = newIndex;
+}
+
+int SiusDataConnection::socketIndex() const
+{
+    return m_index;
 }
 
 void SiusDataConnection::stopProgress()
 {
-    if(progress !=0){
+    if(progress != nullptr){
         if(progress->wasCanceled()){
             siusDataSocket->abort();
         }else progress->accept();
@@ -118,6 +166,10 @@ void SiusDataConnection::stopProgress()
 
 void SiusDataConnection::wasDisconnected()
 {
-    addressLabel->setEnabled(false);
-    emit disconnectedFromSius(myIndex);
+    if(verbose)
+        QTextStream(stdout) << "SiusDataConnection::wasDisconnected(): " << m_index << endl;
+    if(addressLabel->isEnabled()){
+        addressLabel->setEnabled(false);
+        emit disconnectedFromSius(m_index);
+    }
 }

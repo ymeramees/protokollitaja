@@ -145,10 +145,10 @@ void Leht::eemaldaLaskur()
 	}
 }
 
-void Leht::siusiReset()
+void Leht::siusiReset(int connectionIndex)
 {
     for(int i = 0; i < laskurid.count(); i++)
-        laskurid[i]->siusiReset();
+        laskurid[i]->siusiReset(connectionIndex);
 }
 
 void Leht::sorteeri(int t)

@@ -32,7 +32,9 @@ Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i,
         if(this->objectName().isEmpty()){
                 this->setObjectName("laskurClass");
         }
-        siusiReset();
+        m_competitionStage = 0;
+        m_competitionStarted = false;
+        m_siusConnectionIndex = -1;
 //  QMessageBox::information(this, "Teade", "Lasku::Laskur()", "OK");
 //	connect(eesNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus(QString)));
 //	connect(perekNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus2(QString)));
@@ -208,6 +210,11 @@ Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i,
         popup->addAction(idAct);
 }
 
+int Laskur::competitionStage() const
+{
+    return m_competitionStage;
+}
+
 void Laskur::contextMenuEvent(QContextMenuEvent *event)
 {
         popup->exec(event->globalPos());
@@ -225,6 +232,11 @@ bool Laskur::eventFilter(QObject* object, QEvent* event)
         return false; // lets the event continue to the edit
     }
     return false;
+}
+
+bool Laskur::isCompetitionStarted() const
+{
+    return m_competitionStarted;
 }
 
 QString Laskur::getSumma()
@@ -1074,6 +1086,21 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
     return false;
 }
 
+void Laskur::nextCompetitionStage()
+{
+    m_competitionStage++;
+}
+
+QString Laskur::previousSiusRow() const
+{
+    return m_previousSiusRow;
+}
+
+void Laskur::resetCompetitionStage()
+{
+    m_competitionStage = 0;
+}
+
 void Laskur::set(const Laskur *l)
 {
     //Laskuri kopeerimise funktsioon
@@ -1095,9 +1122,10 @@ void Laskur::set(const Laskur *l)
 
     this->onLehelugejaLaskur = l->onLehelugejaLaskur;
     this->onVorguLaskur = l->onVorguLaskur;
-    this->mitmesVoistlus = l->mitmesVoistlus;
-    this->voistlus = l->voistlus;
-    this->eelmineRida = l->eelmineRida;
+    this->m_competitionStage = l->competitionStage();
+    this->m_competitionStarted = l->isCompetitionStarted();
+    this->m_previousSiusRow = l->previousSiusRow();
+    this->m_siusConnectionIndex = l->siusConnectionIndex();
     this->linnuke->setChecked(l->linnuke->isChecked());
     this->rajaNr->setText(l->rajaNr->text().trimmed());
     this->sifriAlgus->setText(l->sifriAlgus->text().trimmed());
@@ -1123,15 +1151,39 @@ void Laskur::set(const Laskur *l)
     this->liida();
 }
 
+void Laskur::setCompetitionStarted(bool competitionStatus)
+{
+    m_competitionStarted = competitionStatus;
+}
+
+void Laskur::setPreviousSiusRow(QString row)
+{
+    m_previousSiusRow = row;
+}
+
+void Laskur::setSiusConnectionIndex(int newIndex)
+{
+    m_siusConnectionIndex = newIndex;
+}
+
 void Laskur::setSumma(QString s)
 {
     summa->setText(s);
 }
 
-void Laskur::siusiReset()
+int Laskur::siusConnectionIndex() const
 {
-    mitmesVoistlus = 0;
-    voistlus = false;
+    return m_siusConnectionIndex;
+}
+
+void Laskur::siusiReset(int siusConnectionIndex)
+{
+    if(siusConnectionIndex == m_siusConnectionIndex){
+        previousSiusRow().clear();
+        m_competitionStage = 0;
+        m_competitionStarted = false;
+        this->m_siusConnectionIndex = -1;
+    }
 }
 
 void Laskur::teataMuudatusest(const QString)
