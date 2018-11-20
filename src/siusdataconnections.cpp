@@ -16,8 +16,11 @@ SiusDataConnections::SiusDataConnections(QFile *siusLog, QTextStream *log, QWidg
 
 SiusDataConnections::~SiusDataConnections()
 {
-    for(SiusDataConnection *socket : sockets)
+    if(verbose)
+        QTextStream(stdout) << "SiusDataConnections::~SiusDataConnections()" << endl;
+    for(SiusDataConnection *socket : sockets){
         socket->deleteLater();
+    }
     sockets.clear();
     delete ui;
 }
@@ -38,8 +41,15 @@ void SiusDataConnections::connectToSiusData()
 
     if(!existing){
         SiusDataConnection *socket = new SiusDataConnection(ui->addressEdit->text(), ui->portEdit->text().toInt(), sockets.length(), siusLog, log, this);
+        if(vBox == nullptr){
+            vBox = new QVBoxLayout;
+            vBox->addStretch(1);
+        }
+        vBox->insertWidget(vBox->count() - 1, socket);
+        ui->existingConnectionsBox->setLayout(vBox);
+
         sockets.append(socket);
-        ui->verticalLayout->addItem(socket);
+//        ui->verticalLayout->addItem(socket);
         connect(socket, &SiusDataConnection::linesRead, this, &SiusDataConnections::linesRead);
         connect(socket, &SiusDataConnection::statusInfo, this, &SiusDataConnections::statusInfo);
         connect(socket, &SiusDataConnection::disconnectedFromSius, this, &SiusDataConnections::disconnectedFromSius);

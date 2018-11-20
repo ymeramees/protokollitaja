@@ -583,41 +583,42 @@ void Protokollitaja::closeEvent(QCloseEvent *event)
 #ifdef PROOV
     qDebug() << "closeEvent()";
 #endif
-        if(voibSulgeda){
-            if(protoUuendaja == 0)  //Kui on uuendamise kaudu sulgemine, siis ei ole vaja küsida, kui salvestama ei pea
-                if(QMessageBox::warning(this, tr("Protokollitaja"), tr("Oled kindel, et soovid programmist väljuda?"), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok)==QMessageBox::Cancel)
-                    event->ignore();
-        }else{
-            int vastus = QMessageBox::question(this, "Protokollitaja", tr("Kas soovid muudatused salvestada ja programmist väljuda?"),	QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-            if(vastus == QMessageBox::Save){
-                salvesta();
-                //tulemus->close();
-                //lehelugejaAken->sulgeUhendus();
-                //qApp->quit();
-                event->accept();
-            }else if(vastus == QMessageBox::Cancel){
+    if(voibSulgeda){
+        if(protoUuendaja == 0)  //Kui on uuendamise kaudu sulgemine, siis ei ole vaja küsida, kui salvestama ei pea
+            if(QMessageBox::warning(this, tr("Protokollitaja"), tr("Oled kindel, et soovid programmist väljuda?"), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok)==QMessageBox::Cancel)
                 event->ignore();
-            }else{
-                /*tulemus->close();
+    }else{
+        int vastus = QMessageBox::question(this, "Protokollitaja", tr("Kas soovid muudatused salvestada ja programmist väljuda?"),	QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        if(vastus == QMessageBox::Save){
+            salvesta();
+            //tulemus->close();
+            //lehelugejaAken->sulgeUhendus();
+            //qApp->quit();
+            event->accept();
+        }else if(vastus == QMessageBox::Cancel){
+            event->ignore();
+        }else{
+            /*tulemus->close();
                 lehelugejaAken->sulgeUhendus();
                 qApp->quit();*/
-                event->accept();
-            }
+            event->accept();
         }
-        if(event->isAccepted()){
-            /*QFile logifail(asukoht.absolutePath() + QString("/Data/Logi %1.log").arg(QDate::currentDate()
-                                                                                     .toString(Qt::ISODate)));
+    }
+    if(event->isAccepted()){
+        /*QFile logifail(asukoht.absolutePath() + QString("/Data/Logi %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
                 if(logifail.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){
                     QTextStream valja(&logifail);
                     valja << lehelugejaAken->m_ui.logi->toPlainText() << "\n";
                     logifail.close();
                 }*/
-                tulemus->close();
-                if(lehelugejaAken)
-                    lehelugejaAken->sulgeUhendus();
-                if(server != 0)
-                    server->closeConnections();
-            }
+        tulemus->close();
+        if(lehelugejaAken)
+            lehelugejaAken->sulgeUhendus();
+        if(server != 0)
+            server->closeConnections();
+//                if(siusDataConnections != nullptr)
+//                    siusDataConnections
+    }
 }
 
 void Protokollitaja::eelvaade()

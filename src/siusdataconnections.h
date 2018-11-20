@@ -17,11 +17,15 @@ public:
     explicit SiusDataConnections(QFile *siusLog, QTextStream *log, QWidget *parent = 0);
     ~SiusDataConnections();
 
+//public slots:
+//    void closeConnections();
+
 private:
     Ui::SiusDataConnections *ui;
     QFile *siusLog = nullptr;
     QList<SiusDataConnection*> sockets;
     QTextStream *log = nullptr;
+    QVBoxLayout *vBox = nullptr;
 
 private slots:
     void connectToSiusData();

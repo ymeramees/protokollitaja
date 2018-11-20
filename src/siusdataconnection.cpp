@@ -2,7 +2,7 @@
 
 extern bool verbose;
 
-SiusDataConnection::SiusDataConnection(QString address, int port, int socketIndex, QFile *siusLog, QTextStream *log, QWidget *parent) : QHBoxLayout(parent)
+SiusDataConnection::SiusDataConnection(QString address, int port, int socketIndex, QFile *siusLog, QTextStream *log, QWidget *parent) : QWidget(parent)
 {
     if(verbose)
         QTextStream(stdout) << "SiusDataConnection()" << endl;
@@ -20,9 +20,11 @@ SiusDataConnection::SiusDataConnection(QString address, int port, int socketInde
     reconnectButton = new QPushButton(tr("Ühendu uuesti"));
     connect(reconnectButton, &QPushButton::clicked, this, &SiusDataConnection::reconnectToSius);
 
-    this->addWidget(addressLabel);
-    this->addWidget(reconnectButton);
-    this->addWidget(disconnectButton);
+    row = new QHBoxLayout;
+    row->addWidget(addressLabel);
+    row->addWidget(reconnectButton);
+    row->addWidget(disconnectButton);
+    setLayout(row);
 
     siusDataSocket = new QTcpSocket(this);
     connect(siusDataSocket, &QTcpSocket::connected, this, &SiusDataConnection::connected);
@@ -45,7 +47,10 @@ SiusDataConnection::SiusDataConnection(QString address, int port, int socketInde
 
 SiusDataConnection::~SiusDataConnection()
 {
+    if(verbose)
+        QTextStream(stdout) << "SiusDataConnection::~SiusDataConnection(): " << m_index << endl;
     addressLabel->deleteLater();
+    addressLabel = nullptr;
     disconnectButton->deleteLater();
     reconnectButton->deleteLater();
     row->deleteLater();
@@ -168,8 +173,9 @@ void SiusDataConnection::wasDisconnected()
 {
     if(verbose)
         QTextStream(stdout) << "SiusDataConnection::wasDisconnected(): " << m_index << endl;
-    if(addressLabel->isEnabled()){
-        addressLabel->setEnabled(false);
-        emit disconnectedFromSius(m_index);
-    }
+    if(addressLabel != nullptr)
+        if(addressLabel->isEnabled()){
+            addressLabel->setEnabled(false);
+            emit disconnectedFromSius(m_index);
+        }
 }

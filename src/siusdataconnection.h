@@ -12,7 +12,7 @@
 #include <QProgressDialog>
 #include <QCoreApplication>
 
-class SiusDataConnection : public QHBoxLayout
+class SiusDataConnection : public QWidget
 {
     Q_OBJECT
 public:
