@@ -6,8 +6,6 @@
 /////////////////////////////////////////////////////////////////////////////
 /// ToDo list:
 /// Print2() on pooleli, asendite pealkirju ei ole
-/// Mitme masinaga lugemise jaoks:
-///     1. Server sulgemine üle vaadata
 ///
 /////////////////////////////////////////////////////////////////////////////
 
@@ -2923,7 +2921,7 @@ void Protokollitaja::naitaInfot()
                         "arvate. Välja arvatud programmi looja maine ning heaolu kahjustamise või rahalise kasu "
                         "saamise eesmärkidel. Samuti pole kasutamine lubatud juhul, kui autor on selle ära keelanud!"
                         "\n\nTeadmiseks teile, et seda programmi on vahelduva eduga autori vabast ajast arendatud juba "
-                        "aastast 2008 ning Finaali programmi, koos vanemate versioonidega üle seitsme aasta!\n\nKüsimused, "
+                        "aastast 2008 ning Finaali programmi, koos vanemate versioonidega aastast 2007!\n\nKüsimused, "
                         "ettepanekud, leitud vead, arvamused jms võib saata allolevale e-postile\n\nAutor: Ümeramees\n"
                         "ymeramees@gmail.com\nTallinn ") + aasta);
 }
@@ -4315,12 +4313,7 @@ void Protokollitaja::salvestaKui()
 void Protokollitaja::seiskaServer()
 {
     if(!server == 0){
-        while(server->hasPendingConnections())
-        {
-            QTcpSocket *sock = server->nextPendingConnection();
-            connect(sock, SIGNAL(disconnected()), sock, SLOT(deleteLater()));
-            sock->close();
-        }
+        server->closeConnections();
         server->close();
         statusBar()->showMessage(tr("Server seisatud"), 5000);
         server->deleteLater();

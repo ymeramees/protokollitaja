@@ -31,6 +31,11 @@ void ProtolehelugejaServer::closeConnections()
 {
     if(verbose)
         QTextStream(stdout) << "ProtolehelugejaServer::closeConnections()" << endl;
+    while(hasPendingConnections()){
+        QTcpSocket *socket = nextPendingConnection();
+        connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
+        socket->close();
+    }
     for(ProtolehelugejaConnection *socket : sockets){
         socket->disconnect();
         socket->deleteLater();
