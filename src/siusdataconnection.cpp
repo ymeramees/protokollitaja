@@ -52,7 +52,9 @@ SiusDataConnection::~SiusDataConnection()
     addressLabel->deleteLater();
     addressLabel = nullptr;
     disconnectButton->deleteLater();
+    disconnectButton = nullptr;
     reconnectButton->deleteLater();
+    reconnectButton = nullptr;
     row->deleteLater();
     siusDataSocket->abort();
     siusDataSocket->deleteLater();
@@ -68,6 +70,7 @@ void SiusDataConnection::connected()
     if(verbose)
         QTextStream(stdout) << "SiusDataConnection::connected(): " << m_index << endl;
     addressLabel->setEnabled(true);
+    disconnectButton->setEnabled(true);
 }
 
 void SiusDataConnection::disconnectFromSius()
@@ -147,6 +150,8 @@ void SiusDataConnection::readFromSius()
 void SiusDataConnection::reconnectToSius()
 {
     siusDataSocket->abort();
+    progress->show();
+    progressTimer->start();
     siusDataSocket->connectToHost(addressLabel->text(), m_port);
 }
 
@@ -173,9 +178,10 @@ void SiusDataConnection::wasDisconnected()
 {
     if(verbose)
         QTextStream(stdout) << "SiusDataConnection::wasDisconnected(): " << m_index << endl;
-    if(addressLabel != nullptr)
+    if(addressLabel != nullptr && disconnectButton != nullptr)
         if(addressLabel->isEnabled()){
             addressLabel->setEnabled(false);
+            disconnectButton->setEnabled(false);
             emit disconnectedFromSius(m_index);
         }
 }
