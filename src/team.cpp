@@ -59,3 +59,15 @@ void Team::sum()
         sumLabel->setText(QString("%1").arg(dTeamSum).replace('.', ','));
     }
 }
+
+void Team::write(QJsonObject &json) const
+{
+//    json["nameEdit"] = nameEdit.text();
+    QJsonArray competitorsArray;
+    foreach (Competitor *competitor, teamCompetitors){
+        QJsonObject competitorObj;
+        competitor->write(competitorObj);
+        competitorsArray.append(competitorObj);
+    }
+    json["Members_in_team"] = competitorsArray;
+}

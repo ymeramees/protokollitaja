@@ -16,15 +16,16 @@ class Competitor : public QWidget
 public:
     explicit Competitor(QJsonArray configJson, QWidget *parent = nullptr);
     ~Competitor();
+    void write(QJsonObject &json) const;
 
 signals:
-    void newShot();
+    void newShot() const;
 
 public slots:
-    int current10Sum();  //Current result x10 to avoid floating point arithmetic errors
+    int current10Sum() const;  //Current result x10 to avoid floating point arithmetic errors
 
 private:
-    QLineEdit *nameEdit = nullptr;
+    QLineEdit nameEdit;
     QVector<QLabel*> sumLabels;
     QVector<QVector<QLineEdit*>*> series;
     QVector<QLineEdit*> shots;

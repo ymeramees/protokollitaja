@@ -4,11 +4,11 @@ Competitor::Competitor(QJsonArray configJson, QWidget *parent) : QWidget(parent)
 {
     QHBoxLayout *hBox = new QHBoxLayout;
 
-    nameEdit = new QLineEdit();
-    nameEdit->setMinimumWidth(75);
-    nameEdit->setMinimumHeight(22);
-    nameEdit->setToolTip(tr("Võistleja nimi"));
-    hBox->addWidget(nameEdit);
+//    nameEdit = new QLineEdit();
+    nameEdit.setMinimumWidth(75);
+    nameEdit.setMinimumHeight(22);
+    nameEdit.setToolTip(tr("Võistleja nimi"));
+    hBox->addWidget(&nameEdit);
 
     if(verbose)
         QTextStream(stdout) << "Competitor::configJson.size(): " << configJson.size() << endl;
@@ -47,7 +47,7 @@ Competitor::~Competitor()
 
 }
 
-int Competitor::current10Sum()
+int Competitor::current10Sum() const
 {
     return sumLabels.at(sumLabels.size()-1)->text().remove(',').toInt();
 }
@@ -74,4 +74,14 @@ void Competitor::sum()
         sumLabels.at(sumLabels.size() - 1)->setText(sumLabels.at(sumLabels.size() - 1)->text() + ",0");
     emit newShot();
 //    return dTotalSum;
+}
+
+void Competitor::write(QJsonObject &json) const
+{
+    json["nameEdit"] = nameEdit.text();
+    QJsonArray shotsArray;
+    foreach (QLineEdit *shot, shots){
+        shotsArray.append(shot->text());
+    }
+    json["Shots"] = shotsArray;
 }

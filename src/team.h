@@ -18,6 +18,7 @@ class Team : public QWidget
 public:
     explicit Team(QJsonObject configJson, int index, QWidget *parent = nullptr);
     ~Team();
+    void write(QJsonObject &json) const;
 
 signals:
 
