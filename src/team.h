@@ -16,9 +16,9 @@ class Team : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Team(QJsonObject configJson, int index, QWidget *parent = nullptr);
+    explicit Team(QJsonObject &configJson, int index, QWidget *parent = nullptr);
     ~Team();
-    void write(QJsonObject &json) const;
+    void toJson(QJsonObject &json) const;
 
 signals:
 
@@ -26,8 +26,9 @@ public slots:
     void sum();
 
 private:
-    QLabel *indexLabel = nullptr;
-    QLabel *sumLabel = nullptr;
+    QLabel indexLabel;
+    QLabel sumLabel;
+    QLineEdit teamName;
     QVector<Competitor*> teamCompetitors;
 };
 

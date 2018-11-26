@@ -1,38 +1,62 @@
 #include "team.h"
 
-Team::Team(QJsonObject configJson, int index, QWidget *parent) : QWidget(parent)
+Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent)
 {
-    int competitorsInTeam = configJson["Members_in_team"].toInt();
-//    int shots = configJson["Shots"].toArray()[0].toInt();
+    int competitorsInTeam = 0;
 
     QGridLayout *layout = new QGridLayout;
-//    QVBoxLayout *vBox = new QVBoxLayout;
 
-    indexLabel = new QLabel(QString("%1.").arg(index));
-    layout->addWidget(indexLabel);
+    teamName.setToolTip(tr("Võistkonna nimi"));
+    teamName.setText("Nimi");
+    indexLabel.setText(QString("%1.").arg(index));
+    layout->addWidget(&indexLabel);
+    layout->addWidget(&teamName, 0, 1);
 
-    if(competitorsInTeam > 1)   //Team finals
-        layout->addWidget(new QLineEdit(QString("Nimi")), 0, 1);
+    if(configJson["Members_in_team"].isDouble()){  //Event config file
+        if(verbose)
+            QTextStream(stdout) << "Team::Team(uus)" << endl;
+        competitorsInTeam = configJson["Members_in_team"].toInt();
 
-    Competitor *competitor = new Competitor(configJson["Shots"].toArray());
-    connect(competitor, &Competitor::newShot, this, &Team::sum);
-
-    teamCompetitors.append(competitor);
-    layout->addWidget(competitor, 0, 2);
-//    vBox->addLayout(layout);
-
-    for(int i = 1; i < competitorsInTeam; i++){
         Competitor *competitor = new Competitor(configJson["Shots"].toArray());
         connect(competitor, &Competitor::newShot, this, &Team::sum);
 
         teamCompetitors.append(competitor);
-        layout->addWidget(competitor, i, 2);
+        layout->addWidget(competitor, 0, 2);
+
+        for(int i = 1; i < competitorsInTeam; i++){
+            Competitor *competitor = new Competitor(configJson["Shots"].toArray());
+            connect(competitor, &Competitor::newShot, this, &Team::sum);
+
+            teamCompetitors.append(competitor);
+            layout->addWidget(competitor, i, 2);
+        }
+
+        sumLabel.setText("0,0");
+
+    }else if(configJson["Members_in_team"].isArray()){  //Loaded finals file
+        if(verbose)
+            QTextStream(stdout) << "Team::Team(failist)" << endl;
+        QJsonArray competitorsArray = configJson["Members_in_team"].toArray();
+        competitorsInTeam = competitorsArray.size();
+
+        for (int i = 0; i < competitorsArray.size(); i++) {
+            Competitor *competitor = new Competitor(competitorsArray.at(i).toObject());
+            connect(competitor, &Competitor::newShot, this, &Team::sum);
+
+            teamCompetitors.append(competitor);
+            layout->addWidget(competitor, i, 2);
+        }
+        teamName.setText(configJson["teamName"].toString());
+    }else
+        QMessageBox::critical(this, tr("Viga!"), tr("Vigane fail!\nMembers_in_team != isDouble && != isArray"), QMessageBox::Ok);
+
+    layout->addWidget(&sumLabel, 0, layout->columnCount());
+
+    if(competitorsInTeam < 2){  //Individual finals
+        teamName.hide();
+        sumLabel.hide();
     }
 
-    if(competitorsInTeam > 1){  //Team finals
-        sumLabel = new QLabel("0,0");
-        layout->addWidget(sumLabel, 0, layout->columnCount());
-    }
 //    if(verbose)
 //        QTextStream(stdout) << "layout->rowCount(): " << layout->rowCount() << endl;
 
@@ -42,7 +66,12 @@ Team::Team(QJsonObject configJson, int index, QWidget *parent) : QWidget(parent)
 
 Team::~Team()
 {
-
+    if(verbose)
+        QTextStream(stdout) << "Team::~Team()" << endl;
+    foreach (Competitor *competitor, teamCompetitors) {
+        competitor->deleteLater();
+    }
+    teamCompetitors.clear();
 }
 
 void Team::sum()
@@ -56,18 +85,18 @@ void Team::sum()
 
         double dTeamSum = teamSum;
         dTeamSum /= 10;
-        sumLabel->setText(QString("%1").arg(dTeamSum).replace('.', ','));
+        sumLabel.setText(QString("%1").arg(dTeamSum).replace('.', ','));
     }
 }
 
-void Team::write(QJsonObject &json) const
+void Team::toJson(QJsonObject &json) const
 {
-//    json["nameEdit"] = nameEdit.text();
     QJsonArray competitorsArray;
     foreach (Competitor *competitor, teamCompetitors){
         QJsonObject competitorObj;
-        competitor->write(competitorObj);
+        competitor->toJson(competitorObj);
         competitorsArray.append(competitorObj);
     }
     json["Members_in_team"] = competitorsArray;
+    json["teamName"] = teamName.text();
 }

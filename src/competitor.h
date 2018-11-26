@@ -4,9 +4,12 @@
 #include <QLabel>
 #include <QWidget>
 #include <QLineEdit>
+#include <QJsonValue>
 #include <QJsonArray>
+#include <QJsonObject>
 #include <QHBoxLayout>
 #include <QTextStream>
+#include <QMessageBox>
 
 extern bool verbose;
 
@@ -14,9 +17,10 @@ class Competitor : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Competitor(QJsonArray configJson, QWidget *parent = nullptr);
+    explicit Competitor(const QJsonArray configJson, QWidget *parent = nullptr);
+    explicit Competitor(const QJsonObject &json, QWidget *parent = nullptr);
     ~Competitor();
-    void write(QJsonObject &json) const;
+    void toJson(QJsonObject &json) const;
 
 signals:
     void newShot() const;

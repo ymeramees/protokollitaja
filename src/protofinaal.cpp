@@ -13,9 +13,18 @@ Protofinaal::~Protofinaal()
 
 }
 
+void Protofinaal::clear()
+{
+    foreach (Team *team, teams) {
+        vBox->removeWidget(team);
+        team->deleteLater();
+    }
+    teams.clear();
+}
+
 void Protofinaal::createLayout(QJsonObject &jsonObj)
 {
-    QVBoxLayout *vBox = new QVBoxLayout;
+    vBox = new QVBoxLayout;
 
     int teamsNo = jsonObj["Teams"].toInt();
 
@@ -74,15 +83,30 @@ void Protofinaal::initialize()
 
 void Protofinaal::open()
 {
-    readFile("save.json");
+    clear();
+    readFinalsFile("save.json");
 }
 
-void Protofinaal::readFile(QString fileName)
+void Protofinaal::readFinalsFile(QString fileName)
 {
     QFile file(fileName);
+    QJsonDocument fileJson;
 
     if(file.open(QIODevice::ReadOnly)){
+        fileJson = QJsonDocument::fromJson(file.readAll());
+        QJsonObject jsonObj = fileJson.object();
 
+        if(jsonObj["fileVersion"].toInt() > 300)
+            QMessageBox::warning(this, tr("Viga!"), tr("Faili versioon on uuem, kui see versioon programmist. Faili avamisel võib tekkida vigu!"), QMessageBox::Ok);
+
+        QJsonArray teamsArray = jsonObj["Teams"].toArray();
+        for(int i = 0; i < teamsArray.size(); i++) {
+            QJsonObject teamJson = teamsArray.at(i).toObject();
+            Team *team = new Team(teamJson, i+1, this);
+            teams.append(team);
+            vBox->addWidget(team);
+        }
+        centralWidget()->setLayout(vBox);
     }else
         QMessageBox::critical(this, tr("Viga!"), tr("Faili avamine ei ole võimalik!"), QMessageBox::Ok);
 }
@@ -92,12 +116,12 @@ void Protofinaal::save()
     writeFile("save.json");
 }
 
-void Protofinaal::write(QJsonObject &json) const
+void Protofinaal::toJson(QJsonObject &json) const
 {
     QJsonArray teamsArray;
     foreach(Team *team, teams){
         QJsonObject teamObj;
-        team->write(teamObj);
+        team->toJson(teamObj);
         teamsArray.append(teamObj);
     }
     json["Teams"] = teamsArray;
@@ -109,7 +133,8 @@ void Protofinaal::writeFile(QString fileName)
 
     if(file.open(QIODevice::WriteOnly)){
         QJsonObject finalsObj;
-        write(finalsObj);
+        toJson(finalsObj);
+        finalsObj["fileVersion"] = 300;
         QJsonDocument jsonDoc(finalsObj);
         file.write(jsonDoc.toJson());
     }else

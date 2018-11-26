@@ -25,14 +25,16 @@ public:
     ~Protofinaal();
     void open();
     void save();
-    void write(QJsonObject &json) const;
+    void toJson(QJsonObject &json) const;
 
 private:
+    QVBoxLayout *vBox = nullptr;
     QVector<Team*> teams;
+    void clear();
     void createLayout(QJsonObject &jsonObj);
     void createMenus();
     void initialize();
-    void readFile(QString fileName);
+    void readFinalsFile(QString fileName);
     void writeFile(QString fileName);
 };
 
