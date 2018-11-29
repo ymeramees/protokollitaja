@@ -46,3 +46,5 @@ CMakeLists.txt.user*
 
 # Other
 save.json
+conf.json
+*.fin

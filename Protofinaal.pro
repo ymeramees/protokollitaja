@@ -25,15 +25,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        src\main.cpp \
-        src\protofinaal.cpp \
+        src/main.cpp \
+        src/protofinaal.cpp \
     src/team.cpp \
-    src/competitor.cpp
+    src/competitor.cpp \
+    src/initialdialog.cpp
 
 HEADERS += \
-        src\protofinaal.h \
+        src/protofinaal.h \
     src/team.h \
-    src/competitor.h
+    src/competitor.h \
+    src/initialdialog.h
+
+FORMS += \
+    src/initialdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

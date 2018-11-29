@@ -3,9 +3,15 @@
 Protofinaal::Protofinaal(QWidget *parent)
     : QMainWindow(parent)
 {
-//    setMinimumHeight(250);
     createMenus();
-    initialize();
+    setStatusBar(statusBar());
+    this->setGeometry(9, 36, 800, 600);
+    readSettings();
+
+    QTimer::singleShot(100, this, SLOT(initialize()));
+
+    if(verbose)
+        QTextStream(stdout) << "currentFile = " << currentFile << endl;
 }
 
 Protofinaal::~Protofinaal()
@@ -20,6 +26,8 @@ void Protofinaal::clear()
         team->deleteLater();
     }
     teams.clear();
+    competitionName.clear();
+    timePlace.clear();
 }
 
 void Protofinaal::createLayout(QJsonObject &jsonObj)
@@ -60,60 +68,124 @@ void Protofinaal::createMenus()
 
 void Protofinaal::initialize()
 {
-    QJsonDocument configJson;
-    QFile configFile("60ohupuss.json");
-    if(configFile.open(QIODevice::ReadOnly)){
-        configJson = QJsonDocument::fromJson(configFile.readAll());
-    }else
-        QMessageBox::critical(this, tr("Viga!"), tr("Harjutuse faili ei leitud!"));
+    if(initialDialog == nullptr){
+        initialDialog = new InitialDialog(this);
+        connect(initialDialog, &InitialDialog::updateMe, this, &Protofinaal::updateInitialDialog);
+    }
 
-    QJsonObject jsonObj = configJson.object();
-    if(!(jsonObj.contains("Event") && jsonObj["Event"].isString()) ||
-            !(jsonObj.contains("Teams") && jsonObj["Teams"].isDouble()) ||
-            !(jsonObj.contains("Members_in_team") && jsonObj["Members_in_team"].isDouble()) ||
-            !(jsonObj.contains("Shots") && jsonObj["Shots"].isArray()))
-        QMessageBox::critical(this, tr("Viga!"), tr("Harjutuse fail vigane!"));
+    QJsonObject initialJson = readFinalsFile(currentFile);
+    initialDialog->setFileName(currentFile);
+    initialDialog->setCompetitionName(initialJson["competitionName"].toString());
+    initialDialog->setTimePlace(initialJson["timePlace"].toString());
 
-//    if(verbose)
-//        QTextStream(stdout) << "Event: " << configJson["Event"].toString() << endl;
-    setWindowTitle(jsonObj["Event"].toString());
+    if(initialDialog->exec() == QDialog::Accepted){
+        writeSettings();
+        QFile testOpenFile(initialDialog->fileName());
+        if(testOpenFile.open(QIODevice::ReadOnly)){ //Check if file exists
+            if(verbose)
+                QTextStream(stdout) << "File exists: " << initialDialog->fileName() << endl;
+            testOpenFile.close();
+            loadFile(initialDialog->fileName());
+        }else{  //File does not exist
+            if(verbose)
+                QTextStream(stdout) << "Create new file: " << initialDialog->fileName() << endl;
+            QJsonDocument configJson;
+            QFile configFile("60ohupuss.json");
+            if(configFile.open(QIODevice::ReadOnly)){
+                configJson = QJsonDocument::fromJson(configFile.readAll());
+            }else
+                QMessageBox::critical(this, tr("Viga!"), tr("Harjutuse faili ei leitud!"));
 
-    createLayout(jsonObj);
+            QJsonObject jsonObj = configJson.object();
+            if(!(jsonObj.contains("Event") && jsonObj["Event"].isString()) ||
+                    !(jsonObj.contains("Teams") && jsonObj["Teams"].isDouble()) ||
+                    !(jsonObj.contains("Members_in_team") && jsonObj["Members_in_team"].isDouble()) ||
+                    !(jsonObj.contains("Shots") && jsonObj["Shots"].isArray()))
+                QMessageBox::critical(this, tr("Viga!"), tr("Harjutuse fail vigane!"));
+            eventName = jsonObj["Event"].toString();
+            createLayout(jsonObj);
+        }
+    }else if(initialDialog->result() == QDialog::Rejected)
+        QCoreApplication::quit();
+
+    setWindowTitle("Protofinaal - " + competitionName + " - " + eventName);
+}
+
+void Protofinaal::loadFile(QString fileName)
+{
+    clear();
+    QJsonObject jsonObj = readFinalsFile(fileName);
+    QJsonArray teamsArray = jsonObj["Teams"].toArray();
+
+    for(int i = 0; i < teamsArray.size(); i++) {
+        QJsonObject teamJson = teamsArray.at(i).toObject();
+        Team *team = new Team(teamJson, i+1, this);
+        teams.append(team);
+        vBox->addWidget(team);
+    }
+    centralWidget()->setLayout(vBox);
 }
 
 void Protofinaal::open()
 {
-    clear();
-    readFinalsFile("save.json");
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Ava fail"), currentFile, tr("Protofinaali fail (*.fin)"));
+    if(!fileName.isEmpty()){
+        loadFile(fileName);
+        writeSettings();
+    }
 }
 
-void Protofinaal::readFinalsFile(QString fileName)
+QJsonObject Protofinaal::readFinalsFile(QString fileName, bool showErrors)
 {
     QFile file(fileName);
+    QJsonDocument fileJson;
+    QJsonObject jsonObj;
+
+    if(file.open(QIODevice::ReadOnly)){
+        fileJson = QJsonDocument::fromJson(file.readAll());
+        jsonObj = fileJson.object();
+
+        if(jsonObj["fileVersion"].toInt() > 300)
+            QMessageBox::warning(this, tr("Viga!"), tr("Faili versioon on uuem, kui see versioon programmist. Faili avamisel võib tekkida vigu!"), QMessageBox::Ok);
+
+        competitionName = jsonObj["competitionName"].toString();
+        eventName = jsonObj["eventName"].toString();
+        timePlace = jsonObj["timePlace"].toString();
+    }else if(showErrors)
+        QMessageBox::critical(this, tr("Viga!"), tr("Faili avamine ei ole võimalik!"), QMessageBox::Ok);
+    return jsonObj;
+}
+
+void Protofinaal::readSettings()
+{
+    QFile file("conf.json");
     QJsonDocument fileJson;
 
     if(file.open(QIODevice::ReadOnly)){
         fileJson = QJsonDocument::fromJson(file.readAll());
         QJsonObject jsonObj = fileJson.object();
 
-        if(jsonObj["fileVersion"].toInt() > 300)
-            QMessageBox::warning(this, tr("Viga!"), tr("Faili versioon on uuem, kui see versioon programmist. Faili avamisel võib tekkida vigu!"), QMessageBox::Ok);
+        currentFile = jsonObj["lastFile"].toString();
 
-        QJsonArray teamsArray = jsonObj["Teams"].toArray();
-        for(int i = 0; i < teamsArray.size(); i++) {
-            QJsonObject teamJson = teamsArray.at(i).toObject();
-            Team *team = new Team(teamJson, i+1, this);
-            teams.append(team);
-            vBox->addWidget(team);
-        }
-        centralWidget()->setLayout(vBox);
+        if(jsonObj.contains("windowXLocation") && jsonObj["windowXLocation"].isDouble() && jsonObj.contains("windowYLocation") && jsonObj["windowYLocation"].isDouble())
+            this->setGeometry(jsonObj["windowXLocation"].toInt() + 9, jsonObj["windowYLocation"].toInt() + 36, 800, 600);  //For some reason window frame is not included, so 9 and 36 need to be added. At least on Win7
+
     }else
-        QMessageBox::critical(this, tr("Viga!"), tr("Faili avamine ei ole võimalik!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Viga!"), tr("Seadete faili avamine ei ole võimalik!"), QMessageBox::Ok);
 }
 
 void Protofinaal::save()
 {
-    writeFile("save.json");
+    writeFinalsFile("save.fin");
+}
+
+void Protofinaal::updateInitialDialog()
+{
+    currentFile = initialDialog->fileName();
+    QJsonObject initialJson = readFinalsFile(currentFile, false);
+    initialDialog->setFileName(currentFile);
+    initialDialog->setCompetitionName(initialJson["competitionName"].toString());
+    initialDialog->setTimePlace(initialJson["timePlace"].toString());
 }
 
 void Protofinaal::toJson(QJsonObject &json) const
@@ -127,7 +199,7 @@ void Protofinaal::toJson(QJsonObject &json) const
     json["Teams"] = teamsArray;
 }
 
-void Protofinaal::writeFile(QString fileName)
+void Protofinaal::writeFinalsFile(QString fileName)
 {
     QFile file(fileName);
 
@@ -135,8 +207,27 @@ void Protofinaal::writeFile(QString fileName)
         QJsonObject finalsObj;
         toJson(finalsObj);
         finalsObj["fileVersion"] = 300;
+        finalsObj["competitionName"] = competitionName;
+        finalsObj["eventName"] = eventName;
+        finalsObj["timePlace"] = timePlace;
         QJsonDocument jsonDoc(finalsObj);
         file.write(jsonDoc.toJson());
     }else
         QMessageBox::critical(this, tr("Viga!"), tr("Faili kirjutamine ei ole võimalik!\nKontrollige, kas teil on sinna kausta kirjutamise õigused."), QMessageBox::Ok);
+}
+
+void Protofinaal::writeSettings()
+{
+    QFile file("conf.json");
+
+    if(file.open(QIODevice::WriteOnly)){
+        QJsonObject jsonObj;
+
+        jsonObj["lastFile"] = currentFile;
+        jsonObj["windowXLocation"] = this->x();
+        jsonObj["windowYLocation"] = this->y();
+        QJsonDocument jsonDoc(jsonObj);
+        file.write(jsonDoc.toJson());
+    }else
+        QMessageBox::critical(this, tr("Viga!"), tr("Seadete faili kirjutamine ei ole võimalik!\nKontrollige, kas teil on sinna kausta kirjutamise õigused."), QMessageBox::Ok);
 }
