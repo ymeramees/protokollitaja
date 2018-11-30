@@ -5,6 +5,12 @@ Protofinaal::Protofinaal(QWidget *parent)
 {
     createMenus();
     setStatusBar(statusBar());
+    vBox = new QVBoxLayout;
+    QWidget *widget = new QWidget();
+    widget->setLayout(vBox);
+//    widget->setStyleSheet("border:1px solid rgb(0, 255, 0); ");
+    setCentralWidget(widget);
+
     this->setGeometry(9, 36, 800, 600);
     readSettings();
 
@@ -32,8 +38,6 @@ void Protofinaal::clear()
 
 void Protofinaal::createLayout(QJsonObject &jsonObj)
 {
-    vBox = new QVBoxLayout;
-
     int teamsNo = jsonObj["Teams"].toInt();
 
     for(int i = 0; i < teamsNo; i++){
@@ -41,29 +45,31 @@ void Protofinaal::createLayout(QJsonObject &jsonObj)
         teams.append(team);
         vBox->addWidget(team);
     }
-
-    QWidget *widget = new QWidget();
-    widget->setLayout(vBox);
-//    widget->setStyleSheet("border:1px solid rgb(0, 255, 0); ");
-    setCentralWidget(widget);
 }
 
 void Protofinaal::createMenus()
 {
     QMenu *fileMenu = this->menuBar()->addMenu(tr("&File"));
 
-    QAction *openAct = new QAction(tr("&Open..."), this);
+    QAction *openAct = new QAction(tr("&Ava..."), this);
     openAct->setShortcuts(QKeySequence::Open);
-    openAct->setStatusTip(tr("Open an existing file"));
+    openAct->setStatusTip(tr("Ava fail"));
     connect(openAct, &QAction::triggered, this, &Protofinaal::open);
 
-    QAction *saveAct = new QAction(tr("&Save..."), this);
+    QAction *saveAct = new QAction(tr("&Salvesta"), this);
     saveAct->setShortcuts(QKeySequence::Save);
-    saveAct->setStatusTip(tr("Save to an existing file"));
+    saveAct->setStatusTip(tr("Salvesta fail"));
     connect(saveAct, &QAction::triggered, this, &Protofinaal::save);
+
+    QAction *exitAct = new QAction(tr("&Välju"), this);
+    exitAct->setShortcuts(QKeySequence::Quit);
+    exitAct->setStatusTip(tr("Välju programmist"));
+    connect(exitAct, &QAction::triggered, this, &QCoreApplication::quit);
 
     fileMenu->addAction(openAct);
     fileMenu->addAction(saveAct);
+    fileMenu->addSeparator();
+    fileMenu->addAction(exitAct);
 }
 
 void Protofinaal::initialize()
@@ -80,15 +86,20 @@ void Protofinaal::initialize()
 
     if(initialDialog->exec() == QDialog::Accepted){
         writeSettings();
+        currentFile = initialDialog->fileName();
         QFile testOpenFile(initialDialog->fileName());
         if(testOpenFile.open(QIODevice::ReadOnly)){ //Check if file exists
             if(verbose)
                 QTextStream(stdout) << "File exists: " << initialDialog->fileName() << endl;
             testOpenFile.close();
-            loadFile(initialDialog->fileName());
+            loadFile(currentFile);
         }else{  //File does not exist
             if(verbose)
                 QTextStream(stdout) << "Create new file: " << initialDialog->fileName() << endl;
+
+            competitionName = initialDialog->competitionName();
+            timePlace = initialDialog->timePlace();
+
             QJsonDocument configJson;
             QFile configFile("60ohupuss.json");
             if(configFile.open(QIODevice::ReadOnly)){
@@ -113,6 +124,8 @@ void Protofinaal::initialize()
 
 void Protofinaal::loadFile(QString fileName)
 {
+    if(verbose)
+        QTextStream(stdout) << "Protofinaal::loadFile()" << endl;
     clear();
     QJsonObject jsonObj = readFinalsFile(fileName);
     QJsonArray teamsArray = jsonObj["Teams"].toArray();
@@ -130,6 +143,7 @@ void Protofinaal::open()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Ava fail"), currentFile, tr("Protofinaali fail (*.fin)"));
     if(!fileName.isEmpty()){
+        currentFile = fileName;
         loadFile(fileName);
         writeSettings();
     }
@@ -176,7 +190,7 @@ void Protofinaal::readSettings()
 
 void Protofinaal::save()
 {
-    writeFinalsFile("save.fin");
+    writeFinalsFile(currentFile);
 }
 
 void Protofinaal::updateInitialDialog()
@@ -212,6 +226,7 @@ void Protofinaal::writeFinalsFile(QString fileName)
         finalsObj["timePlace"] = timePlace;
         QJsonDocument jsonDoc(finalsObj);
         file.write(jsonDoc.toJson());
+        statusBar()->showMessage(tr("Fail salvestatud"), 5000);
     }else
         QMessageBox::critical(this, tr("Viga!"), tr("Faili kirjutamine ei ole võimalik!\nKontrollige, kas teil on sinna kausta kirjutamise õigused."), QMessageBox::Ok);
 }

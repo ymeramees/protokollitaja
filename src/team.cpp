@@ -35,7 +35,7 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
 
     }else if(configJson["Members_in_team"].isArray()){  //Loaded finals file
         if(verbose)
-            QTextStream(stdout) << "Team::Team(failist)" << endl;
+            QTextStream(stdout) << "Team::Team(failist laadimine)" << endl;
         QJsonArray competitorsArray = configJson["Members_in_team"].toArray();
         competitorsInTeam = competitorsArray.size();
 
