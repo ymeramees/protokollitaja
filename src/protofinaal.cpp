@@ -36,12 +36,21 @@ void Protofinaal::clear()
     timePlace.clear();
 }
 
+void Protofinaal::closeEvent(QCloseEvent *event)
+{
+    if(verbose)
+        QTextStream(stdout) << "Protofinaal::closeEvent()" << endl;
+    event->accept();
+    qApp->quit();
+}
+
 void Protofinaal::createLayout(QJsonObject &jsonObj)
 {
     int teamsNo = jsonObj["Teams"].toInt();
 
     for(int i = 0; i < teamsNo; i++){
         Team *team = new Team(jsonObj, i+1);
+        connect(team, &Team::teamUpdated, this, &Protofinaal::updateSpectatorWindow);
         teams.append(team);
         vBox->addWidget(team);
     }
@@ -49,7 +58,8 @@ void Protofinaal::createLayout(QJsonObject &jsonObj)
 
 void Protofinaal::createMenus()
 {
-    QMenu *fileMenu = this->menuBar()->addMenu(tr("&File"));
+    QMenu *fileMenu = this->menuBar()->addMenu(tr("&Fail"));
+    QMenu *editMenu = this->menuBar()->addMenu(tr("&Tulemused"));
 
     QAction *openAct = new QAction(tr("&Ava..."), this);
     openAct->setShortcuts(QKeySequence::Open);
@@ -64,12 +74,18 @@ void Protofinaal::createMenus()
     QAction *exitAct = new QAction(tr("&Välju"), this);
     exitAct->setShortcuts(QKeySequence::Quit);
     exitAct->setStatusTip(tr("Välju programmist"));
-    connect(exitAct, &QAction::triggered, this, &QCoreApplication::quit);
+    connect(exitAct, &QAction::triggered, this, &QWidget::close);
+
+    QAction *showSpectatorWindowAct = new QAction(tr("&Tulemuste aken"), this);
+    showSpectatorWindowAct->setStatusTip(tr("Ava tulemuste aken"));
+    connect(showSpectatorWindowAct, &QAction::triggered, this, &Protofinaal::showSpecatorWindowOnSecondScreen);
 
     fileMenu->addAction(openAct);
     fileMenu->addAction(saveAct);
     fileMenu->addSeparator();
     fileMenu->addAction(exitAct);
+
+    editMenu->addAction(showSpectatorWindowAct);
 }
 
 void Protofinaal::initialize()
@@ -116,6 +132,8 @@ void Protofinaal::initialize()
             eventName = jsonObj["Event"].toString();
             createLayout(jsonObj);
         }
+        showSpecatorWindowOnSecondScreen();
+
     }else if(initialDialog->result() == QDialog::Rejected)
         QCoreApplication::quit();
 
@@ -133,6 +151,7 @@ void Protofinaal::loadFile(QString fileName)
     for(int i = 0; i < teamsArray.size(); i++) {
         QJsonObject teamJson = teamsArray.at(i).toObject();
         Team *team = new Team(teamJson, i+1, this);
+        connect(team, &Team::teamUpdated, this, &Protofinaal::updateSpectatorWindow);
         teams.append(team);
         vBox->addWidget(team);
     }
@@ -146,6 +165,7 @@ void Protofinaal::open()
         currentFile = fileName;
         loadFile(fileName);
         writeSettings();
+        updateSpectatorWindow();
     }
 }
 
@@ -193,13 +213,33 @@ void Protofinaal::save()
     writeFinalsFile(currentFile);
 }
 
-void Protofinaal::updateInitialDialog()
+void Protofinaal::showSpecatorWindowOnSecondScreen()
 {
-    currentFile = initialDialog->fileName();
-    QJsonObject initialJson = readFinalsFile(currentFile, false);
-    initialDialog->setFileName(currentFile);
-    initialDialog->setCompetitionName(initialJson["competitionName"].toString());
-    initialDialog->setTimePlace(initialJson["timePlace"].toString());
+    if(qApp->desktop()->numScreens() >= 2 && qApp->desktop()->isVirtualDesktop()){
+        spectatorWindow.move(qApp->desktop()->screenGeometry(this).width() + 100, 100);
+        if(qApp->desktop()->screenNumber(this) != qApp->desktop()->screenNumber(&spectatorWindow) && qApp->desktop()->screenNumber(&spectatorWindow) != -1)
+            spectatorWindow.showFullScreen();
+        else{
+            spectatorWindow.move(-1000, 100);
+            if(qApp->desktop()->screenNumber(this) != qApp->desktop()->screenNumber(&spectatorWindow))
+                spectatorWindow.showFullScreen();
+        }
+    }else{
+        QMessageBox::critical(this, tr("Viga"), tr("Teist ekraani ei leitud. Programmi korralikuks"
+    " funktsioneerimiseks on vajalik kahe ekraani olemasolu."), QMessageBox::Ok);
+        spectatorWindow.show();
+    }
+
+    if(spectatorWindow.isFullScreen())
+        QMessageBox::information(this, tr("Teade"), tr("Tulemuse aken näidatud teisel ekraanil"), QMessageBox::Ok);
+
+    spectatorWindow.setHeading(competitionName, timePlace, eventName, tr("Koht"), tr("Nimi"), tr("Seeria"), tr("Vahe"));
+    updateSpectatorWindow();
+//    spectatorWindow.addRow("1.", "", "P. PAKIRAAM", "51,3", "51,3", "0");
+
+//    QString resultsTemplate = "<!DOCTYPE html>\n<html>\n<body>\n<h1>%1</h1>\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n<thead>\n</thead>\n<tbody>\n</tbody>\n%2\n</body>\n</html>";
+//    QString resultRow =
+//    spectatorWindow.setResults("<!DOCTYPE html>\n<html>\n<head>\n<title>Hello, Devslopes</title>\n</head>\n<body>\n<h1>Welcome!</h1>\n<h2>Want to learn code?</h2>\n<h3 >Then you've vome to the right place!</h3>\n<h4>So get started now!</h4>\n<p>Muu tekst tuleb siia. Pikem <b>jutt</b>, mida <i>näidata</i> lehel. Ma ei suuda nii pikalt kirjutada, kui vaja oleks.</p>\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n<tbody><tr>\n<td style=\"border: none; padding: 0; padding-top: 5\">\n<p align=\"center\"><font face=\"Arial, sans-serif\" style=\"font-size: 30px\">1</font></p></td><td style=\"border: none; padding: 0; padding-left: 10\">\n<p><font face=\"Arial, sans-serif\" style=\"font-size: 30px\">Anton</font></p>\n</td>\n<td style=\"border: none; padding: 0\">\n<p><font face=\"Arial, sans-serif\" style=\"font-size: 30px\">FARFOROVSKI</font></p>\n</td>\n<td style=\"border: none; padding: 0\">\n<p align=\"center\"><font face=\"Arial, sans-serif\" style=\"font-size: 10pt\">1994</font></p>\n</td>\n<br>\n<br>\n<hr>\n<p>Lisaks, liitu meie <em>TASUTA</em> emaili nimekirjaga.</p>\n</body>\n</html>");
 }
 
 void Protofinaal::toJson(QJsonObject &json) const
@@ -211,6 +251,54 @@ void Protofinaal::toJson(QJsonObject &json) const
         teamsArray.append(teamObj);
     }
     json["Teams"] = teamsArray;
+}
+
+void Protofinaal::updateInitialDialog()
+{
+    currentFile = initialDialog->fileName();
+    QJsonObject initialJson = readFinalsFile(currentFile, false);
+    initialDialog->setFileName(currentFile);
+    initialDialog->setCompetitionName(initialJson["competitionName"].toString());
+    initialDialog->setTimePlace(initialJson["timePlace"].toString());
+}
+
+void Protofinaal::updateSpectatorWindow()
+{
+    if(verbose)
+        QTextStream(stdout) << "Protofinaal::updateSpectatorWindow()" << endl;
+    spectatorWindow.clearResults();
+    if(verbose)
+        QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), teams.size() = " << teams.size() << endl;
+    foreach (Team *team, teams){
+        QVector<Competitor*> teamCompetitors = team->teamCompetitors();
+        if(verbose)
+            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), teamCompetitors.size() = " << teamCompetitors.size() << endl;
+        if(teamCompetitors.size() == 0)
+            return;
+//        if(verbose){
+//            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), team->index() = " << team->index() << endl;
+//            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), team->teamName() = " << team->teamName() << endl;
+//            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), teamCompetitors.at(0)->name() = " << teamCompetitors.at(0)->name() << endl;
+//            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), teamCompetitors.at(0)->lastResult() = " << teamCompetitors.at(0)->lastResult() << endl;
+//            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), team->lastSum() = " << team->lastSum() << endl;
+//        }
+        spectatorWindow.addRow(team->index(), team->teamName(), teamCompetitors.at(0)->name(), teamCompetitors.at(0)->lastResult(), team->lastSum(), "0");
+        if(teamCompetitors.size() > 1){
+            for(int i = 1; i < teamCompetitors.size(); i++){
+                if(verbose)
+                    QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), teamCompetitors.at(i)->lastResult() = " << teamCompetitors.at(i)->lastResult() << endl;
+                spectatorWindow.addRow("", "", teamCompetitors.at(i)->name(), teamCompetitors.at(i)->lastResult(), "", "");
+            }
+        }
+
+//        QJsonObject teamJson;
+//        team->toJson(teamJson);
+//        QJsonArray competitorsArray = teamJson["Members_in_team"].toArray();
+//        for(QJsonValue jsonValue : competitorsArray){
+//            QJsonObject competitorObj = jsonValue.toObject();
+//            spectatorWindow.addRow("1. ", teamJson["teamName"].toString(), competitorObj["nameEdit"].toString(), competitorObj["Sum"].toString(),  competitorObj["Sum"].toString(), "0");
+//        }
+    }
 }
 
 void Protofinaal::writeFinalsFile(QString fileName)

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -29,13 +29,15 @@ SOURCES += \
         src/protofinaal.cpp \
     src/team.cpp \
     src/competitor.cpp \
-    src/initialdialog.cpp
+    src/initialdialog.cpp \
+    src/spectatorwindow.cpp
 
 HEADERS += \
         src/protofinaal.h \
     src/team.h \
     src/competitor.h \
-    src/initialdialog.h
+    src/initialdialog.h \
+    src/spectatorwindow.h
 
 FORMS += \
     src/initialdialog.ui

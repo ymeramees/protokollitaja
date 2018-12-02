@@ -6,10 +6,10 @@ Competitor::Competitor(const QJsonArray configJson, QWidget *parent) : QWidget(p
         QTextStream(stdout) << "Competitor::Competitor(QJsonArray)" << endl;
     QHBoxLayout *hBox = new QHBoxLayout;
 
-    nameEdit.setMinimumWidth(75);
-    nameEdit.setMinimumHeight(22);
-    nameEdit.setToolTip(tr("Võistleja nimi"));
-    hBox->addWidget(&nameEdit);
+    m_nameEdit.setMinimumWidth(75);
+    m_nameEdit.setMinimumHeight(22);
+    m_nameEdit.setToolTip(tr("Võistleja nimi"));
+    hBox->addWidget(&m_nameEdit);
 
     if(verbose)
         QTextStream(stdout) << "Competitor::configJson.size(): " << configJson.size() << endl;
@@ -26,28 +26,29 @@ Competitor::Competitor(const QJsonArray configJson, QWidget *parent) : QWidget(p
             shotEdit->setMinimumHeight(22);
             connect(shotEdit, &QLineEdit::editingFinished, this, &Competitor::sum);
 
-            shots.append(shotEdit);
+            m_shots.append(shotEdit);
             thisSeries->append(shotEdit);
             hBox->addWidget(shotEdit);
         }
-        series.append(thisSeries);
+        m_series.append(thisSeries);
 
         QLabel *sumLabel = new QLabel(tr("0,0"));
-        sumLabels.append(sumLabel);
+        m_sumLabels.append(sumLabel);
         hBox->addWidget(sumLabel);
     }
 
     hBox->setContentsMargins(0, 2, 0, 2);
 
     if(verbose)
-        QTextStream(stdout) << "Competitor::shots: " << shots.size() << " , series: " << series.size() << " ,sumLabels: " << sumLabels.size() << endl;
+        QTextStream(stdout) << "Competitor::shots: " << m_shots.size() << " , series: " << m_series.size() << " ,sumLabels: " << m_sumLabels.size() << endl;
     setLayout(hBox);
+    sum();
 }
 
 Competitor::Competitor(const QJsonObject &json, QWidget *parent) : QWidget(parent)
 {
     if(verbose)
-        QTextStream(stdout) << "Competitor::Competitor(QJsonObject), json[Shots].size = " << json["Shots"].toArray().size() << endl;
+        QTextStream(stdout) << "Competitor::Competitor(QJsonObject), json[Series].size = " << json["Series"].toArray().size() << endl;
     if(!(json.contains("nameEdit") && json["nameEdit"].isString()) ||
             !(json.contains("Series") && json["Series"].isArray())){
         QMessageBox::critical(this, tr("Viga!"), tr("Vigane fail!"));
@@ -56,11 +57,11 @@ Competitor::Competitor(const QJsonObject &json, QWidget *parent) : QWidget(paren
 
     QHBoxLayout *hBox = new QHBoxLayout;
 
-    nameEdit.setMinimumWidth(75);
-    nameEdit.setMinimumHeight(22);
-    nameEdit.setToolTip(tr("Võistleja nimi"));
-    nameEdit.setText(json["nameEdit"].toString());
-    hBox->addWidget(&nameEdit);
+    m_nameEdit.setMinimumWidth(75);
+    m_nameEdit.setMinimumHeight(22);
+    m_nameEdit.setToolTip(tr("Võistleja nimi"));
+    m_nameEdit.setText(json["nameEdit"].toString());
+    hBox->addWidget(&m_nameEdit);
 
     QJsonArray seriesArray = json["Series"].toArray();
 
@@ -77,15 +78,15 @@ Competitor::Competitor(const QJsonObject &json, QWidget *parent) : QWidget(paren
             shotEdit->setMinimumHeight(22);
             connect(shotEdit, &QLineEdit::editingFinished, this, &Competitor::sum);
 
-            shots.append(shotEdit);
+            m_shots.append(shotEdit);
             thisSeries->append(shotEdit);
             hBox->addWidget(shotEdit);
         }
         QLabel *sumLabel = new QLabel(seriesObj["Sum"].toString());
-        sumLabels.append(sumLabel);
+        m_sumLabels.append(sumLabel);
         hBox->addWidget(sumLabel);
 
-        series.append(thisSeries);
+        m_series.append(thisSeries);
     }
 
 //    QJsonArray shotsArray = json["Shots"].toArray();
@@ -110,67 +111,99 @@ Competitor::Competitor(const QJsonObject &json, QWidget *parent) : QWidget(paren
     hBox->setContentsMargins(0, 2, 0, 2);
 
     setLayout(hBox);
+    sum();
 }
 
 Competitor::~Competitor()
 {
     if(verbose)
         QTextStream(stdout) << "Competitor::~Competitor()" << endl;
-    foreach (QLabel *sumLabel, sumLabels)
+    foreach (QLabel *sumLabel, m_sumLabels)
         sumLabel->deleteLater();
-    sumLabels.clear();
+    m_sumLabels.clear();
 
     //series.clear();
-    foreach (QVector<QLineEdit*> *serie, series) {  //Duplicate pointers to shots
+    foreach (QVector<QLineEdit*> *serie, m_series) {  //Duplicate pointers to shots
         delete serie;
     }
 
-    foreach (QLineEdit *shot, shots)
+    foreach (QLineEdit *shot, m_shots)
         shot->deleteLater();
-    shots.clear();
+    m_shots.clear();
 }
 
 int Competitor::current10Sum() const
 {
-    return sumLabels.at(sumLabels.size()-1)->text().remove(',').toInt();
+    return m_sumLabels.at(m_sumLabels.size()-1)->text().remove(',').toInt();
+}
+
+QString Competitor::lastResult()
+{
+    if(m_series.size() == 0){
+        return "0,0";
+    }else if(m_series.size() > 1 && m_series.at(m_series.size() - 1)->at(0)->text().isEmpty()){ //No shot in singleshots, so latest series with a result needs to be found
+        if(m_series.at(m_series.size() - 1)->at(0)->text().isEmpty()){
+            for(int i = m_series.size() - 2; i >= 0; i--)
+                if(m_sumLabels.at(i)->text() != "0,0")
+                    return m_sumLabels.at(i)->text();
+        }
+    }else{  //Only single shots or shot in single shots found, so latest shot needs to be found
+        for(int i = m_shots.size() - 1; i >= 0; i--)
+            if(!m_shots.at(i)->text().isEmpty())
+                return m_shots.at(i)->text();
+    }
+    return "0,0";
+}
+
+QString Competitor::lastSum()
+{
+    if(m_sumLabels.size() >= 1)
+        return m_sumLabels.at(m_sumLabels.size() - 1)->text();
+    else
+        return "0";
+}
+
+QString Competitor::name()
+{
+    return m_nameEdit.text();
 }
 
 void Competitor::sum()
 {
     int totalSum = 0;
-    for(int i = 0; i < series.size(); i++){
+    for(int i = 0; i < m_series.size(); i++){
         int seriesSum = 0;
-        for(int j = 0; j < series.at(i)->size(); j++){
-            seriesSum += series.at(i)->at(j)->text().remove(',').toInt();
+        for(int j = 0; j < m_series.at(i)->size(); j++){
+            seriesSum += m_series.at(i)->at(j)->text().remove(',').toInt();
         }
         totalSum += seriesSum;
         double dSeriesSum = seriesSum;
         dSeriesSum /= 10;
-        sumLabels.at(i)->setText(QString("%1").arg(dSeriesSum).replace('.', ','));
-        if(!sumLabels.at(i)->text().contains(','))
-            sumLabels.at(i)->setText(sumLabels.at(i)->text() + ",0");
+        m_sumLabels.at(i)->setText(QString("%1").arg(dSeriesSum).replace('.', ','));
+        if(!m_sumLabels.at(i)->text().contains(','))
+            m_sumLabels.at(i)->setText(m_sumLabels.at(i)->text() + ",0");
     }
     double dTotalSum = totalSum;
     dTotalSum /= 10;
-    sumLabels.at(sumLabels.size() - 1)->setText(QString("%1").arg(dTotalSum).replace('.', ','));
-    if(!sumLabels.at(sumLabels.size() - 1)->text().contains(','))
-        sumLabels.at(sumLabels.size() - 1)->setText(sumLabels.at(sumLabels.size() - 1)->text() + ",0");
+    m_sumLabels.at(m_sumLabels.size() - 1)->setText(QString("%1").arg(dTotalSum).replace('.', ','));
+    if(!m_sumLabels.at(m_sumLabels.size() - 1)->text().contains(','))
+        m_sumLabels.at(m_sumLabels.size() - 1)->setText(m_sumLabels.at(m_sumLabels.size() - 1)->text() + ",0");
     emit newShot();
 //    return dTotalSum;
 }
 
 void Competitor::toJson(QJsonObject &json) const
 {
-    json["nameEdit"] = nameEdit.text();
+    json["nameEdit"] = m_nameEdit.text();
     QJsonArray seriesArray;
-    for(int i = 0; i < series.size(); i++){
+    for(int i = 0; i < m_series.size(); i++){
         QJsonObject seriesJson;
         QJsonArray seriesShotsJson;
-        for(int j = 0; j < series.at(i)->size(); j++){
-            seriesShotsJson.append(series.at(i)->at(j)->text());
+        for(int j = 0; j < m_series.at(i)->size(); j++){
+            seriesShotsJson.append(m_series.at(i)->at(j)->text());
         }
         seriesJson["Shots"] = seriesShotsJson;
-        seriesJson["Sum"] = sumLabels.at(i)->text();
+        seriesJson["Sum"] = m_sumLabels.at(i)->text();
         seriesArray.append(seriesJson);
     }
     json["Series"] = seriesArray;

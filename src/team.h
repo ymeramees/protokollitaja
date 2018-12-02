@@ -18,18 +18,23 @@ class Team : public QWidget
 public:
     explicit Team(QJsonObject &configJson, int index, QWidget *parent = nullptr);
     ~Team();
+    QString index();
+    QString lastSum();
+    QString teamName();
+    QVector<Competitor*> teamCompetitors();
     void toJson(QJsonObject &json) const;
 
 signals:
+    void teamUpdated();
 
 public slots:
     void sum();
 
 private:
-    QLabel indexLabel;
-    QLabel sumLabel;
-    QLineEdit teamName;
-    QVector<Competitor*> teamCompetitors;
+    QLabel m_indexLabel;
+    QLabel m_sumLabel;
+    QLineEdit m_teamName;
+    QVector<Competitor*> m_teamCompetitors;
 };
 
 #endif // TEAM_H
