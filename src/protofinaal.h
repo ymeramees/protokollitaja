@@ -22,7 +22,8 @@
 #include "team.h"
 #include "initialdialog.h"
 #include "spectatorwindow.h"
-//#include "../protokollitaja/src/siusdataconnections.h"
+#include "../protokollitaja/src/lask.h"
+#include "../protokollitaja/src/siusdataconnections.h"
 
 extern bool verbose;
 
@@ -38,19 +39,31 @@ public:
     void showSpecatorWindowOnSecondScreen();
     void toJson(QJsonObject &json) const;
 
+public slots:
+    void connectToSiusData();
+    void readSiusInfo(QStringList lines, int socketIndex);
+    void statusBarInfoChanged(QString newStatusInfo);
+    void sumAllTeams();
+
 private slots:
+    void connectionToSiusLost(int connectionIndex);
     void initialize();
     void loadFile(QString fileName);
     void updateInitialDialog();
     void updateSpectatorWindow();
 
 private:
+    bool competitionStarted = false;
     InitialDialog *initialDialog = nullptr;
+    SiusDataConnections *siusDataConnections = nullptr;
     SpectatorWindow spectatorWindow;
+    QFile *logFile = nullptr;
+    QFile *siusLog = nullptr;
     QString competitionName;
     QString currentFile;
     QString eventName;
     QString timePlace;
+    QTextStream logOut;
     QVBoxLayout *vBox = nullptr;
     QVector<Team*> teams;
     void clear();

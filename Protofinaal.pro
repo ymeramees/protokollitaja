@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT += core gui
+QT += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -30,17 +30,24 @@ SOURCES += \
     src/team.cpp \
     src/competitor.cpp \
     src/initialdialog.cpp \
-    src/spectatorwindow.cpp
+    src/spectatorwindow.cpp \
+    ../protokollitaja/src/siusdataconnection.cpp \
+    ../protokollitaja/src/siusdataconnections.cpp \
+    ../protokollitaja/src/lask.cpp
 
 HEADERS += \
         src/protofinaal.h \
     src/team.h \
     src/competitor.h \
     src/initialdialog.h \
-    src/spectatorwindow.h
+    src/spectatorwindow.h \
+    ../protokollitaja/src/siusdataconnection.h \
+    ../protokollitaja/src/siusdataconnections.h \
+    ../protokollitaja/src/lask.h
 
 FORMS += \
-    src/initialdialog.ui
+    src/initialdialog.ui \
+    ../protokollitaja/src/siusdataconnections.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

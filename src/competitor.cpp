@@ -6,6 +6,12 @@ Competitor::Competitor(const QJsonArray configJson, QWidget *parent) : QWidget(p
         QTextStream(stdout) << "Competitor::Competitor(QJsonArray)" << endl;
     QHBoxLayout *hBox = new QHBoxLayout;
 
+    m_id = 0;
+    m_idLabel.setToolTip(tr("Võistleja ID"));
+    m_idLabel.setText("0");
+    m_idLabel.installEventFilter(this);
+    hBox->addWidget(&m_idLabel);
+
     m_nameEdit.setMinimumWidth(75);
     m_nameEdit.setMinimumHeight(22);
     m_nameEdit.setToolTip(tr("Võistleja nimi"));
@@ -56,6 +62,12 @@ Competitor::Competitor(const QJsonObject &json, QWidget *parent) : QWidget(paren
     }
 
     QHBoxLayout *hBox = new QHBoxLayout;
+
+    m_id = json["id"].toInt();
+    m_idLabel.setToolTip(tr("Võistleja ID"));
+    m_idLabel.setText(QString("%1").arg(m_id));
+    m_idLabel.installEventFilter(this);
+    hBox->addWidget(&m_idLabel);
 
     m_nameEdit.setMinimumWidth(75);
     m_nameEdit.setMinimumHeight(22);
@@ -137,6 +149,11 @@ int Competitor::current10Sum() const
     return m_sumLabels.at(m_sumLabels.size()-1)->text().remove(',').toInt();
 }
 
+int Competitor::id()
+{
+    return m_id;
+}
+
 QString Competitor::lastResult()
 {
     if(m_series.size() == 0){
@@ -163,9 +180,40 @@ QString Competitor::lastSum()
         return "0";
 }
 
+void Competitor::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    int newID = QInputDialog::getInt(this, tr("Võistleja ID muutmine"), tr("Sisestage uus ID:"), m_id, 0);
+    if(m_id != newID){
+        emit statusInfo(QString(tr("Võistleja ID muudetud, vana: %1 => uus: %2")).arg(m_id).arg(newID));
+        m_id = newID;
+        m_idLabel.setText(QString("%1").arg(m_id));
+    }
+    Q_UNUSED(event);
+}
+
 QString Competitor::name()
 {
     return m_nameEdit.text();
+}
+
+QString Competitor::previousSiusRow()
+{
+    return m_previousSiusRow;
+}
+
+void Competitor::setPreviousSiusRow(QString newSiusRow)
+{
+    m_previousSiusRow = newSiusRow;
+}
+
+void Competitor::setShot(int shotNo, QString shotValue)
+{
+    if(shotNo < m_shots.size())
+        m_shots.at(shotNo)->setText(shotValue);
+    else{
+        QMessageBox::critical(this, tr("Viga"), tr("Laskude arv suurem, kui võimalik! Lask ei läinud kirja!"), QMessageBox::Ok);
+        emit statusInfo(m_nameEdit.text() + tr("Laskude arv suurem, kui võimalik! Lask ei läinud kirja!"));
+    }
 }
 
 void Competitor::sum()
@@ -195,6 +243,7 @@ void Competitor::sum()
 void Competitor::toJson(QJsonObject &json) const
 {
     json["nameEdit"] = m_nameEdit.text();
+    json["id"] = m_id;
     QJsonArray seriesArray;
     for(int i = 0; i < m_series.size(); i++){
         QJsonObject seriesJson;

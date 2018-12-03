@@ -25,10 +25,13 @@ public:
     void toJson(QJsonObject &json) const;
 
 signals:
+    void statusInfo(QString statusInfo);
     void teamUpdated();
 
 public slots:
+    Competitor* getCompetitorWithID(int id);
     void sum();
+    void sumAll();
 
 private:
     QLabel m_indexLabel;

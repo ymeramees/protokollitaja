@@ -1,3 +1,18 @@
+/////////////////////////////////////////////////////////////////////////////
+///ToDo:
+/// Sorting based on results
+/// Show targets on spectator window
+/// Connection to target scoring machine
+/// Save as function
+/// Print function
+/// Some export function
+/// Import SiusData startlist
+/// Add competition stage number, so that there can be sighting shots between competition series (3 positions final)
+/// Add shoot-off possibility
+/// Add ignore shot possibility
+///
+/////////////////////////////////////////////////////////////////////////////
+
 #include "protofinaal.h"
 
 Protofinaal::Protofinaal(QWidget *parent)
@@ -18,6 +33,14 @@ Protofinaal::Protofinaal(QWidget *parent)
 
     if(verbose)
         QTextStream(stdout) << "currentFile = " << currentFile << endl;
+
+    logFile = new QFile(QFileInfo(currentFile).dir().absolutePath() + QString("/Protofinaal logi %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
+
+    if(logFile->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){ //Log file
+        logOut.setDevice(logFile);
+    }else{
+        QMessageBox::critical(this, tr("Viga"), tr("Logi faili kirjutamine ei õnnestunud! Kontrollige, et teil oleks kirjutamisõigus sinna kausta, kus asub võistluste fail."), QMessageBox::Ok);
+    }
 }
 
 Protofinaal::~Protofinaal()
@@ -51,6 +74,7 @@ void Protofinaal::createLayout(QJsonObject &jsonObj)
     for(int i = 0; i < teamsNo; i++){
         Team *team = new Team(jsonObj, i+1);
         connect(team, &Team::teamUpdated, this, &Protofinaal::updateSpectatorWindow);
+        connect(team, &Team::statusInfo, this, &Protofinaal::statusBarInfoChanged);
         teams.append(team);
         vBox->addWidget(team);
     }
@@ -80,12 +104,42 @@ void Protofinaal::createMenus()
     showSpectatorWindowAct->setStatusTip(tr("Ava tulemuste aken"));
     connect(showSpectatorWindowAct, &QAction::triggered, this, &Protofinaal::showSpecatorWindowOnSecondScreen);
 
+    QAction *connectToSiusDataAct = new QAction(tr("&SiusData"), this);
+    connectToSiusDataAct->setStatusTip(tr("Ühendu SiusData'ga"));
+    connect(connectToSiusDataAct, &QAction::triggered, this, &Protofinaal::connectToSiusData);
+
     fileMenu->addAction(openAct);
     fileMenu->addAction(saveAct);
     fileMenu->addSeparator();
     fileMenu->addAction(exitAct);
 
     editMenu->addAction(showSpectatorWindowAct);
+    editMenu->addAction(connectToSiusDataAct);
+}
+
+void Protofinaal::connectToSiusData()
+{
+    siusLog = new QFile(QFileInfo(currentFile).dir().absolutePath() + QString(tr("/Protofinaal sisse logi %1.log")).arg(QDate::currentDate().toString(Qt::ISODate)));
+
+    if(siusDataConnections == nullptr){
+        siusDataConnections = new SiusDataConnections(siusLog, &logOut, this);
+        connect(siusDataConnections, &SiusDataConnections::statusInfo, this, &Protofinaal::statusBarInfoChanged);
+        connect(siusDataConnections, &SiusDataConnections::linesRead, this, &Protofinaal::readSiusInfo);
+        connect(siusDataConnections, &SiusDataConnections::disconnectedFromSius, this, &Protofinaal::connectionToSiusLost);
+    }
+
+    if(siusLog->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){ //Saabunud võrguliikluse logi
+        QTextStream valja(siusLog);
+        valja << "///////////////////////////////" << competitionName << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";
+        siusLog->close();
+    }
+
+    siusDataConnections->exec();
+}
+
+void Protofinaal::connectionToSiusLost(int connectionIndex)
+{
+
 }
 
 void Protofinaal::initialize()
@@ -132,6 +186,9 @@ void Protofinaal::initialize()
             eventName = jsonObj["Event"].toString();
             createLayout(jsonObj);
         }
+
+        logOut << "///////////////////////////////" << competitionName << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";
+        statusBarInfoChanged(tr("Avatud fail: ") + currentFile);
         showSpecatorWindowOnSecondScreen();
 
     }else if(initialDialog->result() == QDialog::Rejected)
@@ -152,6 +209,7 @@ void Protofinaal::loadFile(QString fileName)
         QJsonObject teamJson = teamsArray.at(i).toObject();
         Team *team = new Team(teamJson, i+1, this);
         connect(team, &Team::teamUpdated, this, &Protofinaal::updateSpectatorWindow);
+        connect(team, &Team::statusInfo, this, &Protofinaal::statusBarInfoChanged);
         teams.append(team);
         vBox->addWidget(team);
     }
@@ -208,6 +266,186 @@ void Protofinaal::readSettings()
         QMessageBox::critical(this, tr("Viga!"), tr("Seadete faili avamine ei ole võimalik!"), QMessageBox::Ok);
 }
 
+void Protofinaal::readSiusInfo(QStringList lines, int socketIndex)
+{
+    if(verbose)
+        QTextStream(stdout) << "readSiusInfo()" << endl;
+
+    Q_UNUSED(socketIndex);
+
+    for(QString row : lines){
+        //Search for competitor whose line was received:
+        QStringList rowParts = row.split(';');
+        Competitor *thisCompetitor = nullptr;
+        foreach (Team *team, teams) {
+            if(team->getCompetitorWithID(rowParts[3].toInt()) != nullptr){
+                thisCompetitor = team->getCompetitorWithID(rowParts[3].toInt());
+
+                if(row.startsWith("_SHOT") && !competitionStarted){   //Shot data, sighting shots
+                    thisCompetitor->setPreviousSiusRow(row);
+
+                    statusBarInfoChanged(rowParts[3] + tr(": Proovilask"));
+
+                    Lask lask;
+                    if(rowParts[11].toInt() == 0){  //Kui [11] on 0, siis järelikult loetakse komakohtadega ja lasu väärtus on [10]'s, kui ei ole 0, siis loetakse täisarvudega
+                        lask.set10Lask(rowParts[10]);
+                    }else lask.set10Lask(rowParts[11]);
+                    bool success = false;
+                    float f = 0;
+                    f = rowParts[14].toFloat(&success);
+                    if(!success){
+                        if(rowParts[14].contains(',')){
+                            rowParts[14].replace(',', '.');
+                        }else if(rowParts[14].contains('.')){
+                            rowParts[14].replace('.', ',');
+                        }
+                        f = rowParts[14].toFloat(&success);
+                    }
+                    f *= 1000; //Tundub, et Sius'i koordinaadid on meetrites, vaja teha millimeetrid
+                    lask.setX(f);
+                    success = false;
+                    f = 0;
+                    f = rowParts[15].toFloat(&success);
+                    if(!success){
+                        if(rowParts[15].contains(',')){
+                            rowParts[15].replace(',', '.');
+                        }else if(rowParts[15].contains('.')){
+                            rowParts[15].replace('.', ',');
+                        }
+                        f = rowParts[15].toFloat(&success);
+                    }
+                    f *= 1000; //Tundub, et Sius'i koordinaadid on meetrites, vaja teha millimeetrid
+                    lask.setY(f);
+
+//                    if(tulemus->marklehed[j]->isHidden())   //Algul ei ole märklehti näha
+//                        tulemus->naitaLehed();  //Puhastab ja toob märklehed nähtavale, proovilaskude ajal on need koos nimedega
+                    //                    tulemus->peidaNimed();
+                    //                    tulemus->marklehed[j]->setTulemus(tabel->seeria[j]->text());
+//                    tulemus->marklehed[j]->joonistaLask(lask);
+//                    lehtedePeitja->setInterval(seaded->ui.marklehtedeAegBox->value()*1000);
+//                    lehtedePeitja->start(); //Lehed peale aja möödumist uuesti peitu, et nimed näha oleks
+                    if(verbose)
+                        QTextStream(stdout) << "rowParts[3]: " << rowParts[3] << ", rida: " << row;
+                }else if(row.startsWith("_TOTL") && !competitionStarted){   //Result row
+                    if(rowParts.count() > 12){  //If row is not long enough, then probably it is total result, which is not interesting here
+                        if(rowParts[12] != "0"){   //If it is sighting shot, then this is 0, but if competition shot, then it is series result
+                            if(thisCompetitor->previousSiusRow().startsWith("_SHOT")){  //As previous shot was already competition shot, then it needs to be added to someone
+                                competitionStarted = true;
+//                                lehtedePeitja->stop();  //Kuna joonistatakse esimene võistluslask, siis ei tohi lehed peitu minna
+
+//                                tulemus->puhastaLehed();    //Lehed tuleb proovilaskudest puhastada
+
+                                statusBarInfoChanged(rowParts[3] + tr(": algavad võistluslasud"));
+
+                                QStringList previousRowParts = thisCompetitor->previousSiusRow().split(';');
+                                Lask lask;
+                                if(previousRowParts[11].toInt() == 0){  //Kui [11] on 0, siis järelikult loetakse komakohtadega ja lasu väärtus on [10]'s, kui ei ole 0, siis loetakse täisarvudega
+                                    lask.set10Lask(previousRowParts[10]);
+                                }else lask.set10Lask(previousRowParts[11]);
+                                bool success = false;
+                                float f = 0;
+                                f = previousRowParts[14].toFloat(&success);
+                                if(!success){
+                                    if(previousRowParts[14].contains(',')){
+                                        previousRowParts[14].replace(',', '.');
+                                    }else if(previousRowParts[14].contains('.')){
+                                        previousRowParts[14].replace('.', ',');
+                                    }
+                                    f = previousRowParts[14].toFloat(&success);
+                                }
+                                f *= 1000; //Tundub, et Sius'i koordinaadid on meetrites, vaja teha millimeetrid
+                                lask.setX(f);
+                                success = false;
+                                f = 0;
+                                f = previousRowParts[15].toFloat(&success);
+                                if(!success){
+                                    if(previousRowParts[15].contains(',')){
+                                        previousRowParts[15].replace(',', '.');
+                                    }else if(previousRowParts[15].contains('.')){
+                                        previousRowParts[15].replace('.', ',');
+                                    }
+                                    f = previousRowParts[15].toFloat(&success);
+                                }
+                                f *= 1000; //Tundub, et Sius'i koordinaadid on meetrites, vaja teha millimeetrid
+                                lask.setY(f);
+
+//                                if(tulemus->marklehed[j]->isHidden())   //Algul ei ole märklehti näha
+//                                    tulemus->naitaLehed();  //Toob märklehed nähtavale
+//                                tulemus->peidaNimed();
+                                //                        summ(j);    //Peab kontrollima, ega see siin midagi ära ei riku
+                                //                        tulemus->marklehed[j]->setTulemus(tabel->seeria[j]->text());
+//                                tulemus->marklehed[j]->joonistaLask(lask);
+                                //                        lehtedePeitja->start(); //Lehed peale aja möödumist uuesti peitu, et nimed näha oleks
+
+                                thisCompetitor->setShot(0, lask.getSLask());
+                                statusBarInfoChanged(thisCompetitor->name() + tr(" lask 1 = ") + lask.getSLask());
+                                if(verbose)
+                                    QTextStream(stdout) << "rowParts[12]: " << rowParts[12] << "voistlus = true" << "previousRowParts[10]: " << previousRowParts[10] << "\n\n";
+                            }
+                        }
+                    }
+                }else if(row.startsWith("_SHOT") && competitionStarted){   //Võistluslasu rida
+//                    int shootOffShots = 0;
+//                    for(int i = 0; i < 24; i+=2)
+//                        if(tabel->lisaLask[i][j]->text() != "00")
+//                            lisaLaske++;
+
+                    int shotNo = rowParts[13].toInt() - 1 /*- shootOffShots*/;  //Siusist tulnud lasu Nr, koodi lühendamise eesmärgil
+                    Lask lask;
+                    if(rowParts[11].toInt() == 0){  //Kui [11] on 0, siis järelikult loetakse komakohtadega ja lasu väärtus on [10]'s, kui ei ole 0, siis loetakse täisarvudega
+                        lask.set10Lask(rowParts[10]);
+                    }else lask.set10Lask(rowParts[11]);
+                    bool success = false;
+                    float f = 0;
+                    f = rowParts[14].toFloat(&success);
+                    if(!success){
+                        if(rowParts[14].contains(',')){
+                            rowParts[14].replace(',', '.');
+                        }else if(rowParts[14].contains('.')){
+                            rowParts[14].replace('.', ',');
+                        }
+                        f = rowParts[14].toFloat(&success);
+                    }
+                    f *= 1000; //Tundub, et Sius'i koordinaadid on meetrites, vaja teha millimeetrid
+                    lask.setX(f);
+                    success = false;
+                    f = 0;
+                    f = rowParts[15].toFloat(&success);
+                    if(!success){
+                        if(rowParts[15].contains(',')){
+                            rowParts[15].replace(',', '.');
+                        }else if(rowParts[15].contains('.')){
+                            rowParts[15].replace('.', ',');
+                        }
+                        f = rowParts[15].toFloat(&success);
+                    }
+                    f *= 1000; //Tundub, et Sius'i koordinaadid on meetrites, vaja teha millimeetrid
+                    lask.setY(f);
+
+//                    uuendaLasuNrit();   //Vaja ka uuendada, mitmes lask käsil on, enne, kui uus lask lisatakse
+
+//                    if((shotNo == 5 && tulemus->mitmesLask == 5) || (shotNo == 10 && tulemus->mitmesLask == 10) || (shotNo == 12 && tulemus->mitmesLask == 12) || (shotNo == 14 && tulemus->mitmesLask == 14) || (shotNo == 16 && tulemus->mitmesLask == 16) || (shotNo == 18 && tulemus->mitmesLask == 18) || (shotNo == 20 && tulemus->mitmesLask == 20) || (shotNo == 22 && tulemus->mitmesLask == 22) || (shotNo == 24 && tulemus->mitmesLask == 24)){ //Peale esimest seeriat on vaja lehed puhastada
+//                        tulemus->puhastaLehed();
+//                    }
+
+//                    if(tulemus->marklehed[j]->isHidden())   //Algul ei ole märklehti näha
+//                        tulemus->naitaLehed();  //Toob märklehed nähtavale
+//                    tulemus->peidaNimed();
+                    //                        summ(j);    //Peab kontrollima, ega see siin midagi ära ei riku
+                    //                        tulemus->marklehed[j]->setTulemus(tabel->seeria[j]->text());
+//                    tulemus->marklehed[j]->joonistaLask(lask);
+
+                    thisCompetitor->setShot(shotNo, lask.getSLask());
+                    statusBarInfoChanged(QString("%1%2%3 = %4").arg(thisCompetitor->name()).arg(tr(" lask ")).arg(shotNo).arg(lask.getSLask()));
+                }
+            }
+        }
+        if(thisCompetitor == nullptr)
+            statusBarInfoChanged(tr("Sellise ID'ga võistlejat ei leitud: ") + rowParts[3]);
+    }
+    sumAllTeams();
+}
+
 void Protofinaal::save()
 {
     writeFinalsFile(currentFile);
@@ -233,13 +471,21 @@ void Protofinaal::showSpecatorWindowOnSecondScreen()
     if(spectatorWindow.isFullScreen())
         QMessageBox::information(this, tr("Teade"), tr("Tulemuse aken näidatud teisel ekraanil"), QMessageBox::Ok);
 
-    spectatorWindow.setHeading(competitionName, timePlace, eventName, tr("Koht"), tr("Nimi"), tr("Seeria"), tr("Vahe"));
+    spectatorWindow.setHeading(competitionName, timePlace, eventName, tr("Koht"), tr("Nimi"), tr("Seeria/lask"), tr("Vahe"));
     updateSpectatorWindow();
-//    spectatorWindow.addRow("1.", "", "P. PAKIRAAM", "51,3", "51,3", "0");
+}
 
-//    QString resultsTemplate = "<!DOCTYPE html>\n<html>\n<body>\n<h1>%1</h1>\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n<thead>\n</thead>\n<tbody>\n</tbody>\n%2\n</body>\n</html>";
-//    QString resultRow =
-//    spectatorWindow.setResults("<!DOCTYPE html>\n<html>\n<head>\n<title>Hello, Devslopes</title>\n</head>\n<body>\n<h1>Welcome!</h1>\n<h2>Want to learn code?</h2>\n<h3 >Then you've vome to the right place!</h3>\n<h4>So get started now!</h4>\n<p>Muu tekst tuleb siia. Pikem <b>jutt</b>, mida <i>näidata</i> lehel. Ma ei suuda nii pikalt kirjutada, kui vaja oleks.</p>\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n<tbody><tr>\n<td style=\"border: none; padding: 0; padding-top: 5\">\n<p align=\"center\"><font face=\"Arial, sans-serif\" style=\"font-size: 30px\">1</font></p></td><td style=\"border: none; padding: 0; padding-left: 10\">\n<p><font face=\"Arial, sans-serif\" style=\"font-size: 30px\">Anton</font></p>\n</td>\n<td style=\"border: none; padding: 0\">\n<p><font face=\"Arial, sans-serif\" style=\"font-size: 30px\">FARFOROVSKI</font></p>\n</td>\n<td style=\"border: none; padding: 0\">\n<p align=\"center\"><font face=\"Arial, sans-serif\" style=\"font-size: 10pt\">1994</font></p>\n</td>\n<br>\n<br>\n<hr>\n<p>Lisaks, liitu meie <em>TASUTA</em> emaili nimekirjaga.</p>\n</body>\n</html>");
+void Protofinaal::statusBarInfoChanged(QString newStatusInfo)
+{
+    statusBar()->showMessage(newStatusInfo, 5000);
+    logOut << QTime::currentTime().toString() << " " << newStatusInfo << endl;
+}
+
+void Protofinaal::sumAllTeams()
+{
+    foreach (Team *team, teams) {
+        team->sumAll();
+    }
 }
 
 void Protofinaal::toJson(QJsonObject &json) const

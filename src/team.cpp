@@ -19,6 +19,7 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
 
         Competitor *competitor = new Competitor(configJson["Shots"].toArray());
         connect(competitor, &Competitor::newShot, this, &Team::sum);
+        connect(competitor, &Competitor::statusInfo, this, &Team::statusInfo);
 
         m_teamCompetitors.append(competitor);
         layout->addWidget(competitor, 0, 2);
@@ -26,6 +27,7 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
         for(int i = 1; i < competitorsInTeam; i++){
             Competitor *competitor = new Competitor(configJson["Shots"].toArray());
             connect(competitor, &Competitor::newShot, this, &Team::sum);
+            connect(competitor, &Competitor::statusInfo, this, &Team::statusInfo);
 
             m_teamCompetitors.append(competitor);
             layout->addWidget(competitor, i, 2);
@@ -42,6 +44,7 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
         for (int i = 0; i < competitorsArray.size(); i++) {
             Competitor *competitor = new Competitor(competitorsArray.at(i).toObject());
             connect(competitor, &Competitor::newShot, this, &Team::sum);
+            connect(competitor, &Competitor::statusInfo, this, &Team::statusInfo);
 
             m_teamCompetitors.append(competitor);
             layout->addWidget(competitor, i, 2);
@@ -73,6 +76,15 @@ Team::~Team()
         competitor->deleteLater();
     }
     m_teamCompetitors.clear();
+}
+
+Competitor* Team::getCompetitorWithID(int id)
+{
+    foreach (Competitor *competitor, m_teamCompetitors){
+        if(competitor->id() == id)
+            return competitor;
+    }
+    return nullptr;
 }
 
 QString Team::index()
@@ -107,6 +119,13 @@ void Team::sum()
     }else
         m_sumLabel.setText(m_teamCompetitors.at(0)->lastSum());
     emit teamUpdated();
+}
+
+void Team::sumAll()
+{
+    foreach (Competitor *competitor, m_teamCompetitors){
+        competitor->sum();
+    }
 }
 
 QVector<Competitor *> Team::teamCompetitors()
