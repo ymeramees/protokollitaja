@@ -114,11 +114,11 @@ void SiusDataConnection::readFromSius()
                 siusLog->close();
             }
 
-            *log << QTime::currentTime().toString("#hh:mm:ss") << " #buffer.length(): " << siusBuffer.length() << "    buffer.indexOf('_'): " << siusBuffer.indexOf('_', 1) << "\n";
+            *log << QTime::currentTime().toString("hh:mm:ss") << " # buffer.length(): " << siusBuffer.length() << "    buffer.indexOf('_'): " << siusBuffer.indexOf('_', 1) << "\n";
 
             QString row = "";
             if(siusBuffer.indexOf('_', 1) == -1){
-                *log << "#clear()\n";
+                *log << QTime::currentTime().toString("hh:mm:ss") << " #clear()\n";
                 row = QString("%1").arg(siusBuffer);
                 siusBuffer.clear();
             }else{
@@ -130,16 +130,16 @@ void SiusDataConnection::readFromSius()
                 QTextStream(stdout) << "SiusDataConnection::readFromSius() " << m_index << ": " << row << endl;
 
             if(!row.contains('_')){
-                *log << "#break\n";
+                *log << QTime::currentTime().toString("hh:mm:ss") << " #break\n";
                 break; //Double check not to continue with pointless row
             }
-            *log << "#rida: " << row;
+            *log << QTime::currentTime().toString("hh:mm:ss") << " #rida: " << row;
             lines.append(row);
 
             QCoreApplication::processEvents();
         }
         if(siusBuffer.length() > 0){   //If there is still data in the buffer, but for some reason reached here, then start the function again after a while
-            *log << "#buffer.length(): " << siusBuffer.length() << ", uuele ringile minek" << "\n";
+            *log << QTime::currentTime().toString("hh:mm:ss") << " #buffer.length(): " << siusBuffer.length() << ", uuele ringile minek" << "\n";
             QTimer::singleShot(170, this, SLOT(loeSiusDatast()));
         }
 
