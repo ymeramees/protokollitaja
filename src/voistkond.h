@@ -46,6 +46,7 @@ public:
 	Voistkond(LiikmeteValikKast *lV, int vA, QList<int> *j, int *vI, QWidget *parent = 0);
 	virtual ~Voistkond();
 	bool vaiksem(Voistkond *v) const;
+    QJsonObject toExportJson();
 
 public slots:
 	void liida();

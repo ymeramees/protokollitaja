@@ -83,8 +83,11 @@ public:
     Leht(Andmebaas*, int, int, int, bool*, QString, int, QString, bool kum, int*, QWidget *parent = 0, bool v = false, /* Leht *ind = 0
             ,*/ LiikmeteValikKast *lV = 0, int lI = 0, int ls = 10);
     ~Leht();
+    void setToBeUploaded(bool newStatus);
     void sorteeri(int t);
     void reasta(int t);
+    bool toBeUploaded();
+    QJsonObject toExportJson();
 
 public slots:
 	void eemaldaLaskur();
@@ -105,6 +108,9 @@ signals:
 	void uuendaLiikmeid();
 	void uuendaVoistkondi();
 	void muudatus();
+
+private:
+    bool m_toBeUploaded = true;  //Shows if results on this page should be uploaded to web or not
 };
 
 #endif // LEHT_H

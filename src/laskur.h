@@ -75,6 +75,7 @@ public:
     bool vaiksem(Laskur *l, int t) const;
     void set(const Laskur *l);
     void setSumma(QString);
+    QJsonObject toExportJson();
 
 public slots:
     int competitionStage() const;

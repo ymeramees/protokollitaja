@@ -8,6 +8,7 @@
 //#include <QtGui/QWidget>
 //#endif
 
+#include <QJsonObject>
 #include <QString>
 #include <QPoint>
 
@@ -42,6 +43,7 @@ public /*slots*/:
     void setXY(QPoint);
     QString stringX();
     QString stringY();
+    QJsonObject toJson();
 
 private:
     int lask;   //Hoiab lasu väärtust kümnekordsena (10,5 -> 105)

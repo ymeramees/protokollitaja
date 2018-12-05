@@ -143,7 +143,7 @@
         <item row="1" column="2">
          <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>minuti järel.</string>
+           <string>minuti järel</string>
           </property>
          </widget>
         </item>
@@ -229,6 +229,33 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QLabel" name="label_10">
+       <property name="text">
+        <string>Veebi laadimine iga</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="uploadTimeBox">
+       <property name="minimum">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <number>999</number>
+       </property>
+       <property name="value">
+        <number>30</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_11">
+       <property name="text">
+        <string>sekundi järel</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -271,6 +298,11 @@
      <column>
       <property name="text">
        <string>Kümnendikega</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Laadida veebi</string>
       </property>
      </column>
     </widget>

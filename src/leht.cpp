@@ -145,6 +145,11 @@ void Leht::eemaldaLaskur()
 	}
 }
 
+void Leht::setToBeUploaded(bool newStatus)
+{
+    m_toBeUploaded = newStatus;
+}
+
 void Leht::siusiReset(int connectionIndex)
 {
     for(int i = 0; i < laskurid.count(); i++)
@@ -322,7 +327,7 @@ void Leht::reasta(int t)
             laskurid[i]->jrkArv = i;
         }
 	}
-	sorteeri(t);
+    sorteeri(t);
 }
 
 void Leht::uuendaLiikmeteKast()
@@ -390,7 +395,33 @@ void Leht::teataMuudatusest(const QString)
 
 void Leht::teataMuudatusest()
 {
-	emit muudatus();
+    emit muudatus();
+}
+
+bool Leht::toBeUploaded()
+{
+    return m_toBeUploaded;
+}
+
+QJsonObject Leht::toExportJson()
+{
+    QJsonObject sheetJson;
+    sheetJson["eventName"] = ekraaniNimi;
+    sorteeri(0);
+    QJsonArray competitorsArray;
+
+    foreach (Laskur *competitor, reasLaskurid){
+        competitorsArray.append(competitor->toExportJson());
+    }
+    sheetJson["competitors"] = competitorsArray;
+
+    QJsonArray teamsArray;
+    foreach (Voistkond *team, reasVoistkonnad){
+        teamsArray.append(team->toExportJson());
+    }
+    sheetJson["teams"] = teamsArray;
+
+    return sheetJson;
 }
 
 void Leht::naitaSifrit()
@@ -419,5 +450,5 @@ Leht::~Leht()
 {
 	/*nimedeLeht->jalgijad--;
 	if(nimedeLeht->jalgijad < 0)
-		nimedeLeht->jalgijad = 0;*/
+        nimedeLeht->jalgijad = 0;*/
 }

@@ -51,6 +51,27 @@ void Voistkond::otsiNime()
 
 }
 
+QJsonObject Voistkond::toExportJson()
+{
+    QJsonObject teamJson;
+    teamJson["teamName"] = nimi->text();
+
+    QJsonArray teamMembers;
+    foreach (Liige *teamCompetitor, voistlejad){
+        QJsonObject competitorJson;
+        competitorJson["firstName"] = teamCompetitor->eesNimi;
+        competitorJson["lastName"] = teamCompetitor->perekNimi;
+        competitorJson["club"] = teamCompetitor->klubi;
+        competitorJson["event"] = teamCompetitor->harjutus;
+        competitorJson["result"] = teamCompetitor->summa;
+        teamMembers.append(competitorJson);
+    }
+    teamJson["teamMembers"] = teamMembers;
+    teamJson["totalResult"] = summa->text();
+
+    return teamJson;
+}
+
 bool Voistkond::vaiksem(Voistkond *v) const
 {
 //        if(this->keskmLask < v->keskmLask)

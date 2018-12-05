@@ -148,30 +148,43 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         taiendaBaasAct = new QAction(("Täienda andmebaasi"), this);
         taiendaBaasAct->setStatusTip(tr("Lisab uued laskurid andmebaasi"));
         connect(taiendaBaasAct, SIGNAL(triggered()), this, SLOT(taiendaAndmebaas()));
+
         finaalAct = new QAction(QIcon(":/images/finaal.png"), tr("Finaal"), this);
         finaalAct->setStatusTip(("Käivitab selle lehe andmetega Finaali programmi"));
         connect(finaalAct, SIGNAL(triggered()), this, SLOT(kaivitaFinaal()));
+
         programmistAct = new QAction(tr("Programmist"), this);
         programmistAct->setStatusTip(tr("Kuvab infot programmi kohta"));
         connect(programmistAct, SIGNAL(triggered()), this, SLOT(naitaInfot()));
+
         naitaWAbiAct = new QAction(tr("Abi"), this);
         naitaWAbiAct->setStatusTip(("Näitab abi, kuidas kahe ekraani jaoks seadistada"));
         connect(naitaWAbiAct, SIGNAL(triggered()), this, SLOT(naitaWAbi()));
+
         impordiFinaalAct = new QAction(tr("Impordi finaal..."), this);
         impordiFinaalAct->setStatusTip(tr("Lisab finaali tulemused vastavast failist"));
         connect(impordiFinaalAct, SIGNAL(triggered()), this, SLOT(impordiFinaal()));
+
         finaaliFailAct = new QAction(tr("Finaali fail..."), this);
         finaaliFailAct->setStatusTip(tr("Loob selle lehe kohta finaali faili"));
         connect(finaaliFailAct, SIGNAL(triggered()), this, SLOT(finaaliFail()));
+
         lehelugejaAct = new QAction(tr("Loe lehti..."), this);
         lehelugejaAct->setStatusTip(tr("Lehtede lugemine otse masinast"));
         connect(lehelugejaAct, SIGNAL(triggered()), this, SLOT(lehelugeja()));
+
         uhenduSiusDatagaAct = new QAction(("SiusData"), this);
         uhenduSiusDatagaAct->setStatusTip(tr("Ühendub SiusDataga"));
         connect(uhenduSiusDatagaAct, SIGNAL(triggered()), this, SLOT(uhenduSiusDataga()));
+
+        uploadAct = new QAction(("Lae veebi"), this);
+        uploadAct->setStatusTip(tr("Laeb tulemused veebi"));
+        connect(uploadAct, SIGNAL(triggered()), this, SLOT(uploadResults()));
+
         sifriLisaAct = new QAction(tr("Lisa sifrid..."), this);
         sifriLisaAct->setStatusTip(tr("Sifrite lisamine valitud laskuritele"));
         connect(sifriLisaAct, SIGNAL(triggered()), this, SLOT(sifriLisa()));
+
         seiskaServerAct = new QAction(tr("Seiska server"), this);
         seiskaServerAct->setStatusTip(tr("Seiskab lehtede lugemise serveri"));
         connect(seiskaServerAct, SIGNAL(triggered()), this, SLOT(seiskaServer()));
@@ -219,6 +232,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         tulemusedMenu = menuBar()->addMenu("T&ulemused");
         tulemusedMenu->addAction(importAct);
         tulemusedMenu->addSeparator();
+        tulemusedMenu->addAction(uploadAct);
         tulemusedMenu->addAction(eksportTXTAct);
         tulemusedMenu->addAction(eksportCSVAct);
         tulemusedMenu->addAction(eksportXLSAct);
@@ -289,31 +303,42 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         progressTimer->setSingleShot(true);
         progressTimer->setInterval(3000);
         connect(progressTimer, SIGNAL(timeout()), this, SLOT(peataProgress()));
+
         sulgeja = new QTimer(this);
         connect(sulgeja, SIGNAL(timeout()), this, SLOT(sulge()));
         sulgeja->setSingleShot(true);
+
         naitaja = new QTimer(this);
         connect(naitaja, SIGNAL(timeout()), this, SLOT(naitaTul()));
         naitaja->setInterval(10000);
+
         viiLopuni = new QTimer(this);
         viiLopuni->setSingleShot(true);
         viiLopuni->setInterval(500);
         connect(viiLopuni, SIGNAL(timeout()), this, SLOT(viiLoppu()));
+
         salvestaja = new QTimer(this);
         connect(salvestaja, SIGNAL(timeout()), this, SLOT(autosave()));
         salvestaja->setInterval(300000);
+
+        uploadTimer.setInterval(30000);
+        connect(&uploadTimer, &QTimer::timeout, this, &Protokollitaja::uploadResults);
+
         voistkondadele = new QTimer(this);  //Kasutatakse võistkondade andmete uuendamiseks, peale liikmete valiku kasti sulgemist
         voistkondadele->setSingleShot(true);
         voistkondadele->setInterval(50);
         connect(voistkondadele, SIGNAL(timeout()), this, SLOT(uuendaVoistkondi()));
         connect(lValik, SIGNAL(accepted()), voistkondadele, SLOT(start()));
+
         tabWidget = new QTabWidget(this);
         tabWidget->setTabPosition(QTabWidget::West);
         setCentralWidget(tabWidget);
+
         seaded = new SeadedKast(voistluseNimi, aegKoht, this);
         seaded->setWindowModality(Qt::ApplicationModal);
         connect(seaded, SIGNAL(salvestatud()), this, SLOT(uuendaSeaded()));
         connect(seaded->ui.sakid, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(muudaTab(const QModelIndex&)));
+
         pilt = new QPixmap(1600, 2450);
         pilt2 = new QPixmap(2450, 1600);
 
@@ -2946,6 +2971,8 @@ void Protokollitaja::naitaSeaded()
 //        seaded->kirjutusAbi = seaded->ui.kirjutusAbiCombo->currentIndex();
         seaded->ui.jarjestamiseBox->setCurrentIndex(jarjestamine);
 
+        seaded->ui.uploadTimeBox->setValue(uploadTimer.interval() / 1000);
+
         seaded->ui.sakid->clear();
         for(int i = 0; i < tabWidget->count(); i++){
                 QStringList sakiAndmed;
@@ -2979,9 +3006,15 @@ void Protokollitaja::naitaSeaded()
                 default :  item->setText(5, "Muu");
                 }
                 item->setText(6, leht->harjutus);
+
                 if(leht->kumnendikega)
                     item->setCheckState(7, Qt::Checked);
                 else item->setCheckState(7, Qt::Unchecked);
+
+                if(leht->toBeUploaded())
+                    item->setCheckState(8, Qt::Checked);
+                else item->setCheckState(8, Qt::Unchecked);
+
                 seaded->ui.sakid->insertTopLevelItem(-1, item);
         }
         seaded->show();
@@ -4497,6 +4530,59 @@ void Protokollitaja::taiendaAndmebaas()
         else QMessageBox::information(this, "Protokollitaja", "Uusi laskureid ei leitud", QMessageBox::Ok);
 }
 
+QJsonObject Protokollitaja::toExportJson()
+{
+    QJsonObject json;
+    json["competitionName"] = voistluseNimi;
+    json["timeAndPlace"] = aegKoht;
+
+    Leht *sheet = nullptr;
+    QJsonArray sheetsArray;
+    for(int i = 0; i < tabWidget->count(); i++){
+        sheet = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
+        if(sheet->toBeUploaded())
+            sheetsArray.append(sheet->toExportJson());
+    }
+    json["events"] = sheetsArray;
+
+    return json;
+}
+
+void Protokollitaja::uploadResults()
+{
+    QUrl url;
+    url.setScheme("http");
+    url.setHost("ymeramees.no-ip.org");
+    url.setPath("/product");
+    url.setPort(3004);
+
+    QTextStream(stdout) << "URL: " << url.toString() << endl;
+
+    QNetworkRequest request;
+    request.setUrl(url);
+//    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkAccessManager restClient;
+    restClient.setNetworkAccessible(QNetworkAccessManager::Accessible);
+
+    connect(&restClient, &QNetworkAccessManager::finished, this, &Protokollitaja::handleFinished);
+
+    restClient.get(request);
+//    restClient = new QNetworkAccessManager(this);
+//    QNetworkReply *reply = restClient->get(request);
+//    reply->waitForReadyRead(5000);
+//    QTextStream(stdout) << "Reply: " << reply->errorString() << reply->readAll() << endl;
+
+//    QFile file("testOut.json");
+//    if(file.open(QIODevice::WriteOnly)){
+//        QJsonDocument jsonDoc(toExportJson());
+//        file.write(jsonDoc.toJson());
+//        if(verbose)
+//            QTextStream(stdout) << "Json written to a file" << endl;
+//    }else
+//        QTextStream(stdout) << "Unable to open file" << endl;
+}
+
 void Protokollitaja::uuendaJalgitavaid()
 {
         Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(lValik->ui.leheBox->
@@ -4719,6 +4805,9 @@ void Protokollitaja::uuendaSeaded()
                 kirjutusAbi = true;
         else kirjutusAbi = false;
         jarjestamine = seaded->ui.jarjestamiseBox->currentIndex();
+
+        uploadTimer.setInterval(seaded->ui.uploadTimeBox->value() * 1000);
+
         if(tabWidget->count() > 0){
                 for(int i = 0; i < seaded->ui.sakid->topLevelItemCount(); i++){
                         seaded->ui.sakid->setCurrentItem(seaded->ui.sakid->topLevelItem(i));
@@ -4750,6 +4839,7 @@ void Protokollitaja::uuendaSeaded()
                         if(leht->harjutus != seaded->ui.sakid->currentItem()->text(6))
                             leht->harjutus = seaded->ui.sakid->currentItem()->text(6);
                         leht->kumnendikega = seaded->ui.sakid->currentItem()->checkState(7);
+                        leht->setToBeUploaded(seaded->ui.sakid->currentItem()->checkState(8));
                 }
         }
         voibSulgeda = false;

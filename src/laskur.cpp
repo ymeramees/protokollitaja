@@ -1196,6 +1196,31 @@ void Laskur::teataMuudatusest()
     emit muudatus();
 }
 
+QJsonObject Laskur::toExportJson()
+{
+    QJsonObject json;
+    json["firstName"] = eesNimi->text();
+    json["lastName"] = perekNimi->text();
+    json["birthYear"] = sunniAasta->text();
+    json["club"] = klubi->text();
+    QJsonArray seriesArray;
+    int index = 0;
+    foreach (QList<Lask*> series, lasud){
+        QJsonObject seriesJson;
+        QJsonArray shotsArray;
+        foreach (Lask *shot, series)
+            shotsArray.append(shot->toJson());
+        seriesJson["seriesShots"] = shotsArray;
+        seriesJson["seriesSum"] = seeriad.at(index)->text();
+        index++;
+        seriesArray.append(seriesJson);
+    }
+    json["series"] = seriesArray;
+    json["totalResult"] = summa->text();
+    json["finals"] = finaal->text();
+    return json;
+}
+
 int Laskur::vaiksemNimega(Laskur *l) const //Tagastab kas laskur on nime järgi väiksem (-1), suurem (1) või võrdne (0)
 {
     if(veryVerbose)

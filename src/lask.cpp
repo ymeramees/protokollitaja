@@ -207,3 +207,12 @@ QString Lask::stringY()
 {
     return y;
 }
+
+QJsonObject Lask::toJson()
+{
+    QJsonObject shotJson;
+    shotJson["shotValue"] = getSLask();
+    shotJson["shotX"] = X();
+    shotJson["shotY"] = Y();
+    return shotJson;
+}

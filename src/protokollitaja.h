@@ -134,6 +134,7 @@ public:
     QAction *uusAct;
     QAction *uusLaskurAct;
     QAction *uusTabAct;
+    QAction *uploadAct;
     QAction *valjuAct;
 	QToolBar *toolBar;
 	QTabWidget *tabWidget;
@@ -142,6 +143,7 @@ public:
 	QTimer *naitaja;
 	QTimer *viiLopuni;
 	QTimer *salvestaja;
+    QTimer uploadTimer;
 	QTimer *voistkondadele;
     QUdpSocket *udpSocket;  //Broadcasti saatmiseks, et leida võrgust Protokollitaja arvuti
 	QLabel *prindiEelvaade;
@@ -171,6 +173,7 @@ public:
     Protokollitaja(QWidget *parent = 0);
     ~Protokollitaja();
     //bool lessThan(const Laskur*, const Laskur*);
+    QJsonObject toExportJson();
 
 private slots:
     void algseaded();   //Tekitab või taastab algsed seaded
@@ -248,11 +251,14 @@ private slots:
     void uuendaVorkuSifriga(int, int socketIndex);
     void uhenduSiusDataga();
     void uhendusSiusigaKatkes(int connectionIndex);
+    void uploadResults();   //Upload results to Protokollitaja web page
     void uus();
     void uusLaskur();    //Uue laskuri loomine,  koos uue ID'ga
     void uusLaskur(int);   //Uue laskuri loomine, koos olemasoleva ID'ga (kasutatakse näiteks faili avamisel
     void uusTab();
     void viiLoppu();
+    void handleFinished(QNetworkReply* networkReply) { qDebug() << "Reply: " << networkReply->readAll() << endl; }
+    void handleError(QNetworkReply::NetworkError code) { qDebug() << "Error: " << code << endl; }
 
 private:
     QProgressDialog *progress;  //Näitab, et SiusDatast alles andmed tulevad
