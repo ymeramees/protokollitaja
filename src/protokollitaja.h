@@ -232,6 +232,7 @@ private slots:
     void reastaR();
     void reastaS();
     void reastaSi();
+    void restClientFinished(QNetworkReply *reply);
     void saadaVorku(QString, int socketIndex);
     void salvesta();
     void salvestaKui();
@@ -257,10 +258,9 @@ private slots:
     void uusLaskur(int);   //Uue laskuri loomine, koos olemasoleva ID'ga (kasutatakse näiteks faili avamisel
     void uusTab();
     void viiLoppu();
-    void handleFinished(QNetworkReply* networkReply) { qDebug() << "Reply: " << networkReply->readAll() << endl; }
-    void handleError(QNetworkReply::NetworkError code) { qDebug() << "Error: " << code << endl; }
 
 private:
+    QNetworkAccessManager *restClient = nullptr;
     QProgressDialog *progress;  //Näitab, et SiusDatast alles andmed tulevad
     QTimer *progressTimer;  //Timer, et progressi aken mõne aja pärast kinni panna
 };

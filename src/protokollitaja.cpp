@@ -4303,6 +4303,16 @@ void Protokollitaja::reastaSi() //Sifrite järgi reastamine
         }
 }
 
+void Protokollitaja::restClientFinished(QNetworkReply *reply)
+{
+    if(reply->error()){
+        QTextStream(stdout) << "Error with upload: " << reply->errorString() << endl;
+    }else{
+        QString answer = reply->readAll();
+        QTextStream(stdout) << "Reply to upload: " << answer << endl;
+    }
+}
+
 void Protokollitaja::saadaVorku(QString saadetis, int socketIndex)
 {
     server->send(saadetis, socketIndex);
@@ -4556,23 +4566,25 @@ void Protokollitaja::uploadResults()
     url.setPath("/product");
     url.setPort(3004);
 
-    QTextStream(stdout) << "URL: " << url.toString() << endl;
-
     QNetworkRequest request;
     request.setUrl(url);
-//    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-    QNetworkAccessManager restClient;
-    restClient.setNetworkAccessible(QNetworkAccessManager::Accessible);
+    QTextStream(stdout) << "Url: " << request.url().toString() << endl;
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-    connect(&restClient, &QNetworkAccessManager::finished, this, &Protokollitaja::handleFinished);
+    if(restClient == nullptr)
+        restClient = new QNetworkAccessManager(this);
+//    restClient->setNetworkAccessible(QNetworkAccessManager::Accessible);
 
-    restClient.get(request);
-//    restClient = new QNetworkAccessManager(this);
-//    QNetworkReply *reply = restClient->get(request);
-//    reply->waitForReadyRead(5000);
-//    QTextStream(stdout) << "Reply: " << reply->errorString() << reply->readAll() << endl;
+    connect(restClient, &QNetworkAccessManager::finished, this, &Protokollitaja::restClientFinished);
 
+    QJsonDocument jsonDoc(toExportJson());
+
+    restClient->put(request, jsonDoc.toJson());
+
+    uploadTimer.start();
+
+    //For development purposes:
 //    QFile file("testOut.json");
 //    if(file.open(QIODevice::WriteOnly)){
 //        QJsonDocument jsonDoc(toExportJson());
