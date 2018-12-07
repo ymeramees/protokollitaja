@@ -1,7 +1,7 @@
 ﻿#ifndef VERSION_H
 #define VERSION_H
 
-//Muudetud 21.11.2018 - peale mida ei ole reliisi olnud, seega ei ole vaja uuendada
+//Muudetud 21.11.2018 - peale mida oli reliis, seega on vaja uuendada
 #define VER_FILEVERSION             0,7,9,0
 #define VER_FILEVERSION_STR         "0.7.9\0"
 
