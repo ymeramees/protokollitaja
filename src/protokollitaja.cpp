@@ -321,7 +321,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         connect(salvestaja, SIGNAL(timeout()), this, SLOT(autosave()));
         salvestaja->setInterval(300000);
 
-        uploadTimer.setInterval(30000);
+        uploadTimer.setInterval(60000);
         connect(&uploadTimer, &QTimer::timeout, this, &Protokollitaja::uploadResults);
 
         voistkondadele = new QTimer(this);  //Kasutatakse võistkondade andmete uuendamiseks, peale liikmete valiku kasti sulgemist
@@ -4543,6 +4543,7 @@ void Protokollitaja::taiendaAndmebaas()
 QJsonObject Protokollitaja::toExportJson()
 {
     QJsonObject json;
+    json["token"] = "placeholder for future token34";
     json["competitionName"] = voistluseNimi;
     json["timeAndPlace"] = aegKoht;
 
@@ -4563,7 +4564,7 @@ void Protokollitaja::uploadResults()
     QUrl url;
     url.setScheme("http");
     url.setHost("ymeramees.no-ip.org");
-    url.setPath("/product");
+    url.setPath("/rapla");
     url.setPort(3004);
 
     QNetworkRequest request;
