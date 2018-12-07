@@ -4307,9 +4307,11 @@ void Protokollitaja::restClientFinished(QNetworkReply *reply)
 {
     if(reply->error()){
         QTextStream(stdout) << "Error with upload: " << reply->errorString() << endl;
+        statusBarInfoChanged("Error with upload: " + reply->errorString());
     }else{
         QString answer = reply->readAll();
         QTextStream(stdout) << "Reply to upload: " << answer << endl;
+        statusBarInfoChanged("Upload successful: " + answer);
     }
 }
 
