@@ -14,6 +14,8 @@ LaskudeAken::LaskudeAken(bool kum, int s, int ls, QWidget *parent) :
 //#ifdef PROOV
 //    qDebug() << "LaskudeAken";
 //#endif
+//    if(verbose)
+//        QTextStream(stdout) << "LaskudeAken::LaskudeAken()" << endl;
 
     for(int i = 0; i < seeriateArv; i++){
         QList<Lask*> seeriaLas;
@@ -27,18 +29,24 @@ LaskudeAken::LaskudeAken(bool kum, int s, int ls, QWidget *parent) :
     connect(ui->paremaleNupp, SIGNAL(clicked()), this, SLOT(paremale()));
     connect(ui->vasakuleNupp, SIGNAL(clicked()), this, SLOT(vasakule()));
     QStringList pais;
-    pais << "Lask" << "X" << "Y";
-    ui->laskudeTabel->setColumnCount(3);
+    pais << tr("Lask") << "X" << "Y" << tr("Sisekümme");
+    ui->laskudeTabel->setColumnCount(4);
     ui->laskudeTabel->setHorizontalHeaderLabels(pais);
     ui->laskudeTabel->setColumnWidth(0, 40);
     ui->laskudeTabel->setColumnWidth(1, 80);
     ui->laskudeTabel->setColumnWidth(2, 80);
+    ui->laskudeTabel->setColumnWidth(3, 100);
     ui->laskudeTabel->setRowCount(laskudeArv);
     for(int i = 0; i < laskudeArv; i++){
 //        ui->laskudeTabel->setItem(i, 0, new QTableWidgetItem(tr("%1.").arg(i + 1)));
         ui->laskudeTabel->setItem(i, 0, new QTableWidgetItem(tr("%1").arg(lasud[0][i]->getFLask())));
         ui->laskudeTabel->setItem(i, 1, new QTableWidgetItem(tr("%1").arg(lasud[0][i]->stringX())));
         ui->laskudeTabel->setItem(i, 2, new QTableWidgetItem(tr("%1").arg(lasud[0][i]->stringY())));
+        ui->laskudeTabel->setItem(i, 3, new QTableWidgetItem());
+        if(lasud[0][i]->isInnerTen())
+            ui->laskudeTabel->item(i, 3)->setCheckState(Qt::Checked);
+        else
+            ui->laskudeTabel->item(i, 3)->setCheckState(Qt::Unchecked);
     }
     ui->karistusEdit->setText(QString("%1").arg(lasud[0][lasud[aktiivneSeeria].count() - 1]->getFLask()));
     ui->seeriaSilt->setText("1. seeria");
@@ -52,6 +60,9 @@ void LaskudeAken::closeEvent(QCloseEvent *event)
 
 void LaskudeAken::kirjutaLasud()    //Kirjutab tabelis olevad lasud seeriasse
 {
+//    if(verbose)
+//        QTextStream(stdout) << "LaskudeAken::kirjutaLasud()" << endl;
+
     float lask = 0;
     bool onnestus = false;
     for(int i = 0; i < laskudeArv; i++){
@@ -69,6 +80,7 @@ void LaskudeAken::kirjutaLasud()    //Kirjutab tabelis olevad lasud seeriasse
         lasud[aktiivneSeeria][i]->setLask(lask);
         lasud[aktiivneSeeria][i]->setX(ui->laskudeTabel->item(i, 1)->text());
         lasud[aktiivneSeeria][i]->setY(ui->laskudeTabel->item(i, 2)->text());
+        lasud[aktiivneSeeria][i]->setInnerTen(ui->laskudeTabel->item(i, 3)->checkState());
     }
     int karistus = ui->karistusEdit->text().toInt();
     if(ui->karistusEdit->text().isEmpty() || karistus == -999)
@@ -79,10 +91,20 @@ void LaskudeAken::kirjutaLasud()    //Kirjutab tabelis olevad lasud seeriasse
 
 void LaskudeAken::loeLasud()    //Loeb seeriast tabelisse uued lasud
 {
+//#ifdef PROOV
+//    qDebug() << "LaskudeAken::loelasud()";
+//#endif
+//    if(verbose)
+//        QTextStream(stdout) << "LaskudeAken::loelasud()" << endl;
+
     for(int i = 0; i < laskudeArv; i++){
         ui->laskudeTabel->item(i, 0)->setText(tr("%1").arg(lasud[aktiivneSeeria][i]->getFLask()));
         ui->laskudeTabel->item(i, 1)->setText(tr("%1").arg(lasud[aktiivneSeeria][i]->stringX()));
         ui->laskudeTabel->item(i, 2)->setText(tr("%1").arg(lasud[aktiivneSeeria][i]->stringY()));
+        if(lasud[aktiivneSeeria][i]->isInnerTen())
+            ui->laskudeTabel->item(i, 3)->setCheckState(Qt::Checked);
+        else
+            ui->laskudeTabel->item(i, 3)->setCheckState(Qt::Unchecked);
     }
     QString karistus = QString("%1").arg(lasud[aktiivneSeeria][lasud[aktiivneSeeria].count() - 1]->getFLask());
     if(karistus == "-999")

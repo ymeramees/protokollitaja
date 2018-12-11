@@ -553,7 +553,7 @@ void Laskur::liida() //Laskude summeerimine
                     }else{
                         ssum += lasud[i][j]->getILask() * 10;
                     }
-                    if(lasud[i][j]->get10Lask() >= 103)
+                    if(lasud[i][j]->isInnerTen())
                         siseKumneid++;
                     onLasud = true;
                     lastudLasud++;

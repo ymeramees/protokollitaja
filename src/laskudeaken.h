@@ -2,9 +2,12 @@
 #define LASKUDEAKEN_H
 
 #include <QDialog>
+//#include <QTextStream>
 #include <QMessageBox>
 
 #include "lask.h"
+
+extern bool verbose;
 
 namespace Ui {
 class LaskudeAken;

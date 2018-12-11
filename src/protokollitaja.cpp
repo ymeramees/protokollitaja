@@ -6,6 +6,10 @@
 /////////////////////////////////////////////////////////////////////////////
 /// ToDo list:
 /// Print2() on pooleli, asendite pealkirju ei ole
+/// Protokollitaja lehelugeja vajab uuendamist:
+/// 1. Uue masinaga lugemine ei tööta?
+/// 2. Sisekümneid ei märgistata
+/// Laskude aegade ja sisekümne staatuse salvestamine faili ja sealt lugemine on tegemata
 ///
 /////////////////////////////////////////////////////////////////////////////
 
@@ -4158,6 +4162,28 @@ void Protokollitaja::readShotInfo(QString data, int socketIndex)
             thisCompetitor->lasud[seriesNo][j]->setLask(dataList.takeFirst());
             thisCompetitor->lasud[seriesNo][j]->setX(dataList.takeFirst());
             thisCompetitor->lasud[seriesNo][j]->setY(dataList.takeFirst());
+
+            //Calculate shot center distance for determing inner tens:
+            int iX = thisCompetitor->lasud[seriesNo][j]->X() * 1000;
+            int iY = thisCompetitor->lasud[seriesNo][j]->Y() * 1000;
+            int centerDistance = qRound(qSqrt(iX*iX + iY*iY));
+            switch(sheet->relv){
+            case Ohupuss : {
+                if(centerDistance <= 2000)
+                    thisCompetitor->lasud[seriesNo][j]->setInnerTen(true);
+                break;
+            }
+            case Ohupustol : {
+                if(centerDistance <= 4750)
+                    thisCompetitor->lasud[seriesNo][j]->setInnerTen(true);
+                break;
+            }
+            case Sportpuss : {
+                if(centerDistance <= 5300)
+                    thisCompetitor->lasud[seriesNo][j]->setInnerTen(true);
+                break;
+            }
+            }
         }
     }
 
@@ -4221,22 +4247,32 @@ void Protokollitaja::readSiusInfo(QStringList lines, int socketIndex)
 
                 logiValja << "#" << rowParts[3] << ": " << thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm + rowParts[lasuNrSiusis].toInt() << ". Lask\n";
                 logiValja << "#SHOT: previousSiusRow(): " << thisCompetitor->previousSiusRow();
+                Lask newShot;
+                if(rowParts[11].toInt() == 0){  //If [11] is 0, then results are being read with decimals and shot value is in  [10]. If not 0, then results are with full rings.
+                    newShot.set10Lask(rowParts[10]);
+                }else
+                    newShot.set10Lask(rowParts[11]);
+                newShot.setMX(rowParts[14]);
+                newShot.setMY(rowParts[15]);
+                newShot.setShotTime(QTime::fromString(rowParts[6]));
+                if(rowParts[9].toInt() >= 512)  //Needs to be double checked if this actually marks inner ten
+                    newShot.setInnerTen(true);
 
-                if(thisCompetitor->seeriateArv > ((thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10) && thisCompetitor->lasud[thisCompetitor->seeriateArv - 1][thisCompetitor->laskudeArv - 1]->getILask() < 0){
-                    //If competitor's last shot has data in it, then probably these results have already been read and it is better not to read them again, to avoid mistakes
-                    if(thisCompetitor->lasud.count() > (thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10 && thisCompetitor->lasud[0].count() > (rowParts[lasuNrSiusis].toInt() - 1) % 10){ //Check if series number and number of shots in each series is big enough
-                        if(rowParts[11].toInt() == 0){  //If [11] is 0, then results are being read with decimals and shot value is in  [10]. If not 0, then results are with full rings.
-                            thisCompetitor->lasud[(thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(rowParts[10]);
-                        }else
-                            thisCompetitor->lasud[(thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(rowParts[11]);
-                        thisCompetitor->lasud[(thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->setX(rowParts[14]);
-                        thisCompetitor->lasud[(thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->setY(rowParts[15]);
+                int seriesIndex = (thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10;
+                int shotIndex = (rowParts[lasuNrSiusis].toInt() - 1) % 10;
+
+                //If competitor's last shot has data in it, then probably these results have already been read and it is better not to read them again, to avoid mistakes
+                if(thisCompetitor->seeriateArv > seriesIndex
+                        && thisCompetitor->lasud[thisCompetitor->seeriateArv - 1][thisCompetitor->laskudeArv - 1]->getILask() < 0){
+                    //Check if series number and number of shots in each series is big enough
+                    if(thisCompetitor->lasud.count() > seriesIndex && thisCompetitor->lasud[0].count() > shotIndex){
+                        thisCompetitor->lasud[seriesIndex][shotIndex]->set(&newShot);
                         thisCompetitor->liida();
                         muudaSalvestamist();
 
-                        logiValja << "#" << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << " lask 1 = " << thisCompetitor->lasud[(thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->getFLask() << "\n";
+                        logiValja << "#" << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << " lask 1 = " << thisCompetitor->lasud[seriesIndex][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->getFLask() << "\n";
                     }else
-                        logiValja << "\n#viga!: laskur lõhki! (thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10 = " << (thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10 << ", (rowParts[lasuNrSiusis].toInt() - 1) % 10 = " << (rowParts[lasuNrSiusis].toInt() - 1) % 10 << "\n";
+                        logiValja << "\n#viga!: laskur lõhki! seriesIndex = " << seriesIndex << ", (rowParts[lasuNrSiusis].toInt() - 1) % 10 = " << (rowParts[lasuNrSiusis].toInt() - 1) % 10 << "\n";
                 }
 
             }

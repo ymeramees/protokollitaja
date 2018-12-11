@@ -8,20 +8,22 @@ Lask::Lask(/*QWidget *parent*/)/* : QWidget(parent)*/
 
 void Lask::clear()
 {
+    m_innerTen = false;
     lask = -999;
 //    flask = -1;
+    m_shotTime = QTime();
     x = "-999";
     y = "-999";
 }
 
-int Lask::getILask()
+int Lask::getILask() const
 {
     if(lask == -999)
         return lask;
     return lask / 10;   //Kuna lasu väärtust hoitakse kümnekordsena, siis on vaja jagada 10'ga, komakohad lõigatakse lihtsalt maha
 }
 
-float Lask::getFLask()
+float Lask::getFLask() const
 {
     if(lask == -999)
         return lask;
@@ -29,7 +31,7 @@ float Lask::getFLask()
     return flask / 10;  //Kuna lasu väärtust hoitakse kümnekordsena, siis on vaja jagada 10'ga
 }
 
-QString Lask::getSLask()
+QString Lask::getSLask() const
 {
     if(lask == -999)
         return "";  //Kui lasku ei ole, tagastatakse tühi string
@@ -38,9 +40,14 @@ QString Lask::getSLask()
     return l;
 }
 
-int Lask::get10Lask()
+int Lask::get10Lask() const
 {
     return lask;
+}
+
+bool Lask::isInnerTen() const
+{
+    return m_innerTen;
 }
 
 bool Lask::isEmpty()
@@ -85,6 +92,11 @@ float Lask::Y()
         fy = y.toFloat(&onnestus);
     }
     return fy;
+}
+
+void Lask::setInnerTen(bool isInnerTen)
+{
+    m_innerTen = isInnerTen;
 }
 
 //int Lask::Y()
@@ -151,6 +163,28 @@ bool Lask::set10Lask(QString l)
     return onnestus;
 }
 
+void Lask::setShotTime(QTime newTime)
+{
+    m_shotTime = newTime;
+}
+
+void Lask::setMX(QString s)
+{
+    bool onnestus = false;
+    float fx = 0;
+    fx = s.toFloat(&onnestus);
+    if(!onnestus){
+        if(s.contains(',')){
+            s.replace(',', '.');
+        }else if(s.contains('.')){
+            s.replace('.', ',');
+        }
+        fx = s.toFloat(&onnestus);
+    }
+    fx *= 1000; //Convert meters to millimeters
+    setX(fx);
+}
+
 void Lask::setX(float k)
 {
     x = QString("%1").arg(k);
@@ -165,7 +199,24 @@ void Lask::setX(QString s)
 //    if(!onnestus)
 //        x = s.replace(".", ",").toFloat(&onnestus);
 //    if(!onnestus)
-//        x = s.replace(",", ".").toFloat(&onnestus);
+    //        x = s.replace(",", ".").toFloat(&onnestus);
+}
+
+void Lask::setMY(QString s)
+{
+    bool onnestus = false;
+    float fy = 0;
+    fy = s.toFloat(&onnestus);
+    if(!onnestus){
+        if(s.contains(',')){
+            s.replace(',', '.');
+        }else if(s.contains('.')){
+            s.replace('.', ',');
+        }
+        fy = s.toFloat(&onnestus);
+    }
+    fy *= 1000; //Convert meters to millimeters
+    setX(fy);
 }
 
 void Lask::setY(float k)
@@ -193,7 +244,9 @@ void Lask::setXY(QPoint p)  //See ei ole hea, kuna ei võimalda komakohti
 
 void Lask::set(const Lask *l)
 {
+    this->m_innerTen = l->isInnerTen();
     this->lask = l->lask;
+    this->m_shotTime = l->shotTime();
     this->x = l->x;
     this->y = l->y;
 }
@@ -208,11 +261,18 @@ QString Lask::stringY()
     return y;
 }
 
+QTime Lask::shotTime() const
+{
+    return m_shotTime;
+}
+
 QJsonObject Lask::toJson()
 {
     QJsonObject shotJson;
     shotJson["shotValue"] = getSLask();
     shotJson["shotX"] = X();
     shotJson["shotY"] = Y();
+    shotJson["shotTime"] = shotTime().toString();
+    shotJson["innerTen"] = isInnerTen();
     return shotJson;
 }
