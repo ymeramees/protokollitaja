@@ -9,7 +9,6 @@
 /// Protokollitaja lehelugeja vajab uuendamist:
 /// 1. Uue masinaga lugemine ei tööta?
 /// 2. Sisekümneid ei märgistata
-/// Laskude aegade ja sisekümne staatuse salvestamine faili ja sealt lugemine on tegemata
 ///
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1411,8 +1410,8 @@ void Protokollitaja::finaaliFail()
 #endif
 
         QString teateTekst; //Tekst, kus öeldakse, mille järgi laskurid finaali sorteeriti
-        if(seeLeht->reasLaskurid[0]->rajaNr->text() != "A" && seeLeht->reasLaskurid[0]->rajaNr->text() != "1" && seeLeht->reasLaskurid[0]->rajaNr->text() != "2"){
-            seeLeht->sorteeri(0);   //Kui radade nr'id ei alga A'ga, 1'st või 2'st, siis ilmselt ei ole finaali jaoks radu sisestatud ja tuleb summade järgi reastada
+        if(seeLeht->reasLaskurid[0]->rajaNr->text() != "A"){
+            seeLeht->sorteeri(0);   //Kui radade nr'id ei alga A'ga, siis ilmselt ei ole finaali jaoks radu sisestatud ja tuleb summade järgi reastada
             teateTekst = "Rajanumbreid ei leitud, laskurid reastati finaaliks tulemuse järgi.";
         }else teateTekst = "Leitud rajanumbrid, laskurid reastati finaaliks rajanumbri järgi.";
 
@@ -1618,7 +1617,7 @@ void Protokollitaja::kirjutaFail(QString failiNimi)
     if(fail.open(QIODevice::WriteOnly)){
             QDataStream valja(&fail);
             valja << (quint32)0x00FA3848;	//Kontrollarv
-            valja << (qint32)110;			//Millise faili versiooniga on tegu
+            valja << (qint32)111;			//Millise faili versiooniga on tegu
             valja.setVersion(QDataStream::Qt_4_3);
             valja << voistluseNimi/*.toUtf8()*/;
             valja << aegKoht/*.toUtf8()*/;
@@ -1628,6 +1627,7 @@ void Protokollitaja::kirjutaFail(QString failiNimi)
             valja << seaded->ui.sakiBox->currentIndex();
             valja << tabWidget->count();	//Töölehtede arv, et pärast teaks mitu lehte on vaja lugeda
             valja << jarjestamine;  //Kas järjestamine käib sisekümnetega või viimase seeria järgi
+            valja << seaded->ui.uploadTimeBox->value();
             for(int i = 0; i < tabWidget->count(); i++){
                     valja << tabWidget->tabText(i)/*.toUtf8()*/;	//Töölehe nimi
                     Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
@@ -1677,6 +1677,8 @@ qDebug() << "salvesta() leht->laskurid[" << i << "]->lasud[k].count() = " << leh
                                                 valja << leht->laskurid[i]->lasud[k][l]->get10Lask();
                                                 valja << leht->laskurid[i]->lasud[k][l]->stringX();
                                                 valja << leht->laskurid[i]->lasud[k][l]->stringY();
+                                                valja << leht->laskurid[i]->lasud[k][l]->shotTime();
+                                                valja << leht->laskurid[i]->lasud[k][l]->isInnerTen();
                                             }
                                     }
                                     valja << leht->laskurid[i]->getSumma()/*.toUtf8()*/ << leht->laskurid[i]->finaal->text()/*.toUtf8()*/;
@@ -2224,7 +2226,7 @@ void Protokollitaja::loefail()
             }
             uuendaSeaded();
             voibSulgeda = true;
-        }else if(versioon >= 101 && versioon <= 110){
+        }else if(versioon >= 101 && versioon <= 111){
             tabWidget->deleteLater();   //Vältimaks mälu leket, on vaja eelmine ära kustutada, aga see üksi ei ole piisav
             tabWidget = new QTabWidget(this);
             tabWidget->setTabPosition(QTabWidget::North);
@@ -2234,9 +2236,12 @@ void Protokollitaja::loefail()
             sisse >> aegKoht;
             int sakkideArv = 0, kirjutusA = 1, autosave = 1, aeg = 5, sakiAsukoht = 2;
             jarjestamine = KumneteArvuga;   //Vaja nullida, juhuks kui uues failis seda ei ole
+            int uploadTime = 30;
             sisse >> kirjutusA >> autosave >> aeg >> sakiAsukoht >> sakkideArv;
             if(versioon >= 108)
                 sisse >> jarjestamine;
+            if(versioon >=111)
+                sisse >> uploadTime;
             seaded->ui.voistluseNimi->setText(voistluseNimi);
 //            seaded->voistluseNimi = voistluseNimi;
             seaded->ui.aegKohtEdit->setText(aegKoht);
@@ -2246,6 +2251,7 @@ void Protokollitaja::loefail()
             seaded->ui.aegEdit->setValue(aeg);
             seaded->ui.sakiBox->setCurrentIndex(sakiAsukoht);
             seaded->ui.jarjestamiseBox->setCurrentIndex(jarjestamine);
+            seaded->ui.uploadTimeBox->setValue(uploadTime);
 #ifdef PROOV
     qDebug() << "loefail(): << voistluseNimi << aegKoht << kirjutusA << autosave << aeg << sakiAsukoht << sakkideArv";
     qDebug() << "loefail(): << " << voistluseNimi << " << " << aegKoht << " << " << kirjutusA << " << " << autosave << " << " << aeg << " << " << sakiAsukoht << " << " << sakkideArv;
@@ -2375,8 +2381,15 @@ void Protokollitaja::loefail()
                                     }
                                 }else if(versioon >= 109){
                                     QString x, y;
+                                    QTime shotTime;
+                                    bool isInnerTen = false;
                                     for(int l = 0; l < leht->laskurid[j]->lasud[k].count(); l++){
                                         sisse >> lask >> x >> y;
+                                        if(versioon >= 111){
+                                            sisse >> shotTime >> isInnerTen;
+                                            leht->laskurid[j]->lasud[k][l]->setShotTime(shotTime);
+                                            leht->laskurid[j]->lasud[k][l]->setInnerTen(isInnerTen);
+                                        }
                                         leht->laskurid[j]->lasud[k][l]->set10Lask(lask);
                                         leht->laskurid[j]->lasud[k][l]->setX(x);
                                         leht->laskurid[j]->lasud[k][l]->setY(y);
@@ -2578,7 +2591,7 @@ void Protokollitaja::loeSeaded()
                                             QMessageBox::Ok);
                             return;
                     }
-                    if(versioon >= 100 && versioon <= 110){
+                    if(versioon >= 100 && versioon <= 111){
                             QString rida;
                             //char *rida2;
                             sisse >> rida;
