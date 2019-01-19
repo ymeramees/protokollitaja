@@ -4615,6 +4615,8 @@ void Protokollitaja::uploadResults()
     QUrl url;
     url.setScheme("http");
     url.setHost("ymeramees.no-ip.org");
+    //url.setPath("/api/v1/competitions");
+    //url.setPort(3005);
     url.setPath("/rapla");
     url.setPort(3004);
 
