@@ -6,5 +6,7 @@ TEMPLATE = app
 
 SOURCES += *.cpp \
     ../src/scoringmachineconnection.cpp \
+    ../../protokollitaja/src/lask.cpp
 
-HEADERS += ../src/scoringmachineconnection.h
+HEADERS += ../src/scoringmachineconnection.h \
+    ../../protokollitaja/src/lask.h
