@@ -4595,6 +4595,9 @@ QJsonObject Protokollitaja::toExportJson()
 {
     QJsonObject json;
     json["token"] = "placeholder for future token34";
+#ifdef PROOV
+    json["id"] = "5c48c8334cfa122159c9fe49";
+#endif
     json["competitionName"] = voistluseNimi;
     json["timeAndPlace"] = aegKoht;
 
@@ -4615,10 +4618,10 @@ void Protokollitaja::uploadResults()
     QUrl url;
     url.setScheme("http");
     url.setHost("ymeramees.no-ip.org");
-    //url.setPath("/api/v1/competitions");
-    //url.setPort(3005);
-    url.setPath("/rapla");
-    url.setPort(3004);
+    url.setPath("/api/v1/competitions");
+    url.setPort(3005);
+//    url.setPath("/rapla");
+//    url.setPort(3004);
 
     QNetworkRequest request;
     request.setUrl(url);

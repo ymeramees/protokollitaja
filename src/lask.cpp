@@ -6,14 +6,35 @@ Lask::Lask(/*QWidget *parent*/)/* : QWidget(parent)*/
 //    hide();
 }
 
+Lask::Lask(int shot10Times, QString x, QString y, bool innerTen, QTime shotTime)
+{
+    lask = shot10Times;
+    m_x = x;
+    m_y = y;
+    m_innerTen = innerTen;
+    m_shotTime = shotTime;
+}
+
 void Lask::clear()
 {
     m_innerTen = false;
     lask = -999;
 //    flask = -1;
     m_shotTime = QTime();
-    x = "-999";
-    y = "-999";
+    m_x = "-999";
+    m_y = "-999";
+}
+
+bool Lask::equals(const Lask other) const
+{
+    if(lask == other.get10Lask()
+            && m_innerTen == other.isInnerTen()
+            && m_x.compare(other.stringX()) == 0
+            && m_y.compare(other.stringY()) == 0
+            && m_shotTime.toString().compare(other.shotTime().toString()) == 0)
+        return true;
+    else
+        return false;
 }
 
 int Lask::getILask() const
@@ -52,23 +73,24 @@ bool Lask::isInnerTen() const
 
 bool Lask::isEmpty()
 {
-    if(lask == -999 && x == "-999" && y == "-999")
+    if(lask == -999 && m_x == "-999" && m_y == "-999")
         return true;
     else return false;
 }
 
-float Lask::X()
+float Lask::X() const
 {
     bool onnestus = false;
     float fx = 0;
-    fx = x.toFloat(&onnestus);
+    fx = m_x.toFloat(&onnestus);
     if(!onnestus){
-        if(x.contains(',')){
-            x.replace(',', '.');
-        }else if(x.contains('.')){
-            x.replace('.', ',');
+        QString sx = m_x;
+        if(sx.contains(',')){
+            sx.replace(',', '.');
+        }else if(sx.contains('.')){
+            sx.replace('.', ',');
         }
-        fx = x.toFloat(&onnestus);
+        fx = sx.toFloat(&onnestus);
     }
     return fx;
 }
@@ -78,18 +100,19 @@ float Lask::X()
 //    return x.toInt();
 //}
 
-float Lask::Y()
+float Lask::Y() const
 {
     bool onnestus = false;
     float fy = 0;
-    fy = y.toFloat(&onnestus);
+    fy = m_y.toFloat(&onnestus);
     if(!onnestus){
-        if(y.contains(',')){
-            y.replace(',', '.');
-        }else if(y.contains('.')){
-            y.replace('.', ',');
+        QString sy = m_y;
+        if(sy.contains(',')){
+            sy.replace(',', '.');
+        }else if(sy.contains('.')){
+            sy.replace('.', ',');
         }
-        fy = y.toFloat(&onnestus);
+        fy = sy.toFloat(&onnestus);
     }
     return fy;
 }
@@ -187,13 +210,15 @@ void Lask::setMX(QString s)
 
 void Lask::setX(float k)
 {
-    x = QString("%1").arg(k);
+    m_x = QString("%1").arg(k);
+    m_x.replace('.', ',');
 //    x = k;
 }
 
 void Lask::setX(QString s)
 {
-    x = s;
+    m_x = s;
+    m_x.replace('.', ',');
 //    bool onnestus = true;
 //    x = s.toFloat(&onnestus);
 //    if(!onnestus)
@@ -221,13 +246,15 @@ void Lask::setMY(QString s)
 
 void Lask::setY(float k)
 {
-    y = QString("%1").arg(k);
+    m_y = QString("%1").arg(k);
+    m_y.replace('.', ',');
 //    y = k;
 }
 
 void Lask::setY(QString s)
 {
-    y = s;
+    m_y = s;
+    m_y.replace('.', ',');
 //    bool onnestus = true;
 //    y = s.toFloat(&onnestus);
 //    if(!onnestus)
@@ -238,8 +265,8 @@ void Lask::setY(QString s)
 
 void Lask::setXY(QPoint p)  //See ei ole hea, kuna ei võimalda komakohti
 {
-    x = QString("%1").arg(p.x());
-    y = QString("%1").arg(p.y());
+    m_x = QString("%1").arg(p.x());
+    m_y = QString("%1").arg(p.y());
 }
 
 void Lask::set(const Lask *l)
@@ -247,18 +274,18 @@ void Lask::set(const Lask *l)
     this->m_innerTen = l->isInnerTen();
     this->lask = l->lask;
     this->m_shotTime = l->shotTime();
-    this->x = l->x;
-    this->y = l->y;
+    this->m_x = l->m_x;
+    this->m_y = l->m_y;
 }
 
-QString Lask::stringX()
+QString Lask::stringX() const
 {
-    return x;
+    return m_x;
 }
 
-QString Lask::stringY()
+QString Lask::stringY() const
 {
-    return y;
+    return m_y;
 }
 
 QTime Lask::shotTime() const
@@ -275,4 +302,12 @@ QJsonObject Lask::toJson()
     shotJson["shotTime"] = shotTime().toString();
     shotJson["innerTen"] = isInnerTen();
     return shotJson;
+}
+
+bool Lask::operator ==(const Lask other) const
+{
+    if(equals(other))
+        return true;
+    else
+        return false;
 }

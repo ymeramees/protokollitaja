@@ -406,6 +406,7 @@ bool Leht::toBeUploaded()
 QJsonObject Leht::toExportJson()
 {
     QJsonObject sheetJson;
+    sheetJson["id"] = QString("%1").arg(leheIndeks);
     sheetJson["eventName"] = ekraaniNimi;
     sorteeri(0);
     QJsonArray competitorsArray;

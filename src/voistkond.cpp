@@ -54,6 +54,7 @@ void Voistkond::otsiNime()
 QJsonObject Voistkond::toExportJson()
 {
     QJsonObject teamJson;
+    teamJson["id"] =
     teamJson["teamName"] = nimi->text();
 
     QJsonArray teamMembers;
@@ -68,6 +69,10 @@ QJsonObject Voistkond::toExportJson()
     }
     teamJson["teamMembers"] = teamMembers;
     teamJson["totalResult"] = summa->text();
+    if(markus->text() == "Märkused")
+        teamJson["remarks"] = "";
+    else
+        teamJson["remarks"] = markus->text();
 
     return teamJson;
 }

@@ -1199,6 +1199,7 @@ void Laskur::teataMuudatusest()
 QJsonObject Laskur::toExportJson()
 {
     QJsonObject json;
+    json["id"] = QString("%1").arg(id);
     json["firstName"] = eesNimi->text();
     json["lastName"] = perekNimi->text();
     json["birthYear"] = sunniAasta->text();
@@ -1217,7 +1218,12 @@ QJsonObject Laskur::toExportJson()
     }
     json["series"] = seriesArray;
     json["totalResult"] = summa->text();
+    json["innerTens"] = kumned->text();
     json["finals"] = finaal->text();
+    if(markus->text() == "Märkused")
+        json["remarks"] = "";
+    else
+        json["remarks"] = markus->text();
     return json;
 }
 

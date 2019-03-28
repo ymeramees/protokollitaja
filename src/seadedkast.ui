@@ -239,7 +239,7 @@
      <item>
       <widget class="QSpinBox" name="uploadTimeBox">
        <property name="minimum">
-        <number>0</number>
+        <number>30</number>
        </property>
        <property name="maximum">
         <number>999</number>
