@@ -2,6 +2,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 /// ToDo list:
+/// Connecting to machines
 /// Choice of scoring machine type process
 /// Review and check extractRMIII function result for air pistol
 /////////////////////////////////////////////////////////////////////////////
@@ -21,9 +22,15 @@ ScoringMachineConnection::ScoringMachineConnection(QObject *parent) : QObject(pa
 {
     m_readTimer.setInterval(100);
     m_readTimer.setSingleShot(false);
+    connect(&m_readTimer, &QTimer::timeout, this, &ScoringMachineConnection::readFromMachine);
 
     m_sendTimer.setInterval(20);
     m_sendTimer.setSingleShot(true);
+    connect(&m_sendTimer, &QTimer::timeout, this, qOverload<>(&ScoringMachineConnection::sendToMachine));
+
+    m_settingsTimer.setInterval(1000);
+    m_settingsTimer.setSingleShot(true);
+    connect(&m_settingsTimer, &QTimer::timeout, this, &ScoringMachineConnection::sendSettings);
 
     m_serialPort.close();   // Make sure things are clear
 }
@@ -154,9 +161,38 @@ Lask ScoringMachineConnection::extractRMIIIShot(QString shotInfo)
     return shot;
 }
 
-Lask ScoringMachineConnection::extractRMIVShot(QString)
+Lask ScoringMachineConnection::extractRMIVShot(QString shotInfo)
 {
+    Lask shot;
+    QStringList list = shotInfo.split(';');    //SCH=1;7.2;2973.0;164.7;G#CR
+    if(list.count() >= 4){
+        bool onnestus = false;
+        QLineF coordinates = QLineF::fromPolar(list.at(2).left(list.at(2).indexOf('.')).toInt(), list.at(3).toDouble(&onnestus) - 90);   // 0 in QLineF is at 3 o'clock, but in Disag it is at 12 o'clock
+        if(!onnestus)   // If with point cannot be converted to double, needs to be replaced with dot
+            coordinates = QLineF::fromPolar(list.at(2).toInt(), list.value(3).replace(".", ",").toDouble(&onnestus) - 90);
 
+        if(onnestus){
+            shot.setLask(list.at(1));
+            qreal fx = 0, fy = 0;
+            fx = coordinates.p2().x();
+            fy = coordinates.p2().y();
+            fx = qRound(fx);
+            fy = qRound(fy);
+            shot.setX(float(fx / 100));
+            shot.setY(float(fy / 100));
+        }
+    }
+    return shot;
+}
+
+int ScoringMachineConnection::noOfShotsPerTarget() const
+{
+    return m_noOfShotsPerTarget;
+}
+
+QString ScoringMachineConnection::portName() const
+{
+    return m_portName;
 }
 
 void ScoringMachineConnection::readFromMachine()
@@ -173,7 +209,7 @@ void ScoringMachineConnection::readFromMachine()
 
 void ScoringMachineConnection::readFromRMIII()
 {
-    static bool firstTime = true;   // This is needed to send setting string to RMIII twice, as it might not react to first attempt.
+    //static bool firstTime = true;   // This is needed to send settings to RMIII twice, as it might not react to first attempt.
 
     if(m_serialPort.bytesAvailable() > 0) {
         static QString buffer;
@@ -190,14 +226,125 @@ void ScoringMachineConnection::readFromRMIII()
 
         if(!currentText.contains("START") && !currentText.contains("SCHEIBE") && !currentText.contains("Keine")
                 && currentText.contains(';')) {
-
+            Lask shot = extractRMIIIShot(currentText);
+            if(!shot.isEmpty())
+                emit shotRead(shot);
         }
     }
 }
 
 void ScoringMachineConnection::readFromRMIV()
 {
+    if(m_serialPort.bytesAvailable() > 0) {
+        static QString buffer;
+        QString currentText;
+        buffer.append(m_serialPort.readAll());
+        if(buffer.contains(CR)) {
+            currentText = buffer.left(buffer.indexOf(CR) + 1);
+            currentText.replace(STX, "");
+            if(currentText.contains("SCH=")){
+                Lask shot = extractRMIVShot(currentText);
+                if(!shot.isEmpty())
+                    emit shotRead(shot);
+                m_sendingStage = 4;  // To reply with confirmation
+                sendToMachine("");  // Sends ACK
+//                m_settingsTimer.setInterval(600);   // Here delay before setting can be shorter
+                m_settingsTimer.start();    // Machine needs to be set, in ordet it to take next target in
+            }
+            buffer.remove(0, buffer.indexOf(CR) + 1);
+        }else if(buffer.contains(STX)){
+            currentText = buffer.left(buffer.indexOf(STX) + 1);
+            currentText.replace(STX, "STX");
+            if(m_sendingStage == 1){
+//#ifdef PROOV
+//        qDebug() << "saabus: STX\n";
+//#endif
+                m_sendingStage = 2;  // STX received
+//#ifdef PROOV
+//        qDebug() << "saatmiseEtapp = 2";
+//#endif
+                sendToMachine("");  // If STX was received, then probably the machine is ready to receive text
+            }
+            buffer.remove(0, buffer.indexOf(STX) + 1);
+        }else if(buffer.contains(NAK)){
+            currentText = buffer.left(buffer.indexOf(NAK) + 1);
+            currentText.replace(NAK, "NAK");
+            if(m_sendingStage == 3){
+//#ifdef PROOV
+//        qDebug() << "saabus: NAK\n";
+//#endif
+                m_sendingStage = 0;  // NAK received, so something is wrong -> initial stage
+//#ifdef PROOV
+//        qDebug() << "saatmiseEtapp = 0";
+//#endif
+            }
+            buffer.remove(0, buffer.indexOf(NAK) + 1);
+        }else if(buffer.contains(ACK)){
+            currentText = buffer.left(buffer.indexOf(ACK) + 1);
+            currentText.replace(ACK, "ACK");
+            if(m_sendingStage == 3){
+//#ifdef PROOV
+//        qDebug() << "saabus: ACK";
+//#endif
+                m_sendingStage = 0;  // ACK received -> initial stage
+//#ifdef PROOV
+//        qDebug() << "saatmiseEtapp = 0";
+//#endif
+            }
+            buffer.remove(0, buffer.indexOf(ACK) + 1);
+        }else
+            return;
+    }
+}
 
+void ScoringMachineConnection::sendSettings()
+{
+    m_settingsTimer.setInterval(1000);  // To restore initial value
+
+    QString settingString;
+    switch(m_scoringMachineType) {
+    case RMIII:
+        settingString = "111111111";
+        switch(m_targetType){   // Set target type
+        case AirRifle:
+            settingString.replace(0, 1, "1");
+            break;
+        case AirPistol:
+            settingString.replace(0, 1, "2");
+            break;
+        case SmallboreRifle:
+            settingString.replace(0, 1, "6");
+            break;
+        }
+        settingString.replace(8, 1, QString("%1").arg(m_noOfShotsPerTarget));
+        settingString.replace(3, 1, "2");
+        sendToMachine(settingString);
+        break;
+    case RMIV:
+        m_sendingStage = 0;
+        // Examples: "SCH=KK50;TEA=KT;RIA=ZR;SSC=2;SZI=10;SGE=10;"; //"SCH=LP;TEA=KT;TEG=1500;SSC=2;SGE=10;";//"SCH=LGES;TEA=ZT;SSC=1;SZI=10;SGE=10;KSD;";
+        QString settingString;
+        switch(m_targetType){
+        case AirRifle: settingString = "SCH=LGES;";
+            break;
+        case AirPistol: settingString = "SCH=LP;";
+            break;
+        case SmallboreRifle: settingString = "SCH=KK50;";
+            break;
+        default : settingString = "SCH=LGES;";
+        }
+        settingString.append("TEA=KT;RIA=ZR;"); //Teiler with full rings and shot value with tenths
+        settingString.append(QString("SSC=%1;").arg(m_noOfShotsPerTarget));  //Laskude arv lehes
+        settingString.append(QString("SGE=%1;SZI=%1;").arg(10));    // No of shots in series, currently always 10
+//    #ifdef PROOV
+//    //    s.append("KSD;");
+//        qDebug() << "Seadistamine: " << s;
+//    #endif
+    //    if(!ui->trukkimiseBox->isChecked())   //Kas trükkida lehele lasud ja tulemused või ei
+    //        s.append("KSD;");
+        sendToMachine(settingString);
+        break;
+    }
 }
 
 void ScoringMachineConnection::sendToMachine()
@@ -211,7 +358,7 @@ void ScoringMachineConnection::sendToMachine()
         break;
     case 2:
         if(m_scoringMachineType == RMIV)
-            m_dataToSend.append(CRC(&m_dataToSend));
+            m_dataToSend.append(char(CRC(&m_dataToSend)));
         m_dataToSend.append(CR);
         m_serialPort.write(m_dataToSend);
         emit dataSent(m_dataToSend);
@@ -237,6 +384,16 @@ void ScoringMachineConnection::sendToMachine(QString data)
     m_sendTimer.start();
 }
 
+void ScoringMachineConnection::setNoOfShotsPerTarget(int noOfShotsPerTarget)
+{
+    m_noOfShotsPerTarget = noOfShotsPerTarget;
+}
+
+void ScoringMachineConnection::setPortName(const QString &portName)
+{
+    m_portName = portName;
+}
+
 void ScoringMachineConnection::setScoringMachineType(int machineType)
 {
     m_scoringMachineType = machineType;
@@ -245,6 +402,11 @@ void ScoringMachineConnection::setScoringMachineType(int machineType)
 void ScoringMachineConnection::setTargetType(int targetType)
 {
     m_targetType = targetType;
+}
+
+int ScoringMachineConnection::targetType() const
+{
+    return m_targetType;
 }
 
 ScoringMachineConnection::~ScoringMachineConnection()
