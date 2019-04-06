@@ -17,6 +17,8 @@ public:
 private slots:
     void initTestCase();
     void cleanupTestCase();
+    void test_connectToMachineFailedAttempt();
+    void test_connectToMachineWithoutPort();
     void test_CRCreturnValue();
     void test_extractRMIIIShot();
     void test_extractRMIVShot();
@@ -40,6 +42,41 @@ void ScoringMachineConnectionTest::initTestCase()
 void ScoringMachineConnectionTest::cleanupTestCase()
 {
 
+}
+
+void ScoringMachineConnectionTest::test_connectToMachineFailedAttempt(){
+    ScoringMachineConnection machine;
+    QSignalSpy spy(&machine, SIGNAL(connectionStatusChanged(QString)));
+
+    machine.setPortName("COM1");
+    machine.connectToMachine();
+
+    QCOMPARE(spy.count(), 1);
+    QList<QVariant> statusMessages = spy.takeFirst();
+    QVERIFY(statusMessages.at(0).toString().compare("Ühendamine: RMIII, COM1") == 0);
+
+    QVERIFY(spy.wait(500));
+
+    QCOMPARE(spy.count(), 1);
+    statusMessages = spy.takeFirst();
+    QVERIFY(statusMessages.at(0).toString().compare("Ühendamine: RMIV, COM1") == 0);
+
+    QVERIFY(spy.wait(500));
+
+    QCOMPARE(spy.count(), 1);
+    statusMessages = spy.takeFirst();
+    QVERIFY(statusMessages.at(0).toString().compare("Viga, ei õnnestu ühenduda ei RMIII ega RMIV'ga!") == 0);
+}
+
+void ScoringMachineConnectionTest::test_connectToMachineWithoutPort(){
+    ScoringMachineConnection machine;
+    QSignalSpy spy(&machine, SIGNAL(connectionStatusChanged(QString)));
+
+    machine.connectToMachine();
+
+    QCOMPARE(spy.count(), 1);
+    QList<QVariant> statusMessages = spy.takeFirst();
+    QVERIFY(statusMessages.at(0).toString().compare("Viga: Pordi nime pole määratud, ei saa ühenduda!") == 0);
 }
 
 void ScoringMachineConnectionTest::test_CRCreturnValue()

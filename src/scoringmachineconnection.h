@@ -27,13 +27,14 @@ public:
     enum TargetType {AirRifle, AirPistol, SmallboreRifle};
 
 private:
-    bool m_connected;   // Shows if scoring machine is in connected stage
-    bool m_machineChoiceInProgress;
+    bool m_connected = false;   // Shows if scoring machine is in connected stage
+    bool m_firstAttempt = true;    // Shows if it is a first attempt to connect to a machine
+    bool m_machineChoiceInProgress = false;
     int m_noOfShotsPerTarget;
-    int m_scoringMachineType;
-    int m_sendingStage;   // For RM-IV, showing in which stage sending currently is:
+    int m_scoringMachineType = -1;
+    int m_sendingStage = 0;   // For RM-IV, showing in which stage sending currently is:
     // 0 - initial/ACK received (end), 1 -ENQ sent, 2 - STX received, 3 - text sent, 4 - text received, need to reply ACK
-    int shotNo; // Current shot number in series
+    int shotNo = 0; // Current shot number in series
     int m_targetType = -1;
 
     QString m_portName;
