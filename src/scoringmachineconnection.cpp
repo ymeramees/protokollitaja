@@ -2,8 +2,6 @@
 
 /////////////////////////////////////////////////////////////////////////////
 /// ToDo list:
-/// Connecting to machines
-/// Choice of scoring machine type process
 /// Review and check extractRMIII function result for air pistol
 /////////////////////////////////////////////////////////////////////////////
 
@@ -47,6 +45,13 @@ void ScoringMachineConnection::closeConnection()
 
 void ScoringMachineConnection::connectToMachine()
 {
+    if(m_portName.isEmpty()){
+        emit connectionStatusChanged(tr("Viga: Pordi nime pole määratud, ei saa ühenduda!"));
+        return;
+    }
+
+    m_firstAttempt = true;  // It is first time to connect to each machine
+
     switch(m_scoringMachineType) {
     case RMIII:
         connectToRMIII();
@@ -54,6 +59,9 @@ void ScoringMachineConnection::connectToMachine()
     case RMIV:
         connectToRMIV();
         break;
+    default:
+        m_machineChoiceInProgress = true;
+        connectToRMIII();
     }
 }
 
@@ -101,7 +109,6 @@ void ScoringMachineConnection::connectToRMIV()
     m_sendingStage = 0;
     sendToMachine("SNR=");
     m_readTimer.start();
-    m_connected = true;
 }
 
 int ScoringMachineConnection::CRC(const QByteArray *s) const
@@ -204,12 +211,14 @@ void ScoringMachineConnection::readFromMachine()
     case RMIV:
         readFromRMIV();
         break;
+    default:
+        readFromRMIII();
     }
 }
 
 void ScoringMachineConnection::readFromRMIII()
 {
-    //static bool firstTime = true;   // This is needed to send settings to RMIII twice, as it might not react to first attempt.
+//    static bool firstTime = true;   // This is needed to send settings to RMIII twice, as it might not react to first attempt.
 
     if(m_serialPort.bytesAvailable() > 0) {
         static QString buffer;
@@ -221,8 +230,11 @@ void ScoringMachineConnection::readFromRMIII()
         }else
             return;
 
-        m_connected = true; // If text was received, then connection is established
-        m_machineChoiceInProgress = false;
+        if(!m_connected) {
+            m_connected = true; // If text was received, then connection is established
+            m_machineChoiceInProgress = false;
+            emit connectionStatusChanged(tr("Ühendatud: RMIII"));
+        }
 
         if(!currentText.contains("START") && !currentText.contains("SCHEIBE") && !currentText.contains("Keine")
                 && currentText.contains(';')) {
@@ -230,11 +242,21 @@ void ScoringMachineConnection::readFromRMIII()
             if(!shot.isEmpty())
                 emit shotRead(shot);
         }
+    }else if(m_machineChoiceInProgress){
+        if(!m_firstAttempt) {  // RMIII might not reply to first attempt, therefore, it is worth to try again
+            m_scoringMachineType = ScoringMachineType::RMIV;    // If nothing was received, it is probably RMIV
+            connectToMachine();
+        }
+        m_firstAttempt = false;
+//        firstTime = false;
+//        connectToMachine();   // Is it really needed?
     }
 }
 
 void ScoringMachineConnection::readFromRMIV()
 {
+//    static bool firstTime = true;   // Give some time to machine to reply and read once again
+
     if(m_serialPort.bytesAvailable() > 0) {
         static QString buffer;
         QString currentText;
@@ -250,6 +272,10 @@ void ScoringMachineConnection::readFromRMIV()
                 sendToMachine("");  // Sends ACK
 //                m_settingsTimer.setInterval(600);   // Here delay before setting can be shorter
                 m_settingsTimer.start();    // Machine needs to be set, in ordet it to take next target in
+            }else if(currentText.contains("SNR=")) {
+                m_connected = true;
+                m_machineChoiceInProgress = false;
+                emit connectionStatusChanged(tr("Ühendatud: RMIV"));
             }
             buffer.remove(0, buffer.indexOf(CR) + 1);
         }else if(buffer.contains(STX)){
@@ -294,6 +320,13 @@ void ScoringMachineConnection::readFromRMIV()
             buffer.remove(0, buffer.indexOf(ACK) + 1);
         }else
             return;
+    }else if(m_machineChoiceInProgress) {
+        if(!m_firstAttempt) {
+            m_scoringMachineType = -1;
+            m_machineChoiceInProgress = false;
+            emit connectionStatusChanged(tr("Viga, ei õnnestu ühenduda ei RMIII ega RMIV'ga!"));
+        }
+        m_firstAttempt = false;
     }
 }
 
