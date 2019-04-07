@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QLineF>
+#include <QtMath>
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 
@@ -15,6 +16,7 @@ class ScoringMachineConnection : public QObject
 public:
     explicit ScoringMachineConnection(QObject *parent = nullptr);
     ~ScoringMachineConnection();
+    bool calculateIsInnerTen(float x, float y);
     int noOfShotsPerTarget() const;
     QString portName() const;
     void setNoOfShotsPerTarget(int noOfShotsPerTarget);

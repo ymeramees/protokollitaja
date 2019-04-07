@@ -17,6 +17,7 @@ public:
 private slots:
     void initTestCase();
     void cleanupTestCase();
+    void test_calculateIsInnerTen();
     void test_connectToMachineFailedAttempt();
     void test_connectToMachineWithoutPort();
     void test_CRCreturnValue();
@@ -48,6 +49,28 @@ void ScoringMachineConnectionTest::initTestCase()
 void ScoringMachineConnectionTest::cleanupTestCase()
 {
 
+}
+
+void ScoringMachineConnectionTest::test_calculateIsInnerTen()
+{
+    ScoringMachineConnection machine;
+
+    machine.setTargetType(ScoringMachineConnection::AirRifle);
+    QVERIFY(machine.calculateIsInnerTen(float(0.49), float(0.59)));
+    QVERIFY(machine.calculateIsInnerTen(float(0.07), float(0.90)));
+    QVERIFY(!(machine.calculateIsInnerTen(float(0.35), float(1.99))));
+    QVERIFY(!(machine.calculateIsInnerTen(float(15.35), float(-0.99))));
+
+    machine.setTargetType(ScoringMachineConnection::AirPistol);
+    QVERIFY(machine.calculateIsInnerTen(float(-4.5), float(0.95)));
+    QVERIFY(!(machine.calculateIsInnerTen(float(15.35), float(9.59))));
+    QVERIFY(!(machine.calculateIsInnerTen(float(1.33), float(5.17))));
+
+    machine.setTargetType(ScoringMachineConnection::SmallboreRifle);
+    QVERIFY(machine.calculateIsInnerTen(float(2.22), float(3.21)));
+    QVERIFY(machine.calculateIsInnerTen(float(-0.74), float(-0.94)));
+    QVERIFY(!(machine.calculateIsInnerTen(float(-2.28), float(-6.54))));
+    QVERIFY(!(machine.calculateIsInnerTen(float(-4.75), float(7.38))));
 }
 
 void ScoringMachineConnectionTest::test_connectToMachineFailedAttempt(){
@@ -139,7 +162,8 @@ void ScoringMachineConnectionTest::test_extractRMIVShot()
     QCOMPARE(machine.extractRMIIIShot("4;6.0;-;4.20"), empty);
 }
 
-void ScoringMachineConnectionTest::test_sendSettingsRMIIIAirPistol(){
+void ScoringMachineConnectionTest::test_sendSettingsRMIIIAirPistol()
+{
     ScoringMachineConnection machine;
     machine.setTargetType(ScoringMachineConnection::AirPistol);
     machine.setScoringMachineType(ScoringMachineConnection::RMIII);
@@ -171,7 +195,8 @@ void ScoringMachineConnectionTest::test_sendSettingsRMIIIAirPistol(){
     QVERIFY(statusMessages.at(0).toString().compare("Seadisamine: 21121111B") == 0);
 }
 
-void ScoringMachineConnectionTest::test_sendSettingsRMIIIAirRifle(){
+void ScoringMachineConnectionTest::test_sendSettingsRMIIIAirRifle()
+{
     ScoringMachineConnection machine;
     machine.setTargetType(ScoringMachineConnection::AirRifle);
     machine.setScoringMachineType(ScoringMachineConnection::RMIII);
@@ -203,7 +228,8 @@ void ScoringMachineConnectionTest::test_sendSettingsRMIIIAirRifle(){
     QVERIFY(statusMessages.at(0).toString().compare("Seadisamine: 11121111B") == 0);
 }
 
-void ScoringMachineConnectionTest::test_sendSettingsRMIIISmallboreRifle(){
+void ScoringMachineConnectionTest::test_sendSettingsRMIIISmallboreRifle()
+{
     ScoringMachineConnection machine;
     machine.setTargetType(ScoringMachineConnection::SmallboreRifle);
     machine.setScoringMachineType(ScoringMachineConnection::RMIII);
@@ -235,7 +261,8 @@ void ScoringMachineConnectionTest::test_sendSettingsRMIIISmallboreRifle(){
     QVERIFY(statusMessages.at(0).toString().compare("Seadisamine: 61121111B") == 0);
 }
 
-void ScoringMachineConnectionTest::test_sendSettingsRMIVAirPistol(){
+void ScoringMachineConnectionTest::test_sendSettingsRMIVAirPistol()
+{
     ScoringMachineConnection machine;
     machine.setTargetType(ScoringMachineConnection::AirPistol);
     machine.setScoringMachineType(ScoringMachineConnection::RMIV);
@@ -253,7 +280,8 @@ void ScoringMachineConnectionTest::test_sendSettingsRMIVAirPistol(){
     }
 }
 
-void ScoringMachineConnectionTest::test_sendSettingsRMIVAirRifle(){
+void ScoringMachineConnectionTest::test_sendSettingsRMIVAirRifle()
+{
     ScoringMachineConnection machine;
     machine.setTargetType(ScoringMachineConnection::AirRifle);
     machine.setScoringMachineType(ScoringMachineConnection::RMIV);
@@ -271,7 +299,8 @@ void ScoringMachineConnectionTest::test_sendSettingsRMIVAirRifle(){
     }
 }
 
-void ScoringMachineConnectionTest::test_sendSettingsRMIVSmallboreRifle(){
+void ScoringMachineConnectionTest::test_sendSettingsRMIVSmallboreRifle()
+{
     ScoringMachineConnection machine;
     machine.setTargetType(ScoringMachineConnection::SmallboreRifle);
     machine.setScoringMachineType(ScoringMachineConnection::RMIV);

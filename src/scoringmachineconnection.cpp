@@ -33,6 +33,30 @@ ScoringMachineConnection::ScoringMachineConnection(QObject *parent) : QObject(pa
     m_serialPort.close();   // Make sure things are clear
 }
 
+bool ScoringMachineConnection::calculateIsInnerTen(const float x, const float y)
+{
+    int iX = qRound(x * 100);
+    int iY = qRound(y * 100);
+    int centerDistance = qRound(qSqrt(iX*iX + iY*iY));
+
+    switch(m_targetType) {
+    case AirRifle :
+        if(centerDistance <= 200)
+            return true;
+        break;
+    case AirPistol :
+        if(centerDistance <= 475)
+            return true;
+        break;
+    case SmallboreRifle :
+        if(centerDistance <= 530)
+            return true;
+        break;
+    }
+
+    return false;
+}
+
 void ScoringMachineConnection::closeConnection()
 {
     m_dataToSend = QString("EXIT").toLatin1();
@@ -164,6 +188,7 @@ Lask ScoringMachineConnection::extractRMIIIShot(QString shotInfo)
         shot.setLask(list.at(1));
         shot.setX(fx);
         shot.setY(fy);
+        shot.setInnerTen(calculateIsInnerTen(fx, fy));
     }
     return shot;
 }
@@ -185,8 +210,11 @@ Lask ScoringMachineConnection::extractRMIVShot(QString shotInfo)
             fy = coordinates.p2().y();
             fx = qRound(fx);
             fy = qRound(fy);
-            shot.setX(float(fx / 100));
-            shot.setY(float(fy / 100));
+            fx /= 100;
+            fy /= 100;
+            shot.setX(float(fx));
+            shot.setY(float(fy));
+            shot.setInnerTen(calculateIsInnerTen(float(fx), float(fy)));
         }
     }
     return shot;
