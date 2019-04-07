@@ -349,14 +349,12 @@ void ScoringMachineConnection::sendSettings()
             settingString.replace(0, 1, "6");
             break;
         }
-        settingString.replace(8, 1, QString("%1").arg(m_noOfShotsPerTarget));
+        settingString.replace(8, 1, QString("%1").arg(m_noOfShotsPerTarget, 0, 16).toUpper());
         settingString.replace(3, 1, "2");
-        sendToMachine(settingString);
         break;
     case RMIV:
         m_sendingStage = 0;
         // Examples: "SCH=KK50;TEA=KT;RIA=ZR;SSC=2;SZI=10;SGE=10;"; //"SCH=LP;TEA=KT;TEG=1500;SSC=2;SGE=10;";//"SCH=LGES;TEA=ZT;SSC=1;SZI=10;SGE=10;KSD;";
-        QString settingString;
         switch(m_targetType){
         case AirRifle: settingString = "SCH=LGES;";
             break;
@@ -375,9 +373,12 @@ void ScoringMachineConnection::sendSettings()
 //    #endif
     //    if(!ui->trukkimiseBox->isChecked())   //Kas trükkida lehele lasud ja tulemused või ei
     //        s.append("KSD;");
-        sendToMachine(settingString);
+//        sendToMachine(settingString);
         break;
     }
+
+    sendToMachine(settingString);
+    emit connectionStatusChanged("Seadisamine: " + settingString);
 }
 
 void ScoringMachineConnection::sendToMachine()
