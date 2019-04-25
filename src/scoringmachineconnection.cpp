@@ -31,6 +31,7 @@ ScoringMachineConnection::ScoringMachineConnection(QObject *parent) : QObject(pa
     connect(&m_settingsTimer, &QTimer::timeout, this, &ScoringMachineConnection::sendSettings);
 
     m_serialPort.close();   // Make sure things are clear
+    m_scoringMachineType = RMIII;
 }
 
 bool ScoringMachineConnection::calculateIsInnerTen(const float x, const float y)
@@ -220,6 +221,20 @@ Lask ScoringMachineConnection::extractRMIVShot(QString shotInfo)
     return shot;
 }
 
+void ScoringMachineConnection::extraShotInTarget()
+{
+    // TODO to be implemented
+//    QString s = "111111111";
+//    if(ui->leheCombo->currentIndex() < 2)
+//        s.replace(0, 1, QString("%1").arg(ui->leheCombo->currentIndex() + 1));
+//    else s.replace(0, 1, "6");
+//    s.replace(8, 1, QString("%1").arg(ui->laskudeBox->value() + 1));
+////    if(ui->kumnendikegaBox->isChecked())   //Kas lugeda laske kümnendiku täpsusega või mitte
+////        s.replace(3, 1, "2");
+//    saada(s);
+//    oliLiigneLask = true;   //Siis loe() funktsioon teab, et tuleb uuesti seadistada
+}
+
 int ScoringMachineConnection::noOfShotsPerTarget() const
 {
     return m_noOfShotsPerTarget;
@@ -255,6 +270,7 @@ void ScoringMachineConnection::readFromRMIII()
         if(buffer.contains(CR)) {
             currentText = buffer.left(buffer.indexOf(CR) + 1);
             buffer.remove(0, buffer.indexOf(CR) + 1);
+            emit connectionStatusChanged(tr("RMIII: ") + currentText);
         }else
             return;
 
@@ -292,6 +308,7 @@ void ScoringMachineConnection::readFromRMIV()
         if(buffer.contains(CR)) {
             currentText = buffer.left(buffer.indexOf(CR) + 1);
             currentText.replace(STX, "");
+            emit connectionStatusChanged(tr("RMIV: ") + currentText);
             if(currentText.contains("SCH=")){
                 Lask shot = extractRMIVShot(currentText);
                 if(!shot.isEmpty())
@@ -394,7 +411,7 @@ void ScoringMachineConnection::sendSettings()
         }
         settingString.append("TEA=KT;RIA=ZR;"); //Teiler with full rings and shot value with tenths
         settingString.append(QString("SSC=%1;").arg(m_noOfShotsPerTarget));  //Laskude arv lehes
-        settingString.append(QString("SGE=%1;SZI=%1;").arg(10));    // No of shots in series, currently always 10
+        settingString.append(QString("SGE=%1;SZI=%1;").arg(m_notOfShotsPerSeries));    // No of shots in series, currently always 10
 //    #ifdef PROOV
 //    //    s.append("KSD;");
 //        qDebug() << "Seadistamine: " << s;
@@ -423,14 +440,14 @@ void ScoringMachineConnection::sendToMachine()
             m_dataToSend.append(char(CRC(&m_dataToSend)));
         m_dataToSend.append(CR);
         m_serialPort.write(m_dataToSend);
-        emit dataSent(m_dataToSend);
+        emit dataSent(QString(m_dataToSend));
         m_serialPort.flush();
         if(m_scoringMachineType == RMIV)
             m_sendingStage = 3; // Text sent
         break;
     case 4:
         m_serialPort.write(&m_ack);
-        emit dataSent(&m_ack);
+        emit dataSent("ACK");
         m_serialPort.flush();
         m_sendingStage = 0; // ACK sent
         break;
@@ -469,6 +486,21 @@ void ScoringMachineConnection::setTargetType(int targetType)
 int ScoringMachineConnection::targetType() const
 {
     return m_targetType;
+}
+
+bool ScoringMachineConnection::connected() const
+{
+    return m_connected;
+}
+
+int ScoringMachineConnection::notOfShotsPerSeries() const
+{
+    return m_notOfShotsPerSeries;
+}
+
+void ScoringMachineConnection::setNotOfShotsPerSeries(int notOfShotsPerSeries)
+{
+    m_notOfShotsPerSeries = notOfShotsPerSeries;
 }
 
 ScoringMachineConnection::~ScoringMachineConnection()

@@ -18,12 +18,14 @@ TEMPLATE = app
 SOURCES += main.cpp \
     lehelugeja.cpp \
     scoringmachineconnection.cpp \
-    ../../protokollitaja/src/lask.cpp
+    ../../protokollitaja/src/lask.cpp \
+    ../../protokollitaja/src/common/target.cpp
 
 HEADERS  += lehelugeja.h \
     version.h \
     scoringmachineconnection.h \
-    ../../protokollitaja/src/lask.h
+    ../../protokollitaja/src/lask.h \
+    ../../protokollitaja/src/common/target.h
 
 FORMS    += lehelugeja.ui
 
