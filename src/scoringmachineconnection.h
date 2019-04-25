@@ -17,8 +17,11 @@ public:
     explicit ScoringMachineConnection(QObject *parent = nullptr);
     ~ScoringMachineConnection();
     bool calculateIsInnerTen(float x, float y);
+    bool connected() const;
+    int notOfShotsPerSeries() const;
     int noOfShotsPerTarget() const;
     QString portName() const;
+    void setNotOfShotsPerSeries(int notOfShotsPerSeries);
     void setNoOfShotsPerTarget(int noOfShotsPerTarget);
     void setPortName(const QString &portName);
     void setScoringMachineType(int machineType);
@@ -32,6 +35,7 @@ private:
     bool m_connected = false;   // Shows if scoring machine is in connected stage
     bool m_firstAttempt = true;    // Shows if it is a first attempt to connect to a machine
     bool m_machineChoiceInProgress = false;
+    int m_notOfShotsPerSeries;
     int m_noOfShotsPerTarget;
     int m_scoringMachineType = -1;
     int m_sendingStage = 0;   // For RM-IV, showing in which stage sending currently is:
@@ -50,7 +54,7 @@ private:
     QTimer m_settingsTimer; // Delay before sending settings, so that machines have time to react
 
 signals:
-    void dataSent(QByteArray data);
+    void dataSent(QString data);
     void shotRead(Lask shot);
     void connectionStatusChanged(QString status);
 
@@ -60,6 +64,7 @@ public slots:
     void connectToMachine();
     Lask extractRMIIIShot(QString shotInfo);
     Lask extractRMIVShot(QString);
+    void extraShotInTarget();
     void sendSettings();
     void sendToMachine();
     void sendToMachine(QString);

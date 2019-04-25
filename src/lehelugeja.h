@@ -18,8 +18,10 @@
 #include <QDebug>
 
 #include "../../protokollitaja/src/lask.h"
+#include "../../protokollitaja/src/common/target.h"
 #include "qextserialport.h"
 #include "qextserialenumerator.h"
+#include "scoringmachineconnection.h"
 
 namespace Ui {
 class Lehelugeja;
@@ -30,7 +32,7 @@ class Lehelugeja : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit Lehelugeja(QWidget *parent = 0);
+    explicit Lehelugeja(QWidget *parent = nullptr);
     ~Lehelugeja();
 
 private:
@@ -46,7 +48,7 @@ private:
     bool oliLiigneLask;
     bool vahemuses;
     bool oliKahtlane;
-    bool uhendatud; //Vajalik, et aru saada, kas lugemismasin on ühendatud või mitte, et uus nupuvajutus midagi ära ei rikuks.
+//    bool uhendatud; //Vajalik, et aru saada, kas lugemismasin on ühendatud või mitte, et uus nupuvajutus midagi ära ei rikuks.
     bool uhendusAutoriseeritud; //Vajalik parooli kasutamiseks Protokollitajaga ühendumisel
     bool uusLugemismasin;   //Kas ühendatud on uus või vana lugemismasin
     bool voibSulgeda;   //Kontroll, kas ühendus on suletud ja Protokollitajale teade saadetud, enne kui programm sulgeda
@@ -59,10 +61,10 @@ private:
     QMenu *failMenu;
     quint16 blockSize;  //Protokollitajaga suhtlemisel paketi suurus
     QTcpSocket *socket; //Protokollitajaga suhtlemiseks
-    QextSerialPort *serial;
+//    QextSerialPort *serial;
     QList<QextPortInfo> pordid;
     QImage *pilt;
-    QList<Lask*> seeriaLasud;   //Loetava seeria lasud
+    QList<Lask*> seriesShots;   // Shots in current series that is being read
     QList<QList<Lask*> > lasud; //Iga seeria lasud + koordinaadid
     QList<QLineEdit*> seeriad;
     QLineEdit *aktiivneSeeria;  //Kast, kuhu pannakse loetud seeria
@@ -72,14 +74,16 @@ private:
     QString aadress;    //Protokollitaja serveri IP aadress
     QString eelminePakett;  //vältimaks ühe info korduvat saatmist
     QTimer *broadcastiSaatja;   //Timer, mis käivitab IP küsimise broadcasti saatmise
-    QTimer *timer;
+//    QTimer *timer;
     QTimer *otsija; //Portide otsimiseks
     QTimer *fookus; //Viib kursori, peale uue seeria kasti aktiivseks tegemist, sifri kasti
     QTimer *sulgeja;    //Vajalik viivitus programmi sulgemisel, et jõuaks teate Protokollitajale saata
-    QTimer *saatja; //Viivis enne saatmist, et uus lugemismasin jõuaks reageerida
+//    QTimer *saatja; //Viivis enne saatmist, et uus lugemismasin jõuaks reageerida
     QTimer *seadistaja; //Viivis peale lehtede lugemist, enne kui uuesti seadistatakse
     QUdpSocket *udpSocket;  //Broadcasti saatmiseks, et leida võrgust Protokollitaja arvuti
     QUdpSocket *udpSocket2;  //Kuna windows ei suuta WaitForBytesWritten funktsiooni kasutada, on vaja teist socketit
+    ScoringMachineConnection scoringMachCon;
+    Target target;
     Ui::Lehelugeja *ui;
 
 private slots:
@@ -91,7 +95,7 @@ private slots:
     void joonistaLask(QPointF p, bool kasMM);    //Joonistab lasu lehele, bool näitab, kas on vana lugemismasina koordinaadid või mm
     void joonistaLeht();
     void hakkaOtsima();
-    void liidaSeeria();
+    void sumAndEndSeries();
     void liigneLask();
     void loe();
     void loe2();    //Uuest lugemismasinast lehtede lugemine
@@ -103,6 +107,7 @@ private slots:
     void paluSalvestada();
     void peidaNimi();
     void peidaNupud();
+    void readShot(Lask shot);
     void saada();
     void saada(QString);
     void saadaBroadcast();
@@ -110,13 +115,14 @@ private slots:
     void saadaTekst();
     void saadaVorku(QString);
     void seadista();
-    void seadista2();   //Uue lugemismasina seadistamine lehtede lugemiseks
+//    void seadista2();   //Uue lugemismasina seadistamine lehtede lugemiseks
     void seeriaLoetud();
     void sulgeUhendus();
     void uhenda();
-    void uhenda2(); //Uue lugemismasinaga ühendamine
+//    void uhenda2(); //Uue lugemismasinaga ühendamine
     void uhenduServeriga(QString); //Ühendumine serveriga
     void uhenduUuesti();    //Et muuta serveri IP'd ja uuesti ühenduda
+    void updateLog(QString);
     void uuendaPorte();
     void uuendaSifriga();
 
