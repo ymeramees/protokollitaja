@@ -4617,11 +4617,16 @@ void Protokollitaja::uploadResults()
 {
     QUrl url;
     url.setScheme("http");
-    url.setHost("ymeramees.no-ip.org");
+#ifdef PROOV
+    url.setHost("localhost");
     url.setPath("/api/v1/competitions");
     url.setPort(3005);
-//    url.setPath("/rapla");
-//    url.setPort(3004);
+#else
+    // Temporarly still use old server:
+    url.setHost("ymeramees.no-ip.org");
+    url.setPath("/rapla");
+    url.setPort(3004);
+#endif
 
     QNetworkRequest request;
     request.setUrl(url);

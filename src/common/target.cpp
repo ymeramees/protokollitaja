@@ -8,6 +8,7 @@ Target::Target(QWidget *parent) :
     m_targetImage = nullptr;
     m_targetPainter = nullptr;
     m_active = true;
+    m_zoomEnabled = true;
 //    lehetuubid << QString::fromLatin1("Õhupüss") << QString::fromLatin1("Õhupüstol") << QString::fromLatin1("Sportpüss");
 }
 
@@ -17,6 +18,11 @@ Target::Target(int relv, QString n, QString r, QWidget *parent) :
     setName(n);
     setTargetNo(r);
     init(relv);
+}
+
+bool Target::zoomEnabled()
+{
+    return m_zoomEnabled;
 }
 
 QStringList Target::targetTypes()
@@ -66,32 +72,35 @@ void Target::drawAShot(Lask &l)
     m_targetPainter->setBrush(Qt::red);
     int d = m_multiplier * m_caliber;
     if(!m_previousShot.isEmpty()){
-        m_targetPainter->drawEllipse(QPoint(m_multiplier * 2 * m_previousShot.X(), m_multiplier * -2 * m_previousShot.Y()), d, d);   // Draw previous shot with different colour
+        m_targetPainter->drawEllipse(QPoint(int(m_multiplier * 2 * m_previousShot.X()), int(m_multiplier * -2 * m_previousShot.Y())), d, d);   // Draw previous shot with different colour
 #ifdef PROOV
     qDebug() << "JoonistaLask(): eelminelask: " << m_multiplier * 2 * m_previousShot.X() << ", "  << m_multiplier * -2 * m_previousShot.Y();
 #endif
     }
     m_targetPainter->setBrush(Qt::green);
-    m_targetPainter->drawEllipse(QPoint(m_multiplier * 2 * l.X(), m_multiplier * -2 * l.Y()), d, d);   // Draw the new shot
-    int x = abs(l.X() * 100);   // Make sure values are positive
-    int y = abs(l.Y() * 100);
+    m_targetPainter->drawEllipse(QPoint(int(m_multiplier * 2 * l.X()), int(m_multiplier * -2 * l.Y())), d, d);   // Draw the new shot
+    int x = abs(int(l.X() * 100));   // Make sure values are positive
+    int y = abs(int(l.Y() * 100));
 #ifdef PROOV
-    qDebug() << "QPoint: " << QPoint(m_multiplier * 2 * l.X(), m_multiplier * -2 * l.Y()) << "/tx: " << x << ", y: " << y;
+    qDebug() << "QPoint: " << QPoint(int(m_multiplier * 2 * l.X()), int(m_multiplier * -2 * l.Y())) << "/tx: " << x << ", y: " << y;
 #endif
     m_previousShot.set(&l);
-    m_farthestX *= 100;    // To compare with integers
-    if(m_farthestX == m_targetRadius * 100){ // If it is a first shot, target needs to be zoomed
-       m_farthestX = 0;    // Initially needs to be 0-ed, otherwise zooming does not work
+
+    if(m_zoomEnabled) {
+        m_farthestX *= 100;    // To compare with integers
+        if(m_farthestX == m_targetRadius * 100){ // If it is a first shot, target needs to be zoomed
+            m_farthestX = 0;    // Initially needs to be 0-ed, otherwise zooming does not work
+        }
+        if(x > y){  // Zooming according to bigger coordinate
+            if(m_multiplier * 2 * x + d * 200 > m_farthestX)
+                m_farthestX = m_multiplier * 2 * x + d * 200;  // Make sure farthest shot is fully visible
+        }else{
+            if(m_multiplier * 2 * y + d * 200 > m_farthestX)
+                m_farthestX = m_multiplier * 2 * y + d * 200;  // Make sure farthest shot is fully visible
+        }
+        m_farthestX /= 100;    // Back to correct multiplier
     }
-    if(x > y){  // Zooming according to bigger coordinate
-        if(m_multiplier * 2 * x + d * 200 > m_farthestX)
-            m_farthestX = m_multiplier * 2 * x + d * 200;  // Make sure farthest shot is fully visible
-    }else{
-        if(m_multiplier * 2 * y + d * 200 > m_farthestX)
-            m_farthestX = m_multiplier * 2 * y + d * 200;  // Make sure farthest shot is fully visible
-    }
-    m_farthestX /= 100;    // Back to correct multiplier
-    zoom();
+    zoomAndUpdate();
 }
 
 void Target::drawTarget()
@@ -153,20 +162,20 @@ void Target::drawTarget()
         m_targetPainter->drawText(-344-20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "1");
 
     }else if(m_gunType == 2){   // 50m rifle target
-        float fBlackRings[] = {122.4, 138.4, 154.4}; //black rings on white background, in mm's
+        float fBlackRings[] = {122.4f, 138.4f, 154.4f}; //black rings on white background, in mm's
         int blackRings[(sizeof(fBlackRings)/sizeof(*fBlackRings))];
 
-        float fWhiteRings[] = {10.4, 26.4, 42.4, 58.4, 74.4, 90.4, 106.4}; //white rings on black background, in mm's
+        float fWhiteRings[] = {10.4f, 26.4f, 42.4f, 58.4f, 74.4f, 90.4f, 106.4f}; //white rings on black background, in mm's
         int whiteRings[(sizeof(fWhiteRings)/sizeof(*fWhiteRings))];
 
         m_multiplier = 4;
 
         int blackArea = qRound(112.4 * m_multiplier);
         int innerTen = 5 * m_multiplier;
-        for(int i = 0; i < (sizeof(fBlackRings)/sizeof(*fBlackRings)); i++){
+        for(ulong i = 0; i < (sizeof(fBlackRings)/sizeof(*fBlackRings)); i++){
             blackRings[i] = qRound(fBlackRings[i] * m_multiplier);
         }
-        for(int i = 0; i < (sizeof(fWhiteRings)/sizeof(*fWhiteRings)); i++){
+        for(ulong i = 0; i < (sizeof(fWhiteRings)/sizeof(*fWhiteRings)); i++){
             whiteRings[i] = qRound(fWhiteRings[i] * m_multiplier);
         }
 
@@ -298,7 +307,7 @@ void Target::drawTarget()
 //        painter->drawText(-594, 5, "1");
 //        painter->drawText(584, 5, "1");
     }
-    zoom();
+    zoomAndUpdate();
 //    this->setPixmap(QPixmap::fromImage(*pilt));
 }
 
@@ -324,7 +333,12 @@ void Target::reset()
 void Target::resizeEvent(QResizeEvent * e)
 {
     Q_UNUSED(e);
-    zoom();
+    zoomAndUpdate();
+}
+
+void Target::setZoomEnabled(bool newZoomEnabled)
+{
+    m_zoomEnabled = newZoomEnabled;
 }
 
 void Target::setActive(bool a)
@@ -352,7 +366,7 @@ void Target::setResult(QString tul)
     m_result = tul;
 }
 
-void Target::zoom()
+void Target::zoomAndUpdate()
 {
     if(m_farthestX < (m_targetRadius / 5))
         m_farthestX = m_targetRadius / 5; // Avoid high zooming in case of inner tens
@@ -361,55 +375,61 @@ void Target::zoom()
     int x = m_targetImage->width() / 2 - w / 2;
     int y = m_targetImage->height() / 2 - h / 2;
 
-    QImage koopia = m_targetImage->copy(x, y, w, h);
-    QPainter painter2(&koopia);
+    QImage copy = m_targetImage->copy(x, y, w, h);
+    QPainter painter2(&copy);
     painter2.setBrush(Qt::white);
     QFont font;
     font.setPointSize(h / 15);
     painter2.setFont(font);
-    QRect lasuKast(w - w / 4, h - h / 8 - 1, w / 4, h / 8);
-    QRect nimeKast(0, 0, font.pointSize() * m_name.length(), h / 8);
-    QRect tulKast(w - font.pointSize() * (m_result.length() - 1) - 1, 0, font.pointSize() * (m_result.length() - 1), h / 8);
-    QRect rajaKast(0, h - h / 8 - 1, w / 5, h / 8);
+    QRect shotBox(w - w / 4, h - h / 8 - 1, w / 4, h / 8);
+    QRect nameBox(0, 0, font.pointSize() * m_name.length(), h / 8);
+    QRect resultBox(w - font.pointSize() * (m_result.length() - 1) - 1, 0, font.pointSize() * (m_result.length() - 1), h / 8);
+    QRect targetNoBox(0, h - h / 8 - 1, w / 5, h / 8);
 
-    painter2.drawRect(nimeKast);
-    nimeKast.setLeft(5);
-    painter2.drawText(nimeKast, Qt::AlignVCenter, m_name);
-    if(m_previousShot.get10Lask() != -999){
-        painter2.drawRect(lasuKast);
-//        lasuKast.setLeft(lasuKast.left() + 5);
-//        lasuKast.setRight(lasuKast.right() - 5);
-        QString lask = QString("%1").arg(m_previousShot.getFLask()).replace('.', ',');
-        if(!lask.contains(',')) // If scoring is with tens, but shot value happens to be x,0
-            lask.append(",0");
-        painter2.drawText(lasuKast, Qt::AlignVCenter | Qt::AlignHCenter, lask);
+    if(!m_name.isEmpty()) {
+        painter2.drawRect(nameBox);
+        nameBox.setLeft(5);
+        painter2.drawText(nameBox, Qt::AlignVCenter, m_name);
     }
-    if(m_result != "0" && m_result != "0,0" && m_result != "0.0"){
-        painter2.drawRect(tulKast);
-        painter2.drawText(tulKast, Qt::AlignVCenter | Qt::AlignHCenter, m_result);
-    }else{  // If m_result is 0, then probably it is a sighting shot, although not always
-        QRectF rect = QRectF(w - w / 4, 0, w / 4, w / 4);
-
-        QPainterPath path;
-        path.moveTo(rect.right(), rect.top());
-        path.lineTo(rect.topLeft());
-        path.lineTo(rect.bottomRight());
-        path.lineTo(rect.right(), rect.top());
-
-        //painter2.fillPath(path, QBrush(QColor ("black")));
-        painter2.setBrush(Qt::black);   // Black triangle with white border
-        QPen vanaPliiats = painter2.pen();
-        QPen pliiats;
-        pliiats.setColor(Qt::white);
-        pliiats.setWidth(3);
-        painter2.setPen(pliiats);
-//        painter2.setPen(Qt::white);
-        painter2.drawPath(path);
-
-        painter2.setBrush(Qt::white);   // Set to original values
-        painter2.setPen(vanaPliiats);
+    if(m_previousShot.get10Lask() != -999) {
+        painter2.drawRect(shotBox);
+        //        lasuKast.setLeft(lasuKast.left() + 5);
+        //        lasuKast.setRight(lasuKast.right() - 5);
+        QString shot = QString("%1").arg(double(m_previousShot.getFLask())).replace('.', ',');
+        if(!shot.contains(',')) // If scoring is with tens, but shot value happens to be x,0
+            shot.append(",0");
+        painter2.drawText(shotBox, Qt::AlignVCenter | Qt::AlignHCenter, shot);
     }
-    painter2.drawRect(rajaKast);
-    painter2.drawText(rajaKast, Qt::AlignVCenter | Qt::AlignHCenter, m_targetNo);
-    this->setPixmap(QPixmap::fromImage(koopia.scaled(this->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation)/**pilt).copy(x, y, w, h*/));
+    if(!m_result.isEmpty()) {
+        if(m_result != "0" && m_result != "0,0" && m_result != "0.0"){
+            painter2.drawRect(resultBox);
+            painter2.drawText(resultBox, Qt::AlignVCenter | Qt::AlignHCenter, m_result);
+        }else{  // If m_result is 0, then probably it is a sighting shot, although not always
+            QRectF rect = QRectF(w - w / 4, 0, w / 4, w / 4);
+
+            QPainterPath path;
+            path.moveTo(rect.right(), rect.top());
+            path.lineTo(rect.topLeft());
+            path.lineTo(rect.bottomRight());
+            path.lineTo(rect.right(), rect.top());
+
+            //painter2.fillPath(path, QBrush(QColor ("black")));
+            painter2.setBrush(Qt::black);   // Black triangle with white border
+            QPen oldPen = painter2.pen();
+            QPen pen;
+            pen.setColor(Qt::white);
+            pen.setWidth(3);
+            painter2.setPen(pen);
+            //        painter2.setPen(Qt::white);
+            painter2.drawPath(path);
+
+            painter2.setBrush(Qt::white);   // Set to original values
+            painter2.setPen(oldPen);
+        }
+    }
+    if(!m_targetNo.isEmpty()) {
+        painter2.drawRect(targetNoBox);
+        painter2.drawText(targetNoBox, Qt::AlignVCenter | Qt::AlignHCenter, m_targetNo);
+    }
+    this->setPixmap(QPixmap::fromImage(copy.scaled(this->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation)/**pilt).copy(x, y, w, h*/));
 }
