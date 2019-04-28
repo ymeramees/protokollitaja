@@ -913,8 +913,8 @@ void Lehelugeja::loeBroadcast()
                 return; //Ühendus olemas, võib funktsioonist väljuda, vastasel juhul proovitakse nimekirjast järgmist aadressi
             }
 
-            for(int i = 0; i < ipAadressid.count(); ++i){   //Seejärel proovida kõigepealt 192.'ga algavat aadressi
-                if(ipAadressid.at(i).startsWith("192.")){
+            for(int i = 0; i < ipAadressid.count(); ++i){   // Then try address not starting with 192.to prefer direct cable connections
+                if(!ipAadressid.at(i).startsWith("192.")){
                     socket->connectToHost(ipAadressid.at(i), 50005);
                     if(socket->waitForConnected(500)){
                         aadress = ipAadressid.at(i);    //Serveri IP uuendamine
