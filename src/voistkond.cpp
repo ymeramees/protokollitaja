@@ -149,7 +149,7 @@ void Voistkond::naitaLiikmeteValikKast()
 void Voistkond::liida()
 {
         int sum = 0;
-        float fsum = 0;
+        double fsum = 0;
         int arv = 0;
         bool komaga = false;
         bool onnestus = false;

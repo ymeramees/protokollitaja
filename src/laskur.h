@@ -68,7 +68,7 @@ public:
 	QPushButton *lisaLNupp;
 	QTimer *arvutaja;
 	LisaLaskudeAken *lisaAken;
-    Laskur(Andmebaas*, int, int, int, bool*, bool*, int, int*,int ls = 10, QWidget *parent = 0);
+    Laskur(Andmebaas*, int, int, int, bool*, bool*, int, int*,int ls = 10, QWidget *parent = nullptr);
     ~Laskur();
 //    bool operator<(const Laskur &l) const;
     QString getSumma();

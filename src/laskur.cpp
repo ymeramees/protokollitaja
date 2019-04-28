@@ -8,8 +8,8 @@ Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i,
 {
     id = i;
         jrkArv = 0;
-        lisaAken = 0;
-        laskudeAken = 0;
+        lisaAken = nullptr;
+        laskudeAken = nullptr;
         arvutaja = new QTimer(this);
         arvutaja->setInterval(60000);
         arvutaja->setSingleShot(false);
@@ -227,6 +227,8 @@ void Laskur::enterVajutatud()
 
 bool Laskur::eventFilter(QObject* object, QEvent* event)
 {
+    Q_UNUSED(object);
+
     if(/*object == seeriad[0] &&*/ event->type() == QEvent::MouseButtonDblClick) {
         naitaLaskudeAkent();
         return false; // lets the event continue to the edit
@@ -248,8 +250,8 @@ void Laskur::lisaLAken()
 {
     QString llask;
     bool onnestus;
-        float lask = 0;
-        if(lisaAken == 0)
+        double lask = 0;
+        if(lisaAken == nullptr)
                 lisaAken = new LisaLaskudeAken(this);
         for(int i = 0; i < lisaLasud.count(); i++){
                 if(lisaLasud[i] != -1){
@@ -270,10 +272,10 @@ void Laskur::lisaLAken()
                 int max = lisaAken->ui.lisaLasud->count();
                 for(int i = 0; i < max; i++){
                     llask = lisaAken->ui.lisaLasud->takeItem(0)->text();
-                    lask = llask.toFloat(&onnestus);
+                    lask = llask.toDouble(&onnestus);
                         if(!onnestus){  //Kui arvuks tegemine ei õnnestunud on vaja asendada koma punktiga, kasutame sama QString seeria't
                             llask.replace(',', '.');
-                            lask = llask.toFloat(&onnestus);
+                            lask = llask.toDouble(&onnestus);
                         }
                         lask *= 10;
                         //QString::number(lask);
@@ -531,9 +533,9 @@ void Laskur::muutus2(QString)
 void Laskur::liida() //Laskude summeerimine
 {
         int sum = 0;    //Summa täisarvuna
-        float fsum = 0; //Summa ujukomakohaarvuna
+        double fsum = 0; //Summa ujukomakohaarvuna
         int ssum = 0;   //Seeria summa täisarvuna
-        float fssum = 0;  //Seeria summa ujukomakohaarvuna
+        double fssum = 0;  //Seeria summa ujukomakohaarvuna
         int lastudSeeriad = 0;
         int lastudLasud = 0;
         int siseKumneid = 0;
@@ -874,9 +876,9 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
     }
 
     switch(t){
-    if(veryVerbose)
-        QTextStream(stdout) << "Laskur::vaiksem(): Perekonnanimede järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << endl;
     case 1: {   //1 - perekonnanimede järgi reastamine
+        if(veryVerbose)
+            QTextStream(stdout) << "Laskur::vaiksem(): Perekonnanimede järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << endl;
         if(this->perekNimi->text().localeAwareCompare(l->perekNimi->text()) > 0)
             return true;
         else if(this->perekNimi->text().localeAwareCompare(l->perekNimi->text()) < 0)
@@ -886,7 +888,6 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
                 return true;
             else return false;
         }
-        break;
     }
     case 2: { //2 - sünniaastate järgi reastamine
         if(veryVerbose)
@@ -906,7 +907,6 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
                 else return false;
             }
         }
-        break;
     }
     case 3: { //3 - raja nr'ite järgi reastamine
         if(veryVerbose)
@@ -916,9 +916,7 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
 
         switch(tulemus){    //Kui on 0, siis läheb edasi nimede võrdlemise juurde
         case -1 : return true;
-            break;
         case 1 : return false;
-            break;
         }
 
         if(veryVerbose)
@@ -927,9 +925,7 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
 
         switch(tulemus){
         case -1 : return true;
-            break;
         case 1 : return false;
-            break;
         default: return false;
         }
     }
@@ -955,7 +951,6 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
                 else return false;
             }
         }
-        break;
     }
     default: {   //Kui ei ole eritingimusega sorteerimist, vaadatakse kõigepealt finaali seeriat
 //            liida();
@@ -977,7 +972,7 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
                 ksum2 = seeria.toFloat(&onnestus);
             }
             ksum2 *= 10;
-            int sum = ksum, sum2 = ksum2;
+            int sum = int(ksum), sum2 = int(ksum2);
             if(sum != sum2){
                 if(sum < sum2)
                     return true;
@@ -1047,9 +1042,7 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
 
         switch(tulemus){    //Kui on 0, siis läheb edasi sifrite võrdlemise juurde
         case -1 : return true;
-            break;
         case 1 : return false;
-            break;
         }
 
         //Kui mõlemad perekonnanimed on tühjad, reastatakse sifri järgi
@@ -1326,10 +1319,10 @@ Laskur::~Laskur()
 {
     if(!laskudeAken){
         laskudeAken->deleteLater();
-        laskudeAken = 0;
+        laskudeAken = nullptr;
     }
     if(!lisaAken){
         lisaAken->deleteLater();
-        lisaAken = 0;
+        lisaAken = nullptr;
     }
 }

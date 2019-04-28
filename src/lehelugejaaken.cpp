@@ -42,7 +42,6 @@ LehelugejaAken::LehelugejaAken(QWidget *parent , Qt::WindowFlags f) :
     seeriad << m_ui.seeria4Edit;
     seeriad << m_ui.seeria5Edit;
     seeriad << m_ui.seeria6Edit;
-    aktiivneSeeria = 0;
 
     for(int j = 0; j < 10; j++){
         seeriaLasud << new Lask(/*this*/);  //Loetava seeria lasud
@@ -120,9 +119,12 @@ void LehelugejaAken::alustaUuesti()
 
 void LehelugejaAken::fookusMuutus(QWidget *vana, QWidget *uus)
 {
+    Q_UNUSED(vana);
+    Q_UNUSED(uus);
+
     for(int i = 0; i < seeriad.count(); i++)
         if(seeriad[i]->hasFocus()){
-            if(aktiivneSeeria != 0)
+            if(aktiivneSeeria != nullptr)
                 aktiivneSeeria->setStyleSheet(this->styleSheet());
             seeriad[i]->setStyleSheet("border: 3px solid black");
             aktiivneSeeria = seeriad[i];
@@ -431,7 +433,7 @@ void LehelugejaAken::loe()
                 m_ui.silt->setPixmap(QPixmap::fromImage(*pilt));
                 this->update();
                 if(lask == 10){ //Seeria sai täis, vaja kirjutada väärtus aktiivsesse lahtrisse
-                    if(aktiivneSeeria != 0){
+                    if(aktiivneSeeria != nullptr){
                         fl = seeria;    //Kasutame lasu float muutujat seeria jagamiseks 10'ga, seeria enda jagamisel kaovad komakohad ära
                         //m_ui.logi->append(QString("Seeria: %1, fl: %2, fl/10: %3").arg(seeria).arg(fl).arg(fl/10));
                         aktiivneSeeria->setText(QString("%1").arg(fl / 10));

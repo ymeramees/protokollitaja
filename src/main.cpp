@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 {
     QLocale::setDefault(QLocale::Estonian);
     if(argc > 1)
-        for(int i = 0; i < argc; i++)
+        for(int i = 0; i < argc; i++){
             if(QString("%1").arg(argv[i]) == "-v"){
                 QTextStream(stdout) << "-v => kuvatakse debug info" << endl;
                 verbose = true;
@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
                 QTextStream(stdout) << "-vv => kuvatakse rohke debug info" << endl;
                 verbose = true;
             }
+        }
     QApplication a(argc, argv);
 //    asukoht = QDir(argv[0]);
 //    asukoht.cdUp();

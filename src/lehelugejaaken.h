@@ -35,7 +35,7 @@ public:
     QList<Lask*> seeriaLasud;   //Loetava seeria lasud
     QList<QList<Lask*> > lasud; //Iga seeria lasud + koordinaadid
     QList<QLineEdit*> seeriad;
-    QLineEdit *aktiivneSeeria;  //Kast, kuhu pannakse loetud seeria
+    QLineEdit *aktiivneSeeria = nullptr;  //Kast, kuhu pannakse loetud seeria
     QPainter *painter;
     QTimer *timer;
     QTimer *otsija;

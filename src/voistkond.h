@@ -43,7 +43,7 @@ public:
 	QList<int> *jalgitavad;
 	QList<Liige*> voistlejad;
 	LiikmeteValikKast *lValik;
-	Voistkond(LiikmeteValikKast *lV, int vA, QList<int> *j, int *vI, QWidget *parent = 0);
+    Voistkond(LiikmeteValikKast *lV, int vA, QList<int> *j, int *vI, QWidget *parent = nullptr);
 	virtual ~Voistkond();
 	bool vaiksem(Voistkond *v) const;
     QJsonObject toExportJson();

@@ -1445,6 +1445,10 @@ void Protokollitaja::finaaliFail()
 
 void Protokollitaja::finaalValmis(const int exitCode, const QProcess::ExitStatus exitStatus)
 {
+    // TODO: Check exit code and status in future?
+    Q_UNUSED(exitCode);
+    Q_UNUSED(exitStatus);
+
     loeFinaaliFail(finaaliFailiNimi);
 }
 
