@@ -31,7 +31,7 @@ ScoringMachineConnection::ScoringMachineConnection(QObject *parent) : QObject(pa
     connect(&m_settingsTimer, &QTimer::timeout, this, &ScoringMachineConnection::sendSettings);
 
     m_serialPort.close();   // Make sure things are clear
-    m_scoringMachineType = RMIII;
+//    m_scoringMachineType = RMIII;
 }
 
 bool ScoringMachineConnection::calculateIsInnerTen(const float x, const float y)
@@ -264,14 +264,14 @@ void ScoringMachineConnection::readFromRMIII()
 //    static bool firstTime = true;   // This is needed to send settings to RMIII twice, as it might not react to first attempt.
 
     if(m_serialPort.bytesAvailable() > 0) {
-        static QString buffer;
+//        static QString m_serialBuffer;
         QString currentText;
-        buffer.append(m_serialPort.readAll());
-        if(buffer.contains(CR)) {
-            currentText = buffer.left(buffer.indexOf(CR) + 1);
-            buffer.remove(0, buffer.indexOf(CR) + 1);
+        m_serialBuffer.append(m_serialPort.readAll());
+        if(m_serialBuffer.contains(CR)) {
+            currentText = m_serialBuffer.left(m_serialBuffer.indexOf(CR) + 1);
+            m_serialBuffer.remove(0, m_serialBuffer.indexOf(CR) + 1);
             emit connectionStatusChanged(tr("RMIII: ") + currentText);
-        }else
+        } else
             return;
 
         if(!m_connected) {
@@ -286,7 +286,7 @@ void ScoringMachineConnection::readFromRMIII()
             if(!shot.isEmpty())
                 emit shotRead(shot);
         }
-    }else if(m_machineChoiceInProgress){
+    } else if(m_machineChoiceInProgress) {
         if(!m_firstAttempt) {  // RMIII might not reply to first attempt, therefore, it is worth to try again
             m_scoringMachineType = ScoringMachineType::RMIV;    // If nothing was received, it is probably RMIV
             connectToMachine();
@@ -302,14 +302,14 @@ void ScoringMachineConnection::readFromRMIV()
 //    static bool firstTime = true;   // Give some time to machine to reply and read once again
 
     if(m_serialPort.bytesAvailable() > 0) {
-        static QString buffer;
+//        static QString m_serialBuffer;
         QString currentText;
-        buffer.append(m_serialPort.readAll());
-        if(buffer.contains(CR)) {
-            currentText = buffer.left(buffer.indexOf(CR) + 1);
+        m_serialBuffer.append(m_serialPort.readAll());
+        if(m_serialBuffer.contains(CR)) {
+            currentText = m_serialBuffer.left(m_serialBuffer.indexOf(CR) + 1);
             currentText.replace(STX, "");
             emit connectionStatusChanged(tr("RMIV: ") + currentText);
-            if(currentText.contains("SCH=")){
+            if(currentText.contains("SCH=")) {
                 Lask shot = extractRMIVShot(currentText);
                 if(!shot.isEmpty())
                     emit shotRead(shot);
@@ -317,16 +317,16 @@ void ScoringMachineConnection::readFromRMIV()
                 sendToMachine("");  // Sends ACK
 //                m_settingsTimer.setInterval(600);   // Here delay before setting can be shorter
                 m_settingsTimer.start();    // Machine needs to be set, in ordet it to take next target in
-            }else if(currentText.contains("SNR=")) {
+            } else if(currentText.contains("SNR=")) {
                 m_connected = true;
                 m_machineChoiceInProgress = false;
                 emit connectionStatusChanged(tr("Ühendatud: RMIV"));
             }
-            buffer.remove(0, buffer.indexOf(CR) + 1);
-        }else if(buffer.contains(STX)){
-            currentText = buffer.left(buffer.indexOf(STX) + 1);
+            m_serialBuffer.remove(0, m_serialBuffer.indexOf(CR) + 1);
+        } else if(m_serialBuffer.contains(STX)) {
+            currentText = m_serialBuffer.left(m_serialBuffer.indexOf(STX) + 1);
             currentText.replace(STX, "STX");
-            if(m_sendingStage == 1){
+            if(m_sendingStage == 1) {
 //#ifdef PROOV
 //        qDebug() << "saabus: STX\n";
 //#endif
@@ -336,9 +336,9 @@ void ScoringMachineConnection::readFromRMIV()
 //#endif
                 sendToMachine("");  // If STX was received, then probably the machine is ready to receive text
             }
-            buffer.remove(0, buffer.indexOf(STX) + 1);
-        }else if(buffer.contains(NAK)){
-            currentText = buffer.left(buffer.indexOf(NAK) + 1);
+            m_serialBuffer.remove(0, m_serialBuffer.indexOf(STX) + 1);
+        }else if(m_serialBuffer.contains(NAK)){
+            currentText = m_serialBuffer.left(m_serialBuffer.indexOf(NAK) + 1);
             currentText.replace(NAK, "NAK");
             if(m_sendingStage == 3){
 //#ifdef PROOV
@@ -349,9 +349,9 @@ void ScoringMachineConnection::readFromRMIV()
 //        qDebug() << "saatmiseEtapp = 0";
 //#endif
             }
-            buffer.remove(0, buffer.indexOf(NAK) + 1);
-        }else if(buffer.contains(ACK)){
-            currentText = buffer.left(buffer.indexOf(ACK) + 1);
+            m_serialBuffer.remove(0, m_serialBuffer.indexOf(NAK) + 1);
+        }else if(m_serialBuffer.contains(ACK)){
+            currentText = m_serialBuffer.left(m_serialBuffer.indexOf(ACK) + 1);
             currentText.replace(ACK, "ACK");
             if(m_sendingStage == 3){
 //#ifdef PROOV
@@ -362,7 +362,7 @@ void ScoringMachineConnection::readFromRMIV()
 //        qDebug() << "saatmiseEtapp = 0";
 //#endif
             }
-            buffer.remove(0, buffer.indexOf(ACK) + 1);
+            m_serialBuffer.remove(0, m_serialBuffer.indexOf(ACK) + 1);
         }else
             return;
     }else if(m_machineChoiceInProgress) {

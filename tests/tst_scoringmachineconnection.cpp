@@ -20,6 +20,7 @@ private slots:
     void test_calculateIsInnerTen();
     void test_connectToMachineFailedAttempt();
     void test_connectToMachineWithoutPort();
+    void test_connectToRMIV();
     void test_CRCreturnValue();
     void test_extractRMIIIShot();
     void test_extractRMIVShot();
@@ -73,7 +74,8 @@ void ScoringMachineConnectionTest::test_calculateIsInnerTen()
     QVERIFY(!(machine.calculateIsInnerTen(float(-4.75), float(7.38))));
 }
 
-void ScoringMachineConnectionTest::test_connectToMachineFailedAttempt(){
+void ScoringMachineConnectionTest::test_connectToMachineFailedAttempt()
+{
     ScoringMachineConnection machine;
     QSignalSpy spy(&machine, SIGNAL(connectionStatusChanged(QString)));
 
@@ -97,7 +99,8 @@ void ScoringMachineConnectionTest::test_connectToMachineFailedAttempt(){
     QVERIFY(statusMessages.at(0).toString().compare("Viga, ei õnnestu ühenduda ei RMIII ega RMIV'ga!") == 0);
 }
 
-void ScoringMachineConnectionTest::test_connectToMachineWithoutPort(){
+void ScoringMachineConnectionTest::test_connectToMachineWithoutPort()
+{
     ScoringMachineConnection machine;
     QSignalSpy spy(&machine, SIGNAL(connectionStatusChanged(QString)));
 
@@ -106,6 +109,13 @@ void ScoringMachineConnectionTest::test_connectToMachineWithoutPort(){
     QCOMPARE(spy.count(), 1);
     QList<QVariant> statusMessages = spy.takeFirst();
     QVERIFY(statusMessages.at(0).toString().compare("Viga: Pordi nime pole määratud, ei saa ühenduda!") == 0);
+}
+
+void ScoringMachineConnectionTest::test_connectToRMIV()
+{
+    ScoringMachineConnection machine;
+
+    machine.m_serialBuffer = "SNR=";
 }
 
 void ScoringMachineConnectionTest::test_CRCreturnValue()

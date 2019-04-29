@@ -75,6 +75,9 @@ private slots:
     void readFromMachine();
     void readFromRMIII();
     void readFromRMIV();
+
+protected:
+    QString m_serialBuffer;
 };
 
 #endif // SCORINGMACHINECONNECTION_H
