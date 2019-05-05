@@ -114,8 +114,27 @@ void ScoringMachineConnectionTest::test_connectToMachineWithoutPort()
 void ScoringMachineConnectionTest::test_connectToRMIV()
 {
     ScoringMachineConnection machine;
+    QSignalSpy spy(&machine, SIGNAL(connectionStatusChanged(QString)));
+
+    machine.setPortName("COM1");
+    machine.m_scoringMachineType = ScoringMachineConnection::RMIV;
+//    QMetaObject::invokeMethod(&machine, "connectToRMIV", Qt::DirectConnection);
+    machine.connectToMachine();
+
+    QCOMPARE(spy.count(), 1);
+    QList<QVariant> statusMessages = spy.takeFirst();
+    QVERIFY(statusMessages.at(0).toString().compare("Ühendamine: RMIV, COM1") == 0);
 
     machine.m_serialBuffer = "SNR=";
+    machine.m_serialBuffer.append(0x0d);
+
+    spy.wait(500);
+    QCOMPARE(spy.count(), 2);
+    statusMessages = spy.takeFirst();
+    QVERIFY(statusMessages.at(0).toString().compare("RMIV: SNR=\r") == 0);
+
+    statusMessages = spy.takeFirst();
+    QVERIFY(statusMessages.at(0).toString().compare("Ühendatud: RMIV") == 0);
 }
 
 void ScoringMachineConnectionTest::test_CRCreturnValue()

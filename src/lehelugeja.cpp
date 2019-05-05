@@ -37,6 +37,10 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
 {
     ui->setupUi(this);
 
+#ifdef PROOV
+    ui->laskudeBox->setRange(1, 10);    // For testing purposes
+#endif
+
     broadcastSaabunud = false;
 //    markleheSuurus = ui->silt->size();
     oliLiigneLask = false;
@@ -194,6 +198,9 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
     seadistaja->setSingleShot(true);
     connect(seadistaja, SIGNAL(timeout()), this, SLOT(seadista()));
 
+    if(verbose)
+        scoringMachCon.setLogLevel(ScoringMachineConnection::Verbose);
+
     connect(&scoringMachCon, &ScoringMachineConnection::shotRead, this, &Lehelugeja::readShot);
     connect(&scoringMachCon, &ScoringMachineConnection::connectionStatusChanged, this, &Lehelugeja::updateLog);
     connect(&scoringMachCon, &ScoringMachineConnection::dataSent, this, &Lehelugeja::updateLog);
@@ -228,6 +235,7 @@ void Lehelugeja::alustaUuesti()
         seriesShots[j]->clear();    //Loetava seeria lasud puhtaks
     }
     joonistaLeht();
+    ui->silt->setText("");
     seadistaja->start();
 }
 
@@ -1220,6 +1228,9 @@ void Lehelugeja::readShot(Lask shot)
                           .left(shot.getSLask().indexOf(",")));
     }
 
+    if(shot.isInnerTen())
+        ui->silt->setText(ui->silt->text() + "*");
+
     lask++;
     if(lask == laskudeArv) {
         sumAndEndSeries();
@@ -1385,19 +1396,21 @@ void Lehelugeja::saadaTekst()
         ui->comPort->setCurrentIndex(ui->comPort->count() - 1);
     }else if(ui->tekstiEdit->text() == "uusLugemismasin=true"){
         ui->logi->append(tr("Kasutusel uue lugemismasinaga ühendus"));
-        uusLugemismasin = true;
-        saatmiseEtapp = 0;
+//        uusLugemismasin = true;
+        scoringMachCon.setScoringMachineType(ScoringMachineConnection::RMIV);
+//        saatmiseEtapp = 0;
     }else if(ui->tekstiEdit->text() == "uusLugemismasin=false"){
         ui->logi->append(tr("Kasutusel vana lugemismasinaga ühendus"));
-        uusLugemismasin = false;
-        saatmiseEtapp = 2;
+//        uusLugemismasin = false;
+        scoringMachCon.setScoringMachineType(ScoringMachineConnection::RMIII);
+//        saatmiseEtapp = 2;
         // TODO to be fixed:
     }else if(ui->tekstiEdit->text() == "ACK"){
-        saatmiseEtapp = 4;
+//        saatmiseEtapp = 4;
         saada("");  //Saadab ACK'i
     }else{
-        if(uusLugemismasin)
-            saatmiseEtapp = 0;
+//        if(uusLugemismasin)
+//            saatmiseEtapp = 0;
         saada(ui->tekstiEdit->text());
     }
     ui->tekstiEdit->clear();

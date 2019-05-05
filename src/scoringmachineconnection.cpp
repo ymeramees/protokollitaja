@@ -60,16 +60,23 @@ bool ScoringMachineConnection::calculateIsInnerTen(const float x, const float y)
 
 void ScoringMachineConnection::closeConnection()
 {
+    if(m_logLevel > 0)
+        QTextStream(stdout) << "[ScoringMachineConnection]: closeConnection(), m_sendingStage = " << m_sendingStage << endl;
+
     m_dataToSend = QString("EXIT").toLatin1();
     m_sendingStage = 2;
     sendToMachine();
     m_serialPort.close();
     m_readTimer.stop();
     m_connected = false;
+    m_scoringMachineType = -1;
 }
 
 void ScoringMachineConnection::connectToMachine()
 {
+    if(m_logLevel > 0)
+        QTextStream(stdout) << "[ScoringMachineConnection]: connectToMachine(), m_sendingStage = " << m_sendingStage << endl;
+
     if(m_portName.isEmpty()){
         emit connectionStatusChanged(tr("Viga: Pordi nime pole määratud, ei saa ühenduda!"));
         return;
@@ -92,6 +99,9 @@ void ScoringMachineConnection::connectToMachine()
 
 void ScoringMachineConnection::connectToRMIII()
 {
+    if(m_logLevel > 0)
+        QTextStream(stdout) << "[ScoringMachineConnection]: connectToRMIII(), m_sendingStage = " << m_sendingStage << endl;
+
     if(m_connected){
         sendToMachine("V");
         return;
@@ -105,7 +115,11 @@ void ScoringMachineConnection::connectToRMIII()
     m_serialPort.setStopBits(QSerialPort::OneStop);
     m_serialPort.setFlowControl(QSerialPort::NoFlowControl);
 
-    m_serialPort.open(QIODevice::ReadWrite);
+    if(!m_serialPort.open(QIODevice::ReadWrite)) {
+        emit connectionStatusChanged(tr("Ei õnnestu serial port'i avada! Kontrollige, et mõni teine programm seda juba ei kasuta."));
+        emit connectionStatusChanged(tr("Veakood: ") + m_serialPort.error());
+        return;
+    }
 
     m_serialPort.setDataTerminalReady(true);
     m_serialPort.setRequestToSend(true);
@@ -118,6 +132,9 @@ void ScoringMachineConnection::connectToRMIII()
 
 void ScoringMachineConnection::connectToRMIV()
 {
+    if(m_logLevel > 0)
+        QTextStream(stdout) << "[ScoringMachineConnection]: connectToRMIV(), m_sendingStage = " << m_sendingStage << endl;
+
     m_serialPort.flush();
     m_serialPort.close();
 
@@ -264,6 +281,8 @@ void ScoringMachineConnection::readFromRMIII()
 //    static bool firstTime = true;   // This is needed to send settings to RMIII twice, as it might not react to first attempt.
 
     if(m_serialPort.bytesAvailable() > 0) {
+        if(m_logLevel > 0)
+            QTextStream(stdout) << "[ScoringMachineConnection]: readFromRMIII(), m_sendingStage = " << m_sendingStage << endl;
 //        static QString m_serialBuffer;
         QString currentText;
         m_serialBuffer.append(m_serialPort.readAll());
@@ -300,11 +319,12 @@ void ScoringMachineConnection::readFromRMIII()
 void ScoringMachineConnection::readFromRMIV()
 {
 //    static bool firstTime = true;   // Give some time to machine to reply and read once again
-
-    if(m_serialPort.bytesAvailable() > 0) {
+    if(m_serialPort.bytesAvailable() > 0 || m_serialBuffer.length() > 0) {
 //        static QString m_serialBuffer;
         QString currentText;
         m_serialBuffer.append(m_serialPort.readAll());
+        if(m_logLevel > 0)
+            QTextStream(stdout) << "[ScoringMachineConnection]: readFromRMIV(), m_serialBuffer = " << m_serialBuffer << ", m_sendingStage = " << m_sendingStage << endl;
         if(m_serialBuffer.contains(CR)) {
             currentText = m_serialBuffer.left(m_serialBuffer.indexOf(CR) + 1);
             currentText.replace(STX, "");
@@ -327,13 +347,9 @@ void ScoringMachineConnection::readFromRMIV()
             currentText = m_serialBuffer.left(m_serialBuffer.indexOf(STX) + 1);
             currentText.replace(STX, "STX");
             if(m_sendingStage == 1) {
-//#ifdef PROOV
-//        qDebug() << "saabus: STX\n";
-//#endif
+                if(m_logLevel > 0)
+                    QTextStream(stdout) << "[ScoringMachineConnection]: received: STX, m_sendingStage = " << m_sendingStage << endl;
                 m_sendingStage = 2;  // STX received
-//#ifdef PROOV
-//        qDebug() << "saatmiseEtapp = 2";
-//#endif
                 sendToMachine("");  // If STX was received, then probably the machine is ready to receive text
             }
             m_serialBuffer.remove(0, m_serialBuffer.indexOf(STX) + 1);
@@ -341,26 +357,20 @@ void ScoringMachineConnection::readFromRMIV()
             currentText = m_serialBuffer.left(m_serialBuffer.indexOf(NAK) + 1);
             currentText.replace(NAK, "NAK");
             if(m_sendingStage == 3){
-//#ifdef PROOV
-//        qDebug() << "saabus: NAK\n";
-//#endif
+                if(m_logLevel > 0)
+                    QTextStream(stdout) << "[ScoringMachineConnection]: received: NAK, m_sendingStage = " << m_sendingStage << endl;
+
                 m_sendingStage = 0;  // NAK received, so something is wrong -> initial stage
-//#ifdef PROOV
-//        qDebug() << "saatmiseEtapp = 0";
-//#endif
             }
             m_serialBuffer.remove(0, m_serialBuffer.indexOf(NAK) + 1);
         }else if(m_serialBuffer.contains(ACK)){
             currentText = m_serialBuffer.left(m_serialBuffer.indexOf(ACK) + 1);
             currentText.replace(ACK, "ACK");
             if(m_sendingStage == 3){
-//#ifdef PROOV
-//        qDebug() << "saabus: ACK";
-//#endif
+                if(m_logLevel > 0)
+                    QTextStream(stdout) << "[ScoringMachineConnection]: received: ACK, m_sendingStage = " << m_sendingStage << endl;
                 m_sendingStage = 0;  // ACK received -> initial stage
-//#ifdef PROOV
-//        qDebug() << "saatmiseEtapp = 0";
-//#endif
+                m_machineChoiceInProgress = false;
             }
             m_serialBuffer.remove(0, m_serialBuffer.indexOf(ACK) + 1);
         }else
@@ -412,16 +422,11 @@ void ScoringMachineConnection::sendSettings()
         settingString.append("TEA=KT;RIA=ZR;"); //Teiler with full rings and shot value with tenths
         settingString.append(QString("SSC=%1;").arg(m_noOfShotsPerTarget));  //Laskude arv lehes
         settingString.append(QString("SGE=%1;SZI=%1;").arg(m_notOfShotsPerSeries));    // No of shots in series, currently always 10
-//    #ifdef PROOV
-//    //    s.append("KSD;");
-//        qDebug() << "Seadistamine: " << s;
-//    #endif
-    //    if(!ui->trukkimiseBox->isChecked())   //Kas trükkida lehele lasud ja tulemused või ei
-    //        s.append("KSD;");
-//        sendToMachine(settingString);
         break;
     }
 
+    if(m_logLevel > 0)
+        QTextStream(stdout) << "[ScoringMachineConnection]: sendSettings(): " << settingString << endl;
     sendToMachine(settingString);
     emit connectionStatusChanged("Seadisamine: " + settingString);
 }
@@ -434,6 +439,8 @@ void ScoringMachineConnection::sendToMachine()
         m_serialPort.write(&m_enq);
         m_serialPort.flush();
         m_sendingStage = 1; // ENQ sent
+        if(m_logLevel > 0)
+            QTextStream(stdout) << "[ScoringMachineConnection]: sent: ENQ, m_sendingStage = " << m_sendingStage << endl;
         break;
     case 2:
         if(m_scoringMachineType == RMIV)
@@ -444,12 +451,16 @@ void ScoringMachineConnection::sendToMachine()
         m_serialPort.flush();
         if(m_scoringMachineType == RMIV)
             m_sendingStage = 3; // Text sent
+        if(m_logLevel > 0)
+            QTextStream(stdout) << "[ScoringMachineConnection]: sent: " << m_dataToSend << ", m_sendingStage = " << m_sendingStage << endl;
         break;
     case 4:
         m_serialPort.write(&m_ack);
         emit dataSent("ACK");
         m_serialPort.flush();
         m_sendingStage = 0; // ACK sent
+        if(m_logLevel > 0)
+            QTextStream(stdout) << "[ScoringMachineConnection]: sent: ACK, m_sendingStage = " << m_sendingStage << endl;
         break;
     default:
         break;
@@ -458,6 +469,9 @@ void ScoringMachineConnection::sendToMachine()
 
 void ScoringMachineConnection::sendToMachine(QString data)
 {
+    if(m_logLevel > 0)
+        QTextStream(stdout) << "[ScoringMachineConnection]: sendToMachine(" << data << "), m_sendingStage = " << m_sendingStage << endl;
+
     if(!data.isEmpty()) // If this is empty, then probably it is second stage of sending
         m_dataToSend = data.toLatin1();
     m_sendTimer.start();
@@ -486,6 +500,16 @@ void ScoringMachineConnection::setTargetType(int targetType)
 int ScoringMachineConnection::targetType() const
 {
     return m_targetType;
+}
+
+int ScoringMachineConnection::logLevel() const
+{
+    return m_logLevel;
+}
+
+void ScoringMachineConnection::setLogLevel(LogLevel logLevel)
+{
+    m_logLevel = logLevel;
 }
 
 bool ScoringMachineConnection::connected() const

@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QLineF>
 #include <QtMath>
+#include <QTextStream>
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 
@@ -14,13 +15,19 @@ class ScoringMachineConnection : public QObject
 {
     Q_OBJECT
 public:
+    enum LogLevel {None, Verbose, VeryVerbose};
+    enum ScoringMachineType {RMIII, RMIV};
+    enum TargetType {AirRifle, AirPistol, SmallboreRifle};
+
     explicit ScoringMachineConnection(QObject *parent = nullptr);
     ~ScoringMachineConnection();
     bool calculateIsInnerTen(float x, float y);
     bool connected() const;
+    int logLevel() const;
     int notOfShotsPerSeries() const;
     int noOfShotsPerTarget() const;
     QString portName() const;
+    void setLogLevel(LogLevel logLevel);
     void setNotOfShotsPerSeries(int notOfShotsPerSeries);
     void setNoOfShotsPerTarget(int noOfShotsPerTarget);
     void setPortName(const QString &portName);
@@ -28,17 +35,15 @@ public:
     void setTargetType(int targetType);
     int targetType() const;
 
-    enum ScoringMachineType {RMIII, RMIV};
-    enum TargetType {AirRifle, AirPistol, SmallboreRifle};
-
 private:
     bool m_connected = false;   // Shows if scoring machine is in connected stage
     bool m_firstAttempt = true;    // Shows if it is a first attempt to connect to a machine
     bool m_machineChoiceInProgress = false;
-    int m_notOfShotsPerSeries;
-    int m_noOfShotsPerTarget;
+    int m_logLevel = None; // Amount of debug/logging data to be sent out
+    int m_notOfShotsPerSeries = 10;
+    int m_noOfShotsPerTarget = 1;
     int m_scoringMachineType = -1;
-    int m_sendingStage = 0;   // For RM-IV, showing in which stage sending currently is:
+    int m_sendingStage = 2;   // For RM-III always 2, for RM-IV, showing in which stage sending currently is:
     // 0 - initial/ACK received (end), 1 -ENQ sent, 2 - STX received, 3 - text sent, 4 - text received, need to reply ACK
     int shotNo = 0; // Current shot number in series
     int m_targetType = -1;
@@ -52,6 +57,8 @@ private:
     QTimer m_readTimer;   // Delay between reads from serial port
     QTimer m_sendTimer; // Delay before sending, so that RMIV has time to react
     QTimer m_settingsTimer; // Delay before sending settings, so that machines have time to react
+
+    friend class ScoringMachineConnectionTest;
 
 signals:
     void dataSent(QString data);
