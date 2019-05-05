@@ -104,7 +104,7 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
 
     connect(ui->liigneNupp, SIGNAL(clicked()), this, SLOT(liigneLask()));
     connect(ui->otsiCOMNupp, SIGNAL(clicked()), this, SLOT(hakkaOtsima()));
-    connect(ui->resetNupp, SIGNAL(clicked()), this, SLOT(alustaUuesti()));
+    connect(ui->resetNupp, SIGNAL(clicked()), this, SLOT(restartScoring()));
     connect(ui->peidaNupp, SIGNAL(clicked()), this, SLOT(peidaNimi()));
     connect(ui->peida2Nupp, SIGNAL(clicked()), this, SLOT(peidaNupud()));
     connect(ui->saadaNupp, SIGNAL(clicked()), this, SLOT(saadaTekst()));
@@ -166,7 +166,7 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
 //    ui->silt->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 //    ui->silt->setScaledContents(true);
 
-    joonistaLeht();
+    startScoring();
 
 //    serial = new QextSerialPort();
     broadcastiSaatja = new QTimer(this);
@@ -227,15 +227,11 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
 #endif
 }
 
-void Lehelugeja::alustaUuesti()
+void Lehelugeja::restartScoring()
 {
     lask = 0;
     seeria = 0;
-    for(int j = 0; j < 10; j++){
-        seriesShots[j]->clear();    //Loetava seeria lasud puhtaks
-    }
-    joonistaLeht();
-    ui->silt->setText("");
+    startScoring();
     seadistaja->start();
 }
 
@@ -363,7 +359,7 @@ void Lehelugeja::joonistaLask(QPointF p, bool kasMM)
 //    this->update();
 }
 
-void Lehelugeja::joonistaLeht()
+void Lehelugeja::drawTarget()
 {
     target.init(ui->leheCombo->currentIndex());
     target.setZoomEnabled(false);
@@ -1027,7 +1023,7 @@ void Lehelugeja::loeVorgust()   //Protokollitajast tulev info/käsk
         }
 
         ui->summaEdit->setEnabled(true);
-        alustaUuesti();
+        restartScoring();
 
         QStringList pakett = sisse.split(";");
         ui->sifriLabel->setText(pakett.takeFirst());
@@ -1087,8 +1083,8 @@ void Lehelugeja::loeVorgust()   //Protokollitajast tulev info/käsk
 
         for(int j = seeriateArv; j < seeriad.count(); j++)
             seeriad[j]->hide();
-        joonistaLeht();
-        seadista();
+//        drawTarget();
+//        seadista();
         seeriad[aktiivneSeeria]->selectAll();
         seeriad[aktiivneSeeria]->setFocus();
     }else if(sisse.startsWith("Summa:")){    //Saadeti praeguse laskuri summa
@@ -1215,8 +1211,9 @@ void Lehelugeja::peidaNupud()
 
 void Lehelugeja::readShot(Lask shot)
 {
-    if(lask == 0)
-        joonistaLeht();
+    if(lask == 0) {
+        startScoring();
+    }
 
     target.drawAShot(shot);
     seriesShots[lask]->set(&shot);
@@ -1524,6 +1521,15 @@ void Lehelugeja::seeriaLoetud()
         ui->summaEdit->setEnabled(false);
     }
 //    fookus->start();  //See siin pigem tekitab probleeme
+}
+
+void Lehelugeja::startScoring()
+{
+    for(int j = 0; j < 10; j++){
+        seriesShots[j]->clear();    // Loetava seeria lasud puhtaks
+    }
+    drawTarget();
+    ui->silt->setText("");
 }
 
 void Lehelugeja::sulgeUhendus()

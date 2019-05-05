@@ -87,13 +87,13 @@ private:
     Ui::Lehelugeja *ui;
 
 private slots:
-    void alustaUuesti();
+    void restartScoring();
     int CRC(QByteArray *s);  //Arvutab lugemismasina ühenduse jaoks kontrollnumbri
 //    int eraldaLask(QString rida);  //Eraldab loetud reast lasu väärtuse
     void fookusMuutus(QWidget *vana, QWidget *uus);    //Vaatab, kas mõni seeria kastidest sai fookuse, kui sai, muudab, et sinna loetaks tulemus
     void fookusSifrile();   //Viib kursori, peale uue seeria kasti aktiivseks tegemist, sifri kasti
     void joonistaLask(QPointF p, bool kasMM);    //Joonistab lasu lehele, bool näitab, kas on vana lugemismasina koordinaadid või mm
-    void joonistaLeht();
+    void drawTarget();
     void hakkaOtsima();
     void sumAndEndSeries();
     void liigneLask();
@@ -117,6 +117,7 @@ private slots:
     void seadista();
 //    void seadista2();   //Uue lugemismasina seadistamine lehtede lugemiseks
     void seeriaLoetud();
+    void startScoring();
     void sulgeUhendus();
     void uhenda();
 //    void uhenda2(); //Uue lugemismasinaga ühendamine

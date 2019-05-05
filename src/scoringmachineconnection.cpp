@@ -117,7 +117,6 @@ void ScoringMachineConnection::connectToRMIII()
 
     if(!m_serialPort.open(QIODevice::ReadWrite)) {
         emit connectionStatusChanged(tr("Ei õnnestu serial port'i avada! Kontrollige, et mõni teine programm seda juba ei kasuta."));
-        emit connectionStatusChanged(tr("Veakood: ") + m_serialPort.error());
         return;
     }
 
