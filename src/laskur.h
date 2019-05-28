@@ -68,14 +68,16 @@ public:
 	QPushButton *lisaLNupp;
 	QTimer *arvutaja;
 	LisaLaskudeAken *lisaAken;
-    Laskur(Andmebaas*, int, int, int, bool*, bool*, int, int*,int ls = 10, QWidget *parent = nullptr);
+    Laskur(Andmebaas*, int, int, int, bool*, bool*, int, int*, QString *eventType, int ls = 10, QWidget *parent = nullptr);
     ~Laskur();
 //    bool operator<(const Laskur &l) const;
+    QString* getEventType() const;
     QString getSumma();
     bool vaiksem(Laskur *l, int t) const;
     void set(const Laskur *l);
     void setSumma(QString);
     QJsonObject toExportJson();
+
 
 public slots:
     int competitionStage() const;
@@ -122,6 +124,7 @@ private:
     QAction *laskudeAkenAct;
     QLineEdit *summa;
     QMenu *popup;
+    QString *m_eventType;
     QString m_previousSiusRow;
     LaskudeAken *laskudeAken;
     void contextMenuEvent(QContextMenuEvent *event);

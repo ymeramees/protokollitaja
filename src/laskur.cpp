@@ -3,7 +3,7 @@
 extern bool verbose;
 extern bool veryVerbose;
 
-Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i, int *jar, int ls, QWidget *parent)
+Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i, int *jar, QString *eventType, int ls, QWidget *parent)
     : QWidget(parent)
 {
     id = i;
@@ -23,6 +23,7 @@ Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i,
         kirjutusAbi = k;
         kumnendikega = kum;
         jarjestamine = jar;
+        m_eventType = eventType;
         keskmLask = 0;
         muudetud = false;
         onLehelugejaLaskur = false;
@@ -239,6 +240,11 @@ bool Laskur::eventFilter(QObject* object, QEvent* event)
 bool Laskur::isCompetitionStarted() const
 {
     return m_competitionStarted;
+}
+
+QString* Laskur::getEventType() const
+{
+    return m_eventType;
 }
 
 QString Laskur::getSumma()
@@ -1117,6 +1123,7 @@ void Laskur::set(const Laskur *l)
     this->onVorguLaskur = l->onVorguLaskur;
     this->m_competitionStage = l->competitionStage();
     this->m_competitionStarted = l->isCompetitionStarted();
+    this->m_eventType = l->getEventType();
     this->m_previousSiusRow = l->previousSiusRow();
     this->m_siusConnectionIndex = l->siusConnectionIndex();
     this->linnuke->setChecked(l->linnuke->isChecked());
@@ -1197,19 +1204,154 @@ QJsonObject Laskur::toExportJson()
     json["lastName"] = perekNimi->text();
     json["birthYear"] = sunniAasta->text();
     json["club"] = klubi->text();
-    QJsonArray seriesArray;
-    int index = 0;
-    foreach (QList<Lask*> series, lasud){
-        QJsonObject seriesJson;
-        QJsonArray shotsArray;
-        foreach (Lask *shot, series)
-            shotsArray.append(shot->toJson());
-        seriesJson["seriesShots"] = shotsArray;
-        seriesJson["seriesSum"] = seeriad.at(index)->text();
-        index++;
-        seriesArray.append(seriesJson);
+
+    QJsonArray subtotalsArray;
+    if(vSummadeSamm != 0) {
+        for (int i = 0; i < vSummad.size(); i++){
+//            int index = i * vSummadeSamm;
+            QJsonObject subtotalJson;
+            QJsonArray seriesArray;
+            for (int index = i * vSummadeSamm; index < (i + 1) * vSummadeSamm; index++){
+                QList<Lask*> seriesShots = lasud.at(index);
+                QJsonObject seriesJson;
+                QJsonArray shotsArray;
+                foreach (Lask *shot, seriesShots)
+                    shotsArray.append(shot->toJson());
+                seriesJson["seriesShots"] = shotsArray;
+                seriesJson["seriesSum"] = seeriad.at(index)->text();
+//                index++;
+                seriesArray.append(seriesJson);
+            }
+            subtotalJson["series"] = seriesArray;
+            if(*m_eventType == "3x20l Standard" || *m_eventType == "3x40l Standard"){
+                switch (i) {
+                case 0: {
+                    subtotalJson["label"] = "Kneeling";
+                    break;
+                }
+                case 1: {
+                    subtotalJson["label"] = "Prone";
+                    break;
+                }
+                case 2: {
+                    subtotalJson["label"] = "Standing";
+                    break;
+                }
+                default: {
+                    subtotalJson["label"] = "Series";
+                    break;
+                }
+                }
+            } else if(*m_eventType == tr("30+30l Spordipüstol")){
+                switch (i) {
+                case 0: {
+                    subtotalJson["label"] = "Precision";
+                    break;
+                }
+                case 1: {
+                    subtotalJson["label"] = "Rapid";
+                    break;
+                }
+                default: {
+                    subtotalJson["label"] = "Series";
+                    break;
+                }
+                }
+            } else if(*m_eventType == tr("Olümpiakiirlaskmine") || *m_eventType == tr("20+20l Metssiga")){
+                switch (i) {
+                case 0: {
+                    subtotalJson["label"] = "Stage 1";
+                    break;
+                }
+                case 1: {
+                    subtotalJson["label"] = "Stage 2";
+                    break;
+                }
+                default: {
+                    subtotalJson["label"] = "Series";
+                    break;
+                }
+                }
+            } else if(*m_eventType == tr("20+20+20l Spordipüstol")){
+                switch (i) {
+                case 0: {
+                    subtotalJson["label"] = "150\'\'";
+                    break;
+                }
+                case 1: {
+                    subtotalJson["label"] = "20\'\'";
+                    break;
+                }
+                case 2: {
+                    subtotalJson["label"] = "10\'\'";
+                    break;
+                }
+                default: {
+                    subtotalJson["label"] = "Series";
+                    break;
+                }
+                }
+            } else if(*m_eventType == tr("CISM püstol")){
+                switch (i) {
+                case 0: {
+                    subtotalJson["label"] = "10\'\'";
+                    break;
+                }
+                case 1: {
+                    subtotalJson["label"] = "8\'\'";
+                    break;
+                }
+                case 2: {
+                    subtotalJson["label"] = "6\'\'";
+                    break;
+                }
+                default: {
+                    subtotalJson["label"] = "Series";
+                    break;
+                }
+                }
+            } else if(*m_eventType == "30+30l Metssiga"){
+                switch (i) {
+                case 0: {
+                    subtotalJson["label"] = "Slow run";
+                    break;
+                }
+                case 1: {
+                    subtotalJson["label"] = "Rapid run";
+                    break;
+                }
+                default: {
+                    subtotalJson["label"] = "Series";
+                    break;
+                }
+                }
+            } else {
+                subtotalJson["label"] = "Series";
+            }
+
+            subtotalJson["subtotal"] = vSummad.at(i)->text();
+            subtotalsArray.append(subtotalJson);
+        }
+    } else {
+        QJsonObject subtotalJson;
+        QJsonArray seriesArray;
+        int index = 0;
+        foreach (QList<Lask*> series, lasud){
+            QJsonObject seriesJson;
+            QJsonArray shotsArray;
+            foreach (Lask *shot, series)
+                shotsArray.append(shot->toJson());
+            seriesJson["seriesShots"] = shotsArray;
+            seriesJson["seriesSum"] = seeriad.at(index)->text();
+            index++;
+            seriesArray.append(seriesJson);
+        }
+        subtotalJson["series"] = seriesArray;
+        subtotalJson["label"] = "Series";
+        subtotalJson["subtotal"] = summa->text();
+        subtotalsArray.append(subtotalJson);
     }
-    json["series"] = seriesArray;
+    json["subtotals"] = subtotalsArray;
     json["totalResult"] = summa->text();
     json["innerTens"] = kumned->text();
     json["finals"] = finaal->text();

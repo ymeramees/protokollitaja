@@ -36,7 +36,7 @@ void AlguseValik::avamine()
                                 QMessageBox::critical(this, tr("Protokollitaja"), tr("Vigane või vale fail!\n%1").arg(ui.failiNimi->text()), QMessageBox::Ok);
                                 return;
                         }
-                        if(versioon >= 100 && versioon <= 111){
+                        if(versioon >= 100 && versioon <= 112){
                                 QString rida;
                                 //char *rida2;
                                 sisse >> rida;
@@ -69,10 +69,11 @@ void AlguseValik::edasi()
                         if(fail.open(QIODevice::WriteOnly)){
                                 QDataStream valja(&fail);
                                 valja << (quint32)0x00FA3848;	//Kontrollarv
-                                valja << (qint32)111;			//Millise programmi versiooni failiga on tegu
+                                valja << (qint32)112;			//Millise programmi versiooni failiga on tegu
                                 valja.setVersion(QDataStream::Qt_4_3);
                                 valja << ui.voistluseNimi->text()/*.toLatin1()*/;
                                 valja << ui.aegKohtEdit->text()/*.toLatin1()*/;
+                                valja << "";
                                 valja << 1 << 1 << 5 << 0 << 0 << 0;  //kirjutusabi << autosave << autosave aeg << sakiAsukoht << sakkideArv << järjestamine;
                         }else QMessageBox::critical(this, "Protokollitaja", tr("Ei õnnestu faili luua. Kontrollige kas "
                                         "teil on sinna kausta kirjutamise õigus."), QMessageBox::Ok);

@@ -88,6 +88,7 @@ public:
     void reasta(int t);
     bool toBeUploaded();
     QJsonObject toExportJson();
+    QString getEventType();
 
 public slots:
 	void eemaldaLaskur();

@@ -142,7 +142,7 @@ void TulemuseAken::joonista()
         painter->drawText(1460, 1190, "Protokollitaja " + versioon); // TODO uuendada nime
         painter->drawText(1, 1190, "Autor: Ümeramees");
         painter->setFont(kirjaFont);
-//        painter->drawText(450, 1190, "Vaata tulemusi internetis: http://web.zone.ee/protokollitaja");
+        painter->drawText(450, 1190, "Vaata tulemusi internetis: https://webzone.ee/protokollitaja");
         painter->setFont(pealkirjaFont);
         painter->drawText(60, 50, voistluseNimi);
         painter->setFont(paiseFont);

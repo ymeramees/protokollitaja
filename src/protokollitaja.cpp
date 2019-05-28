@@ -1620,11 +1620,12 @@ void Protokollitaja::kirjutaFail(QString failiNimi)
     QFile fail(failiNimi);
     if(fail.open(QIODevice::WriteOnly)){
             QDataStream valja(&fail);
-            valja << (quint32)0x00FA3848;	//Kontrollarv
-            valja << (qint32)111;			//Millise faili versiooniga on tegu
+            valja << quint32(0x00FA3848);	//Kontrollarv
+            valja << qint32(112);			//Millise faili versiooniga on tegu
             valja.setVersion(QDataStream::Qt_4_3);
             valja << voistluseNimi/*.toUtf8()*/;
             valja << aegKoht/*.toUtf8()*/;
+            valja << webCompetitionId;
             valja << seaded->ui.kirjutusAbiCombo->currentIndex();
             valja << seaded->ui.aegCombo->currentIndex();
             valja << seaded->ui.aegEdit->value();
@@ -2230,7 +2231,7 @@ void Protokollitaja::loefail()
             }
             uuendaSeaded();
             voibSulgeda = true;
-        }else if(versioon >= 101 && versioon <= 111){
+        }else if(versioon >= 101 && versioon <= 112){
             tabWidget->deleteLater();   //Vältimaks mälu leket, on vaja eelmine ära kustutada, aga see üksi ei ole piisav
             tabWidget = new QTabWidget(this);
             tabWidget->setTabPosition(QTabWidget::North);
@@ -2238,6 +2239,8 @@ void Protokollitaja::loefail()
             //QString rida;
             sisse >> voistluseNimi;
             sisse >> aegKoht;
+            if(versioon >= 112)
+                sisse >> webCompetitionId;
             int sakkideArv = 0, kirjutusA = 1, autosave = 1, aeg = 5, sakiAsukoht = 2;
             jarjestamine = KumneteArvuga;   //Vaja nullida, juhuks kui uues failis seda ei ole
             int uploadTime = 30;
@@ -2595,7 +2598,7 @@ void Protokollitaja::loeSeaded()
                                             QMessageBox::Ok);
                             return;
                     }
-                    if(versioon >= 100 && versioon <= 111){
+                    if(versioon >= 100 && versioon <= 112){
                             QString rida;
                             //char *rida2;
                             sisse >> rida;
@@ -2969,7 +2972,8 @@ void Protokollitaja::naitaInfot()
                         "\n\nTeadmiseks teile, et seda programmi on vahelduva eduga autori vabast ajast arendatud juba "
                         "aastast 2008 ning Finaali programmi, koos vanemate versioonidega aastast 2007!\n\nKüsimused, "
                         "ettepanekud, leitud vead, arvamused jms võib saata allolevale e-postile\n\nAutor: Ümeramees\n"
-                        "ymeramees@gmail.com\nTallinn ") + aasta);
+                        "ymeramees@gmail.com\nTallinn ") + aasta + "\n\nQt versioon:\n\tCompile: " + QT_VERSION_STR +
+                        "\n\tRun time: " + qVersion());
 }
 
 void Protokollitaja::naitaSeaded()
@@ -4358,13 +4362,19 @@ void Protokollitaja::reastaSi() //Sifrite järgi reastamine
 
 void Protokollitaja::restClientFinished(QNetworkReply *reply)
 {
+    QString answer = reply->readAll();
     if(reply->error()){
-        QTextStream(stdout) << "Error with upload: " << reply->errorString() << endl;
-        statusBarInfoChanged("Error with upload: " + reply->errorString());
+        QTextStream(stdout) << "Error with upload: " << reply->errorString() << " " << answer << endl;
+        statusBarInfoChanged("Error with upload: " + reply->errorString() + " " + answer);
+        if(reply->errorString().contains("Authentication", Qt::CaseInsensitive) || reply->errorString().contains("Connection closed", Qt::CaseInsensitive))
+            m_restHeaderData = ""; // In case of login error, clear login data
     }else{
-        QString answer = reply->readAll();
         QTextStream(stdout) << "Reply to upload: " << answer << endl;
         statusBarInfoChanged("Upload successful: " + answer);
+        if(webCompetitionId.isEmpty()) {
+            webCompetitionId = answer;
+            voibSulgeda = false;
+        }
     }
 }
 
@@ -4599,9 +4609,12 @@ QJsonObject Protokollitaja::toExportJson()
 {
     QJsonObject json;
     json["token"] = "placeholder for future token34";
-#ifdef PROOV
-    json["id"] = "5c48c8334cfa122159c9fe49";
-#endif
+//#ifdef PROOV
+//    json["id"] = "5c48c8334cfa122159c9fe49";
+//#endif
+    if(!webCompetitionId.isEmpty()) {
+        json["id"] = webCompetitionId;
+    }
     json["competitionName"] = voistluseNimi;
     json["timeAndPlace"] = aegKoht;
 
@@ -4620,33 +4633,55 @@ QJsonObject Protokollitaja::toExportJson()
 void Protokollitaja::uploadResults()
 {
     QUrl url;
-    url.setScheme("http");
+    url.setScheme("https");
 #ifdef PROOV
     url.setHost("localhost");
     url.setPath("/api/v1/competitions");
     url.setPort(3005);
 #else
-    // Temporarly still use old server:
     url.setHost("ymeramees.no-ip.org");
-    url.setPath("/rapla");
-    url.setPort(3004);
+    url.setPath("/api/v1/competitions");
+    url.setPort(3005);
 #endif
+
+    if(m_restHeaderData.isEmpty()) {
+        bool isOk = false;
+        QString userName = QInputDialog::getText(this, tr("Kasutajanimi andmebaasis"), tr("Kasutajanimi:"), QLineEdit::Normal, "", &isOk).toLower();
+        if(isOk) {
+            QString passWord = QInputDialog::getText(this, tr("Kasutaja parool andmebaasis"), tr("Parool:"), QLineEdit::Password, "", &isOk);
+            QString concatenated = userName + ":" + passWord;
+            QByteArray data = concatenated.toLocal8Bit().toBase64();
+            m_restHeaderData = "Basic " + data;
+        }
+        if(!isOk)
+            return;
+    }
 
     QNetworkRequest request;
     request.setUrl(url);
 
     QTextStream(stdout) << "Url: " << request.url().toString() << endl;
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setRawHeader("Authorization", m_restHeaderData.toLocal8Bit());
+
+#ifdef PROOV
+    QSslConfiguration sslConf = request.sslConfiguration();
+    sslConf.setPeerVerifyMode(QSslSocket::VerifyNone);
+    request.setSslConfiguration(sslConf);
+#endif
 
     if(restClient == nullptr)
         restClient = new QNetworkAccessManager(this);
-//    restClient->setNetworkAccessible(QNetworkAccessManager::Accessible);
 
     connect(restClient, &QNetworkAccessManager::finished, this, &Protokollitaja::restClientFinished);
 
     QJsonDocument jsonDoc(toExportJson());
 
-    restClient->put(request, jsonDoc.toJson());
+    if(webCompetitionId.isEmpty()) {
+        restClient->post(request, jsonDoc.toJson());
+    } else {
+        restClient->put(request, jsonDoc.toJson());
+    }
 
     uploadTimer.start();
 

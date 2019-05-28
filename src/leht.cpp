@@ -37,6 +37,11 @@ Leht::Leht(Andmebaas* baas, int s, int vs, int a, bool *k, QString eNimi, int r,
 	//setGeometry(1, 1, 1000, 100);
 }
 
+QString Leht::getEventType()
+{
+    return harjutus;
+}
+
 void Leht::idMuudatus(int uusId, Laskur* las)
 {
     emit idMuutus(uusId, las);
@@ -54,7 +59,7 @@ void Leht::uusLaskur(int id)
         voistkonnad << voistKond;
         voistKond->show();
     }else{
-        Laskur *las = new Laskur(andmebaas, seeriateArv, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, id, jarjestamine, laskudeArv, this);
+        Laskur *las = new Laskur(andmebaas, seeriateArv, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, id, jarjestamine, &harjutus, laskudeArv, this);
         connect(las, SIGNAL(sifrimuutus()), this, SLOT(naitaSifrit()));
         connect(las, SIGNAL(idMuutus(int,Laskur*)), this, SLOT(idMuudatus(int,Laskur*)));
         connect(las->eesNimi, SIGNAL(editingFinished()), this, SLOT(kontrolliKordusi()));
@@ -236,7 +241,7 @@ void Leht::reasta(int t)
 //                uus.lisaLasud << reasLaskurid[i]->lisaLasud[j];
 //            uus.kumned = reasLaskurid[i]->kumned->text();
 //            uus.markus = reasLaskurid[i]->markus->text();
-            Laskur* uus = new Laskur(andmebaas, seeriateArv, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, 0, jarjestamine, laskudeArv, this);
+            Laskur* uus = new Laskur(andmebaas, seeriateArv, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, 0, jarjestamine, &harjutus, laskudeArv, this);
             uus->set(reasLaskurid[i]);
 			varuLaskurid << uus;
 		}

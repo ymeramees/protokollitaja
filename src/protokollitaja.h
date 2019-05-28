@@ -262,6 +262,8 @@ private slots:
 private:
     QNetworkAccessManager *restClient = nullptr;
     QProgressDialog *progress;  //Näitab, et SiusDatast alles andmed tulevad
+    QString webCompetitionId = "";
+    QString m_restHeaderData = "";
     QTimer *progressTimer;  //Timer, et progressi aken mõne aja pärast kinni panna
 };
 
