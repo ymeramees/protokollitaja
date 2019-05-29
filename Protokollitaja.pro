@@ -80,7 +80,9 @@ FORMS += src/lisalaskudeaken.ui \
 RESOURCES += protokollitaja.qrc
 RC_FILE += src/ikoon.rc
 win32{
-LIBS += -liconv #-L../libxl-2.2.0/bin -lxl \
+INCLUDEPATH += c:\Qt\Qt5.12.1\Tools\mingw730_64\opt\include
+LIBS += -liconv \
+ -L c:\Qt\Qt5.12.1\Tools\mingw730_64\opt\lib -lcrypto #-L../libxl-2.2.0/bin -lxl \
     #-lpthread #\
     #-L../qextserialport/build -lqextserialport
 }
