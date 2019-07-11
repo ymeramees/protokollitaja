@@ -6,6 +6,7 @@
 //#include <QHostAddress>
 #include <QInputDialog>
 #include <QProgressDialog>
+#include <QSerialPortInfo>
 #include <QDataStream>
 //#include <QTcpSocket>
 #include <QtNetwork>
@@ -19,8 +20,6 @@
 
 #include "../../protokollitaja/src/lask.h"
 #include "../../protokollitaja/src/common/target.h"
-#include "qextserialport.h"
-#include "qextserialenumerator.h"
 #include "scoringmachineconnection.h"
 
 namespace Ui {
@@ -61,8 +60,7 @@ private:
     QMenu *failMenu;
     quint16 blockSize;  //Protokollitajaga suhtlemisel paketi suurus
     QTcpSocket *socket; //Protokollitajaga suhtlemiseks
-//    QextSerialPort *serial;
-    QList<QextPortInfo> pordid;
+    QList<QSerialPortInfo> pordid;
     QImage *pilt;
     QList<Lask*> seriesShots;   // Shots in current series that is being read
     QList<QList<Lask*> > lasud; //Iga seeria lasud + koordinaadid
@@ -124,7 +122,7 @@ private slots:
     void uhenduServeriga(QString); //Ühendumine serveriga
     void uhenduUuesti();    //Et muuta serveri IP'd ja uuesti ühenduda
     void updateLog(QString);
-    void uuendaPorte();
+    void updatePorts();
     void uuendaSifriga();
 
 //signals:

@@ -37,7 +37,8 @@ public:
 
 private:
     bool m_connected = false;   // Shows if scoring machine is in connected stage
-    bool m_firstAttempt = true;    // Shows if it is a first attempt to connect to a machine
+    int m_attemptCount = 0;    // Number of attempts to read from RMIII
+    const int MAX_ATTEMPTS = 3; // Number of attempts to read form RMIII, before changing to RMIV
     bool m_machineChoiceInProgress = false;
     int m_logLevel = None; // Amount of debug/logging data to be sent out
     int m_notOfShotsPerSeries = 10;

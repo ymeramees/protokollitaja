@@ -208,7 +208,7 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
     // Make sure things are clear
 //    serial->close();
 
-    uuendaPorte();
+    updatePorts();
 
     ui->nimeBox->hide();
     ui->nimeSilt->hide();
@@ -305,7 +305,7 @@ void Lehelugeja::hakkaOtsima()
         return;
     }
 
-    uuendaPorte();
+    updatePorts();
 //    otsija->start();
 }
 
@@ -1386,7 +1386,7 @@ void Lehelugeja::saadaTekst()
         return;
     else if(ui->tekstiEdit->text().contains("uuenda porte", Qt::CaseInsensitive)){
         ui->logi->append("Uuenda porte:");
-        uuendaPorte();
+        updatePorts();
     }else if(ui->tekstiEdit->text().left(3) == "COM" && ui->tekstiEdit->text().length() <= 5 && ui->tekstiEdit->text().length() >= 4){
         ui->logi->append("Lisatud: " + ui->tekstiEdit->text());
         ui->comPort->addItem(ui->tekstiEdit->text());
@@ -1556,7 +1556,7 @@ void Lehelugeja::uhenda()
 //        return;
 //    }
     if(!kaabelLeitud)   //Kui lugemismasina kaablit algul ei leitud, siis äkki vahepeal on see külge ühendatud
-        uuendaPorte();
+        updatePorts();
 
     ui->logi->append("Ühendamine: " + ui->comPort->currentText());
 
@@ -1660,16 +1660,16 @@ void Lehelugeja::uuendaSifriga()
     fookus->start();
 }
 
-void Lehelugeja::uuendaPorte()
+void Lehelugeja::updatePorts()
 {
     kaabelLeitud = false;
-    pordid = QextSerialEnumerator::getPorts();
+    pordid = QSerialPortInfo::availablePorts();
     ui->comPort->clear();
-    foreach(QextPortInfo info, pordid){
-        ui->comPort->addItem(info.portName);
-        ui->logi->append(QString("%1, %2").arg(info.portName).arg(info.friendName));
-        if((info.friendName.contains("Prolific", Qt::CaseInsensitive) || info.friendName.contains("serial", Qt::CaseInsensitive))
-                && info.friendName.contains("USB", Qt::CaseInsensitive)){
+    foreach(QSerialPortInfo info, pordid){
+        ui->comPort->addItem(info.portName());
+        ui->logi->append(QString("%1, %2").arg(info.portName()).arg(info.description()));
+        if((info.description().contains("Prolific", Qt::CaseInsensitive) || info.description().contains("serial", Qt::CaseInsensitive))
+                && info.description().contains("USB", Qt::CaseInsensitive)){
             ui->comPort->setCurrentIndex(ui->comPort->count() - 1);
             kaabelLeitud = true;
         }

@@ -66,6 +66,7 @@ void ScoringMachineConnection::closeConnection()
     m_dataToSend = QString("EXIT").toLatin1();
     m_sendingStage = 2;
     sendToMachine();
+    m_serialPort.waitForBytesWritten(1000);
     m_serialPort.close();
     m_readTimer.stop();
     m_connected = false;
@@ -74,6 +75,11 @@ void ScoringMachineConnection::closeConnection()
 
 void ScoringMachineConnection::connectToMachine()
 {
+    if(!m_connected && !m_machineChoiceInProgress) {
+        m_serialPort.close();   // Make sure port is free
+        m_attemptCount = 0;
+    }
+
     if(m_logLevel > 0)
         QTextStream(stdout) << "[ScoringMachineConnection]: connectToMachine(), m_sendingStage = " << m_sendingStage << endl;
 
@@ -81,8 +87,6 @@ void ScoringMachineConnection::connectToMachine()
         emit connectionStatusChanged(tr("Viga: Pordi nime pole määratud, ei saa ühenduda!"));
         return;
     }
-
-    m_firstAttempt = true;  // It is first time to connect to each machine
 
     switch(m_scoringMachineType) {
     case RMIII:
@@ -108,16 +112,18 @@ void ScoringMachineConnection::connectToRMIII()
     }
 
     emit connectionStatusChanged(tr("Ühendamine: RMIII, ") + m_portName);
-    m_serialPort.setPortName(m_portName);
-    m_serialPort.setBaudRate(QSerialPort::Baud2400);
-    m_serialPort.setDataBits(QSerialPort::Data8);
-    m_serialPort.setParity(QSerialPort::NoParity);
-    m_serialPort.setStopBits(QSerialPort::OneStop);
-    m_serialPort.setFlowControl(QSerialPort::NoFlowControl);
 
-    if(!m_serialPort.open(QIODevice::ReadWrite)) {
-        emit connectionStatusChanged(tr("Ei õnnestu serial port'i avada! Kontrollige, et mõni teine programm seda juba ei kasuta."));
-        return;
+    if(!m_serialPort.isOpen()) {
+        m_serialPort.setPortName(m_portName);
+        m_serialPort.setBaudRate(QSerialPort::Baud2400);
+        m_serialPort.setDataBits(QSerialPort::Data8);
+        m_serialPort.setParity(QSerialPort::NoParity);
+        m_serialPort.setStopBits(QSerialPort::OneStop);
+        m_serialPort.setFlowControl(QSerialPort::NoFlowControl);
+        if(!m_serialPort.open(QIODevice::ReadWrite)) {
+            emit connectionStatusChanged(tr("Ei õnnestu serial port'i avada! Kontrollige, et mõni teine programm seda juba ei kasuta."));
+            return;
+        }
     }
 
     m_serialPort.setDataTerminalReady(true);
@@ -295,6 +301,7 @@ void ScoringMachineConnection::readFromRMIII()
         if(!m_connected) {
             m_connected = true; // If text was received, then connection is established
             m_machineChoiceInProgress = false;
+            m_scoringMachineType = RMIII;
             emit connectionStatusChanged(tr("Ühendatud: RMIII"));
         }
 
@@ -305,11 +312,14 @@ void ScoringMachineConnection::readFromRMIII()
                 emit shotRead(shot);
         }
     } else if(m_machineChoiceInProgress) {
-        if(!m_firstAttempt) {  // RMIII might not reply to first attempt, therefore, it is worth to try again
+        if(m_attemptCount >= MAX_ATTEMPTS) {  // RMIII might not reply to first attempt, therefore, it is worth to try again
             m_scoringMachineType = ScoringMachineType::RMIV;    // If nothing was received, it is probably RMIV
             connectToMachine();
         }
-        m_firstAttempt = false;
+        else {
+            connectToRMIII();
+        }
+        m_attemptCount++;
 //        firstTime = false;
 //        connectToMachine();   // Is it really needed?
     }
@@ -375,12 +385,12 @@ void ScoringMachineConnection::readFromRMIV()
         }else
             return;
     }else if(m_machineChoiceInProgress) {
-        if(!m_firstAttempt) {
+        if(m_attemptCount >= MAX_ATTEMPTS) {
             m_scoringMachineType = -1;
             m_machineChoiceInProgress = false;
             emit connectionStatusChanged(tr("Viga, ei õnnestu ühenduda ei RMIII ega RMIV'ga!"));
         }
-        m_firstAttempt = false;
+        m_attemptCount = 0;
     }
 }
 
@@ -451,7 +461,7 @@ void ScoringMachineConnection::sendToMachine()
         if(m_scoringMachineType == RMIV)
             m_sendingStage = 3; // Text sent
         if(m_logLevel > 0)
-            QTextStream(stdout) << "[ScoringMachineConnection]: sent: " << m_dataToSend << ", m_sendingStage = " << m_sendingStage << endl;
+            QTextStream(stdout) << "[ScoringMachineConnection]: sent: " << m_dataToSend.replace(CR, "CR") << ", m_sendingStage = " << m_sendingStage << endl;
         break;
     case 4:
         m_serialPort.write(&m_ack);
