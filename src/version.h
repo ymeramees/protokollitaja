@@ -1,12 +1,12 @@
 ﻿#ifndef VERSION_H
 #define VERSION_H
 
-// Changed 28.04.2019 - after which there has not been a release, so no need to update
-#define VER_FILEVERSION             0,7,12,0
-#define VER_FILEVERSION_STR         "0.7.12\0"
+// Changed 12.07.2019 - after which there has been a release, so need to update
+#define VER_FILEVERSION             0,7,13,0
+#define VER_FILEVERSION_STR         "0.7.13\0"
 
-#define VER_PRODUCTVERSION          0,7,12,0
-#define VER_PRODUCTVERSION_STR      "0.7.12\0"
+#define VER_PRODUCTVERSION          0,7,13,0
+#define VER_PRODUCTVERSION_STR      "0.7.13\0"
 
 #define VER_COMPANYNAME_STR         "Ymeramees"
 #define VER_FILEDESCRIPTION_STR     "Protokollitaja 0.7 Beta"

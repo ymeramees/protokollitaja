@@ -73,7 +73,7 @@ void AlguseValik::edasi()
                                 valja.setVersion(QDataStream::Qt_4_3);
                                 valja << ui.voistluseNimi->text()/*.toLatin1()*/;
                                 valja << ui.aegKohtEdit->text()/*.toLatin1()*/;
-                                valja << "";
+                                valja << "Empty";
                                 valja << 1 << 1 << 5 << 0 << 0 << 0;  //kirjutusabi << autosave << autosave aeg << sakiAsukoht << sakkideArv << järjestamine;
                         }else QMessageBox::critical(this, "Protokollitaja", tr("Ei õnnestu faili luua. Kontrollige kas "
                                         "teil on sinna kausta kirjutamise õigus."), QMessageBox::Ok);

@@ -381,6 +381,8 @@ Protokollitaja::Protokollitaja(QWidget *parent)
                 }
                 andmebaas.kirjutusabiPuss = true;
                 fail.close();
+                if(verbose)
+                    QTextStream(stdout) << "Püssilaskurite nimekiri loetud, leitud " << andmebaas.nimekiriPuss.size() << " rida" << endl;
         }else{
                 QMessageBox::warning(this, "Hoiatus", ("Püssilaskurite faili ei leitud! Püssilaskurite kirjutusabi pole võimaldatud"), "Selge");
                 andmebaas.kirjutusabiPuss = false;
@@ -403,7 +405,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
                         andmebaas.nimekiriPustol[andmebaas.nimekiriPustol.count()-1]->eesnimi = list.takeFirst().trimmed();
                         if(andmebaas.nimekiriPustol.isEmpty()){
                                 QMessageBox::critical(this, "Protokollitaja", tr("Püstolilaskurite failis on %1. rida vigane!").arg(andmebaas.nimekiriPustol.count()), "Selge");
-                                return;
+                                return; // FIXME kas on õige siin ja järgmises kahes if'is return'ida?
                         }
                         andmebaas.nimekiriPustol[andmebaas.nimekiriPustol.count()-1]->perekonnanimi = list.takeFirst().trimmed();
                         if(andmebaas.nimekiriPustol.isEmpty()){
@@ -419,6 +421,8 @@ Protokollitaja::Protokollitaja(QWidget *parent)
                 }
                 andmebaas.kirjutusabiPustol = true;
                 fail.close();
+                if(verbose)
+                    QTextStream(stdout) << "Püstolilaskurite nimekiri loetud, leitud " << andmebaas.nimekiriPustol.size() << " rida" << endl;
         }else{
                 QMessageBox::warning(this, "Hoiatus", ("Püstolilaskurite faili ei leitud! Püstolilaskurite kirjutusabi pole võimaldatud"), "Selge");
                 andmebaas.kirjutusabiPustol = false;
@@ -554,7 +558,7 @@ void Protokollitaja::algseaded()    //Seadistab algsed väärtused kas programmi
 //    seaded->autosave = seaded->ui.aegCombo->currentIndex();
     seaded->ui.aegEdit->setValue(salvestaja->interval() / 60000);
 //    seaded->aeg = seaded->ui.aegEdit->value();
-    seaded->ui.kirjutusAbiCombo->setCurrentIndex(abi);
+    seaded->ui.kirjutusAbiCombo->setCurrentIndex(1);
 //    seaded->kirjutusAbi = seaded->ui.kirjutusAbiCombo->currentIndex();
     seaded->ui.jarjestamiseBox->setCurrentIndex(jarjestamine);
 
@@ -2241,6 +2245,8 @@ void Protokollitaja::loefail()
             sisse >> aegKoht;
             if(versioon >= 112)
                 sisse >> webCompetitionId;
+            if(webCompetitionId == "Empty")
+                webCompetitionId = "";
             int sakkideArv = 0, kirjutusA = 1, autosave = 1, aeg = 5, sakiAsukoht = 2;
             jarjestamine = KumneteArvuga;   //Vaja nullida, juhuks kui uues failis seda ei ole
             int uploadTime = 30;

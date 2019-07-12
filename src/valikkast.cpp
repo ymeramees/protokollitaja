@@ -165,34 +165,26 @@ void ValikKast::muudaEkraaniNimi(int)
     }
     case 12:{
         ui.seeriateArv->setValue(6);
+        ui.vSummadeArv->setValue(2);
+        relv = Muu;
+        break;
+    }
+    case 13:{
+        ui.seeriateArv->setValue(6);
         ui.vSummadeArv->setValue(3);
         relv = Spordipustol;
         break;
     }
-    case 13:{
+    case 14:{
         ui.seeriateArv->setValue(4);
         ui.vSummadeArv->setValue(2);
         relv = Puss;
         break;
     }
-    case 14:{
+    case 15:{
         ui.seeriateArv->setValue(6);
         ui.vSummadeArv->setValue(3);
         relv = Puss;
-        break;
-    }
-    case 15:{
-        ui.seeriateSilt->setVisible(true);
-        ui.seeriateArv->setVisible(true);
-        ui.laskudeSilt->setVisible(true);
-        ui.laskudeArv->setVisible(true);
-        ui.vSummadeSilt->setVisible(true);
-        ui.vSummadeArv->setVisible(true);
-        ui.vSummadeSilt2->setVisible(true);
-
-        ui.seeriateArv->setValue(2);
-        ui.vSummadeArv->setValue(0);
-        relv = Ohupuss;
         break;
     }
     case 16:{
@@ -206,10 +198,24 @@ void ValikKast::muudaEkraaniNimi(int)
 
         ui.seeriateArv->setValue(2);
         ui.vSummadeArv->setValue(0);
-        relv = Ohupustol;
+        relv = Ohupuss;
         break;
     }
     case 17:{
+        ui.seeriateSilt->setVisible(true);
+        ui.seeriateArv->setVisible(true);
+        ui.laskudeSilt->setVisible(true);
+        ui.laskudeArv->setVisible(true);
+        ui.vSummadeSilt->setVisible(true);
+        ui.vSummadeArv->setVisible(true);
+        ui.vSummadeSilt2->setVisible(true);
+
+        ui.seeriateArv->setValue(2);
+        ui.vSummadeArv->setValue(0);
+        relv = Ohupustol;
+        break;
+    }
+    case 18:{
         ui.seeriateSilt->setVisible(true);
         ui.seeriateArv->setVisible(true);
         ui.laskudeSilt->setVisible(true);
@@ -223,7 +229,7 @@ void ValikKast::muudaEkraaniNimi(int)
         relv = Sportpuss;
         break;
     }
-    case 18:{
+    case 19:{
         ui.seeriateSilt->setVisible(true);
         ui.seeriateArv->setVisible(true);
         ui.laskudeSilt->setVisible(true);
