@@ -2243,8 +2243,18 @@ void Protokollitaja::loefail()
             //QString rida;
             sisse >> voistluseNimi;
             sisse >> aegKoht;
-            if(versioon >= 112)
+            if(versioon >= 112){
                 sisse >> webCompetitionId;
+                if(webCompetitionId.contains(QRegularExpression(QStringLiteral("[^\\x{0000}-\\x{007F}]")))){
+                    if(QMessageBox::warning(
+                                this,
+                                tr("Viga!"),
+                                tr("Võistluse veebi ID (%1) sisaldab kummalisi tähemärke ja on ilmselt vigane!"
+                                   "\n\nKas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.").arg(webCompetitionId),
+                                QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
+                    webCompetitionId = "";
+                }
+            }
             if(webCompetitionId == "Empty")
                 webCompetitionId = "";
             int sakkideArv = 0, kirjutusA = 1, autosave = 1, aeg = 5, sakiAsukoht = 2;
@@ -4370,16 +4380,29 @@ void Protokollitaja::restClientFinished(QNetworkReply *reply)
 {
     QString answer = reply->readAll();
     if(reply->error()){
+        logiValja << "#ERROR: Web upload failed, errorString: " << reply->errorString() << "\n#reply: " << answer << "\n";
         QTextStream(stdout) << "Error with upload: " << reply->errorString() << " " << answer << endl;
         statusBarInfoChanged("Error with upload: " + reply->errorString() + " " + answer);
-        if(reply->errorString().contains("Authentication", Qt::CaseInsensitive) || reply->errorString().contains("Connection closed", Qt::CaseInsensitive))
+        if(reply->errorString().contains("Authentication", Qt::CaseInsensitive) || reply->errorString().contains("Connection closed", Qt::CaseInsensitive)){
             m_restHeaderData = ""; // In case of login error, clear login data
+            uploadTimer.stop();  // No point to try again if login data was incorrect
+        }
     }else{
         QTextStream(stdout) << "Reply to upload: " << answer << endl;
         statusBarInfoChanged("Upload successful: " + answer);
         if(webCompetitionId.isEmpty()) {
             webCompetitionId = answer;
+            if(webCompetitionId.contains(QRegularExpression(QStringLiteral("[^\\x{0000}-\\x{007F}]")))){
+                if(QMessageBox::warning(
+                            this,
+                            tr("Viga!"),
+                            tr("Võistluse veebi ID (%1) sisaldab kummalisi tähemärke ja on ilmselt vigane!"
+                               "\n\nKas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.").arg(webCompetitionId),
+                            QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
+                webCompetitionId = "";
+            }
             voibSulgeda = false;
+            logiValja << "#Web upload success: " << answer << "\n#webCompetitionId: " << webCompetitionId << "\n";
         }
     }
 }
@@ -4686,6 +4709,8 @@ void Protokollitaja::uploadResults()
     if(webCompetitionId.isEmpty()) {
         restClient->post(request, jsonDoc.toJson());
     } else {
+        if(verbose)
+            QTextStream(stdout) << "PUT request, webCompetitionId: " << webCompetitionId << endl;
         restClient->put(request, jsonDoc.toJson());
     }
 
