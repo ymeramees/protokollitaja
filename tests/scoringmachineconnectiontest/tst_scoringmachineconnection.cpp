@@ -1,10 +1,9 @@
 #include <QtTest>
 #include <QCoreApplication>
 
-// add necessary includes here
 #include <QTextStream>
-#include "../../protokollitaja/src/lask.h"
-#include "../src/scoringmachineconnection.h"
+#include "lask.h"
+#include "scoringmachineconnection.h"
 
 class ScoringMachineConnectionTest : public QObject
 {
@@ -350,5 +349,4 @@ void ScoringMachineConnectionTest::test_sendSettingsRMIVSmallboreRifle()
 }
 
 QTEST_MAIN(ScoringMachineConnectionTest)
-
 #include "tst_scoringmachineconnection.moc"

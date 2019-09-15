@@ -18,8 +18,8 @@
 #include <QTimer>
 #include <QDebug>
 
-#include "../../protokollitaja/src/lask.h"
-#include "../../protokollitaja/src/common/target.h"
+#include "lask.h"
+#include "common/target.h"
 #include "scoringmachineconnection.h"
 
 namespace Ui {

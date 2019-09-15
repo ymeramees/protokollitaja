@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 INCLUDEPATH += ./ \
-DEPENDPATH += $${INCLUDEPATH}
+INCLUDEPATH += ../../protokollitaja/src
 include(qextserialport/src/qextserialport.pri)
 
 QT       += core gui network serialport

@@ -5,5 +5,5 @@
 #-------------------------------------------------
 TEMPLATE = subdirs
 
-SUBDIRS += src \
+SUBDIRS += main \
     tests
