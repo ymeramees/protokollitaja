@@ -20,6 +20,7 @@
 
 #include "lask.h"
 #include "common/target.h"
+#include "logandcmdwindow.h"
 #include "scoringmachineconnection.h"
 
 namespace Ui {
@@ -52,6 +53,7 @@ private:
     bool uusLugemismasin;   //Kas ühendatud on uus või vana lugemismasin
     bool voibSulgeda;   //Kontroll, kas ühendus on suletud ja Protokollitajale teade saadetud, enne kui programm sulgeda
     bool kaabelLeitud;  //Kontrollimaks, kas käivitamisel leiti lugemismasina kaabel või ei
+    LogAndCmdWindow logi;
     QAction *programmistAct;
     QAction *uhenduServerigaAct;
     QAction *valjuAct;
@@ -84,6 +86,10 @@ private:
     Target target;
     Ui::Lehelugeja *ui;
 
+public slots:
+    void changeVariable(QString variableAndValue);
+    void processCommand(QString command);
+
 private slots:
     void restartScoring();
     int CRC(QByteArray *s);  //Arvutab lugemismasina ühenduse jaoks kontrollnumbri
@@ -110,7 +116,6 @@ private slots:
     void saada(QString);
     void saadaBroadcast();
     void saadaParool(); //Vaja ühenduse loomise jätkamiseks
-    void saadaTekst();
     void saadaVorku(QString);
     void seadista();
 //    void seadista2();   //Uue lugemismasina seadistamine lehtede lugemiseks

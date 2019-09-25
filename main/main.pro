@@ -17,17 +17,20 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     lehelugeja.cpp \
+    logandcmdwindow.cpp \
     scoringmachineconnection.cpp \
     ../../protokollitaja/src/lask.cpp \
     ../../protokollitaja/src/common/target.cpp
 
 HEADERS  += lehelugeja.h \
+    logandcmdwindow.h \
     version.h \
     scoringmachineconnection.h \
     ../../protokollitaja/src/lask.h \
     ../../protokollitaja/src/common/target.h
 
-FORMS    += lehelugeja.ui
+FORMS    += lehelugeja.ui \
+    logandcmdwindow.ui
 
 RESOURCES += \
     ../protolehelugeja.qrc

@@ -102,15 +102,18 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
     abiMenu = ui->menuBar->addMenu("&Abi");
     abiMenu->addAction(programmistAct);
 
+    ui->centralGrid->replaceWidget(ui->logiPlaceholder, &logi);
+    connect(&logi, &LogAndCmdWindow::receivedCommand, this, &Lehelugeja::processCommand);
+    connect(&logi, &LogAndCmdWindow::changeVariable, this, &Lehelugeja::changeVariable);
+
+
     connect(ui->liigneNupp, SIGNAL(clicked()), this, SLOT(liigneLask()));
     connect(ui->otsiCOMNupp, SIGNAL(clicked()), this, SLOT(hakkaOtsima()));
     connect(ui->resetNupp, SIGNAL(clicked()), this, SLOT(restartScoring()));
     connect(ui->peidaNupp, SIGNAL(clicked()), this, SLOT(peidaNimi()));
     connect(ui->peida2Nupp, SIGNAL(clicked()), this, SLOT(peidaNupud()));
-    connect(ui->saadaNupp, SIGNAL(clicked()), this, SLOT(saadaTekst()));
     connect(ui->seadistaNupp, SIGNAL(clicked()), this, SLOT(seadista()));
     connect(ui->sulgeUhendusNupp, SIGNAL(clicked()), this, SLOT(sulgeUhendus()));
-    connect(ui->tekstiEdit, SIGNAL(returnPressed()), this, SLOT(saadaTekst()));
     connect(ui->uhendaNupp, SIGNAL(clicked()), this, SLOT(uhenda()));
     connect(ui->seeria1Edit, SIGNAL(editingFinished()), this, SLOT(seeriaLoetud()));
     connect(ui->seeria2Edit, SIGNAL(editingFinished()), this, SLOT(seeriaLoetud()));
@@ -247,6 +250,35 @@ void Lehelugeja::changeEvent(QEvent *e)
     }
 }
 
+void Lehelugeja::changeVariable(QString variableAndValue)
+{
+    QStringList variableValueList = variableAndValue.split(';');
+
+    if(variableValueList.length() < 2){
+        logi.append(tr("Vigane käsklus: ") + variableAndValue);
+        return;
+    }
+    QString variableName = variableValueList.takeFirst();
+    QString value = variableValueList.takeFirst();
+
+    if(variableName.compare("comPort") == 0){
+        ui->comPort->addItem(value);
+        ui->comPort->setCurrentIndex(ui->comPort->count() - 1);
+    }else if(variableName.compare("scoringMachineType") == 0){
+        if(value.compare("RMIV") == 0){
+            scoringMachCon.setScoringMachineType(ScoringMachineConnection::RMIV);
+            logi.append(tr("Lugemismasina tüüp: RMIV"));
+        }else if(value.compare("RMIII") == 0){
+            scoringMachCon.setScoringMachineType(ScoringMachineConnection::RMIII);
+            logi.append(tr("Lugemismasina tüüp: RMIII"));
+        }else {
+            logi.append(tr("Tundmatu lugemismasina tüüp: ") + value);
+        }
+    }else{
+        logi.append(tr("Tundmatu muutuja: ") + variableName);
+    }
+}
+
 void Lehelugeja::closeEvent(QCloseEvent *event)
 {
     if(!voibSulgeda){
@@ -364,7 +396,7 @@ void Lehelugeja::drawTarget()
     target.init(ui->leheCombo->currentIndex());
     target.setZoomEnabled(false);
     target.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    ui->centralGrid->replaceWidget(ui->placeHolderWidget, &target);
+    ui->centralGrid->replaceWidget(ui->placeholderWidget, &target);
 
 //    if(ui->leheCombo->currentIndex() == 0 || ui->leheCombo->currentIndex() == 2){   //Õhupüss ja sportpüss
 //        QFont font;
@@ -483,14 +515,14 @@ void Lehelugeja::sumAndEndSeries()
 
         for(int i = 0; i < seriesShots.count(); i++)    //Loetud laskude kirjutamine aktiivsesse seeriasse
             lasud[aktiivseSeeriaNr][i]->set(seriesShots[i]);
-        ui->logi->append(ui->nimeBox->currentText() + QString(" %1. seeria: %2").arg(aktiivneSeeria->objectName().at(6)).arg(double(fl / 10)));
+        logi.append(ui->nimeBox->currentText() + QString(" %1. seeria: %2").arg(aktiivneSeeria->objectName().at(6)).arg(double(fl / 10)));
 
         aktiivneSeeria->setFocus();
         QApplication::sendEvent(this, new QKeyEvent(QEvent::KeyPress, Qt::Key_Tab, Qt::NoModifier));
         QApplication::sendEvent(this, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Tab, Qt::NoModifier));
     } else {
         QMessageBox::critical(this, "Viga", "Puudus aktiivne seeria kast!", QMessageBox::Ok);
-        ui->logi->append("Viga!:" + ui->nimeBox->currentText() + QString(" tundmatu seeria: %1").arg(double(fl / 10)));
+        logi.append("Viga!:" + ui->nimeBox->currentText() + QString(" tundmatu seeria: %1").arg(double(fl / 10)));
     }
 
     fookus->start();
@@ -1209,6 +1241,24 @@ void Lehelugeja::peidaNupud()
     }
 }
 
+void Lehelugeja::processCommand(QString command)
+{
+    if(command.isEmpty())
+        return;
+    else if(command.contains("uuenda porte", Qt::CaseInsensitive)){
+        logi.append(tr("Uuenda porte:"));
+        updatePorts();
+    }else if(command.startsWith("COM") && command.length() <= 5 && command.length() >= 4){
+        logi.append(tr("Lisatud: ") + command);
+        ui->comPort->addItem(command);
+        ui->comPort->setCurrentIndex(ui->comPort->count() - 1);
+    }else if(command == "ACK"){
+        saada("");  //Saadab ACK'i
+    }else{
+        saada(command);
+        }
+}
+
 void Lehelugeja::readShot(Lask shot)
 {
     if(lask == 0) {
@@ -1380,39 +1430,6 @@ void Lehelugeja::saadaParool()
     block.clear();
 }
 
-void Lehelugeja::saadaTekst()
-{
-    if(ui->tekstiEdit->text().isEmpty())
-        return;
-    else if(ui->tekstiEdit->text().contains("uuenda porte", Qt::CaseInsensitive)){
-        ui->logi->append("Uuenda porte:");
-        updatePorts();
-    }else if(ui->tekstiEdit->text().left(3) == "COM" && ui->tekstiEdit->text().length() <= 5 && ui->tekstiEdit->text().length() >= 4){
-        ui->logi->append("Lisatud: " + ui->tekstiEdit->text());
-        ui->comPort->addItem(ui->tekstiEdit->text());
-        ui->comPort->setCurrentIndex(ui->comPort->count() - 1);
-    }else if(ui->tekstiEdit->text() == "uusLugemismasin=true"){
-        ui->logi->append(tr("Kasutusel uue lugemismasinaga ühendus"));
-//        uusLugemismasin = true;
-        scoringMachCon.setScoringMachineType(ScoringMachineConnection::RMIV);
-//        saatmiseEtapp = 0;
-    }else if(ui->tekstiEdit->text() == "uusLugemismasin=false"){
-        ui->logi->append(tr("Kasutusel vana lugemismasinaga ühendus"));
-//        uusLugemismasin = false;
-        scoringMachCon.setScoringMachineType(ScoringMachineConnection::RMIII);
-//        saatmiseEtapp = 2;
-        // TODO to be fixed:
-    }else if(ui->tekstiEdit->text() == "ACK"){
-//        saatmiseEtapp = 4;
-        saada("");  //Saadab ACK'i
-    }else{
-//        if(uusLugemismasin)
-//            saatmiseEtapp = 0;
-        saada(ui->tekstiEdit->text());
-    }
-    ui->tekstiEdit->clear();
-}
-
 void Lehelugeja::saadaVorku(QString saadetis)
 {
     blockSize = 0;
@@ -1558,7 +1575,7 @@ void Lehelugeja::uhenda()
     if(!kaabelLeitud)   //Kui lugemismasina kaablit algul ei leitud, siis äkki vahepeal on see külge ühendatud
         updatePorts();
 
-    ui->logi->append("Ühendamine: " + ui->comPort->currentText());
+    logi.append("Ühendamine: " + ui->comPort->currentText());
 
     scoringMachCon.setTargetType(ui->leheCombo->currentIndex());
     scoringMachCon.setNoOfShotsPerTarget(ui->laskudeBox->value());
@@ -1651,7 +1668,7 @@ void Lehelugeja::uhenduUuesti()
 
 void Lehelugeja::updateLog(QString updateInfo)
 {
-    ui->logi->append(updateInfo);
+    logi.append(updateInfo, true);
 }
 
 void Lehelugeja::uuendaSifriga()
@@ -1667,7 +1684,7 @@ void Lehelugeja::updatePorts()
     ui->comPort->clear();
     foreach(QSerialPortInfo info, pordid){
         ui->comPort->addItem(info.portName());
-        ui->logi->append(QString("%1, %2").arg(info.portName()).arg(info.description()));
+        logi.append(QString("%1, %2").arg(info.portName()).arg(info.description()));
         if((info.description().contains("Prolific", Qt::CaseInsensitive) || info.description().contains("serial", Qt::CaseInsensitive))
                 && info.description().contains("USB", Qt::CaseInsensitive)){
             ui->comPort->setCurrentIndex(ui->comPort->count() - 1);

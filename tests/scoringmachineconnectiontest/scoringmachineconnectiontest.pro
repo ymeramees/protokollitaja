@@ -6,7 +6,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 INCLUDEPATH += ../../../protokollitaja/src \
     ../../main/
 
-CONFIG += qt warn_on depend_includepath testcase
+CONFIG += qt warn_on testcase
 
 TEMPLATE = app
 
