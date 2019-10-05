@@ -27,6 +27,7 @@ public:
     int notOfShotsPerSeries() const;
     int noOfShotsPerTarget() const;
     QString portName() const;
+    int scoringMachineType() const;
     void setLogLevel(LogLevel logLevel);
     void setNotOfShotsPerSeries(int notOfShotsPerSeries);
     void setNoOfShotsPerTarget(int noOfShotsPerTarget);

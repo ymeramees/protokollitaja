@@ -1248,10 +1248,6 @@ void Lehelugeja::processCommand(QString command)
     else if(command.contains("uuenda porte", Qt::CaseInsensitive)){
         logi.append(tr("Uuenda porte:"));
         updatePorts();
-    }else if(command.startsWith("COM") && command.length() <= 5 && command.length() >= 4){
-        logi.append(tr("Lisatud: ") + command);
-        ui->comPort->addItem(command);
-        ui->comPort->setCurrentIndex(ui->comPort->count() - 1);
     }else if(command == "ACK"){
         saada("");  //Saadab ACK'i
     }else{
@@ -1444,6 +1440,11 @@ void Lehelugeja::saadaVorku(QString saadetis)
         QTextStream(stdout) << "saadaVorku(): " << block << endl;
     socket->write(block);
     block.clear();
+}
+
+int Lehelugeja::scoringMachineType() const
+{
+    return scoringMachCon.scoringMachineType();
 }
 
 void Lehelugeja::seadista()

@@ -34,6 +34,7 @@ class Lehelugeja : public QMainWindow
 public:
     explicit Lehelugeja(QWidget *parent = nullptr);
     ~Lehelugeja();
+    int scoringMachineType() const;
 
 private:
     int lask;   //Loetava lasu järjekorra nr seerias

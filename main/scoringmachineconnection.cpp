@@ -496,6 +496,11 @@ void ScoringMachineConnection::setPortName(const QString &portName)
     m_portName = portName;
 }
 
+int ScoringMachineConnection::scoringMachineType() const
+{
+    return m_scoringMachineType;
+}
+
 void ScoringMachineConnection::setScoringMachineType(int machineType)
 {
     m_scoringMachineType = machineType;

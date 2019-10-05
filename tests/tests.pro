@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
 
-SUBDIRS += scoringmachineconnectiontest \# \
-    LogAndCmdWindowTest
-    #lehelugejatest
+SUBDIRS += scoringmachineconnectiontest \
+    LogAndCmdWindowTest \
+    lehelugejatest
