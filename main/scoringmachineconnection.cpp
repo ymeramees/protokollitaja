@@ -182,7 +182,7 @@ Lask ScoringMachineConnection::extractRMIIIShot(QString shotInfo)
             fx /= 10;
             fx = qRound(fx);
 
-            fy = list.at(4).toFloat() * 100;
+            fy = list.at(4).toFloat() * -100;
             y = qRound(fy);
             fy = y *25;
             fy /= 10;
@@ -193,13 +193,13 @@ Lask ScoringMachineConnection::extractRMIIIShot(QString shotInfo)
         case SmallboreRifle:
             fx = list.at(3).toFloat() * 100;
             x = qRound(fx);
-            fx = x * 160;
+            fx = x * 80;
             fx /= 10;
             fx = qRound(fx);
 
-            fy = list.at(4).toFloat() * 100;
+            fy = list.at(4).toFloat() * -100;
             y = qRound(fy);
-            fy = y *160;
+            fy = y * 80;
             fy /= 10;
             fy = qRound(fy);
             break;

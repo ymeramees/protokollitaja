@@ -154,23 +154,27 @@ void ScoringMachineConnectionTest::test_extractRMIIIShot()
     ScoringMachineConnection machine;
     machine.setTargetType(ScoringMachineConnection::AirRifle);
 
-    Lask toCompare1(90, "3,33" ,"-0,35");
-    Lask toCompare2(90, "-1,1" ,"2,4");
-    Lask toCompare3(60, "67,2" ,"21,12");
-    Lask toCompare4(60, "67,3" ,"21,12");
+    Lask toCompare1(90, "3,33" ,"0,35");
+    Lask toCompare2(106, "-0,2" ,"-0,77", true);
+    Lask toCompare3(87, "0,56" ,"17,76");
+    Lask toCompare4(104, "-2,64" ,"3,76", true);
+    Lask toCompare5(74, "16,48" ,"-23,36");
+    Lask toCompare6(107, "0,64" ,"-1,68", true);
     Lask empty(-999, "-999", "-999");
 
     QCOMPARE(machine.extractRMIIIShot("7;9.0;-;1.33;-0.14;N"), toCompare1);
-    QCOMPARE(machine.extractRMIIIShot("8;9.0;-;-0.44;0.96;N"), toCompare2);
+    QCOMPARE(machine.extractRMIIIShot("8;10.6;-;-0.08;0.31;N"), toCompare2);
 
     machine.setTargetType(ScoringMachineConnection::AirPistol);
-    QCOMPARE(machine.extractRMIIIShot("4;6.0;-;4.20;1.32;N"), toCompare3);
+    QCOMPARE(machine.extractRMIIIShot("4;8.7;-;0.07;-2.22;N"), toCompare3);
+    QCOMPARE(machine.extractRMIIIShot("8;10.4;-;-0.33;-0.47;N"), toCompare4);
 
     machine.setTargetType(ScoringMachineConnection::SmallboreRifle);
-    QCOMPARE(machine.extractRMIIIShot("4;6.0;-;4.20;1.32;N"), toCompare3);
+    QCOMPARE(machine.extractRMIIIShot("4;7.4;-;2.06;2.92;N"), toCompare5);
+    QCOMPARE(machine.extractRMIIIShot("4;10.7;-;0.08;0.21;N"), toCompare6);
 
     // Make sure comparing not equal shots are not considered equal
-    QVERIFY(!(machine.extractRMIIIShot("4;6.0;-;4.20;1.32;N") == toCompare4));
+    QVERIFY(!(machine.extractRMIIIShot("4;6.0;-;4.20;1.32;N") == toCompare5));
 
     // If input row is too short, an empty shot must be returned
     QCOMPARE(machine.extractRMIIIShot("4;6.0;-;4.20"), empty);
