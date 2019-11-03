@@ -15,10 +15,11 @@ QString aasta = VER_AASTA;
 QString argument;
 bool verbose = false;
 bool veryVerbose = false;
-//QDir asukoht;
 
 int main(int argc, char *argv[])
 {
+    QApplication::setAttribute(Qt::AA_Use96Dpi);    // Disable scaling as it does not work properly
+
     QLocale::setDefault(QLocale::Estonian);
     if(argc > 1)
         for(int i = 0; i < argc; i++){
@@ -30,9 +31,18 @@ int main(int argc, char *argv[])
                 verbose = true;
             }
         }
+
+
     QApplication a(argc, argv);
-//    asukoht = QDir(argv[0]);
-//    asukoht.cdUp();
+
+    QFont font = qApp->font();
+#ifdef Q_OS_UNIX
+    font.setPixelSize(14);
+#else
+    font.setPixelSize(11);
+#endif
+    qApp->setFont(font);    // Fix font size, as scaling does not work properly
+
     a.setApplicationName(programmiNimi);
     a.setOrganizationName("Ümeramees");
     Protokollitaja w;
