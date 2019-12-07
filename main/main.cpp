@@ -4,6 +4,7 @@
 #else
 #include <QtGui/QApplication>
 #endif
+#include "globalvariables.h"
 #include "protokollitaja.h"
 #include "version.h"
 

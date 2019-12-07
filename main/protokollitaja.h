@@ -46,7 +46,7 @@
 #include "liikmetevalikkast.h"
 #include "siusdataconnections.h"
 #include "protolehelugejaserver.h"
-#include "../qfinaal/src/uhendumiseaken.h"
+#include "uhendumiseaken.h"
 #include "xlslib.h"
 
 class Protokollitaja : public QMainWindow
