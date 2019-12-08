@@ -1,12 +1,11 @@
 ﻿#include "lask.h"
 
-Lask::Lask(/*QWidget *parent*/)/* : QWidget(parent)*/
+Lask::Lask()
 {
     clear();
-//    hide();
 }
 
-Lask::Lask(int shot10Times, QString x, QString y, bool innerTen, QTime shotTime)
+Lask::Lask(int shot10Times, int x, int y, bool innerTen, QTime shotTime)
 {
     lask = shot10Times;
     m_x = x;
@@ -15,22 +14,35 @@ Lask::Lask(int shot10Times, QString x, QString y, bool innerTen, QTime shotTime)
     m_shotTime = shotTime;
 }
 
+Lask::Lask(QString siusRow)
+{
+    QStringList rowParts = siusRow.split(';');
+    if(rowParts[11].toInt() == 0){  //If [11] is 0, then results are being read with decimals and shot value is in  [10]. If not 0, then results are with full rings.
+        set10Lask(rowParts[10]);
+    }else
+        set10Lask(rowParts[11]);
+    setMX(rowParts[14]);
+    setMY(rowParts[15]);
+    setShotTime(QTime::fromString(rowParts[6]));
+    if(rowParts[9].toInt() >= 512)
+        setInnerTen(true);
+}
+
 void Lask::clear()
 {
     m_innerTen = false;
     lask = -999;
-//    flask = -1;
     m_shotTime = QTime();
-    m_x = "-999";
-    m_y = "-999";
+    m_x = -999;
+    m_y = -999;
 }
 
 bool Lask::equals(const Lask other) const
 {
     if(lask == other.get10Lask()
             && m_innerTen == other.isInnerTen()
-            && m_x.compare(other.stringX()) == 0
-            && m_y.compare(other.stringY()) == 0
+            && stringX().compare(other.stringX()) == 0
+            && stringY().compare(other.stringY()) == 0
             && m_shotTime.toString().compare(other.shotTime().toString()) == 0)
         return true;
     else
@@ -41,23 +53,15 @@ int Lask::getILask() const
 {
     if(lask == -999)
         return lask;
-    return lask / 10;   //Kuna lasu väärtust hoitakse kümnekordsena, siis on vaja jagada 10'ga, komakohad lõigatakse lihtsalt maha
-}
-
-float Lask::getFLask() const
-{
-    if(lask == -999)
-        return lask;
-    float flask = lask;
-    return flask / 10;  //Kuna lasu väärtust hoitakse kümnekordsena, siis on vaja jagada 10'ga
+    return lask / 10;   // As shot value is kept multiplied with 10, then it needs to be divided, decimals will be cut off
 }
 
 QString Lask::getSLask() const
 {
     if(lask == -999)
-        return "";  //Kui lasku ei ole, tagastatakse tühi string
+        return "";  // If there is no shot value, empty string is returned
     QString l = QString("%1").arg(lask);
-    l.insert(l.length() - 1,',');  //Kuna lasu väärtust hoitakse kümnekordsena, siis on vaja lisada koma
+    l.insert(l.length() - 1,',');  // Comma needs to be added
     return l;
 }
 
@@ -73,59 +77,25 @@ bool Lask::isInnerTen() const
 
 bool Lask::isEmpty()
 {
-    if(lask == -999 && m_x == "-999" && m_y == "-999")
+    if(lask == -999 && m_x == -999 && m_y == -999)
         return true;
     else return false;
 }
 
-float Lask::X() const
+int Lask::X() const
 {
-    bool onnestus = false;
-    float fx = 0;
-    fx = m_x.toFloat(&onnestus);
-    if(!onnestus){
-        QString sx = m_x;
-        if(sx.contains(',')){
-            sx.replace(',', '.');
-        }else if(sx.contains('.')){
-            sx.replace('.', ',');
-        }
-        fx = sx.toFloat(&onnestus);
-    }
-    return fx;
+    return m_x;   // Returns nanometers
 }
 
-//int Lask::X()
-//{
-//    return x.toInt();
-//}
-
-float Lask::Y() const
+int Lask::Y() const
 {
-    bool onnestus = false;
-    float fy = 0;
-    fy = m_y.toFloat(&onnestus);
-    if(!onnestus){
-        QString sy = m_y;
-        if(sy.contains(',')){
-            sy.replace(',', '.');
-        }else if(sy.contains('.')){
-            sy.replace('.', ',');
-        }
-        fy = sy.toFloat(&onnestus);
-    }
-    return fy;
+    return m_y;   // Returns nanometers
 }
 
 void Lask::setInnerTen(bool isInnerTen)
 {
     m_innerTen = isInnerTen;
 }
-
-//int Lask::Y()
-//{
-//    return y.toInt();
-//}
 
 //QPoint Lask::XY()
 //{
@@ -134,15 +104,12 @@ void Lask::setInnerTen(bool isInnerTen)
 
 void Lask::setLask(int l)
 {
-    lask = l * 10;  //Kuna lasu väärtust hoitakse kümnekordsena, siis on vaja korrutada 10'ga
-//    flask = l;
+    lask = l * 10;  // Shot value is kept multiplied with 10
 }
 
 void Lask::setLask(float l)
 {
-//    float flask = l * 10; //Kuna lasu väärtust hoitakse kümnekordsena, siis on vaja korrutada 10'ga
-//    lask = flask;
-    lask = qRound(l * 10);
+    lask = qRound(l * 10);  // Shot value is kept multiplied with 10
 }
 
 bool Lask::setLask(QString l)
@@ -158,12 +125,11 @@ bool Lask::setLask(QString l)
         }
         flask = l.toFloat(&onnestus);
     }
-//    flask *= 10;
     lask = qRound(flask * 10);
     return onnestus;
 }
 
-void Lask::set10Lask(int l) //Lasu väärtuse sisestamine 10kordsena
+void Lask::set10Lask(int l) // Shot value is kept multiplied with 10
 {
     lask = l;
 }
@@ -181,7 +147,6 @@ bool Lask::set10Lask(QString l)
         }
         ilask = l.toInt(&onnestus);
     }
-//    flask *= 10;
     lask = ilask;
     return onnestus;
 }
@@ -193,80 +158,38 @@ void Lask::setShotTime(QTime newTime)
 
 void Lask::setMX(QString s)
 {
-    bool onnestus = false;
-    float fx = 0;
-    fx = s.toFloat(&onnestus);
-    if(!onnestus){
-        if(s.contains(',')){
-            s.replace(',', '.');
-        }else if(s.contains('.')){
-            s.replace('.', ',');
-        }
-        fx = s.toFloat(&onnestus);
-    }
-    fx *= 1000; //Convert meters to millimeters
-    setX(fx);
+    m_x = qRound(stringToFloat(s) * 1000000);   // meters to nanometers
 }
 
 void Lask::setX(float k)
 {
-    m_x = QString("%1").arg(k);
-    m_x.replace('.', ',');
-//    x = k;
+    m_x = qRound(k * 1000);
 }
 
 void Lask::setX(QString s)
 {
-    m_x = s;
-    m_x.replace('.', ',');
-//    bool onnestus = true;
-//    x = s.toFloat(&onnestus);
-//    if(!onnestus)
-//        x = s.replace(".", ",").toFloat(&onnestus);
-//    if(!onnestus)
-    //        x = s.replace(",", ".").toFloat(&onnestus);
+    m_x = qRound(stringToFloat(s) * 1000);   // millimeters to nanometers;
 }
 
 void Lask::setMY(QString s)
 {
-    bool onnestus = false;
-    float fy = 0;
-    fy = s.toFloat(&onnestus);
-    if(!onnestus){
-        if(s.contains(',')){
-            s.replace(',', '.');
-        }else if(s.contains('.')){
-            s.replace('.', ',');
-        }
-        fy = s.toFloat(&onnestus);
-    }
-    fy *= 1000; //Convert meters to millimeters
-    setX(fy);
+    m_y = qRound(stringToFloat(s) * 1000000);   // meters to nanometers
 }
 
 void Lask::setY(float k)
 {
-    m_y = QString("%1").arg(k);
-    m_y.replace('.', ',');
-//    y = k;
+    m_y = qRound(k * 1000);
 }
 
 void Lask::setY(QString s)
 {
-    m_y = s;
-    m_y.replace('.', ',');
-//    bool onnestus = true;
-//    y = s.toFloat(&onnestus);
-//    if(!onnestus)
-//        y = s.replace(".", ",").toFloat(&onnestus);
-//    if(!onnestus)
-//        y = s.replace(",", ".").toFloat(&onnestus);
+    m_y = qRound(stringToFloat(s) * 1000);   // millimeters to nanometers;
 }
 
-void Lask::setXY(QPoint p)  //See ei ole hea, kuna ei võimalda komakohti
+void Lask::setNanoXY(QPoint p)
 {
-    m_x = QString("%1").arg(p.x());
-    m_y = QString("%1").arg(p.y());
+    m_x = p.x(); // Nanometers
+    m_y = p.y(); // Nanometers
 }
 
 void Lask::set(const Lask *l)
@@ -278,14 +201,32 @@ void Lask::set(const Lask *l)
     this->m_y = l->m_y;
 }
 
+float Lask::stringToFloat(QString s)
+{
+    bool success = false;
+    float fx = 0;
+    fx = s.toFloat(&success);
+    if(!success){
+        if(s.contains(',')){
+            s.replace(',', '.');
+        }else if(s.contains('.')){
+            s.replace('.', ',');
+        }
+        fx = s.toFloat(&success);
+    }
+    return fx;
+}
+
 QString Lask::stringX() const
 {
-    return m_x;
+    double fx = m_x;
+    return QString("%1").arg(fx / 1000);
 }
 
 QString Lask::stringY() const
 {
-    return m_y;
+    double fy = m_y;
+    return QString("%1").arg(fy / 1000);
 }
 
 QTime Lask::shotTime() const

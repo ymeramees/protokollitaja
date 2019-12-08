@@ -2,45 +2,39 @@
 #define LASK_H
 
 #include <QtGlobal>
-//#if QT_VERSION >= 0x050000
-//#include <QtWidgets>
-//#else
-//#include <QtGui/QWidget>
-//#endif
 
 #include <QJsonObject>
 #include <QString>
 #include <QPoint>
 #include <QTime>
 
-class Lask /*: public QWidget*/
+class Lask
 {
-//    Q_OBJECT
 
 public:
-    Lask(/*QWidget *parent = 0*/);
-    Lask(int shot10Times, QString x = "-999", QString y = "-999", bool innerTen = false, QTime shotTime = QTime());
+    Lask();
+    Lask(int shot10Times, int x = -999, int y = -999, bool innerTen = false, QTime shotTime = QTime());
+    Lask(QString siusRow);
     void set(const Lask *l);
     bool isEmpty();
-//    void operator=(const Lask & l);
 
-public /*slots*/:
+public:
     void clear();
     bool equals(const Lask other) const;
     int getILask() const;
-    float getFLask() const;
+//    float getFLask() const;   // No point of having this fn, as result is often wrong
     QString getSLask() const;
     int get10Lask() const;
     bool isInnerTen() const;
-    float X() const;
-    float Y() const;
+    int X() const;
+    int Y() const;
 //    QPoint XY();
     void setInnerTen(bool isInnerTen);
     void setLask(int);
     void setLask(float);
     bool setLask(QString);
-    void set10Lask(int);    //Lasu väärtuse sisestamine 10kordsena
-    bool set10Lask(QString);    //Lasu väärtuse sisestamine 10kordsena
+    void set10Lask(int);    // Insert shot value as multiplied by 10
+    bool set10Lask(QString);    // Insert shot value as multiplied by 10
     void setShotTime(QTime newTime);
     void setMX(QString s);
     void setX(float);
@@ -48,7 +42,7 @@ public /*slots*/:
     void setMY(QString s);
     void setY(float);
     void setY(QString);
-    void setXY(QPoint);
+    void setNanoXY(QPoint);
     QString stringX() const;
     QString stringY() const;
     QTime shotTime() const;
@@ -57,13 +51,12 @@ public /*slots*/:
     bool operator ==(const Lask other) const;
 
 private:
-    int lask;   //Hoiab lasu väärtust kümnekordsena (10,5 -> 105)
-//    int ilask;
-//    float flask; <- seda ei ole ilmselt vaja
+    int lask;   // Value as multiplied with 10 (10,5 -> 105)
     bool m_innerTen;
-    QString m_x;    //Enne oli int ja siis float aga parem vist on kui on QString, väärtused mm'des
-    QString m_y;    //Sama siin, väärtused mm'des
+    int m_x;    // Values in nanometers, to keep it as int, but have 3 decimal point accuracy with millimeters
+    int m_y;    // Same here
     QTime m_shotTime;
+    float stringToFloat(QString s);
 };
 
 #endif // LASK_H

@@ -1,4 +1,5 @@
 TEMPLATE = subdirs
 
-SUBDIRS += siusdataconnectiontest
+SUBDIRS += siusdataconnectiontest \
+    lasktest
 

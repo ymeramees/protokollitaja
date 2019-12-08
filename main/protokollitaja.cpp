@@ -4201,8 +4201,8 @@ void Protokollitaja::readShotInfo(QString data, int socketIndex)
             thisCompetitor->lasud[seriesNo][j]->setY(dataList.takeFirst());
 
             //Calculate shot center distance for determing inner tens:
-            int iX = thisCompetitor->lasud[seriesNo][j]->X() * 1000;
-            int iY = thisCompetitor->lasud[seriesNo][j]->Y() * 1000;
+            int iX = thisCompetitor->lasud[seriesNo][j]->X();
+            int iY = thisCompetitor->lasud[seriesNo][j]->Y();
             int centerDistance = qRound(qSqrt(iX*iX + iY*iY));
             switch(sheet->relv){
             case Ohupuss : {
@@ -4284,16 +4284,7 @@ void Protokollitaja::readSiusInfo(QStringList lines, int socketIndex)
 
                 logiValja << "#" << rowParts[3] << ": " << thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm + rowParts[lasuNrSiusis].toInt() << ". Lask\n";
                 logiValja << "#SHOT: previousSiusRow(): " << thisCompetitor->previousSiusRow();
-                Lask newShot;
-                if(rowParts[11].toInt() == 0){  //If [11] is 0, then results are being read with decimals and shot value is in  [10]. If not 0, then results are with full rings.
-                    newShot.set10Lask(rowParts[10]);
-                }else
-                    newShot.set10Lask(rowParts[11]);
-                newShot.setMX(rowParts[14]);
-                newShot.setMY(rowParts[15]);
-                newShot.setShotTime(QTime::fromString(rowParts[6]));
-                if(rowParts[9].toInt() >= 512)  //Needs to be double checked if this actually marks inner ten
-                    newShot.setInnerTen(true);
+                Lask newShot(row);
 
                 int seriesIndex = (thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10;
                 int shotIndex = (rowParts[lasuNrSiusis].toInt() - 1) % 10;
@@ -4307,7 +4298,7 @@ void Protokollitaja::readSiusInfo(QStringList lines, int socketIndex)
                         thisCompetitor->liida();
                         muudaSalvestamist();
 
-                        logiValja << "#" << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << " lask 1 = " << thisCompetitor->lasud[seriesIndex][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->getFLask() << "\n";
+                        logiValja << "#" << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << " lask 1 = " << thisCompetitor->lasud[seriesIndex][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->getSLask() << "\n";
                     }else
                         logiValja << "\n#viga!: laskur lõhki! seriesIndex = " << seriesIndex << ", (rowParts[lasuNrSiusis].toInt() - 1) % 10 = " << (rowParts[lasuNrSiusis].toInt() - 1) % 10 << "\n";
                 }
@@ -5068,7 +5059,7 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
                             for(int k = 0; k < leht->seeriateArv; k++){
                                 pakett.append(seeLaskur->seeriad[k]->text() + ";");
                                 for(int j = 0; j < laskudeArv; j++){
-                                    pakett.append(QString("%1;%2;%3;").arg(seeLaskur->lasud[k][j]->getFLask())
+                                    pakett.append(QString("%1;%2;%3;").arg(seeLaskur->lasud[k][j]->getSLask())
                                                   .arg(seeLaskur->lasud[k][j]->stringX()).arg(seeLaskur->lasud[k][j]->stringY()));
                                 }
                             }
