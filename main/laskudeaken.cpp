@@ -39,7 +39,7 @@ LaskudeAken::LaskudeAken(bool kum, int s, int ls, QWidget *parent) :
     ui->laskudeTabel->setRowCount(laskudeArv);
     for(int i = 0; i < laskudeArv; i++){
 //        ui->laskudeTabel->setItem(i, 0, new QTableWidgetItem(tr("%1.").arg(i + 1)));
-        ui->laskudeTabel->setItem(i, 0, new QTableWidgetItem(tr("%1").arg(lasud[0][i]->getFLask())));
+        ui->laskudeTabel->setItem(i, 0, new QTableWidgetItem(lasud[0][i]->getSLask()));
         ui->laskudeTabel->setItem(i, 1, new QTableWidgetItem(tr("%1").arg(lasud[0][i]->stringX())));
         ui->laskudeTabel->setItem(i, 2, new QTableWidgetItem(tr("%1").arg(lasud[0][i]->stringY())));
         ui->laskudeTabel->setItem(i, 3, new QTableWidgetItem());
@@ -48,7 +48,7 @@ LaskudeAken::LaskudeAken(bool kum, int s, int ls, QWidget *parent) :
         else
             ui->laskudeTabel->item(i, 3)->setCheckState(Qt::Unchecked);
     }
-    ui->karistusEdit->setText(QString("%1").arg(lasud[0][lasud[aktiivneSeeria].count() - 1]->getFLask()));
+    ui->karistusEdit->setText(lasud[0][lasud[aktiivneSeeria].count() - 1]->getSLask());
     ui->seeriaSilt->setText("1. seeria");
     ui->vasakuleNupp->setEnabled(false);
 }
@@ -98,7 +98,7 @@ void LaskudeAken::loeLasud()    //Loeb seeriast tabelisse uued lasud
 //        QTextStream(stdout) << "LaskudeAken::loelasud()" << endl;
 
     for(int i = 0; i < laskudeArv; i++){
-        ui->laskudeTabel->item(i, 0)->setText(tr("%1").arg(lasud[aktiivneSeeria][i]->getFLask()));
+        ui->laskudeTabel->item(i, 0)->setText(lasud[aktiivneSeeria][i]->getSLask());
         ui->laskudeTabel->item(i, 1)->setText(tr("%1").arg(lasud[aktiivneSeeria][i]->stringX()));
         ui->laskudeTabel->item(i, 2)->setText(tr("%1").arg(lasud[aktiivneSeeria][i]->stringY()));
         if(lasud[aktiivneSeeria][i]->isInnerTen())
@@ -106,7 +106,7 @@ void LaskudeAken::loeLasud()    //Loeb seeriast tabelisse uued lasud
         else
             ui->laskudeTabel->item(i, 3)->setCheckState(Qt::Unchecked);
     }
-    QString karistus = QString("%1").arg(lasud[aktiivneSeeria][lasud[aktiivneSeeria].count() - 1]->getFLask());
+    QString karistus = lasud[aktiivneSeeria][lasud[aktiivneSeeria].count() - 1]->getSLask();
     if(karistus == "-999")
         karistus.clear();
     ui->karistusEdit->setText(karistus);

@@ -557,7 +557,7 @@ void Laskur::liida() //Laskude summeerimine
                 if(lasud[i][j]->getILask() != -999){
 //                    qDebug() << "lasud[" << i << "][" << j << "] = " << lasud[i][j]->getILask();
                     if(*kumnendikega){
-                        ssum += qRound(lasud[i][j]->getFLask() * 10);
+                        ssum += lasud[i][j]->get10Lask();
                     }else{
                         ssum += lasud[i][j]->getILask() * 10;
                     }
