@@ -49,7 +49,6 @@ private:
     bool oliLiigneLask;
     bool vahemuses;
     bool oliKahtlane;
-//    bool uhendatud; //Vajalik, et aru saada, kas lugemismasin on ühendatud või mitte, et uus nupuvajutus midagi ära ei rikuks.
     bool uhendusAutoriseeritud; //Vajalik parooli kasutamiseks Protokollitajaga ühendumisel
     bool uusLugemismasin;   //Kas ühendatud on uus või vana lugemismasin
     bool voibSulgeda;   //Kontroll, kas ühendus on suletud ja Protokollitajale teade saadetud, enne kui programm sulgeda
@@ -75,11 +74,9 @@ private:
     QString aadress;    //Protokollitaja serveri IP aadress
     QString eelminePakett;  //vältimaks ühe info korduvat saatmist
     QTimer *broadcastiSaatja;   //Timer, mis käivitab IP küsimise broadcasti saatmise
-//    QTimer *timer;
     QTimer *otsija; //Portide otsimiseks
     QTimer *fookus; //Viib kursori, peale uue seeria kasti aktiivseks tegemist, sifri kasti
     QTimer *sulgeja;    //Vajalik viivitus programmi sulgemisel, et jõuaks teate Protokollitajale saata
-//    QTimer *saatja; //Viivis enne saatmist, et uus lugemismasin jõuaks reageerida
     QTimer *seadistaja; //Viivis peale lehtede lugemist, enne kui uuesti seadistatakse
     QUdpSocket *udpSocket;  //Broadcasti saatmiseks, et leida võrgust Protokollitaja arvuti
     QUdpSocket *udpSocket2;  //Kuna windows ei suuta WaitForBytesWritten funktsiooni kasutada, on vaja teist socketit
@@ -94,7 +91,6 @@ public slots:
 private slots:
     void restartScoring();
     int CRC(QByteArray *s);  //Arvutab lugemismasina ühenduse jaoks kontrollnumbri
-//    int eraldaLask(QString rida);  //Eraldab loetud reast lasu väärtuse
     void fookusMuutus(QWidget *vana, QWidget *uus);    //Vaatab, kas mõni seeria kastidest sai fookuse, kui sai, muudab, et sinna loetaks tulemus
     void fookusSifrile();   //Viib kursori, peale uue seeria kasti aktiivseks tegemist, sifri kasti
     void joonistaLask(QPointF p, bool kasMM);    //Joonistab lasu lehele, bool näitab, kas on vana lugemismasina koordinaadid või mm
@@ -102,8 +98,6 @@ private slots:
     void hakkaOtsima();
     void sumAndEndSeries();
     void liigneLask();
-    void loe();
-    void loe2();    //Uuest lugemismasinast lehtede lugemine
     void loeBroadcast();    //Loeb võrgust tulnud broadcasti
     void loeVorgust();
     void naitaInfot();
@@ -113,18 +107,15 @@ private slots:
     void peidaNimi();
     void peidaNupud();
     void readShot(Lask shot);
-    void saada();
     void saada(QString);
     void saadaBroadcast();
     void saadaParool(); //Vaja ühenduse loomise jätkamiseks
     void saadaVorku(QString);
     void seadista();
-//    void seadista2();   //Uue lugemismasina seadistamine lehtede lugemiseks
     void seeriaLoetud();
     void startScoring();
     void sulgeUhendus();
     void uhenda();
-//    void uhenda2(); //Uue lugemismasinaga ühendamine
     void uhenduServeriga(QString); //Ühendumine serveriga
     void uhenduUuesti();    //Et muuta serveri IP'd ja uuesti ühenduda
     void updateLog(QString);
@@ -139,7 +130,7 @@ private slots:
 protected:
     void changeEvent(QEvent *e);
     void closeEvent(QCloseEvent *event);
-    void paintEvent(QPaintEvent * event);
+//    void paintEvent(QPaintEvent * event);
 };
 
 #endif // LEHELUGEJA_H

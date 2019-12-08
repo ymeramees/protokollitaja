@@ -154,13 +154,13 @@ void ScoringMachineConnectionTest::test_extractRMIIIShot()
     ScoringMachineConnection machine;
     machine.setTargetType(ScoringMachineConnection::AirRifle);
 
-    Lask toCompare1(90, "3,33" ,"0,35");
-    Lask toCompare2(106, "-0,2" ,"-0,77", true);
-    Lask toCompare3(87, "0,56" ,"17,76");
-    Lask toCompare4(104, "-2,64" ,"3,76", true);
-    Lask toCompare5(74, "16,48" ,"-23,36");
-    Lask toCompare6(107, "0,64" ,"-1,68", true);
-    Lask empty(-999, "-999", "-999");
+    Lask toCompare1(90, 3330, 350);
+    Lask toCompare2(106, -200, -770, true);
+    Lask toCompare3(87, 560, 17760);
+    Lask toCompare4(104, -2640 ,3760, true);
+    Lask toCompare5(74, 16480, -23360);
+    Lask toCompare6(107, 640, -1680, true);
+    Lask empty(-999, -999, -999);
 
     QCOMPARE(machine.extractRMIIIShot("7;9.0;-;1.33;-0.14;N"), toCompare1);
     QCOMPARE(machine.extractRMIIIShot("8;10.6;-;-0.08;0.31;N"), toCompare2);
@@ -185,8 +185,8 @@ void ScoringMachineConnectionTest::test_extractRMIVShot()
     ScoringMachineConnection machine;
     machine.setTargetType(ScoringMachineConnection::AirRifle);
 
-    Lask toCompare1(72, "7,84", "-28,68");
-    Lask empty(-999, "-999", "-999");
+    Lask toCompare1(72, 7840, -28680);
+    Lask empty(-999, -999, -999);
 
     Lask shot = machine.extractRMIVShot("SCH=1;7.2;2973.0;164.7;G");
 

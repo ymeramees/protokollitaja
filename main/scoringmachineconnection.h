@@ -9,7 +9,7 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 
-#include "../../protokollitaja/src/lask.h"
+#include "lask.h"
 
 class ScoringMachineConnection : public QObject
 {
