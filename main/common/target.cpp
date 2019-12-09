@@ -395,10 +395,7 @@ void Target::zoomAndUpdate()
         painter2.drawRect(shotBox);
         //        lasuKast.setLeft(lasuKast.left() + 5);
         //        lasuKast.setRight(lasuKast.right() - 5);
-        QString shot = QString("%1").arg(double(m_previousShot.getFLask())).replace('.', ',');
-        if(!shot.contains(',')) // If scoring is with tens, but shot value happens to be x,0
-            shot.append(",0");
-        painter2.drawText(shotBox, Qt::AlignVCenter | Qt::AlignHCenter, shot);
+        painter2.drawText(shotBox, Qt::AlignVCenter | Qt::AlignHCenter, m_previousShot.getSLask());
     }
     if(!m_result.isEmpty()) {
         if(m_result != "0" && m_result != "0,0" && m_result != "0.0"){
