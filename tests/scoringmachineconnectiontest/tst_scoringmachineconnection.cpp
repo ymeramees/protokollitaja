@@ -25,9 +25,11 @@ private slots:
     void test_extractRMIVShot();
     void test_sendSettingsRMIIIAirPistol();
     void test_sendSettingsRMIIIAirRifle();
+    void test_sendSettingsRMIIIAirRifleTargetBands();
     void test_sendSettingsRMIIISmallboreRifle();
     void test_sendSettingsRMIVAirPistol();
     void test_sendSettingsRMIVAirRifle();
+    void test_sendSettingsRMIVAirRifleTargetBands();
     void test_sendSettingsRMIVSmallboreRifle();
 };
 
@@ -262,6 +264,49 @@ void ScoringMachineConnectionTest::test_sendSettingsRMIIIAirRifle()
     QVERIFY(statusMessages.at(0).toString().compare("Seadisamine: 11121111B") == 0);
 }
 
+void ScoringMachineConnectionTest::test_sendSettingsRMIIIAirRifleTargetBands()
+{
+    ScoringMachineConnection machine;
+    machine.setTargetType(ScoringMachineConnection::AirRifle5Band);
+    machine.setScoringMachineType(ScoringMachineConnection::RMIII);
+
+    QSignalSpy spy(&machine, SIGNAL(connectionStatusChanged(QString)));
+    QList<QVariant> statusMessages;
+
+    for(int i = 1; i <= 6; i++){
+        machine.setNoOfShotsPerTarget(i);
+        machine.sendSettings();
+
+        QCOMPARE(spy.count(), 1);
+        statusMessages = spy.takeFirst();
+        QVERIFY(statusMessages.at(0).toString().compare(QString("Seadisamine: 12121111%1").arg(i)) == 0);
+    }
+
+    machine.setNoOfShotsPerTarget(10);
+    machine.sendSettings();
+
+    QCOMPARE(spy.count(), 1);
+    statusMessages = spy.takeFirst();
+    QVERIFY(statusMessages.at(0).toString().compare("Seadisamine: 12121111A") == 0);
+
+    machine.setNoOfShotsPerTarget(11);
+    machine.sendSettings();
+
+    QCOMPARE(spy.count(), 1);
+    statusMessages = spy.takeFirst();
+    QVERIFY(statusMessages.at(0).toString().compare("Seadisamine: 12121111B") == 0);
+
+    machine.setTargetType(ScoringMachineConnection::AirRifle10Band);
+    for(int i = 1; i <= 6; i++){
+        machine.setNoOfShotsPerTarget(i);
+        machine.sendSettings();
+
+        QCOMPARE(spy.count(), 1);
+        statusMessages = spy.takeFirst();
+        QVERIFY(statusMessages.at(0).toString().compare(QString("Seadisamine: 13121111%1").arg(i)) == 0);
+    }
+}
+
 void ScoringMachineConnectionTest::test_sendSettingsRMIIISmallboreRifle()
 {
     ScoringMachineConnection machine;
@@ -330,6 +375,35 @@ void ScoringMachineConnectionTest::test_sendSettingsRMIVAirRifle()
         QCOMPARE(spy.count(), 1);
         statusMessages = spy.takeFirst();
         QVERIFY(statusMessages.at(0).toString().compare(QString("Seadisamine: SCH=LGES;TEA=KT;RIA=ZR;SSC=%1;SGE=10;SZI=10;").arg(i)) == 0);
+    }
+}
+
+void ScoringMachineConnectionTest::test_sendSettingsRMIVAirRifleTargetBands()
+{
+    ScoringMachineConnection machine;
+    machine.setTargetType(ScoringMachineConnection::AirRifle5Band);
+    machine.setScoringMachineType(ScoringMachineConnection::RMIV);
+
+    QSignalSpy spy(&machine, SIGNAL(connectionStatusChanged(QString)));
+    QList<QVariant> statusMessages;
+
+    for(int i = 1; i <= 11; i++){
+        machine.setNoOfShotsPerTarget(i);
+        machine.sendSettings();
+
+        QCOMPARE(spy.count(), 1);
+        statusMessages = spy.takeFirst();
+        QVERIFY(statusMessages.at(0).toString().compare(QString("Seadisamine: SCH=LG5;TEA=KT;RIA=ZR;SSC=%1;SGE=10;SZI=10;").arg(i)) == 0);
+    }
+
+    machine.setTargetType(ScoringMachineConnection::AirRifle10Band);
+    for(int i = 1; i <= 11; i++){
+        machine.setNoOfShotsPerTarget(i);
+        machine.sendSettings();
+
+        QCOMPARE(spy.count(), 1);
+        statusMessages = spy.takeFirst();
+        QVERIFY(statusMessages.at(0).toString().compare(QString("Seadisamine: SCH=LG10;TEA=KT;RIA=ZR;SSC=%1;SGE=10;SZI=10;").arg(i)) == 0);
     }
 }
 

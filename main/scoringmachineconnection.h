@@ -17,7 +17,7 @@ class ScoringMachineConnection : public QObject
 public:
     enum LogLevel {None, Verbose, VeryVerbose};
     enum ScoringMachineType {RMIII, RMIV};
-    enum TargetType {AirRifle, AirPistol, SmallboreRifle};
+    enum TargetType {AirRifle, AirPistol, SmallboreRifle, AirRifle5Band, AirRifle10Band};
 
     explicit ScoringMachineConnection(QObject *parent = nullptr);
     ~ScoringMachineConnection();

@@ -356,6 +356,16 @@
            <string>Sportpüss</string>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string>Õhupüss x5</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Õhupüss x10</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item row="1" column="0">

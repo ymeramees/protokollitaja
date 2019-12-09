@@ -2,7 +2,6 @@
 
 /////////////////////////////////////////////////////////////////////////////
 /// ToDo list:
-/// Review and check extractRMIII function result for air pistol
 /////////////////////////////////////////////////////////////////////////////
 
 // Defines for scoring machine connection:
@@ -41,7 +40,7 @@ bool ScoringMachineConnection::calculateIsInnerTen(const float x, const float y)
     int centerDistance = qRound(qSqrt(iX*iX + iY*iY));
 
     switch(m_targetType) {
-    case AirRifle :
+    case AirRifle: case AirRifle5Band: case AirRifle10Band :
         if(centerDistance <= 200)
             return true;
         break;
@@ -175,7 +174,7 @@ Lask ScoringMachineConnection::extractRMIIIShot(QString shotInfo)
         float fx = 0, fy = 0;
 
         switch(m_targetType) {
-        case AirRifle:
+        case AirRifle: case AirRifle5Band: case AirRifle10Band:
             fx = list.at(3).toFloat() * 100;
             x = qRound(fx);
             fx = x * 25;
@@ -412,6 +411,14 @@ void ScoringMachineConnection::sendSettings()
         case SmallboreRifle:
             settingString.replace(0, 1, "6");
             break;
+        case AirRifle5Band:
+            settingString.replace(0, 1, "1");
+            settingString.replace(1, 1, "2");
+            break;
+        case AirRifle10Band:
+            settingString.replace(0, 1, "1");
+            settingString.replace(1, 1, "3");
+            break;
         }
         settingString.replace(8, 1, QString("%1").arg(m_noOfShotsPerTarget, 0, 16).toUpper());
         settingString.replace(3, 1, "2");
@@ -425,6 +432,10 @@ void ScoringMachineConnection::sendSettings()
         case AirPistol: settingString = "SCH=LP;";
             break;
         case SmallboreRifle: settingString = "SCH=KK50;";
+            break;
+        case AirRifle5Band: settingString = "SCH=LG5;";
+            break;
+        case AirRifle10Band: settingString = "SCH=LG10;";
             break;
         default : settingString = "SCH=LGES;";
         }
