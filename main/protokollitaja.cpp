@@ -245,8 +245,8 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         tulemusedMenu->addAction(kopeeriVahAct);
         tulemusedMenu->addAction(kopeeriValitudVahAct);
         tulemusedMenu->addSeparator();
-        tulemusedMenu->addAction(lehelugejaAct);
-        tulemusedMenu->addSeparator();
+//        tulemusedMenu->addAction(lehelugejaAct);  // Not tested lately and probably not working properly
+//        tulemusedMenu->addSeparator();
         tulemusedMenu->addAction(naitaTulAkenAct);
         tulemusedMenu->addAction(finaalAct);
         tulemusedMenu->addAction(finaaliFailAct);
@@ -2399,8 +2399,8 @@ void Protokollitaja::loefail()
                                     for(int l = 0; l < leht->laskurid[j]->lasud[k].count(); l++){
                                         sisse >> lask >> x >> y;
                                         leht->laskurid[j]->lasud[k][l]->set10Lask(lask);
-                                        leht->laskurid[j]->lasud[k][l]->setX(x);
-                                        leht->laskurid[j]->lasud[k][l]->setY(y);
+                                        leht->laskurid[j]->lasud[k][l]->setMmX(x);
+                                        leht->laskurid[j]->lasud[k][l]->setMmY(y);
                                     }
                                 }else if(versioon >= 109){
                                     QString x, y;
@@ -2414,8 +2414,8 @@ void Protokollitaja::loefail()
                                             leht->laskurid[j]->lasud[k][l]->setInnerTen(isInnerTen);
                                         }
                                         leht->laskurid[j]->lasud[k][l]->set10Lask(lask);
-                                        leht->laskurid[j]->lasud[k][l]->setX(x);
-                                        leht->laskurid[j]->lasud[k][l]->setY(y);
+                                        leht->laskurid[j]->lasud[k][l]->setMmX(x);
+                                        leht->laskurid[j]->lasud[k][l]->setMmY(y);
                                     }
                                 }
                                 if(versioon >= 110){
@@ -4197,13 +4197,18 @@ void Protokollitaja::readShotInfo(QString data, int socketIndex)
         thisCompetitor->seeriad[seriesNo]->setText(series);
         for(int j = 0; j < numberOfShots; j++){
             thisCompetitor->lasud[seriesNo][j]->setLask(dataList.takeFirst());
-            thisCompetitor->lasud[seriesNo][j]->setX(dataList.takeFirst());
-            thisCompetitor->lasud[seriesNo][j]->setY(dataList.takeFirst());
+            thisCompetitor->lasud[seriesNo][j]->setNanoX(dataList.takeFirst());
+            thisCompetitor->lasud[seriesNo][j]->setNanoY(dataList.takeFirst());
 
             //Calculate shot center distance for determing inner tens:
-            int iX = thisCompetitor->lasud[seriesNo][j]->X();
-            int iY = thisCompetitor->lasud[seriesNo][j]->Y();
-            int centerDistance = qRound(qSqrt(iX*iX + iY*iY));
+            long iX = thisCompetitor->lasud[seriesNo][j]->X();
+            long iY = thisCompetitor->lasud[seriesNo][j]->Y();
+            long centerDistance = qRound(qSqrt(iX*iX + iY*iY));
+
+#ifdef PROOV
+        qDebug() << "centerDistance = " << centerDistance << ", iX = " << iX << ", iY = " << iY << "\n";
+#endif
+
             switch(sheet->relv){
             case Ohupuss : {
                 if(centerDistance <= 2000)

@@ -161,14 +161,19 @@ void Lask::setMX(QString s)
     m_x = qRound(stringToFloat(s) * 1000000);   // meters to nanometers
 }
 
-void Lask::setX(float k)
+void Lask::setMmX(float k)
 {
     m_x = qRound(k * 1000);
 }
 
-void Lask::setX(QString s)
+void Lask::setMmX(QString s)
 {
     m_x = qRound(stringToFloat(s) * 1000);   // millimeters to nanometers;
+}
+
+void Lask::setNanoX(QString s)
+{
+    m_x = qRound(stringToFloat(s));   // nanometers;
 }
 
 void Lask::setMY(QString s)
@@ -176,14 +181,19 @@ void Lask::setMY(QString s)
     m_y = qRound(stringToFloat(s) * 1000000);   // meters to nanometers
 }
 
-void Lask::setY(float k)
+void Lask::setMmY(float k)
 {
     m_y = qRound(k * 1000);
 }
 
-void Lask::setY(QString s)
+void Lask::setMmY(QString s)
 {
     m_y = qRound(stringToFloat(s) * 1000);   // millimeters to nanometers;
+}
+
+void Lask::setNanoY(QString s)
+{
+    m_y = qRound(stringToFloat(s));   // nanometers;
 }
 
 void Lask::setNanoXY(QPoint p)

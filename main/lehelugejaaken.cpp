@@ -314,8 +314,8 @@ void LehelugejaAken::loe()
                     rida.replace('.', ',');
                     fl = rida.toFloat(&onnestus);
                 }
-                seeriaLasud[lask]->setX(x);
-                seeriaLasud[lask]->setY(y);
+                seeriaLasud[lask]->setMmX(x);
+                seeriaLasud[lask]->setMmY(y);
                 seeriaLasud[lask]->setLask(fl);
 
                 lask++;
@@ -364,8 +364,8 @@ void LehelugejaAken::loe()
                         rida.replace('.', ',');
                         fl = rida.toFloat(&onnestus);
                     }
-                    seeriaLasud[lask]->setX(x);
-                    seeriaLasud[lask]->setY(y);
+                    seeriaLasud[lask]->setMmX(x);
+                    seeriaLasud[lask]->setMmY(y);
                     seeriaLasud[lask]->setLask(fl);
 
                     lask++;
@@ -411,8 +411,8 @@ void LehelugejaAken::loe()
                         rida.replace('.', ',');
                         fl = rida.toFloat(&onnestus);
                     }
-                    seeriaLasud[lask]->setX(x);
-                    seeriaLasud[lask]->setY(y);
+                    seeriaLasud[lask]->setMmX(x);
+                    seeriaLasud[lask]->setMmY(y);
                     seeriaLasud[lask]->setLask(fl);
 
                     lask++;

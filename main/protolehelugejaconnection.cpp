@@ -105,12 +105,12 @@ void ProtolehelugejaConnection::readData()
         return;
     }else if(lineIn.startsWith("Versioon:")){    //Version of the connection protocol between Protokollitaja and Protolehelugeja
         lineIn.remove(0, 9);
-        if(lineIn.toInt() > 3){
+        if(lineIn.toInt() > 4){
             send(tr("Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!\nProtokollitaja on uuem, seega on vaja uuendada Protolehelugejat või mõlemaid."));
             authorized = false;
             socket->disconnect();
         }
-        else if(lineIn.toInt() < 3){
+        else if(lineIn.toInt() < 4){
             send(tr("Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!\nProtolehelugeja on uuem, seega on vaja uuendada Protokollitajat"));
             authorized = false;
             socket->disconnect();

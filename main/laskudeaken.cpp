@@ -78,8 +78,8 @@ void LaskudeAken::kirjutaLasud()    //Kirjutab tabelis olevad lasud seeriasse
             return;
         }
         lasud[aktiivneSeeria][i]->setLask(lask);
-        lasud[aktiivneSeeria][i]->setX(ui->laskudeTabel->item(i, 1)->text());
-        lasud[aktiivneSeeria][i]->setY(ui->laskudeTabel->item(i, 2)->text());
+        lasud[aktiivneSeeria][i]->setMmX(ui->laskudeTabel->item(i, 1)->text());
+        lasud[aktiivneSeeria][i]->setMmY(ui->laskudeTabel->item(i, 2)->text());
         lasud[aktiivneSeeria][i]->setInnerTen(ui->laskudeTabel->item(i, 3)->checkState());
     }
     int karistus = ui->karistusEdit->text().toInt();

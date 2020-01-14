@@ -40,14 +40,14 @@ void LaskTest::test_coordinates()
     QCOMPARE(shot.X(), 42462);
     QCOMPARE(shot.Y(), -224);
 
-    shot.setX("0.3267");
-    shot.setY("98,796487");
+    shot.setMmX("0.3267");
+    shot.setMmY("98,796487");
 
     QCOMPARE(shot.X(), 327);
     QCOMPARE(shot.Y(), 98796);
 
-    shot.setX(96.4228f);
-    shot.setY(23.982f);
+    shot.setMmX(96.4228f);
+    shot.setMmY(23.982f);
 
     QCOMPARE(shot.X(), 96423);
     QCOMPARE(shot.Y(), 23982);
@@ -115,8 +115,8 @@ void LaskTest::test_equalsAndSet()
 
     Lask shot2;
     shot2.set10Lask(103);
-    shot2.setX("-1,236");
-    shot2.setY("63.579");
+    shot2.setMmX("-1,236");
+    shot2.setMmY("63.579");
     shot2.setInnerTen(false);
     shot2.setShotTime(currentTime);
 

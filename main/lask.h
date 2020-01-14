@@ -37,11 +37,13 @@ public:
     bool set10Lask(QString);    // Insert shot value as multiplied by 10
     void setShotTime(QTime newTime);
     void setMX(QString s);
-    void setX(float);
-    void setX(QString);
+    void setMmX(float);
+    void setMmX(QString);
+    void setNanoX(QString);
     void setMY(QString s);
-    void setY(float);
-    void setY(QString);
+    void setMmY(float);
+    void setMmY(QString);
+    void setNanoY(QString);
     void setNanoXY(QPoint);
     QString stringX() const;
     QString stringY() const;

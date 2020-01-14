@@ -72,13 +72,14 @@ void Target::drawAShot(Lask &l)
     m_targetPainter->setBrush(Qt::red);
     int d = m_multiplier * m_caliber;
     if(!m_previousShot.isEmpty()){
-        m_targetPainter->drawEllipse(QPoint(int(m_multiplier * 2 * m_previousShot.X()), int(m_multiplier * -2 * m_previousShot.Y())), d, d);   // Draw previous shot with different colour
+        m_targetPainter->drawEllipse(QPoint(int(m_multiplier * 2 * m_previousShot.X() / 1000),
+                                            int(m_multiplier * -2 * m_previousShot.Y() / 1000)), d, d);   // Draw previous shot with different colour (shot x, y coordinates in nanometers)
 #ifdef PROOV
     qDebug() << "JoonistaLask(): eelminelask: " << m_multiplier * 2 * m_previousShot.X() << ", "  << m_multiplier * -2 * m_previousShot.Y();
 #endif
     }
     m_targetPainter->setBrush(Qt::green);
-    m_targetPainter->drawEllipse(QPoint(int(m_multiplier * 2 * l.X()), int(m_multiplier * -2 * l.Y())), d, d);   // Draw the new shot
+    m_targetPainter->drawEllipse(QPoint(int(m_multiplier * 2 * l.X() / 1000), int(m_multiplier * -2 * l.Y() / 1000)), d, d);   // Draw the new shot (shot x, y coordinates in nanometers)
     int x = abs(int(l.X() * 100));   // Make sure values are positive
     int y = abs(int(l.Y() * 100));
 #ifdef PROOV
