@@ -208,8 +208,8 @@ Lask ScoringMachineConnection::extractRMIIIShot(QString shotInfo)
         fy /= 100;
 
         shot.setLask(list.at(1));
-        shot.setX(fx);
-        shot.setY(fy);
+        shot.setMmX(fx);
+        shot.setMmY(fy);
         shot.setInnerTen(calculateIsInnerTen(fx, fy));
     }
     return shot;
@@ -234,8 +234,8 @@ Lask ScoringMachineConnection::extractRMIVShot(QString shotInfo)
             fy = qRound(fy);
             fx /= 100;
             fy /= 100;
-            shot.setX(float(fx));
-            shot.setY(float(fy));
+            shot.setMmX(float(fx));
+            shot.setMmY(float(fy));
             shot.setInnerTen(calculateIsInnerTen(float(fx), float(fy)));
         }
     }

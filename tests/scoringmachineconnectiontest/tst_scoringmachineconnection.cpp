@@ -188,14 +188,17 @@ void ScoringMachineConnectionTest::test_extractRMIVShot()
     machine.setTargetType(ScoringMachineConnection::AirRifle);
 
     Lask toCompare1(72, 7840, -28680);
+    Lask toCompare2(69, 7840, -28680);
     Lask empty(-999, -999, -999);
 
-    Lask shot = machine.extractRMIVShot("SCH=1;7.2;2973.0;164.7;G");
+//    Lask shot = machine.extractRMIVShot("SCH=1;7.2;2973.0;164.7;G");
 
     QCOMPARE(machine.extractRMIVShot("SCH=1;7.2;2973.0;164.7;G"), toCompare1);
 
+    QCOMPARE(machine.extractRMIVShot("SCH=7;6.9;2973.0;164.7;G"), toCompare2);
+
     // If input row is too short, an empty shot must be returned
-    QCOMPARE(machine.extractRMIIIShot("4;6.0;-;4.20"), empty);
+    QCOMPARE(machine.extractRMIVShot("4;6.0;-"), empty);
 }
 
 void ScoringMachineConnectionTest::test_sendSettingsRMIIIAirPistol()

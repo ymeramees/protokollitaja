@@ -486,7 +486,7 @@ void Lehelugeja::loeVorgust()   //Protokollitajast tulev info/käsk
     }else{  //Kui on autoriseerimata ühendus, peab saabuma kinnitus "OK", et parool oli õige
         blockSize = 0;
         if(sisse == "OK"){
-            saadaVorku("Versioon:3");
+            saadaVorku("Versioon:4");
         }else if(sisse == "Versioon OK"){
             uhendusAutoriseeritud = true;
             saadaVorku("Tere");
@@ -522,8 +522,8 @@ void Lehelugeja::loeVorgust()   //Protokollitajast tulev info/käsk
             seeriad[i]->setText(pakett.takeFirst());
             for(int j = 0; j < laskudeArv; j++){
                 lasud[i][j]->setLask(pakett.takeFirst());
-                lasud[i][j]->setX(pakett.takeFirst());
-                lasud[i][j]->setY(pakett.takeFirst());
+                lasud[i][j]->setMmX(pakett.takeFirst());
+                lasud[i][j]->setMmY(pakett.takeFirst());
             }
         }
         ui->summaEdit->setText(pakett.takeFirst());
@@ -858,7 +858,9 @@ void Lehelugeja::updatePorts()
     foreach(QSerialPortInfo info, pordid){
         ui->comPort->addItem(info.portName());
         logi.append(QString("%1, %2").arg(info.portName()).arg(info.description()));
-        if((info.description().contains("Prolific", Qt::CaseInsensitive) || info.description().contains("serial", Qt::CaseInsensitive))
+        if((info.description().contains("Prolific", Qt::CaseInsensitive)
+            || info.description().contains("serial", Qt::CaseInsensitive)
+            ||info.description().contains("uart", Qt::CaseInsensitive))
                 && info.description().contains("USB", Qt::CaseInsensitive)){
             ui->comPort->setCurrentIndex(ui->comPort->count() - 1);
             kaabelLeitud = true;
