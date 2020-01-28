@@ -27,6 +27,8 @@ FinalsFileExport::FinalsFileExport(QVector<QStringList> inputTable, QString comp
 
     //Each "row" in inputTable: target, ID, screen name, result, first name, name, club
     for(int row = 0; row < inputTable.count(); row++){
+        ui->finalsCompetitorsTable->insertRow(row);
+
         for(int column = 0; column < inputTable.at(row).count(); column++){
         QTableWidgetItem *item = new QTableWidgetItem(inputTable.at(row).at(column));
 

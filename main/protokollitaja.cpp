@@ -926,7 +926,12 @@ void Protokollitaja::eksportFSiusStartList()
 
     bool rajaNrOlemas = true;   //Kontrollimaks, kas kõigil on raja nr'id olemas või mitte
     leht->sorteeri(0);   //Et laskurid oleks raja nr'ite järgi reas ja oleks olemas reaslaskurid
-    for(int i = 0; i < 8; i++)
+
+    int competitorsInFinal = 8;
+    if(leht->reasLaskurid.count() < 8)
+        competitorsInFinal = leht->reasLaskurid.count();
+
+    for(int i = 0; i < competitorsInFinal; i++)
         if(leht->reasLaskurid[i]->rajaNr->text().isEmpty())
             rajaNrOlemas = false;
 
@@ -945,7 +950,7 @@ void Protokollitaja::eksportFSiusStartList()
     if(fail.open(QIODevice::WriteOnly | QIODevice::Text)){
         QTextStream valja(&fail);
         int eksporditud = 0;
-        for(int i = 0; i < leht->reasLaskurid.count() && i < 8; i++){
+        for(int i = 0; i < leht->reasLaskurid.count() && i < competitorsInFinal; i++){
                 //ID no;Startno;Name;Firstname;Disp name;Nat;Cat;Group;Team;Bay;Target;Relay;Starttime;BoxTg;Active;Q Tot;Avg;Rank;G1;...;G12;10s;...;0s;Mouches
                 valja << QString(";%1%2;\"").arg(leht->leheIndeks).arg(leht->reasLaskurid[i]->id);
                 valja << leht->reasLaskurid[i]->perekNimi->text() << "\";\"";
@@ -1400,7 +1405,11 @@ void Protokollitaja::finaaliFail()
         bool rajaNrOlemas = false;   //Kontrollimaks, kas kõigil on raja nr'id olemas või mitte
 //        bool valitud = false;   //Kui mõnel laskuril on linnuke ees, siis lähevad valitud finaali
         seeLeht->sorteeri(0);
-        for(int i = 0; i < 8; i++){ //Piisab, kui on osadel raja nr, mitte kõigil
+        int competitorsInFinal = 8;
+        if(seeLeht->reasLaskurid.count() < 8)
+            competitorsInFinal = seeLeht->reasLaskurid.count();
+
+        for(int i = 0; i < competitorsInFinal; i++){ //Piisab, kui on osadel raja nr, mitte kõigil
             if(!seeLeht->reasLaskurid[i]->rajaNr->text().isEmpty())
                 rajaNrOlemas = true;
 //            if(seeLeht->reasLaskurid[i]->linnuke->isChecked())
@@ -1424,7 +1433,7 @@ void Protokollitaja::finaaliFail()
 #endif
         QVector<QStringList> finalsTable; //Each "row": target, ID, screen name, result, first name, name, club
 
-        for(int i = 0; i < seeLeht->laskurid.count() && i < 8; i++){
+        for(int i = 0; i < seeLeht->laskurid.count() && i < competitorsInFinal; i++){
             QStringList finalsRow;
             finalsRow << seeLeht->reasLaskurid[i]->rajaNr->text();
             finalsRow << QString("%100%2").arg(seeLeht->leheIndeks).arg(seeLeht->reasLaskurid[i]->id);

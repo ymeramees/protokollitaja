@@ -24,7 +24,7 @@
       <bool>false</bool>
      </property>
      <property name="rowCount">
-      <number>8</number>
+      <number>0</number>
      </property>
      <property name="columnCount">
       <number>7</number>
@@ -38,14 +38,6 @@
      <attribute name="verticalHeaderDefaultSectionSize">
       <number>30</number>
      </attribute>
-     <row/>
-     <row/>
-     <row/>
-     <row/>
-     <row/>
-     <row/>
-     <row/>
-     <row/>
      <column/>
      <column/>
      <column/>
