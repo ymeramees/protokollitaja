@@ -6,6 +6,7 @@
 #include <QJsonObject>
 #include <QString>
 #include <QPoint>
+#include <QtMath>
 #include <QTime>
 
 class Lask
@@ -19,6 +20,9 @@ public:
     bool isEmpty();
 
 public:
+    enum {Muu = 0, Ohupuss = 1, Ohupustol = 2, Sportpuss = 3, Spordipustol = 4, Puss = 5, Pustol = 6};
+    static bool calcIfInnerTen(int targetType, int x, int y);
+
     void clear();
     bool equals(const Lask other) const;
     int getILask() const;

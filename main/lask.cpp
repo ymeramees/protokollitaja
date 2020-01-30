@@ -16,6 +16,8 @@ Lask::Lask(int shot10Times, int x, int y, bool innerTen, QTime shotTime)
 
 Lask::Lask(QString siusRow)
 {
+    clear();
+
     QStringList rowParts = siusRow.split(';');
     if(rowParts[11].toInt() == 0){  //If [11] is 0, then results are being read with decimals and shot value is in  [10]. If not 0, then results are with full rings.
         set10Lask(rowParts[10]);
@@ -70,6 +72,33 @@ int Lask::get10Lask() const
     return lask;
 }
 
+bool Lask::calcIfInnerTen(int targetType, int x, int y)
+{
+    //Calculate shot center distance for determing inner tens:
+    if(x != -999 && y != -999){
+        long centerDistance = qRound(qSqrt(x*x + y*y));
+
+        switch(targetType){
+        case Ohupuss : {
+            if(centerDistance <= 2000)
+                return true;
+            break;
+        }
+        case Ohupustol : {
+            if(centerDistance <= 4750)
+                return true;
+            break;
+        }
+        case Sportpuss : {
+            if(centerDistance <= 5300)
+                return true;
+            break;
+        }
+        }
+    }
+    return false;
+}
+
 bool Lask::isInnerTen() const
 {
     return m_innerTen;
@@ -114,6 +143,11 @@ void Lask::setLask(float l)
 
 bool Lask::setLask(QString l)
 {
+    if(l.isEmpty()){
+        lask = -999;
+        return true;
+    }
+
     bool onnestus = false;
     float flask = 0;
     flask = l.toFloat(&onnestus);

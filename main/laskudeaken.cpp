@@ -66,18 +66,21 @@ void LaskudeAken::kirjutaLasud()    //Kirjutab tabelis olevad lasud seeriasse
     float lask = 0;
     bool onnestus = false;
     for(int i = 0; i < laskudeArv; i++){
-        if(ui->laskudeTabel->item(i, 0)->text().isEmpty())
-            ui->laskudeTabel->item(i, 0)->setText("-999");
-        lask = ui->laskudeTabel->item(i, 0)->text().toFloat(&onnestus);
-        if(!onnestus && ui->laskudeTabel->item(i, 0)->text().contains(','))
-            lask = ui->laskudeTabel->item(i, 0)->text().replace(',', '.').toFloat(&onnestus);
-        else if(!onnestus && ui->laskudeTabel->item(i, 0)->text().contains('.'))
-            lask = ui->laskudeTabel->item(i, 0)->text().replace('.', ',').toFloat(&onnestus);
-        if(!onnestus){
-            QMessageBox::critical(this, "Viga", "Vigane lasu väärtus tabelis!", QMessageBox::Ok);
-            return;
+        if(ui->laskudeTabel->item(i, 0)->text().isEmpty()){
+            lasud[aktiivneSeeria][i]->setLask("");
+        } else {
+//            ui->laskudeTabel->item(i, 0)->setText("-999");
+            lask = ui->laskudeTabel->item(i, 0)->text().toFloat(&onnestus);
+            if(!onnestus && ui->laskudeTabel->item(i, 0)->text().contains(','))
+                lask = ui->laskudeTabel->item(i, 0)->text().replace(',', '.').toFloat(&onnestus);
+            else if(!onnestus && ui->laskudeTabel->item(i, 0)->text().contains('.'))
+                lask = ui->laskudeTabel->item(i, 0)->text().replace('.', ',').toFloat(&onnestus);
+            if(!onnestus){
+                QMessageBox::critical(this, "Viga", "Vigane lasu väärtus tabelis!", QMessageBox::Ok);
+                return;
+            }
+            lasud[aktiivneSeeria][i]->setLask(lask);
         }
-        lasud[aktiivneSeeria][i]->setLask(lask);
         lasud[aktiivneSeeria][i]->setMmX(ui->laskudeTabel->item(i, 1)->text());
         lasud[aktiivneSeeria][i]->setMmY(ui->laskudeTabel->item(i, 2)->text());
         lasud[aktiivneSeeria][i]->setInnerTen(ui->laskudeTabel->item(i, 3)->checkState());
@@ -107,7 +110,7 @@ void LaskudeAken::loeLasud()    //Loeb seeriast tabelisse uued lasud
             ui->laskudeTabel->item(i, 3)->setCheckState(Qt::Unchecked);
     }
     QString karistus = lasud[aktiivneSeeria][lasud[aktiivneSeeria].count() - 1]->getSLask();
-    if(karistus == "-999")
+    if(karistus.isEmpty() || karistus == "-999")
         karistus.clear();
     ui->karistusEdit->setText(karistus);
     ui->seeriaSilt->setText(QString("%1. seeria").arg(aktiivneSeeria + 1));

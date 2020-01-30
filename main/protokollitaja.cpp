@@ -4208,33 +4208,13 @@ void Protokollitaja::readShotInfo(QString data, int socketIndex)
             thisCompetitor->lasud[seriesNo][j]->setLask(dataList.takeFirst());
             thisCompetitor->lasud[seriesNo][j]->setNanoX(dataList.takeFirst());
             thisCompetitor->lasud[seriesNo][j]->setNanoY(dataList.takeFirst());
-
-            //Calculate shot center distance for determing inner tens:
-            long iX = thisCompetitor->lasud[seriesNo][j]->X();
-            long iY = thisCompetitor->lasud[seriesNo][j]->Y();
-            long centerDistance = qRound(qSqrt(iX*iX + iY*iY));
-
-#ifdef PROOV
-        qDebug() << "centerDistance = " << centerDistance << ", iX = " << iX << ", iY = " << iY << "\n";
-#endif
-
-            switch(sheet->relv){
-            case Ohupuss : {
-                if(centerDistance <= 2000)
-                    thisCompetitor->lasud[seriesNo][j]->setInnerTen(true);
-                break;
-            }
-            case Ohupustol : {
-                if(centerDistance <= 4750)
-                    thisCompetitor->lasud[seriesNo][j]->setInnerTen(true);
-                break;
-            }
-            case Sportpuss : {
-                if(centerDistance <= 5300)
-                    thisCompetitor->lasud[seriesNo][j]->setInnerTen(true);
-                break;
-            }
-            }
+            thisCompetitor->lasud[seriesNo][j]->setInnerTen(
+                        Lask::calcIfInnerTen(
+                            sheet->relv,
+                            thisCompetitor->lasud[seriesNo][j]->X(),
+                            thisCompetitor->lasud[seriesNo][j]->Y()
+                            )
+                        );
         }
     }
 
