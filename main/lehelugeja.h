@@ -31,6 +31,8 @@ class Lehelugeja : public QMainWindow
 {
     Q_OBJECT
 
+    friend class IntegrationTest;
+
 public:
     explicit Lehelugeja(QWidget *parent = nullptr);
     ~Lehelugeja();
@@ -106,7 +108,6 @@ private slots:
     void paluSalvestada();
     void peidaNimi();
     void peidaNupud();
-    void readShot(Lask shot);
     void saada(QString);
     void saadaBroadcast();
     void saadaParool(); //Vaja ühenduse loomise jätkamiseks
@@ -122,6 +123,8 @@ private slots:
     void updatePorts();
     void uuendaSifriga();
 
+protected slots:
+    void readShot(Lask shot);
 //signals:
 //    void lehedLoetud();
 //    void salvesta();
