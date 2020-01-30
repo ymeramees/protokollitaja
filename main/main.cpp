@@ -11,6 +11,8 @@ bool veryVerbose = false;
 
 int main(int argc, char *argv[])
 {
+    QApplication::setAttribute(Qt::AA_Use96Dpi);    // Disable scaling as it does not work properly
+
     if(argc > 1)
         for(int i = 0; i < argc; i++)
             if(QString("%1").arg(argv[i]) == "-v"){
@@ -21,6 +23,15 @@ int main(int argc, char *argv[])
                 verbose = true;
             }
     QApplication a(argc, argv);
+
+    QFont font = qApp->font();
+#ifdef Q_OS_UNIX
+    font.setPixelSize(18);
+#else
+    font.setPixelSize(12);
+#endif
+    qApp->setFont(font);    // Fix font size, as scaling does not work properly
+
     Lehelugeja w;
     w.show();
 
