@@ -8,6 +8,10 @@
 #include "protokollitaja.h"
 #include "version.h"
 
+#ifdef ASM_CRASH_REPORT
+#include "asmCrashReport.h"
+#endif
+
 #include <QLocale>
 
 QString programmiNimi = VER_INTERNALNAME_STR; //"Protokollitaja 0.5 Beta"; // TODO uuendada nime
@@ -46,6 +50,22 @@ int main(int argc, char *argv[])
 
     a.setApplicationName(programmiNimi);
     a.setOrganizationName("Ümeramees");
+    a.setApplicationVersion(versioon);
+
+#ifdef ASM_CRASH_REPORT
+  asmCrashReport::setSignalHandler( QString(), [] (const QString &inFileName, bool inSuccess) {
+      QString  message;
+
+      if ( inSuccess ) {
+          message = QStringLiteral( "Sorry, %1 has crashed. A log file was written to:\n\n%2\n\nPlease email this to ymeramees@gmail.com." ).arg( QCoreApplication::applicationName(), inFileName );
+      } else {
+          message = QStringLiteral( "Sorry, %1 has crashed and we could not write a log file to:\n\n%2\n\nPlease contact ymeramees@gmail.com." ).arg( QCoreApplication::applicationName(), inFileName );
+      }
+
+      QMessageBox::critical( nullptr, QObject::tr( "%1 Crashed" ).arg( QCoreApplication::applicationName() ), message );
+  });
+#endif
+
     Protokollitaja w;
     w.show();
     a.connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));

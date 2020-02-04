@@ -605,7 +605,7 @@ void Protokollitaja::ava()
 void Protokollitaja::autoUuendusteKontroll()
 {
     aadressidOtsitud = false;
-    laeUuendusi("http://web.zone.ee/protokollitaja/inf20150118");
+    laeUuendusi("https://webzone.ee/protokollitaja/inf20150118");
 }
 
 void Protokollitaja::closeEvent(QCloseEvent *event)
@@ -1784,7 +1784,7 @@ void Protokollitaja::kontrolliUuendusi()
     autoUuendus = false;    //Ei ole automaatne uuendus
     aadressidOtsitud = false;
 //    laeUuendusi("http://ymeramees.no-ip.org/protokollitaja/inf20150118");
-    laeUuendusi("http://web.zone.ee/protokollitaja/inf20150118");
+    laeUuendusi("https://webzone.ee/protokollitaja/inf20150118");
 }
 
 void Protokollitaja::kopeeriLaskurid()

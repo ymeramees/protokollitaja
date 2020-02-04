@@ -6,6 +6,9 @@ DEPENDPATH += $${INCLUDEPATH}
 
 include(qextserialport/src/qextserialport.pri)
 include(xlslib/xlslib.pri)
+if ( !include( asmCrashReport/asmCrashReport.pri ) ) {
+    error( Could not find the asmCrashReport.pri file. )
+}
 
 QT += core \
     gui \
