@@ -242,6 +242,11 @@ bool Laskur::isCompetitionStarted() const
     return m_competitionStarted;
 }
 
+bool Laskur::isFinished() const
+{
+    return lasud[seeriateArv - 1][laskudeArv - 1]->getILask() != -999;
+}
+
 QString* Laskur::getEventType() const
 {
     return m_eventType;
@@ -543,16 +548,22 @@ void Laskur::liida() //Laskude summeerimine
         int ssum = 0;   //Seeria summa täisarvuna
         double fssum = 0;  //Seeria summa ujukomakohaarvuna
         int lastudSeeriad = 0;
-        int lastudLasud = 0;
+        int shotsInTotal = 0;   // Total number of shots already existing
         int siseKumneid = 0;
 //        bool komaga = false;
         bool onnestus = false;
         bool onLasud = false;
         QString seeria;
+        QPalette shotsMissingBackground;
+        shotsMissingBackground.setColor(QPalette::Base, Qt::yellow);
+        QPalette shotsMissingFinishedBackground;
+        shotsMissingFinishedBackground.setColor(QPalette::Base, Qt::red);
+        QPalette standardBackground = eesNimi->palette();
 
         for(int i = 0; i < seeriad.size(); i++){
             ssum = 0;
             onLasud = false;
+            int shotsInSeries = 0;  // Number of shots existing in the series
             for(int j = 0; j < lasud[i].count(); j++)   //Liitmisel liidetakse ka karistus juurde
                 if(lasud[i][j]->getILask() != -999){
 //                    qDebug() << "lasud[" << i << "][" << j << "] = " << lasud[i][j]->getILask();
@@ -564,8 +575,9 @@ void Laskur::liida() //Laskude summeerimine
                     if(lasud[i][j]->isInnerTen())
                         siseKumneid++;
                     onLasud = true;
-                    lastudLasud++;
+                    shotsInSeries++;
                 }
+            shotsInTotal += shotsInSeries;
             if(onLasud){
                 fssum = ssum;
                 seeriad[i]->setText(QString("%1").arg(fssum / 10));
@@ -576,15 +588,24 @@ void Laskur::liida() //Laskude summeerimine
                 seeriad[i]->installEventFilter(this);
                 kumned->setText(QString("%1").arg(siseKumneid));
                 kumned->setReadOnly(true);
+                if(shotsInSeries < laskudeArv) {
+                    if(isFinished())
+                        seeriad[i]->setPalette(shotsMissingFinishedBackground);
+                    else
+                        seeriad[i]->setPalette(shotsMissingBackground);
+                } else {
+                    seeriad[i]->setPalette(standardBackground);
+                }
 //                kumned->setEnabled(false);
 //                connect(seeriad[i], SIGNAL(doubleClicked()), this, SLOT(naitaLaskudeAkent()));
             }else{
                 seeriad[i]->setReadOnly(false);
+                seeriad[i]->setPalette(standardBackground);
                 kumned->setReadOnly(false);
             }
             if(!seeriad[i]->text().isEmpty()){
                 if(!onLasud)
-                    lastudLasud += 10;  //Kui on käsitsi seeria kirjutatud, siis ilmselt on 10 lasku lastud
+                    shotsInTotal += 10;  //Kui on käsitsi seeria kirjutatud, siis ilmselt on 10 lasku lastud
                 sum += qRound(seeriad[i]->text().toFloat(&onnestus) * 10);
                 if(!onnestus){  //Kui arvuks tegemine ei õnnestunud on vaja asendada koma punktiga
                     seeria = seeriad[i]->text();
@@ -630,7 +651,7 @@ void Laskur::liida() //Laskude summeerimine
                 sum += qRound(seeria.toFloat(&onnestus) * 10000);
             }
         }
-        keskmLask = sum / lastudLasud;
+        keskmLask = sum / shotsInTotal;
 //            lastudSeeriad *= 10;
 //            keskmLask = sum / lastudSeeriad;
         if(finaal->text().contains('.') || koguSumma->text().contains('.') || summa->text().contains('.')){

@@ -82,6 +82,7 @@ public:
 public slots:
     int competitionStage() const;
     bool isCompetitionStarted() const;
+    bool isFinished() const;
     void liida(); //laskude summeerimine
     void nextCompetitionStage();
     QString previousSiusRow() const;
@@ -119,6 +120,7 @@ signals:
 private:
     bool m_competitionStarted;  //Has competition started
     int m_competitionStage; //From which competition stage (position, run or half) the incoming shots are
+//    bool m_finished;    // If last shot value exists, then competitor has finished
     int m_siusConnectionIndex = -1;   //Which SiusData connection is used for this competitor
     QAction *idAct;
     QAction *laskudeAkenAct;
