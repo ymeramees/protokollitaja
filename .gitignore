@@ -14,7 +14,7 @@ object_script.*.Release
 object_script.*.Debug
 *_plugin_import.cpp
 /.qmake.cache
-/.qmake.stash
+*.qmake.stash
 *.pro.user
 *.pro.user.*
 *.qbs.user
@@ -34,6 +34,8 @@ build/*/*
 !build/*/Data
 build/*/Data/*
 !build/*/Data/Print_template.html
+debug/
+release/
 
 # Qt unit tests
 target_wrapper.*
@@ -54,5 +56,8 @@ CMakeLists.txt.user*
 *.kll
 *.txt
 *.xls
+*.fin
+save.json
+conf.json
 Koduleht/
 images_store/
