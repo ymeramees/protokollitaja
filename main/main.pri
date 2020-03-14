@@ -5,14 +5,16 @@ SOURCES += $$PWD/lehelugeja.cpp \
     $$PWD/logandcmdwindow.cpp \
     $$PWD/scoringmachineconnection.cpp \
     $$PWD/../../protokollitaja/main/lask.cpp \
-    $$PWD/../../protokollitaja/main/common/target.cpp
+    $$PWD/../../protokollitaja/main/common/target.cpp \
+    $$PWD/selftests.cpp
 
 HEADERS  += $$PWD/lehelugeja.h \
     $$PWD/logandcmdwindow.h \
     $$PWD/version.h \
     $$PWD/scoringmachineconnection.h \
     $$PWD/../../protokollitaja/main/lask.h \
-    $$PWD/../../protokollitaja/main/common/target.h
+    $$PWD/../../protokollitaja/main/common/target.h \
+    $$PWD/selftests.h
 
 FORMS    += $$PWD/lehelugeja.ui \
     $$PWD/logandcmdwindow.ui

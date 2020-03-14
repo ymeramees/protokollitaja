@@ -20,10 +20,12 @@ SOURCES += main.cpp \
     logandcmdwindow.cpp \
     scoringmachineconnection.cpp \
     ../../protokollitaja/main/lask.cpp \
-    ../../protokollitaja/main/common/target.cpp
+    ../../protokollitaja/main/common/target.cpp \
+    selftests.cpp
 
 HEADERS  += lehelugeja.h \
     logandcmdwindow.h \
+    selftests.h \
     version.h \
     scoringmachineconnection.h \
     ../../protokollitaja/main/lask.h \

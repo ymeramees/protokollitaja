@@ -23,6 +23,11 @@
 #include "logandcmdwindow.h"
 #include "scoringmachineconnection.h"
 
+// For testing
+#ifdef PROOV
+#include "selftests.h"
+#endif
+
 namespace Ui {
 class Lehelugeja;
 }
@@ -108,6 +113,7 @@ private slots:
     void paluSalvestada();
     void peidaNimi();
     void peidaNupud();
+    void runSelfTests();
     void saada(QString);
     void saadaBroadcast();
     void saadaParool(); //Vaja ühenduse loomise jätkamiseks

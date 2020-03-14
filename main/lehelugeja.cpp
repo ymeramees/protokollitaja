@@ -91,6 +91,13 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
     abiMenu = ui->menuBar->addMenu("&Abi");
     abiMenu->addAction(programmistAct);
 
+#ifdef PROOV
+    QAction* selfTestsAct = new QAction(tr("Käivita testid"), this);
+    selfTestsAct->setStatusTip("Käivitab sisemised programmi testid");
+    connect(selfTestsAct, SIGNAL(triggered()), this, SLOT(runSelfTests()));
+    abiMenu->addAction(selfTestsAct);
+#endif
+
     ui->centralGrid->replaceWidget(ui->logiPlaceholder, &logi);
     connect(&logi, &LogAndCmdWindow::receivedCommand, this, &Lehelugeja::processCommand);
     connect(&logi, &LogAndCmdWindow::changeVariable, this, &Lehelugeja::changeVariable);
@@ -320,6 +327,7 @@ void Lehelugeja::joonistaLask(QPointF p, bool kasMM)
 void Lehelugeja::drawTarget()
 {
     target.init(ui->leheCombo->currentIndex());
+    target.setResult("");  // Not to show previously read series
     target.setZoomEnabled(false);
     target.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     ui->centralGrid->replaceWidget(ui->placeholderWidget, &target);
@@ -356,6 +364,7 @@ void Lehelugeja::sumAndEndSeries()
 
     if(aktiivneSeeria != nullptr){
         target.setResult(aktiivneSeeria->text());
+        target.zoomAndUpdate();
 
         for(int i = 0; i < seriesShots.count(); i++)    //Loetud laskude kirjutamine aktiivsesse seeriasse
             lasud[aktiivseSeeriaNr][i]->set(seriesShots[i]);
@@ -670,6 +679,14 @@ void Lehelugeja::readShot(Lask shot)
     if(lask == laskudeArv) {
         sumAndEndSeries();
     }
+}
+
+void Lehelugeja::runSelfTests()
+{
+    // Test to check target visual layout
+    SelfTests selfTests(this);
+    connect(&selfTests, &SelfTests::shotRead, this, &Lehelugeja::readShot);
+    selfTests.generateShots(10);
 }
 
 void Lehelugeja::saada(QString s)
