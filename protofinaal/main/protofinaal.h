@@ -22,8 +22,8 @@
 #include "team.h"
 #include "initialdialog.h"
 #include "spectatorwindow.h"
-#include "../protokollitaja/src/lask.h"
-#include "../protokollitaja/src/siusdataconnections.h"
+#include "lask.h"
+#include "siusdataconnections.h"
 
 extern bool verbose;
 

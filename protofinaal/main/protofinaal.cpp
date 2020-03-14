@@ -286,37 +286,7 @@ void Protofinaal::readSiusInfo(QStringList lines, int socketIndex)
 
                     statusBarInfoChanged(rowParts[3] + tr(": Proovilask"));
 
-                    Lask lask;
-                    if(rowParts[11].toInt() == 0){  //Kui [11] on 0, siis järelikult loetakse komakohtadega ja lasu väärtus on [10]'s, kui ei ole 0, siis loetakse täisarvudega
-                        lask.set10Lask(rowParts[10]);
-                    }else lask.set10Lask(rowParts[11]);
-                    bool success = false;
-                    float f = 0;
-                    f = rowParts[14].toFloat(&success);
-                    if(!success){
-                        if(rowParts[14].contains(',')){
-                            rowParts[14].replace(',', '.');
-                        }else if(rowParts[14].contains('.')){
-                            rowParts[14].replace('.', ',');
-                        }
-                        f = rowParts[14].toFloat(&success);
-                    }
-                    f *= 1000; //Tundub, et Sius'i koordinaadid on meetrites, vaja teha millimeetrid
-                    lask.setX(f);
-                    success = false;
-                    f = 0;
-                    f = rowParts[15].toFloat(&success);
-                    if(!success){
-                        if(rowParts[15].contains(',')){
-                            rowParts[15].replace(',', '.');
-                        }else if(rowParts[15].contains('.')){
-                            rowParts[15].replace('.', ',');
-                        }
-                        f = rowParts[15].toFloat(&success);
-                    }
-                    f *= 1000; //Tundub, et Sius'i koordinaadid on meetrites, vaja teha millimeetrid
-                    lask.setY(f);
-
+                    Lask lask(row);
 //                    if(tulemus->marklehed[j]->isHidden())   //Algul ei ole märklehti näha
 //                        tulemus->naitaLehed();  //Puhastab ja toob märklehed nähtavale, proovilaskude ajal on need koos nimedega
                     //                    tulemus->peidaNimed();
@@ -338,36 +308,7 @@ void Protofinaal::readSiusInfo(QStringList lines, int socketIndex)
                                 statusBarInfoChanged(rowParts[3] + tr(": algavad võistluslasud"));
 
                                 QStringList previousRowParts = thisCompetitor->previousSiusRow().split(';');
-                                Lask lask;
-                                if(previousRowParts[11].toInt() == 0){  //Kui [11] on 0, siis järelikult loetakse komakohtadega ja lasu väärtus on [10]'s, kui ei ole 0, siis loetakse täisarvudega
-                                    lask.set10Lask(previousRowParts[10]);
-                                }else lask.set10Lask(previousRowParts[11]);
-                                bool success = false;
-                                float f = 0;
-                                f = previousRowParts[14].toFloat(&success);
-                                if(!success){
-                                    if(previousRowParts[14].contains(',')){
-                                        previousRowParts[14].replace(',', '.');
-                                    }else if(previousRowParts[14].contains('.')){
-                                        previousRowParts[14].replace('.', ',');
-                                    }
-                                    f = previousRowParts[14].toFloat(&success);
-                                }
-                                f *= 1000; //Tundub, et Sius'i koordinaadid on meetrites, vaja teha millimeetrid
-                                lask.setX(f);
-                                success = false;
-                                f = 0;
-                                f = previousRowParts[15].toFloat(&success);
-                                if(!success){
-                                    if(previousRowParts[15].contains(',')){
-                                        previousRowParts[15].replace(',', '.');
-                                    }else if(previousRowParts[15].contains('.')){
-                                        previousRowParts[15].replace('.', ',');
-                                    }
-                                    f = previousRowParts[15].toFloat(&success);
-                                }
-                                f *= 1000; //Tundub, et Sius'i koordinaadid on meetrites, vaja teha millimeetrid
-                                lask.setY(f);
+                                Lask lask(thisCompetitor->previousSiusRow());
 
 //                                if(tulemus->marklehed[j]->isHidden())   //Algul ei ole märklehti näha
 //                                    tulemus->naitaLehed();  //Toob märklehed nähtavale
@@ -391,36 +332,7 @@ void Protofinaal::readSiusInfo(QStringList lines, int socketIndex)
 //                            lisaLaske++;
 
                     int shotNo = rowParts[13].toInt() - 1 /*- shootOffShots*/;  //Siusist tulnud lasu Nr, koodi lühendamise eesmärgil
-                    Lask lask;
-                    if(rowParts[11].toInt() == 0){  //Kui [11] on 0, siis järelikult loetakse komakohtadega ja lasu väärtus on [10]'s, kui ei ole 0, siis loetakse täisarvudega
-                        lask.set10Lask(rowParts[10]);
-                    }else lask.set10Lask(rowParts[11]);
-                    bool success = false;
-                    float f = 0;
-                    f = rowParts[14].toFloat(&success);
-                    if(!success){
-                        if(rowParts[14].contains(',')){
-                            rowParts[14].replace(',', '.');
-                        }else if(rowParts[14].contains('.')){
-                            rowParts[14].replace('.', ',');
-                        }
-                        f = rowParts[14].toFloat(&success);
-                    }
-                    f *= 1000; //Tundub, et Sius'i koordinaadid on meetrites, vaja teha millimeetrid
-                    lask.setX(f);
-                    success = false;
-                    f = 0;
-                    f = rowParts[15].toFloat(&success);
-                    if(!success){
-                        if(rowParts[15].contains(',')){
-                            rowParts[15].replace(',', '.');
-                        }else if(rowParts[15].contains('.')){
-                            rowParts[15].replace('.', ',');
-                        }
-                        f = rowParts[15].toFloat(&success);
-                    }
-                    f *= 1000; //Tundub, et Sius'i koordinaadid on meetrites, vaja teha millimeetrid
-                    lask.setY(f);
+                    Lask lask(row);
 
 //                    uuendaLasuNrit();   //Vaja ka uuendada, mitmes lask käsil on, enne, kui uus lask lisatakse
 
