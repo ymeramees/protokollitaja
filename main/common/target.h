@@ -55,7 +55,7 @@ public slots:
     void setName(QString n);
     void setTargetNo(QString r);
     void setGunType(int r);
-    void setResult(QString tul);
+    void setResult(QString newResult);
     void zoomAndUpdate();
 
 };

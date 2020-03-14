@@ -362,9 +362,9 @@ void Target::setGunType(int r)
     m_gunType = r;
 }
 
-void Target::setResult(QString tul)
+void Target::setResult(QString newResult)
 {
-    m_result = tul;
+    m_result = newResult;
 }
 
 void Target::zoomAndUpdate()
@@ -382,9 +382,9 @@ void Target::zoomAndUpdate()
     QFont font;
     font.setPointSize(h / 15);
     painter2.setFont(font);
-    QRect shotBox(w - w / 4, h - h / 8 - 1, w / 4, h / 8);
+    QRect shotBox(w - w / 4 - 1, h - h / 8 - 1, w / 4, h / 8);
     QRect nameBox(0, 0, font.pointSize() * m_name.length(), h / 8);
-    QRect resultBox(w - font.pointSize() * (m_result.length() - 1) - 1, 0, font.pointSize() * (m_result.length() - 1), h / 8);
+    QRect resultBox(w - (font.pointSize() * m_result.length() / 2) - 56, 0, font.pointSize() * m_result.length() / 2 + 55, h / 8);
     QRect targetNoBox(0, h - h / 8 - 1, w / 5, h / 8);
 
     if(!m_name.isEmpty()) {
