@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 INCLUDEPATH += ./ \
-INCLUDEPATH += ../../protokollitaja/main
+INCLUDEPATH += ../../../protokollitaja/main
 #include(qextserialport/src/qextserialport.pri)
 
 QT       += core gui network serialport
@@ -19,8 +19,8 @@ SOURCES += main.cpp \
     lehelugeja.cpp \
     logandcmdwindow.cpp \
     scoringmachineconnection.cpp \
-    ../../protokollitaja/main/lask.cpp \
-    ../../protokollitaja/main/common/target.cpp \
+    ../../../protokollitaja/main/lask.cpp \
+    ../../../protokollitaja/main/common/target.cpp \
     selftests.cpp
 
 HEADERS  += lehelugeja.h \
@@ -28,8 +28,8 @@ HEADERS  += lehelugeja.h \
     selftests.h \
     version.h \
     scoringmachineconnection.h \
-    ../../protokollitaja/main/lask.h \
-    ../../protokollitaja/main/common/target.h
+    ../../../protokollitaja/main/lask.h \
+    ../../../protokollitaja/main/common/target.h
 
 FORMS    += lehelugeja.ui \
     logandcmdwindow.ui

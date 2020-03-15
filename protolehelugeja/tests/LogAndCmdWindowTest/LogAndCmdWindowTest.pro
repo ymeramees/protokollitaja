@@ -3,7 +3,7 @@ QT -= gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-INCLUDEPATH += ../../main/
+INCLUDEPATH += ../../protolehelugeja/
 
 CONFIG += qt console warn_on testcase
 CONFIG -= app_bundle
@@ -11,8 +11,8 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES +=  tst_logandcmdwindow.cpp \
-    ../../main/logandcmdwindow.cpp
+    ../../protolehelugeja/logandcmdwindow.cpp
 
-HEADERS += ../../main/logandcmdwindow.h
+HEADERS += ../../protolehelugeja/logandcmdwindow.h
 
-FORMS    += ../../main/logandcmdwindow.ui
+FORMS    += ../../protolehelugeja/logandcmdwindow.ui
