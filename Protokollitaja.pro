@@ -6,4 +6,5 @@
 TEMPLATE = subdirs
 
 SUBDIRS += protokollitaja \
-    protofinaal
+    protofinaal \
+    common

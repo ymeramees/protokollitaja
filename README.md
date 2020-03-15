@@ -1,7 +1,7 @@
 # Protokollitaja
 ISSF Shooting sport ranking and results display software suite. Now monorepo for previously separate programs:
-* [Protokollitaja](https://github.com/ymeramees/protokollitaja/protokollitaja) - Main ranking and results display program and a server from a set of programs.
-* [Protofinaal](https://github.com/ymeramees/protokollitaja/protofinaal) - New implementation of [QFinaal](https://github.com/ymeramees/qfinaal). In a very early stage at the moment.
+* [Protokollitaja](protokollitaja/README.md) - Main ranking and results display program and a server from a set of programs.
+* [Protofinaal](protofinaal) - New implementation of [QFinaal](https://github.com/ymeramees/qfinaal). In a very early stage at the moment.
 * Others will follow
 
 For more details about each program, see their respective readme files.
@@ -25,7 +25,6 @@ For more details about each program, see their respective readme files.
 ## Built With
 
 * [Qt](http://www.qt-project.org)
-* Depends on [QFinaal](https://github.com/ymeramees/qfinaal) for building. Make sure to clone QFinaal next to Protokollitaja folder.
 
 ### Installing/Deploying
 On Windows, make sure to copy needed dll's from your Qt installation into respective folders (platforms, printsupport) into the same directory where executable is. This is also needed when building/running from Qt Creator.

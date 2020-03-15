@@ -1,12 +1,12 @@
 TEMPLATE = app
 TARGET = Protokollitaja
 INCLUDEPATH += ./ \
-INCLUDEPATH += ../../../qfinaal/src
+INCLUDEPATH += ../../common/src
 DEPENDPATH += $${INCLUDEPATH}
 
-include(qextserialport/src/qextserialport.pri)
+include(../../common/src/qextserialport/src/qextserialport.pri)
 include(xlslib/xlslib.pri)
-if ( !include( asmCrashReport/asmCrashReport.pri ) ) {
+if ( !include( ../../common/src/asmCrashReport/asmCrashReport.pri ) ) {
     error( Could not find the asmCrashReport.pri file. )
 }
 
@@ -21,7 +21,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += lisalaskudeaken.h \
-    globalvariables.h \
     liikmetevalikkast.h \
     voistkond.h \
     importaken.h \
@@ -35,17 +34,18 @@ HEADERS += lisalaskudeaken.h \
     protokollitaja.h \
     lehelugejaaken.h \
     sifriseade.h \
-    lask.h \
     version.h \
     laskudeaken.h \
-    ../../../qfinaal/src/uhendumiseaken.h \
     filedownloader.h \
     finalsfileexport.h \
     startlistwriter.h \
     protolehelugejaserver.h \
     protolehelugejaconnection.h \
-    siusdataconnections.h \
-    siusdataconnection.h
+    ../../common/src/globalvariables.h \
+    ../../common/src/lask.h \
+    ../../common/src/uhendumiseaken.h \
+    ../../common/src/siusdataconnections.h \
+    ../../common/src/siusdataconnection.h
 SOURCES += lisalaskudeaken.cpp \
     liikmetevalikkast.cpp \
     voistkond.cpp \
@@ -60,16 +60,16 @@ SOURCES += lisalaskudeaken.cpp \
     protokollitaja.cpp \
     lehelugejaaken.cpp \
     sifriseade.cpp \
-    lask.cpp \
     laskudeaken.cpp \
-    ../../../qfinaal/src/uhendumiseaken.cpp \
     filedownloader.cpp \
     finalsfileexport.cpp \
     startlistwriter.cpp \
     protolehelugejaserver.cpp \
     protolehelugejaconnection.cpp \
-    siusdataconnections.cpp \
-    siusdataconnection.cpp
+    ../../common/src/lask.cpp \
+    ../../common/src/uhendumiseaken.cpp \
+    ../../common/src/siusdataconnections.cpp \
+    ../../common/src/siusdataconnection.cpp
 FORMS += lisalaskudeaken.ui \
     liikmetevalikkast.ui \
     importaken.ui \
@@ -79,9 +79,9 @@ FORMS += lisalaskudeaken.ui \
     lehelugejaaken.ui \
     sifriseade.ui \
     laskudeaken.ui \
-    ../../../qfinaal/src/uhendumiseaken.ui \
     finalsfileexport.ui \
-    siusdataconnections.ui
+    ../../common/src/uhendumiseaken.ui \
+    ../../common/src/siusdataconnections.ui
 RESOURCES += ../protokollitaja.qrc
 RC_FILE += ikoon.rc
 win32{

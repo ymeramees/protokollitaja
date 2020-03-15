@@ -15,17 +15,17 @@ HEADERS += $$PWD/lisalaskudeaken.h \
     $$PWD/protokollitaja.h \
     $$PWD/lehelugejaaken.h \
     $$PWD/sifriseade.h \
-    $$PWD/lask.h \
     $$PWD/version.h \
     $$PWD/laskudeaken.h \
-    $$PWD/../../qfinaal/src/uhendumiseaken.h \
     $$PWD/filedownloader.h \
     $$PWD/finalsfileexport.h \
     $$PWD/startlistwriter.h \
     $$PWD/protolehelugejaserver.h \
     $$PWD/protolehelugejaconnection.h \
-    $$PWD/siusdataconnections.h \
-    $$PWD/siusdataconnection.h
+    $$PWD/../common/src/lask.h \
+    $$PWD/../common/src/uhendumiseaken.h \
+    $$PWD/../common/src/siusdataconnections.h \
+    $$PWD/../common/src/siusdataconnection.h
 SOURCES += $$PWD/lisalaskudeaken.cpp \
     $$PWD/liikmetevalikkast.cpp \
     $$PWD/voistkond.cpp \
@@ -40,16 +40,16 @@ SOURCES += $$PWD/lisalaskudeaken.cpp \
     $$PWD/protokollitaja.cpp \
     $$PWD/lehelugejaaken.cpp \
     $$PWD/sifriseade.cpp \
-    $$PWD/lask.cpp \
     $$PWD/laskudeaken.cpp \
-    $$PWD/../../qfinaal/src/uhendumiseaken.cpp \
     $$PWD/filedownloader.cpp \
     $$PWD/finalsfileexport.cpp \
     $$PWD/startlistwriter.cpp \
     $$PWD/protolehelugejaserver.cpp \
     $$PWD/protolehelugejaconnection.cpp \
-    $$PWD/siusdataconnections.cpp \
-    $$PWD/siusdataconnection.cpp
+    $$PWD/../common/src/lask.cpp \
+    $$PWD/../common/src/uhendumiseaken.cpp \
+    $$PWD/../common/src/siusdataconnections.cpp \
+    $$PWD/../common/src/siusdataconnection.cpp
 FORMS += $$PWD/lisalaskudeaken.ui \
     $$PWD/liikmetevalikkast.ui \
     $$PWD/importaken.ui \
@@ -59,8 +59,8 @@ FORMS += $$PWD/lisalaskudeaken.ui \
     $$PWD/lehelugejaaken.ui \
     $$PWD/sifriseade.ui \
     $$PWD/laskudeaken.ui \
-    $$PWD/../../qfinaal/src/uhendumiseaken.ui \
     $$PWD/finalsfileexport.ui \
-    $$PWD/siusdataconnections.ui
+    $$PWD/../common/src/uhendumiseaken.ui \
+    $$PWD/../common/src/siusdataconnections.ui
 RESOURCES += $$PWD/../protokollitaja.qrc
 RC_FILE += $$PWD/ikoon.rc

@@ -1,7 +1,5 @@
 TEMPLATE = subdirs
 
-SUBDIRS += siusdataconnectiontest \
-    CompetitorTest \
-    FinalsFileExportTest \
-    lasktest
+SUBDIRS += CompetitorTest \
+    FinalsFileExportTest
 

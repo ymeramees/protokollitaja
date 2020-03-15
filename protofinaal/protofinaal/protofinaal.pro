@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 INCLUDEPATH += ./ \
-INCLUDEPATH += ../../protokollitaja/protokollitaja
+INCLUDEPATH += ../../common/src/src
 
 QT += core gui network
 
@@ -34,9 +34,9 @@ SOURCES += \
     competitor.cpp \
     initialdialog.cpp \
     spectatorwindow.cpp \
-    ../../protokollitaja/protokollitaja/siusdataconnection.cpp \
-    ../../protokollitaja/protokollitaja/siusdataconnections.cpp \
-    ../../protokollitaja/protokollitaja/lask.cpp
+    ../../common/src/siusdataconnection.cpp \
+    ../../common/src/siusdataconnections.cpp \
+    ../../common/src/lask.cpp
 
 HEADERS += \
         protofinaal.h \
@@ -44,13 +44,13 @@ HEADERS += \
     competitor.h \
     initialdialog.h \
     spectatorwindow.h \
-    ../../protokollitaja/protokollitaja/siusdataconnection.h \
-    ../../protokollitaja/protokollitaja/siusdataconnections.h \
-    ../../protokollitaja/protokollitaja/lask.h
+    ../../common/src/siusdataconnection.h \
+    ../../common/src/siusdataconnections.h \
+    ../../common/src/lask.h
 
 FORMS += \
     initialdialog.ui \
-    ../../protokollitaja/protokollitaja/siusdataconnections.ui
+    ../../common/src/siusdataconnections.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
