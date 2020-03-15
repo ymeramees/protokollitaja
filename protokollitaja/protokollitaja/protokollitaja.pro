@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = Protokollitaja
 INCLUDEPATH += ./ \
-INCLUDEPATH += ../../qfinaal/src
+INCLUDEPATH += ../../../qfinaal/src
 DEPENDPATH += $${INCLUDEPATH}
 
 include(qextserialport/src/qextserialport.pri)
@@ -38,7 +38,7 @@ HEADERS += lisalaskudeaken.h \
     lask.h \
     version.h \
     laskudeaken.h \
-    ../../qfinaal/src/uhendumiseaken.h \
+    ../../../qfinaal/src/uhendumiseaken.h \
     filedownloader.h \
     finalsfileexport.h \
     startlistwriter.h \
@@ -62,7 +62,7 @@ SOURCES += lisalaskudeaken.cpp \
     sifriseade.cpp \
     lask.cpp \
     laskudeaken.cpp \
-    ../../qfinaal/src/uhendumiseaken.cpp \
+    ../../../qfinaal/src/uhendumiseaken.cpp \
     filedownloader.cpp \
     finalsfileexport.cpp \
     startlistwriter.cpp \
@@ -79,7 +79,7 @@ FORMS += lisalaskudeaken.ui \
     lehelugejaaken.ui \
     sifriseade.ui \
     laskudeaken.ui \
-    ../../qfinaal/src/uhendumiseaken.ui \
+    ../../../qfinaal/src/uhendumiseaken.ui \
     finalsfileexport.ui \
     siusdataconnections.ui
 RESOURCES += ../protokollitaja.qrc

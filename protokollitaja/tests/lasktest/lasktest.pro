@@ -1,7 +1,7 @@
 QT += testlib
 QT -= gui
 
-INCLUDEPATH += ../../main/
+INCLUDEPATH += ../../protokollitaja/
 
 CONFIG += qt console warn_on depend_includepath testcase
 CONFIG -= app_bundle
@@ -9,6 +9,6 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES +=  tst_lask.cpp \
-    ../../main/lask.cpp
+    ../../protokollitaja/lask.cpp
 
-HEADERS += ../../main/lask.h
+HEADERS += ../../protokollitaja/lask.h

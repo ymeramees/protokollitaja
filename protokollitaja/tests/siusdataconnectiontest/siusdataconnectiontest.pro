@@ -3,13 +3,13 @@ QT += gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-INCLUDEPATH += ../../main/
+INCLUDEPATH += ../../protokollitaja/
 
 CONFIG += qt warn_on testcase
 
 TEMPLATE = app
 
 SOURCES += *.cpp \
-    ../../main/siusdataconnection.cpp
+    ../../protokollitaja/siusdataconnection.cpp
 
-HEADERS += ../../main/siusdataconnection.h
+HEADERS += ../../protokollitaja/siusdataconnection.h

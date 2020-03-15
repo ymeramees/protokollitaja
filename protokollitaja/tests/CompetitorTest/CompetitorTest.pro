@@ -3,7 +3,7 @@ QT -= gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-INCLUDEPATH += ../../main/
+INCLUDEPATH += ../../protokollitaja/
 
 CONFIG += qt console warn_on depend_includepath testcase
 CONFIG -= app_bundle
@@ -11,15 +11,15 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES +=  tst_competitor.cpp \
-    ../../main/laskur.cpp \
-    ../../main/lask.cpp \
-    ../../main/lisalaskudeaken.cpp \
-    ../../main/laskudeaken.cpp
+    ../../protokollitaja/laskur.cpp \
+    ../../protokollitaja/lask.cpp \
+    ../../protokollitaja/lisalaskudeaken.cpp \
+    ../../protokollitaja/laskudeaken.cpp
 
-HEADERS += ../../main/laskur.h \
-    ../../main/lask.h \
-    ../../main/lisalaskudeaken.h \
-    ../../main/laskudeaken.h
+HEADERS += ../../protokollitaja/laskur.h \
+    ../../protokollitaja/lask.h \
+    ../../protokollitaja/lisalaskudeaken.h \
+    ../../protokollitaja/laskudeaken.h
 
-FORMS += ../../main/lisalaskudeaken.ui \
-    ../../main/laskudeaken.ui
+FORMS += ../../protokollitaja/lisalaskudeaken.ui \
+    ../../protokollitaja/laskudeaken.ui

@@ -5,5 +5,5 @@
 #-------------------------------------------------
 TEMPLATE = subdirs
 
-SUBDIRS += main \
+SUBDIRS += protofinaal \
     tests
