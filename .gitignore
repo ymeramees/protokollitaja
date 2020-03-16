@@ -14,7 +14,11 @@ object_script.*.Release
 object_script.*.Debug
 *_plugin_import.cpp
 /.qmake.cache
+<<<<<<< HEAD
 *.qmake.stash
+=======
+/.qmake.stash
+>>>>>>> protolehelugeja/master
 *.pro.user
 *.pro.user.*
 *.qbs.user
@@ -61,3 +65,4 @@ save.json
 conf.json
 Koduleht/
 images_store/
+image_store/

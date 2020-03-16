@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 INCLUDEPATH += ./ \
-INCLUDEPATH += ../../common/src/src
+INCLUDEPATH += ../../common/src/
 
 QT += core gui network
 
