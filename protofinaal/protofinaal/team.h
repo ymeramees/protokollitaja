@@ -22,7 +22,7 @@ public:
     QString lastSum();
     QString teamName();
     QVector<Competitor*> teamCompetitors();
-    void toJson(QJsonObject &json) const;
+    QJsonObject toJson() const;
 
 signals:
     void statusInfo(QString statusInfo);

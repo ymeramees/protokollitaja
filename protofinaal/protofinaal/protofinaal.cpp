@@ -139,7 +139,7 @@ void Protofinaal::connectToSiusData()
 
 void Protofinaal::connectionToSiusLost(int connectionIndex)
 {
-
+    // TODO To be implemented
 }
 
 void Protofinaal::initialize()
@@ -400,15 +400,17 @@ void Protofinaal::sumAllTeams()
     }
 }
 
-void Protofinaal::toJson(QJsonObject &json) const
+QJsonObject Protofinaal::toJson() const
 {
     QJsonArray teamsArray;
     foreach(Team *team, teams){
-        QJsonObject teamObj;
-        team->toJson(teamObj);
-        teamsArray.append(teamObj);
+//        QJsonObject teamObj;
+//        team->toJson(teamObj);
+        teamsArray.append(team->toJson());
     }
+    QJsonObject json;
     json["Teams"] = teamsArray;
+    return json;
 }
 
 void Protofinaal::updateInitialDialog()
@@ -464,8 +466,7 @@ void Protofinaal::writeFinalsFile(QString fileName)
     QFile file(fileName);
 
     if(file.open(QIODevice::WriteOnly)){
-        QJsonObject finalsObj;
-        toJson(finalsObj);
+        QJsonObject finalsObj = toJson();
         finalsObj["fileVersion"] = 300;
         finalsObj["competitionName"] = competitionName;
         finalsObj["eventName"] = eventName;

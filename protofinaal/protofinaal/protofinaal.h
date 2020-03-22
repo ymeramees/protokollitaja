@@ -37,7 +37,7 @@ public:
     void open();
     void save();
     void showSpecatorWindowOnSecondScreen();
-    void toJson(QJsonObject &json) const;
+    QJsonObject toJson() const;
 
 public slots:
     void connectToSiusData();

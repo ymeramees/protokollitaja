@@ -138,14 +138,16 @@ QString Team::teamName()
     return m_teamName.text();
 }
 
-void Team::toJson(QJsonObject &json) const
+QJsonObject Team::toJson() const
 {
     QJsonArray competitorsArray;
     foreach (Competitor *competitor, m_teamCompetitors){
-        QJsonObject competitorObj;
-        competitor->toJson(competitorObj);
-        competitorsArray.append(competitorObj);
+//        QJsonObject competitorObj;
+//        competitor->toJson(competitorObj);
+        competitorsArray.append(competitor->toJson());
     }
+    QJsonObject json;
     json["Members_in_team"] = competitorsArray;
     json["teamName"] = m_teamName.text();
+    return json;
 }

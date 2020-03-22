@@ -25,7 +25,7 @@ public:
     QString name();
     QString lastResult();
     QString lastSum();
-    void toJson(QJsonObject &json) const;
+    QJsonObject toJson() const;
 
 signals:
     void newShot() const;

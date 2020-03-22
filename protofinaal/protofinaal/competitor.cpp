@@ -240,8 +240,9 @@ void Competitor::sum()
 //    return dTotalSum;
 }
 
-void Competitor::toJson(QJsonObject &json) const
+QJsonObject Competitor::toJson() const
 {
+    QJsonObject json;
     json["nameEdit"] = m_nameEdit.text();
     json["id"] = m_id;
     QJsonArray seriesArray;
@@ -256,4 +257,5 @@ void Competitor::toJson(QJsonObject &json) const
         seriesArray.append(seriesJson);
     }
     json["Series"] = seriesArray;
+    return json;
 }
