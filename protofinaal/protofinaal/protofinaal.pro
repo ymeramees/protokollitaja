@@ -30,6 +30,7 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         protofinaal.cpp \
+    shotedit.cpp \
     team.cpp \
     competitor.cpp \
     initialdialog.cpp \
@@ -40,6 +41,7 @@ SOURCES += \
 
 HEADERS += \
         protofinaal.h \
+    shotedit.h \
     team.h \
     competitor.h \
     initialdialog.h \

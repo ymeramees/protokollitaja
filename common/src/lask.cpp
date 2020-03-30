@@ -16,18 +16,18 @@ Lask::Lask(int shot10Times, int x, int y, bool innerTen, QTime shotTime)
 
 Lask::Lask(QString siusRow)
 {
+    setSiusShot(siusRow);
+}
+
+Lask::Lask(QJsonObject shotJson)
+{
     clear();
 
-    QStringList rowParts = siusRow.split(';');
-    if(rowParts[11].toInt() == 0){  //If [11] is 0, then results are being read with decimals and shot value is in  [10]. If not 0, then results are with full rings.
-        set10Lask(rowParts[10]);
-    }else
-        set10Lask(rowParts[11]);
-    setMX(rowParts[14]);
-    setMY(rowParts[15]);
-    setShotTime(QTime::fromString(rowParts[6]));
-    if(rowParts[9].toInt() >= 512)
-        setInnerTen(true);
+    setLask(shotJson["shotValue"].toString());
+    m_x = shotJson["shotX"].toInt();
+    m_y = shotJson["shotY"].toInt();
+    m_shotTime = QTime::fromString(shotJson["shotTime"].toString());
+    m_innerTen = shotJson["innerTen"].toBool();
 }
 
 void Lask::clear()
@@ -236,6 +236,25 @@ void Lask::setNanoXY(QPoint p)
     m_y = p.y(); // Nanometers
 }
 
+void Lask::setSiusShot(QString siusRow)
+{
+    clear();
+
+    QStringList rowParts = siusRow.split(';');
+    if (rowParts.length() < 16)
+        return; // Ignore faulty rows to avoid crashes // TODO implement a nicer solution
+
+    if(rowParts[11].toInt() == 0){  //If [11] is 0, then results are being read with decimals and shot value is in  [10]. If not 0, then results are with full rings.
+        set10Lask(rowParts[10]);
+    }else
+        set10Lask(rowParts[11]);
+    setMX(rowParts[14]);
+    setMY(rowParts[15]);
+    setShotTime(QTime::fromString(rowParts[6]));
+    if(rowParts[9].toInt() >= 512)
+        setInnerTen(true);
+}
+
 void Lask::set(const Lask *l)
 {
     this->m_innerTen = l->isInnerTen();
@@ -278,13 +297,13 @@ QTime Lask::shotTime() const
     return m_shotTime;
 }
 
-QJsonObject Lask::toJson()
+QJsonObject Lask::toJson() const
 {
     QJsonObject shotJson;
     shotJson["shotValue"] = getSLask();
     shotJson["shotX"] = X();
     shotJson["shotY"] = Y();
-    shotJson["shotTime"] = shotTime().toString();
+    shotJson["shotTime"] = shotTime().toString();   // FIXME milliseconds part is lost
     shotJson["innerTen"] = isInnerTen();
     return shotJson;
 }

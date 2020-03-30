@@ -11,6 +11,7 @@
 #include <QTextStream>
 #include <QMessageBox>
 #include <QInputDialog>
+#include "shotedit.h"
 
 extern bool verbose;
 
@@ -36,7 +37,8 @@ public slots:
     void mouseDoubleClickEvent(QMouseEvent *event);
     QString previousSiusRow();
     void setPreviousSiusRow(QString newSiusRow);
-    void setShot(int shotNo, QString shotValue);
+    void setShot(int shotNo, Lask newShot);
+    void setShot(int shotNo, QString siusRow);
     void sum();
 
 private:
@@ -45,8 +47,8 @@ private:
     QLineEdit m_nameEdit;
     QString m_previousSiusRow;
     QVector<QLabel*> m_sumLabels;
-    QVector<QVector<QLineEdit*>*> m_series;
-    QVector<QLineEdit*> m_shots;
+    QVector<QVector<ShotEdit*>*> m_series;
+    QVector<ShotEdit*> m_shots;
 };
 
 #endif // COMPETITOR_H

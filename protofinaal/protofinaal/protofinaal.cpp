@@ -318,7 +318,7 @@ void Protofinaal::readSiusInfo(QStringList lines, int socketIndex)
 //                                tulemus->marklehed[j]->joonistaLask(lask);
                                 //                        lehtedePeitja->start(); //Lehed peale aja möödumist uuesti peitu, et nimed näha oleks
 
-                                thisCompetitor->setShot(0, lask.getSLask());
+                                thisCompetitor->setShot(0, thisCompetitor->previousSiusRow());
                                 statusBarInfoChanged(thisCompetitor->name() + tr(" lask 1 = ") + lask.getSLask());
                                 if(verbose)
                                     QTextStream(stdout) << "rowParts[12]: " << rowParts[12] << "voistlus = true" << "previousRowParts[10]: " << previousRowParts[10] << "\n\n";
@@ -347,7 +347,7 @@ void Protofinaal::readSiusInfo(QStringList lines, int socketIndex)
                     //                        tulemus->marklehed[j]->setTulemus(tabel->seeria[j]->text());
 //                    tulemus->marklehed[j]->joonistaLask(lask);
 
-                    thisCompetitor->setShot(shotNo, lask.getSLask());
+                    thisCompetitor->setShot(shotNo, row);
                     statusBarInfoChanged(QString("%1%2%3 = %4").arg(thisCompetitor->name()).arg(tr(" lask ")).arg(shotNo).arg(lask.getSLask()));
                 }
             }

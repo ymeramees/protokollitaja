@@ -16,6 +16,7 @@ public:
     Lask();
     Lask(int shot10Times, int x = -999, int y = -999, bool innerTen = false, QTime shotTime = QTime());
     Lask(QString siusRow);
+    Lask(QJsonObject);
     void set(const Lask *l);
     bool isEmpty();
 
@@ -49,10 +50,11 @@ public:
     void setMmY(QString);
     void setNanoY(QString);
     void setNanoXY(QPoint);
+    void setSiusShot(QString siusRow);
     QString stringX() const;
     QString stringY() const;
     QTime shotTime() const;
-    QJsonObject toJson();
+    QJsonObject toJson() const;
 
     bool operator ==(const Lask other) const;
 

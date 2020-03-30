@@ -21,16 +21,12 @@ Competitor::Competitor(const QJsonArray configJson, QWidget *parent) : QWidget(p
         QTextStream(stdout) << "Competitor::configJson.size(): " << configJson.size() << endl;
 
     for(int i = 0; i < configJson.size(); i++){
-        QVector<QLineEdit*> *thisSeries = new QVector<QLineEdit*>;
+        QVector<ShotEdit*> *thisSeries = new QVector<ShotEdit*>;
         for(int j = 0; j < configJson.at(i).toInt(); j++){
 //            if(verbose)
 //                QTextStream(stdout) << "Competitor::configJson.at(i).toInt(): " << configJson.at(i).toInt() << endl;
-            QLineEdit *shotEdit = new QLineEdit;
-            shotEdit->setToolTip(tr("Lask"));
-            shotEdit->setMinimumWidth(30);
-            shotEdit->setMaximumWidth(40);
-            shotEdit->setMinimumHeight(22);
-            connect(shotEdit, &QLineEdit::editingFinished, this, &Competitor::sum);
+            ShotEdit *shotEdit = new ShotEdit;
+            connect(shotEdit, &ShotEdit::valueChanged, this, &Competitor::sum);
 
             m_shots.append(shotEdit);
             thisSeries->append(shotEdit);
@@ -78,17 +74,13 @@ Competitor::Competitor(const QJsonObject &json, QWidget *parent) : QWidget(paren
     QJsonArray seriesArray = json["Series"].toArray();
 
     foreach (QJsonValue seriesJson, seriesArray) {
-        QVector<QLineEdit*> *thisSeries = new QVector<QLineEdit*>;
+        QVector<ShotEdit*> *thisSeries = new QVector<ShotEdit*>;
         QJsonObject seriesObj = seriesJson.toObject();
         QJsonArray shotsArray = seriesObj["Shots"].toArray();
         foreach (QJsonValue shotJson, shotsArray) {
-            QLineEdit *shotEdit = new QLineEdit;
+            ShotEdit *shotEdit = new ShotEdit;
             shotEdit->setText(shotJson.toString());
-            shotEdit->setToolTip(tr("Lask"));
-            shotEdit->setMinimumWidth(30);
-            shotEdit->setMaximumWidth(40);
-            shotEdit->setMinimumHeight(22);
-            connect(shotEdit, &QLineEdit::editingFinished, this, &Competitor::sum);
+            connect(shotEdit, &ShotEdit::valueChanged, this, &Competitor::sum);
 
             m_shots.append(shotEdit);
             thisSeries->append(shotEdit);
@@ -135,11 +127,11 @@ Competitor::~Competitor()
     m_sumLabels.clear();
 
     //series.clear();
-    foreach (QVector<QLineEdit*> *serie, m_series) {  //Duplicate pointers to shots
+    foreach (QVector<ShotEdit*> *serie, m_series) {  //Duplicate pointers to shots
         delete serie;
     }
 
-    foreach (QLineEdit *shot, m_shots)
+    foreach (ShotEdit *shot, m_shots)
         shot->deleteLater();
     m_shots.clear();
 }
@@ -206,10 +198,20 @@ void Competitor::setPreviousSiusRow(QString newSiusRow)
     m_previousSiusRow = newSiusRow;
 }
 
-void Competitor::setShot(int shotNo, QString shotValue)
+void Competitor::setShot(int shotNo, Lask newShot)
 {
     if(shotNo < m_shots.size())
-        m_shots.at(shotNo)->setText(shotValue);
+        m_shots.at(shotNo)->setShot(newShot);
+    else{
+        QMessageBox::critical(this, tr("Viga"), tr("Laskude arv suurem, kui võimalik! Lask ei läinud kirja!"), QMessageBox::Ok);
+        emit statusInfo(m_nameEdit.text() + tr("Laskude arv suurem, kui võimalik! Lask ei läinud kirja!"));
+    }
+}
+
+void Competitor::setShot(int shotNo, QString siusRow)
+{
+    if(shotNo < m_shots.size())
+        m_shots.at(shotNo)->setSiusShot(siusRow);
     else{
         QMessageBox::critical(this, tr("Viga"), tr("Laskude arv suurem, kui võimalik! Lask ei läinud kirja!"), QMessageBox::Ok);
         emit statusInfo(m_nameEdit.text() + tr("Laskude arv suurem, kui võimalik! Lask ei läinud kirja!"));
@@ -250,7 +252,7 @@ QJsonObject Competitor::toJson() const
         QJsonObject seriesJson;
         QJsonArray seriesShotsJson;
         for(int j = 0; j < m_series.at(i)->size(); j++){
-            seriesShotsJson.append(m_series.at(i)->at(j)->text());
+            seriesShotsJson.append(m_series.at(i)->at(j)->toJson());
         }
         seriesJson["Shots"] = seriesShotsJson;
         seriesJson["Sum"] = m_sumLabels.at(i)->text();
