@@ -78,8 +78,7 @@ Competitor::Competitor(const QJsonObject &json, QWidget *parent) : QWidget(paren
         QJsonObject seriesObj = seriesJson.toObject();
         QJsonArray shotsArray = seriesObj["Shots"].toArray();
         foreach (QJsonValue shotJson, shotsArray) {
-            ShotEdit *shotEdit = new ShotEdit;
-            shotEdit->setText(shotJson.toString());
+            ShotEdit *shotEdit = new ShotEdit(shotJson.toObject());
             connect(shotEdit, &ShotEdit::valueChanged, this, &Competitor::sum);
 
             m_shots.append(shotEdit);

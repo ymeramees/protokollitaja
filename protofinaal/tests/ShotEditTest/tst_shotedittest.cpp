@@ -50,6 +50,7 @@ void ShotEditTest::test_createFromJson()
     QVERIFY(shotEdit.shot() == expectedShot);
     QVERIFY(shotEdit.ignored() == false);
     QVERIFY(shotEdit.palette().base().color() == Qt::yellow);   // originalShotValue differs from shot value, so should be shown as edited
+    QVERIFY(shotEdit.text() == "9,4");
 }
 
 void ShotEditTest::test_ignored()
@@ -71,14 +72,17 @@ void ShotEditTest::test_setShotFromGui()
     QTest::keyClick(&shotEdit, Qt::Key_Return);
     QVERIFY(shotEdit.palette().base().color() == Qt::white);
     QVERIFY(shotEdit.shot().getSLask() == "10,4");
+    QVERIFY(shotEdit.text() == "10,4");
 
     shotEdit.setSiusShot("_SHOT;9;10;36;60;74;10:43:56.17;3;31;7;94;0;0;49;-0.00187626;0.00347202;900;0;0;655.35;98903519;61;450;0");
     QVERIFY(shotEdit.palette().base().color() == Qt::white);
     QVERIFY(shotEdit.shot().getSLask() == "9,4");
+    QVERIFY(shotEdit.text() == "9,4");
     shotEdit.setText("10,4");
     QTest::keyClick(&shotEdit, Qt::Key_Return);
     QVERIFY(shotEdit.palette().base().color() == Qt::yellow);
     QVERIFY(shotEdit.shot().getSLask() == "10,4");
+    QVERIFY(shotEdit.text() == "10,4");
 
     shotEdit.setIgnored(true);
     QVERIFY(shotEdit.palette().base().color() == Qt::red);
@@ -89,6 +93,7 @@ void ShotEditTest::test_setShotFromGui()
     QTest::keyClick(&shotEdit, Qt::Key_Return);
     QVERIFY(shotEdit.palette().base().color() == Qt::white);
     QVERIFY(shotEdit.shot().getSLask() == "9,4");
+    QVERIFY(shotEdit.text() == "9,4");
 }
 
 void ShotEditTest::test_setSiusShot()

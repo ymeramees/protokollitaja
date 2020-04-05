@@ -14,6 +14,7 @@ private slots:
     void test_coordinates();
     void test_calcIfInnerTen();
     void test_createShotFromJson();
+    void test_createShotFromPartialJson();
     void test_createShotFromSiusRow();
     void test_equalsAndSet();
     void test_json();
@@ -116,6 +117,22 @@ void LaskTest::test_createShotFromJson()
     QCOMPARE(shot.Y(), -626);
     QCOMPARE(shot.shotTime(), QTime(16, 46, 55, 000));
     QVERIFY(shot.isInnerTen() == false);
+}
+
+void LaskTest::test_createShotFromPartialJson()
+{
+    QJsonObject partialShotJson;
+    partialShotJson["shotValue"] = "10,7";
+    partialShotJson["innerTen"] = true;
+
+    Lask shot2(partialShotJson);
+
+    QCOMPARE(shot2.get10Lask(), 107);
+    QCOMPARE(shot2.getSLask(), "10,7");
+    QCOMPARE(shot2.X(), -999);
+    QCOMPARE(shot2.Y(), -999);
+    QCOMPARE(shot2.shotTime(), QTime());
+    QVERIFY(shot2.isInnerTen() == true);
 }
 
 void LaskTest::test_createShotFromSiusRow()

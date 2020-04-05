@@ -97,7 +97,17 @@ void CompetitorTest::test_createCompetitorFromJsonObject_data()
 
 void CompetitorTest::test_createCompetitorFromSavedJsonObject()
 {
-    QJsonObject savedConf = QJsonDocument::fromJson(QString("{\"Series\": [{\"Shots\": [\"10,5\",\"10,8\",\"9,2\",\"10,0\",\"\"],\"Sum\": \"0,0\"},{\"Shots\": [\"\",\"\",\"\",\"\",\"\"],\"Sum\": \"0,0\"},{\"Shots\": [\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"],\"Sum\": \"0,0\"}],\"id\": 536,\"nameEdit\": \"Pedaal P.\"}").toUtf8()).object();
+    QJsonObject savedConf = QJsonDocument::fromJson(
+                QString("{\"Series\": [{\"Shots\": ["
+                        "{\"ignored\": false,\"originalShotValue\":\"\",\"shot\": {\"innerTen\": true,\"shotTime\":\"\",\"shotValue\": \"10,5\",\"shotX\":-999,\"shotY\":-999}},"
+                        "{\"ignored\": false,\"shotTime\":\"\",\"shot\": {\"innerTen\": true,\"shotValue\": \"10,8\"}},"
+                        "{\"ignored\": false,\"shotTime\":\"\",\"shot\": {\"innerTen\": false,\"shotValue\": \"9,2\"}},"
+                        "{\"ignored\": false,\"shotTime\":\"\",\"shot\": {\"innerTen\": false,\"shotValue\": \"10,0\"}},"
+                        "{\"ignored\": false,\"shotTime\":\"\",\"shot\": {\"innerTen\": false,\"shotValue\": \"\"}}]"
+                        ",\"Sum\": \"40,5\"},{\"Shots\": [\"\",\"\",\"\",\"\",\"\"],\"Sum\": \"0,0\"},"
+                        "{\"Shots\": [\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"],"
+                        "\"Sum\": \"40,5\"}],\"id\": 536,\"nameEdit\": \"Pedaal P.\"}"
+                        ).toUtf8()).object();
 
     Competitor *competitor = new Competitor(savedConf);
     QHBoxLayout* hBox = competitor->findChild<QHBoxLayout*>();
@@ -152,10 +162,27 @@ void CompetitorTest::test_lastResultAndSum()
 
 void CompetitorTest::test_toJson()
 {
-    QJsonObject savedConf = QJsonDocument::fromJson(QString("{\"Series\": [{\"Shots\": [\"10,5\",\"10,8\",\"9,2\",\"10,0\",\"\"],\"Sum\": \"40,5\"},{\"Shots\": [\"\",\"\",\"\",\"\",\"\"],\"Sum\": \"0,0\"},{\"Shots\": [\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"],\"Sum\": \"40,5\"}],\"id\": 536,\"nameEdit\": \"Pedaal P.\"}").toUtf8()).object();
+    QJsonObject savedConf = QJsonDocument::fromJson(
+                QString("{\"Series\": [{\"Shots\": ["
+                         "{\"ignored\": false,\"originalShotValue\":\"\",\"shot\": {\"innerTen\": true,\"shotTime\":\"\",\"shotValue\": \"10,5\",\"shotX\":-999,\"shotY\":-999}},"
+                         "{\"ignored\": false,\"shotTime\":\"\",\"shot\": {\"innerTen\": true,\"shotValue\": \"10,8\"}},"
+                        "{\"ignored\": false,\"shotTime\":\"\",\"shot\": {\"innerTen\": false,\"shotValue\": \"9,2\"}},"
+                        "{\"ignored\": false,\"shotTime\":\"\",\"shot\": {\"innerTen\": false,\"shotValue\": \"10,0\"}},"
+                        "{\"ignored\": false,\"shotTime\":\"\",\"shot\": {\"innerTen\": false,\"shotValue\": \"\"}}]"
+                        ",\"Sum\": \"40,5\"},{\"Shots\": [\"\",\"\",\"\",\"\",\"\"],\"Sum\": \"0,0\"},"
+                        "{\"Shots\": [\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"],"
+                        "\"Sum\": \"40,5\"}],\"id\": 536,\"nameEdit\": \"Pedaal P.\"}"
+                        ).toUtf8()).object();
 
     Competitor *competitor = new Competitor(savedConf);
-//    QCOMPARE(competitor->toJson(), savedConf); // FIXME to be updated accoring to changes in shot
+//    QString json = QJsonDocument(competitor->toJson()).toJson(QJsonDocument::Compact);
+//    QTextStream(stdout) << json << endl;
+
+    QJsonObject expectedJson = QJsonDocument::fromJson(
+                QString("{\"Series\":[{\"Shots\":[{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":true,\"shotTime\":\"\",\"shotValue\":\"10,5\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":true,\"shotTime\":\"\",\"shotValue\":\"10,8\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"9,2\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"10,0\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}}],\"Sum\":\"40,5\"},{\"Shots\":[{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}}],\"Sum\":\"0,0\"},{\"Shots\":[{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}},{\"ignored\":false,\"originalShotValue\":\"\",\"shot\":{\"innerTen\":false,\"shotTime\":\"\",\"shotValue\":\"\",\"shotX\":-999,\"shotY\":-999}}],\"Sum\":\"40,5\"}],\"id\":536,\"nameEdit\":\"Pedaal P.\"}"
+                        ).toUtf8()).object();
+
+    QCOMPARE(competitor->toJson(), expectedJson);
 }
 
 QTEST_MAIN(CompetitorTest)

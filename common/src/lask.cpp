@@ -24,8 +24,14 @@ Lask::Lask(QJsonObject shotJson)
     clear();
 
     setLask(shotJson["shotValue"].toString());
-    m_x = shotJson["shotX"].toInt();
-    m_y = shotJson["shotY"].toInt();
+    if (shotJson["shotX"].isNull())
+        m_x = -999;
+    else
+        m_x = shotJson["shotX"].toInt();
+    if (shotJson["shotY"].isNull())
+        m_y = -999;
+    else
+        m_y = shotJson["shotY"].toInt();
     m_shotTime = QTime::fromString(shotJson["shotTime"].toString());
     m_innerTen = shotJson["innerTen"].toBool();
 }

@@ -7,11 +7,10 @@ ShotEdit::ShotEdit()
 ShotEdit::ShotEdit(QJsonObject json)
 {
     init();
-
     m_shot = Lask(json["shot"].toObject());
     m_ignored = json["ignored"].toBool();
     m_originalShotValue = json["originalShotValue"].toString();
-    updateBackground();
+    updateGui();
 }
 
 bool ShotEdit::ignored() const
@@ -63,12 +62,14 @@ void ShotEdit::setIgnored(bool newIgnored)
 void ShotEdit::setShot(Lask shot)
 {
     m_shot.set(&shot);
+    m_originalShotValue = m_shot.getSLask();
     updateGui();
 }
 
 void ShotEdit::setSiusShot(QString siusRow)
 {
     m_shot.setSiusShot(siusRow);
+    m_originalShotValue = m_shot.getSLask();
     updateGui();
 }
 
@@ -89,7 +90,6 @@ QJsonObject ShotEdit::toJson() const
 void ShotEdit::updateGui()
 {
     this->setText(m_shot.getSLask());
-    m_originalShotValue = m_shot.getSLask();
     updateBackground();
     emit valueChanged();
 }
