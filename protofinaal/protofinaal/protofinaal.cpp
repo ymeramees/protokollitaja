@@ -9,7 +9,8 @@
 /// Import SiusData startlist
 /// Add competition stage number, so that there can be sighting shots between competition series (3 positions final)
 /// Add shoot-off possibility
-/// Add ignore shot possibility
+/// Add ignore shot(s) possibility - OK
+/// Add possibility to add missed shot(s)
 ///
 /////////////////////////////////////////////////////////////////////////////
 

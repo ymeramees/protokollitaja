@@ -1,7 +1,9 @@
 #ifndef SHOTEDIT_H
 #define SHOTEDIT_H
 
+#include <QContextMenuEvent>
 #include <QLineEdit>
+#include <QMenu>
 #include "lask.h"
 
 class ShotEdit : public QLineEdit
@@ -19,10 +21,13 @@ public:
     void updateGui();
 
 public slots:
+    void contextMenuEvent(QContextMenuEvent *event);
     void setIgnored(bool newIgnored);
     void setShotFromGui();
 
 signals:
+    void shotIgnored();
+    void shotUnignored();
     void valueChanged();
 
 private:

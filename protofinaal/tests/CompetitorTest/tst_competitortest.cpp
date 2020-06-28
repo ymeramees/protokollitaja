@@ -19,7 +19,11 @@ private slots:
     void test_createCompetitorFromJsonObject();
     void test_createCompetitorFromJsonObject_data();
     void test_createCompetitorFromSavedJsonObject();
+    void test_handleIgnoredShot();
+    void test_handleUnignoredShot();
+    void test_handleUnignoredShot2();
     void test_lastResultAndSum();
+    void test_sumWithIgnoredShot();
     void test_toJson();
 
 };
@@ -130,34 +134,195 @@ void CompetitorTest::test_createCompetitorFromSavedJsonObject()
     QCOMPARE(competitor->lastSum(), "40,5");
 }
 
+void CompetitorTest::test_handleIgnoredShot()
+{
+    QJsonArray conf = {5, 5, 14};
+    Competitor competitor(conf);
+    competitor.setShot(0, Lask(104, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(1, Lask(83, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(2, Lask(103, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(5, Lask(100, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(6, Lask(58, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(10, Lask(105, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(23, Lask(109, 354, -983, true, QTime::currentTime()));
+    QCOMPARE(competitor.lastResult(), "10,9");
+    QCOMPARE(competitor.lastSum(), "66,2");
+
+    // Make sure sum is last in QHBoxLayout
+    QHBoxLayout *hBox = competitor.findChild<QHBoxLayout*>();
+    QVERIFY(dynamic_cast<QLabel*>(hBox->itemAt(hBox->count() - 1)->widget())->text() == "66,2");
+    QVERIFY(dynamic_cast<ShotEdit*>(hBox->itemAt(hBox->count() - 2)->widget())->text() == "10,9");
+    // Make sure 7th position is a series sum
+    QVERIFY(dynamic_cast<QLabel*>(hBox->itemAt(7)->widget())->text() == "29,0");
+    QVERIFY(dynamic_cast<QLabel*>(hBox->itemAt(13)->widget())->text() == "15,8");
+
+    QList<ShotEdit*> shotEdits = competitor.findChildren<ShotEdit*>();
+    QVERIFY(shotEdits.last()->text() == "10,9");
+    QVERIFY(shotEdits.at(shotEdits.length() - 2)->text() == "");
+    shotEdits.at(2)->setIgnored(true);
+    QList<ShotEdit*> shotEdits2 = competitor.findChildren<ShotEdit*>();
+    QVERIFY(shotEdits2.last()->text() == "");
+    QVERIFY(shotEdits2.at(shotEdits2.length() - 2)->text() == "10,9");
+
+    // Make sure sum is still last in QHBoxLayout
+    QHBoxLayout *hBox2 = competitor.findChild<QHBoxLayout*>();
+    QVERIFY(dynamic_cast<QLabel*>(hBox2->itemAt(hBox->count() - 1)->widget())->text() == "55,9");
+    QVERIFY(dynamic_cast<ShotEdit*>(hBox2->itemAt(hBox->count() - 2)->widget())->text().isEmpty());
+    // Make sure 7th position is now a shot and 8th position is a series sum
+    QVERIFY(dynamic_cast<ShotEdit*>(hBox->itemAt(7)->widget())->text() == "10,0");
+    QVERIFY(dynamic_cast<QLabel*>(hBox->itemAt(8)->widget())->text() == "28,7");
+    QVERIFY(dynamic_cast<QLabel*>(hBox->itemAt(14)->widget())->text() == "16,3");
+}
+
+void CompetitorTest::test_handleUnignoredShot()
+{
+    QJsonArray conf = {5, 5, 14};
+    Competitor competitor(conf);
+    competitor.setShot(0, Lask(104, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(1, Lask(83, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(2, Lask(103, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(5, Lask(100, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(6, Lask(58, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(10, Lask(105, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(23, Lask(109, 354, -983, true, QTime::currentTime()));
+    QCOMPARE(competitor.lastResult(), "10,9");
+    QCOMPARE(competitor.lastSum(), "66,2");
+
+    // Make sure sum is last in QHBoxLayout
+    QHBoxLayout *hBox = competitor.findChild<QHBoxLayout*>();
+    QCOMPARE(dynamic_cast<QLabel*>(hBox->itemAt(hBox->count() - 1)->widget())->text(), "66,2");
+    QCOMPARE(dynamic_cast<ShotEdit*>(hBox->itemAt(hBox->count() - 2)->widget())->text(), "10,9");
+    // Make sure 7th position is a series sum
+    QCOMPARE(dynamic_cast<QLabel*>(hBox->itemAt(7)->widget())->text(), "29,0");
+    QCOMPARE(dynamic_cast<QLabel*>(hBox->itemAt(13)->widget())->text(), "15,8");
+
+    QList<ShotEdit*> shotEdits = competitor.findChildren<ShotEdit*>();
+    QCOMPARE(shotEdits.last()->text(), "10,9");
+    QCOMPARE(shotEdits.at(shotEdits.length() - 2)->text(), "");
+    QCOMPARE(dynamic_cast<ShotEdit*>(hBox->itemAt(8)->widget())->text(), "10,0");
+    shotEdits.at(2)->setIgnored(true);
+    shotEdits.at(6)->setIgnored(true);
+    QList<ShotEdit*> shotEdits2 = competitor.findChildren<ShotEdit*>();
+    QCOMPARE(shotEdits2.last()->text(), "");
+    QCOMPARE(shotEdits2.at(shotEdits2.length() - 2)->text(), "");
+    QCOMPARE(shotEdits2.at(shotEdits2.length() - 3)->text(), "10,9");
+    QCOMPARE(dynamic_cast<ShotEdit*>(hBox->itemAt(7)->widget())->text(), "10,0");
+    QCOMPARE(dynamic_cast<QLabel*>(hBox->itemAt(8)->widget())->text(), "28,7");
+    QCOMPARE(dynamic_cast<QLabel*>(hBox->itemAt(15)->widget())->text(), "10,5");
+    QHBoxLayout *hBox2 = competitor.findChild<QHBoxLayout*>();
+    QCOMPARE(dynamic_cast<QLabel*>(hBox2->itemAt(hBox->count() - 1)->widget())->text(), "50,1");
+    QVERIFY(dynamic_cast<ShotEdit*>(hBox2->itemAt(hBox->count() - 2)->widget())->text().isEmpty());
+    QVERIFY(dynamic_cast<ShotEdit*>(hBox2->itemAt(hBox->count() - 3)->widget())->text().isEmpty());
+
+
+    shotEdits.at(2)->setIgnored(false);
+    // Make sure 8th position is now a shot and 7th position is a series sum
+    QCOMPARE(dynamic_cast<ShotEdit*>(hBox->itemAt(8)->widget())->text(), "10,0");
+    QCOMPARE(dynamic_cast<QLabel*>(hBox->itemAt(7)->widget())->text(), "29,0");
+    QCOMPARE(dynamic_cast<QLabel*>(hBox->itemAt(14)->widget())->text(), "20,5");
+}
+
+void CompetitorTest::test_handleUnignoredShot2()
+{
+    QJsonArray conf = {5, 5, 14};
+    Competitor competitor(conf);
+    competitor.setShot(0, Lask(104, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(4, Lask(105, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(5, Lask(106, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(9, Lask(107, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(10, Lask(108, 354, -983, true, QTime::currentTime()));
+    competitor.setShot(23, Lask(109, 354, -983, true, QTime::currentTime()));
+    QCOMPARE(competitor.lastResult(), "10,9");
+    QCOMPARE(competitor.lastSum(), "63,9");
+
+    // Make sure sum is last in QHBoxLayout
+    QHBoxLayout *hBox = competitor.findChild<QHBoxLayout*>();
+    QCOMPARE(dynamic_cast<QLabel*>(hBox->itemAt(hBox->count() - 1)->widget())->text(), "63,9");
+    QCOMPARE(dynamic_cast<ShotEdit*>(hBox->itemAt(hBox->count() - 2)->widget())->text(), "10,9");
+    // Make sure 7th position is a series sum
+    QCOMPARE(dynamic_cast<QLabel*>(hBox->itemAt(7)->widget())->text(), "20,9");
+    QCOMPARE(dynamic_cast<QLabel*>(hBox->itemAt(13)->widget())->text(), "21,3");
+
+    QList<ShotEdit*> shotEdits = competitor.findChildren<ShotEdit*>();
+    QCOMPARE(shotEdits.last()->text(), "10,9");
+    QCOMPARE(shotEdits.at(shotEdits.length() - 2)->text(), "");
+    shotEdits.at(7)->setIgnored(true);
+    QList<ShotEdit*> shotEdits2 = competitor.findChildren<ShotEdit*>();
+    QCOMPARE(shotEdits2.last()->text(), "");
+    QCOMPARE(shotEdits2.at(shotEdits2.length() - 2)->text(), "10,9");
+    QCOMPARE(dynamic_cast<QLabel*>(hBox->itemAt(7)->widget())->text(), "20,9");
+    QCOMPARE(dynamic_cast<QLabel*>(hBox->itemAt(14)->widget())->text(), "32,1");
+    QHBoxLayout *hBox2 = competitor.findChild<QHBoxLayout*>();
+    QCOMPARE(dynamic_cast<QLabel*>(hBox2->itemAt(hBox->count() - 1)->widget())->text(), "63,9");
+    QVERIFY(dynamic_cast<ShotEdit*>(hBox2->itemAt(hBox->count() - 2)->widget())->text().isEmpty());
+
+
+    shotEdits.at(7)->setIgnored(false);
+    QCOMPARE(dynamic_cast<QLabel*>(hBox->itemAt(7)->widget())->text(), "20,9");
+    QCOMPARE(dynamic_cast<QLabel*>(hBox->itemAt(13)->widget())->text(), "21,3");
+}
+
 void CompetitorTest::test_lastResultAndSum()
 {
     QJsonArray conf = {5, 5, 14};
     Competitor competitor(conf);
     competitor.setShot(0, Lask(104, 354, -983, true, QTime::currentTime()));
-    competitor.sum();
     QCOMPARE(competitor.lastResult(), "10,4");
     QCOMPARE(competitor.lastSum(), "10,4");
 
     competitor.setShot(1, Lask(83, 354, -983, true, QTime::currentTime()));
-    competitor.sum();
     QCOMPARE(competitor.lastResult(), "18,7");
     QCOMPARE(competitor.lastSum(), "18,7");
 
     competitor.setShot(5, Lask(100, 354, -983, true, QTime::currentTime()));
-    competitor.sum();
     QCOMPARE(competitor.lastResult(), "10,0");
     QCOMPARE(competitor.lastSum(), "28,7");
 
     competitor.setShot(6, Lask(58, 354, -983, true, QTime::currentTime()));
-    competitor.sum();
     QCOMPARE(competitor.lastResult(), "15,8");
     QCOMPARE(competitor.lastSum(), "34,5");
 
     competitor.setShot(10, Lask(109, 354, -983, true, QTime::currentTime()));
-    competitor.sum();
     QCOMPARE(competitor.lastResult(), "10,9");
     QCOMPARE(competitor.lastSum(), "45,4");
+
+    competitor.setShot(23, Lask(100, 354, -983, true, QTime::currentTime()));
+    QCOMPARE(competitor.lastResult(), "10,0");
+    QCOMPARE(competitor.lastSum(), "55,4");
+}
+
+void CompetitorTest::test_sumWithIgnoredShot()
+{
+    QJsonArray conf = {5, 5, 14};
+    Competitor competitor(conf);
+    competitor.setShot(0, Lask(104, 354, -983, true, QTime::currentTime()));
+    QCOMPARE(competitor.lastResult(), "10,4");
+    QCOMPARE(competitor.lastSum(), "10,4");
+
+    competitor.setShot(1, Lask(83, 354, -983, true, QTime::currentTime()));
+    QCOMPARE(competitor.lastResult(), "18,7");
+    QCOMPARE(competitor.lastSum(), "18,7");
+
+    competitor.setShot(3, Lask(100, 354, -983, true, QTime::currentTime()));
+    QCOMPARE(competitor.lastResult(), "28,7");
+    QCOMPARE(competitor.lastSum(), "28,7");
+
+    QList<ShotEdit*> shotEdits = competitor.findChildren<ShotEdit*>();
+    shotEdits.at(3)->setIgnored(true);
+    QCOMPARE(competitor.lastResult(), "18,7");
+    QCOMPARE(competitor.lastSum(), "18,7");
+
+    competitor.setShot(10, Lask(58, 354, -983, true, QTime::currentTime()));
+    QCOMPARE(competitor.lastResult(), "5,8");
+    QCOMPARE(competitor.lastSum(), "24,5");
+
+    competitor.setShot(11, Lask(109, 354, -983, true, QTime::currentTime()));
+    QCOMPARE(competitor.lastResult(), "10,9");
+    QCOMPARE(competitor.lastSum(), "35,4");
+
+    shotEdits.at(11)->setIgnored(true);
+    QCOMPARE(competitor.lastResult(), "5,8");
+    QCOMPARE(competitor.lastSum(), "24,5");
 }
 
 void CompetitorTest::test_toJson()

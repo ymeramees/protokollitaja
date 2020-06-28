@@ -13,6 +13,22 @@ ShotEdit::ShotEdit(QJsonObject json)
     updateGui();
 }
 
+void ShotEdit::contextMenuEvent(QContextMenuEvent *event)
+{
+    QMenu *menu = createStandardContextMenu();
+
+        QAction ignoreAction(tr("Ignoreeri lasku"));
+        connect(&ignoreAction, &QAction::triggered, [this]() {setIgnored(true);});
+        menu->addAction(&ignoreAction);
+
+        QAction unignoreAction(tr("Eemalda ignoreerimine"));
+        connect(&unignoreAction, &QAction::triggered, [this]() {setIgnored(false);});
+        menu->addAction(&unignoreAction);
+
+    menu->exec(event->globalPos());
+    delete menu;
+}
+
 bool ShotEdit::ignored() const
 {
     return m_ignored;
@@ -54,9 +70,15 @@ void ShotEdit::setShotFromGui()
 
 void ShotEdit::setIgnored(bool newIgnored)
 {
+    bool oldIgnored = m_ignored;
     m_ignored = newIgnored;
     updateBackground();
-    emit valueChanged();
+    if(oldIgnored != newIgnored){
+        if(newIgnored)
+            emit shotIgnored();
+        else
+            emit shotUnignored();
+    }
 }
 
 void ShotEdit::setShot(Lask shot)

@@ -26,7 +26,7 @@ Competitor::Competitor(const QJsonArray configJson, QWidget *parent) : QWidget(p
 //            if(verbose)
 //                QTextStream(stdout) << "Competitor::configJson.at(i).toInt(): " << configJson.at(i).toInt() << endl;
             ShotEdit *shotEdit = new ShotEdit;
-            connect(shotEdit, &ShotEdit::valueChanged, this, &Competitor::sum);
+            createShotEditConnections(shotEdit);
 
             m_shots.append(shotEdit);
             thisSeries->append(shotEdit);
@@ -79,7 +79,7 @@ Competitor::Competitor(const QJsonObject &json, QWidget *parent) : QWidget(paren
         QJsonArray shotsArray = seriesObj["Shots"].toArray();
         foreach (QJsonValue shotJson, shotsArray) {
             ShotEdit *shotEdit = new ShotEdit(shotJson.toObject());
-            connect(shotEdit, &ShotEdit::valueChanged, this, &Competitor::sum);
+            createShotEditConnections(shotEdit);
 
             m_shots.append(shotEdit);
             thisSeries->append(shotEdit);
@@ -135,9 +135,81 @@ Competitor::~Competitor()
     m_shots.clear();
 }
 
+void Competitor::createShotEditConnections(ShotEdit *shotEdit)
+{
+    connect(shotEdit, &ShotEdit::valueChanged, this, &Competitor::sum);
+    connect(shotEdit, &ShotEdit::shotIgnored, this, &Competitor::handleIgnoredShot);
+    connect(shotEdit, &ShotEdit::shotUnignored, this, &Competitor::handleUnignoredShot);
+}
+
 int Competitor::current10Sum() const
 {
     return m_sumLabels.at(m_sumLabels.size()-1)->text().remove(',').toInt();
+}
+
+void Competitor::handleIgnoredShot()
+{
+    ShotEdit *ignoredShotEdit = qobject_cast<ShotEdit*>(sender());
+    if(ignoredShotEdit != NULL) {
+        ShotEdit *shotEdit = new ShotEdit;
+        createShotEditConnections(shotEdit);
+
+        m_shots.append(shotEdit);
+        m_series.last()->append(shotEdit);
+
+        QHBoxLayout *hBox = qobject_cast<QHBoxLayout*>(layout());
+        hBox->insertWidget(hBox->count() - 1, shotEdit);
+        int indexOfIgnoredShot = hBox->indexOf(ignoredShotEdit);
+        // Shift following lables forward
+        foreach(QLabel *sumLabel, m_sumLabels) {
+            int labelIndex = hBox->indexOf(sumLabel);
+            if(labelIndex > indexOfIgnoredShot) {
+                hBox->insertItem(labelIndex + 1, hBox->takeAt(labelIndex));
+            }
+        }
+        // Find series where ignored shotEdit is
+        int indexOfSeries = -1;
+        for(int i = 0; i < m_series.size() - 1; i++) {
+            if (m_series.at(i)->contains(ignoredShotEdit))
+                indexOfSeries = i;
+            // Take first shot from each following series and append it to previous one
+            if (i >= indexOfSeries && indexOfSeries != -1)
+                m_series.at(i)->append(m_series.at(i + 1)->takeFirst());
+        }
+        sum();
+    }
+}
+
+void Competitor::handleUnignoredShot()
+{
+    ShotEdit *unIgnoredShotEdit = qobject_cast<ShotEdit*>(sender());
+    if(unIgnoredShotEdit != NULL) {
+        ShotEdit *lastShot = m_shots.takeLast();
+        m_series.last()->takeLast();
+
+        QHBoxLayout *hBox = qobject_cast<QHBoxLayout*>(layout());
+        int indexOfUnIgnoredShot = hBox->indexOf(unIgnoredShotEdit);
+        // Shift following lables backwards
+        foreach(QLabel *sumLabel, m_sumLabels) {
+            int labelIndex = hBox->indexOf(sumLabel);
+            if(labelIndex > indexOfUnIgnoredShot) {
+                hBox->insertItem(labelIndex - 1, hBox->takeAt(labelIndex));
+            }
+        }
+        // Find series where ignored shotEdit is
+        int indexOfSeries = -1;
+        for(int i = 0; i < m_series.size() - 1; i++) {
+            if (m_series.at(i)->contains(unIgnoredShotEdit))
+                indexOfSeries = i;
+            // Take the last shot from each following series and prepend it to next one
+            if (i >= indexOfSeries && indexOfSeries != -1)
+                m_series.at(i + 1)->prepend(m_series.at(i)->takeLast());
+        }
+
+        hBox->removeWidget(lastShot);
+        lastShot->deleteLater();
+        sum();
+    }
 }
 
 int Competitor::id()
@@ -149,16 +221,22 @@ QString Competitor::lastResult()
 {
     if(m_series.size() == 0){
         return "0,0";
-    }else if(m_series.size() > 1 && m_series.at(m_series.size() - 1)->at(0)->text().isEmpty()){ //No shot in singleshots, so latest series with a result needs to be found
-        if(m_series.at(m_series.size() - 1)->at(0)->text().isEmpty()){
+    } else {
+        // First check if there are single shots
+        QString lastShotValue = "";
+        for(int i = m_series.last()->size() - 1; i >= 0; i--)
+            if(!m_series.last()->at(i)->text().isEmpty() && !m_series.last()->at(i)->ignored()){
+                lastShotValue = m_series.last()->at(i)->text();
+                break;
+            }
+
+        if(!lastShotValue.isEmpty())
+            return lastShotValue;
+        else if(m_series.size() > 1){ //No shot in singleshots, so latest series with a result needs to be found
             for(int i = m_series.size() - 2; i >= 0; i--)
                 if(m_sumLabels.at(i)->text() != "0,0")
                     return m_sumLabels.at(i)->text();
         }
-    }else{  //Only single shots or shot in single shots found, so latest shot needs to be found
-        for(int i = m_shots.size() - 1; i >= 0; i--)
-            if(!m_shots.at(i)->text().isEmpty())
-                return m_shots.at(i)->text();
     }
     return "0,0";
 }
@@ -219,11 +297,13 @@ void Competitor::setShot(int shotNo, QString siusRow)
 
 void Competitor::sum()
 {
+    // FIXME shot value without decimal places is divided by 10
     int totalSum = 0;
     for(int i = 0; i < m_series.size(); i++){
         int seriesSum = 0;
         for(int j = 0; j < m_series.at(i)->size(); j++){
-            seriesSum += m_series.at(i)->at(j)->text().remove(',').toInt();
+            if(!m_series.at(i)->at(j)->ignored())
+                seriesSum += m_series.at(i)->at(j)->text().remove(',').toInt();
         }
         totalSum += seriesSum;
         double dSeriesSum = seriesSum;

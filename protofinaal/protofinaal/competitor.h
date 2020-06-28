@@ -22,6 +22,7 @@ public:
     explicit Competitor(const QJsonArray configJson, QWidget *parent = nullptr);
     explicit Competitor(const QJsonObject &json, QWidget *parent = nullptr);
     ~Competitor();
+    int current10Sum() const;  //Current result x10 to avoid floating point arithmetic errors
     int id();
     QString name();
     QString lastResult();
@@ -33,7 +34,8 @@ signals:
     void statusInfo(QString statusInfo);
 
 public slots:
-    int current10Sum() const;  //Current result x10 to avoid floating point arithmetic errors
+    void handleIgnoredShot();
+    void handleUnignoredShot();
     void mouseDoubleClickEvent(QMouseEvent *event);
     QString previousSiusRow();
     void setPreviousSiusRow(QString newSiusRow);
@@ -49,6 +51,7 @@ private:
     QVector<QLabel*> m_sumLabels;
     QVector<QVector<ShotEdit*>*> m_series;
     QVector<ShotEdit*> m_shots;
+    void createShotEditConnections(ShotEdit* shotEdit);
 };
 
 #endif // COMPETITOR_H

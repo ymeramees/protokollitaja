@@ -56,10 +56,19 @@ void ShotEditTest::test_createFromJson()
 void ShotEditTest::test_ignored()
 {
     ShotEdit shotEdit;
+    QSignalSpy spyIgnored(&shotEdit, SIGNAL(shotIgnored()));
+    QSignalSpy spyUnignored(&shotEdit, SIGNAL(shotUnignored()));
     QVERIFY(shotEdit.palette().base().color() == Qt::white);
+    QCOMPARE(spyIgnored.count(), 0);
+    QCOMPARE(spyUnignored.count(), 0);
     shotEdit.setIgnored(true);
+    QCOMPARE(spyIgnored.count(), 1);
+    QCOMPARE(spyUnignored.count(), 0);
     QVERIFY(shotEdit.palette().base().color() == Qt::red);
+
     shotEdit.setIgnored(false);
+    QCOMPARE(spyUnignored.count(), 1);
+    QCOMPARE(spyIgnored.count(), 1);
     QVERIFY(shotEdit.palette().base().color() == Qt::white);
 }
 
