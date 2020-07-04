@@ -31,9 +31,9 @@ public:
     Ui::ImportAkenClass ui;
 
 public slots:
-	void failist();
-        void puhtaks();
-	void vahemalust();
+	void fromFile();
+        void clearSheet();
+	void fromClipboard();
 };
 
 #endif // IMPORTAKEN_H

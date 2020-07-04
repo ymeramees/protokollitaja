@@ -4,16 +4,20 @@ ImportAken::ImportAken(QWidget *parent)
     : QDialog(parent)
 {
         ui.setupUi(this);
-        connect(ui.failistNupp, SIGNAL(clicked()), this, SLOT(failist()));
-        connect(ui.maluNupp, SIGNAL(clicked()), this, SLOT(vahemalust()));
+        connect(ui.failistNupp, SIGNAL(clicked()), this, SLOT(fromFile()));
+        connect(ui.maluNupp, SIGNAL(clicked()), this, SLOT(fromClipboard()));
         leht = new Leht(0, 6, 0, 0, &kirjutusabi, "Ekraaninimi", 0, "Muu", 0, 0, this);
         ui.scrollArea->setWidgetResizable(true);
         ui.scrollArea->setWidget(leht);
 }
 
-void ImportAken::failist()
+void ImportAken::fromFile()
 {
-        QString failiNimi = QFileDialog::getOpenFileName(this, "Impordi...", "", "");
+        QString failiNimi = QFileDialog::getOpenFileName(
+                    this,
+                    tr("Impordi..."),
+                    "",
+                    tr("Text files (*.txt);;Comma separated files (*.csv"));
         if(failiNimi.isEmpty()) return;
         if(!failiNimi.endsWith(".txt") && !failiNimi.endsWith(".csv")){
                 QMessageBox::critical(this, "Protokollitaja", tr("Tundmatu laiendiga fail. Importimine pole kahjuks "
@@ -110,19 +114,16 @@ void ImportAken::failist()
                         leht->vSummadeSamm = vSummadeSamm;
                         leht->uusLaskur(0);
                         leht->laskurid[leht->laskurid.count() - 1]->linnuke->setChecked(true);
-                        leht->laskurid[leht->laskurid.count() - 1]->eesNimi->setText(andmed[arv].trimmed().remove('\"'));
-                        if(!leht->laskurid[leht->laskurid.count() - 1]->eesNimi->text().isEmpty())
-                                leht->laskurid[leht->laskurid.count() - 1]->eesNimi->setText(leht->
-                                                laskurid[leht->laskurid.count() - 1]->eesNimi->text().remove('\"').at(0).toUpper() + leht->
-                                                laskurid[leht->laskurid.count() - 1]->eesNimi->text().remove(0, 1).toLower().remove('\"'));
+                        leht->laskurid[leht->laskurid.count() - 1]->eesNimi->setText(andmed[arv].remove('\"').trimmed());
                         leht->laskurid[leht->laskurid.count() - 1]->perekNimi->setText(andmed[arv + 1].toUpper()
-                                        .trimmed().remove('\"'));
-                        leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->setText(andmed[arv + 2].trimmed().remove('\"'));
-                        if(leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->text().toInt() < 100 &&
-                                        !leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->text().contains("."))
-                                leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->setText("19" + leht->
+                                        .remove('\"').trimmed());
+                        leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->setText(andmed[arv + 2].remove('\"').trimmed());
+                        if(leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->text().toInt() < 100
+                                && leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->text().toInt() > 0
+                                && !leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->text().contains("."))
+                            leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->setText("19" + leht->
                                                 laskurid[leht->laskurid.count() - 1]->sunniAasta->text().trimmed());
-                        leht->laskurid[leht->laskurid.count() - 1]->klubi->setText(andmed[arv + 3].trimmed().remove('\"'));
+                        leht->laskurid[leht->laskurid.count() - 1]->klubi->setText(andmed[arv + 3].remove('\"').trimmed());
                         //QMessageBox::information(this, "Protokollitaja", "Teises kohas", QMessageBox::Ok);
                         int lisaIndeks = 0;
                         for(int i = 0; i < seeriateArv; i++){
@@ -135,7 +136,7 @@ void ImportAken::failist()
                         leht->laskurid[leht->laskurid.count() - 1]->setSumma(andmed[andmed.count() - 1 - arv2].trimmed());
                         if(arv2 > 0)
                                 leht->laskurid[leht->laskurid.count() - 1]->markus->setText(andmed[andmed.count() - 1]
-                                                                                                   .trimmed().remove('\"'));
+                                                                                                   .remove('\"').trimmed());
                         if(leht->laskurid[leht->laskurid.count() - 1]->markus->text().isEmpty() ||
                                         leht->laskurid[leht->laskurid.count() - 1]->markus->text() == leht->laskurid[leht->
                                         laskurid.count() - 1]->klubi->text())
@@ -144,7 +145,7 @@ void ImportAken::failist()
         }
 }
 
-void ImportAken::puhtaks()
+void ImportAken::clearSheet()
 {
         if(leht->laskurid.count() < 1) return;
         for(int i = 0; i < leht->laskurid.count(); i++)
@@ -152,7 +153,7 @@ void ImportAken::puhtaks()
         leht->eemaldaLaskur();
 }
 
-void ImportAken::vahemalust()
+void ImportAken::fromClipboard()
 {
         int vSummadeSamm = 0;
         QString rida;
@@ -247,18 +248,15 @@ void ImportAken::vahemalust()
                 leht->vSummadeSamm = vSummadeSamm;
                 leht->uusLaskur(0);
                 leht->laskurid[leht->laskurid.count() - 1]->linnuke->setChecked(true);
-                leht->laskurid[leht->laskurid.count() - 1]->eesNimi->setText(andmed[arv].trimmed().remove('\"'));
-                if(!leht->laskurid[leht->laskurid.count() - 1]->eesNimi->text().isEmpty())
-                        leht->laskurid[leht->laskurid.count() - 1]->eesNimi->setText(leht->
-                                        laskurid[leht->laskurid.count() - 1]->eesNimi->text().remove('\"').at(0).toUpper() + leht->
-                                        laskurid[leht->laskurid.count() - 1]->eesNimi->text().remove(0, 1).toLower().remove('\"'));
-                leht->laskurid[leht->laskurid.count() - 1]->perekNimi->setText(andmed[arv + 1].toUpper().trimmed().remove('\"'));
-                leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->setText(andmed[arv + 2].trimmed().remove('\"'));
-                if(leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->text().toInt() < 100 &&
-                                        !leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->text().contains("."))
-                        leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->setText("19" + leht->
+                leht->laskurid[leht->laskurid.count() - 1]->eesNimi->setText(andmed[arv].remove('\"').trimmed());
+                leht->laskurid[leht->laskurid.count() - 1]->perekNimi->setText(andmed[arv + 1].toUpper().remove('\"').trimmed());
+                leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->setText(andmed[arv + 2].remove('\"').trimmed());
+                if(leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->text().toInt() < 100
+                        && leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->text().toInt() > 0
+                        && !leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->text().contains("."))
+                    leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->setText("19" + leht->
                                         laskurid[leht->laskurid.count() - 1]->sunniAasta->text().trimmed());
-                leht->laskurid[leht->laskurid.count() - 1]->klubi->setText(andmed[arv + 3].trimmed().remove('\"'));
+                leht->laskurid[leht->laskurid.count() - 1]->klubi->setText(andmed[arv + 3].remove('\"').trimmed());
                 //QMessageBox::information(this, "Protokollitaja", "Teises kohas", QMessageBox::Ok);
                 int lisaIndeks = 0;
                 for(int i = 0; i < seeriateArv; i++){

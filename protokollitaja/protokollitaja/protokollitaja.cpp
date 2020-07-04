@@ -1511,7 +1511,7 @@ void Protokollitaja::import()
                 }
                 voibSulgeda = false;
         }
-        importAken->puhtaks();
+        importAken->clearSheet();
 }
 
 void Protokollitaja::kaivitaFinaal()
