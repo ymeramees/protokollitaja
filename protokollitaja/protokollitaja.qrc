@@ -1,0 +1,29 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/Finaal.ico</file>
+        <file>images/Protokollitaja.ico</file>
+        <file>images/copy.png</file>
+        <file>images/cut.png</file>
+        <file>images/eemaldaLaskur.png</file>
+        <file>images/eemaldaMargid.png</file>
+        <file>images/eemaldaTab.png</file>
+        <file>images/eksport.png</file>
+        <file>images/exit.png</file>
+        <file>images/finaal.png</file>
+        <file>images/import.png</file>
+        <file>images/margista.png</file>
+        <file>images/new.png</file>
+        <file>images/open.png</file>
+        <file>images/paste.png</file>
+        <file>images/print.png</file>
+        <file>images/reasta.png</file>
+        <file>images/salvesta_kui.png</file>
+        <file>images/save.png</file>
+        <file>images/teisaldaLaskur.png</file>
+        <file>images/tulemuse_aken.png</file>
+        <file>images/uusLaskur.png</file>
+        <file>images/uusTab.png</file>
+        <file>images/Abi.bmp</file>
+        <file>images/kopeeriLaskur.png</file>
+    </qresource>
+</RCC>

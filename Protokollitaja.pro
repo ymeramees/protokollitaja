@@ -1,4 +1,11 @@
+#-------------------------------------------------
+#
+# Project initially created sometime in 2007-2008
+#
+#-------------------------------------------------
 TEMPLATE = subdirs
 
-SUBDIRS += main \
-    tests
+SUBDIRS += protokollitaja \
+    protolehelugeja \
+    protofinaal \
+    common
