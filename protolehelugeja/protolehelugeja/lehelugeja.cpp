@@ -681,6 +681,7 @@ void Lehelugeja::readShot(Lask shot)
     }
 }
 
+#ifdef PROOV
 void Lehelugeja::runSelfTests()
 {
     // Test to check target visual layout
@@ -688,6 +689,7 @@ void Lehelugeja::runSelfTests()
     connect(&selfTests, &SelfTests::shotRead, this, &Lehelugeja::readShot);
     selfTests.generateShots(10);
 }
+#endif
 
 void Lehelugeja::saada(QString s)
 {

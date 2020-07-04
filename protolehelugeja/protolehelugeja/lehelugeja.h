@@ -113,7 +113,9 @@ private slots:
     void paluSalvestada();
     void peidaNimi();
     void peidaNupud();
+#ifdef PROOV
     void runSelfTests();
+#endif
     void saada(QString);
     void saadaBroadcast();
     void saadaParool(); //Vaja ühenduse loomise jätkamiseks

@@ -4691,6 +4691,9 @@ void Protokollitaja::uploadResults()
 
     QJsonDocument jsonDoc(toExportJson());
 
+    // Sometimes needed for quick fixes:
+//    webCompetitionId = QInputDialog::getText(this, "webCompetitionId", "id:", QLineEdit::Normal, webCompetitionId);
+
     if(webCompetitionId.isEmpty()) {
         restClient->post(request, jsonDoc.toJson());
     } else {
