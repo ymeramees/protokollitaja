@@ -25,7 +25,6 @@ Protokollitaja::Protokollitaja(QWidget *parent)
     setWindowTitle(programmiNimi); // TODO uuendada nime
     setWindowIcon(QIcon(":/images/Protokollitaja.ico"));
 
-    allaLaadija = 0;
     prindiEelvaade = 0;
     protoUuendaja = 0;
     server = 0;
@@ -114,7 +113,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         connect(kaivitaServerAct, SIGNAL(triggered()), this, SLOT(kaivitaServer()));
         kontrolliUuendusiAct = new QAction(tr("Kontrolli uuendusi"), this);
         kontrolliUuendusiAct->setStatusTip(tr("Kontrollib Protokollitaja programmi uuenduste olemasolu internetist"));
-        connect(kontrolliUuendusiAct, SIGNAL(triggered()), this, SLOT(kontrolliUuendusi()));
+        connect(kontrolliUuendusiAct, SIGNAL(triggered()), this, SLOT(checkForUpdates()));
         kopeeriLaskuridAct = new QAction(QIcon(":/images/kopeeriLaskur.png"), tr("Kopeeri valitud laskurid..."), this);
         kopeeriLaskuridAct->setStatusTip(tr("Kopeerib valitud laskurid teisele lehele"));
         connect(kopeeriLaskuridAct, SIGNAL(triggered()), this, SLOT(kopeeriLaskurid()));
@@ -444,7 +443,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
     QMessageBox::information(this, "Teade", "Debug versioon!", QMessageBox::Ok);
 #endif
 
-    autoUuendusteKontroll();
+    checkForUpdates(true);
 
         argument = qApp->arguments().last();
         if(argument.endsWith(".kll", Qt::CaseInsensitive) /*!argument.isEmpty() && !argument.endsWith(".exe") && !argument.endsWith("Protokollitaja", Qt::CaseInsensitive)*/){
@@ -546,7 +545,6 @@ void Protokollitaja::algseaded()    //Seadistab algsed väärtused kas programmi
 //    vorguLeht = 0;
 //    vorguLaskur = 0;
     uhendusAutoriseeritud = false;
-    aadressidOtsitud = false;
 
     seaded->ui.voistluseNimi->setText(voistluseNimi);
 //    seaded->voistluseNimi = voistluseNimi;
@@ -602,10 +600,18 @@ void Protokollitaja::ava()
         voibSulgeda = true;
 }
 
-void Protokollitaja::autoUuendusteKontroll()
+void Protokollitaja::checkForUpdates()
 {
-    aadressidOtsitud = false;
-    laeUuendusi("https://webzone.ee/protokollitaja/inf20150118");
+    checkForUpdates(false);
+}
+
+void Protokollitaja::checkForUpdates(bool autoCheck)
+{
+    autoUuendus = autoCheck;
+    UpdateChecker *checker = new UpdateChecker(versioon);
+    connect(checker, &UpdateChecker::versionInfoResponse, this, &Protokollitaja::receivedVersionInfo);
+
+    checker->getLatestVersionInfo("ymeramees", "protokollitaja");
 }
 
 void Protokollitaja::closeEvent(QCloseEvent *event)
@@ -1779,14 +1785,6 @@ void Protokollitaja::kontrolliIdKordust(int uusId, Laskur* las)   //Kontrollib l
     }
 }
 
-void Protokollitaja::kontrolliUuendusi()
-{
-    autoUuendus = false;    //Ei ole automaatne uuendus
-    aadressidOtsitud = false;
-//    laeUuendusi("http://ymeramees.no-ip.org/protokollitaja/inf20150118");
-    laeUuendusi("https://webzone.ee/protokollitaja/inf20150118");
-}
-
 void Protokollitaja::kopeeriLaskurid()
 {
     if(tabWidget->count() < 1) return;  //Kui lehti on vähem kui üks, ei saa kopeerida
@@ -1937,17 +1935,6 @@ void Protokollitaja::kopeeriValitudVah()
         }
         QClipboard *vahemalu = QApplication::clipboard();
         vahemalu->setText(tekst);
-}
-
-void Protokollitaja::laeUuendusi(QString url)
-{
-    QUrl koduLeht(url);
-    if(allaLaadija != 0)    //Kui on korra juba tõmmatud, siis tuleb vana kustutada
-        allaLaadija->deleteLater();
-
-    allaLaadija = new FileDownloader(koduLeht, this);
-
-    connect(allaLaadija, SIGNAL(downloaded()), SLOT(loeUuendusteInfot()));
 }
 
 void Protokollitaja::lehedLoetud()
@@ -2831,81 +2818,6 @@ void Protokollitaja::loeSeaded()
 //        QTimer::singleShot(170, this, SLOT(loeSiusDatast()));
 //    }
 //}
-
-void Protokollitaja::loeUuendusteInfot()
-{
-    QString info(allaLaadija->downloadedData());
-    if(!info.startsWith("<!--proto")){ //Kui ei leitud infot, tuleb proovida teist aadressi
-        if(aadressidOtsitud){   //Kui kõik aadressid on otsitud ja infot ei ole, siis järelikult on aadressid valed
-            if(!autoUuendus)
-                QMessageBox::critical(this, "Teade",tr("Ei õnnestunud uuenduste serverit leida! Programmi tuleb uuendada käsitsi!"), QMessageBox::Ok);
-        }else{
-            laeUuendusi("http://ymeramees.no-ip.org/protokollitaja/inf20150118");
-//            laeUuendusi("http://web.zone.ee/protokollitaja/inf20150118");
-            aadressidOtsitud = true;
-        }
-        return;
-    }
-    QStringList uuenduseNimekiri = info.left(info.indexOf("\n")).split(";");    //Versiooni nr, koos uuendatavate failide nimekirjaga
-    QStringList versiooniNr = versioon.split(".");  //Kuna versioon on stringina, siis on vaja teha iga number eraldi arvuks
-    QStringList uusVersiooniNr = uuenduseNimekiri[1].split(".");    //Sama siin. Kusjuures esimene rida on kontrolltekst
-
-    bool onUuendust = false;
-    if(versiooniNr[0].toInt() < uusVersiooniNr[0].toInt()){ //Versiooninumbrite võrdlemine alates kõige suuremast astmest
-        onUuendust = true;
-    }else if(versiooniNr[1].toInt() < uusVersiooniNr[1].toInt() && versiooniNr[0].toInt() == uusVersiooniNr[0].toInt()){
-        onUuendust = true;
-    }else if(versiooniNr[2].toInt() < uusVersiooniNr[2].toInt() && versiooniNr[1].toInt() == uusVersiooniNr[1].toInt() && versiooniNr[0].toInt() == uusVersiooniNr[0].toInt()){
-        onUuendust = true;
-    }else{  //Kui ükski eelnev õige ei olnud, siis järelikult on praegune versioon kas sama uus või uuem, kui internetis
-        if(!autoUuendus){
-            QMessageBox::information(this, "Teade", tr("Teil on kõige uuem versioon programmist."), QMessageBox::Ok);
-            return;
-        }
-    }
-    if(onUuendust)  //Saadaval on uuem versioon
-        if(QMessageBox::information(this, "Teade", QString("Programmist on saadaval uuem versioon. Kas soovite uuendada?\n\nPraegune versioon: %1\nUus versioon: %2").arg(versioon).arg(uuenduseNimekiri[1]), QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok){
-            protoUuendaja = new QProcess(); //Uuendaja programmi protsess
-            protoUuendaja->start(qApp->applicationDirPath() + "/Protouuendaja", QStringList() << "8946Protokollitajast");
-            connect(protoUuendaja, SIGNAL(started()), this, SLOT(close())); //Et uuendamine toimuda saaks, on vaja Protokollitaja sulgeda
-
-            if(!protoUuendaja->waitForStarted(5000)){   //Kontrollimaks, kas õnnestub käivitada
-//                switch(protoUuendaja.state()){
-//                case QProcess::NotRunning : {
-//                    QMessageBox::critical(this, "Protokollitaja", "QProcess::NotRunning", QMessageBox::Ok);
-//                    break;
-//                }
-//                case QProcess::Starting : {
-//                    QMessageBox::critical(this, "Protokollitaja", "QProcess::Starting", QMessageBox::Ok);
-//                    break;
-//                }
-//                case QProcess::Running : {
-//                    QMessageBox::critical(this, "Protokollitaja", "QProcess::Running", QMessageBox::Ok);
-//                    break;
-//                }
-//                default : QMessageBox::critical(this, "Protokollitaja", "QProcess::Info puudub", QMessageBox::Ok);
-//                }
-                switch(protoUuendaja->error()){
-                case QProcess::FailedToStart : {
-                    if(protoUuendaja->errorString() == "No such file or directory")
-                        QMessageBox::critical(this, "Viga", tr("Ei leia Protouuendajat! Programmi uuendamine ei ole võimalik!"), QMessageBox::Ok);
-                    else
-                        QMessageBox::critical(this, "Viga", tr("Protouuendaja käivitamine ei õnnestunud!\n\n%1").arg(protoUuendaja->errorString()), QMessageBox::Ok);
-                    break;
-                }
-                case QProcess::Crashed : {
-                    QMessageBox::critical(this, "Viga", tr("Protouuendaja programm jooksis käivitamisel kokku!\n\n%1").arg(protoUuendaja->errorString()), QMessageBox::Ok);
-                    break;
-                }
-                case QProcess::Timedout : {
-                    QMessageBox::critical(this, "Viga", tr("Protouuendaja käivitamine ei õnnestunud! Võttis liiga palju aega!\n\n%1").arg(protoUuendaja->errorString()), QMessageBox::Ok);
-                    break;
-                }
-                default : QMessageBox::critical(this, "Viga", tr("Protouuendaja käivitamine ei õnnestunud! Põhjus teadmata!\n\n%1").arg(protoUuendaja->errorString()), QMessageBox::Ok);
-                }
-            }
-        }
-}
 
 void Protokollitaja::margi()
 {
@@ -4359,6 +4271,61 @@ void Protokollitaja::reastaSi() //Sifrite järgi reastamine
                 voibSulgeda = false;
                 QApplication::restoreOverrideCursor();
         }
+}
+
+void Protokollitaja::receivedVersionInfo(bool updateExists, QString versionString)
+{
+    if(updateExists){  //Saadaval on uuem versioon
+        if(QMessageBox::information(
+                    this,
+                    "Teade",
+                    QString("Programmist on saadaval uuem versioon. Kas soovite uuendada?\n\n"
+                            "Praegune versioon: %1\nUus versioon: %2").arg(versioon).arg(versionString),
+                    QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok
+                ){
+            protoUuendaja = new QProcess(); //Uuendaja programmi protsess
+            protoUuendaja->start(qApp->applicationDirPath() + "/Protouuendaja", QStringList() << "8946Protokollitajast");
+            connect(protoUuendaja, SIGNAL(started()), this, SLOT(close())); //Et uuendamine toimuda saaks, on vaja Protokollitaja sulgeda
+
+            if(!protoUuendaja->waitForStarted(5000)){   //Kontrollimaks, kas õnnestub käivitada
+//                switch(protoUuendaja.state()){
+//                case QProcess::NotRunning : {
+//                    QMessageBox::critical(this, "Protokollitaja", "QProcess::NotRunning", QMessageBox::Ok);
+//                    break;
+//                }
+//                case QProcess::Starting : {
+//                    QMessageBox::critical(this, "Protokollitaja", "QProcess::Starting", QMessageBox::Ok);
+//                    break;
+//                }
+//                case QProcess::Running : {
+//                    QMessageBox::critical(this, "Protokollitaja", "QProcess::Running", QMessageBox::Ok);
+//                    break;
+//                }
+//                default : QMessageBox::critical(this, "Protokollitaja", "QProcess::Info puudub", QMessageBox::Ok);
+//                }
+                switch(protoUuendaja->error()){
+                case QProcess::FailedToStart : {
+                    if(protoUuendaja->errorString() == "No such file or directory")
+                        QMessageBox::critical(this, "Viga", tr("Ei leia Protouuendajat! Programmi uuendamine ei ole võimalik!"), QMessageBox::Ok);
+                    else
+                        QMessageBox::critical(this, "Viga", tr("Protouuendaja käivitamine ei õnnestunud!\n\n%1").arg(protoUuendaja->errorString()), QMessageBox::Ok);
+                    break;
+                }
+                case QProcess::Crashed : {
+                    QMessageBox::critical(this, "Viga", tr("Protouuendaja programm jooksis käivitamisel kokku!\n\n%1").arg(protoUuendaja->errorString()), QMessageBox::Ok);
+                    break;
+                }
+                case QProcess::Timedout : {
+                    QMessageBox::critical(this, "Viga", tr("Protouuendaja käivitamine ei õnnestunud! Võttis liiga palju aega!\n\n%1").arg(protoUuendaja->errorString()), QMessageBox::Ok);
+                    break;
+                }
+                default : QMessageBox::critical(this, "Viga", tr("Protouuendaja käivitamine ei õnnestunud! Põhjus teadmata!\n\n%1").arg(protoUuendaja->errorString()), QMessageBox::Ok);
+                }
+            }
+        }
+    } else if(!autoUuendus){
+        QMessageBox::information(this, "Teade", tr("Teil on kõige uuem versioon programmist."), QMessageBox::Ok);
+    }
 }
 
 void Protokollitaja::restClientFinished(QNetworkReply *reply)

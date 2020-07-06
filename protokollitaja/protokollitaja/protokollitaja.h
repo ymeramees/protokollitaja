@@ -39,7 +39,6 @@
 #include "sifriseade.h"
 #include "importaken.h"
 #include "tulemuseaken.h"
-#include "filedownloader.h"
 #include "lehelugejaaken.h"
 #include "startlistwriter.h"
 #include "finalsfileexport.h"
@@ -47,6 +46,7 @@
 #include "siusdataconnections.h"
 #include "protolehelugejaserver.h"
 #include "uhendumiseaken.h"
+#include "updatechecker.h"
 #include "xlslib.h"
 
 class Protokollitaja : public QMainWindow
@@ -61,7 +61,6 @@ public:
 	bool kirjutusAbi;
 	bool kasNaidataTul;
     bool uhendusAutoriseeritud;
-    bool aadressidOtsitud;  //Kas kõik uuenduste info aadressid on läbi käidud
     bool autoUuendus;   //Kas uuenduste kontroll on automaatne (true) või menüüst valitud (false)
 	bool voibUuendadaNimekirja;
     bool voistlus;   //Kasutatakse SiusDatast info vastuvõtmisel, näitab, kas finaali võistluslasud on alanud
@@ -159,8 +158,7 @@ public:
 //    Leht *vorguLeht;    //Pointer lehele, millel oleva laskuri siffer saadeti viimati Protolehelugejale
     Laskur *lehelugejaLaskur;   //Pointer laskurile, kellele loetakse parasjagu tulemusi
 //    Laskur *vorguLaskur;    //Pointer laskurile, kelle siffer saadeti viimati Protolehelugejale
-	AlguseValik *aValik;
-    FileDownloader *allaLaadija;    //Uuenduste info allalaadimiseks
+    AlguseValik *aValik;
 	ValikKast *valik;
 	SeadedKast *seaded;
     SifriSeade *sifriLisaAken;
@@ -179,7 +177,8 @@ private slots:
     void algseaded();   //Tekitab või taastab algsed seaded
     void autosave();
     void ava();
-    void autoUuendusteKontroll();   //Automaatne uuenduste kontroll
+    void checkForUpdates();   //Automaatne uuenduste kontroll
+    void checkForUpdates(bool autoCheck);  // Check for newer versions of the program
     void eelvaade();
     void eemaldaLaskur();
     void eemaldaMargid();
@@ -200,11 +199,9 @@ private slots:
     void kirjutaSeaded();
     void kontrolliIdKordusi();   //Kuna see funktsioon peaks midagi muutma ainult, kui avatakse vana faili, siis lisab see uued ID'd automaatselt
     void kontrolliIdKordust(int, Laskur*);   //Kontrollib laskuri uue ID varasemat olemasolu
-    void kontrolliUuendusi();  //Programmi uuenduste olemasolu kontrollimine ja programmi uuendamine
     void kopeeriLaskurid();
     void kopeeriVah();
     void kopeeriValitudVah();
-    void laeUuendusi(QString);  //Programmi uuenduste info alla laadimine
     void lehedLoetud();
     void lehelugeja();
     void liiguta();
@@ -213,7 +210,6 @@ private slots:
     void loeFinaaliFail(QString);
     void loeSeaded();
 //    void loeSiusDatast();   //Võtab vastu lasud SiusDatast
-    void loeUuendusteInfot();   //Töötleb uuenduste kohta laetud infot
     void margi();
     void muudaSalvestamist();
     void muudaTab(const QModelIndex&);
@@ -232,6 +228,7 @@ private slots:
     void reastaR();
     void reastaS();
     void reastaSi();
+    void receivedVersionInfo(bool updateExists, QString versionString);
     void restClientFinished(QNetworkReply *reply);
     void saadaVorku(QString, int socketIndex);
     void salvesta();

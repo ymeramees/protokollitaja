@@ -22,6 +22,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += lisalaskudeaken.h \
     liikmetevalikkast.h \
+    updatechecker.h \
     voistkond.h \
     importaken.h \
     tulemuseaken.h \
@@ -48,6 +49,7 @@ HEADERS += lisalaskudeaken.h \
     ../../common/src/siusdataconnection.h
 SOURCES += lisalaskudeaken.cpp \
     liikmetevalikkast.cpp \
+    updatechecker.cpp \
     voistkond.cpp \
     importaken.cpp \
     tulemuseaken.cpp \
