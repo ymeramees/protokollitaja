@@ -21,7 +21,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += lisalaskudeaken.h \
+    kllfilerw.h \
     liikmetevalikkast.h \
+    tabwidgetwithsettings.h \
     updatechecker.h \
     voistkond.h \
     importaken.h \
@@ -48,6 +50,7 @@ HEADERS += lisalaskudeaken.h \
     ../../common/src/siusdataconnections.h \
     ../../common/src/siusdataconnection.h
 SOURCES += lisalaskudeaken.cpp \
+    kllfilerw.cpp \
     liikmetevalikkast.cpp \
     updatechecker.cpp \
     voistkond.cpp \

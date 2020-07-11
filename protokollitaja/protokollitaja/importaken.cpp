@@ -11,24 +11,38 @@ ImportAken::ImportAken(QWidget *parent)
         ui.scrollArea->setWidget(leht);
 }
 
+ImportAken::~ImportAken()
+{
+
+}
+
+void ImportAken::clearSheet()
+{
+        if(leht->laskurid.count() < 1) return;
+        for(int i = 0; i < leht->laskurid.count(); i++)
+                leht->laskurid[i]->linnuke->setChecked(true);
+        leht->eemaldaLaskur();
+}
+
+int ImportAken::currentCompetitorId()
+{
+    return m_currentCompetitorId;
+}
+
 void ImportAken::fromFile()
 {
-        QString failiNimi = QFileDialog::getOpenFileName(
-                    this,
-                    tr("Impordi..."),
-                    "",
-                    tr("Text files (*.txt);;Comma separated files (*.csv"));
-        if(failiNimi.isEmpty()) return;
-        if(!failiNimi.endsWith(".txt") && !failiNimi.endsWith(".csv")){
-                QMessageBox::critical(this, "Protokollitaja", tr("Tundmatu laiendiga fail. Importimine pole kahjuks "
-                                "võimalik."), QMessageBox::Ok);
-                return;
-        }
-        QFile fail(failiNimi);
+    QString fileName = QFileDialog::getOpenFileName(
+                this,
+                tr("Impordi..."),
+                "",
+                tr("Protokollitaja files (*.kll);;Text files (*.txt);;Comma separated files (*.csv"));
+    if(fileName.isEmpty()) return;
+    if(fileName.endsWith(".txt") || fileName.endsWith(".csv")){
+        QFile fail(fileName);
         if(fail.open(QIODevice::ReadOnly | QIODevice::Text)){
-                QTextStream sisse(&fail);
-                int vSummadeSamm = 0;
-                do{
+            QTextStream sisse(&fail);
+            int vSummadeSamm = 0;
+            do{
                         QStringList andmed, andmed2, vahepealne;
                         QString rida = sisse.readLine();
                         andmed << rida;
@@ -143,18 +157,17 @@ void ImportAken::fromFile()
                                 leht->laskurid[leht->laskurid.count() - 1]->markus->setText(tr("Märkused"));
                 }while(!sisse.atEnd());
         }
-}
-
-void ImportAken::clearSheet()
-{
-        if(leht->laskurid.count() < 1) return;
-        for(int i = 0; i < leht->laskurid.count(); i++)
-                leht->laskurid[i]->linnuke->setChecked(true);
-        leht->eemaldaLaskur();
+    } else if (fileName.endsWith(".kll")) {
+        fromKllFile(fileName);
+    } else {
+        QMessageBox::critical(this, "Protokollitaja", tr("Tundmatu laiendiga fail. Importimine pole kahjuks "
+                                                         "võimalik."), QMessageBox::Ok);
+    }
 }
 
 void ImportAken::fromClipboard()
 {
+    QMessageBox::warning(this, "Protokollitaja", tr("Kas teil .kll faili ei ole? Sealt importimisel (Failist... nupp) tuleb rohkem infot üle, kui vahemälust importimisel."), QMessageBox::Ok);
         int vSummadeSamm = 0;
         QString rida;
         QClipboard *vahemalu = QApplication::clipboard();
@@ -277,7 +290,43 @@ void ImportAken::fromClipboard()
         }
 }
 
-ImportAken::~ImportAken()
+void ImportAken::fromKllFile(QString fileName)
 {
+    KllFileRW reader(nullptr, &kirjutusabi, nullptr, nullptr, this, this);
+    TabWidgetWithSettings contents = reader.readKllFile(fileName, currentCompetitorId());
 
+    QStringList tabNames;
+    for (int i = 0; i < contents.tabWidget->count(); i++) {
+        Leht *sheet = qobject_cast<Leht*>(qobject_cast<QScrollArea*>(contents.tabWidget->widget(i))->widget());
+        if (sheet != 0){
+            tabNames << (contents.tabWidget->tabText(i) + " - " + sheet->harjutus);
+        }
+    }
+    bool ok;
+    QString chosenTab = QInputDialog::getItem(this, tr("Vali leht"), tr("Leht millelt importida:"), tabNames, 0, false, &ok);
+
+    if (ok && !chosenTab.isEmpty()){
+        int tabIndex = tabNames.indexOf(chosenTab);
+        Leht* sheet = qobject_cast<Leht*>(qobject_cast<QScrollArea*>(contents.tabWidget->widget(tabIndex))->widget());
+
+        if (sheet != 0) {
+            for(int i = 0; i < sheet->laskurid.count(); i++){
+                leht->uusLaskur(0);
+                Laskur *competitor = leht->laskurid[leht->laskurid.count() - 1];
+                competitor->set(sheet->laskurid[i]);
+                competitor->linnuke->setCheckState(Qt::Checked);
+            }
+        }
+    }
+    contents.tabWidget->deleteLater();
+}
+
+//QString ImportAken::getKllSheetName()
+//{
+
+//}
+
+void ImportAken::setCurrentCompetitorId(int newId)
+{
+    m_currentCompetitorId = newId;
 }

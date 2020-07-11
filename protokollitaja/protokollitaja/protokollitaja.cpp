@@ -9,6 +9,7 @@
 /// Protokollitaja lehelugeja vajab uuendamist:
 /// 1. Uue masinaga lugemine ei tööta?
 /// 2. Sisekümneid ei märgistata
+/// 3. Kll faili lugeja-kirjutaja testide tegemine
 ///
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1483,6 +1484,7 @@ void Protokollitaja::import()
 {
         if(tabWidget->count() < 1) return;
         importAken->ui.sakiBox->clear();
+        importAken->setCurrentCompetitorId(laskuriId);
         for(int i = 0; i < tabWidget->count(); i++)
                 importAken->ui.sakiBox->addItem(tabWidget->tabText(i));
         importAken->ui.sakiBox->setCurrentIndex(tabWidget->currentIndex());

@@ -14,6 +14,8 @@
 #include <QFile>
 
 #include "ui_importaken.h"
+#include "tabwidgetwithsettings.h"
+#include "kllfilerw.h"
 #include "laskur.h"
 #include "leht.h"
 
@@ -23,17 +25,21 @@ class ImportAken : public QDialog
 
 private:
     bool kirjutusabi = false;
+    int m_currentCompetitorId;
 
 public:
-    Leht* leht;
+    Leht* leht = nullptr;
     ImportAken(QWidget *parent = 0);
     ~ImportAken();
     Ui::ImportAkenClass ui;
+    int currentCompetitorId();
+    void setCurrentCompetitorId(int newId);
 
 public slots:
-	void fromFile();
-        void clearSheet();
-	void fromClipboard();
+    void clearSheet();
+    void fromClipboard();
+    void fromFile();
+    void fromKllFile(QString fileName);
 };
 
 #endif // IMPORTAKEN_H
