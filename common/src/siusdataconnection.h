@@ -47,6 +47,8 @@ private:
     QTextStream *log;
     QTimer *progressTimer;
 
+    friend class SiusDataConnectionTest;
+
 private slots:
     void connected();
     void readFromSius();

@@ -1,5 +1,8 @@
 #include "siusdataconnection.h"
 
+#define CR 0x0d
+#define LF 0x0a
+
 extern bool verbose;
 
 SiusDataConnection::SiusDataConnection(QString address, int port, int socketIndex, QFile *siusLog, QTextStream *log, QWidget *parent) : QWidget(parent)
@@ -118,9 +121,13 @@ void SiusDataConnection::readFromSius()
 
             QString row = "";
             if(siusBuffer.indexOf('_', 1) == -1){
-                *log << QTime::currentTime().toString("hh:mm:ss") << " #clear()\n";
-                row = QString("%1").arg(siusBuffer);
-                siusBuffer.clear();
+                if(siusBuffer.contains(CR) || siusBuffer.contains(LF)){ // Make sure complete last row has arrived
+                    *log << QTime::currentTime().toString("hh:mm:ss") << " #clear()\n";
+                    row = QString("%1").arg(siusBuffer);
+                    siusBuffer.clear();
+                    emit statusInfo(tr("Viimane rida, buffer.length(): %1").arg(siusBuffer.length()));
+                } else
+                    break;
             }else{
                 row = siusBuffer.left(siusBuffer.indexOf('_', 1));
                 siusBuffer.remove(0, siusBuffer.indexOf('_', 1));
@@ -140,10 +147,11 @@ void SiusDataConnection::readFromSius()
         }
         if(siusBuffer.length() > 0){   //If there is still data in the buffer, but for some reason reached here, then start the function again after a while
             *log << QTime::currentTime().toString("hh:mm:ss") << " #buffer.length(): " << siusBuffer.length() << ", uuele ringile minek" << "\n";
-            QTimer::singleShot(170, this, SLOT(loeSiusDatast()));
+            QTimer::singleShot(170, this, SLOT(readFromSius()));
         }
 
-        emit linesRead(lines, m_index);
+        if(lines.size() > 0)
+            emit linesRead(lines, m_index);
     }
 }
 
