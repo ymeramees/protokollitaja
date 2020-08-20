@@ -11,6 +11,7 @@
 /// 2. Sisekümneid ei märgistata
 /// 3. Kll faili lugeja-kirjutaja testide tegemine
 ///
+///
 /////////////////////////////////////////////////////////////////////////////
 
 extern QString programmiNimi;
@@ -4124,7 +4125,7 @@ void Protokollitaja::readShotInfo(QString data, int socketIndex)
             thisCompetitor->lasud[seriesNo][j]->setNanoY(dataList.takeFirst());
             thisCompetitor->lasud[seriesNo][j]->setInnerTen(
                         Lask::calcIfInnerTen(
-                            sheet->relv,
+                            Lask::TargetType(sheet->relv),
                             thisCompetitor->lasud[seriesNo][j]->X(),
                             thisCompetitor->lasud[seriesNo][j]->Y()
                             )
@@ -4141,83 +4142,97 @@ void Protokollitaja::readShotInfo(QString data, int socketIndex)
     muudaSalvestamist();
 }
 
-void Protokollitaja::readSiusInfo(QStringList lines, int socketIndex)
+void Protokollitaja::readSiusInfo(SiusShotData shotData)
 {
     if(verbose)
         QTextStream(stdout) << "readSiusInfo()" << endl;
 
-    for(QString row : lines){
+//    for(QString row : lines){
         //Search for competitor whose line was received:
-        Laskur *thisCompetitor = 0;
-        Leht* sheet = 0;
-        QStringList rowParts = row.split(';');
+        Laskur* thisCompetitor = nullptr;
+        Leht* sheet = nullptr;
+//        QStringList rowParts = row.split(';');
 
-        if(row.startsWith("_PRCH") || row.startsWith("_GRPH") || row.startsWith("_SHOT") || row.startsWith("_TOTL")){
+//        if(row.startsWith("_PRCH") || row.startsWith("_GRPH") || row.startsWith("_SHOT") || row.startsWith("_TOTL")){
+        if(shotData.shot.isCompetitionShot()) // TODO: process and save also sighting shots
             for(int i = 0; i < tabWidget->count(); i++){
                 sheet = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
                 for(int j = 0; j < sheet->laskurid.count(); j++){
-                    if(rowParts[3].toInt() == sheet->laskurid[j]->id && (socketIndex == sheet->laskurid[j]->siusConnectionIndex() || sheet->laskurid[j]->siusConnectionIndex() == -1)){ //To avoid different Sius connections reading into one competitor
+                    if(shotData.id == sheet->laskurid[j]->id && (shotData.socketIndex == sheet->laskurid[j]->siusConnectionIndex() || sheet->laskurid[j]->siusConnectionIndex() == -1)){ //To avoid different Sius connections reading into one competitor
                         thisCompetitor = sheet->laskurid[j];
-                        thisCompetitor->setSiusConnectionIndex(socketIndex);
+//                        static QStringList previousRowParts;
+//                        if(row.startsWith("_TOTL") && rowParts[3] == previousRowParts[3]){
+//                            SiusShotData siusShotData;
+//                            siusShotData.shotRow = previousRowParts;
+//                            siusShotData.totalRow = rowParts;
+//                            siusShotData.socketIndex = socketIndex;
+//                            siusShotData.shotFieldNoInSiusRow = lasuNrSiusis;
+//                            previousRowParts.clear();
+                        thisCompetitor->readSiusShot(shotData);
+//                        } else if (row.startsWith("_SHOT")){
+//                            previousRowParts = rowParts;
+//                        }
+//                        thisCompetitor->setSiusConnectionIndex(socketIndex);
                         logiValja << "#thisCompetitor: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << "\n";
                         j = sheet->laskurid.count(); //To break out from all loops
                         i = tabWidget->count(); //To break out from all loops
+
                         break;
                     }
                 }
             }
-        }
+//        }
 
-        if(thisCompetitor != 0 && sheet != 0){
-            if(row.startsWith("_GRPH")){
-                if(thisCompetitor->previousSiusRow().startsWith("_PRCH")){
-                    if(thisCompetitor->isCompetitionStarted() && (!sheet->harjutus.contains("Lamades") || !sheet->harjutus.contains("Õhupüss") || !sheet->harjutus.contains("Õhupüstol") || !sheet->harjutus.contains("Vabapüstol") || !sheet->harjutus.contains("Muu"))){
-                        thisCompetitor->nextCompetitionStage();  //If there are sighting shots or only one competition, no point to risk with increasing competition stage
-                    }
-                    thisCompetitor->setCompetitionStarted(false);    //These are sighting shots
-                    logiValja << "#GRPH: proovilasud: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << "\n";
-                    logiValja << "#GRPH: competitionStage = " << thisCompetitor->competitionStage();
-                }else{
-                    thisCompetitor->setCompetitionStarted(true); //If previous row does not start with _PRCH, then these are competition shots
-                    logiValja << "#GRPH: algavad võistluslasud: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << "\n";
-                }
-            }else if(row.startsWith("_SHOT") && thisCompetitor->isCompetitionStarted()){   //Competition shot row
-                if(rowParts.count() < 4){
-                    logiValja << "\n#viga!: rowParts lõhki! rowParts.count() < 4\n";
-                    break;
-                }else if(rowParts.count() <= lasuNrSiusis){
-                    logiValja << "\n#viga!: rowParts lõhki! rowParts.count() < lasuNrSiusis = " << lasuNrSiusis << "\n";
-                    break;
-                }
+//        if(thisCompetitor != nullptr && sheet != nullptr){
+//            if(row.startsWith("_GRPH")){
+//                if(thisCompetitor->previousSiusRow().startsWith("_PRCH")){
+//                    if(thisCompetitor->isCompetitionStarted() && (!sheet->harjutus.contains("Lamades") || !sheet->harjutus.contains("Õhupüss") || !sheet->harjutus.contains("Õhupüstol") || !sheet->harjutus.contains("Vabapüstol") || !sheet->harjutus.contains("Muu"))){
+//                        thisCompetitor->nextCompetitionStage();  //If there are sighting shots or only one competition, no point to risk with increasing competition stage
+//                    }
+//                    thisCompetitor->setCompetitionStarted(false);    //These are sighting shots
+//                    logiValja << "#GRPH: proovilasud: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << "\n";
+//                    logiValja << "#GRPH: competitionStage = " << thisCompetitor->competitionStage();
+//                }else{
+//                    thisCompetitor->setCompetitionStarted(true); //If previous row does not start with _PRCH, then these are competition shots
+//                    logiValja << "#GRPH: algavad võistluslasud: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << "\n";
+//                }
+//            }else if(row.startsWith("_SHOT") && thisCompetitor->isCompetitionStarted()){   //Competition shot row
+//                if(rowParts.count() < 4){
+//                    logiValja << "\n#viga!: rowParts lõhki! rowParts.count() < 4\n";
+//                    break;
+//                }else if(rowParts.count() <= lasuNrSiusis){
+//                    logiValja << "\n#viga!: rowParts lõhki! rowParts.count() < lasuNrSiusis = " << lasuNrSiusis << "\n";
+//                    break;
+//                }
 
-                logiValja << "#" << rowParts[3] << ": " << thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm + rowParts[lasuNrSiusis].toInt() << ". Lask\n";
-                logiValja << "#SHOT: previousSiusRow(): " << thisCompetitor->previousSiusRow();
-                Lask newShot(row);
+//                logiValja << "#" << rowParts[3] << ": " << thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm + rowParts[lasuNrSiusis].toInt() << ". Lask\n";
+//                logiValja << "#SHOT: previousSiusRow(): " << thisCompetitor->previousSiusRow();
+////                Lask newShot(row);
 
-                int seriesIndex = (thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10;
-                int shotIndex = (rowParts[lasuNrSiusis].toInt() - 1) % 10;
+//                int seriesIndex = (thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10;
+//                int shotIndex = (rowParts[lasuNrSiusis].toInt() - 1) % 10;
 
-                //If competitor's last shot has data in it, then probably these results have already been read and it is better not to read them again, to avoid mistakes
-                if(thisCompetitor->seeriateArv > seriesIndex
-                        && thisCompetitor->lasud[thisCompetitor->seeriateArv - 1][thisCompetitor->laskudeArv - 1]->getILask() < 0){
-                    //Check if series number and number of shots in each series is big enough
-                    if(thisCompetitor->lasud.count() > seriesIndex && thisCompetitor->lasud[0].count() > shotIndex){
-                        thisCompetitor->lasud[seriesIndex][shotIndex]->set(&newShot);
-                        thisCompetitor->liida();
-                        muudaSalvestamist();
+//                //If competitor's last shot has data in it, then probably these results have already been read and it is better not to read them again, to avoid mistakes
+//                if(thisCompetitor->seeriateArv > seriesIndex
+//                        && thisCompetitor->lasud[thisCompetitor->seeriateArv - 1][thisCompetitor->laskudeArv - 1]->getILask() < 0){
+//                    //Check if series number and number of shots in each series is big enough
+//                    if(thisCompetitor->lasud.count() > seriesIndex && thisCompetitor->lasud[0].count() > shotIndex){
+//                        thisCompetitor->lasud[seriesIndex][shotIndex]->setSiusShot(row);
+//                        thisCompetitor->liida();
+//                        muudaSalvestamist();
 
-                        logiValja << "#" << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << " lask 1 = " << thisCompetitor->lasud[seriesIndex][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->getSLask() << "\n";
-                    }else
-                        logiValja << "\n#viga!: laskur lõhki! seriesIndex = " << seriesIndex << ", (rowParts[lasuNrSiusis].toInt() - 1) % 10 = " << (rowParts[lasuNrSiusis].toInt() - 1) % 10 << "\n";
-                }
+//                        logiValja << "#" << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << " lask 1 = " << thisCompetitor->lasud[seriesIndex][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->getSLask() << "\n";
+//                    }else
+//                        logiValja << "\n#viga!: laskur lõhki! seriesIndex = " << seriesIndex << ", (rowParts[lasuNrSiusis].toInt() - 1) % 10 = " << (rowParts[lasuNrSiusis].toInt() - 1) % 10 << "\n";
+//                }
 
-            }
+//            }
 
-            thisCompetitor->setPreviousSiusRow(row);
+//            thisCompetitor->setPreviousSiusRow(row);
 
-            logiValja << "#lõpp\n";
-        }
-    }
+//            logiValja << "#lõpp\n";
+//        }
+//    }
 }
 
 void Protokollitaja::reasta()   //Tulemuste järgi reastamine
@@ -4658,10 +4673,10 @@ void Protokollitaja::uploadResults()
 
     connect(restClient, &QNetworkAccessManager::finished, this, &Protokollitaja::restClientFinished);
 
-    QJsonDocument jsonDoc(toExportJson());
-
     // Sometimes needed for quick fixes:
 //    webCompetitionId = QInputDialog::getText(this, "webCompetitionId", "id:", QLineEdit::Normal, webCompetitionId);
+
+    QJsonDocument jsonDoc(toExportJson());
 
     if(webCompetitionId.isEmpty()) {
         restClient->post(request, jsonDoc.toJson());
@@ -5101,7 +5116,7 @@ void Protokollitaja::uhenduSiusDataga()
     if(siusDataConnections == nullptr){
         siusDataConnections = new SiusDataConnections(siusLogi, &logiValja, this);
         connect(siusDataConnections, &SiusDataConnections::statusInfo, this, &Protokollitaja::statusBarInfoChanged);
-        connect(siusDataConnections, &SiusDataConnections::linesRead, this, &Protokollitaja::readSiusInfo);
+        connect(siusDataConnections, &SiusDataConnections::shotRead, this, &Protokollitaja::readSiusInfo);
         connect(siusDataConnections, &SiusDataConnections::disconnectedFromSius, this, &Protokollitaja::uhendusSiusigaKatkes);
     }
 

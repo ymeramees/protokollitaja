@@ -34,7 +34,6 @@ Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i,
                 this->setObjectName("laskurClass");
         }
         m_competitionStage = 0;
-        m_competitionStarted = false;
         m_siusConnectionIndex = -1;
 //  QMessageBox::information(this, "Teade", "Lasku::Laskur()", "OK");
 //	connect(eesNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus(QString)));
@@ -218,7 +217,7 @@ int Laskur::competitionStage() const
 
 void Laskur::contextMenuEvent(QContextMenuEvent *event)
 {
-        popup->exec(event->globalPos());
+    popup->exec(event->globalPos());
 }
 
 void Laskur::enterVajutatud()
@@ -235,11 +234,6 @@ bool Laskur::eventFilter(QObject* object, QEvent* event)
         return false; // lets the event continue to the edit
     }
     return false;
-}
-
-bool Laskur::isCompetitionStarted() const
-{
-    return m_competitionStarted;
 }
 
 bool Laskur::isFinished() const
@@ -1111,9 +1105,163 @@ void Laskur::nextCompetitionStage()
     m_competitionStage++;
 }
 
+//bool Laskur::parseSiusCompetitionShot(QString row, QStringList rowParts, int shotFieldNoInSiusRow)
+//{
+//    if(rowParts.count() < 4){
+//        return false;
+////                logiValja << "\n#viga!: rowParts lõhki! rowParts.count() < 4\n";
+//    }else if(rowParts.count() <= shotFieldNoInSiusRow){
+//        return false;
+////                logiValja << "\n#viga!: rowParts lõhki! rowParts.count() < lasuNrSiusis = " << lasuNrSiusis << "\n";
+//    } else {
+
+////            logiValja << "#" << rowParts[3] << ": " << competitionStage() * vSummadeSamm + rowParts[lasuNrSiusis].toInt() << ". Lask\n";
+////            logiValja << "#SHOT: previousSiusRow(): " << previousSiusRow();
+////                Lask newShot(row);
+
+//        int seriesIndex = (competitionStage() * vSummadeSamm * 10 + rowParts[shotFieldNoInSiusRow].toInt() - 1) / 10;
+//        int shotIndex = (rowParts[shotFieldNoInSiusRow].toInt() - 1) % 10;
+
+//        //If competitor's last shot has data in it, then probably these results have already been read and it is better not to read them again, to avoid mistakes
+//        if(seeriateArv > seriesIndex && lasud[seeriateArv - 1][laskudeArv - 1]->getILask() < 0){
+//            //Check if series number and number of shots in each series is big enough
+//            if(lasud.count() > seriesIndex && lasud[0].count() > shotIndex){
+//                lasud[seriesIndex][shotIndex]->setSiusShot(row);
+//                liida();
+//                teataMuudatusest();
+//                return true;
+
+////                    logiValja << "#" << eesNimi->text() << " " << perekNimi->text() << " lask 1 = " << lasud[seriesIndex][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->getSLask() << "\n";
+//            }// else
+////                    logiValja << "\n#viga!: laskur lõhki! seriesIndex = " << seriesIndex << ", (rowParts[lasuNrSiusis].toInt() - 1) % 10 = " << (rowParts[lasuNrSiusis].toInt() - 1) % 10 << "\n";
+//        }
+//    }
+//    return false;   // If flow reaches here, then there is some error in row
+//}
+
 QString Laskur::previousSiusRow() const
 {
     return m_previousSiusRow;
+}
+
+bool Laskur::readSiusShot(SiusShotData shotData)
+{
+    bool result = false;
+
+    if(shotData.id == id && (shotData.socketIndex == siusConnectionIndex() || siusConnectionIndex() == -1)){ //To avoid different Sius connections reading into one competitor
+        if(siusConnectionIndex() == -1)
+            setSiusConnectionIndex(shotData.socketIndex);
+
+        if(vSummadeSamm == 0 || (vSummadeSamm != 0 && shotData.siusShotNo <= vSummadeSamm * 10)) { // Ignore additional shots in all stages
+            int seriesIndex = (competitionStage() * vSummadeSamm * 10 + shotData.siusShotNo - 1) / 10;
+            int shotIndex = (shotData.siusShotNo - 1) % 10;
+
+            // TODO: A solution to enable adding missing shots and ignoring wrong shots
+            //If competitor's last shot has data in it, then probably these results have already been read and it is better not to read them again, to avoid mistakes
+            if(seeriateArv > seriesIndex && lasud[seeriateArv - 1][laskudeArv - 1]->getILask() < 0){
+                //Check if series number and number of shots in each series is big enough
+                if(lasud.count() > seriesIndex && lasud[0].count() > shotIndex){
+                    if (lasud[seriesIndex][shotIndex]->isEmpty()){
+                        lasud[seriesIndex][shotIndex]->set(&shotData.shot);
+                        liida();
+                        teataMuudatusest();
+                        result = true;
+                    } else if (lasud[seriesIndex][shotIndex]->getSLask().compare(shotData.shot.getSLask()) == 0 &&
+                               lasud[seriesIndex][shotIndex]->shotTime() == shotData.shot.shotTime()) {
+                        result = true;  // Shot already existing, ignore, but return true
+                    } else if (vSummadeSamm > 0 && findShotFromPreviousStages(shotData) != -1) {
+                        setCompetitionStage(findShotFromPreviousStages(shotData));  // If old shot was received, then set competition stage to that stage, because most likely shots will continue from there
+                        result = true;  // Shot already existing, ignore, but return true
+                    } else if (lasud[seriesIndex][shotIndex]->shotTime() < shotData.shot.shotTime()
+                               && vSummadeSamm != 0){  // Increase competition stage only if there are more than 1 stages
+                        nextCompetitionStage();
+                        result = readSiusShot(shotData); // Try again with new competitionstage
+                    } else
+                        result = false;
+                    //                    logiValja << "#" << eesNimi->text() << " " << perekNimi->text() << " lask 1 = " << lasud[seriesIndex][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->getSLask() << "\n";
+                }// else
+                //                    logiValja << "\n#viga!: laskur lõhki! seriesIndex = " << seriesIndex << ", (rowParts[lasuNrSiusis].toInt() - 1) % 10 = " << (rowParts[lasuNrSiusis].toInt() - 1) % 10 << "\n";
+            }
+        }
+    }
+//    QStringList rowParts = row.split(';');
+//    if(rowParts.count() >= shotFieldNoInSiusRow){
+//    if(rowParts[3].toInt() == id && (socketIndex == siusConnectionIndex() || siusConnectionIndex() == -1)){ //To avoid different Sius connections reading into one competitor
+//        if(siusConnectionIndex() == -1)
+//            setSiusConnectionIndex(socketIndex);
+
+////        if(row.startsWith("_TOTL") && !isCompetitionStarted()){
+////            if(rowParts.count() <=12)
+////                return false;   // If row is not long enough, then it is probably an event total which we are not interested in
+////            if(rowParts[12] != "0" && previousSiusRow().startsWith("_SHOT")){   // During sighting shots it is 0 and during competition it contains series result
+////                setCompetitionStarted(true);
+////                result = parseSiusCompetitionShot(previousSiusRow(), previousSiusRow().split(';'), shotFieldNoInSiusRow);
+////            }
+////            if(previousSiusRow().startsWith("_PRCH")){
+////                if(isCompetitionStarted() && (!m_eventType->contains("Lamades") || !m_eventType->contains("Õhupüss") || !m_eventType->contains("Õhupüstol") || !m_eventType->contains("Vabapüstol"))){
+////                    nextCompetitionStage();  //If there are sighting shots or only one competition, no point to risk with increasing competition stage
+////                }
+////                setCompetitionStarted(false);    //These are sighting shots
+////                logiValja << "#GRPH: proovilasud: " << id << " " << eesNimi->text() << " " << perekNimi->text() << "\n";
+////                logiValja << "#GRPH: competitionStage = " << competitionStage();
+////            }else{
+////                setCompetitionStarted(true); //If previous row does not start with _PRCH, then these are competition shots
+////                logiValja << "#GRPH: algavad võistluslasud: " << id << " " << eesNimi->text() << " " << perekNimi->text() << "\n";
+////            }
+//        // Sighting shots: 32, 544
+//        // Competition shots: 0, 512
+//        QVector<int> sighterTypes = {32, 36, 37, 39, 544, 551, 1060};
+//        QVector<int> competitionShotTypes = {0, 4, 5, 7, 512, 515, 519, 1028, 1029, 1036, 2304};
+//        static bool checkTotal = false;
+
+//        bool ok;    // If shot type cannot be converted to int, then something is wrong
+//        int currentShotType = rowParts[9].toInt(&ok);
+
+//        /*} else*/ if((row.startsWith("_SHOT") && ok && competitionShotTypes.contains(currentShotType) /*&& isCompetitionStarted()*/) ||
+//                      (checkTotal && row.startsWith("_TOTL") && rowParts.count() > 12)){   //Competition shot row
+////            result = parseSiusCompetitionShot(row, rowParts, shotFieldNoInSiusRow);
+////            if (rowParts.count() < 4){
+////                return false;
+//        //                logiValja << "\n#viga!: rowParts lõhki! rowParts.count() < 4\n";
+////            } else if(rowParts.count() <= shotFieldNoInSiusRow){
+////                return false;
+//        //                logiValja << "\n#viga!: rowParts lõhki! rowParts.count() < lasuNrSiusis = " << lasuNrSiusis << "\n";
+////            } else {
+
+//        //            logiValja << "#" << rowParts[3] << ": " << competitionStage() * vSummadeSamm + rowParts[lasuNrSiusis].toInt() << ". Lask\n";
+//        //            logiValja << "#SHOT: previousSiusRow(): " << previousSiusRow();
+//        //                Lask newShot(row);
+
+//                int seriesIndex = (competitionStage() * vSummadeSamm * 10 + rowParts[shotFieldNoInSiusRow].toInt() - 1) / 10;
+//                int shotIndex = (rowParts[shotFieldNoInSiusRow].toInt() - 1) % 10;
+
+//                //If competitor's last shot has data in it, then probably these results have already been read and it is better not to read them again, to avoid mistakes
+//                // Make sure new shot is within series and shots' list bounds
+//                if(seeriateArv > seriesIndex && lasud[seeriateArv - 1][laskudeArv - 1]->getILask() < 0){
+//                    if(lasud.count() > seriesIndex && lasud[0].count() > shotIndex){
+//                        if(!lasud[seriesIndex][shotIndex]->isEmpty() && lasud[seriesIndex][shotIndex]->shotTime() < QTime::fromString(rowParts[6])){
+//                            nextCompetitionStage(); // If shot no is same, but time is later, then it is probably next stage in the event
+//                            seriesIndex = (competitionStage() * vSummadeSamm * 10 + rowParts[shotFieldNoInSiusRow].toInt() - 1) / 10;
+//                        }
+//                        lasud[seriesIndex][shotIndex]->setSiusShot(row);
+//                        liida();
+//                        teataMuudatusest();
+//                        return true;
+
+//        //                    logiValja << "#" << eesNimi->text() << " " << perekNimi->text() << " lask 1 = " << lasud[seriesIndex][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->getSLask() << "\n";
+//                    } else
+//                        return false;
+//        //                    logiValja << "\n#viga!: laskur lõhki! seriesIndex = " << seriesIndex << ", (rowParts[lasuNrSiusis].toInt() - 1) % 10 = " << (rowParts[lasuNrSiusis].toInt() - 1) % 10 << "\n";
+////                }
+//            }
+//        }
+//        result = true;
+//    } else
+//        result = false;
+
+//        setPreviousSiusRow(row);
+//    }
+    return result;
 }
 
 void Laskur::resetCompetitionStage()
@@ -1143,7 +1291,6 @@ void Laskur::set(const Laskur *l)
     this->onLehelugejaLaskur = l->onLehelugejaLaskur;
     this->onVorguLaskur = l->onVorguLaskur;
     this->m_competitionStage = l->competitionStage();
-    this->m_competitionStarted = l->isCompetitionStarted();
     this->m_eventType = l->getEventType();
     this->m_previousSiusRow = l->previousSiusRow();
     this->m_siusConnectionIndex = l->siusConnectionIndex();
@@ -1172,9 +1319,9 @@ void Laskur::set(const Laskur *l)
     this->liida();
 }
 
-void Laskur::setCompetitionStarted(bool competitionStatus)
+void Laskur::setCompetitionStage(int newStage)
 {
-    m_competitionStarted = competitionStatus;
+    m_competitionStage = newStage;
 }
 
 void Laskur::setPreviousSiusRow(QString row)
@@ -1192,6 +1339,21 @@ void Laskur::setSumma(QString s)
     summa->setText(s);
 }
 
+int Laskur::findShotFromPreviousStages(const SiusShotData shotData) const
+{
+    if (vSummadeSamm != 0) {    // More than 1 stage
+        for(int stage = competitionStage(); stage >= 0; stage--){
+            int seriesIndex = (stage * vSummadeSamm * 10 + shotData.siusShotNo - 1) / 10;
+            int shotIndex = (shotData.siusShotNo - 1) % 10;
+
+            if (lasud[seriesIndex][shotIndex]->getSLask().compare(shotData.shot.getSLask()) == 0 &&
+                    lasud[seriesIndex][shotIndex]->shotTime() == shotData.shot.shotTime())
+                return stage;
+        }
+    }
+    return -1;
+}
+
 int Laskur::siusConnectionIndex() const
 {
     return m_siusConnectionIndex;
@@ -1202,7 +1364,6 @@ void Laskur::siusiReset(int siusConnectionIndex)
     if(siusConnectionIndex == m_siusConnectionIndex){
         previousSiusRow().clear();
         m_competitionStage = 0;
-        m_competitionStarted = false;
         this->m_siusConnectionIndex = -1;
     }
 }

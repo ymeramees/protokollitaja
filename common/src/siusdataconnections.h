@@ -33,7 +33,8 @@ private slots:
 
 signals:
     void disconnectedFromSius(int socketIndex);
-    void linesRead(QStringList lines, int socketIndex);
+//    void linesRead(QStringList lines, int socketIndex);
+    void shotRead(SiusShotData shotData);
     void statusInfo(QString statusInfo);
 };
 

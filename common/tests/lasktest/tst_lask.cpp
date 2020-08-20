@@ -74,30 +74,30 @@ void LaskTest::test_coordinates()
 void LaskTest::test_calcIfInnerTen()
 {
     Lask empty;
-    QVERIFY(!Lask::calcIfInnerTen(1, empty.X(), empty.Y()));
+    QVERIFY(!Lask::calcIfInnerTen(Lask::Ohupuss, empty.X(), empty.Y()));
 
     QTime time = QTime::currentTime();
 
     Lask shot(106, 477, -1042, true, time);
-    QVERIFY(Lask::calcIfInnerTen(1, shot.X(), shot.Y()));
+    QVERIFY(Lask::calcIfInnerTen(Lask::Ohupuss, shot.X(), shot.Y()));
 
     Lask shot2("_SHOT;9;10;36;60;74;10:43:56.17;3;31;7;94;0;0;49;-0.00187626;0.00347202;900;0;0;655.35;98903519;61;450;0");
-    QVERIFY(!Lask::calcIfInnerTen(1, shot2.X(), shot2.Y()));
+    QVERIFY(!Lask::calcIfInnerTen(Lask::Ohupuss, shot2.X(), shot2.Y()));
 
     Lask shot3(103, -3622, -3647, true, time);
-    QVERIFY(!Lask::calcIfInnerTen(2, shot3.X(), shot3.Y()));
+    QVERIFY(!Lask::calcIfInnerTen(Lask::Ohupustol, shot3.X(), shot3.Y()));
 
     Lask shot4(100, -3292, 6872, true, time);
-    QVERIFY(!Lask::calcIfInnerTen(2, shot4.X(), shot4.Y()));
+    QVERIFY(!Lask::calcIfInnerTen(Lask::Ohupustol, shot4.X(), shot4.Y()));
 
     Lask shot5(104, -478, 4404, true, time);
-    QVERIFY(Lask::calcIfInnerTen(2, shot5.X(), shot5.Y()));
+    QVERIFY(Lask::calcIfInnerTen(Lask::Ohupustol, shot5.X(), shot5.Y()));
 
     Lask shot6(103, -759, 5469, true, time);
-    QVERIFY(!Lask::calcIfInnerTen(2, shot6.X(), shot6.Y()));
+    QVERIFY(!Lask::calcIfInnerTen(Lask::Ohupustol, shot6.X(), shot6.Y()));
 
     Lask shot7(104, -4315, 1323, true, time);
-    QVERIFY(Lask::calcIfInnerTen(2, shot7.X(), shot7.Y()));
+    QVERIFY(Lask::calcIfInnerTen(Lask::Ohupustol, shot7.X(), shot7.Y()));
 }
 
 void LaskTest::test_createShotFromJson()
@@ -108,6 +108,8 @@ void LaskTest::test_createShotFromJson()
     shotJson["shotY"] = -626;
     shotJson["shotTime"] = QTime::fromString("16:46:55.84").toString();
     shotJson["innerTen"] = false;
+    shotJson["competitionShot"] = false;
+    shotJson["shotOrigin"] = Lask::ScoringMachine;
 
     Lask shot(shotJson);
 
@@ -116,7 +118,9 @@ void LaskTest::test_createShotFromJson()
     QCOMPARE(shot.X(), 352);
     QCOMPARE(shot.Y(), -626);
     QCOMPARE(shot.shotTime(), QTime(16, 46, 55, 000));
-    QVERIFY(shot.isInnerTen() == false);
+    QCOMPARE(shot.isInnerTen(), false);
+    QCOMPARE(shot.isCompetitionShot(), false);
+    QCOMPARE(shot.shotOrigin(), Lask::ScoringMachine);
 }
 
 void LaskTest::test_createShotFromPartialJson()
@@ -132,7 +136,9 @@ void LaskTest::test_createShotFromPartialJson()
     QCOMPARE(shot2.X(), -999);
     QCOMPARE(shot2.Y(), -999);
     QCOMPARE(shot2.shotTime(), QTime());
-    QVERIFY(shot2.isInnerTen() == true);
+    QCOMPARE(shot2.isInnerTen(), true);
+    QCOMPARE(shot2.isCompetitionShot(), true);
+    QCOMPARE(shot2.shotOrigin(), Lask::Manual);
 }
 
 void LaskTest::test_createShotFromSiusRow()
@@ -146,6 +152,8 @@ void LaskTest::test_createShotFromSiusRow()
     QCOMPARE(shot.Y(), -1940);
     QCOMPARE(shot.shotTime(), QTime(10, 9, 17, 560));
     QVERIFY(shot.isInnerTen() == false);
+    QCOMPARE(shot.isCompetitionShot(), true);
+    QCOMPARE(shot.shotOrigin(), Lask::Sius);
 
     QString siusRow2 = "_SHOT;2;3;2504;60;24;16:46:55.84;3;31;0;88;0;0;8;-0.01735604;0.00080582;900;0;0;655.35;170209718;60;449;0";
     Lask shot2(siusRow2);
@@ -156,6 +164,8 @@ void LaskTest::test_createShotFromSiusRow()
     QCOMPARE(shot2.Y(), 806);
     QCOMPARE(shot2.shotTime(), QTime(16, 46, 55, 840));
     QVERIFY(shot2.isInnerTen() == false);
+    QCOMPARE(shot2.isCompetitionShot(), true);
+    QCOMPARE(shot2.shotOrigin(), Lask::Sius);
 
     QString siusRow3 = "_SHOT;4;5;4304;60;24;16:46:23.03;3;31;512;106;0;0;7;-0.00242729;-0.00144642;900;0;0;655.35;170206441;60;449;0";
     Lask shot3(siusRow3);
@@ -166,12 +176,14 @@ void LaskTest::test_createShotFromSiusRow()
     QCOMPARE(shot3.Y(), -1446);
     QCOMPARE(shot3.shotTime(), QTime(16, 46, 23, 30));
     QVERIFY(shot3.isInnerTen() == true);
+    QCOMPARE(shot3.isCompetitionShot(), true);
+    QCOMPARE(shot3.shotOrigin(), Lask::Sius);
 }
 
 void LaskTest::test_equalsAndSet()
 {
     QTime currentTime = QTime::currentTime();
-    Lask shot1(103, -1236, 63579, false, currentTime);
+    Lask shot1(103, -1236, 63579, false, currentTime, false, Lask::ScoringMachine);
 
     QCOMPARE(shot1.get10Lask(), 103);
     QCOMPARE(shot1.X(), -1236);
@@ -179,6 +191,8 @@ void LaskTest::test_equalsAndSet()
     QVERIFY(!shot1.isInnerTen());
     QCOMPARE(shot1.shotTime(), currentTime);
     QVERIFY(!shot1.isEmpty());
+    QCOMPARE(shot1.isCompetitionShot(), false);
+    QCOMPARE(shot1.shotOrigin(), Lask::ScoringMachine);
 
     Lask shot2;
     shot2.set10Lask(103);
@@ -186,6 +200,8 @@ void LaskTest::test_equalsAndSet()
     shot2.setMmY("63.579");
     shot2.setInnerTen(false);
     shot2.setShotTime(currentTime);
+    shot2.setCompetitionShot(false);
+    shot2.setShotOrigin(Lask::ScoringMachine);
 
     QVERIFY(shot1.equals(shot2));
 
@@ -207,6 +223,8 @@ void LaskTest::test_json()
     QCOMPARE(json["shotY"].toInt(), -1042);
     QVERIFY(json["shotTime"].toString().compare(time.toString()) == 0);
     QCOMPARE(json["innerTen"].toBool(), true);
+    QCOMPARE(json["competitionShot"].toBool(), true);
+    QCOMPARE(json["shotOrigin"].toInt(), 0);
 }
 
 void LaskTest::test_shotTime()
@@ -230,6 +248,12 @@ void LaskTest::test_getShotValues()
     QCOMPARE(shot.getILask(), 5);
     QCOMPARE(shot.getSLask(), "5,6");
     QCOMPARE(shot.get10Lask(), 56);
+
+    Lask shot2(0, 63477, -10462, false, QTime::currentTime());
+
+    QCOMPARE(shot2.getILask(), 0);
+    QCOMPARE(shot2.getSLask(), "0,0");
+    QCOMPARE(shot2.get10Lask(), 0);
 }
 
 void LaskTest::test_setShotValues()

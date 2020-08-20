@@ -5,13 +5,15 @@ Lask::Lask()
     clear();
 }
 
-Lask::Lask(int shot10Times, int x, int y, bool innerTen, QTime shotTime)
+Lask::Lask(int shot10Times, int x, int y, bool innerTen, QTime shotTime, bool competitionShot, OriginType shotOrigin)
 {
-    lask = shot10Times;
+    m_lask = shot10Times;
     m_x = x;
     m_y = y;
     m_innerTen = innerTen;
     m_shotTime = shotTime;
+    m_competitionShot = competitionShot;
+    m_shotOrigin = shotOrigin;
 }
 
 Lask::Lask(QString siusRow)
@@ -34,12 +36,16 @@ Lask::Lask(QJsonObject shotJson)
         m_y = shotJson["shotY"].toInt();
     m_shotTime = QTime::fromString(shotJson["shotTime"].toString());
     m_innerTen = shotJson["innerTen"].toBool();
+    if (shotJson["competitionShot"].isNull())
+        m_competitionShot = true;   // default is true for backwards compatibility
+    else m_competitionShot = shotJson["competitionShot"].toBool();
+    m_shotOrigin = OriginType(shotJson["shotOrigin"].toInt());
 }
 
 void Lask::clear()
 {
     m_innerTen = false;
-    lask = -999;
+    m_lask = -999;
     m_shotTime = QTime();
     m_x = -999;
     m_y = -999;
@@ -47,11 +53,13 @@ void Lask::clear()
 
 bool Lask::equals(const Lask other) const
 {
-    if(lask == other.get10Lask()
+    if(m_lask == other.get10Lask()
             && m_innerTen == other.isInnerTen()
             && stringX().compare(other.stringX()) == 0
             && stringY().compare(other.stringY()) == 0
-            && m_shotTime.toString().compare(other.shotTime().toString()) == 0)
+            && m_shotTime.toString().compare(other.shotTime().toString()) == 0
+            && m_competitionShot == other.isCompetitionShot()
+            && m_shotOrigin == other.shotOrigin())
         return true;
     else
         return false;
@@ -59,26 +67,28 @@ bool Lask::equals(const Lask other) const
 
 int Lask::getILask() const
 {
-    if(lask == -999)
-        return lask;
-    return lask / 10;   // As shot value is kept multiplied with 10, then it needs to be divided, decimals will be cut off
+    if(m_lask == -999)
+        return m_lask;
+    return m_lask / 10;   // As shot value is kept multiplied with 10, then it needs to be divided, decimals will be cut off
 }
 
 QString Lask::getSLask() const
 {
-    if(lask == -999)
+    if(m_lask == -999)
         return "";  // If there is no shot value, empty string is returned
-    QString l = QString("%1").arg(lask);
-    l.insert(l.length() - 1,',');  // Comma needs to be added
+    QString l = QString("%1").arg(m_lask);
+    if (m_lask != 0)
+        l.insert(l.length() - 1,',');  // Comma needs to be added
+    else l = "0,0";
     return l;
 }
 
 int Lask::get10Lask() const
 {
-    return lask;
+    return m_lask;
 }
 
-bool Lask::calcIfInnerTen(int targetType, int x, int y)
+bool Lask::calcIfInnerTen(TargetType targetType, int x, int y)
 {
     //Calculate shot center distance for determing inner tens:
     if(x != -999 && y != -999){
@@ -105,6 +115,11 @@ bool Lask::calcIfInnerTen(int targetType, int x, int y)
     return false;
 }
 
+bool Lask::isCompetitionShot() const
+{
+    return m_competitionShot;
+}
+
 bool Lask::isInnerTen() const
 {
     return m_innerTen;
@@ -112,7 +127,7 @@ bool Lask::isInnerTen() const
 
 bool Lask::isEmpty()
 {
-    if(lask == -999 && m_x == -999 && m_y == -999)
+    if(m_lask == -999 && m_x == -999 && m_y == -999)
         return true;
     else return false;
 }
@@ -127,7 +142,12 @@ int Lask::Y() const
     return m_y;   // Returns nanometers
 }
 
-void Lask::setInnerTen(bool isInnerTen)
+void Lask::setCompetitionShot(const bool isCompetitionShot)
+{
+    m_competitionShot = isCompetitionShot;
+}
+
+void Lask::setInnerTen(const bool isInnerTen)
 {
     m_innerTen = isInnerTen;
 }
@@ -139,18 +159,18 @@ void Lask::setInnerTen(bool isInnerTen)
 
 void Lask::setLask(int l)
 {
-    lask = l * 10;  // Shot value is kept multiplied with 10
+    m_lask = l * 10;  // Shot value is kept multiplied with 10
 }
 
 void Lask::setLask(float l)
 {
-    lask = qRound(l * 10);  // Shot value is kept multiplied with 10
+    m_lask = qRound(l * 10);  // Shot value is kept multiplied with 10
 }
 
 bool Lask::setLask(QString l)
 {
     if(l.isEmpty()){
-        lask = -999;
+        m_lask = -999;
         return true;
     }
 
@@ -165,13 +185,13 @@ bool Lask::setLask(QString l)
         }
         flask = l.toFloat(&onnestus);
     }
-    lask = qRound(flask * 10);
+    m_lask = qRound(flask * 10);
     return onnestus;
 }
 
 void Lask::set10Lask(int l) // Shot value is kept multiplied with 10
 {
-    lask = l;
+    m_lask = l;
 }
 
 bool Lask::set10Lask(QString l)
@@ -187,8 +207,13 @@ bool Lask::set10Lask(QString l)
         }
         ilask = l.toInt(&onnestus);
     }
-    lask = ilask;
+    m_lask = ilask;
     return onnestus;
+}
+
+void Lask::setShotOrigin(const OriginType newOrigin)
+{
+    m_shotOrigin = newOrigin;
 }
 
 void Lask::setShotTime(QTime newTime)
@@ -257,17 +282,25 @@ void Lask::setSiusShot(QString siusRow)
     setMX(rowParts[14]);
     setMY(rowParts[15]);
     setShotTime(QTime::fromString(rowParts[6]));
-    if(rowParts[9].toInt() >= 512)
+    if(rowParts[9].toInt() >= 512 && rowParts[9].toInt() <= 551)
         setInnerTen(true);
+    setShotOrigin(Sius);
 }
 
 void Lask::set(const Lask *l)
 {
     this->m_innerTen = l->isInnerTen();
-    this->lask = l->lask;
+    this->m_lask = l->m_lask;
     this->m_shotTime = l->shotTime();
     this->m_x = l->m_x;
     this->m_y = l->m_y;
+    this->m_competitionShot = l->isCompetitionShot();
+    this->m_shotOrigin = l->shotOrigin();
+}
+
+Lask::OriginType Lask::shotOrigin() const
+{
+    return m_shotOrigin;
 }
 
 float Lask::stringToFloat(QString s)
@@ -311,6 +344,8 @@ QJsonObject Lask::toJson() const
     shotJson["shotY"] = Y();
     shotJson["shotTime"] = shotTime().toString();   // FIXME milliseconds part is lost
     shotJson["innerTen"] = isInnerTen();
+    shotJson["competitionShot"] = isCompetitionShot();
+    shotJson["shotOrigin"] = shotOrigin();
     return shotJson;
 }
 

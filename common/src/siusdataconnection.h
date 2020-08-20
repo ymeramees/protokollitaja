@@ -12,6 +12,8 @@
 #include <QProgressDialog>
 #include <QCoreApplication>
 
+#include "siusshotdata.h"
+
 class SiusDataConnection : public QWidget
 {
     Q_OBJECT
@@ -21,7 +23,8 @@ public:
 
 signals:
     void disconnectedFromSius(int socketIndex);
-    void linesRead(QStringList siusInfoLines, int socketIndex);
+//    void linesRead(QStringList siusInfoLines, int socketIndex);
+    void shotRead(SiusShotData shotData);
     void statusInfo(QString statusInfo);
 
 public slots:
@@ -46,6 +49,7 @@ private:
     QTcpSocket *siusDataSocket;
     QTextStream *log;
     QTimer *progressTimer;
+    static std::optional<SiusShotData> extractShotData(QString totalRow, QString shotRow, int socketIndex, QTextStream *log);
 
     friend class SiusDataConnectionTest;
 

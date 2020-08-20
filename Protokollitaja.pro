@@ -5,7 +5,9 @@
 #-------------------------------------------------
 TEMPLATE = subdirs
 
+CONFIG += c++17
+
 SUBDIRS += protokollitaja \
     protolehelugeja \
-    protofinaal \
+#    protofinaal \
     common

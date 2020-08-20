@@ -118,7 +118,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                     kllData.lastCompetitorId = addCompetitor(kllData.tabWidget, kllData.lastCompetitorId);
                 }
 
-                // FIXME To be refactored for reading full competition with this class, currently supports only importing
+                // TODO To be refactored for reading full competition with this class, currently supports only importing
 //                connect(sheet, SIGNAL(uuendaLiikmeid()), this, SLOT(uuendaLiikmeteKast()));
 //                connect(sheet, SIGNAL(uuendaVoistkondi()), this, SLOT(uuendaVoistkondi()));
 //                connect(sheet, SIGNAL(muudatus()), this, SLOT(muudaSalvestamist()));
@@ -245,7 +245,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                     sheet->uusLaskur(0);   // First add competitor with ID 0, so it can be later determined if correct ID was read from the file
                 }
 
-                // FIXME To be refactored for reading full competition with this class, currently supports only importing
+                // TODO To be refactored for reading full competition with this class, currently supports only importing
 //                connect(sheet, SIGNAL(uuendaLiikmeid()), this, SLOT(uuendaLiikmeteKast()));
 //                connect(sheet, SIGNAL(uuendaVoistkondi()), this, SLOT(uuendaVoistkondi()));
 //                connect(sheet, SIGNAL(muudatus()), this, SLOT(muudaSalvestamist()));

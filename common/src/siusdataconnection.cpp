@@ -82,6 +82,77 @@ void SiusDataConnection::disconnectFromSius()
     emit disconnectedFromSius(m_index);
 }
 
+std::optional<SiusShotData> SiusDataConnection::extractShotData(QString totalRow, QString shotRow, int socketIndex, QTextStream *log)
+{
+    QStringList totalRowParts = totalRow.split(';');
+    QStringList previousRowParts = shotRow.split(';');
+    if (totalRowParts.length() < 13){
+        return std::nullopt;  // Probably the event's last total row, which can be ignored
+    } else if (previousRowParts.length() < 16){
+        *log << QTime::currentTime().toString("hh:mm:ss") << " #ERROR: Too few fields in shot row: " << shotRow;
+        return std::nullopt;
+    }
+
+    bool ok;
+    SiusShotData shotData;
+
+    int previousId = previousRowParts[3].toInt(&ok);
+    if (!ok){
+        *log << QTime::currentTime().toString("hh:mm:ss") << " #ERROR: Unable to extract id from shot row: " << shotRow;
+        return std::nullopt;
+    }
+
+    int currentId = totalRowParts[3].toInt(&ok);
+    if (ok)
+        shotData.id = currentId;
+    else {
+        *log << QTime::currentTime().toString("hh:mm:ss") << " #ERROR: Unable to extract id from row: " << totalRow;
+        return std::nullopt;
+    }
+
+    if (currentId != previousId){
+        *log << QTime::currentTime().toString("hh:mm:ss") << " #ERROR: Competitor Id's do not match: " << currentId << " != " << previousId;
+        return std::nullopt;
+    }
+
+    int shotType = previousRowParts[9].toInt(&ok);
+    if (!ok){
+        *log << QTime::currentTime().toString("hh:mm:ss") << " #ERROR: Unable to extract shot type (competition/sighters) from row: " << shotRow;
+        return std::nullopt;
+    }
+
+    int shotNo = previousRowParts[13].toInt(&ok);
+    if (ok)
+        shotData.siusShotNo = shotNo;
+    else {
+        *log << QTime::currentTime().toString("hh:mm:ss") << " #ERROR: Unable to extract shot number from row: " << shotRow;
+        return std::nullopt;
+    }
+
+    Lask shot(shotRow);
+
+    QVector<int> sighterShotTypes = {32, 36, 37, 39, 544, 551, 1060};
+    QVector<int> competitionShotTypes = {0, 4, 5, 7, 512, 515, 519, 1028, 1029, 1036, 2304};
+
+    if (competitionShotTypes.contains(shotType))
+        shot.setCompetitionShot(true);
+    else if (sighterShotTypes.contains(shotType))
+        shot.setCompetitionShot(false);
+    else {
+        *log << QTime::currentTime().toString("hh:mm:ss") << " #ERROR: Unknown shot type in shot row: " << shotRow;
+        if( totalRowParts[6] == "0")
+            shot.setCompetitionShot(false);
+        else
+            shot.setCompetitionShot(true);
+        // TODO Send unknown new shot type to api server
+    }
+
+    shotData.shot = shot;
+    shotData.socketIndex = socketIndex;
+
+    return  std::optional<SiusShotData>{shotData};
+}
+
 int SiusDataConnection::port() const
 {
     return m_port;
@@ -89,23 +160,15 @@ int SiusDataConnection::port() const
 
 void SiusDataConnection::readFromSius()
 {
-    if(siusDataSocket->bytesAvailable() > 5 || siusBuffer.length() > 0){
-        QStringList lines;
+    if(siusDataSocket->bytesAvailable() > 0 || siusBuffer.length() > 0){
+//        QStringList lines;
         progress->setLabelText(tr("SiusDatast andmete vastuvõtt..."));
 
-        while(siusDataSocket->bytesAvailable() > 2){
+        while(siusDataSocket->bytesAvailable() > 0){
           siusBuffer.append(siusDataSocket->readAll());  //Start of line 5f, end 0d 0a
           emit statusInfo(tr("Saabus info, buffer.length(): %1").arg(siusBuffer.length()));
 
         }
-//    QFile file("siusData.txt");
-//    if (file.open(QFile::ReadOnly)){
-//        siusDatast = file.readAll();
-//        QString rida;
-//    }
-
-//        logi->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append); //Saabunud muudatuste ja laskude logifail
-//        QTextStream logiValja(logi);
 
         while(siusBuffer.contains('_')){
 
@@ -136,12 +199,25 @@ void SiusDataConnection::readFromSius()
             if(verbose)
                 QTextStream(stdout) << "SiusDataConnection::readFromSius() " << m_index << ": " << row << endl;
 
-            if(!row.contains('_')){
-                *log << QTime::currentTime().toString("hh:mm:ss") << " #break\n";
-                break; //Double check not to continue with pointless row
-            }
             *log << QTime::currentTime().toString("hh:mm:ss") << " #rida: " << row;
-            lines.append(row);
+
+            static QString previousRow;
+
+            if(row.startsWith("_TOTL") && !previousRow.isEmpty()){
+//                *log << QTime::currentTime().toString("hh:mm:ss") << " #break\n";
+//                break; //Double check not to continue with pointless row
+//            }
+//                *log << QTime::currentTime().toString("hh:mm:ss") << " #rida: " << row;
+//            lines.append(row);
+                std::optional<SiusShotData> shotData = extractShotData(row, previousRow, m_index, log);
+                if (shotData.has_value())
+                    emit shotRead(shotData.value());
+
+                previousRow.clear();
+
+            } else if (row.startsWith("_SHOT")){
+                previousRow = row;
+            }
 
             QCoreApplication::processEvents();
         }
@@ -150,8 +226,8 @@ void SiusDataConnection::readFromSius()
             QTimer::singleShot(170, this, SLOT(readFromSius()));
         }
 
-        if(lines.size() > 0)
-            emit linesRead(lines, m_index);
+//        if(lines.size() > 0)
+//            emit linesRead(lines, m_index);
     }
 }
 

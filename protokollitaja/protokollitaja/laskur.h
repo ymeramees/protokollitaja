@@ -20,6 +20,7 @@
 #include <QTimer>
 
 #include "lisalaskudeaken.h"
+#include "siusshotdata.h"
 #include "laskudeaken.h"
 #include "andmebaas.h"
 #include "lask.h"
@@ -68,7 +69,19 @@ public:
 	QPushButton *lisaLNupp;
 	QTimer *arvutaja;
 	LisaLaskudeAken *lisaAken;
-    Laskur(Andmebaas*, int, int, int, bool*, bool*, int, int*, QString *eventType, int ls = 10, QWidget *parent = nullptr);
+    Laskur(
+            Andmebaas* andmebaas,
+            int seeriateArv,
+            int vahesummadeSamm,
+            int abi,
+            bool *kirjutusabi,
+            bool *kumnendikega,
+            int id,
+            int *jarjestamine,
+            QString *eventType,
+            int laskudeArv,
+            QWidget *parent = nullptr
+            );
     ~Laskur();
 //    bool operator<(const Laskur &l) const;
     QString* getEventType() const;
@@ -81,13 +94,12 @@ public:
 
 public slots:
     int competitionStage() const;
-    bool isCompetitionStarted() const;
     bool isFinished() const;
     void liida(); //laskude summeerimine
     void nextCompetitionStage();
     QString previousSiusRow() const;
+    bool readSiusShot(SiusShotData shotData);
     void resetCompetitionStage();
-    void setCompetitionStarted(bool competitionStatus);
     void setPreviousSiusRow(QString row);
     void setSiusConnectionIndex(int newIndex);
     int siusConnectionIndex() const;
@@ -118,7 +130,6 @@ signals:
     void sifrimuutus();
 
 private:
-    bool m_competitionStarted;  //Has competition started
     int m_competitionStage; //From which competition stage (position, run or half) the incoming shots are
 //    bool m_finished;    // If last shot value exists, then competitor has finished
     int m_siusConnectionIndex = -1;   //Which SiusData connection is used for this competitor
@@ -130,6 +141,8 @@ private:
     QString m_previousSiusRow;
     LaskudeAken *laskudeAken;
     void contextMenuEvent(QContextMenuEvent *event);
+    int findShotFromPreviousStages(const SiusShotData shotData) const;
+    void setCompetitionStage(int newStage);
 };
 
 #endif // LASKUR_H

@@ -10,6 +10,8 @@ CONFIG += qt warn_on testcase
 TEMPLATE = app
 
 SOURCES += *.cpp \
-    ../../src/siusdataconnection.cpp
+    ../../src/siusdataconnection.cpp \
+    ../../src/lask.cpp
 
-HEADERS += ../../src/siusdataconnection.h
+HEADERS += ../../src/siusdataconnection.h \
+    ../../src/lask.h

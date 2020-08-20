@@ -222,7 +222,7 @@ private slots:
     void prindi();
     void prindi2();
     void readShotInfo(QString data, int socketIndex);
-    void readSiusInfo(QStringList lines, int socketIndex);
+    void readSiusInfo(SiusShotData shotData);
     void reasta();
     void reastaP();
     void reastaR();

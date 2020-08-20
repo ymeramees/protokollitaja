@@ -50,7 +50,7 @@ void SiusDataConnections::connectToSiusData()
 
         sockets.append(socket);
 //        ui->verticalLayout->addItem(socket);
-        connect(socket, &SiusDataConnection::linesRead, this, &SiusDataConnections::linesRead);
+        connect(socket, &SiusDataConnection::shotRead, this, &SiusDataConnections::shotRead);
         connect(socket, &SiusDataConnection::statusInfo, this, &SiusDataConnections::statusInfo);
         connect(socket, &SiusDataConnection::disconnectedFromSius, this, &SiusDataConnections::disconnectedFromSius);
     }

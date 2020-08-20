@@ -13,16 +13,17 @@ class Lask
 {
 
 public:
+    enum TargetType {Muu = 0, Ohupuss = 1, Ohupustol = 2, Sportpuss = 3, Spordipustol = 4, Puss = 5, Pustol = 6};
+    enum OriginType {Manual = 0, ScoringMachine = 1, Sius = 2};
     Lask();
-    Lask(int shot10Times, int x = -999, int y = -999, bool innerTen = false, QTime shotTime = QTime());
+    Lask(int shot10Times, int x = -999, int y = -999, bool innerTen = false, QTime shotTime = QTime(), bool competitionShot = true, OriginType shotOrigin = Manual);
     Lask(QString siusRow);
     Lask(QJsonObject);
     void set(const Lask *l);
     bool isEmpty();
 
 public:
-    enum {Muu = 0, Ohupuss = 1, Ohupustol = 2, Sportpuss = 3, Spordipustol = 4, Puss = 5, Pustol = 6};
-    static bool calcIfInnerTen(int targetType, int x, int y);
+    static bool calcIfInnerTen(TargetType targetType, int x, int y);
 
     void clear();
     bool equals(const Lask other) const;
@@ -30,11 +31,13 @@ public:
 //    float getFLask() const;   // No point of having this fn, as result is often wrong
     QString getSLask() const;
     int get10Lask() const;
+    bool isCompetitionShot() const;
     bool isInnerTen() const;
     int X() const;
     int Y() const;
 //    QPoint XY();
-    void setInnerTen(bool isInnerTen);
+    void setCompetitionShot(const bool isCompetitionShot);
+    void setInnerTen(const bool isInnerTen);
     void setLask(int);
     void setLask(float);
     bool setLask(QString);
@@ -51,6 +54,8 @@ public:
     void setNanoY(QString);
     void setNanoXY(QPoint);
     void setSiusShot(QString siusRow);
+    void setShotOrigin(const OriginType newOrigin);
+    OriginType shotOrigin() const;
     QString stringX() const;
     QString stringY() const;
     QTime shotTime() const;
@@ -59,8 +64,10 @@ public:
     bool operator ==(const Lask other) const;
 
 private:
-    int lask;   // Value as multiplied with 10 (10,5 -> 105)
+    int m_lask;   // Value as multiplied with 10 (10,5 -> 105)
+    bool m_competitionShot = true;
     bool m_innerTen;
+    OriginType m_shotOrigin = Manual;
     int m_x;    // Values in nanometers, to keep it as int, but have 3 decimal point accuracy with millimeters
     int m_y;    // Same here
     QTime m_shotTime;
