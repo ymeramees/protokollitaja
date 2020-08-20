@@ -1,9 +1,10 @@
 # Protokollitaja
-ISSF Shooting sport ranking and results display software. Main program and a server from a set of programs.
+ISSF Shooting sport ranking and results display software suite. Now monorepo for previously separate programs:
+* [Protokollitaja](protokollitaja/README.md) - Main ranking and results display program and a server from a set of programs.
+* [Protofinaal](protofinaal) - New implementation of [QFinaal](https://github.com/ymeramees/qfinaal). In a very early stage at the moment.
+* Others will follow
 
-Unfortunately, main part of the code is quite ugly, as this project was started in 2007 when I had just started learning Qt and programming in general. Quality of the code has (hopefully) improved over the years.
-
-As it was initially developed for national competitions, the program is in Estonian language. Adding translation framework and translation to English is planned sometime in future.
+For more details about each program, see their respective readme files.
 
 ### Main Features
 * Most ISSF shooting sport diciplines included
@@ -24,13 +25,12 @@ As it was initially developed for national competitions, the program is in Eston
 ## Built With
 
 * [Qt](http://www.qt-project.org)
-* Depends on [QFinaal](https://github.com/ymeramees/qfinaal) for building. Make sure to clone QFinaal next to Protokollitaja folder.
 
 ### Installing/Deploying
 On Windows, make sure to copy needed dll's from your Qt installation into respective folders (platforms, printsupport) into the same directory where executable is. This is also needed when building/running from Qt Creator.
 On Linux, this is not needed.
 
-In addition, Data folder is needed. Program will search for autocomplete databases from there. If this folder does not exist it will be created, but autocomplete will not work.
+In addition, Data folder is needed for Protokollitaja. Program will search for autocomplete databases from there. If this folder does not exist it will be created, but autocomplete will not work.
 
 ## License
 
