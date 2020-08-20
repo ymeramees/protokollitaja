@@ -1,16 +1,16 @@
 ﻿#ifndef VERSION_H
 #define VERSION_H
 
-// Changed 08.02.2020 - after which there has been a release, so need to update
-#define VER_FILEVERSION             0,7,16,0
-#define VER_FILEVERSION_STR         "0.7.16\0"
+// Changed 20.08.2020 - after which there has been a release, so need to update
+#define VER_FILEVERSION             0,8,0,0
+#define VER_FILEVERSION_STR         "0.8.0\0"
 
-#define VER_PRODUCTVERSION          0,7,16,0
-#define VER_PRODUCTVERSION_STR      "0.7.16\0"
+#define VER_PRODUCTVERSION          0,8,0,0
+#define VER_PRODUCTVERSION_STR      "0.8.0\0"
 
 #define VER_COMPANYNAME_STR         "Ymeramees"
-#define VER_FILEDESCRIPTION_STR     "Protokollitaja 0.7 Beta"
-#define VER_INTERNALNAME_STR        "Protokollitaja 0.7 Beta"
+#define VER_FILEDESCRIPTION_STR     "Protokollitaja 0.8 Beta"
+#define VER_INTERNALNAME_STR        "Protokollitaja 0.8 Beta"
 #define VER_LEGALCOPYRIGHT_STR      "Copyright © 2020 Ymeramees"
 #define VER_LEGALTRADEMARKS1_STR    "All Rights Reserved"
 #define VER_LEGALTRADEMARKS2_STR    VER_LEGALTRADEMARKS1_STR
