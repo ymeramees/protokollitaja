@@ -1,11 +1,19 @@
-#include "siusdataconnection.h"
+﻿#include "siusdataconnection.h"
 
 #define CR 0x0d
 #define LF 0x0a
 
 extern bool verbose;
 
-SiusDataConnection::SiusDataConnection(QString address, int port, int socketIndex, QFile *siusLog, QTextStream *log, QWidget *parent) : QWidget(parent)
+SiusDataConnection::SiusDataConnection(
+        QString address,
+        int port,
+        int socketIndex,
+        QFile *siusLog,
+        QTextStream *log,
+        CommonSettings *settings,
+        QWidget *parent
+        ) : QWidget(parent)
 {
     if(verbose)
         QTextStream(stdout) << "SiusDataConnection()" << endl;
@@ -14,6 +22,7 @@ SiusDataConnection::SiusDataConnection(QString address, int port, int socketInde
     m_port = port;
     this->siusLog = siusLog;
     this->log = log;
+    m_settings = settings;
 
     if(verbose)
         QTextStream(stdout) << "connectToSiusData()2" << endl;
@@ -82,7 +91,13 @@ void SiusDataConnection::disconnectFromSius()
     emit disconnectedFromSius(m_index);
 }
 
-std::optional<SiusShotData> SiusDataConnection::extractShotData(QString totalRow, QString shotRow, int socketIndex, QTextStream *log)
+std::optional<SiusShotData> SiusDataConnection::extractShotData(
+        QString totalRow,
+        QString shotRow,
+        int socketIndex,
+        QTextStream *log,
+        CommonSettings *settings
+        )
 {
     QStringList totalRowParts = totalRow.split(';');
     QStringList previousRowParts = shotRow.split(';');
@@ -131,12 +146,9 @@ std::optional<SiusShotData> SiusDataConnection::extractShotData(QString totalRow
 
     Lask shot(shotRow);
 
-    QVector<int> sighterShotTypes = {32, 36, 37, 39, 544, 551, 1060};
-    QVector<int> competitionShotTypes = {0, 4, 5, 7, 512, 515, 519, 1028, 1029, 1036, 2304};
-
-    if (competitionShotTypes.contains(shotType))
+    if (settings->competitionShotTypes().contains(shotType))
         shot.setCompetitionShot(true);
-    else if (sighterShotTypes.contains(shotType))
+    else if (settings->sighterShotTypes().contains(shotType))
         shot.setCompetitionShot(false);
     else {
         *log << QTime::currentTime().toString("hh:mm:ss") << " #ERROR: Unknown shot type in shot row: " << shotRow;
@@ -209,7 +221,7 @@ void SiusDataConnection::readFromSius()
 //            }
 //                *log << QTime::currentTime().toString("hh:mm:ss") << " #rida: " << row;
 //            lines.append(row);
-                std::optional<SiusShotData> shotData = extractShotData(row, previousRow, m_index, log);
+                std::optional<SiusShotData> shotData = extractShotData(row, previousRow, m_index, log, m_settings);
                 if (shotData.has_value())
                     emit shotRead(shotData.value());
 

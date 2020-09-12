@@ -94,6 +94,7 @@ public:
 
 public slots:
     int competitionStage() const;
+    void deleteAllShots(); // For testing purposes
     bool isFinished() const;
     void liida(); //laskude summeerimine
     void nextCompetitionStage();

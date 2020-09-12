@@ -13,12 +13,21 @@
 #include <QCoreApplication>
 
 #include "siusshotdata.h"
+#include "commonsettings.h"
 
 class SiusDataConnection : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SiusDataConnection(QString address, int port, int socketIndex, QFile *siusLog, QTextStream *log, QWidget *parent = nullptr);
+    explicit SiusDataConnection(
+            QString address,
+            int port,
+            int socketIndex,
+            QFile *siusLog,
+            QTextStream *log,
+            CommonSettings *settings,
+            QWidget *parent = nullptr
+            );
     ~SiusDataConnection();
 
 signals:
@@ -39,6 +48,7 @@ public slots:
 private:
     int m_index;
     int m_port;
+    CommonSettings *m_settings = nullptr;
     QFile *siusLog;
     QHBoxLayout *row;
     QLabel *addressLabel;
@@ -49,7 +59,13 @@ private:
     QTcpSocket *siusDataSocket;
     QTextStream *log;
     QTimer *progressTimer;
-    static std::optional<SiusShotData> extractShotData(QString totalRow, QString shotRow, int socketIndex, QTextStream *log);
+    static std::optional<SiusShotData> extractShotData(
+            QString totalRow,
+            QString shotRow,
+            int socketIndex,
+            QTextStream *log,
+            CommonSettings *settings
+            );
 
     friend class SiusDataConnectionTest;
 

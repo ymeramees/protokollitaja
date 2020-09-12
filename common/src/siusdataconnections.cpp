@@ -3,13 +3,18 @@
 
 extern bool verbose;
 
-SiusDataConnections::SiusDataConnections(QFile *siusLog, QTextStream *log, QWidget *parent) :
-    QDialog(parent),
+SiusDataConnections::SiusDataConnections(
+        QFile *siusLog,
+        QTextStream *log,
+        CommonSettings *settings,
+        QWidget *parent
+        ) : QDialog(parent),
     ui(new Ui::SiusDataConnections)
 {
     ui->setupUi(this);
     this->siusLog = siusLog;
     this->log = log;
+    m_settings = settings;
 
     connect(ui->connectButton, &QPushButton::clicked, this, &SiusDataConnections::connectToSiusData);
 }
@@ -40,7 +45,15 @@ void SiusDataConnections::connectToSiusData()
         QTextStream(stdout) << "connectToSiusData(): existing = " << existing << endl;
 
     if(!existing){
-        SiusDataConnection *socket = new SiusDataConnection(ui->addressEdit->text(), ui->portEdit->text().toInt(), sockets.length(), siusLog, log, this);
+        SiusDataConnection *socket = new SiusDataConnection(
+                    ui->addressEdit->text(),
+                    ui->portEdit->text().toInt(),
+                    sockets.length(),
+                    siusLog,
+                    log,
+                    m_settings,
+                    this
+                    );
         if(vBox == nullptr){
             vBox = new QVBoxLayout;
             vBox->addStretch(1);

@@ -36,6 +36,7 @@
 #include "algusevalik.h"
 #include "valikkast.h"
 #include "seadedkast.h"
+#include "commonsettings.h"
 #include "sifriseade.h"
 #include "importaken.h"
 #include "tulemuseaken.h"
@@ -173,6 +174,13 @@ public:
     //bool lessThan(const Laskur*, const Laskur*);
     QJsonObject toExportJson();
 
+#ifdef PROOV    // Functionality for testing purposes
+    QAction *deleteAllShotsAct;
+
+private slots:
+    void deleteAllShots();
+#endif
+
 private slots:
     void algseaded();   //Tekitab või taastab algsed seaded
     void autosave();
@@ -259,6 +267,7 @@ private slots:
 private:
     QNetworkAccessManager *restClient = nullptr;
     QProgressDialog *progress;  //Näitab, et SiusDatast alles andmed tulevad
+    CommonSettings m_settings;
     QString webCompetitionId = "";
     QString m_restHeaderData = "";
     QTimer *progressTimer;  //Timer, et progressi aken mõne aja pärast kinni panna

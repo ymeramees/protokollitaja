@@ -14,7 +14,12 @@ class SiusDataConnections : public QDialog
     Q_OBJECT
 
 public:
-    explicit SiusDataConnections(QFile *siusLog, QTextStream *log, QWidget *parent = 0);
+    explicit SiusDataConnections(
+            QFile *siusLog,
+            QTextStream *log,
+            CommonSettings *settings,
+            QWidget *parent = 0
+            );
     ~SiusDataConnections();
 
 //public slots:
@@ -22,6 +27,7 @@ public:
 
 private:
     Ui::SiusDataConnections *ui;
+    CommonSettings *m_settings = nullptr;
     QFile *siusLog = nullptr;
     QList<SiusDataConnection*> sockets;
     QTextStream *log = nullptr;

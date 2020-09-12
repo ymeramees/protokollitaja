@@ -220,6 +220,17 @@ void Laskur::contextMenuEvent(QContextMenuEvent *event)
     popup->exec(event->globalPos());
 }
 
+void Laskur::deleteAllShots()
+{
+    for(int i = 0; i < lasud.length(); i++)
+        for(Lask *shot : lasud.at(i))
+            shot->clear();
+
+    for(QLineEdit *serie : seeriad)
+        serie->setText("");
+    liida();
+}
+
 void Laskur::enterVajutatud()
 {
     emit enter(jrkArv);
