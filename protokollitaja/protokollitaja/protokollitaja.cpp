@@ -11,7 +11,6 @@
 /// 2. Sisekümneid ei märgistata
 /// 3. Kll faili lugeja-kirjutaja testide tegemine
 ///
-/// Pooleli: CommonSettings testid ja kui settings faili ei leita, siis kirjutatakse algseaded 0'dega üle
 ///
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1515,7 +1514,7 @@ void Protokollitaja::import()
         for(int i = 0; i < tabWidget->count(); i++)
                 importAken->ui.sakiBox->addItem(tabWidget->tabText(i));
         importAken->ui.sakiBox->setCurrentIndex(tabWidget->currentIndex());
-        if(importAken->exec() == QDialog::Accepted){
+        if(importAken->exec() == QDialog::Accepted && importAken->leht != nullptr){
                 Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(importAken->
                                 ui.sakiBox->currentIndex()))->widget());
                 if(leht->voistk){
@@ -1526,22 +1525,6 @@ void Protokollitaja::import()
                         if(importAken->leht->laskurid[i]->linnuke->isChecked()){
                                 leht->uusLaskur(++laskuriId);
                                 leht->laskurid[leht->laskurid.count() - 1]->set(importAken->leht->laskurid[i]);
-//                                leht->laskurid[leht->laskurid.count() - 1]->eesNimi->setText(importAken->leht->
-//                                                laskurid[i]->eesNimi->text());
-//                                leht->laskurid[leht->laskurid.count() - 1]->perekNimi->setText(importAken->leht->
-//                                                laskurid[i]->perekNimi->text());
-//                                leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->setText(importAken->leht->
-//                                                laskurid[i]->sunniAasta->text());
-//                                leht->laskurid[leht->laskurid.count() - 1]->klubi->setText(importAken->leht->laskurid[i]->
-//                                                klubi->text());
-//                                for(int j = 0; j < importAken->leht->laskurid[i]->seeriateArv && j < leht->seeriateArv; j++)
-//                                        leht->laskurid[leht->laskurid.count() - 1]->seeriad[j]->setText(importAken->leht->
-//                                                        laskurid[i]->seeriad[j]->text());
-//                                leht->laskurid[leht->laskurid.count() - 1]->summa->setText(importAken->leht->laskurid[i]->
-//                                                summa->text());
-//                                leht->laskurid[leht->laskurid.count() - 1]->markus->setText(importAken->leht->laskurid[i]->
-//                                                markus->text());
-//                                leht->laskurid[leht->laskurid.count() - 1]->liida();
                         }
                 }
                 voibSulgeda = false;
@@ -4334,49 +4317,14 @@ void Protokollitaja::receivedVersionInfo(bool updateExists, QString versionStrin
         if(QMessageBox::information(
                     this,
                     "Teade",
-                    QString("Programmist on saadaval uuem versioon. Kas soovite uuendada?\n\n"
-                            "Praegune versioon: %1\nUus versioon: %2").arg(versioon).arg(versionString),
+                    QString("Programmist on saadaval uuem versioon. Praegune: %1\nUus versioon: %2\n\n"
+                            "Uus versioon on saadaval Drive'is: "
+                            "https://drive.google.com/drive/folders/1SpWxxP-E12XytEFT0VmYz_QpLLFzq1nd\n\n"
+                            "Kas soovite selle kausta avada?"
+                            ).arg(versioon).arg(versionString),
                     QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok
                 ){
-            protoUuendaja = new QProcess(); //Uuendaja programmi protsess
-            protoUuendaja->start(qApp->applicationDirPath() + "/Protouuendaja", QStringList() << "8946Protokollitajast");
-            connect(protoUuendaja, SIGNAL(started()), this, SLOT(close())); //Et uuendamine toimuda saaks, on vaja Protokollitaja sulgeda
-
-            if(!protoUuendaja->waitForStarted(5000)){   //Kontrollimaks, kas õnnestub käivitada
-//                switch(protoUuendaja.state()){
-//                case QProcess::NotRunning : {
-//                    QMessageBox::critical(this, "Protokollitaja", "QProcess::NotRunning", QMessageBox::Ok);
-//                    break;
-//                }
-//                case QProcess::Starting : {
-//                    QMessageBox::critical(this, "Protokollitaja", "QProcess::Starting", QMessageBox::Ok);
-//                    break;
-//                }
-//                case QProcess::Running : {
-//                    QMessageBox::critical(this, "Protokollitaja", "QProcess::Running", QMessageBox::Ok);
-//                    break;
-//                }
-//                default : QMessageBox::critical(this, "Protokollitaja", "QProcess::Info puudub", QMessageBox::Ok);
-//                }
-                switch(protoUuendaja->error()){
-                case QProcess::FailedToStart : {
-                    if(protoUuendaja->errorString() == "No such file or directory")
-                        QMessageBox::critical(this, "Viga", tr("Ei leia Protouuendajat! Programmi uuendamine ei ole võimalik!"), QMessageBox::Ok);
-                    else
-                        QMessageBox::critical(this, "Viga", tr("Protouuendaja käivitamine ei õnnestunud!\n\n%1").arg(protoUuendaja->errorString()), QMessageBox::Ok);
-                    break;
-                }
-                case QProcess::Crashed : {
-                    QMessageBox::critical(this, "Viga", tr("Protouuendaja programm jooksis käivitamisel kokku!\n\n%1").arg(protoUuendaja->errorString()), QMessageBox::Ok);
-                    break;
-                }
-                case QProcess::Timedout : {
-                    QMessageBox::critical(this, "Viga", tr("Protouuendaja käivitamine ei õnnestunud! Võttis liiga palju aega!\n\n%1").arg(protoUuendaja->errorString()), QMessageBox::Ok);
-                    break;
-                }
-                default : QMessageBox::critical(this, "Viga", tr("Protouuendaja käivitamine ei õnnestunud! Põhjus teadmata!\n\n%1").arg(protoUuendaja->errorString()), QMessageBox::Ok);
-                }
-            }
+            QDesktopServices::openUrl(QUrl("https://drive.google.com/drive/folders/1SpWxxP-E12XytEFT0VmYz_QpLLFzq1nd"));
         }
     } else if(!autoUuendus){
         QMessageBox::information(this, "Teade", tr("Teil on kõige uuem versioon programmist."), QMessageBox::Ok);
