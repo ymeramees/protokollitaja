@@ -91,6 +91,7 @@ public:
     QString getEventType();
 
 public slots:
+    void deleteAllShotsFromSelectedCompetitors();    // For testing purposes
 	void eemaldaLaskur();
     void idMuudatus(int, Laskur*);  //Edastab laskurist tulnud signaali
     void kontrolliKordusi();

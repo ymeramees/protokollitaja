@@ -14,6 +14,7 @@
 ///
 /////////////////////////////////////////////////////////////////////////////
 
+extern QString organization;
 extern QString programmiNimi;
 extern QString versioon;
 extern QString aasta;
@@ -22,7 +23,7 @@ extern bool verbose;
 //extern QDir asukoht;
 
 Protokollitaja::Protokollitaja(QWidget *parent)
-    : QMainWindow(parent)
+    : m_settings(programmiNimi.mid(0, programmiNimi.indexOf(' ')), "Protokollitaja conf"), QMainWindow(parent)
 {
     setWindowTitle(programmiNimi); // TODO uuendada nime
     setWindowIcon(QIcon(":/images/Protokollitaja.ico"));
@@ -193,6 +194,12 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         seiskaServerAct->setStatusTip(tr("Seiskab lehtede lugemise serveri"));
         connect(seiskaServerAct, SIGNAL(triggered()), this, SLOT(seiskaServer()));
 
+#ifdef PROOV
+        deleteAllShotsAct = new QAction(tr("Kustuta lasud"), this);
+        deleteAllShotsAct->setStatusTip(tr("Kustutab märgitud laskurite kõik lasud"));
+        connect(deleteAllShotsAct, SIGNAL(triggered()), this, SLOT(deleteAllShots()));
+#endif
+
         failMenu = menuBar()->addMenu("&Fail");
         failMenu->addAction(uusAct);
         failMenu->addAction(avaAct);
@@ -257,6 +264,11 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         abiMenu->addAction(naitaWAbiAct);
         abiMenu->addAction(programmistAct);
         abiMenu->addAction(kontrolliUuendusiAct);
+
+#ifdef PROOV
+        QMenu *testMenu = menuBar()->addMenu("&Testimine");
+        testMenu->addAction(deleteAllShotsAct);
+#endif
 
         (void) new QShortcut(Qt::Key_Escape, this, SLOT(close()));
         setStatusBar(statusBar());
@@ -565,6 +577,10 @@ void Protokollitaja::algseaded()    //Seadistab algsed väärtused kas programmi
     seaded->ui.sakid->clear();
 
     salvestaja->setInterval(300000);
+
+    m_settings.readSettings();
+    seaded->ui.competitionTypesEdit->setText(m_settings.competitionShotTypesString());
+    seaded->ui.sighterTypesEdit->setText(m_settings.sighterShotTypesString());
 }
 
 void Protokollitaja::autosave()
@@ -658,6 +674,15 @@ void Protokollitaja::closeEvent(QCloseEvent *event)
 //                    siusDataConnections
     }
 }
+
+#ifdef PROOV
+void Protokollitaja::deleteAllShots()
+{
+    Leht* seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->
+                    widget());
+    seeLeht->deleteAllShotsFromSelectedCompetitors();
+}
+#endif
 
 void Protokollitaja::eelvaade()
 {
@@ -1489,7 +1514,7 @@ void Protokollitaja::import()
         for(int i = 0; i < tabWidget->count(); i++)
                 importAken->ui.sakiBox->addItem(tabWidget->tabText(i));
         importAken->ui.sakiBox->setCurrentIndex(tabWidget->currentIndex());
-        if(importAken->exec() == QDialog::Accepted){
+        if(importAken->exec() == QDialog::Accepted && importAken->leht != nullptr){
                 Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(importAken->
                                 ui.sakiBox->currentIndex()))->widget());
                 if(leht->voistk){
@@ -1500,22 +1525,6 @@ void Protokollitaja::import()
                         if(importAken->leht->laskurid[i]->linnuke->isChecked()){
                                 leht->uusLaskur(++laskuriId);
                                 leht->laskurid[leht->laskurid.count() - 1]->set(importAken->leht->laskurid[i]);
-//                                leht->laskurid[leht->laskurid.count() - 1]->eesNimi->setText(importAken->leht->
-//                                                laskurid[i]->eesNimi->text());
-//                                leht->laskurid[leht->laskurid.count() - 1]->perekNimi->setText(importAken->leht->
-//                                                laskurid[i]->perekNimi->text());
-//                                leht->laskurid[leht->laskurid.count() - 1]->sunniAasta->setText(importAken->leht->
-//                                                laskurid[i]->sunniAasta->text());
-//                                leht->laskurid[leht->laskurid.count() - 1]->klubi->setText(importAken->leht->laskurid[i]->
-//                                                klubi->text());
-//                                for(int j = 0; j < importAken->leht->laskurid[i]->seeriateArv && j < leht->seeriateArv; j++)
-//                                        leht->laskurid[leht->laskurid.count() - 1]->seeriad[j]->setText(importAken->leht->
-//                                                        laskurid[i]->seeriad[j]->text());
-//                                leht->laskurid[leht->laskurid.count() - 1]->summa->setText(importAken->leht->laskurid[i]->
-//                                                summa->text());
-//                                leht->laskurid[leht->laskurid.count() - 1]->markus->setText(importAken->leht->laskurid[i]->
-//                                                markus->text());
-//                                leht->laskurid[leht->laskurid.count() - 1]->liida();
                         }
                 }
                 voibSulgeda = false;
@@ -1724,6 +1733,9 @@ qDebug() << "salvesta() leht->laskurid[" << i << "]->lasud[k].count() = " << leh
 
 void Protokollitaja::kirjutaSeaded()
 {
+    // New settings class
+    m_settings.writeSettings();
+
         QDir dir(qApp->applicationDirPath());
         if(!dir.cd("Data"))
                 dir.mkdir("Data");
@@ -2572,6 +2584,11 @@ void Protokollitaja::loeSeaded()
 #ifdef PROOV
     qDebug() << "loeseaded()";
 #endif
+
+    m_settings.readSettings();
+    seaded->ui.competitionTypesEdit->setText(m_settings.competitionShotTypesString());
+    seaded->ui.sighterTypesEdit->setText(m_settings.sighterShotTypesString());
+
     QFile algF(qApp->applicationDirPath() + "/Data/Seaded.ini");
     if(algF.open(QIODevice::ReadOnly | QIODevice::Text)){
             QTextStream sisse(&algF);
@@ -2918,6 +2935,10 @@ void Protokollitaja::naitaInfot()
 
 void Protokollitaja::naitaSeaded()
 {
+    // From new settings class
+    seaded->ui.sighterTypesEdit->setText(m_settings.sighterShotTypesString());
+    seaded->ui.competitionTypesEdit->setText(m_settings.competitionShotTypesString());
+
         seaded->ui.voistluseNimi->setText(voistluseNimi);
 //        seaded->voistluseNimi = voistluseNimi;
         seaded->ui.aegKohtEdit->setText(aegKoht);
@@ -4296,49 +4317,14 @@ void Protokollitaja::receivedVersionInfo(bool updateExists, QString versionStrin
         if(QMessageBox::information(
                     this,
                     "Teade",
-                    QString("Programmist on saadaval uuem versioon. Kas soovite uuendada?\n\n"
-                            "Praegune versioon: %1\nUus versioon: %2").arg(versioon).arg(versionString),
+                    QString("Programmist on saadaval uuem versioon. Praegune: %1\nUus versioon: %2\n\n"
+                            "Uus versioon on saadaval Drive'is: "
+                            "https://drive.google.com/drive/folders/1SpWxxP-E12XytEFT0VmYz_QpLLFzq1nd\n\n"
+                            "Kas soovite selle kausta avada?"
+                            ).arg(versioon).arg(versionString),
                     QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok
                 ){
-            protoUuendaja = new QProcess(); //Uuendaja programmi protsess
-            protoUuendaja->start(qApp->applicationDirPath() + "/Protouuendaja", QStringList() << "8946Protokollitajast");
-            connect(protoUuendaja, SIGNAL(started()), this, SLOT(close())); //Et uuendamine toimuda saaks, on vaja Protokollitaja sulgeda
-
-            if(!protoUuendaja->waitForStarted(5000)){   //Kontrollimaks, kas õnnestub käivitada
-//                switch(protoUuendaja.state()){
-//                case QProcess::NotRunning : {
-//                    QMessageBox::critical(this, "Protokollitaja", "QProcess::NotRunning", QMessageBox::Ok);
-//                    break;
-//                }
-//                case QProcess::Starting : {
-//                    QMessageBox::critical(this, "Protokollitaja", "QProcess::Starting", QMessageBox::Ok);
-//                    break;
-//                }
-//                case QProcess::Running : {
-//                    QMessageBox::critical(this, "Protokollitaja", "QProcess::Running", QMessageBox::Ok);
-//                    break;
-//                }
-//                default : QMessageBox::critical(this, "Protokollitaja", "QProcess::Info puudub", QMessageBox::Ok);
-//                }
-                switch(protoUuendaja->error()){
-                case QProcess::FailedToStart : {
-                    if(protoUuendaja->errorString() == "No such file or directory")
-                        QMessageBox::critical(this, "Viga", tr("Ei leia Protouuendajat! Programmi uuendamine ei ole võimalik!"), QMessageBox::Ok);
-                    else
-                        QMessageBox::critical(this, "Viga", tr("Protouuendaja käivitamine ei õnnestunud!\n\n%1").arg(protoUuendaja->errorString()), QMessageBox::Ok);
-                    break;
-                }
-                case QProcess::Crashed : {
-                    QMessageBox::critical(this, "Viga", tr("Protouuendaja programm jooksis käivitamisel kokku!\n\n%1").arg(protoUuendaja->errorString()), QMessageBox::Ok);
-                    break;
-                }
-                case QProcess::Timedout : {
-                    QMessageBox::critical(this, "Viga", tr("Protouuendaja käivitamine ei õnnestunud! Võttis liiga palju aega!\n\n%1").arg(protoUuendaja->errorString()), QMessageBox::Ok);
-                    break;
-                }
-                default : QMessageBox::critical(this, "Viga", tr("Protouuendaja käivitamine ei õnnestunud! Põhjus teadmata!\n\n%1").arg(protoUuendaja->errorString()), QMessageBox::Ok);
-                }
-            }
+            QDesktopServices::openUrl(QUrl("https://drive.google.com/drive/folders/1SpWxxP-E12XytEFT0VmYz_QpLLFzq1nd"));
         }
     } else if(!autoUuendus){
         QMessageBox::information(this, "Teade", tr("Teil on kõige uuem versioon programmist."), QMessageBox::Ok);
@@ -4893,6 +4879,10 @@ void Protokollitaja::uuendaLiikmeteNimekirja(int)
 
 void Protokollitaja::uuendaSeaded()
 {
+    // From new settings class
+    m_settings.setCompetitionShotTypes(seaded->ui.competitionTypesEdit->text());
+    m_settings.setSighterShotTypes(seaded->ui.sighterTypesEdit->text());
+
         voistluseNimi = seaded->ui.voistluseNimi->text();
         aegKoht = seaded->ui.aegKohtEdit->text();
         salvestaja->setInterval(seaded->ui.aegEdit->value() * 60000);
@@ -4959,6 +4949,7 @@ void Protokollitaja::uuendaSeaded()
                 }
         }
         voibSulgeda = false;
+        kirjutaSeaded();
 }
 
 void Protokollitaja::uuendaVoistkondi() //Uuendadakse võistkondade tulemusi enne ekraanil näitamist ja peale liikmete valiku kasti sulgemist
@@ -5114,7 +5105,12 @@ void Protokollitaja::uhenduSiusDataga()
     siusLogi = new QFile(QFileInfo(seeFail).dir().absolutePath() + QString("/Protokollitaja sisse logi %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
 
     if(siusDataConnections == nullptr){
-        siusDataConnections = new SiusDataConnections(siusLogi, &logiValja, this);
+        siusDataConnections = new SiusDataConnections(
+                    siusLogi,
+                    &logiValja,
+                    &m_settings,
+                    this
+                    );
         connect(siusDataConnections, &SiusDataConnections::statusInfo, this, &Protokollitaja::statusBarInfoChanged);
         connect(siusDataConnections, &SiusDataConnections::shotRead, this, &Protokollitaja::readSiusInfo);
         connect(siusDataConnections, &SiusDataConnections::disconnectedFromSius, this, &Protokollitaja::uhendusSiusigaKatkes);

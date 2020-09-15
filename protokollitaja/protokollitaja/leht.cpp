@@ -37,6 +37,16 @@ Leht::Leht(Andmebaas* baas, int s, int vs, int a, bool *k, QString eNimi, int r,
 	//setGeometry(1, 1, 1000, 100);
 }
 
+void Leht::deleteAllShotsFromSelectedCompetitors()
+{
+    if(!voistk){
+        for(Laskur *laskur : laskurid){
+            if(laskur->linnuke->isChecked())
+                laskur->deleteAllShots();
+        }
+    }
+}
+
 QString Leht::getEventType()
 {
     return harjutus;

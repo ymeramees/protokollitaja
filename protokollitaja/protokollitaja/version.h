@@ -2,11 +2,11 @@
 #define VERSION_H
 
 // Changed 20.08.2020 - after which there has been a release, so need to update
-#define VER_FILEVERSION             0,8,0,0
-#define VER_FILEVERSION_STR         "0.8.0\0"
+#define VER_FILEVERSION             0,8,1,0
+#define VER_FILEVERSION_STR         "0.8.1\0"
 
-#define VER_PRODUCTVERSION          0,8,0,0
-#define VER_PRODUCTVERSION_STR      "0.8.0\0"
+#define VER_PRODUCTVERSION          0,8,1,0
+#define VER_PRODUCTVERSION_STR      "0.8.1\0"
 
 #define VER_COMPANYNAME_STR         "Ymeramees"
 #define VER_FILEDESCRIPTION_STR     "Protokollitaja 0.8 Beta"

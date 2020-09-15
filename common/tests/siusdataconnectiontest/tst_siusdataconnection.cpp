@@ -2,6 +2,7 @@
 #include <QCoreApplication>
 
 #include <QTextStream>
+#include "commonsettings.h"
 #include "globalvariables.h"
 #include "siusdataconnection.h"
 
@@ -15,6 +16,9 @@ public:
     SiusDataConnectionTest();
     ~SiusDataConnectionTest();
 
+private:
+    CommonSettings settings; // Tests are run with default values
+
 private slots:
     void initTestCase();
     void cleanupTestCase();
@@ -26,7 +30,7 @@ private slots:
     void test_handlePartialSiusTransfer();
 };
 
-SiusDataConnectionTest::SiusDataConnectionTest()
+SiusDataConnectionTest::SiusDataConnectionTest() : settings("", "")
 {
 
 }
@@ -53,7 +57,9 @@ void SiusDataConnectionTest::test_extractShotDataCompetitionShot()
                 "_TOTL;6;7;90;103;T;131;0;Q;0;0;S;131;0;P;131;0;G;95;0;G;36;0;\n",
                 "_SHOT;6;7;90;60;41;10:08:25.05;3;1;0;10;102;0;14;0.00232;-0.00593;900;0;0;655.35;1731649946;64;559;0\n",
                 0,
-                &log);
+                &log,
+                &settings
+                );
 
     QCOMPARE(shotData.value().id, 90);
     QCOMPARE(shotData.value().socketIndex, 0);
@@ -74,7 +80,9 @@ void SiusDataConnectionTest::test_extractShotDataNotMatchingIds()
                 "_TOTL;6;7;91;103;T;131;0;Q;0;0;S;131;0;P;131;0;G;95;0;G;36;0;\n",
                 "_SHOT;6;7;90;60;41;10:08:25.05;3;1;57;10;102;0;14;0.00232;-0.00593;900;0;0;655.35;1731649946;64;559;0\n",
                 0,
-                &log);
+                &log,
+                &settings
+                );
     } catch (...) {
     }
 
@@ -88,7 +96,9 @@ void SiusDataConnectionTest::test_extractShotDataUnknownShotTypeCompetitionShot(
                 "_TOTL;6;7;90;103;T;131;0;Q;0;0;S;131;0;P;131;0;G;95;0;G;36;0;\n",
                 "_SHOT;6;7;90;60;41;10:08:25.05;3;1;57;10;102;0;14;0.00232;-0.00593;900;0;0;655.35;1731649946;64;559;0\n",
                 0,
-                &log);
+                &log,
+                &settings
+                );
 
     QCOMPARE(shotData.value().id, 90);
     QCOMPARE(shotData.value().socketIndex, 0);
@@ -107,7 +117,9 @@ void SiusDataConnectionTest::test_extractShotDataUnknownShotTypeSightingShot()
                 "_TOTL;23;24;4;103;T;0;0;Q;0;0;S;0;0;\n",
                 "_SHOT;23;24;4;60;4;09:49:49.53;3;1;307;0;0;0;1;-0.07557213;0.19096041;900;0;0;467.12;1792017711;64;560;0\n",
                 0,
-                &log);
+                &log,
+                &settings
+                );
 
     QCOMPARE(shotData.value().id, 4);
     QCOMPARE(shotData.value().socketIndex, 0);
@@ -126,7 +138,9 @@ void SiusDataConnectionTest::test_extractShotDataSightingShot()
                 "_TOTL;11;12;12;103;T;0;0;Q;0;0;S;0;0;\n",
                 "_SHOT;11;12;12;60;5;09:49:21.82;3;1;32;7;71;0;2;-0.00762645;0.02968479;900;0;0;655.35;1792015072;64;559;0\n",
                 0,
-                &log);
+                &log,
+                &settings
+                );
 
     QCOMPARE(shotData.value().id, 12);
     QCOMPARE(shotData.value().socketIndex, 0);
@@ -142,7 +156,7 @@ void SiusDataConnectionTest::test_handlePartialSiusTransfer()
 {
     QFile file;
     QTextStream log = QTextStream(stdout);
-    SiusDataConnection conn("127.0.0.1", 4000, 0, &file, &log);
+    SiusDataConnection conn("127.0.0.1", 4000, 0, &file, &log, &settings);
     qRegisterMetaType<SiusShotData>();
     QSignalSpy spy(&conn, SIGNAL(shotRead(SiusShotData)));
 

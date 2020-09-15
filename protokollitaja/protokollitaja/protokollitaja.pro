@@ -21,7 +21,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += lisalaskudeaken.h \
-    ../../common/src/siusshotdata.h \
     kllfilerw.h \
     liikmetevalikkast.h \
     tabwidgetwithsettings.h \
@@ -45,11 +44,13 @@ HEADERS += lisalaskudeaken.h \
     startlistwriter.h \
     protolehelugejaserver.h \
     protolehelugejaconnection.h \
+    ../../common/src/commonsettings.h \
     ../../common/src/globalvariables.h \
     ../../common/src/lask.h \
     ../../common/src/uhendumiseaken.h \
     ../../common/src/siusdataconnections.h \
-    ../../common/src/siusdataconnection.h
+    ../../common/src/siusdataconnection.h \
+    ../../common/src/siusshotdata.h
 SOURCES += lisalaskudeaken.cpp \
     kllfilerw.cpp \
     liikmetevalikkast.cpp \
@@ -72,6 +73,7 @@ SOURCES += lisalaskudeaken.cpp \
     startlistwriter.cpp \
     protolehelugejaserver.cpp \
     protolehelugejaconnection.cpp \
+    ../../common/src/commonsettings.cpp \
     ../../common/src/lask.cpp \
     ../../common/src/uhendumiseaken.cpp \
     ../../common/src/siusdataconnections.cpp \

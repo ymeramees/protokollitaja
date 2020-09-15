@@ -22,10 +22,12 @@ HEADERS += $$PWD/lisalaskudeaken.h \
     $$PWD/startlistwriter.h \
     $$PWD/protolehelugejaserver.h \
     $$PWD/protolehelugejaconnection.h \
+    $$PWD/../common/src/commonsettings.h \
     $$PWD/../common/src/lask.h \
     $$PWD/../common/src/uhendumiseaken.h \
     $$PWD/../common/src/siusdataconnections.h \
-    $$PWD/../common/src/siusdataconnection.h
+    $$PWD/../common/src/siusdataconnection.h \
+    $$PWD/../common/src/siusshotdata.h
 SOURCES += $$PWD/lisalaskudeaken.cpp \
     $$PWD/liikmetevalikkast.cpp \
     $$PWD/voistkond.cpp \
@@ -46,6 +48,7 @@ SOURCES += $$PWD/lisalaskudeaken.cpp \
     $$PWD/startlistwriter.cpp \
     $$PWD/protolehelugejaserver.cpp \
     $$PWD/protolehelugejaconnection.cpp \
+    $$PWD/../common/src/commonsettings.cpp \
     $$PWD/../common/src/lask.cpp \
     $$PWD/../common/src/uhendumiseaken.cpp \
     $$PWD/../common/src/siusdataconnections.cpp \

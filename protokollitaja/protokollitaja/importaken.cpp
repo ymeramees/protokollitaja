@@ -6,9 +6,7 @@ ImportAken::ImportAken(QWidget *parent)
         ui.setupUi(this);
         connect(ui.failistNupp, SIGNAL(clicked()), this, SLOT(fromFile()));
         connect(ui.maluNupp, SIGNAL(clicked()), this, SLOT(fromClipboard()));
-        leht = new Leht(0, 6, 0, 0, &kirjutusabi, "Ekraaninimi", 0, "Muu", 0, 0, this);
         ui.scrollArea->setWidgetResizable(true);
-        ui.scrollArea->setWidget(leht);
 }
 
 ImportAken::~ImportAken()
@@ -18,10 +16,14 @@ ImportAken::~ImportAken()
 
 void ImportAken::clearSheet()
 {
+    if(leht != nullptr){
         if(leht->laskurid.count() < 1) return;
         for(int i = 0; i < leht->laskurid.count(); i++)
-                leht->laskurid[i]->linnuke->setChecked(true);
+            leht->laskurid[i]->linnuke->setChecked(true);
         leht->eemaldaLaskur();
+        leht->deleteLater();
+        leht = nullptr;
+    }
 }
 
 int ImportAken::currentCompetitorId()
@@ -41,6 +43,10 @@ void ImportAken::fromFile()
         QFile fail(fileName);
         if(fail.open(QIODevice::ReadOnly | QIODevice::Text)){
             QTextStream sisse(&fail);
+            if(leht == nullptr){
+                leht = new Leht(0, 6, 0, 0, &kirjutusabi, "Ekraaninimi", 0, "Muu", 0, 0, this);
+                ui.scrollArea->setWidget(leht);
+            }
             int vSummadeSamm = 0;
             do{
                         QStringList andmed, andmed2, vahepealne;
@@ -168,6 +174,11 @@ void ImportAken::fromFile()
 void ImportAken::fromClipboard()
 {
     QMessageBox::warning(this, "Protokollitaja", tr("Kas teil .kll faili ei ole? Sealt importimisel (Failist... nupp) tuleb rohkem infot üle, kui vahemälust importimisel."), QMessageBox::Ok);
+    if(leht == nullptr){
+        leht = new Leht(0, 6, 0, 0, &kirjutusabi, "Ekraaninimi", 0, "Muu", 0, 0, this);
+        ui.scrollArea->setWidget(leht);
+    }
+
         int vSummadeSamm = 0;
         QString rida;
         QClipboard *vahemalu = QApplication::clipboard();
@@ -298,7 +309,7 @@ void ImportAken::fromKllFile(QString fileName)
     QStringList tabNames;
     for (int i = 0; i < contents.tabWidget->count(); i++) {
         Leht *sheet = qobject_cast<Leht*>(qobject_cast<QScrollArea*>(contents.tabWidget->widget(i))->widget());
-        if (sheet != 0){
+        if (sheet != 0 && !sheet->voistk){  // Exclude team events for now
             tabNames << (contents.tabWidget->tabText(i) + " - " + sheet->harjutus);
         }
     }
@@ -310,6 +321,11 @@ void ImportAken::fromKllFile(QString fileName)
         Leht* sheet = qobject_cast<Leht*>(qobject_cast<QScrollArea*>(contents.tabWidget->widget(tabIndex))->widget());
 
         if (sheet != 0) {
+            if(leht == nullptr){
+                leht = new Leht(0, sheet->seeriateArv, sheet->vSummadeSamm, 0, &kirjutusabi, "Ekraaninimi", sheet->relv, sheet->harjutus, 0, 0, this);
+                ui.scrollArea->setWidget(leht);
+            }
+
             for(int i = 0; i < sheet->laskurid.count(); i++){
                 leht->uusLaskur(0);
                 Laskur *competitor = leht->laskurid[leht->laskurid.count() - 1];
@@ -320,11 +336,6 @@ void ImportAken::fromKllFile(QString fileName)
     }
     contents.tabWidget->deleteLater();
 }
-
-//QString ImportAken::getKllSheetName()
-//{
-
-//}
 
 void ImportAken::setCurrentCompetitorId(int newId)
 {

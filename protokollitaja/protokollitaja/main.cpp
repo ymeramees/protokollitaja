@@ -14,6 +14,7 @@
 
 #include <QLocale>
 
+QString organization = "Ümeramees";
 QString programmiNimi = VER_INTERNALNAME_STR; //"Protokollitaja 0.5 Beta"; // TODO uuendada nime
 QString versioon = VER_PRODUCTVERSION_STR; //"0.5.x Beta";
 QString aasta = VER_AASTA;
@@ -49,7 +50,7 @@ int main(int argc, char *argv[])
     qApp->setFont(font);    // Fix font size, as scaling does not work properly
 
     a.setApplicationName(programmiNimi);
-    a.setOrganizationName("Ümeramees");
+    a.setOrganizationName(organization);
     a.setApplicationVersion(versioon);
 
 #ifdef ASM_CRASH_REPORT

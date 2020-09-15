@@ -11,7 +11,9 @@ TEMPLATE = app
 
 SOURCES += *.cpp \
     ../../src/siusdataconnection.cpp \
-    ../../src/lask.cpp
+    ../../src/lask.cpp \
+    ../../src/commonsettings.cpp
 
 HEADERS += ../../src/siusdataconnection.h \
-    ../../src/lask.h
+    ../../src/lask.h \
+    ../../src/commonsettings.h
