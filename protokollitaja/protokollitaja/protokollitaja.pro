@@ -93,17 +93,7 @@ FORMS += lisalaskudeaken.ui \
 RESOURCES += ../protokollitaja.qrc
 RC_FILE += ikoon.rc
 win32{
-INCLUDEPATH += D:\Qt\Tools\mingw730_32\opt\include
+INCLUDEPATH += $$(OPENSSL_INCLUDE_PATH)
 LIBS += -liconv \
- -L D:\Qt\Tools\mingw730_32\opt\lib -lcrypto #-L../libxl-2.2.0/bin -lxl \
-    #-lpthread #\
-    #-L../qextserialport/build -lqextserialport
+ -L $$(OPENSSL_LIB_PATH) -lcrypto
 }
-#QMAKE_CXXFLAGS += -finput-charset=utf-8 \
-    #-fexec-charset=utf-8
-#QMAKE_LFLAGS += -lpthread \
-#    -static-libstdc++ \
-#    -static-libgcc
-#unix{
-#    QMAKE_LFLAGS += -LLIBDIR
-#}

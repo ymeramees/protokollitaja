@@ -1,0 +1,141 @@
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
+
+# version format
+version: 0.8.{build}
+
+# branches to build
+branches:
+  # whitelist
+  only:
+    - master
+
+# Start builds on tags only (GitHub, BitBucket, GitLab, Gitea)
+skip_non_tags: true
+
+# Maximum number of concurrent jobs for the project
+max_jobs: 1
+
+image: Visual Studio 2017
+clone_folder: C:\projects\protokollitaja
+
+install:
+- cmd: >-
+    set QTDIR=C:\Qt\5.12.6\mingw73_32
+
+    set OPENSSL_INCLUDE_PATH=C:\OpenSSL-v111-Win32\include\openssl
+
+    set OPENSSL_LIB_PATH=C:\OpenSSL-v111-Win32\lib\MinGW
+
+    %QTDIR%\bin\qtenv2.bat
+
+    qmake -v
+
+    set make=mingw32-make.exe
+
+    g++ --version
+
+    %make% --version
+build_script:
+- cmd: >-
+    qmake.exe Protokollitaja.pro -spec win32-g++ "CONFIG+=qtquickcompiler" DEFINES+=ASM_CRASH_REPORT CONFIG+=c++17 && mingw32-make.exe qmake_all
+
+    mingw32-make.exe -j4
+
+    cd C:\projects
+
+    git clone https://github.com/ymeramees/qfinaal.git
+
+    cd qfinaal
+
+    qmake.exe QFinaal.pro -spec win32-g++ "CONFIG+=qtquickcompiler" DEFINES+=ASM_CRASH_REPORT CONFIG+=c++17 && mingw32-make.exe qmake_all
+
+    mingw32-make.exe -j4
+
+    dir
+test_script:
+- ps: >-
+    echo $env:APPVEYOR_BUILD_FOLDER
+
+    cd $env:APPVEYOR_BUILD_FOLDER
+
+    New-Item -Path .\build -Name "Protokollitaja-$env:APPVEYOR_BUILD_VERSION" -ItemType "directory"
+
+    New-Item -Path ".\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION" -Name "Data" -ItemType "directory"
+
+    New-Item -Path ".\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION" -Name "tools" -ItemType "directory"
+
+    $apps = Get-ChildItem -Path "$env:APPVEYOR_BUILD_FOLDER" -Recurse -Name -Include *.exe -Exclude *test.exe
+
+    echo $apps
+
+    foreach($app in $apps) {
+
+        Copy-Item "$app" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
+
+    }
+
+    Copy-Item "$env:APPVEYOR_BUILD_FOLDER\protokollitaja\build\release\Data\Print_template.html" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\Data"
+
+    Copy-Item "C:\Qt\Tools\mingw730_32\bin\addr2line.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\tools"
+
+    Copy-Item "C:\projects\qfinaal\release\Finaal.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
+
+    cd .\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION
+
+    $copiedApps = Get-ChildItem -Path . -Name -Include *.exe
+
+    echo $copiedApps
+
+    foreach($app in $copiedApps) {
+
+        windeployqt.exe --release $app
+
+    }
+
+    dir
+
+    cd $env:APPVEYOR_BUILD_FOLDER
+
+    & 7z a "Protokollitaja-$env:APPVEYOR_BUILD_VERSION.zip" ".\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
+
+    $tests = Get-ChildItem -Path $env:APPVEYOR_BUILD_FOLDER -Recurse -Name -Include *test.exe
+
+    foreach($test in $tests) {
+
+        echo Testing: $test
+
+        if ($test.IndexOf("IntegrationTest") -lt 0) {
+
+            windeployqt.exe --release $test
+
+            & $test -xunitxml -tickcounter -o testresults.xml
+
+            $wc = New-Object 'System.Net.WebClient'
+
+            $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\testresults.xml))
+
+        }
+
+    }
+
+artifacts:
+- path: '*.zip'
+  name: Protokollitaja
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: P/zUL3ViagnDmZ3ZTc3mOmXgb88FOvmq1vr2xxOIr0zTO335YaWPkNEVu8w2hDse
+  artifact: Protokollitaja
+  draft: true
+  force_update: true
+notifications:
+- provider: Email
+  to:
+  - ymeramees@gmail.com
+  subject: Protokollitaja Build {{status}}
+  message: "'{{message}}, {{commitId}}, ...'"
+  on_build_success: false
+  on_build_failure: false
+  on_build_status_changed: true
