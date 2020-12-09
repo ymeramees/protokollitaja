@@ -4331,22 +4331,19 @@ void Protokollitaja::receivedVersionInfo(bool updateExists, QString versionStrin
     }
 }
 
-void Protokollitaja::restClientFinished(QNetworkReply *reply)
+void Protokollitaja::dataUploaderFinished(bool success, QString reply, QString errorString)
 {
-    QString answer = reply->readAll();
-    if(reply->error()){
-        logiValja << "#ERROR: Web upload failed, errorString: " << reply->errorString() << "\n#reply: " << answer << "\n";
-        QTextStream(stdout) << "Error with upload: " << reply->errorString() << " " << answer << endl;
-        statusBarInfoChanged("Error with upload: " + reply->errorString() + " " + answer);
-        if(reply->errorString().contains("Authentication", Qt::CaseInsensitive) || reply->errorString().contains("Connection closed", Qt::CaseInsensitive)){
+    if(!success){
+        logiValja << "#ERROR: Web upload failed, errorString: " << errorString << "\n#reply: " << reply << "\n";
+        statusBarInfoChanged("Error with upload: " + errorString + " " + reply);
+        if(errorString.contains("Authentication", Qt::CaseInsensitive) || errorString.contains("Connection closed", Qt::CaseInsensitive)){
             m_restHeaderData = ""; // In case of login error, clear login data
             uploadTimer.stop();  // No point to try again if login data was incorrect
         }
     }else{
-        QTextStream(stdout) << "Reply to upload: " << answer << endl;
-        statusBarInfoChanged("Upload successful: " + answer);
+        statusBarInfoChanged("Upload successful: " + reply);
         if(webCompetitionId.isEmpty()) {
-            webCompetitionId = answer;
+            webCompetitionId = reply;
             if(webCompetitionId.contains(QRegularExpression(QStringLiteral("[^\\x{0000}-\\x{007F}]")))){
                 if(QMessageBox::warning(
                             this,
@@ -4357,7 +4354,7 @@ void Protokollitaja::restClientFinished(QNetworkReply *reply)
                 webCompetitionId = "";
             }
             voibSulgeda = false;
-            logiValja << "#Web upload success: " << answer << "\n#webCompetitionId: " << webCompetitionId << "\n";
+            logiValja << "#Web upload success: " << reply << "\n#webCompetitionId: " << webCompetitionId << "\n";
         }
     }
 }
@@ -4641,36 +4638,17 @@ void Protokollitaja::uploadResults()
             return;
     }
 
-    QNetworkRequest request;
-    request.setUrl(url);
-
-    QTextStream(stdout) << "Url: " << request.url().toString() << endl;
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setRawHeader("Authorization", m_restHeaderData.toLocal8Bit());
-
-#ifdef PROOV
-    QSslConfiguration sslConf = request.sslConfiguration();
-    sslConf.setPeerVerifyMode(QSslSocket::VerifyNone);
-    request.setSslConfiguration(sslConf);
-#endif
-
-    if(restClient == nullptr)
-        restClient = new QNetworkAccessManager(this);
-
-    connect(restClient, &QNetworkAccessManager::finished, this, &Protokollitaja::restClientFinished);
-
     // Sometimes needed for quick fixes:
 //    webCompetitionId = QInputDialog::getText(this, "webCompetitionId", "id:", QLineEdit::Normal, webCompetitionId);
 
     QJsonDocument jsonDoc(toExportJson());
 
-    if(webCompetitionId.isEmpty()) {
-        restClient->post(request, jsonDoc.toJson());
-    } else {
-        if(verbose)
-            QTextStream(stdout) << "PUT request, webCompetitionId: " << webCompetitionId << endl;
-        restClient->put(request, jsonDoc.toJson());
-    }
+    if(dataUploader == nullptr)
+        dataUploader = new DataUploader(verbose, this);
+
+    connect(dataUploader, &DataUploader::uploadFinished, this, &Protokollitaja::dataUploaderFinished);
+
+    dataUploader->uploadResults(url, m_restHeaderData, webCompetitionId, jsonDoc);
 
     uploadTimer.start();
 

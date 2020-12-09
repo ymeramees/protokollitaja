@@ -34,6 +34,7 @@
 #include "laskur.h"
 #include "leht.h"
 #include "algusevalik.h"
+#include "datauploader.h"
 #include "valikkast.h"
 #include "seadedkast.h"
 #include "commonsettings.h"
@@ -237,7 +238,7 @@ private slots:
     void reastaS();
     void reastaSi();
     void receivedVersionInfo(bool updateExists, QString versionString);
-    void restClientFinished(QNetworkReply *reply);
+    void dataUploaderFinished(bool success, QString reply, QString errorString);
     void saadaVorku(QString, int socketIndex);
     void salvesta();
     void salvestaKui();
@@ -265,7 +266,7 @@ private slots:
     void viiLoppu();
 
 private:
-    QNetworkAccessManager *restClient = nullptr;
+    DataUploader *dataUploader = nullptr;
     QProgressDialog *progress;  //Näitab, et SiusDatast alles andmed tulevad
     CommonSettings m_settings;
     QString webCompetitionId = "";

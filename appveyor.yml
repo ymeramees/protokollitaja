@@ -79,6 +79,10 @@ test_script:
     Copy-Item "$env:APPVEYOR_BUILD_FOLDER\protokollitaja\build\release\Data\Print_template.html" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\Data"
 
     Copy-Item "C:\Qt\Tools\mingw730_32\bin\addr2line.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\tools"
+    
+    Copy-Item "C:\OpenSSL-v111-Win32\bin\libcrypto-1_1.dll" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
+
+    Copy-Item "C:\OpenSSL-v111-Win32\bin\libssl-1_1.dll" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
 
     Copy-Item "C:\projects\qfinaal\release\Finaal.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
 

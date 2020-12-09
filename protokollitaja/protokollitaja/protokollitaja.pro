@@ -21,6 +21,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += lisalaskudeaken.h \
+    datauploader.h \
     kllfilerw.h \
     liikmetevalikkast.h \
     tabwidgetwithsettings.h \
@@ -52,6 +53,7 @@ HEADERS += lisalaskudeaken.h \
     ../../common/src/siusdataconnection.h \
     ../../common/src/siusshotdata.h
 SOURCES += lisalaskudeaken.cpp \
+    datauploader.cpp \
     kllfilerw.cpp \
     liikmetevalikkast.cpp \
     updatechecker.cpp \
@@ -95,5 +97,5 @@ RC_FILE += ikoon.rc
 win32{
 INCLUDEPATH += $$(OPENSSL_INCLUDE_PATH)
 LIBS += -liconv \
- -L $$(OPENSSL_LIB_PATH) -lcrypto
+ -L $$(OPENSSL_LIB_PATH) -lcrypto -lssl
 }
