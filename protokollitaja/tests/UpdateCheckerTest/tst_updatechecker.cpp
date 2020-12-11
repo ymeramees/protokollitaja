@@ -43,7 +43,7 @@ void UpdateCheckerTest::test_getLatestVersionInfoNewer()
 
 void UpdateCheckerTest::test_getLatestVersionInfoOlder()
 {
-    UpdateChecker checker("0.7.15");
+    UpdateChecker checker("0.8.1");
     QSignalSpy spy(&checker, SIGNAL(versionInfoResponse(bool, QString)));
     checker.getLatestVersionInfo("ymeramees", "protokollitaja");
 
@@ -58,7 +58,7 @@ void UpdateCheckerTest::test_getLatestVersionInfoOlder()
 
 void UpdateCheckerTest::test_getLatestVersionInfoWeb()
 {
-    UpdateChecker checker("0.7.15");
+    UpdateChecker checker("0.8.1");
     QSignalSpy spy(&checker, SIGNAL(versionInfoResponse(bool, QString)));
     checker.getLatestVersionInfo("ymm", "protokollitaja");
 
@@ -80,6 +80,7 @@ void UpdateCheckerTest::test_isCurrentVersionOld()
 
     QCOMPARE(checker.isCurrentVersionOld("0.7.15", "0.8.1"), true);
     QCOMPARE(checker.isCurrentVersionOld("0.7.15", "1.0.0"), true);
+    QCOMPARE(checker.isCurrentVersionOld("0.8.1", "0.8.2"), true);
     QCOMPARE(checker.isCurrentVersionOld("0.8.0", "0.7.16"), false);
     QCOMPARE(checker.isCurrentVersionOld("10.7.15", "0.7.16"), false);
 }
