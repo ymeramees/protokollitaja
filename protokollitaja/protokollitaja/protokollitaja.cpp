@@ -457,8 +457,6 @@ Protokollitaja::Protokollitaja(QWidget *parent)
     QMessageBox::information(this, "Teade", "Debug versioon!", QMessageBox::Ok);
 #endif
 
-    checkForUpdates(true);
-
         argument = qApp->arguments().last();
         if(argument.endsWith(".kll", Qt::CaseInsensitive) /*!argument.isEmpty() && !argument.endsWith(".exe") && !argument.endsWith("Protokollitaja", Qt::CaseInsensitive)*/){
             //qDebug() << "Protokollitaja().arguments().last()";
@@ -511,6 +509,9 @@ Protokollitaja::Protokollitaja(QWidget *parent)
 #ifdef PROOV
         qDebug() << "Vahepunkt2; " << QString((QChar)10).length();
 #endif
+
+        checkForUpdates(true);
+
         tulemus->joonista();
 
         if(qApp->desktop()->numScreens() >= 2){
