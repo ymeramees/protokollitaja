@@ -39,7 +39,7 @@ install:
     %make% --version
 build_script:
 - cmd: >-
-    cd $env:APPVEYOR_BUILD_FOLDER
+    cd %APPVEYOR_BUILD_FOLDER%
 
     dir
 
