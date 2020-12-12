@@ -39,6 +39,10 @@ install:
     %make% --version
 build_script:
 - cmd: >-
+    cd $env:APPVEYOR_BUILD_FOLDER
+
+    dir
+
     qmake.exe Protokollitaja.pro -spec win32-g++ "CONFIG+=qtquickcompiler" DEFINES+=ASM_CRASH_REPORT CONFIG+=c++17 && mingw32-make.exe qmake_all
 
     mingw32-make.exe -j4

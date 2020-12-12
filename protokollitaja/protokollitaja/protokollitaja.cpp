@@ -626,7 +626,7 @@ void Protokollitaja::checkForUpdates()
 void Protokollitaja::checkForUpdates(bool autoCheck)
 {
     autoUuendus = autoCheck;
-    UpdateChecker *checker = new UpdateChecker(versioon);
+    UpdateChecker *checker = new UpdateChecker(versioon, &logiValja);
     connect(checker, &UpdateChecker::versionInfoResponse, this, &Protokollitaja::receivedVersionInfo);
 
     checker->getLatestVersionInfo("ymeramees", "protokollitaja");
@@ -4327,7 +4327,12 @@ void Protokollitaja::receivedVersionInfo(bool updateExists, QString versionStrin
             QDesktopServices::openUrl(QUrl("https://drive.google.com/drive/folders/1SpWxxP-E12XytEFT0VmYz_QpLLFzq1nd"));
         }
     } else if(!autoUuendus){
-        QMessageBox::information(this, "Teade", tr("Teil on kõige uuem versioon programmist."), QMessageBox::Ok);
+        QMessageBox::information(
+                    this,
+                    "Teade",
+                    QString("Teil on kõige uuem versioon programmist.\n\nLeitud uusim versioon: %1").arg(versionString),
+                    QMessageBox::Ok
+                    );
     }
 }
 

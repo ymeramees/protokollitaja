@@ -1,8 +1,9 @@
 #include "updatechecker.h"
 
-UpdateChecker::UpdateChecker(QString currentVersion, QObject *parent) : QObject(parent)
+UpdateChecker::UpdateChecker(QString currentVersion, QTextStream *log, QObject *parent) : QObject(parent)
 {
     m_currentVersion = currentVersion;
+    m_log = log;
 }
 
 UpdateChecker::~UpdateChecker()
@@ -61,9 +62,11 @@ void UpdateChecker::readWebVersionInfo()
     QString info(m_downloader->downloadedData());
     if(!info.startsWith("<!--proto")){
         if(allAddressesChecked){
+            QTextStream(stdout) << "#ERROR: Unable to get version info from Webzone!" << endl;
+            *m_log << "#ERROR: Unable to get version info from Webzone!" << endl;
             emit versionInfoResponse(false, "#ERROR: Unable to find version info! Program needs to be updated manually!");
         }else{
-            checkVersionFromWeb("https://ymeramees.no-ip.org/protokollitaja/inf20150118");  // Fallback address
+            checkVersionFromWeb("http://ymeramees.no-ip.org/protokollitaja/inf20150118");  // Fallback address
             allAddressesChecked = true;
         }
     } else {
@@ -77,6 +80,8 @@ void UpdateChecker::restClientFinished(QNetworkReply *reply)
 {
     QByteArray answer = reply->readAll();
     if(reply->error()){
+        QTextStream(stdout) << "#ERROR: Unable to get version info from GitHub: " << reply << ", " << reply->errorString() << endl;
+        *m_log << "#ERROR: Unable to get version info from GitHub: " << reply << ", " << reply->errorString() << endl;
         checkVersionFromWeb("https://webzone.ee/protokollitaja/inf20150118");   // Check version info from a webpage
     } else {
         QJsonDocument json = QJsonDocument::fromJson(answer);

@@ -15,7 +15,7 @@ class UpdateChecker : public QObject
 {
     Q_OBJECT
 public:
-    explicit UpdateChecker(QString currentVersion, QObject *parent = nullptr);
+    explicit UpdateChecker(QString currentVersion, QTextStream *log, QObject *parent = nullptr);
     ~UpdateChecker();
     void getLatestVersionInfo(QString user, QString repo);
 
@@ -28,6 +28,7 @@ private slots:
 
 private:
     QString m_currentVersion;
+    QTextStream *m_log = nullptr;
     FileDownloader *m_downloader = nullptr;    // For downloading version info file
     QNetworkAccessManager *m_restClient = nullptr;
     void checkVersionFromWeb(QString url);
