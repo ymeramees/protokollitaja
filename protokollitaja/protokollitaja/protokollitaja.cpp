@@ -4649,6 +4649,15 @@ void Protokollitaja::uploadResults()
 
     QJsonDocument jsonDoc(toExportJson());
 
+//    //For development purposes:
+//    QFile file("testOut.json");
+//    if(file.open(QIODevice::WriteOnly)){
+//        file.write(jsonDoc.toJson());
+//        if(verbose)
+//            QTextStream(stdout) << "Json written to a file" << endl;
+//    }else
+//        QTextStream(stdout) << "Unable to open file" << endl;
+
     if(dataUploader == nullptr)
         dataUploader = new DataUploader(verbose, this);
 
@@ -4657,16 +4666,6 @@ void Protokollitaja::uploadResults()
     dataUploader->uploadResults(url, m_restHeaderData, webCompetitionId, jsonDoc);
 
     uploadTimer.start();
-
-    //For development purposes:
-//    QFile file("testOut.json");
-//    if(file.open(QIODevice::WriteOnly)){
-//        QJsonDocument jsonDoc(toExportJson());
-//        file.write(jsonDoc.toJson());
-//        if(verbose)
-//            QTextStream(stdout) << "Json written to a file" << endl;
-//    }else
-//        QTextStream(stdout) << "Unable to open file" << endl;
 }
 
 void Protokollitaja::uuendaJalgitavaid()

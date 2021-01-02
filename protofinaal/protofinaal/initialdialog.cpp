@@ -8,6 +8,7 @@ InitialDialog::InitialDialog(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->browseButton, &QPushButton::clicked, this, &InitialDialog::openFile);
     connect(ui->newButton, &QPushButton::clicked, this, &InitialDialog::newFile);
+    connect(ui->forwardButton, &QPushButton::clicked, this, &InitialDialog::forward);
 }
 
 InitialDialog::~InitialDialog()
@@ -23,6 +24,21 @@ QString InitialDialog::competitionName()
 QString InitialDialog::fileName()
 {
     return ui->fileNameEdit->text();
+}
+
+void InitialDialog::forward()
+{
+    if(ui->competitionNameEdit->text().isEmpty() || ui->fileNameEdit->text().isEmpty()){
+            QMessageBox(
+                        QMessageBox::Icon::Critical,
+                        "Protofinaal",
+                        tr("Mõlemad lahtrid peavad olema täidetud!"),
+                        QMessageBox::Ok,
+                        this
+                        ).exec();
+            return;
+    }
+    this->accept();
 }
 
 void InitialDialog::newFile()

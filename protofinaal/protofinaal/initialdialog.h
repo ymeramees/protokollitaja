@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QFileDialog>
+#include <QMessageBox>
 
 namespace Ui {
 class InitialDialog;
@@ -25,6 +26,9 @@ public:
 public slots:
     void newFile();
     void openFile();
+
+private slots:
+    void forward();
 
 private:
     Ui::InitialDialog *ui;

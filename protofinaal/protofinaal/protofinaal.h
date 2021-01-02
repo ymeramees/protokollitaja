@@ -41,7 +41,7 @@ public:
 
 public slots:
     void connectToSiusData();
-    void readSiusInfo(QStringList lines, int socketIndex);
+    void readSiusInfo(SiusShotData shotData);
     void statusBarInfoChanged(QString newStatusInfo);
     void sumAllTeams();
 
@@ -54,6 +54,7 @@ private slots:
 
 private:
     bool competitionStarted = false;
+    CommonSettings m_settings;
     InitialDialog *initialDialog = nullptr;
     SiusDataConnections *siusDataConnections = nullptr;
     SpectatorWindow spectatorWindow;

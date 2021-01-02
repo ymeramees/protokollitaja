@@ -33,6 +33,7 @@ SOURCES += \
     competitor.cpp \
     initialdialog.cpp \
     spectatorwindow.cpp \
+    ../../common/src/commonsettings.cpp \
     ../../common/src/siusdataconnection.cpp \
     ../../common/src/siusdataconnections.cpp \
     ../../common/src/lask.cpp
@@ -44,6 +45,7 @@ HEADERS += \
     competitor.h \
     initialdialog.h \
     spectatorwindow.h \
+    ../../common/src/commonsettings.h \
     ../../common/src/siusdataconnection.h \
     ../../common/src/siusdataconnections.h \
     ../../common/src/lask.h
