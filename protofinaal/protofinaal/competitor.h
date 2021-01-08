@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include "shotedit.h"
+#include "siusshotdata.h"
 
 extern bool verbose;
 
@@ -19,11 +20,13 @@ class Competitor : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Competitor(const QJsonArray configJson, QWidget *parent = nullptr);
+    explicit Competitor(const int id, const QJsonArray configJson, QWidget *parent = nullptr);
     explicit Competitor(const QJsonObject &json, QWidget *parent = nullptr);
     ~Competitor();
+    bool readSiusShot(SiusShotData shotData);
     int current10Sum() const;  //Current result x10 to avoid floating point arithmetic errors
     int id();
+    std::optional<Lask> shotAt(int index);
     QString name();
     QString lastResult();
     QString lastSum();
@@ -39,7 +42,7 @@ public slots:
     void mouseDoubleClickEvent(QMouseEvent *event);
     QString previousSiusRow();
     void setPreviousSiusRow(QString newSiusRow);
-    void setShot(int shotNo, Lask newShot);
+    bool setShot(int shotNo, Lask newShot);
     void setShot(int shotNo, QString siusRow);
     void sum();
 

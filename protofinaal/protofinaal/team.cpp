@@ -17,7 +17,7 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
             QTextStream(stdout) << "Team::Team(uus)" << endl;
         competitorsInTeam = configJson["Members_in_team"].toInt();
 
-        Competitor *competitor = new Competitor(configJson["Shots"].toArray());
+        Competitor *competitor = new Competitor(index * 10 + 1, configJson["Shots"].toArray());
         connect(competitor, &Competitor::newShot, this, &Team::sum);
         connect(competitor, &Competitor::statusInfo, this, &Team::statusInfo);
 
@@ -25,7 +25,7 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
         layout->addWidget(competitor, 0, 2);
 
         for(int i = 1; i < competitorsInTeam; i++){
-            Competitor *competitor = new Competitor(configJson["Shots"].toArray());
+            Competitor *competitor = new Competitor(index * 10 + 1 + i, configJson["Shots"].toArray());
             connect(competitor, &Competitor::newShot, this, &Team::sum);
             connect(competitor, &Competitor::statusInfo, this, &Team::statusInfo);
 

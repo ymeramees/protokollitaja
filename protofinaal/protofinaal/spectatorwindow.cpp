@@ -90,8 +90,10 @@ void SpectatorWindow::initializeTemplates()
             QTextStream(stdout) << "resultsTemplate:" << resultsTemplate << endl;
             QTextStream(stdout) << "originalResultsFontSize:" << originalResultsFontSize << endl;
         }
-    }else
+    }else {
+        QFile::copy(":/templates/spectatorView_template.html", "spectatorView_template.html");
         QMessageBox::warning(this, tr("Teade"), tr("Tulemuste akna template faili ei leitud!\nProgramm lõi uue, vaikimisi seadistustega."), QMessageBox::Ok);
+    }
 }
 
 void SpectatorWindow::mouseDoubleClickEvent(QMouseEvent *event)

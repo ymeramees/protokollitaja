@@ -20,6 +20,7 @@
 #include <QFile>
 
 #include "team.h"
+#include "teamstable.h"
 #include "initialdialog.h"
 #include "spectatorwindow.h"
 #include "lask.h"
@@ -41,16 +42,16 @@ public:
 
 public slots:
     void connectToSiusData();
-    void readSiusInfo(SiusShotData shotData);
+//    void readSiusInfo(SiusShotData shotData);
     void statusBarInfoChanged(QString newStatusInfo);
-    void sumAllTeams();
+//    void sumAllTeams();
+    void updateSpectatorWindow();
 
 private slots:
     void connectionToSiusLost(int connectionIndex);
     void initialize();
     void loadFile(QString fileName);
     void updateInitialDialog();
-    void updateSpectatorWindow();
 
 private:
     bool competitionStarted = false;
@@ -65,15 +66,15 @@ private:
     QString eventName;
     QString timePlace;
     QTextStream logOut;
-    QVBoxLayout *vBox = nullptr;
-    QVector<Team*> teams;
+//    QVector<Team*> teams;
     void clear();
     void closeEvent(QCloseEvent *event);
-    void createLayout(QJsonObject &jsonObj);
+//    void createLayout(QJsonObject &jsonObj);
     void createMenus();
     QJsonObject readFinalsFile(QString fileName, bool showErrors = true);
     void readSettings();
-    void sortTeams();
+//    void sortTeams();
+    TeamsTable *teamsTable = nullptr;
     void writeFinalsFile(QString fileName);
     void writeSettings();
 };

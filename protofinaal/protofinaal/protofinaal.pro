@@ -36,7 +36,8 @@ SOURCES += \
     ../../common/src/commonsettings.cpp \
     ../../common/src/siusdataconnection.cpp \
     ../../common/src/siusdataconnections.cpp \
-    ../../common/src/lask.cpp
+    ../../common/src/lask.cpp \
+    teamstable.cpp
 
 HEADERS += \
         protofinaal.h \
@@ -48,11 +49,15 @@ HEADERS += \
     ../../common/src/commonsettings.h \
     ../../common/src/siusdataconnection.h \
     ../../common/src/siusdataconnections.h \
-    ../../common/src/lask.h
+    ../../common/src/lask.h \
+    teamstable.h
 
 FORMS += \
     initialdialog.ui \
     ../../common/src/siusdataconnections.ui
+
+RESOURCES += \
+    ../protofinaal.qrc
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

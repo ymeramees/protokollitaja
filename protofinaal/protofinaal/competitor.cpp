@@ -1,12 +1,12 @@
 #include "competitor.h"
 
-Competitor::Competitor(const QJsonArray configJson, QWidget *parent) : QWidget(parent)
+Competitor::Competitor(const int id, const QJsonArray configJson, QWidget *parent) : QWidget(parent)
 {
     if(verbose)
         QTextStream(stdout) << "Competitor::Competitor(QJsonArray)" << endl;
     QHBoxLayout *hBox = new QHBoxLayout;
 
-    m_id = 0;
+    m_id = id;
     m_idLabel.setToolTip(tr("Võistleja ID"));
     m_idLabel.setText("0");
     m_idLabel.installEventFilter(this);
@@ -270,18 +270,54 @@ QString Competitor::previousSiusRow()
     return m_previousSiusRow;
 }
 
+bool Competitor::readSiusShot(SiusShotData shotData)
+{
+    bool result = false;
+
+    if(shotData.id == m_id){
+
+//        if(vSummadeSamm == 0 || (vSummadeSamm != 0 && shotData.siusShotNo <= vSummadeSamm * 10)) { // Ignore additional shots in all stages
+//            int seriesIndex = (competitionStage() * vSummadeSamm * 10 + shotData.siusShotNo - 1) / 10;
+            int shotIndex = (shotData.siusShotNo - 1);
+
+            if(shotData.shot.isCompetitionShot() && m_shots.length() > shotIndex){
+                if(m_shots.at(shotIndex)->shot().isEmpty()){
+                    result = setShot(shotIndex, shotData.shot);
+                } else if (m_shots.at(shotIndex)->shot().getSLask().compare(shotData.shot.getSLask()) == 0 &&
+                            m_shots.at(shotIndex)->shot().shotTime() == shotData.shot.shotTime()) {
+                     result = true;  // Shot already existing, ignore, but return true
+                } else
+                    result = false;
+            } else {
+                // TODO draw sighting shots on spectator's screen
+            }
+//        }
+    }
+    return result;
+}
+
+std::optional<Lask> Competitor::shotAt(int index)
+{
+    if(m_shots.length() > index)
+        return std::optional<Lask>{m_shots.at(index)->shot()};
+    else
+        return std::nullopt;
+}
+
 void Competitor::setPreviousSiusRow(QString newSiusRow)
 {
     m_previousSiusRow = newSiusRow;
 }
 
-void Competitor::setShot(int shotNo, Lask newShot)
+bool Competitor::setShot(int shotNo, Lask newShot)
 {
-    if(shotNo < m_shots.size())
+    if(shotNo < m_shots.size()){
         m_shots.at(shotNo)->setShot(newShot);
-    else{
+        return true;
+    } else {
         QMessageBox::critical(this, tr("Viga"), tr("Laskude arv suurem, kui võimalik! Lask ei läinud kirja!"), QMessageBox::Ok);
         emit statusInfo(m_nameEdit.text() + tr("Laskude arv suurem, kui võimalik! Lask ei läinud kirja!"));
+        return false;
     }
 }
 
