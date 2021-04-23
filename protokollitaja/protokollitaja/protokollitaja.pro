@@ -21,15 +21,17 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += lisalaskudeaken.h \
+    competitionsettings.h \
     datauploader.h \
+    initialdialog.h \
     kllfilerw.h \
     liikmetevalikkast.h \
+    simplekllfilerw.h \
     tabwidgetwithsettings.h \
     updatechecker.h \
     voistkond.h \
     importaken.h \
     tulemuseaken.h \
-    algusevalik.h \
     seadedkast.h \
     valikkast.h \
     andmebaas.h \
@@ -54,13 +56,14 @@ HEADERS += lisalaskudeaken.h \
     ../../common/src/siusshotdata.h
 SOURCES += lisalaskudeaken.cpp \
     datauploader.cpp \
+    initialdialog.cpp \
     kllfilerw.cpp \
     liikmetevalikkast.cpp \
+    simplekllfilerw.cpp \
     updatechecker.cpp \
     voistkond.cpp \
     importaken.cpp \
     tulemuseaken.cpp \
-    algusevalik.cpp \
     seadedkast.cpp \
     valikkast.cpp \
     leht.cpp \
@@ -81,9 +84,9 @@ SOURCES += lisalaskudeaken.cpp \
     ../../common/src/siusdataconnections.cpp \
     ../../common/src/siusdataconnection.cpp
 FORMS += lisalaskudeaken.ui \
+    initialdialog.ui \
     liikmetevalikkast.ui \
     importaken.ui \
-    algusevalik.ui \
     seadedkast.ui \
     valikkast.ui \
     lehelugejaaken.ui \

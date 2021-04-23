@@ -11,6 +11,7 @@
 #include <QApplication>
 
 #include "leht.h"
+#include "competitionsettings.h"
 #include "tabwidgetwithsettings.h"
 
 class KllFileRW : public QObject

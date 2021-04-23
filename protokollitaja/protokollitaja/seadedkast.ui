@@ -22,14 +22,7 @@
         <string>Võistluse seaded</string>
        </property>
        <layout class="QGridLayout" name="gridLayout">
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Kirjutusabi:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
+        <item row="3" column="2">
          <spacer name="horizontalSpacer_2">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -42,6 +35,54 @@
           </property>
          </spacer>
         </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Kirjutusabi:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="4" colspan="3">
+         <widget class="QComboBox" name="jarjestamiseBox">
+          <item>
+           <property name="text">
+            <string>Sisekümnete arvuga</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Viimase seeriaga</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="label_13">
+          <property name="text">
+           <string>kuni:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1" colspan="6">
+         <widget class="QLineEdit" name="kohtEdit"/>
+        </item>
+        <item row="0" column="1" colspan="6">
+         <widget class="QLineEdit" name="voistluseNimi"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_12">
+          <property name="text">
+           <string>Toimumisaeg:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>Koht:</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label">
           <property name="text">
@@ -49,14 +90,14 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_7">
+        <item row="3" column="3">
+         <widget class="QLabel" name="label_8">
           <property name="text">
-           <string>Aeg ja koht:</string>
+           <string>Järjestamine</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
+        <item row="3" column="1">
          <widget class="QComboBox" name="kirjutusAbiCombo">
           <property name="currentIndex">
            <number>1</number>
@@ -73,31 +114,32 @@
           </item>
          </widget>
         </item>
-        <item row="1" column="1" colspan="6">
-         <widget class="QLineEdit" name="aegKohtEdit"/>
-        </item>
-        <item row="0" column="1" colspan="6">
-         <widget class="QLineEdit" name="voistluseNimi"/>
-        </item>
-        <item row="2" column="3">
-         <widget class="QLabel" name="label_8">
-          <property name="text">
-           <string>Järjestamine</string>
+        <item row="1" column="1">
+         <widget class="QDateEdit" name="startDateEdit">
+          <property name="minimumDate">
+           <date>
+            <year>2000</year>
+            <month>1</month>
+            <day>1</day>
+           </date>
+          </property>
+          <property name="displayFormat">
+           <string>dd.MM.yyyy</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="4" colspan="3">
-         <widget class="QComboBox" name="jarjestamiseBox">
-          <item>
-           <property name="text">
-            <string>Sisekümnete arvuga</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Viimase seeriaga</string>
-           </property>
-          </item>
+        <item row="1" column="3">
+         <widget class="QDateEdit" name="endDateEdit">
+          <property name="minimumDate">
+           <date>
+            <year>2000</year>
+            <month>1</month>
+            <day>1</day>
+           </date>
+          </property>
+          <property name="displayFormat">
+           <string>dd.MM.yyyy</string>
+          </property>
          </widget>
         </item>
        </layout>
@@ -109,6 +151,27 @@
         <string>Autosave</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="aegEdit">
+          <property name="value">
+           <number>20</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Varukoopia salvestamine iga</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>minuti järel</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="0" colspan="2">
          <widget class="QLabel" name="label_3">
           <property name="text">
@@ -131,27 +194,6 @@
             <string>Sees</string>
            </property>
           </item>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Varukoopia salvestamine iga</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QLabel" name="label_5">
-          <property name="text">
-           <string>minuti järel</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QSpinBox" name="aegEdit">
-          <property name="value">
-           <number>20</number>
-          </property>
          </widget>
         </item>
        </layout>

@@ -33,7 +33,7 @@
 #include "andmebaas.h"
 #include "laskur.h"
 #include "leht.h"
-#include "algusevalik.h"
+#include "initialdialog.h"
 #include "datauploader.h"
 #include "valikkast.h"
 #include "seadedkast.h"
@@ -80,7 +80,7 @@ public:
     QFile *logi;    //Siusist tulnud info põhjal tehtud muudatuste logi
     QFile *siusLogi;    //Siusist saabunud võrguliikluse logi
 	QString voistluseNimi;
-	QString aegKoht;
+    QString koht;
 	QString seeFail;
     QString finaaliFailiNimi;   //Tehtava finaali faili nimi täies pikkuses
     QString ipAadress;
@@ -160,7 +160,7 @@ public:
 //    Leht *vorguLeht;    //Pointer lehele, millel oleva laskuri siffer saadeti viimati Protolehelugejale
     Laskur *lehelugejaLaskur;   //Pointer laskurile, kellele loetakse parasjagu tulemusi
 //    Laskur *vorguLaskur;    //Pointer laskurile, kelle siffer saadeti viimati Protolehelugejale
-    AlguseValik *aValik;
+    InitialDialog *aValik;
 	ValikKast *valik;
 	SeadedKast *seaded;
     SifriSeade *sifriLisaAken;
@@ -266,7 +266,11 @@ private slots:
     void viiLoppu();
 
 private:
+    void setDataFromInitialDialog();
+    QString timeAndPlaceString();
     DataUploader *dataUploader = nullptr;
+    QDate m_startDate;
+    QDate m_endDate;
     QProgressDialog *progress;  //Näitab, et SiusDatast alles andmed tulevad
     CommonSettings m_settings;
     QString webCompetitionId = "";
