@@ -25,10 +25,11 @@ protected:
 public:
     InitialDialog(QWidget *parent = 0);
     ~InitialDialog();
-    Ui::InitialDialogClass ui;
+    void setCompetitionName(QString newName);
     void setData(CompetitionSettings data);
-    void setStartDate(const QDate startDate);
     void setEndDate(const QDate endDate);
+    void setFileName(QString newName);
+    void setStartDate(const QDate startDate);
     QDate endDate() const;
     QDate startDate() const;
     QString competitionName() const;
@@ -44,6 +45,7 @@ public slots:
 private slots:
 
 private:
+    Ui::InitialDialogClass ui;
     void resetDates();
 };
 

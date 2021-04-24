@@ -4,19 +4,19 @@ InitialDialog::InitialDialog(QWidget *parent)
     : QDialog(parent)
 {
         ui.setupUi(this);
-        ui.failiNimi->setText("");
+        ui.fileNameEdit->setText("");
         resetDates();
 
-        connect(ui.avaNupp, SIGNAL(clicked()), this, SLOT(avamine()));
-        connect(ui.voistluseNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus(QString)));
-        connect(ui.uusNupp, SIGNAL(clicked()), this, SLOT(newCompetition()));
-        connect(ui.edasiNupp, SIGNAL(clicked()), this, SLOT(edasi()));
+        connect(ui.browseButton, SIGNAL(clicked()), this, SLOT(avamine()));
+        connect(ui.competitionNameEdit, SIGNAL(textEdited(QString)), this, SLOT(muutus(QString)));
+        connect(ui.newButton, SIGNAL(clicked()), this, SLOT(newCompetition()));
+        connect(ui.forwardButton, SIGNAL(clicked()), this, SLOT(edasi()));
 }
 
 void InitialDialog::avamine()
 {
     QString uusNimi;
-    if(ui.failiNimi->text().isEmpty())
+    if(ui.fileNameEdit->text().isEmpty())
 #if QT_VERSION >= 0x050000
         uusNimi = QFileDialog::getOpenFileName(this, tr("Ava fail"),
                 QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("Protokollitaja fail (*.kll)"));
@@ -25,17 +25,17 @@ void InitialDialog::avamine()
                 QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation), tr("Protokollitaja fail (*.kll)"));
 #endif
     else
-        uusNimi = QFileDialog::getOpenFileName(this, tr("Ava fail"), ui.failiNimi->text(), tr("Protokollitaja fail (*.kll)"));
+        uusNimi = QFileDialog::getOpenFileName(this, tr("Ava fail"), ui.fileNameEdit->text(), tr("Protokollitaja fail (*.kll)"));
     if(!uusNimi.isEmpty()){
-                ui.failiNimi->setText(uusNimi);
+                ui.fileNameEdit->setText(uusNimi);
                 //failiNimi.chop(4);
-                QFile fail(ui.failiNimi->text());
+                QFile fail(ui.fileNameEdit->text());
                 if(fail.open(QIODevice::ReadOnly)){
                         QDataStream sisse(&fail);
                         quint32 kontroll, versioon;
                         sisse >> kontroll >> versioon;
                         if(kontroll != 0x00FA3848){
-                                QMessageBox::critical(this, tr("Protokollitaja"), tr("Vigane või vale fail!\n%1").arg(ui.failiNimi->text()), QMessageBox::Ok);
+                                QMessageBox::critical(this, tr("Protokollitaja"), tr("Vigane või vale fail!\n%1").arg(ui.fileNameEdit->text()), QMessageBox::Ok);
                                 return;
                         }
                         if(versioon >= 100 && versioon <= 112){
@@ -43,12 +43,12 @@ void InitialDialog::avamine()
                                 //char *rida2;
                                 sisse >> rida;
                                 //rida = QString::fromUtf8(rida2);
-                                ui.voistluseNimi->setText(rida);
+                                ui.competitionNameEdit->setText(rida);
                                 rida.clear();
                                 //*rida2 = 0;
                                 sisse >> rida;
                                 //rida = QString::fromUtf8(rida2);
-                                ui.kohtEdit->setText(rida);
+                                ui.placeEdit->setText(rida);
                         }else QMessageBox::critical(this, tr("Protokollitaja"), tr("Vale versiooni fail!\n\nVõimalik, et "
                                   "tegu on uuema programmi versiooni failiga.\n\n(AlguseValik::avamine())"),QMessageBox::Ok);
                         fail.close();
@@ -58,7 +58,7 @@ void InitialDialog::avamine()
 
 void InitialDialog::closeEvent(QCloseEvent *event)
 {
-    if(ui.voistluseNimi->text().isEmpty() || ui.kohtEdit->text().isEmpty())
+    if(ui.competitionNameEdit->text().isEmpty() || ui.placeEdit->text().isEmpty())
         event->ignore();
     else
         event->accept();
@@ -66,7 +66,7 @@ void InitialDialog::closeEvent(QCloseEvent *event)
 
 QString InitialDialog::competitionName() const
 {
-    return ui.voistluseNimi->text();
+    return ui.competitionNameEdit->text();
 }
 
 void InitialDialog::edasi()
@@ -102,7 +102,7 @@ void InitialDialog::edasi()
                     "Sellise nimega faili ei ole. Kas soovite selle luua?",
                     QMessageBox::Ok | QMessageBox::Cancel
                     ) == QMessageBox::Ok){
-            if (SimpleKllFileRW::writeInitialKll(ui.failiNimi->text(), data, this))
+            if (SimpleKllFileRW::writeInitialKll(ui.fileNameEdit->text(), data, this))
                 this->accept();
             return;
         } else
@@ -118,17 +118,17 @@ QDate InitialDialog::endDate() const
 
 QString InitialDialog::fileName() const
 {
-    return ui.failiNimi->text();
+    return ui.fileNameEdit->text();
 }
 
 void InitialDialog::muutus(QString)
 {
-        ui.failiNimi->setText("");
+        ui.fileNameEdit->setText("");
 }
 
 QString InitialDialog::place() const
 {
-    return ui.kohtEdit->text();
+    return ui.placeEdit->text();
 }
 
 void InitialDialog::resetDates()
@@ -138,18 +138,28 @@ void InitialDialog::resetDates()
     setStartDate(QDate::currentDate());
 }
 
+void InitialDialog::setCompetitionName(QString newName)
+{
+    ui.competitionNameEdit->setText(newName);
+}
+
 void InitialDialog::setData(CompetitionSettings data)
 {
-    ui.voistluseNimi->setText(data.competitionName);
+    ui.competitionNameEdit->setText(data.competitionName);
     setStartDate(data.startDate);
     setEndDate(data.endDate);
-    ui.kohtEdit->setText(data.place);
-    ui.failiNimi->setText(data.fileName);
+    ui.placeEdit->setText(data.place);
+    ui.fileNameEdit->setText(data.fileName);
 }
 
 void InitialDialog::setEndDate(const QDate endDate)
 {
     ui.endDateEdit->setDate(endDate);
+}
+
+void InitialDialog::setFileName(QString newName)
+{
+    ui.fileNameEdit->setText(newName);
 }
 
 void InitialDialog::setStartDate(const QDate startDate)
@@ -170,7 +180,7 @@ void InitialDialog::newCompetition()
                 tr("Sisestage uue võistluse nimi"),
                 tr("Võistluse nimi:"),
                 QLineEdit::Normal,
-                ui.voistluseNimi->text(),
+                ui.competitionNameEdit->text(),
                 &ok
                 );
 
@@ -187,8 +197,8 @@ void InitialDialog::newCompetition()
             if(!failiNimi.endsWith(".kll"))
                 failiNimi.append(".kll");
 
-            ui.voistluseNimi->setText(uusNimi);
-            ui.failiNimi->setText(failiNimi);
+            ui.competitionNameEdit->setText(uusNimi);
+            ui.fileNameEdit->setText(failiNimi);
             resetDates();
         }
     }

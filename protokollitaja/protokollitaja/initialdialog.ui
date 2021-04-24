@@ -34,7 +34,7 @@
       </widget>
      </item>
      <item row="2" column="1" colspan="3">
-      <widget class="QLineEdit" name="kohtEdit">
+      <widget class="QLineEdit" name="placeEdit">
        <property name="toolTip">
         <string>Toimumise aeg ja koht</string>
        </property>
@@ -68,7 +68,7 @@
       </widget>
      </item>
      <item row="3" column="3">
-      <widget class="QPushButton" name="avaNupp">
+      <widget class="QPushButton" name="browseButton">
        <property name="toolTip">
         <string>Siia vajutades saate otsida teise faili, mida avada</string>
        </property>
@@ -78,7 +78,7 @@
       </widget>
      </item>
      <item row="0" column="1" colspan="3">
-      <widget class="QLineEdit" name="voistluseNimi">
+      <widget class="QLineEdit" name="competitionNameEdit">
        <property name="toolTip">
         <string>Praegu valitava võistluse nimi</string>
        </property>
@@ -139,7 +139,7 @@
       </widget>
      </item>
      <item row="3" column="1" colspan="2">
-      <widget class="QLineEdit" name="failiNimi">
+      <widget class="QLineEdit" name="fileNameEdit">
        <property name="toolTip">
         <string>Võistluse faili nimi</string>
        </property>
@@ -176,7 +176,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="uusNupp">
+      <widget class="QPushButton" name="newButton">
        <property name="toolTip">
         <string>Siia vajutades saate luua uue võistluse ja faili</string>
        </property>
@@ -186,7 +186,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="edasiNupp">
+      <widget class="QPushButton" name="forwardButton">
        <property name="toolTip">
         <string>Selle võistluse ja faili avamiseks vajutage siia</string>
        </property>
@@ -199,7 +199,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="valjuNupp">
+      <widget class="QPushButton" name="exitButton">
        <property name="text">
         <string>Välju</string>
        </property>
@@ -213,7 +213,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>valjuNupp</sender>
+   <sender>exitButton</sender>
    <signal>clicked()</signal>
    <receiver>InitialDialogClass</receiver>
    <slot>reject()</slot>

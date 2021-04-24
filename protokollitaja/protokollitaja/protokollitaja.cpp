@@ -2578,7 +2578,7 @@ void Protokollitaja::loeSeaded()
     if(algF.open(QIODevice::ReadOnly | QIODevice::Text)){
             QTextStream sisse(&algF);
             sisse.setCodec("UTF-8");
-            aValik->ui.failiNimi->setText(sisse.readLine());
+            aValik->setFileName(sisse.readLine());
 
             while(!sisse.atEnd()){  //Loetakse seadete failist veel ka uued väärtused mõnedele konstantidele (kui need seal olemas on)
                 QString rida = sisse.readLine();
@@ -2601,7 +2601,7 @@ void Protokollitaja::loeSeaded()
                 }
             }
             algF.close();
-            aValik->setData(SimpleKllFileRW::readCompetitionSettingsFromKll(aValik->ui.failiNimi->text(), this));
+            aValik->setData(SimpleKllFileRW::readCompetitionSettingsFromKll(aValik->fileName(), this));
     }
 }
 
@@ -4379,11 +4379,11 @@ void Protokollitaja::seiskaServer()
 
 void Protokollitaja::setDataFromInitialDialog()
 {
-    voistluseNimi = aValik->ui.voistluseNimi->text();
-    seeFail = aValik->ui.failiNimi->text();
+    voistluseNimi = aValik->competitionName();
+    seeFail = aValik->fileName();
     m_startDate = aValik->startDate();
     m_endDate = aValik->endDate();
-    koht = aValik->ui.kohtEdit->text();
+    koht = aValik->place();
     setWindowTitle(programmiNimi + " - " + seeFail);
     kirjutaSeaded();
 }
