@@ -5,6 +5,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 /// ToDo list:
+/// Pooleli:
 /// Print2() on pooleli, asendite pealkirju ei ole
 /// Protokollitaja lehelugeja vajab uuendamist:
 /// 1. Uue masinaga lugemine ei tööta?
@@ -102,12 +103,15 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         eksportCSVAct = new QAction(QIcon(":/images/eksport.png"), tr("Eksport csv..."), this);
         eksportCSVAct->setStatusTip(tr("Ekspordib selle lehe tulemused .csv faili"));
         connect(eksportCSVAct, SIGNAL(triggered()), this, SLOT(eksportCSV()));
+        eksportInbandStartListAct = new QAction(tr("Eksport Inband startlist..."), this);
+        eksportInbandStartListAct->setStatusTip(tr("Ekspordib valitud laskurid Inband'i startlisti faili"));
+        connect(eksportInbandStartListAct, &QAction::triggered, [this]{exportStartList(StartListWriter::INBAND);});
         eksportSiusStartListAct = new QAction(tr("Eksport Sius startlist..."), this);
         eksportSiusStartListAct->setStatusTip(tr("Ekspordib valitud laskurid Sius'i startlisti faili"));
-        connect(eksportSiusStartListAct, SIGNAL(triggered()), this, SLOT(eksportSiusStartList()));
+        connect(eksportSiusStartListAct, &QAction::triggered, [this]{exportStartList(StartListWriter::SIUS);});
         eksportFSiusStartListAct = new QAction(tr("Eksport finaali Sius startlist..."), this);
         eksportFSiusStartListAct->setStatusTip(tr("Ekspordib esimesed 8 laskurit Sius'i startlisti faili"));
-        connect(eksportFSiusStartListAct, SIGNAL(triggered()), this, SLOT(eksportFSiusStartList()));
+        connect(eksportFSiusStartListAct, SIGNAL(triggered()), this, SLOT(exportFinalsSiusStartList()));
         eksportXLSAct = new QAction(QIcon(":/images/eksport.png"), tr("Eksport xls..."), this);
         eksportXLSAct->setStatusTip(tr("Ekspordib selle lehe tulemused Excel'i .xls faili"));
         connect(eksportXLSAct, SIGNAL(triggered()), this, SLOT(eksportXLS()));
@@ -247,6 +251,8 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         tulemusedMenu->addAction(eksportTXTAct);
         tulemusedMenu->addAction(eksportCSVAct);
         tulemusedMenu->addAction(eksportXLSAct);
+        tulemusedMenu->addSeparator();
+        tulemusedMenu->addAction(eksportInbandStartListAct);
         tulemusedMenu->addAction(eksportSiusStartListAct);
         tulemusedMenu->addAction(eksportFSiusStartListAct);
         tulemusedMenu->addSeparator();
@@ -299,7 +305,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         aValik = new InitialDialog(this);
         aValik->setWindowModality(Qt::ApplicationModal);
         aValik->setWindowIcon(QIcon(":/images/Protokollitaja.ico"));
-        valik = new ValikKast(this);
+        valik = new ValikKast(&m_settings, this);
         valik->setWindowIcon(QIcon(":/images/Protokollitaja.ico"));
         valik->setWindowModality(Qt::ApplicationModal);
         tulemus = new TulemuseAken();
@@ -894,7 +900,7 @@ void Protokollitaja::eksportCSV()
         }else QMessageBox::critical(this, "Viga", tr("Ei õnnestu faili kirjutada."), QMessageBox::Ok);
 }
 
-void Protokollitaja::eksportSiusStartList()
+void Protokollitaja::exportStartList(StartListWriter::StartListType type)
 {
     Leht* leht = 0;
     if(tabWidget->count() > 0)
@@ -913,29 +919,37 @@ void Protokollitaja::eksportSiusStartList()
         return;
     }
 
-    QVector<QStringList> competitorsList;
+    QVector<StartListWriter::StartListCompetitor> competitorsList;
 
     for(int i = 0; i < leht->laskurid.count(); i++){
         if(leht->laskurid[i]->linnuke->isChecked()){
             QStringList row;    //target, ID, first name, name, club, result
             if(leht->laskurid[i]->rajaNr->text().contains("A") || leht->laskurid[i]->rajaNr->text().contains("B") || leht->laskurid[i]->rajaNr->text().contains("C") || leht->laskurid[i]->rajaNr->text().contains("D") || leht->laskurid[i]->rajaNr->text().contains("E") || leht->laskurid[i]->rajaNr->text().contains("F") || leht->laskurid[i]->rajaNr->text().contains("G") || leht->laskurid[i]->rajaNr->text().contains("H"))
                 QMessageBox::critical(this, "Viga", tr("Raja numbrites on tähti. Kui soovite finaali start listi eksportida, kasutage teist funktsiooni!"), QMessageBox::Ok);
-            row << leht->laskurid[i]->rajaNr->text();
-            row << QString("%1").arg(leht->laskurid[i]->id);
-            row << leht->laskurid[i]->eesNimi->text();
-            row << leht->laskurid[i]->perekNimi->text();
-            row << leht->laskurid[i]->klubi->text();
-            row << leht->laskurid[i]->getSumma().replace(",", ".");
 
-            competitorsList.append(row);
+            competitorsList.append(StartListWriter::StartListCompetitor{
+                                       leht->laskurid[i]->rajaNr->text(),
+                                       QString("%1").arg(leht->laskurid[i]->id),
+                                       leht->laskurid[i]->eesNimi->text(),
+                                       leht->laskurid[i]->perekNimi->text(),
+                                       leht->laskurid[i]->klubi->text(),
+                                       leht->laskurid[i]->getSumma().replace(",", "."),
+                                       m_settings.eventNames.indexOf(leht->harjutus),
+                                       ""  // TODO to be implemented
+                                   });
         }
     }
 
-    StartListWriter *startListWriter = new StartListWriter(competitorsList, seeFail, this);
-    startListWriter->deleteLater();
+    if(competitorsList.size() <= 0){
+        QMessageBox::critical(this, "Viga", tr("Märgitud laskurid puuduvad, ei ole midagi eksportida!"), QMessageBox::Ok);
+        return;
+    } else {
+        StartListWriter *startListWriter = new StartListWriter(competitorsList, seeFail, type, this);
+        startListWriter->deleteLater();
+    }
 }
 
-void Protokollitaja::eksportFSiusStartList()
+void Protokollitaja::exportFinalsSiusStartList()
 {
     Leht* leht = 0;
     if(tabWidget->count() > 0)
@@ -1475,7 +1489,14 @@ void Protokollitaja::finaaliFail()
             finalsTable << finalsRow;
         }
 
-        FinalsFileExport *finalsFileExport = new FinalsFileExport(finalsTable, seeFail, voistluseNimi, seeLeht->ekraaniNimi, this);
+        FinalsFileExport *finalsFileExport = new FinalsFileExport(
+                    finalsTable,
+                    seeFail,
+                    voistluseNimi,
+                    seeLeht->ekraaniNimi,
+                    m_settings.eventNames.indexOf(seeLeht->harjutus),
+                    this
+                    );
         finalsFileExport->setRelay(10 + seeLeht->leheIndeks);
         if(finalsFileExport->exec() == QDialog::Accepted){
             //Lisa kood, et lugeda finaalifailinimi
@@ -2984,6 +3005,7 @@ void Protokollitaja::naitaTul()
         areaNr = 0;
         reaNr = 0;
     }
+
     if(tabWidget->count() > leheNr){
         if(leheNr >= 0){
             Leht *seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(leheNr))->widget());

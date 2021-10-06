@@ -1,23 +1,19 @@
 QT += testlib
-QT -= gui
+QT += gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 INCLUDEPATH += ../../protokollitaja/ \
     ../../../common/src/
 
-CONFIG += qt console warn_on depend_includepath testcase
-CONFIG -= app_bundle
+CONFIG += qt warn_on depend_includepath testcase
 
 TEMPLATE = app
 
-SOURCES +=  tst_finalsfileexport.cpp \
-    ../../protokollitaja/finalsfileexport.cpp \
+SOURCES +=  tst_startlistwritertest.cpp \
     ../../protokollitaja/startlistwriter.cpp \
     ../../../common/src/commonsettings.cpp
 
-HEADERS += ../../protokollitaja/finalsfileexport.h \
+HEADERS += \
     ../../protokollitaja/startlistwriter.h \
     ../../../common/src/commonsettings.h
-
-FORMS += ../../protokollitaja/finalsfileexport.ui

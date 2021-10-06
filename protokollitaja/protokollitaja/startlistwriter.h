@@ -7,23 +7,46 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QMessageBox>
+#include "commonsettings.h"
 
 class StartListWriter : public QObject
 {
     Q_OBJECT
 public:
-    explicit StartListWriter(QVector<QStringList> competitorsList, QString filePath, QObject *parent = nullptr, int relay = 0);
+    enum StartListType {SIUS = 0, INBAND = 1};
+    struct StartListCompetitor {
+        QString target;
+        QString ID;
+        QString firstName;
+        QString name;
+        QString club;
+        QString result;
+        int discipline;
+        QString competitorClass;
+    };
+
+    explicit StartListWriter(
+            QVector<StartListCompetitor> competitorsList,
+            QString filePath,
+            StartListType type,
+            QObject *parent = nullptr,
+            int relay = 0
+            );
 
 signals:
 
 public slots:
 
 private:
-    int relay;
-    QString filePath;
-    QVector<QStringList> competitorsList;
+    int m_relay;
+    QString m_filePath;
+    QVector<StartListCompetitor> m_competitorsList;
+
+    QString replaceLetterWithNumber(QString in);
 private slots:
-    void writeStartListFile();
+    int writeInbandData(QTextStream*);
+    int writeSiusData(QTextStream*);
+    void writeStartListFile(StartListType);
 };
 
 #endif // STARTLISTWRITER_H

@@ -100,6 +100,7 @@ public:
     QAction *eemaldaMargidAct;
     QAction *eemaldaTabAct;
     QAction *eksportCSVAct;
+    QAction *eksportInbandStartListAct;
     QAction *eksportSiusStartListAct;
     QAction *eksportFSiusStartListAct;
     QAction *eksportTXTAct;
@@ -193,8 +194,8 @@ private slots:
     void eemaldaMargid();
     void eemaldaTab();
     void eksportCSV();
-    void eksportSiusStartList();    //SiusData fail põhivõistluse jaoks
-    void eksportFSiusStartList();   //SiusData fail finaali jaoks
+    void exportStartList(StartListWriter::StartListType type);    // For qualification event
+    void exportFinalsSiusStartList();   // For finals
     void eksportTXT();
     void eksportXLS();
     void finaaliFail();

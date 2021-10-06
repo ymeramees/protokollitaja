@@ -151,7 +151,7 @@ std::optional<SiusShotData> SiusDataConnection::extractShotData(
     else if (settings->sighterShotTypes().contains(shotType))
         shot.setCompetitionShot(false);
     else {
-        *log << QTime::currentTime().toString("hh:mm:ss") << " #ERROR: Unknown shot type in shot row: " << shotRow;
+        *log << QTime::currentTime().toString("hh:mm:ss") << " #ERROR: Unknown shot type " << shotType << " in shot row: " << shotRow;
         if( totalRowParts[6] == "0")
             shot.setCompetitionShot(false);
         else

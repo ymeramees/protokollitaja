@@ -10,6 +10,7 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include "ui_valikkast.h"
+#include "commonsettings.h"
 
 class ValikKast : public QDialog
 {
@@ -17,9 +18,9 @@ class ValikKast : public QDialog
 
 public:
     int relv;   //defineeritud järgmiselt
-    enum {Muu = 0, Ohupuss = 1, Ohupustol = 2, Sportpuss = 3, Spordipustol = 4, Puss = 5, Pustol = 6};
-    QString harjutus;
-    ValikKast(QWidget *parent = 0);
+    enum Relv {Muu = 0, Ohupuss = 1, Ohupustol = 2, Sportpuss = 3, Spordipustol = 4, Puss = 5, Pustol = 6};
+    QString harjutus;   // TODO To be changed to int
+    ValikKast(CommonSettings *settings, QWidget *parent = 0);
     ~ValikKast();
     Ui::ValikKastClass ui;
 
