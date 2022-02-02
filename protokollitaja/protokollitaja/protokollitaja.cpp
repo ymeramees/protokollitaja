@@ -5,13 +5,13 @@
 
 /////////////////////////////////////////////////////////////////////////////
 /// ToDo list:
-/// Pooleli:
+/// Pooleli: Laskude akna sulgemisel laskude seeriasse asetamine ning summeerimine ei toimi õigesti (test selle jaoks)
 /// Print2() on pooleli, asendite pealkirju ei ole
 /// Protokollitaja lehelugeja vajab uuendamist:
 /// 1. Uue masinaga lugemine ei tööta?
 /// 2. Sisekümneid ei märgistata
 /// 3. Kll faili lugeja-kirjutaja testide tegemine
-///
+/// 4. Inbandi stardinimekirja eksport konfigureeritavaks
 ///
 /////////////////////////////////////////////////////////////////////////////
 
@@ -2417,6 +2417,10 @@ void Protokollitaja::loefail()
                                             leht->laskurid[j]->lasud[k][l]->set10Lask(lask);
                                             leht->laskurid[j]->lasud[k][l]->setMmX(x);
                                             leht->laskurid[j]->lasud[k][l]->setMmY(y);
+                                            Lask shot(lask);
+                                            shot.setMmX(x);
+                                            shot.setMmY(y);
+                                            leht->laskurid[j]->addShot(shot);
                                         }
                                     }else if(competitionSettings.fileVersion >= 109){
                                         QString x, y;
@@ -2424,14 +2428,20 @@ void Protokollitaja::loefail()
                                         bool isInnerTen = false;
                                         for(int l = 0; l < leht->laskurid[j]->lasud[k].count(); l++){
                                             in >> lask >> x >> y;
+                                            Lask shot(lask);
+                                            shot.setMmX(x);
+                                            shot.setMmY(y);
                                             if(competitionSettings.fileVersion >= 111){
                                                 in >> shotTime >> isInnerTen;
                                                 leht->laskurid[j]->lasud[k][l]->setShotTime(shotTime);
                                                 leht->laskurid[j]->lasud[k][l]->setInnerTen(isInnerTen);
+                                                shot.setShotTime(shotTime);
+                                                shot.setInnerTen(isInnerTen);
                                             }
                                             leht->laskurid[j]->lasud[k][l]->set10Lask(lask);
                                             leht->laskurid[j]->lasud[k][l]->setMmX(x);
                                             leht->laskurid[j]->lasud[k][l]->setMmY(y);
+                                            leht->laskurid[j]->addShot(shot);
                                         }
                                     }
                                     if(competitionSettings.fileVersion >= 110){

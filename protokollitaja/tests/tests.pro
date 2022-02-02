@@ -5,6 +5,7 @@ SUBDIRS += CompetitorTest \
     FinalsFileExportTest \
     InitialDialogTest \
     KllFileRWTest \
+    ShotsWindowTest \
     StartListWriterTest \
     UpdateCheckerTest
 

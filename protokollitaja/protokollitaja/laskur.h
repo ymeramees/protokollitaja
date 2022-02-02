@@ -20,8 +20,9 @@
 #include <QTimer>
 
 #include "lisalaskudeaken.h"
+#include "competitorshot.h"
 #include "siusshotdata.h"
-#include "laskudeaken.h"
+#include "shotswindow.h"
 #include "andmebaas.h"
 #include "lask.h"
 
@@ -68,7 +69,7 @@ public:
 	QLineEdit *markus;
 	QPushButton *lisaLNupp;
 	QTimer *arvutaja;
-	LisaLaskudeAken *lisaAken;
+    LisaLaskudeAken *lisaAken = nullptr;
     Laskur(
             Andmebaas* andmebaas,
             int seeriateArv,
@@ -84,6 +85,7 @@ public:
             );
     ~Laskur();
 //    bool operator<(const Laskur &l) const;
+    bool addShot(Lask shot);
     QString* getEventType() const;
     QString getSumma();
     bool vaiksem(Laskur *l, int t) const;
@@ -140,7 +142,8 @@ private:
     QMenu *popup;
     QString *m_eventType;
     QString m_previousSiusRow;
-    LaskudeAken *laskudeAken;
+    QVector<CompetitorShot> m_shots;
+    ShotsWindow *shotsWindow = nullptr;
     void contextMenuEvent(QContextMenuEvent *event);
     int findShotFromPreviousStages(const SiusShotData shotData) const;
     void setCompetitionStage(int newStage);

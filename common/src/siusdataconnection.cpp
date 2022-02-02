@@ -102,6 +102,7 @@ std::optional<SiusShotData> SiusDataConnection::extractShotData(
     QStringList totalRowParts = totalRow.split(';');
     QStringList previousRowParts = shotRow.split(';');
     if (totalRowParts.length() < 13){
+        *log << QTime::currentTime().toString("hh:mm:ss") << " #ERROR: Too few fields in total row: " << shotRow;
         return std::nullopt;  // Probably the event's last total row, which can be ignored
     } else if (previousRowParts.length() < 16){
         *log << QTime::currentTime().toString("hh:mm:ss") << " #ERROR: Too few fields in shot row: " << shotRow;
@@ -159,6 +160,7 @@ std::optional<SiusShotData> SiusDataConnection::extractShotData(
         // TODO Send unknown new shot type to api server
     }
 
+    *log << QTime::currentTime().toString("hh:mm:ss") << " #INFO: extracted a shot: " << QJsonDocument(shot.toJson()).toJson(QJsonDocument::Compact) << " in shot row: " << shotRow;
     shotData.shot = shot;
     shotData.socketIndex = socketIndex;
 
@@ -200,7 +202,7 @@ void SiusDataConnection::readFromSius()
                     *log << QTime::currentTime().toString("hh:mm:ss") << " #clear()\n";
                     row = QString("%1").arg(siusBuffer);
                     siusBuffer.clear();
-                    emit statusInfo(tr("Viimane rida, buffer.length(): %1").arg(siusBuffer.length()));
+                    emit statusInfo(tr("Viimane rida: %1, buffer.length(): %2").arg(row).arg(siusBuffer.length()));
                 } else
                     break;
             }else{
@@ -227,6 +229,8 @@ void SiusDataConnection::readFromSius()
 
                 previousRow.clear();
 
+            } else if (row.startsWith("_TOTL") && previousRow.isEmpty()) {
+                *log << QTime::currentTime().toString("hh:mm:ss") << " #ERROR: Received " << row << ", but previousRow is empty";
             } else if (row.startsWith("_SHOT")){
                 previousRow = row;
             }

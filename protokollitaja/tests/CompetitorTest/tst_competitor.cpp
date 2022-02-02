@@ -24,6 +24,7 @@ private slots:
     void test_readSiusShotRepeatedShotDataInSecondStage();
     void test_readSiusShotSecondStageCompetitionShots();
     void test_seriesMissingShots();
+    void test_shotsWindow();
 
 };
 
@@ -310,6 +311,20 @@ void CompetitorTest::test_seriesMissingShots()
     }
     competitor.liida();
     QVERIFY(competitor.seeriad[1]->palette().base().color() == Qt::white);
+}
+
+void CompetitorTest::test_shotsWindow()
+{
+    QString eventType = "40l õhupüss";
+    bool writeAssistant = false;
+    bool withDecimals = true;
+    int sorting = 1;
+
+    Laskur competitor(nullptr, 4, 0, 0, &writeAssistant, &withDecimals, 36, &sorting, &eventType, 10, nullptr);
+    Lask shot("_SHOT;9;10;36;60;74;10:43:56.17;3;31;7;94;0;0;49;-0.00187626;0.00347202;900;0;0;655.35;98903519;61;450;0");
+
+    competitor.lasud[0][0]->set(&shot);
+    competitor.liida();
 }
 
 QTEST_MAIN(CompetitorTest)

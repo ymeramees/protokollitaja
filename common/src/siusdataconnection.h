@@ -9,6 +9,7 @@
 #include <QTcpSocket>
 #include <QPushButton>
 #include <QHBoxLayout>
+#include <QJsonDocument>
 #include <QProgressDialog>
 #include <QCoreApplication>
 

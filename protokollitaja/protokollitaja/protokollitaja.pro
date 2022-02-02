@@ -21,11 +21,14 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += lisalaskudeaken.h \
+    ../../common/src/competitorshot.h \
     competitionsettings.h \
     datauploader.h \
     initialdialog.h \
     kllfilerw.h \
     liikmetevalikkast.h \
+    shotstablemodel.h \
+    shotswindow.h \
     simplekllfilerw.h \
     tabwidgetwithsettings.h \
     updatechecker.h \
@@ -41,7 +44,6 @@ HEADERS += lisalaskudeaken.h \
     lehelugejaaken.h \
     sifriseade.h \
     version.h \
-    laskudeaken.h \
     filedownloader.h \
     finalsfileexport.h \
     startlistwriter.h \
@@ -55,10 +57,13 @@ HEADERS += lisalaskudeaken.h \
     ../../common/src/siusdataconnection.h \
     ../../common/src/siusshotdata.h
 SOURCES += lisalaskudeaken.cpp \
+    ../../common/src/competitorshot.cpp \
     datauploader.cpp \
     initialdialog.cpp \
     kllfilerw.cpp \
     liikmetevalikkast.cpp \
+    shotstablemodel.cpp \
+    shotswindow.cpp \
     simplekllfilerw.cpp \
     updatechecker.cpp \
     voistkond.cpp \
@@ -72,7 +77,6 @@ SOURCES += lisalaskudeaken.cpp \
     protokollitaja.cpp \
     lehelugejaaken.cpp \
     sifriseade.cpp \
-    laskudeaken.cpp \
     filedownloader.cpp \
     finalsfileexport.cpp \
     startlistwriter.cpp \
@@ -88,10 +92,10 @@ FORMS += lisalaskudeaken.ui \
     liikmetevalikkast.ui \
     importaken.ui \
     seadedkast.ui \
+    shotswindow.ui \
     valikkast.ui \
     lehelugejaaken.ui \
     sifriseade.ui \
-    laskudeaken.ui \
     finalsfileexport.ui \
     ../../common/src/uhendumiseaken.ui \
     ../../common/src/siusdataconnections.ui

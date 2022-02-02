@@ -8,8 +8,6 @@ Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i,
 {
     id = i;
         jrkArv = 0;
-        lisaAken = nullptr;
-        laskudeAken = nullptr;
         arvutaja = new QTimer(this);
         arvutaja->setInterval(60000);
         arvutaja->setSingleShot(false);
@@ -208,6 +206,14 @@ Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i,
         popup = new QMenu(this);
         popup->addAction(laskudeAkenAct);
         popup->addAction(idAct);
+}
+
+bool Laskur::addShot(Lask shot)
+{
+    CompetitorShot compShot;    // FIXME Needs to be fixed
+    compShot.set(&shot);
+    m_shots.append(compShot);
+    return true;
 }
 
 int Laskur::competitionStage() const
@@ -788,27 +794,33 @@ void Laskur::naitaLaskudeAkent()
 //#ifdef PROOV
 //    qDebug() << "naitaLaskudeAkent()";
 //#endif
-    if(!laskudeAken){
-        laskudeAken = new LaskudeAken(kumnendikega, seeriateArv, laskudeArv, this);
+//    for(int i = 0; i < seeriateArv; i++){
+//        if(seeriad[i]->hasFocus())
+//            shotsWindow->aktiivneSeeria = i;    //Teeb laskude aknas aktiivseks selle seeria, millele klikiti
+//        for(int j = 0; j < lasud[0].count(); j++){    //Karistuse lask on vaja ka kopeerida, seetõttu on lasud.count, mitte laskudeArv
+//            m_shots.append(*lasud[i][j]);
+//        }
+//    }
+
+    if(shotsWindow == nullptr){
+        shotsWindow = new ShotsWindow(&m_shots, this);
     }
 
-    laskudeAken->muudaPealkirja(eesNimi->text() + " " + perekNimi->text());
+    shotsWindow->muudaPealkirja(eesNimi->text() + " " + perekNimi->text());
 
-    for(int i = 0; i < seeriateArv; i++){
-        if(seeriad[i]->hasFocus())
-            laskudeAken->aktiivneSeeria = i;    //Teeb laskude aknas aktiivseks selle seeria, millele klikiti
-        for(int j = 0; j < lasud[0].count(); j++){    //Karistuse lask on vaja ka kopeerida, seetõttu on lasud.count, mitte laskudeArv
-            laskudeAken->lasud[i][j]->set(lasud[i][j]);
-        }
-    }
-    laskudeAken->loeLasud();
 
-    if(laskudeAken->exec() == QDialog::Accepted){
-        laskudeAken->kirjutaLasud();
+    shotsWindow->loeLasud();
+
+    if(shotsWindow->exec() == QDialog::Accepted){
+        shotsWindow->kirjutaLasud();
         emit muudatus();
         for(int i = 0; i < seeriateArv; i++)
             for(int j = 0; j < lasud[0].count(); j++){ //Karistuse lask on vaja ka kopeerida
-                lasud[i][j]->set(laskudeAken->lasud[i][j]);
+                int index = i * 10 + j;
+                if(veryVerbose)
+                    QTextStream(stdout) << "Laskur::naitaLaskudeAkent(): index = " << index << endl;
+                if (index < m_shots.size())
+                    lasud[i][j]->set(&m_shots.at(index));   // FIXME This doesn't work
             }
     }
     liida();
@@ -1652,11 +1664,11 @@ void Laskur::vajutaTab()
 
 Laskur::~Laskur()
 {
-    if(!laskudeAken){
-        laskudeAken->deleteLater();
-        laskudeAken = nullptr;
+    if(shotsWindow != nullptr){
+        shotsWindow->deleteLater();
+        shotsWindow = nullptr;
     }
-    if(!lisaAken){
+    if(lisaAken != nullptr){
         lisaAken->deleteLater();
         lisaAken = nullptr;
     }

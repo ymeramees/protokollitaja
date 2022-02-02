@@ -11,3 +11,9 @@ SUBDIRS += protokollitaja \
     protolehelugeja \
     protofinaal \
     common
+
+HEADERS += \
+    common/src/competitorshot.h
+
+SOURCES += \
+    common/src/competitorshot.cpp
