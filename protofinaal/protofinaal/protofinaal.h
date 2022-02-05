@@ -12,6 +12,7 @@
 #include <QVBoxLayout>
 #include <QFileDialog>
 #include <QCloseEvent>
+#include <QScrollArea>
 #include <QStatusBar>
 #include <QLineEdit>
 #include <QMenuBar>
@@ -19,8 +20,8 @@
 #include <QTimer>
 #include <QFile>
 
-#include "team.h"
-#include "teamstable.h"
+#include "team2022.h"
+#include "teamstable2022.h"
 #include "initialdialog.h"
 #include "spectatorwindow.h"
 #include "lask.h"
@@ -34,6 +35,7 @@ class Protofinaal : public QMainWindow
 
 public:
     Protofinaal(QWidget *parent = nullptr);
+//    Protofinaal(QString competitionName, QString timeAndPlace, QWidget *parent = nullptr);  // TODO For testing, but a better solution would be needed
     ~Protofinaal();
     void open();
     void save();
@@ -44,7 +46,6 @@ public slots:
     void connectToSiusData();
 //    void readSiusInfo(SiusShotData shotData);
     void statusBarInfoChanged(QString newStatusInfo);
-//    void sumAllTeams();
     void updateSpectatorWindow();
 
 private slots:
@@ -55,26 +56,27 @@ private slots:
 
 private:
     bool competitionStarted = false;
+    bool m_modifiedAfterSave = false;
     CommonSettings m_settings;
-    InitialDialog *initialDialog = nullptr;
+    InitialDialog *m_initialDialog = nullptr;
     SiusDataConnections *siusDataConnections = nullptr;
-    SpectatorWindow spectatorWindow;
+    SpectatorWindow m_spectatorWindow;
     QFile *logFile = nullptr;
     QFile *siusLog = nullptr;
     QString competitionName;
     QString currentFile;
     QString eventName;
+    QString eventType;
     QString timePlace;
     QTextStream logOut;
-//    QVector<Team*> teams;
     void clear();
     void closeEvent(QCloseEvent *event);
-//    void createLayout(QJsonObject &jsonObj);
     void createMenus();
     QJsonObject readFinalsFile(QString fileName, bool showErrors = true);
     void readSettings();
-//    void sortTeams();
-    TeamsTable *teamsTable = nullptr;
+    QVBoxLayout vBox;
+    QVector<TeamsTable2022*> m_teamsTables;
+//    QScrollArea m_scrollArea;
     void writeFinalsFile(QString fileName);
     void writeSettings();
 };

@@ -21,16 +21,16 @@ void TeamsTable::createLayout(QJsonObject &jsonObj)
 {
     int teamsNo = 0;
 
-    if(jsonObj["Teams"].isArray()){
-        teamsNo = jsonObj["Teams"].toArray().size();
+    if(jsonObj["teams"].isArray()){
+        teamsNo = jsonObj["teams"].toArray().size();
     } else {
-        jsonObj["Teams"].toInt();
+        jsonObj["teams"].toInt();
     }
 
     for(int i = 0; i < teamsNo; i++){
         Team *team = nullptr;
-        if(jsonObj["Teams"].isArray()){
-            QJsonObject teamJson = jsonObj["Teams"].toArray().at(i).toObject();
+        if(jsonObj["teams"].isArray()){
+            QJsonObject teamJson = jsonObj["teams"].toArray().at(i).toObject();
             team = new Team(teamJson, i+1);
         } else {
             team = new Team(jsonObj, i+1);
@@ -121,6 +121,6 @@ QJsonObject TeamsTable::toJson() const
         teamsArray.append(team->toJson());
     }
     QJsonObject json;
-    json["Teams"] = teamsArray;
+    json["teams"] = teamsArray;
     return json;
 }

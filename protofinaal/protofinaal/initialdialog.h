@@ -18,9 +18,13 @@ public:
     ~InitialDialog();
     QString competitionName();
     QString fileName();
+    QString eventName();
+    QString eventType();
     QString timePlace();
     void setCompetitionName(QString competitionName);
     void setFileName(QString fileName);
+    void setEventName(QString newName);
+    void setEventType(QString newType);
     void setTimePlace(QString timePlace);
 
 public slots:

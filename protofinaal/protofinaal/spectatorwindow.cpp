@@ -32,7 +32,7 @@ void SpectatorWindow::addRow(QString rank, QString teamName, QString competitorN
     row.replace("#difference#", diff);
 //    row.replace(originalResultsFontSize, newResultsFontSize);
 
-    resultRows.append(row);
+    m_resultRows.prepend(row);
 
 //    if(verbose)
 //        QTextStream(stdout) << "resultRows & resultsHTML:" << resultRows << endl << endl << resultsHTML << endl;
@@ -41,7 +41,7 @@ void SpectatorWindow::addRow(QString rank, QString teamName, QString competitorN
 
 //    if(verbose)
 //        QTextStream(stdout) << "resultsHTML:" << resultsHTML << endl;
-    QString newHTML = resultsTemplate.arg(resultRows);
+    QString newHTML = resultsTemplate.arg(m_resultRows);
     newHTML.replace(originalResultsFontSize, newResultsFontSize);
     resultsView.setHtml(newHTML);
 //    resultsView.setText(resultsHTML.arg(resultRows));
@@ -60,7 +60,7 @@ bool SpectatorWindow::eventFilter(QObject *watched, QEvent *event)
 void SpectatorWindow::clearResults()
 {
 //    resultsHTML = resultsTemplate;
-    resultRows.clear();
+    m_resultRows.clear();
 }
 
 void SpectatorWindow::fullscreen()
@@ -74,12 +74,13 @@ void SpectatorWindow::initializeTemplates()
 {
     QFile templateFile("spectatorView_template.html");
     if(templateFile.open(QIODevice::ReadOnly)){
-        resultsTemplate = QString(templateFile.readAll());
-        int rowStart = resultsTemplate.indexOf("<tr>", resultsTemplate.lastIndexOf("<tbody>"));
-        int rowLength = resultsTemplate.lastIndexOf("</tr>") + 5 - rowStart;
-        rowTemplate = resultsTemplate.mid(rowStart, rowLength);
+        originalResultsTemplate = QString(templateFile.readAll());
+        int rowStart = originalResultsTemplate.indexOf("<tr>", originalResultsTemplate.lastIndexOf("<tbody>"));
+        int rowLength = originalResultsTemplate.lastIndexOf("</tr>") + 5 - rowStart;
+        rowTemplate = originalResultsTemplate.mid(rowStart, rowLength);
 //        resultsTemplate.remove(rowStart, rowLength);
-        resultsTemplate.replace(rowTemplate, "%1");
+        originalResultsTemplate.replace(rowTemplate, "%1");
+        resultsTemplate = originalResultsTemplate;
 //        resultsHTML = resultsTemplate;
         int fontSizeStart = rowTemplate.indexOf("font-size:");
         int fontSizeLength = rowTemplate.indexOf("pt" , fontSizeStart) + 2 - fontSizeStart;
@@ -114,22 +115,24 @@ void SpectatorWindow::resizeEvent(QResizeEvent *event)
         if(verbose)
             QTextStream(stdout) << "SpectatorWindow::resizeEvent(), newFontSize = " << newFontSize << ", resultsView.height() = " << resultsView.height() << endl;
         newResultsFontSize = QString("font-size: %1pt").arg(newFontSize);
-        QString newHTML = resultsTemplate.arg(resultRows);
+        QString newHTML = resultsTemplate.arg(m_resultRows);
         newHTML.replace(originalResultsFontSize, newResultsFontSize);
         resultsView.setHtml(newHTML);
     }
     event->accept();
 }
 
-void SpectatorWindow::setHeading(QString competitionName, QString timePlace, QString eventName, QString rankLabel, QString nameLabel, QString seriesLabel, QString diffLabel)
+void SpectatorWindow::setHeading(QString competitionName, QString timePlace, QString eventName, QString rankLabel, QString nameLabel, QString seriesLabel, QString pointsLabel, QString totalLabel)
 {
+    resultsTemplate = originalResultsTemplate;
     resultsTemplate.replace("#competitionName#", competitionName);
     resultsTemplate.replace("#timePlace#", timePlace);
     resultsTemplate.replace("#event#", eventName);
     resultsTemplate.replace("#rank#", rankLabel);
     resultsTemplate.replace("#name#", nameLabel);
     resultsTemplate.replace("#series#", seriesLabel);
-    resultsTemplate.replace("#diff#", diffLabel);
+    resultsTemplate.replace("#points#", pointsLabel);
+    resultsTemplate.replace("#totalPoints#", totalLabel);
 }
 
 void SpectatorWindow::setResults(QString resultsHTML)

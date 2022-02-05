@@ -26,6 +26,16 @@ QString InitialDialog::fileName()
     return ui->fileNameEdit->text();
 }
 
+QString InitialDialog::eventName()
+{
+    return ui->eventNameEdit->text();
+}
+
+QString InitialDialog::eventType()
+{
+    return ui->eventBox->currentText();
+}
+
 void InitialDialog::forward()
 {
     if(ui->competitionNameEdit->text().isEmpty() || ui->fileNameEdit->text().isEmpty()){
@@ -74,6 +84,16 @@ void InitialDialog::setCompetitionName(QString competitionName)
 void InitialDialog::setFileName(QString fileName)
 {
     ui->fileNameEdit->setText(fileName);
+}
+
+void InitialDialog::setEventName(QString newName)
+{
+    ui->eventNameEdit->setText(newName);
+}
+
+void InitialDialog::setEventType(QString newType)
+{
+    ui->eventBox->setCurrentText(newType);
 }
 
 void InitialDialog::setTimePlace(QString timePlace)
