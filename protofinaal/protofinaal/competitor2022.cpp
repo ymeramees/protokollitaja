@@ -296,8 +296,7 @@ void Competitor2022::mouseDoubleClickEvent(QMouseEvent *event)
     int newID = QInputDialog::getInt(this, tr("Võistleja ID muutmine"), tr("Sisestage uus ID:"), m_id, 0);
     if(m_id != newID){
         emit statusInfo(QString(tr("Võistleja ID muudetud, vana: %1 => uus: %2")).arg(m_id).arg(newID));
-        m_id = newID;
-        m_idLabel.setText(QString("%1").arg(m_id));
+        setId(newID);
         emit modified();
     }
     Q_UNUSED(event);
@@ -311,6 +310,11 @@ QString Competitor2022::name()
 QString Competitor2022::previousSiusRow()
 {
     return m_previousSiusRow;
+}
+
+void Competitor2022::setDisplayName(QString newName)
+{
+    m_nameEdit.setText(newName);
 }
 
 bool Competitor2022::readSiusShot(SiusShotData shotData)
@@ -352,6 +356,12 @@ void Competitor2022::setActive(bool active)
     m_active.setChecked(active);
 }
 
+void Competitor2022::setId(int newId)
+{
+    m_id = newId;
+    m_idLabel.setText(QString("%1").arg(newId));
+}
+
 bool Competitor2022::setPoints(int shotNo, int points)
 {
     double dPoints = points;
@@ -367,6 +377,11 @@ bool Competitor2022::setPoints(int shotNo, int points)
 void Competitor2022::setPreviousSiusRow(QString newSiusRow)
 {
     m_previousSiusRow = newSiusRow;
+}
+
+void Competitor2022::setQualificationResult(QString result)
+{
+    m_resultEdit.setText(result);
 }
 
 bool Competitor2022::setShot(int shotNo, Lask newShot)
@@ -421,7 +436,7 @@ void Competitor2022::setupCompetitor(QHBoxLayout *layout, bool active, int id, Q
     layout->addWidget(&m_resultEdit);
 
     m_siusOffset.setMaximumWidth(45);
-    m_siusOffset.setMinimum(-10);
+    m_siusOffset.setMinimum(-99);
     m_siusOffset.setToolTip(tr("Arv, mille võrra Siusist tulnud lasud on nihkes"));
     layout->addWidget(&m_siusOffset);
 }

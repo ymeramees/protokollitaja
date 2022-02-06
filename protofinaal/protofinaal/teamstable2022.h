@@ -23,8 +23,10 @@ public:
     QMap<int, Result> getCurrentResults() const;
     QMap<int, Result> getSortedResults() const;
     int lastValidShotIndex() const;
+    void setCompetitiorsData(QStringList rows);
     void setTableName(QString newName);
     QString tableName() const;
+    int teamsCount();
     QJsonObject toJson() const;
 
 signals:

@@ -151,6 +151,11 @@ void Protofinaal::createMenus()
     saveAct->setStatusTip(tr("Salvesta fail"));
     connect(saveAct, &QAction::triggered, this, &Protofinaal::save);
 
+    QAction *importSiusStartListAct = new QAction(tr("&Impordi Sius startlist..."), this);
+    importSiusStartListAct->setShortcuts(QKeySequence::Open);
+    importSiusStartListAct->setStatusTip(tr("Impordi Sius startlist"));
+    connect(importSiusStartListAct, &QAction::triggered, this, &Protofinaal::importSiusStartList);
+
     QAction *exitAct = new QAction(tr("&Välju"), this);
     exitAct->setShortcuts(QKeySequence::Quit);
     exitAct->setStatusTip(tr("Välju programmist"));
@@ -166,6 +171,8 @@ void Protofinaal::createMenus()
 
     fileMenu->addAction(openAct);
     fileMenu->addAction(saveAct);
+    fileMenu->addSeparator();
+    fileMenu->addAction(importSiusStartListAct);
     fileMenu->addSeparator();
     fileMenu->addAction(exitAct);
 
@@ -198,6 +205,47 @@ void Protofinaal::connectToSiusData()
 void Protofinaal::connectionToSiusLost(int connectionIndex)
 {
     // TODO To be implemented
+}
+
+void Protofinaal::importSiusStartList()
+{
+    QString fileName = m_initialDialog->fileName().left(QDir::fromNativeSeparators(m_initialDialog->fileName()).lastIndexOf("/"));
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Ava startlist"), fileName, tr("Comma separated file (*.csv)"));
+    if (filePath.isEmpty())
+        return;
+
+    QFile file(filePath);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        QStringList rows;
+        while(!in.atEnd()){  // Read the whole file in
+            QString newRow = in.readLine();
+            int newTarget = newRow.split(';').at(10).toInt();
+            bool wasAdded = false;
+            if (rows.size() > 0) {
+                for (int i = 0; i < rows.size(); i++) {
+                    int currentTarget = rows.at(i).split(';').at(10).toInt();
+                    if (newTarget < currentTarget) {
+                        rows.insert(i, newRow);
+                        wasAdded = true;
+                        break ;
+                    }
+                }
+            }
+            if (!wasAdded)
+                rows.append(newRow);
+        }
+
+        foreach(TeamsTable2022 *teamsTable, m_teamsTables) {
+            QStringList forCurrentTable;
+            for(int i = 0; i < teamsTable->teamsCount(); i++)
+                if (!rows.isEmpty())
+                    forCurrentTable.append(rows.takeFirst());
+            teamsTable->setCompetitiorsData(forCurrentTable);
+        }
+
+    } else
+        QMessageBox::critical(this, "Viga", "Ei õnnestunud faili avada!", QMessageBox::Ok);
 }
 
 void Protofinaal::initialize()
@@ -494,8 +542,12 @@ void Protofinaal::updateInitialDialog()
     currentFile = m_initialDialog->fileName();
     QJsonObject initialJson = readFinalsFile(currentFile, false);
     m_initialDialog->setFileName(currentFile);
-    m_initialDialog->setCompetitionName(initialJson["competitionName"].toString());
-    m_initialDialog->setTimePlace(initialJson["timePlace"].toString());
+    QString newCompetitionName = initialJson["competitionName"].toString();
+    if (!newCompetitionName.isEmpty())
+        m_initialDialog->setCompetitionName(newCompetitionName);
+    QString newTimeAndPlace = initialJson["timePlace"].toString();
+    if (!newTimeAndPlace.isEmpty())
+        m_initialDialog->setTimePlace(newTimeAndPlace);
 }
 
 void Protofinaal::updateSpectatorWindow()

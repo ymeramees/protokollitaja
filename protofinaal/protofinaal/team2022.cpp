@@ -140,6 +140,15 @@ int Team2022::result10At(int index)
     return teamSum;
 }
 
+void Team2022::setFirstCompetitiorData(int id, QString displayName, QString result)
+{
+    if (m_teamCompetitors.size() > 0) {
+        m_teamCompetitors.first()->setId(id);
+        m_teamCompetitors.first()->setDisplayName(displayName);
+        m_teamCompetitors.first()->setQualificationResult(result);
+    }
+}
+
 bool Team2022::setPoints(int shotNo, int points)
 {
     if (m_teamCompetitors.size() > 0) {

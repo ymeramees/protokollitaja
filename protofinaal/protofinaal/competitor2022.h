@@ -36,6 +36,7 @@ public:
     QString pointsAt(int index) const;
     QString pointsTotal();
     void setActive(bool active);
+    void setId(int id);
     QJsonObject toJson() const;
 
 signals:
@@ -48,8 +49,10 @@ public slots:
     void handleUnignoredShot();
     void mouseDoubleClickEvent(QMouseEvent *event);
     QString previousSiusRow();
+    void setDisplayName(QString newName);
     bool setPoints(int shotNo, int points);
     void setPreviousSiusRow(QString newSiusRow);
+    void setQualificationResult(QString result);
     bool setShot(int shotNo, Lask newShot);
     void setShot(int shotNo, QString siusRow);
     void sumPoints();

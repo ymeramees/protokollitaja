@@ -107,6 +107,21 @@ int TeamsTable2022::lastValidShotIndex() const
     return largestIndex;
 }
 
+void TeamsTable2022::setCompetitiorsData(QStringList rows)
+{
+    if (m_teams.size() > 0) {
+        QVectorIterator<Team2022*> iterator(m_teams);
+        foreach(QString row, rows) {
+            //ID no;Startno;Name;Firstname;Disp name;Nat;Cat;Group;Team;Bay;Target;Relay;Starttime;BoxTg;Active;Q Tot;Avg;Rank;G1;...;G12;10s;...;0s;Mouches
+            QStringList rowParts = row.split(";");
+            if(rowParts.count() < 15)
+                break; // Row too short, so something is wrong
+            if (iterator.hasNext())
+                iterator.next()->setFirstCompetitiorData(rowParts[1].toInt(), rowParts[4].remove('"'), "");  // TODO To be fixed
+        }
+    }
+}
+
 void TeamsTable2022::readSiusInfo(SiusShotData shotData)
 {
     if(verbose)
@@ -263,6 +278,11 @@ void TeamsTable2022::sumAllTeams()
 QString TeamsTable2022::tableName() const
 {
     return m_tableName;
+}
+
+int TeamsTable2022::teamsCount()
+{
+    return m_teams.size();
 }
 
 QJsonObject TeamsTable2022::toJson() const
