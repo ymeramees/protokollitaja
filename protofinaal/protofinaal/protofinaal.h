@@ -35,7 +35,6 @@ class Protofinaal : public QMainWindow
 
 public:
     Protofinaal(QWidget *parent = nullptr);
-//    Protofinaal(QString competitionName, QString timeAndPlace, QWidget *parent = nullptr);  // TODO For testing, but a better solution would be needed
     ~Protofinaal();
     void open();
     void save();
@@ -44,7 +43,6 @@ public:
 
 public slots:
     void connectToSiusData();
-//    void readSiusInfo(SiusShotData shotData);
     void statusBarInfoChanged(QString newStatusInfo);
     void updateSpectatorWindow();
 
@@ -77,7 +75,6 @@ private:
     void readSettings();
     QVBoxLayout vBox;
     QVector<TeamsTable2022*> m_teamsTables;
-//    QScrollArea m_scrollArea;
     void writeFinalsFile(QString fileName);
     void writeSettings();
 };

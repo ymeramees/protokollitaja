@@ -28,6 +28,7 @@ private slots:
     void test_readSiusShotReadCompetitionShotsWithoutSighters();
     void test_readSiusShotRepeatedShotDataInFirstStage();
     void test_readSiusShotWithOffset();
+    void test_readSiusShotWithOffsetClean();
     void test_shotAtOutOfBounds();
 //    void test_sumWithIgnoredShot();
     void test_toJson();
@@ -459,6 +460,29 @@ void CompetitorTest2022::test_readSiusShotWithOffset()
     QCOMPARE(competitor.shotAt(13)->get10Lask(), 100);
     QCOMPARE(competitor.pointsAt(13), "3");
     QCOMPARE(competitor.lastValidShotIndex(), 13);
+}
+
+void CompetitorTest2022::test_readSiusShotWithOffsetClean()
+{
+    QJsonArray conf = {17};
+    Competitor2022 competitor(1, conf);
+    QCOMPARE(competitor.lastResult(), "0,0");
+    QCOMPARE(competitor.pointsTotal(), "0");
+    QCOMPARE(competitor.shotAt(0)->get10Lask(), -999);
+    QCOMPARE(competitor.pointsAt(0), "");
+    QCOMPARE(competitor.lastValidShotIndex(), -1);
+
+    QSpinBox *siusOffset = competitor.findChild<QSpinBox*>();
+    siusOffset->setValue(-15);
+    competitor.readSiusShot(SiusShotData(1, 0, 6, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;9;95;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0")));
+    competitor.readSiusShot(SiusShotData(1, 0, 16, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;109;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0")));
+    competitor.setPoints(0, 40);
+    QCOMPARE(competitor.lastResult(), "10,9");
+    QCOMPARE(competitor.pointsTotal(), "4");
+    QCOMPARE(competitor.shotAt(0)->get10Lask(), 109);
+    QCOMPARE(competitor.pointsAt(0), "4");
+    QCOMPARE(competitor.pointsAt(1), "");
+    QCOMPARE(competitor.lastValidShotIndex(), 0);
 }
 
 void CompetitorTest2022::test_shotAtOutOfBounds()

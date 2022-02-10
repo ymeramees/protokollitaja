@@ -1,4 +1,5 @@
 #include <QtTest>
+#include <QtDebug>
 #include <QCoreApplication>
 
 #include "teamstable2022.h"
@@ -16,6 +17,7 @@ public:
 private slots:
     void test_pointsGivenWithNoEqualResults();
     void test_pointsGivenWithEqualResults();
+    void test_readSiusShotWithOffset();
     void test_returnSortedResults();
 
 };
@@ -182,6 +184,42 @@ void teamstable2022test::test_pointsGivenWithEqualResults()
         QCOMPARE(actual3.value(i + 1).shotValue, expected3.at(i).shotValue);
         QCOMPARE(actual3.value(i + 1).points, expected3.at(i).points);
         QCOMPARE(actual3.value(i + 1).totalPoints, expected3.at(i).totalPoints);
+    }
+}
+
+void teamstable2022test::test_readSiusShotWithOffset()
+{
+    QJsonObject json = QJsonDocument::fromJson(QString("{\"event\": \"60l Õhupüss\",\"teams\": 2,\"membersInTeam\": 1,\"relaysTogether\": 1,\"shots\": [17]}").toUtf8()).object();
+
+    TeamsTable2022 teamsTable;
+    teamsTable.createLayout(json);
+
+    QCOMPARE(teamsTable.lastValidShotIndex(), -1);
+
+    QList<Competitor2022*> competitors = teamsTable.findChildren<Competitor2022*>();
+    foreach(Competitor2022 *competitor, competitors) {
+        QSpinBox *siusOffset = competitor->findChild<QSpinBox*>();
+        siusOffset->setValue(-15);
+    }
+
+    QVector<SiusShotData> shot1;
+    shot1.append(SiusShotData(11, 0, 16, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;101;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0")));
+    shot1.append(SiusShotData(21, 0, 16, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;107;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0")));
+
+    foreach(SiusShotData shotData, shot1) {
+        teamsTable.readSiusInfo(shotData);
+    }
+    QCOMPARE(teamsTable.lastValidShotIndex(), 0);
+
+    QVector<TeamsTable2022::Result> expected1;
+    expected1.append(TeamsTable2022::Result { "", "10,1", "0", "0" });
+    expected1.append(TeamsTable2022::Result { "", "10,7", "2", "2" });
+    auto actual1 = teamsTable.getCurrentResults();
+    for(int i = 0; i < expected1.size(); i++) {
+        QCOMPARE(actual1.value(i+1).name, expected1.at(i).name);
+        QCOMPARE(actual1.value(i+1).shotValue, expected1.at(i).shotValue);
+        QCOMPARE(actual1.value(i+1).points, expected1.at(i).points);
+        QCOMPARE(actual1.value(i+1).totalPoints, expected1.at(i).totalPoints);
     }
 }
 

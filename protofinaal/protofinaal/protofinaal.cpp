@@ -1,13 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
 ///ToDo:
 /// In progress:
+/// Would be good to create a new file immediately when going forward from initialdialog
+/// In Windows when exiting from initialdialog, the program won't exit?
+/// Crashes when big negative offset is used (same as number of shots) - OK
 /// Enable adjusting Sius shot number offset - OK
 /// Sorting based on results - OK
 /// Show last shot number in spectators window - OK
 /// Add possibility to have two teamTables - OK
 /// Choice of event types - OK
 /// Medal match - OK
-/// Import SiusData startlist
+/// Import SiusData startlist - OK
 /// Add possibility to add missed shot(s)
 /// Add ignore shot(s) possibility - Needs to be implemented again
 /// Add shoot-off possibility
@@ -53,47 +56,6 @@ Protofinaal::Protofinaal(QWidget *parent)
         QMessageBox::critical(this, tr("Viga"), tr("Logi faili kirjutamine ei õnnestunud! Kontrollige, et teil oleks kirjutamisõigus sinna kausta, kus asub võistluste fail."), QMessageBox::Ok);
     }
 }
-
-//Protofinaal::Protofinaal(QString competitionName, QString timeAndPlace, QWidget *parent)
-//    : m_settings("Protofinaal", "Protofinaali conf"), QMainWindow(parent)
-//{
-//    createMenus();
-//    setStatusBar(statusBar());
-//    m_teamsTable = new TeamsTable2022();
-////    QWidget *widget = new QWidget();
-////    widget->setLayout(vBox);
-////    widget->setStyleSheet("border:1px solid rgb(0, 255, 0); ");
-//    QScrollArea *scrollArea = new QScrollArea();
-//    scrollArea->setWidgetResizable(true);
-//    setCentralWidget(scrollArea);
-//    scrollArea->setWidget(m_teamsTable);
-
-//    this->setGeometry(9, 36, 1200, 600);
-//    readSettings();
-
-//    if(m_initialDialog == nullptr){
-//        m_initialDialog = new InitialDialog(this);
-//        connect(m_initialDialog, &InitialDialog::updateMe, this, &Protofinaal::updateInitialDialog);
-//    }
-//    m_initialDialog->setCompetitionName(competitionName);
-//    m_initialDialog->setTimePlace(timeAndPlace);
-
-
-//    initialize();
-////    QTimer::singleShot(100, this, SLOT(initialize()));
-//    QTimer::singleShot(100, this, SLOT(m_initialDialog->accept()));
-
-//    if(verbose)
-//        QTextStream(stdout) << "currentFile = " << currentFile << endl;
-
-//    logFile = new QFile(QFileInfo(currentFile).dir().absolutePath() + QString("/Protofinaal logi %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
-
-//    if(logFile->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){ //Log file
-//        logOut.setDevice(logFile);
-//    }else{
-//        QMessageBox::critical(this, tr("Viga"), tr("Logi faili kirjutamine ei õnnestunud! Kontrollige, et teil oleks kirjutamisõigus sinna kausta, kus asub võistluste fail."), QMessageBox::Ok);
-//    }
-//}
 
 Protofinaal::~Protofinaal()
 {
@@ -319,7 +281,7 @@ void Protofinaal::initialize()
     }else if(m_initialDialog->result() == QDialog::Rejected)
         QCoreApplication::quit();
 
-    setWindowTitle("Protofinaal - nightly pre-alfa 1 - " + competitionName + " - " + eventName);
+    setWindowTitle("Protofinaal - test 3 - " + currentFile + " - " + competitionName + " - " + eventName);
 }
 
 void Protofinaal::loadFile(QString fileName)
