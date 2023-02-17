@@ -56,6 +56,7 @@ private slots:
 private:
     bool competitionStarted = false;
     bool m_modifiedAfterSave = false;
+    bool m_scoringWithPoints = false;
     CommonSettings m_settings;
     InitialDialog *m_initialDialog = nullptr;
     SiusDataConnections *siusDataConnections = nullptr;

@@ -14,12 +14,12 @@ public:
     struct Result {
         QString name;   ///< First competitor name.
         QString shotValue;   ///< Shot value.
-        QString points; ///< Points for this shot.
-        QString totalPoints;   ///< Points in total.
+        QString seriesOrPoints; ///< Series result or points for this shot.
+        QString totalScore;   ///< Result/Points in total.
     };
     explicit TeamsTable2022(QWidget *parent = nullptr);
     void clear();
-    void createLayout(QJsonObject jsonObj);
+    void createLayout(QJsonObject jsonObj, const bool scoringWithPoints);
     QMap<int, Result> getCurrentResults() const;
     QMap<int, Result> getSortedResults() const;
     int lastValidShotIndex() const;

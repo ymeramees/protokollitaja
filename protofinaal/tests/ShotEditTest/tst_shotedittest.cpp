@@ -130,6 +130,8 @@ void ShotEditTest::test_toJson()
     expectedShotJson["shotY"] = 3472;
     expectedShotJson["shotTime"] = QTime::fromString("10:43:56.17").toString();
     expectedShotJson["innerTen"] = false;
+    expectedShotJson["competitionShot"] = true;
+    expectedShotJson["shotOrigin"] = 2;
 
     QVERIFY(json["shot"].toObject() == expectedShotJson);
     QVERIFY(json["ignored"].toBool() == false);

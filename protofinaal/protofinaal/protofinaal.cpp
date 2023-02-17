@@ -1,6 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 ///ToDo:
 /// In progress:
+/// Enable switching from one final stage to another
 /// Would be good to create a new file immediately when going forward from initialdialog
 /// In Windows when exiting from initialdialog, the program won't exit?
 /// Crashes when big negative offset is used (same as number of shots) - OK
@@ -257,8 +258,14 @@ void Protofinaal::initialize()
                     !(jsonObj.contains("relaysTogether") && jsonObj["relaysTogether"].isDouble()) ||
                     !(jsonObj.contains("teams") && jsonObj["teams"].isDouble()) ||
                     !(jsonObj.contains("membersInTeam") && jsonObj["membersInTeam"].isDouble()) ||
-                    !(jsonObj.contains("shots") && jsonObj["shots"].isArray()))
+                    !(jsonObj.contains("shots") && jsonObj["shots"].isArray()) ||
+                    !(jsonObj.contains("scoringWithPoints") && jsonObj["scoringWithPoints"].isBool()))
                 QMessageBox::critical(this, tr("Viga!"), tr("Harjutuse fail vigane!"));
+
+            m_scoringWithPoints = false;
+            if (jsonObj.contains("scoringWithPoints") && jsonObj["scoringWithPoints"].isBool()) {
+                m_scoringWithPoints = jsonObj["scoringWithPoints"].toBool();
+            }
 
             int numberOfRelaysTogether = jsonObj["relaysTogether"].toDouble();
             for (int relay = 1; relay <= numberOfRelaysTogether; relay++) {
@@ -270,7 +277,7 @@ void Protofinaal::initialize()
                 connect(m_teamsTable, &TeamsTable2022::updateSpectatorWindow, this, &Protofinaal::updateSpectatorWindow);
                 connect(m_teamsTable, &TeamsTable2022::modified, [this]() { m_modifiedAfterSave = true; });
                 m_teamsTables.append(m_teamsTable);
-                m_teamsTable->createLayout(jsonObj);
+                m_teamsTable->createLayout(jsonObj, m_scoringWithPoints);
             }
         }
 
@@ -299,6 +306,13 @@ void Protofinaal::loadFile(QString fileName)
             !(jsonObj.contains("fileVersion") && jsonObj["fileVersion"].isDouble()))
         QMessageBox::critical(this, tr("Viga!"), tr("Finaali fail vigane!"));
 
+    m_scoringWithPoints = false;
+    if (jsonObj.contains("scoringWithPoints"))
+        m_scoringWithPoints = jsonObj["scoringWithPoints"].toBool();
+
+    if (verbose)
+        QTextStream(stdout) << "Protofinaal::loadFile(), scoringWithPoints: " << m_scoringWithPoints << endl;
+
     QJsonArray relaysArray = jsonObj["relays"].toArray();
     int noOfRelays = relaysArray.size();
     int relayNo = 1;
@@ -311,14 +325,25 @@ void Protofinaal::loadFile(QString fileName)
         connect(m_teamsTable, &TeamsTable2022::updateSpectatorWindow, this, &Protofinaal::updateSpectatorWindow);
         connect(m_teamsTable, &TeamsTable2022::modified, [this]() { m_modifiedAfterSave = true; });
         m_teamsTables.append(m_teamsTable);
-        m_teamsTable->createLayout(relayJson.toObject());
+        m_teamsTable->createLayout(relayJson.toObject(), m_scoringWithPoints);
     }
+
+    m_modifiedAfterSave = false;
 
 //    centralWidget()->setLayout(vBox);
 }
 
 void Protofinaal::open()
 {
+    if (m_modifiedAfterSave) {
+        int reply = QMessageBox::question(this, "Protofinaal", tr("Kas soovid muudatused salvestada?"),	QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        if (reply == QMessageBox::Save) {
+            save();
+        } else if(reply == QMessageBox::Cancel) {
+            return;
+        }
+    }
+
     QString fileName = QFileDialog::getOpenFileName(this, tr("Ava fail"), currentFile, tr("Protofinaali fail (*.fin)"));
     if(!fileName.isEmpty()){
         currentFile = fileName;
@@ -344,6 +369,10 @@ QJsonObject Protofinaal::readFinalsFile(QString fileName, bool showErrors)
         competitionName = jsonObj["competitionName"].toString();
         eventName = jsonObj["eventName"].toString();
         timePlace = jsonObj["timePlace"].toString();
+
+        m_scoringWithPoints = false;
+        if (jsonObj.contains("scoringWithPoints"))
+            m_scoringWithPoints = jsonObj["scoringWithPoints"].toBool();
     }else if(showErrors)
         QMessageBox::critical(this, tr("Viga!"), tr("Faili avamine ei ole võimalik!\n\nAsukoht: ") + file.fileName(), QMessageBox::Ok);
     return jsonObj;
@@ -496,6 +525,7 @@ QJsonObject Protofinaal::toJson() const
     finalsObj["eventName"] = eventName;
     finalsObj["eventType"] = eventType;
     finalsObj["timePlace"] = timePlace;
+    finalsObj["scoringWithPoints"] = m_scoringWithPoints;
     return finalsObj;
 }
 
@@ -510,6 +540,9 @@ void Protofinaal::updateInitialDialog()
     QString newTimeAndPlace = initialJson["timePlace"].toString();
     if (!newTimeAndPlace.isEmpty())
         m_initialDialog->setTimePlace(newTimeAndPlace);
+    QString newEventName = initialJson["eventName"].toString();
+    if (!newEventName.isEmpty())
+        m_initialDialog->setEventName(newEventName);
 }
 
 void Protofinaal::updateSpectatorWindow()
@@ -522,7 +555,10 @@ void Protofinaal::updateSpectatorWindow()
     QString shotHeader = tr("Lask");
     if (shotNo > 0)
         shotHeader.prepend(QString("%1. ").arg(shotNo));
-    m_spectatorWindow.setHeading(competitionName, timePlace, eventName, tr("Koht"), tr("Nimi"), shotHeader, tr("Punktid"), tr("Kokku"));
+    if (m_scoringWithPoints)
+        m_spectatorWindow.setHeading(competitionName, timePlace, eventName, tr("Koht"), tr("Nimi"), shotHeader, tr("Punktid"), tr("Kokku"));
+    else
+        m_spectatorWindow.setHeading(competitionName, timePlace, eventName, tr("Koht"), tr("Nimi"), shotHeader, tr("Seeria"), tr("Kokku"));
 
     for (int i = m_teamsTables.size() - 1; i >= 0; i-- ) {
         m_spectatorWindow.addRow("", "", "", "", "", "");   // To add some spacing between different groups
@@ -538,8 +574,8 @@ void Protofinaal::updateSpectatorWindow()
                         m_teamsTables.at(i)->tableName(),
                         currentResult.name,
                         currentResult.shotValue,
-                        currentResult.points,
-                        currentResult.totalPoints
+                        currentResult.seriesOrPoints,
+                        currentResult.totalScore
                         );
         }
     }

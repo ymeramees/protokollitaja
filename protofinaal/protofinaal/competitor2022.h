@@ -22,8 +22,8 @@ class Competitor2022 : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Competitor2022(const int id, const QJsonArray configJson, QWidget *parent = nullptr);
-    explicit Competitor2022(const QJsonObject &json, QWidget *parent = nullptr);
+    explicit Competitor2022(const int id, const QJsonArray configJson, const bool scoringWithPoints, QWidget *parent = nullptr);
+    explicit Competitor2022(const QJsonObject &json, const bool scoringWithPoints, QWidget *parent = nullptr);
     ~Competitor2022();
     bool readSiusShot(SiusShotData shotData);
     int current10Sum() const;  //Current result x10 to avoid floating point arithmetic errors
@@ -33,8 +33,8 @@ public:
     QString name();
     QString lastResult();
     int lastValidShotIndex() const;
-    QString pointsAt(int index) const;
-    QString pointsTotal();
+    QString resultAt(int index) const;
+    QString total();
     void setActive(bool active);
     void setId(int id);
     QJsonObject toJson() const;
@@ -55,7 +55,7 @@ public slots:
     void setQualificationResult(QString result);
     bool setShot(int shotNo, Lask newShot);
     void setShot(int shotNo, QString siusRow);
-    void sumPoints();
+    void sum();
 
 private:
     QCheckBox m_active;
@@ -63,14 +63,15 @@ private:
     QLabel m_idLabel;
     QLineEdit m_nameEdit;
     QLineEdit m_resultEdit;
+    bool m_scoringWithPoints;
     QSpinBox m_siusOffset;
     QString m_previousSiusRow;
     QVector<QLabel*> m_pointsLabels;
-    QVector<QLabel*> m_pointsTotalLabels;
+    QVector<QLabel*> m_totalLabels;
     QVector<QVector<ShotEdit*>*> m_series;
     QVector<ShotEdit*> m_shots;
     void createShotEditConnections(ShotEdit* shotEdit);
-    void setupCompetitor(QHBoxLayout *layout, bool active, int id, QString name, QString result);
+    void setupCompetitor(QHBoxLayout *layout, bool active, int id, QString name, QString result, const bool scoringWithPoints);
 };
 
 #endif // COMPETITOR_H

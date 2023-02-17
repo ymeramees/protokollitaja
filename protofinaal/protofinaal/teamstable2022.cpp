@@ -17,7 +17,7 @@ void TeamsTable2022::clear()
     m_teams.clear();
 }
 
-void TeamsTable2022::createLayout(QJsonObject jsonObj)
+void TeamsTable2022::createLayout(QJsonObject jsonObj, const bool scoringWithPoints)
 {
     int teamsNo = 4;    // Defaults to 4
 
@@ -31,9 +31,9 @@ void TeamsTable2022::createLayout(QJsonObject jsonObj)
         Team2022 *team = nullptr;
         if(jsonObj["teams"].isArray()){
             QJsonObject teamJson = jsonObj["teams"].toArray().at(i).toObject();
-            team = new Team2022(teamJson, i+1);
+            team = new Team2022(teamJson, i+1, scoringWithPoints);
         } else {
-            team = new Team2022(jsonObj, i+1);
+            team = new Team2022(jsonObj, i+1, scoringWithPoints);
         }
 //        if(m_parent != nullptr){
             connect(team, &Team2022::teamUpdated, this, &TeamsTable2022::sumAllTeams);
@@ -64,8 +64,8 @@ QMap<int, TeamsTable2022::Result> TeamsTable2022::getCurrentResults() const
         results[team->index()] = Result {
                 team->teamName(),
                 result,
-                team->points10At(currentShotNo),
-                team->pointsTotal()};
+                team->resultAt(currentShotNo),
+                team->teamTotal()};
     }
 
     return results;
@@ -86,11 +86,11 @@ QMap<int, TeamsTable2022::Result> TeamsTable2022::getSortedResults() const
             result = "";
 
 //        if (result != "0,0" && result != "-999")
-        results.insertMulti(team->pointsTotal().replace(',', '.').toDouble() * 10, Result {
+        results.insertMulti(team->teamTotal().replace(',', '.').toDouble() * 10, Result {
                 team->teamName(),
                 result,
-                team->points10At(currentShotNo),
-                team->pointsTotal()});
+                team->resultAt(currentShotNo),
+                team->teamTotal()});
     }
 
     return results;

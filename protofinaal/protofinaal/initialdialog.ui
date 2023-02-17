@@ -74,32 +74,42 @@
       <widget class="QComboBox" name="eventBox">
        <item>
         <property name="text">
-         <string>AR 2022 2 relays</string>
+         <string>AR 2023</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>AR 2022</string>
+         <string>AR 2023 GMM</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>AR 2022 medal match</string>
+         <string>AP 2023</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>AP 2022 2 relays</string>
+         <string>AP 2023 GMM</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>AP 2022</string>
+         <string>AR 2023 mixed</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>AP 2022 medal match</string>
+         <string>AR 2023 mixed 2 relays</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>AP 2023 mixed</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>AP 2023 mixed 2 relays</string>
         </property>
        </item>
       </widget>

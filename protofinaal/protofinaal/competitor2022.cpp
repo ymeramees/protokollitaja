@@ -1,12 +1,12 @@
 #include "competitor2022.h"
 
-Competitor2022::Competitor2022(const int id, const QJsonArray configJson, QWidget *parent) : QWidget(parent)
+Competitor2022::Competitor2022(const int id, const QJsonArray configJson, const bool scoringWithPoints, QWidget *parent) : QWidget(parent)
 {
     if(verbose)
         QTextStream(stdout) << "Competitor::Competitor(QJsonArray)" << endl;
     QHBoxLayout *hBox = new QHBoxLayout;
 
-    setupCompetitor(hBox, true, id, "", "");
+    setupCompetitor(hBox, true, id, "", "", scoringWithPoints);
 
     if(verbose)
         QTextStream(stdout) << "Competitor::configJson.size(): " << configJson.size() << endl;
@@ -31,7 +31,7 @@ Competitor2022::Competitor2022(const int id, const QJsonArray configJson, QWidge
             m_series.append(thisSeries);
 
             QLabel *sumLabel = new QLabel(tr("0"));
-            m_pointsTotalLabels.append(sumLabel);
+            m_totalLabels.append(sumLabel);
             hBox->addWidget(sumLabel);
         }
 //    else
@@ -57,12 +57,12 @@ Competitor2022::Competitor2022(const int id, const QJsonArray configJson, QWidge
     hBox->setContentsMargins(0, 2, 0, 2);
 
     if(verbose)
-        QTextStream(stdout) << "Competitor::shots: " << m_shots.size() << " , series: " << m_series.size() << " ,sumLabels: " << m_pointsTotalLabels.size() << endl;
+        QTextStream(stdout) << "Competitor::shots: " << m_shots.size() << " , series: " << m_series.size() << " ,sumLabels: " << m_totalLabels.size() << endl;
     setLayout(hBox);
-    sumPoints();
+    sum();
 }
 
-Competitor2022::Competitor2022(const QJsonObject &json, QWidget *parent) : QWidget(parent)
+Competitor2022::Competitor2022(const QJsonObject &json, const bool scoringWithPoints, QWidget *parent) : QWidget(parent)
 {
     if(verbose)
         QTextStream(stdout) << "Competitor::Competitor(QJsonObject), json[Series].size = " << json["series"].toArray().size() << endl;
@@ -82,7 +82,7 @@ Competitor2022::Competitor2022(const QJsonObject &json, QWidget *parent) : QWidg
     if (json.contains("isActive"))
         isActive = json["isActive"].toBool();
 
-    setupCompetitor(hBox, isActive, json["id"].toInt(), json["nameEdit"].toString(), resultText);
+    setupCompetitor(hBox, isActive, json["id"].toInt(), json["nameEdit"].toString(), resultText, scoringWithPoints);
 
     QJsonArray seriesArray = json["series"].toArray();
 
@@ -103,7 +103,7 @@ Competitor2022::Competitor2022(const QJsonObject &json, QWidget *parent) : QWidg
             hBox->addWidget(pointsLabel);
         }
         QLabel *sumLabel = new QLabel(seriesObj["Sum"].toString());
-        m_pointsTotalLabels.append(sumLabel);
+        m_totalLabels.append(sumLabel);
         hBox->addWidget(sumLabel);
 
         m_series.append(thisSeries);
@@ -131,16 +131,16 @@ Competitor2022::Competitor2022(const QJsonObject &json, QWidget *parent) : QWidg
     hBox->setContentsMargins(0, 2, 0, 2);
 
     setLayout(hBox);
-    sumPoints();
+    sum();
 }
 
 Competitor2022::~Competitor2022()
 {
     if(verbose)
         QTextStream(stdout) << "Competitor::~Competitor()" << endl;
-    foreach (QLabel *sumLabel, m_pointsTotalLabels)
+    foreach (QLabel *sumLabel, m_totalLabels)
         sumLabel->deleteLater();
-    m_pointsTotalLabels.clear();
+    m_totalLabels.clear();
 
     //series.clear();
     foreach (QVector<ShotEdit*> *serie, m_series) {  //Duplicate pointers to shots
@@ -161,7 +161,7 @@ void Competitor2022::createShotEditConnections(ShotEdit *shotEdit)
 
 int Competitor2022::current10Sum() const
 {
-    return m_pointsTotalLabels.at(m_pointsTotalLabels.size()-1)->text().remove(',').toInt();
+    return m_totalLabels.at(m_totalLabels.size()-1)->text().remove(',').toInt();
 }
 
 void Competitor2022::handleIgnoredShot()
@@ -178,7 +178,7 @@ void Competitor2022::handleIgnoredShot()
         hBox->insertWidget(hBox->count() - 1, shotEdit);
         int indexOfIgnoredShot = hBox->indexOf(ignoredShotEdit);
         // Shift following lables forward
-        foreach(QLabel *sumLabel, m_pointsTotalLabels) {
+        foreach(QLabel *sumLabel, m_totalLabels) {
             int labelIndex = hBox->indexOf(sumLabel);
             if(labelIndex > indexOfIgnoredShot) {
                 hBox->insertItem(labelIndex + 1, hBox->takeAt(labelIndex));
@@ -193,7 +193,7 @@ void Competitor2022::handleIgnoredShot()
             if (i >= indexOfSeries && indexOfSeries != -1)
                 m_series.at(i)->append(m_series.at(i + 1)->takeFirst());
         }
-        sumPoints();
+        sum();
     }
 }
 
@@ -207,7 +207,7 @@ void Competitor2022::handleUnignoredShot()
         QHBoxLayout *hBox = qobject_cast<QHBoxLayout*>(layout());
         int indexOfUnIgnoredShot = hBox->indexOf(unIgnoredShotEdit);
         // Shift following lables backwards
-        foreach(QLabel *sumLabel, m_pointsTotalLabels) {
+        foreach(QLabel *sumLabel, m_totalLabels) {
             int labelIndex = hBox->indexOf(sumLabel);
             if(labelIndex > indexOfUnIgnoredShot) {
                 hBox->insertItem(labelIndex - 1, hBox->takeAt(labelIndex));
@@ -225,7 +225,7 @@ void Competitor2022::handleUnignoredShot()
 
         hBox->removeWidget(lastShot);
         lastShot->deleteLater();
-        sumPoints();
+        sum();
     }
 }
 
@@ -275,18 +275,24 @@ int Competitor2022::lastValidShotIndex() const
     return -1;
 }
 
-QString Competitor2022::pointsAt(int index) const
+QString Competitor2022::resultAt(int index) const
 {
-    if (index >= 0 && index < m_pointsLabels.size())
+    if (m_scoringWithPoints && (index >= 0 && index < m_pointsLabels.size()))
         return m_pointsLabels.at(index)->text();
-    else
+    else if (!m_scoringWithPoints && (index >= 0 && index < m_shots.size())) {
+        for(int i = 0; i < m_series.size() - 1; i++) {
+            if (m_series.at(i)->contains(m_shots.at(index)))
+                return m_totalLabels.at(i)->text();
+        }
+        return m_totalLabels.at(m_totalLabels.size() - 1)->text();
+    } else
         return "";
 }
 
-QString Competitor2022::pointsTotal()
+QString Competitor2022::total()
 {
-    if(m_pointsTotalLabels.size() >= 1)
-        return m_pointsTotalLabels.at(m_pointsTotalLabels.size() - 1)->text();
+    if(m_totalLabels.size() >= 1)
+        return m_totalLabels.at(m_totalLabels.size() - 1)->text();
     else
         return "0";
 }
@@ -362,9 +368,9 @@ bool Competitor2022::setPoints(int shotNo, int points)
 {
     double dPoints = points;
     dPoints /= 10;
-    if (shotNo < m_pointsLabels.size()) {
+    if (m_scoringWithPoints && shotNo < m_pointsLabels.size()) {
         m_pointsLabels.at(shotNo)->setText(QString("%1").arg(dPoints).replace('.', ','));
-        sumPoints();
+        sum();
         return true;
     } else
         return false;
@@ -402,7 +408,7 @@ void Competitor2022::setShot(int shotNo, QString siusRow)
     }
 }
 
-void Competitor2022::setupCompetitor(QHBoxLayout *layout, bool active, int id, QString name, QString result)
+void Competitor2022::setupCompetitor(QHBoxLayout *layout, bool active, int id, QString name, QString result, const bool scoringWithPoints)
 {
     m_active.setChecked(active);
     connect(&m_active, &QCheckBox::stateChanged, this, &Competitor2022::modified);
@@ -435,10 +441,15 @@ void Competitor2022::setupCompetitor(QHBoxLayout *layout, bool active, int id, Q
     m_siusOffset.setMinimum(-99);
     m_siusOffset.setToolTip(tr("Arv, mille võrra Siusist tulnud lasud on nihkes"));
     layout->addWidget(&m_siusOffset);
+
+    m_scoringWithPoints = scoringWithPoints;
 }
 
-void Competitor2022::sumPoints()
+void Competitor2022::sum()
 {
+    // QTextStream(stdout) << "Competitor::sum(), m_scoringWithPoints: " << m_scoringWithPoints << endl;
+
+    if (m_scoringWithPoints) {
     if(verbose)
         QTextStream(stdout) << "Competitor2022::sumPoints()" << endl;
 
@@ -457,17 +468,42 @@ void Competitor2022::sumPoints()
         pointsTotal += seriesSum;
         double dSeriesSum = seriesSum;
         dSeriesSum /= 10;
-        m_pointsTotalLabels.at(i)->setText(QString("%1").arg(dSeriesSum).replace('.', ','));
+        m_totalLabels.at(i)->setText(QString("%1").arg(dSeriesSum).replace('.', ','));
 //        if(!m_sumLabels.at(i)->text().contains(','))
 //            m_sumLabels.at(i)->setText(m_sumLabels.at(i)->text() + ",0");
-    }
-    double dPointsTotal = pointsTotal;
-    dPointsTotal /= 10;
-    m_pointsTotalLabels.at(m_pointsTotalLabels.size() - 1)->setText(QString("%1").arg(dPointsTotal).replace('.', ','));
+        }
+        double dPointsTotal = pointsTotal;
+        dPointsTotal /= 10;
+        m_totalLabels.at(m_totalLabels.size() - 1)->setText(QString("%1").arg(dPointsTotal).replace('.', ','));
 //    if(!m_sumLabels.at(m_sumLabels.size() - 1)->text().contains(','))
 //        m_sumLabels.at(m_sumLabels.size() - 1)->setText(m_sumLabels.at(m_sumLabels.size() - 1)->text() + ",0");
 //    emit newShot();
 //    return dTotalSum;
+    } else {
+        int totalSum = 0;
+        for(int i = 0; i < m_series.size(); i++){
+            int seriesSum = 0;
+            for(int j = 0; j < m_series.at(i)->size(); j++){
+                // QTextStream(stdout) << "Competitor::sum(), m_series.at(i)->at(j)->text(): " << m_series.at(i)->at(j)->shot().getSLask() << endl;
+                if(!m_series.at(i)->at(j)->ignored())
+                    seriesSum += qRound(m_series.at(i)->at(j)->shot().getSLask().replace(',','.').toDouble() * 10);
+            }
+            // QTextStream(stdout) << "Competitor::sum(), seriesSum: " << seriesSum << endl;
+            totalSum += seriesSum;
+            double dSeriesSum = seriesSum;
+            dSeriesSum /= 10;
+            m_totalLabels.at(i)->setText(QString("%1").arg(dSeriesSum).replace('.', ','));
+            // QTextStream(stdout) << "Competitor::sum(), m_totalLabels.at(i): " << m_totalLabels.at(i)->text() << endl;
+            if(!m_totalLabels.at(i)->text().contains(','))
+                m_totalLabels.at(i)->setText(m_totalLabels.at(i)->text() + ",0");
+        }
+        double dTotalSum = totalSum;
+        dTotalSum /= 10;
+        m_totalLabels.at(m_totalLabels.size() - 1)->setText(QString("%1").arg(dTotalSum).replace('.', ','));
+        if(!m_totalLabels.at(m_totalLabels.size() - 1)->text().contains(','))
+            m_totalLabels.at(m_totalLabels.size() - 1)->setText(m_totalLabels.at(m_totalLabels.size() - 1)->text() + ",0");
+//        emit newShot();
+    }
 }
 
 QJsonObject Competitor2022::toJson() const
@@ -485,7 +521,7 @@ QJsonObject Competitor2022::toJson() const
             seriesShotsJson.append(m_series.at(i)->at(j)->toJson());
         }
         seriesJson["shots"] = seriesShotsJson;
-        seriesJson["Sum"] = m_pointsTotalLabels.at(i)->text();
+        seriesJson["Sum"] = m_totalLabels.at(i)->text();
         seriesArray.append(seriesJson);
     }
     json["series"] = seriesArray;

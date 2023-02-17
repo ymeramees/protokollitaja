@@ -16,16 +16,16 @@ class Team2022 : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Team2022(QJsonObject &configJson, int index, QWidget *parent = nullptr);
+    explicit Team2022(QJsonObject &configJson, int index, const bool scoringWithPoints, QWidget *parent = nullptr);
     ~Team2022();
     int index();
     bool isActive() const;
-    QString pointsTotal();
+    QString teamTotal();
     int lastValidShotIndex() const;
     QString teamName();
     QVector<Competitor2022*> teamCompetitors();
     QJsonObject toJson() const;
-    QString points10At(int index);
+    QString resultAt(int index);
     int result10At(int index);
     void setFirstCompetitiorData(int id, QString displayName, QString result);
     bool setPoints(int shotNo, int points);

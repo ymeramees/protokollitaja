@@ -57,6 +57,7 @@ CMakeLists.txt.user*
 *.txt
 *.xls
 *.fin
+.vscode/
 save.json
 conf.json
 Koduleht/

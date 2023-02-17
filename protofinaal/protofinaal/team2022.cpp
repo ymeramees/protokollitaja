@@ -1,6 +1,6 @@
 #include "team2022.h"
 
-Team2022::Team2022(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent)
+Team2022::Team2022(QJsonObject &configJson, int index, const bool scoringWithPoints, QWidget *parent) : QWidget(parent)
 {
     int competitorsInTeam = 1;  // Defaults to 1
 
@@ -18,7 +18,7 @@ Team2022::Team2022(QJsonObject &configJson, int index, QWidget *parent) : QWidge
             QTextStream(stdout) << "Team::Team(uus)" << endl;
         competitorsInTeam = configJson["membersInTeam"].toInt();
 
-        Competitor2022 *competitor = new Competitor2022(index * 10 + 1, configJson["shots"].toArray());
+        Competitor2022 *competitor = new Competitor2022(index * 10 + 1, configJson["shots"].toArray(), scoringWithPoints);
         connect(competitor, &Competitor2022::newShot, this, &Team2022::calculatePointsTotal);
         connect(competitor, &Competitor2022::newShot, this, &Team2022::modified);
         connect(competitor, &Competitor2022::modified, this, &Team2022::modified);
@@ -28,7 +28,7 @@ Team2022::Team2022(QJsonObject &configJson, int index, QWidget *parent) : QWidge
         layout->addWidget(competitor, 0, 2);
 
         for(int i = 1; i < competitorsInTeam; i++){
-            Competitor2022 *competitor = new Competitor2022(index * 10 + 1 + i, configJson["shots"].toArray());
+            Competitor2022 *competitor = new Competitor2022(index * 10 + 1 + i, configJson["shots"].toArray(), scoringWithPoints);
             connect(competitor, &Competitor2022::newShot, this, &Team2022::calculatePointsTotal);
             connect(competitor, &Competitor2022::newShot, this, &Team2022::modified);
             connect(competitor, &Competitor2022::modified, this, &Team2022::modified);
@@ -47,7 +47,7 @@ Team2022::Team2022(QJsonObject &configJson, int index, QWidget *parent) : QWidge
         competitorsInTeam = competitorsArray.size();
 
         for (int i = 0; i < competitorsArray.size(); i++) {
-            Competitor2022 *competitor = new Competitor2022(competitorsArray.at(i).toObject());
+            Competitor2022 *competitor = new Competitor2022(competitorsArray.at(i).toObject(), scoringWithPoints);
             connect(competitor, &Competitor2022::newShot, this, &Team2022::calculatePointsTotal);
             connect(competitor, &Competitor2022::newShot, this, &Team2022::modified);
             connect(competitor, &Competitor2022::modified, this, &Team2022::modified);
@@ -104,10 +104,10 @@ bool Team2022::isActive() const
     return m_teamCompetitors.at(0)->isActive();
 }
 
-QString Team2022::pointsTotal()
+QString Team2022::teamTotal()
 {
     if (m_teamCompetitors.size() > 0)
-        return m_teamCompetitors.at(0)->pointsTotal();
+        return m_teamCompetitors.at(0)->total();
     else
         return "";
 }
@@ -158,10 +158,10 @@ bool Team2022::setPoints(int shotNo, int points)
         return false;
 }
 
-QString Team2022::points10At(int index)
+QString Team2022::resultAt(int index)
 {
     if (m_teamCompetitors.size() > 0)
-        return m_teamCompetitors.first()->pointsAt(index);
+        return m_teamCompetitors.first()->resultAt(index);
     else return 0;
 }
 
@@ -185,8 +185,8 @@ void Team2022::calculatePointsTotal()
 //        m_sumLabel.setText(m_sumLabel.text().replace('.', ','));
 //        QTextStream(stdout) << "Team::sum()3" << endl;
 //    }else
-        m_teamCompetitors.at(0)->sumPoints();
-        m_sumLabel.setText(m_teamCompetitors.at(0)->pointsTotal());
+        m_teamCompetitors.at(0)->sum();
+        m_sumLabel.setText(m_teamCompetitors.at(0)->total());
     }
     emit teamUpdated();
 }
@@ -194,7 +194,7 @@ void Team2022::calculatePointsTotal()
 void Team2022::sumAll()
 {
     foreach (Competitor2022 *competitor, m_teamCompetitors){
-        competitor->sumPoints();
+        competitor->sum();
     }
 }
 
@@ -205,8 +205,12 @@ QVector<Competitor2022 *> Team2022::teamCompetitors()
 
 QString Team2022::teamName()
 {
-//    return m_teamName.text();
-    return m_teamCompetitors.first()->name();
+    QString name = m_teamCompetitors.first()->name();
+    if (m_teamCompetitors.size() == 2)
+        name.append("/" + m_teamCompetitors.at(1)->name());
+    else if (m_teamCompetitors.size() > 2)
+        name = m_teamName.text();
+    return name;
 }
 
 QJsonObject Team2022::toJson() const

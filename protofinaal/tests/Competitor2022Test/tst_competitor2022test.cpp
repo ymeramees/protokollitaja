@@ -22,7 +22,8 @@ private slots:
 //    void test_handleIgnoredShot();
 //    void test_handleUnignoredShot();
 //    void test_handleUnignoredShot2();
-    void test_lastResultAndSum();
+    void test_lastResultAndSumWithPoints();
+    void test_lastResultAndSumWithShots();
     void test_readSiusShotAdditionalShot();
     void test_readSiusShotIgnoreWrongId();
     void test_readSiusShotReadCompetitionShotsWithoutSighters();
@@ -30,7 +31,7 @@ private slots:
     void test_readSiusShotWithOffset();
     void test_readSiusShotWithOffsetClean();
     void test_shotAtOutOfBounds();
-//    void test_sumWithIgnoredShot();
+    void test_sumWithIgnoredShot();
     void test_toJson();
 
 };
@@ -51,7 +52,7 @@ void CompetitorTest2022::test_createCompetitorFromJsonArray()
     QFETCH(int, fieldCount);
     QFETCH(int, idAndSumsCount);
 
-    Competitor2022 *competitor = new Competitor2022(1, shotsConf);
+    Competitor2022 *competitor = new Competitor2022(1, shotsConf, true);
     QHBoxLayout* hBox = competitor->findChild<QHBoxLayout*>();
     QVERIFY(hBox != 0);
     QList<QLabel*> idAndSums = competitor->findChildren<QLabel*>();
@@ -269,69 +270,107 @@ void CompetitorTest2022::test_createCompetitorFromSavedJsonObject()
 //    QCOMPARE(dynamic_cast<QLabel*>(hBox->itemAt(13)->widget())->text(), "21,3");
 //}
 
-void CompetitorTest2022::test_lastResultAndSum()
+void CompetitorTest2022::test_lastResultAndSumWithPoints()
 {
     QJsonArray conf = {10, 5};
-    Competitor2022 competitor(1, conf);
+    Competitor2022 competitor(1, conf, true);
     QCOMPARE(competitor.lastResult(), "0,0");
-    QCOMPARE(competitor.pointsTotal(), "0");
+    QCOMPARE(competitor.total(), "0");
     QCOMPARE(competitor.shotAt(0)->get10Lask(), -999);
-    QCOMPARE(competitor.pointsAt(0), "");
+    QCOMPARE(competitor.resultAt(0), "");
     QCOMPARE(competitor.lastValidShotIndex(), -1);
 
     competitor.setShot(0, Lask(104, 354, -983, true, QTime::currentTime()));
     competitor.setPoints(0, 40);
     QCOMPARE(competitor.lastResult(), "10,4");
-    QCOMPARE(competitor.pointsTotal(), "4");
+    QCOMPARE(competitor.total(), "4");
     QCOMPARE(competitor.shotAt(0)->get10Lask(), 104);
-    QCOMPARE(competitor.pointsAt(0), "4");
+    QCOMPARE(competitor.resultAt(0), "4");
     QCOMPARE(competitor.lastValidShotIndex(), 0);
 
     competitor.setShot(1, Lask(83, 354, -983, true, QTime::currentTime()));
     competitor.setPoints(1, 20);
     QCOMPARE(competitor.lastResult(), "8,3");
-    QCOMPARE(competitor.pointsTotal(), "6");
+    QCOMPARE(competitor.total(), "6");
     QCOMPARE(competitor.shotAt(1)->get10Lask(), 83);
-    QCOMPARE(competitor.pointsAt(1), "2");
+    QCOMPARE(competitor.resultAt(1), "2");
     QCOMPARE(competitor.lastValidShotIndex(), 1);
 
     competitor.setShot(5, Lask(100, 354, -983, true, QTime::currentTime()));
     competitor.setPoints(5, 30);
     QCOMPARE(competitor.lastResult(), "10,0");
-    QCOMPARE(competitor.pointsTotal(), "9");
+    QCOMPARE(competitor.total(), "9");
     QCOMPARE(competitor.shotAt(5)->get10Lask(), 100);
-    QCOMPARE(competitor.pointsAt(5), "3");
+    QCOMPARE(competitor.resultAt(5), "3");
     QCOMPARE(competitor.lastValidShotIndex(), 5);
 
     competitor.setShot(6, Lask(58, 354, -983, true, QTime::currentTime()));
     competitor.setPoints(6, 10);
     QCOMPARE(competitor.lastResult(), "5,8");
-    QCOMPARE(competitor.pointsTotal(), "10");
+    QCOMPARE(competitor.total(), "10");
     QCOMPARE(competitor.shotAt(6)->get10Lask(), 58);
     QCOMPARE(competitor.lastValidShotIndex(), 6);
 
     competitor.setShot(10, Lask(109, 354, -983, true, QTime::currentTime()));
     competitor.setPoints(10, 40);
     QCOMPARE(competitor.lastResult(), "10,9");
-    QCOMPARE(competitor.pointsTotal(), "14");
+    QCOMPARE(competitor.total(), "14");
     QCOMPARE(competitor.shotAt(10)->get10Lask(), 109);
-    QCOMPARE(competitor.pointsAt(10), "4");
-    QCOMPARE(competitor.pointsAt(13), "");
+    QCOMPARE(competitor.resultAt(10), "4");
+    QCOMPARE(competitor.resultAt(13), "");
     QCOMPARE(competitor.lastValidShotIndex(), 10);
 
     competitor.setShot(13, Lask(100, 354, -983, true, QTime::currentTime()));
     competitor.setPoints(13, 30);
     QCOMPARE(competitor.lastResult(), "10,0");
-    QCOMPARE(competitor.pointsTotal(), "17");
+    QCOMPARE(competitor.total(), "17");
     QCOMPARE(competitor.shotAt(13)->get10Lask(), 100);
-    QCOMPARE(competitor.pointsAt(13), "3");
+    QCOMPARE(competitor.resultAt(13), "3");
     QCOMPARE(competitor.lastValidShotIndex(), 13);
+}
+
+void CompetitorTest2022::test_lastResultAndSumWithShots()
+{
+    QJsonArray conf = {5, 5, 14};
+    Competitor2022 competitor(1, conf, false);
+    QCOMPARE(competitor.lastResult(), "0,0");
+    QCOMPARE(competitor.total(), "0,0");
+    QCOMPARE(competitor.shotAt(0)->get10Lask(), -999);
+    QCOMPARE(competitor.resultAt(0), "");
+    QCOMPARE(competitor.lastValidShotIndex(), -1);
+
+    competitor.setShot(0, Lask(104, 354, -983, true, QTime::currentTime()));
+    QCOMPARE(competitor.lastResult(), "10,4");
+    QCOMPARE(competitor.shotAt(0)->get10Lask(), 104);
+    QCOMPARE(competitor.resultAt(0), "10,4");
+    QCOMPARE(competitor.total(), "10,4");
+    QCOMPARE(competitor.lastValidShotIndex(), 0);
+
+    competitor.setShot(1, Lask(83, 354, -983, true, QTime::currentTime()));
+    QCOMPARE(competitor.lastResult(), "18,7");
+    QCOMPARE(competitor.total(), "18,7");
+
+    competitor.setShot(5, Lask(100, 354, -983, true, QTime::currentTime()));
+    QCOMPARE(competitor.lastResult(), "10,0");
+    QCOMPARE(competitor.total(), "28,7");
+
+    competitor.setShot(6, Lask(58, 354, -983, true, QTime::currentTime()));
+    QCOMPARE(competitor.lastResult(), "15,8");
+    QCOMPARE(competitor.total(), "34,5");
+
+    competitor.setShot(10, Lask(109, 354, -983, true, QTime::currentTime()));
+    QCOMPARE(competitor.lastResult(), "10,9");
+    QCOMPARE(competitor.total(), "45,4");
+
+    competitor.setShot(23, Lask(100, 354, -983, true, QTime::currentTime()));
+    QCOMPARE(competitor.lastResult(), "10,0");
+    QCOMPARE(competitor.total(), "55,4");
 }
 
 void CompetitorTest2022::test_readSiusShotAdditionalShot()
 {
     QJsonArray conf = {3, 3, 10};
-    Competitor2022 competitor(13, conf);
+    Competitor2022 competitor(13, conf, false);
 
     SiusShotData shot1(13, 0, 1, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;101;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0"));
     QCOMPARE(competitor.readSiusShot(shot1), true);
@@ -349,7 +388,7 @@ void CompetitorTest2022::test_readSiusShotAdditionalShot()
 void CompetitorTest2022::test_readSiusShotIgnoreWrongId()
 {
     QJsonArray conf = {3, 3, 10};
-    Competitor2022 competitor(13, conf);
+    Competitor2022 competitor(13, conf, false);
 
     SiusShotData shot1(17, 0, 2, Lask("_SHOT;16;17;15;60;17;09:57:56.05;3;1;0;8;88;0;2;0.01295;0.01074;900;0;0;655.35;387107423;64;559;0"));
     QCOMPARE(competitor.readSiusShot(shot1), false);
@@ -358,7 +397,7 @@ void CompetitorTest2022::test_readSiusShotIgnoreWrongId()
 void CompetitorTest2022::test_readSiusShotReadCompetitionShotsWithoutSighters()
 {
     QJsonArray conf = {3, 3, 10};
-    Competitor2022 competitor(13, conf);
+    Competitor2022 competitor(13, conf, false);
 
     SiusShotData shot1(13, 0, 1, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;101;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0"));
     QCOMPARE(competitor.readSiusShot(shot1), true);
@@ -372,7 +411,7 @@ void CompetitorTest2022::test_readSiusShotReadCompetitionShotsWithoutSighters()
 void CompetitorTest2022::test_readSiusShotRepeatedShotDataInFirstStage()
 {
     QJsonArray conf = {5, 5, 14};
-    Competitor2022 competitor(13, conf);
+    Competitor2022 competitor(13, conf, false);
 
     SiusShotData shot1(13, 0, 1, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;101;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0"));
     QCOMPARE(competitor.readSiusShot(shot1), true);
@@ -399,28 +438,28 @@ void CompetitorTest2022::test_readSiusShotRepeatedShotDataInFirstStage()
 void CompetitorTest2022::test_readSiusShotWithOffset()
 {
     QJsonArray conf = {10, 5};
-    Competitor2022 competitor(1, conf);
+    Competitor2022 competitor(1, conf, true);
     QCOMPARE(competitor.lastResult(), "0,0");
-    QCOMPARE(competitor.pointsTotal(), "0");
+    QCOMPARE(competitor.total(), "0");
     QCOMPARE(competitor.shotAt(0)->get10Lask(), -999);
-    QCOMPARE(competitor.pointsAt(0), "");
+    QCOMPARE(competitor.resultAt(0), "");
     QCOMPARE(competitor.lastValidShotIndex(), -1);
 
     competitor.setShot(0, Lask(104, 354, -983, true, QTime::currentTime()));
     competitor.setPoints(0, 40);
     QCOMPARE(competitor.lastResult(), "10,4");
-    QCOMPARE(competitor.pointsTotal(), "4");
+    QCOMPARE(competitor.total(), "4");
     QCOMPARE(competitor.shotAt(0)->get10Lask(), 104);
-    QCOMPARE(competitor.pointsAt(0), "4");
+    QCOMPARE(competitor.resultAt(0), "4");
     QCOMPARE(competitor.lastValidShotIndex(), 0);
 
 //    competitor.setShot(1, Lask(83, 354, -983, true, QTime::currentTime()));
     competitor.readSiusShot(SiusShotData(1, 0, 2, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;8;83;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0")));
     competitor.setPoints(1, 20);
     QCOMPARE(competitor.lastResult(), "8,3");
-    QCOMPARE(competitor.pointsTotal(), "6");
+    QCOMPARE(competitor.total(), "6");
     QCOMPARE(competitor.shotAt(1)->get10Lask(), 83);
-    QCOMPARE(competitor.pointsAt(1), "2");
+    QCOMPARE(competitor.resultAt(1), "2");
     QCOMPARE(competitor.lastValidShotIndex(), 1);
 
     QSpinBox *siusOffset = competitor.findChild<QSpinBox*>();
@@ -430,15 +469,15 @@ void CompetitorTest2022::test_readSiusShotWithOffset()
     competitor.readSiusShot(SiusShotData(1, 0, 5, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;100;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0")));
     competitor.setPoints(5, 30);
     QCOMPARE(competitor.lastResult(), "10,0");
-    QCOMPARE(competitor.pointsTotal(), "9");
+    QCOMPARE(competitor.total(), "9");
     QCOMPARE(competitor.shotAt(5)->get10Lask(), 100);
-    QCOMPARE(competitor.pointsAt(5), "3");
+    QCOMPARE(competitor.resultAt(5), "3");
     QCOMPARE(competitor.lastValidShotIndex(), 5);
 
     competitor.setShot(6, Lask(58, 354, -983, true, QTime::currentTime()));
     competitor.setPoints(6, 10);
     QCOMPARE(competitor.lastResult(), "5,8");
-    QCOMPARE(competitor.pointsTotal(), "10");
+    QCOMPARE(competitor.total(), "10");
     QCOMPARE(competitor.shotAt(6)->get10Lask(), 58);
     QCOMPARE(competitor.lastValidShotIndex(), 6);
 
@@ -447,29 +486,29 @@ void CompetitorTest2022::test_readSiusShotWithOffset()
     competitor.readSiusShot(SiusShotData(1, 0, 12, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;109;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0")));
     competitor.setPoints(10, 40);
     QCOMPARE(competitor.lastResult(), "10,9");
-    QCOMPARE(competitor.pointsTotal(), "14");
+    QCOMPARE(competitor.total(), "14");
     QCOMPARE(competitor.shotAt(10)->get10Lask(), 109);
-    QCOMPARE(competitor.pointsAt(10), "4");
-    QCOMPARE(competitor.pointsAt(13), "");
+    QCOMPARE(competitor.resultAt(10), "4");
+    QCOMPARE(competitor.resultAt(13), "");
     QCOMPARE(competitor.lastValidShotIndex(), 10);
 
     competitor.setShot(13, Lask(100, 354, -983, true, QTime::currentTime()));
     competitor.setPoints(13, 30);
     QCOMPARE(competitor.lastResult(), "10,0");
-    QCOMPARE(competitor.pointsTotal(), "17");
+    QCOMPARE(competitor.total(), "17");
     QCOMPARE(competitor.shotAt(13)->get10Lask(), 100);
-    QCOMPARE(competitor.pointsAt(13), "3");
+    QCOMPARE(competitor.resultAt(13), "3");
     QCOMPARE(competitor.lastValidShotIndex(), 13);
 }
 
 void CompetitorTest2022::test_readSiusShotWithOffsetClean()
 {
     QJsonArray conf = {17};
-    Competitor2022 competitor(1, conf);
+    Competitor2022 competitor(1, conf, true);
     QCOMPARE(competitor.lastResult(), "0,0");
-    QCOMPARE(competitor.pointsTotal(), "0");
+    QCOMPARE(competitor.total(), "0");
     QCOMPARE(competitor.shotAt(0)->get10Lask(), -999);
-    QCOMPARE(competitor.pointsAt(0), "");
+    QCOMPARE(competitor.resultAt(0), "");
     QCOMPARE(competitor.lastValidShotIndex(), -1);
 
     QSpinBox *siusOffset = competitor.findChild<QSpinBox*>();
@@ -478,10 +517,10 @@ void CompetitorTest2022::test_readSiusShotWithOffsetClean()
     competitor.readSiusShot(SiusShotData(1, 0, 16, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;109;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0")));
     competitor.setPoints(0, 40);
     QCOMPARE(competitor.lastResult(), "10,9");
-    QCOMPARE(competitor.pointsTotal(), "4");
+    QCOMPARE(competitor.total(), "4");
     QCOMPARE(competitor.shotAt(0)->get10Lask(), 109);
-    QCOMPARE(competitor.pointsAt(0), "4");
-    QCOMPARE(competitor.pointsAt(1), "");
+    QCOMPARE(competitor.resultAt(0), "4");
+    QCOMPARE(competitor.resultAt(1), "");
     QCOMPARE(competitor.lastValidShotIndex(), 0);
 }
 
@@ -489,47 +528,47 @@ void CompetitorTest2022::test_shotAtOutOfBounds()
 {
     // FIXME That doesn't seem to do what it says
     QJsonArray conf = {5, 5, 14};
-    Competitor2022 competitor(13, conf);
+    Competitor2022 competitor(13, conf, true);
     competitor.setShot(0, Lask(104, 354, -983, true, QTime::currentTime()));
     QCOMPARE(competitor.lastResult(), "10,4");
-    QCOMPARE(competitor.pointsTotal(), "0");    // No points have been added
+    QCOMPARE(competitor.total(), "0");    // No points have been added
     QCOMPARE(competitor.shotAt(0)->getSLask(), "10,4");
     QCOMPARE(competitor.shotAt(24), std::nullopt);
 }
 
-//void CompetitorTest2022::test_sumWithIgnoredShot()
-//{
-//    QJsonArray conf = {5, 5, 14};
-//    Competitor2022 competitor(13, conf);
-//    competitor.setShot(0, Lask(104, 354, -983, true, QTime::currentTime()));
-//    QCOMPARE(competitor.lastResult(), "10,4");
-//    QCOMPARE(competitor.lastSum(), "10,4");
+void CompetitorTest2022::test_sumWithIgnoredShot()
+{
+   QJsonArray conf = {5, 5, 14};
+   Competitor2022 competitor(13, conf, false);
+   competitor.setShot(0, Lask(104, 354, -983, true, QTime::currentTime()));
+   QCOMPARE(competitor.lastResult(), "10,4");
+   QCOMPARE(competitor.total(), "10,4");
 
-//    competitor.setShot(1, Lask(83, 354, -983, true, QTime::currentTime()));
-//    QCOMPARE(competitor.lastResult(), "18,7");
-//    QCOMPARE(competitor.lastSum(), "18,7");
+   competitor.setShot(1, Lask(83, 354, -983, true, QTime::currentTime()));
+   QCOMPARE(competitor.lastResult(), "18,7");
+   QCOMPARE(competitor.total(), "18,7");
 
-//    competitor.setShot(3, Lask(100, 354, -983, true, QTime::currentTime()));
-//    QCOMPARE(competitor.lastResult(), "28,7");
-//    QCOMPARE(competitor.lastSum(), "28,7");
+   competitor.setShot(3, Lask(100, 354, -983, true, QTime::currentTime()));
+   QCOMPARE(competitor.lastResult(), "28,7");
+   QCOMPARE(competitor.total(), "28,7");
 
-//    QList<ShotEdit*> shotEdits = competitor.findChildren<ShotEdit*>();
-//    shotEdits.at(3)->setIgnored(true);
-//    QCOMPARE(competitor.lastResult(), "18,7");
-//    QCOMPARE(competitor.lastSum(), "18,7");
+   QList<ShotEdit*> shotEdits = competitor.findChildren<ShotEdit*>();
+   shotEdits.at(3)->setIgnored(true);
+   QCOMPARE(competitor.lastResult(), "18,7");
+   QCOMPARE(competitor.total(), "18,7");
 
-//    competitor.setShot(10, Lask(58, 354, -983, true, QTime::currentTime()));
-//    QCOMPARE(competitor.lastResult(), "5,8");
-//    QCOMPARE(competitor.lastSum(), "24,5");
+   competitor.setShot(10, Lask(58, 354, -983, true, QTime::currentTime()));
+   QCOMPARE(competitor.lastResult(), "5,8");
+   QCOMPARE(competitor.total(), "24,5");
 
-//    competitor.setShot(11, Lask(109, 354, -983, true, QTime::currentTime()));
-//    QCOMPARE(competitor.lastResult(), "10,9");
-//    QCOMPARE(competitor.lastSum(), "35,4");
+   competitor.setShot(11, Lask(109, 354, -983, true, QTime::currentTime()));
+   QCOMPARE(competitor.lastResult(), "10,9");
+   QCOMPARE(competitor.total(), "35,4");
 
-//    shotEdits.at(11)->setIgnored(true);
-//    QCOMPARE(competitor.lastResult(), "5,8");
-//    QCOMPARE(competitor.lastSum(), "24,5");
-//}
+   shotEdits.at(11)->setIgnored(true);
+   QCOMPARE(competitor.lastResult(), "5,8");
+   QCOMPARE(competitor.total(), "24,5");
+}
 
 void CompetitorTest2022::test_toJson()
 {
