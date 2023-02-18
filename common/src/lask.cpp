@@ -127,7 +127,7 @@ bool Lask::isInnerTen() const
 
 bool Lask::isEmpty()
 {
-    if(m_lask == -999 && m_x == -999 && m_y == -999)
+    if(m_lask == -999)
         return true;
     else return false;
 }
