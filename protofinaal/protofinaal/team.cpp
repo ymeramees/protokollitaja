@@ -12,12 +12,12 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
     layout->addWidget(&m_indexLabel);
     layout->addWidget(&m_teamName, 0, 1);
 
-    if(configJson["Members_in_team"].isDouble()){  //Event config file
+    if(configJson["membersInTeam"].isDouble()){  //Event config file
         if(verbose)
             QTextStream(stdout) << "Team::Team(uus)" << endl;
-        competitorsInTeam = configJson["Members_in_team"].toInt();
+        competitorsInTeam = configJson["membersInTeam"].toInt();
 
-        Competitor *competitor = new Competitor(index * 10 + 1, configJson["Shots"].toArray());
+        Competitor *competitor = new Competitor(index * 10 + 1, configJson["shots"].toArray());
         connect(competitor, &Competitor::newShot, this, &Team::sum);
         connect(competitor, &Competitor::statusInfo, this, &Team::statusInfo);
 
@@ -25,7 +25,7 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
         layout->addWidget(competitor, 0, 2);
 
         for(int i = 1; i < competitorsInTeam; i++){
-            Competitor *competitor = new Competitor(index * 10 + 1 + i, configJson["Shots"].toArray());
+            Competitor *competitor = new Competitor(index * 10 + 1 + i, configJson["shots"].toArray());
             connect(competitor, &Competitor::newShot, this, &Team::sum);
             connect(competitor, &Competitor::statusInfo, this, &Team::statusInfo);
 
@@ -35,10 +35,10 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
 
         m_sumLabel.setText("0,0");
 
-    }else if(configJson["Members_in_team"].isArray()){  //Loaded finals file
+    }else if(configJson["membersInTeam"].isArray()){  //Loaded finals file
         if(verbose)
             QTextStream(stdout) << "Team::Team(failist laadimine)" << endl;
-        QJsonArray competitorsArray = configJson["Members_in_team"].toArray();
+        QJsonArray competitorsArray = configJson["membersInTeam"].toArray();
         competitorsInTeam = competitorsArray.size();
 
         for (int i = 0; i < competitorsArray.size(); i++) {
@@ -51,7 +51,7 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
         }
         m_teamName.setText(configJson["teamName"].toString());
     }else
-        QMessageBox::critical(this, tr("Viga!"), tr("Vigane fail!\nMembers_in_team != isDouble && != isArray"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Viga!"), tr("Vigane fail!\nMembersInTeam != isDouble && != isArray"), QMessageBox::Ok);
 
     layout->addWidget(&m_sumLabel, 0, layout->columnCount());
 
@@ -147,7 +147,7 @@ QJsonObject Team::toJson() const
         competitorsArray.append(competitor->toJson());
     }
     QJsonObject json;
-    json["Members_in_team"] = competitorsArray;
+    json["membersInTeam"] = competitorsArray;
     json["teamName"] = m_teamName.text();
     return json;
 }

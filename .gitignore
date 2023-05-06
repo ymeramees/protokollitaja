@@ -57,8 +57,10 @@ CMakeLists.txt.user*
 *.txt
 *.xls
 *.fin
+.vscode/
 save.json
 conf.json
 Koduleht/
 images_store/
 image_store/
+.qtc_clangd/

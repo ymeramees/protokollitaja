@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>InitialDialog</class>
  <widget class="QDialog" name="InitialDialog">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>470</width>
-    <height>210</height>
+    <height>231</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,10 +29,34 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout_3">
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="fileNameEdit">
+       <property name="toolTip">
+        <string>Võistluse faili nimi</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="2">
+      <widget class="QLineEdit" name="timePlaceEdit">
+       <property name="toolTip">
+        <string>Toimumise aeg ja koht</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="competitionNameLabel">
        <property name="text">
         <string>Võistluse nimi:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QPushButton" name="browseButton">
+       <property name="toolTip">
+        <string>Siia vajutades saate otsida teise faili, mida avada</string>
+       </property>
+       <property name="text">
+        <string>Lehitse...</string>
        </property>
       </widget>
      </item>
@@ -43,6 +70,57 @@
        </property>
       </widget>
      </item>
+     <item row="4" column="1">
+      <widget class="QComboBox" name="eventBox">
+       <item>
+        <property name="text">
+         <string>AR 2023</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>AR 2023 GMM</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>AP 2023</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>AP 2023 GMM</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>AR 2023 mixed</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>AR 2023 mixed 2 relays</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>AP 2023 mixed</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>AP 2023 mixed 2 relays</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="eventLabel">
+       <property name="text">
+        <string>Finaali tüüp:</string>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="timePlaceLabel">
        <property name="text">
@@ -50,36 +128,22 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1" colspan="2">
-      <widget class="QLineEdit" name="timePlaceEdit">
-       <property name="toolTip">
-        <string>Toimumise aeg ja koht</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QLabel" name="fileNameLabel">
        <property name="text">
         <string>Faili nimi:</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="fileNameEdit">
-       <property name="toolTip">
-        <string>Võistluse faili nimi</string>
+     <item row="2" column="0">
+      <widget class="QLabel" name="eventNameLabel">
+       <property name="text">
+        <string>Harjutuse nimi:</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
-      <widget class="QPushButton" name="browseButton">
-       <property name="toolTip">
-        <string>Siia vajutades saate otsida teise faili, mida avada</string>
-       </property>
-       <property name="text">
-        <string>Lehitse...</string>
-       </property>
-      </widget>
+     <item row="2" column="1" colspan="2">
+      <widget class="QLineEdit" name="eventNameEdit"/>
      </item>
     </layout>
    </item>

@@ -21,7 +21,7 @@ public:
     void updateGui();
 
 public slots:
-    void contextMenuEvent(QContextMenuEvent *event);
+//    void contextMenuEvent(QContextMenuEvent *event);  // TODO To be implemented again
     void setIgnored(bool newIgnored);
     void setShotFromGui();
 

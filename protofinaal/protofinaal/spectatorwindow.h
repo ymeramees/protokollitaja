@@ -27,17 +27,18 @@ public slots:
     void clearResults();
     void fullscreen();
     void mouseDoubleClickEvent(QMouseEvent *event);
-    void setHeading(QString competitionName, QString timePlace, QString eventName, QString rankLabel, QString nameLabel, QString seriesLabel, QString diffLabel);
+    void setHeading(QString competitionName, QString timePlace, QString eventName, QString rankLabel, QString nameLabel, QString seriesLabel, QString pointsLabel, QString diffLabel);
     void setResults(QString resultsHTML);
 //    void setResults(QStringList resultsRows);
 
 private:
+    QString originalResultsTemplate;
     QString resultsTemplate;
     QString rowTemplate;
 //    QString resultsHTML;
     QString newResultsFontSize;
     QString originalResultsFontSize;
-    QString resultRows;
+    QString m_resultRows;
     QGridLayout targetsBox;
     QTextBrowser resultsView;
     QVBoxLayout vBox;

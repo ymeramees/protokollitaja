@@ -50,9 +50,9 @@ Competitor::Competitor(const int id, const QJsonArray configJson, QWidget *paren
 Competitor::Competitor(const QJsonObject &json, QWidget *parent) : QWidget(parent)
 {
     if(verbose)
-        QTextStream(stdout) << "Competitor::Competitor(QJsonObject), json[Series].size = " << json["Series"].toArray().size() << endl;
+        QTextStream(stdout) << "Competitor::Competitor(QJsonObject), json[Series].size = " << json["series"].toArray().size() << endl;
     if(!(json.contains("nameEdit") && json["nameEdit"].isString()) ||
-            !(json.contains("Series") && json["Series"].isArray())){
+            !(json.contains("series") && json["series"].isArray())){
         QMessageBox::critical(this, tr("Viga!"), tr("Vigane fail!"));
         return;
     }
@@ -71,12 +71,12 @@ Competitor::Competitor(const QJsonObject &json, QWidget *parent) : QWidget(paren
     m_nameEdit.setText(json["nameEdit"].toString());
     hBox->addWidget(&m_nameEdit);
 
-    QJsonArray seriesArray = json["Series"].toArray();
+    QJsonArray seriesArray = json["series"].toArray();
 
     foreach (QJsonValue seriesJson, seriesArray) {
         QVector<ShotEdit*> *thisSeries = new QVector<ShotEdit*>;
         QJsonObject seriesObj = seriesJson.toObject();
-        QJsonArray shotsArray = seriesObj["Shots"].toArray();
+        QJsonArray shotsArray = seriesObj["shots"].toArray();
         foreach (QJsonValue shotJson, shotsArray) {
             ShotEdit *shotEdit = new ShotEdit(shotJson.toObject());
             createShotEditConnections(shotEdit);
@@ -92,7 +92,7 @@ Competitor::Competitor(const QJsonObject &json, QWidget *parent) : QWidget(paren
         m_series.append(thisSeries);
     }
 
-//    QJsonArray shotsArray = json["Shots"].toArray();
+//    QJsonArray shotsArray = json["shots"].toArray();
 
 //    foreach (QJsonValue shot, shotsArray) {
 //        QLineEdit *shotEdit = new QLineEdit;
@@ -369,10 +369,10 @@ QJsonObject Competitor::toJson() const
         for(int j = 0; j < m_series.at(i)->size(); j++){
             seriesShotsJson.append(m_series.at(i)->at(j)->toJson());
         }
-        seriesJson["Shots"] = seriesShotsJson;
+        seriesJson["shots"] = seriesShotsJson;
         seriesJson["Sum"] = m_sumLabels.at(i)->text();
         seriesArray.append(seriesJson);
     }
-    json["Series"] = seriesArray;
+    json["series"] = seriesArray;
     return json;
 }

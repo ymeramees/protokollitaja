@@ -1,18 +1,28 @@
 /////////////////////////////////////////////////////////////////////////////
 ///ToDo:
-/// In progress: Additional level TeamsTable, needs modifications to be fully implemented.
-/// ProtofinaalTest (TeamsTableTest), to test that shots' data from SiusData is added to correct competitor
-/// Sorting based on results
+/// In progress:
+/// Enable switching from one final stage to another
+/// Would be good to create a new file immediately when going forward from initialdialog
+/// In Windows when exiting from initialdialog, the program won't exit?
+/// Crashes when big negative offset is used (same as number of shots) - OK
+/// Enable adjusting Sius shot number offset - OK
+/// Sorting based on results - OK
+/// Show last shot number in spectators window - OK
+/// Add possibility to have two teamTables - OK
+/// Choice of event types - OK
+/// Medal match - OK
+/// Import SiusData startlist - OK
+/// Add possibility to add missed shot(s)
+/// Add ignore shot(s) possibility - Needs to be implemented again
 /// Add shoot-off possibility
 /// Print function
-/// Show targets on spectator window
 /// Save as function
+/// Show targets on spectator window
 /// Some export function
-/// Import SiusData startlist
-/// Connection to target scoring machine
 /// Add competition stage number, so that there can be sighting shots between competition series (3 positions final)
-/// Add ignore shot(s) possibility - OK
-/// Add possibility to add missed shot(s)
+/// Connection to target scoring machine
+/// OLD - Additional level TeamsTable, needs modifications to be fully implemented.
+/// OLD - ProtofinaalTest (TeamsTableTest), to test that shots' data from SiusData is added to correct competitor
 ///
 /////////////////////////////////////////////////////////////////////////////
 
@@ -23,13 +33,15 @@ Protofinaal::Protofinaal(QWidget *parent)
 {
     createMenus();
     setStatusBar(statusBar());
-    teamsTable = new TeamsTable(this);
 //    QWidget *widget = new QWidget();
 //    widget->setLayout(vBox);
 //    widget->setStyleSheet("border:1px solid rgb(0, 255, 0); ");
-    setCentralWidget(teamsTable);
+    QScrollArea *scrollArea = new QScrollArea();
+    scrollArea->setWidgetResizable(true);
+    setCentralWidget(scrollArea);
+    scrollArea->setLayout(&vBox);
 
-    this->setGeometry(9, 36, 800, 600);
+    this->setGeometry(9, 36, 1200, 600);
     readSettings();
 
     QTimer::singleShot(100, this, SLOT(initialize()));
@@ -53,37 +65,39 @@ Protofinaal::~Protofinaal()
 
 void Protofinaal::clear()
 {
-//    foreach (Team *team, teams) {
-//        vBox->removeWidget(team);
-//        team->deleteLater();
-//    }
-//    teams.clear();
-    if(teamsTable != nullptr)
+    foreach (TeamsTable2022 *teamsTable, m_teamsTables) {
         teamsTable->clear();
+        teamsTable->deleteLater();
+    }
+    m_teamsTables.clear();
     competitionName.clear();
     timePlace.clear();
+    eventName.clear();
+    eventType.clear();
+    m_spectatorWindow.clearResults();
 }
 
 void Protofinaal::closeEvent(QCloseEvent *event)
 {
     if(verbose)
         QTextStream(stdout) << "Protofinaal::closeEvent()" << endl;
-    event->accept();
-    qApp->quit();
+    if (m_modifiedAfterSave) {
+        int reply = QMessageBox::question(this, "Protofinaal", tr("Kas soovid muudatused salvestada ja programmist väljuda?"),	QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        if (reply == QMessageBox::Save) {
+            save();
+            event->accept();
+        } else if(reply == QMessageBox::Cancel) {
+            event->ignore();
+        } else {
+            event->accept();
+        }
+    } else {
+        event->accept();
+    }
+
+    if(event->isAccepted())
+        qApp->quit();
 }
-
-//void Protofinaal::createLayout(QJsonObject &jsonObj)
-//{
-//    int teamsNo = jsonObj["Teams"].toInt();
-
-//    for(int i = 0; i < teamsNo; i++){
-//        Team *team = new Team(jsonObj, i+1);
-//        connect(team, &Team::teamUpdated, this, &Protofinaal::updateSpectatorWindow);
-//        connect(team, &Team::statusInfo, this, &Protofinaal::statusBarInfoChanged);
-//        teams.append(team);
-//        vBox->addWidget(team);
-//    }
-//}
 
 void Protofinaal::createMenus()
 {
@@ -99,6 +113,11 @@ void Protofinaal::createMenus()
     saveAct->setShortcuts(QKeySequence::Save);
     saveAct->setStatusTip(tr("Salvesta fail"));
     connect(saveAct, &QAction::triggered, this, &Protofinaal::save);
+
+    QAction *importSiusStartListAct = new QAction(tr("&Impordi Sius startlist..."), this);
+    importSiusStartListAct->setShortcuts(QKeySequence::Open);
+    importSiusStartListAct->setStatusTip(tr("Impordi Sius startlist"));
+    connect(importSiusStartListAct, &QAction::triggered, this, &Protofinaal::importSiusStartList);
 
     QAction *exitAct = new QAction(tr("&Välju"), this);
     exitAct->setShortcuts(QKeySequence::Quit);
@@ -116,6 +135,8 @@ void Protofinaal::createMenus()
     fileMenu->addAction(openAct);
     fileMenu->addAction(saveAct);
     fileMenu->addSeparator();
+    fileMenu->addAction(importSiusStartListAct);
+    fileMenu->addSeparator();
     fileMenu->addAction(exitAct);
 
     editMenu->addAction(showSpectatorWindowAct);
@@ -129,8 +150,9 @@ void Protofinaal::connectToSiusData()
     if(siusDataConnections == nullptr){
         siusDataConnections = new SiusDataConnections(siusLog, &logOut, &m_settings, this);
         connect(siusDataConnections, &SiusDataConnections::statusInfo, this, &Protofinaal::statusBarInfoChanged);
-        if(teamsTable != nullptr)
-            connect(siusDataConnections, &SiusDataConnections::shotRead, teamsTable, &TeamsTable::readSiusInfo);
+        foreach (TeamsTable2022 *teamsTable, m_teamsTables) {
+            connect(siusDataConnections, &SiusDataConnections::shotRead, teamsTable, &TeamsTable2022::readSiusInfo);
+        }
         connect(siusDataConnections, &SiusDataConnections::disconnectedFromSius, this, &Protofinaal::connectionToSiusLost);
     }
 
@@ -148,59 +170,125 @@ void Protofinaal::connectionToSiusLost(int connectionIndex)
     // TODO To be implemented
 }
 
+void Protofinaal::importSiusStartList()
+{
+    QString fileName = m_initialDialog->fileName().left(QDir::fromNativeSeparators(m_initialDialog->fileName()).lastIndexOf("/"));
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Ava startlist"), fileName, tr("Comma separated file (*.csv)"));
+    if (filePath.isEmpty())
+        return;
+
+    QFile file(filePath);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        QStringList rows;
+        while(!in.atEnd()){  // Read the whole file in
+            QString newRow = in.readLine();
+            int newTarget = newRow.split(';').at(10).toInt();
+            bool wasAdded = false;
+            if (rows.size() > 0) {
+                for (int i = 0; i < rows.size(); i++) {
+                    int currentTarget = rows.at(i).split(';').at(10).toInt();
+                    if (newTarget < currentTarget) {
+                        rows.insert(i, newRow);
+                        wasAdded = true;
+                        break ;
+                    }
+                }
+            }
+            if (!wasAdded)
+                rows.append(newRow);
+        }
+
+        foreach(TeamsTable2022 *teamsTable, m_teamsTables) {
+            QStringList forCurrentTable;
+            for(int i = 0; i < teamsTable->teamsCount(); i++)
+                if (!rows.isEmpty())
+                    forCurrentTable.append(rows.takeFirst());
+            teamsTable->setCompetitiorsData(forCurrentTable);
+        }
+
+    } else
+        QMessageBox::critical(this, "Viga", "Ei õnnestunud faili avada!", QMessageBox::Ok);
+}
+
 void Protofinaal::initialize()
 {
-    if(initialDialog == nullptr){
-        initialDialog = new InitialDialog(this);
-        connect(initialDialog, &InitialDialog::updateMe, this, &Protofinaal::updateInitialDialog);
+    if(verbose)
+        QTextStream(stdout) << "initialize" << endl;
+
+    if(m_initialDialog == nullptr){
+        m_initialDialog = new InitialDialog(this);
+        connect(m_initialDialog, &InitialDialog::updateMe, this, &Protofinaal::updateInitialDialog);
     }
 
     QJsonObject initialJson = readFinalsFile(currentFile, false);
-    initialDialog->setFileName(currentFile);
-    initialDialog->setCompetitionName(initialJson["competitionName"].toString());
-    initialDialog->setTimePlace(initialJson["timePlace"].toString());
+    m_initialDialog->setFileName(currentFile);
+    m_initialDialog->setCompetitionName(initialJson["competitionName"].toString());
+    m_initialDialog->setTimePlace(initialJson["timePlace"].toString());
+    m_initialDialog->setEventName(initialJson["eventName"].toString());
+    m_initialDialog->setEventType(initialJson["eventType"].toString());
 
-    if(initialDialog->exec() == QDialog::Accepted){
+    if(m_initialDialog->exec() == QDialog::Accepted){
         writeSettings();
-        currentFile = initialDialog->fileName();
-        QFile testOpenFile(initialDialog->fileName());
-        if(testOpenFile.open(QIODevice::ReadOnly)){ //Check if file exists
+        currentFile = m_initialDialog->fileName();
+        QFile testOpenFile(m_initialDialog->fileName());
+        if(testOpenFile.open(QIODevice::ReadOnly)){ //Check if file exists    // FIXME Re-enable
             if(verbose)
-                QTextStream(stdout) << "File exists: " << initialDialog->fileName() << endl;
+                QTextStream(stdout) << "File exists: " << m_initialDialog->fileName() << endl;
             testOpenFile.close();
             loadFile(currentFile);
         }else{  //File does not exist
             if(verbose)
-                QTextStream(stdout) << "Create new file: " << initialDialog->fileName() << endl;
+                QTextStream(stdout) << "Create new file: " << m_initialDialog->fileName() << endl;
 
-            competitionName = initialDialog->competitionName();
-            timePlace = initialDialog->timePlace();
+            competitionName = m_initialDialog->competitionName();
+            timePlace = m_initialDialog->timePlace();
+            eventName = m_initialDialog->eventName();
+            eventType = m_initialDialog->eventType();
 
             QJsonDocument configJson;
-            QFile configFile("60ohupuss.json");
+            QFile configFile(QString("%1.json").arg(eventType));
             if(configFile.open(QIODevice::ReadOnly)){
                 configJson = QJsonDocument::fromJson(configFile.readAll());
             }else
                 QMessageBox::critical(this, tr("Viga!"), tr("Harjutuse faili ei leitud!"));
 
             QJsonObject jsonObj = configJson.object();
-            if(!(jsonObj.contains("Event") && jsonObj["Event"].isString()) ||
-                    !(jsonObj.contains("Teams") && jsonObj["Teams"].isDouble()) ||
-                    !(jsonObj.contains("Members_in_team") && jsonObj["Members_in_team"].isDouble()) ||
-                    !(jsonObj.contains("Shots") && jsonObj["Shots"].isArray()))
+            if(!(jsonObj.contains("event") && jsonObj["event"].isString()) ||
+                    !(jsonObj.contains("relaysTogether") && jsonObj["relaysTogether"].isDouble()) ||
+                    !(jsonObj.contains("teams") && jsonObj["teams"].isDouble()) ||
+                    !(jsonObj.contains("membersInTeam") && jsonObj["membersInTeam"].isDouble()) ||
+                    !(jsonObj.contains("shots") && jsonObj["shots"].isArray()) ||
+                    !(jsonObj.contains("scoringWithPoints") && jsonObj["scoringWithPoints"].isBool()))
                 QMessageBox::critical(this, tr("Viga!"), tr("Harjutuse fail vigane!"));
-            eventName = jsonObj["Event"].toString();
-            teamsTable->createLayout(jsonObj);
+
+            m_scoringWithPoints = false;
+            if (jsonObj.contains("scoringWithPoints") && jsonObj["scoringWithPoints"].isBool()) {
+                m_scoringWithPoints = jsonObj["scoringWithPoints"].toBool();
+            }
+
+            int numberOfRelaysTogether = jsonObj["relaysTogether"].toDouble();
+            for (int relay = 1; relay <= numberOfRelaysTogether; relay++) {
+                TeamsTable2022 *m_teamsTable = new TeamsTable2022();
+                vBox.addWidget(m_teamsTable);
+                if (numberOfRelaysTogether > 1)
+                    m_teamsTable->setTableName(QString("Grupp %1").arg(relay));
+
+                connect(m_teamsTable, &TeamsTable2022::updateSpectatorWindow, this, &Protofinaal::updateSpectatorWindow);
+                connect(m_teamsTable, &TeamsTable2022::modified, [this]() { m_modifiedAfterSave = true; });
+                m_teamsTables.append(m_teamsTable);
+                m_teamsTable->createLayout(jsonObj, m_scoringWithPoints);
+            }
         }
 
         logOut << "///////////////////////////////" << competitionName << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";
         statusBarInfoChanged(tr("Avatud fail: ") + currentFile);
         showSpecatorWindowOnSecondScreen();
 
-    }else if(initialDialog->result() == QDialog::Rejected)
+    }else if(m_initialDialog->result() == QDialog::Rejected)
         QCoreApplication::quit();
 
-    setWindowTitle("Protofinaal - " + competitionName + " - " + eventName);
+    setWindowTitle("Protofinaal - test 3 - " + currentFile + " - " + competitionName + " - " + eventName);
 }
 
 void Protofinaal::loadFile(QString fileName)
@@ -210,12 +298,52 @@ void Protofinaal::loadFile(QString fileName)
     clear();
     QJsonObject jsonObj = readFinalsFile(fileName);
 
+    if(!(jsonObj.contains("relays") && jsonObj["relays"].isArray()) ||
+            !(jsonObj.contains("competitionName") && jsonObj["competitionName"].isString()) ||
+            !(jsonObj.contains("eventName") && jsonObj["eventName"].isString()) ||
+            !(jsonObj.contains("eventType") && jsonObj["eventType"].isString()) ||
+            !(jsonObj.contains("timePlace") && jsonObj["timePlace"].isString()) ||
+            !(jsonObj.contains("fileVersion") && jsonObj["fileVersion"].isDouble()))
+        QMessageBox::critical(this, tr("Viga!"), tr("Finaali fail vigane!"));
+
+    m_scoringWithPoints = false;
+    if (jsonObj.contains("scoringWithPoints"))
+        m_scoringWithPoints = jsonObj["scoringWithPoints"].toBool();
+
+    if (verbose)
+        QTextStream(stdout) << "Protofinaal::loadFile(), scoringWithPoints: " << m_scoringWithPoints << endl;
+
+    QJsonArray relaysArray = jsonObj["relays"].toArray();
+    int noOfRelays = relaysArray.size();
+    int relayNo = 1;
+    foreach (QJsonValue relayJson, relaysArray) {
+        TeamsTable2022 *m_teamsTable = new TeamsTable2022();
+        vBox.addWidget(m_teamsTable);
+        if (noOfRelays > 1)
+            m_teamsTable->setTableName(QString("Grupp %1").arg(relayNo++));
+
+        connect(m_teamsTable, &TeamsTable2022::updateSpectatorWindow, this, &Protofinaal::updateSpectatorWindow);
+        connect(m_teamsTable, &TeamsTable2022::modified, [this]() { m_modifiedAfterSave = true; });
+        m_teamsTables.append(m_teamsTable);
+        m_teamsTable->createLayout(relayJson.toObject(), m_scoringWithPoints);
+    }
+
+    m_modifiedAfterSave = false;
 
 //    centralWidget()->setLayout(vBox);
 }
 
 void Protofinaal::open()
 {
+    if (m_modifiedAfterSave) {
+        int reply = QMessageBox::question(this, "Protofinaal", tr("Kas soovid muudatused salvestada?"),	QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        if (reply == QMessageBox::Save) {
+            save();
+        } else if(reply == QMessageBox::Cancel) {
+            return;
+        }
+    }
+
     QString fileName = QFileDialog::getOpenFileName(this, tr("Ava fail"), currentFile, tr("Protofinaali fail (*.fin)"));
     if(!fileName.isEmpty()){
         currentFile = fileName;
@@ -241,6 +369,10 @@ QJsonObject Protofinaal::readFinalsFile(QString fileName, bool showErrors)
         competitionName = jsonObj["competitionName"].toString();
         eventName = jsonObj["eventName"].toString();
         timePlace = jsonObj["timePlace"].toString();
+
+        m_scoringWithPoints = false;
+        if (jsonObj.contains("scoringWithPoints"))
+            m_scoringWithPoints = jsonObj["scoringWithPoints"].toBool();
     }else if(showErrors)
         QMessageBox::critical(this, tr("Viga!"), tr("Faili avamine ei ole võimalik!\n\nAsukoht: ") + file.fileName(), QMessageBox::Ok);
     return jsonObj;
@@ -259,7 +391,7 @@ void Protofinaal::readSettings()
 
         if(jsonObj.contains("windowXLocation") && jsonObj["windowXLocation"].isDouble() && jsonObj.contains("windowYLocation") && jsonObj["windowYLocation"].isDouble())
             //For some reason window frame is not included, so 9 and 36 need to be added. At least on Win7
-            this->setGeometry(jsonObj["windowXLocation"].toInt() + 9, jsonObj["windowYLocation"].toInt() + 36, 800, 600);
+            this->setGeometry(jsonObj["windowXLocation"].toInt() + 9, jsonObj["windowYLocation"].toInt() + 36, 1200, 600);
 
     }else
         QMessageBox::critical(
@@ -339,24 +471,23 @@ void Protofinaal::save()
 void Protofinaal::showSpecatorWindowOnSecondScreen()
 {
     if(qApp->desktop()->numScreens() >= 2 && qApp->desktop()->isVirtualDesktop()){
-        spectatorWindow.move(qApp->desktop()->screenGeometry(this).width() + 100, 100);
-        if(qApp->desktop()->screenNumber(this) != qApp->desktop()->screenNumber(&spectatorWindow) && qApp->desktop()->screenNumber(&spectatorWindow) != -1)
-            spectatorWindow.showFullScreen();
+        m_spectatorWindow.move(qApp->desktop()->screenGeometry(this).width() + 100, 100);
+        if(qApp->desktop()->screenNumber(this) != qApp->desktop()->screenNumber(&m_spectatorWindow) && qApp->desktop()->screenNumber(&m_spectatorWindow) != -1)
+            m_spectatorWindow.showFullScreen();
         else{
-            spectatorWindow.move(-1000, 100);
-            if(qApp->desktop()->screenNumber(this) != qApp->desktop()->screenNumber(&spectatorWindow))
-                spectatorWindow.showFullScreen();
+            m_spectatorWindow.move(-1000, 100);
+            if(qApp->desktop()->screenNumber(this) != qApp->desktop()->screenNumber(&m_spectatorWindow))
+                m_spectatorWindow.showFullScreen();
         }
     }else{
         QMessageBox::critical(this, tr("Viga"), tr("Teist ekraani ei leitud. Programmi korralikuks"
     " funktsioneerimiseks on vajalik kahe ekraani olemasolu."), QMessageBox::Ok);
-        spectatorWindow.show();
+        m_spectatorWindow.show();
     }
 
-    if(spectatorWindow.isFullScreen())
+    if(m_spectatorWindow.isFullScreen())
         QMessageBox::information(this, tr("Teade"), tr("Tulemuse aken näidatud teisel ekraanil"), QMessageBox::Ok);
 
-    spectatorWindow.setHeading(competitionName, timePlace, eventName, tr("Koht"), tr("Nimi"), tr("Seeria/lask"), tr("Vahe"));
     updateSpectatorWindow();
 }
 
@@ -375,37 +506,90 @@ void Protofinaal::statusBarInfoChanged(QString newStatusInfo)
 
 QJsonObject Protofinaal::toJson() const
 {
-//    QJsonArray teamsArray;
 //    foreach(Team *team, teams){
 //        QJsonObject teamObj;
 //        team->toJson(teamObj);
 //        teamsArray.append(team->toJson());
 //    }
 //    QJsonObject json;
-//    json["Teams"] = teamsArray;
-    QJsonObject finalsObj = teamsTable->toJson();
+//    json["teams"] = teamsArray;
+    QJsonArray relaysArray;
+    foreach (TeamsTable2022 *teamsTable, m_teamsTables) {
+        relaysArray.append(teamsTable->toJson());
+    }
+
+    QJsonObject finalsObj;// = m_teamsTable->toJson();
+    finalsObj["relays"] = relaysArray;
     finalsObj["fileVersion"] = 300;
     finalsObj["competitionName"] = competitionName;
     finalsObj["eventName"] = eventName;
+    finalsObj["eventType"] = eventType;
     finalsObj["timePlace"] = timePlace;
+    finalsObj["scoringWithPoints"] = m_scoringWithPoints;
     return finalsObj;
 }
 
 void Protofinaal::updateInitialDialog()
 {
-    currentFile = initialDialog->fileName();
+    currentFile = m_initialDialog->fileName();
     QJsonObject initialJson = readFinalsFile(currentFile, false);
-    initialDialog->setFileName(currentFile);
-    initialDialog->setCompetitionName(initialJson["competitionName"].toString());
-    initialDialog->setTimePlace(initialJson["timePlace"].toString());
+    m_initialDialog->setFileName(currentFile);
+    QString newCompetitionName = initialJson["competitionName"].toString();
+    if (!newCompetitionName.isEmpty())
+        m_initialDialog->setCompetitionName(newCompetitionName);
+    QString newTimeAndPlace = initialJson["timePlace"].toString();
+    if (!newTimeAndPlace.isEmpty())
+        m_initialDialog->setTimePlace(newTimeAndPlace);
+    QString newEventName = initialJson["eventName"].toString();
+    if (!newEventName.isEmpty())
+        m_initialDialog->setEventName(newEventName);
 }
 
 void Protofinaal::updateSpectatorWindow()
 {
-    // FIXME To be implemented
-//    if(verbose)
-//        QTextStream(stdout) << "Protofinaal::updateSpectatorWindow()" << endl;
-//    spectatorWindow.clearResults();
+    if(verbose)
+        QTextStream(stdout) << "Protofinaal::updateSpectatorWindow()" << endl;
+
+    m_spectatorWindow.clearResults();
+    int shotNo = m_teamsTables.first()->lastValidShotIndex() + 1;
+    QString shotHeader = tr("Lask");
+    if (shotNo > 0)
+        shotHeader.prepend(QString("%1. ").arg(shotNo));
+    if (m_scoringWithPoints)
+        m_spectatorWindow.setHeading(competitionName, timePlace, eventName, tr("Koht"), tr("Nimi"), shotHeader, tr("Punktid"), tr("Kokku"));
+    else
+        m_spectatorWindow.setHeading(competitionName, timePlace, eventName, tr("Koht"), tr("Nimi"), shotHeader, tr("Seeria"), tr("Kokku"));
+
+    for (int i = m_teamsTables.size() - 1; i >= 0; i-- ) {
+        m_spectatorWindow.addRow("", "", "", "", "", "");   // To add some spacing between different groups
+        m_spectatorWindow.addRow("", "", "", "", "", "");
+        m_spectatorWindow.addRow("", "", "", "", "", "");
+//    foreach(TeamsTable2022 *m_teamsTable, m_teamsTables) {
+        auto results = m_teamsTables.at(i)->getSortedResults();
+
+        int index = results.size();
+        foreach(auto currentResult, results) {
+            m_spectatorWindow.addRow(
+                        QString("%1.").arg(index--),
+                        m_teamsTables.at(i)->tableName(),
+                        currentResult.name,
+                        currentResult.shotValue,
+                        currentResult.seriesOrPoints,
+                        currentResult.totalScore
+                        );
+        }
+    }
+//    for(int i = 0; i < results.size(); i++) {
+//        auto currentResult = results.value(i + 1);
+//        m_spectatorWindow.addRow(
+//                    QString("%1.").arg(i + 1),
+//                    "Grupp 1",
+//                    currentResult.name,
+//                    currentResult.shotValue,
+//                    currentResult.points,
+//                    currentResult.totalPoints
+//                    );
+//    }
 //    if(verbose)
 //        QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), teams.size() = " << teams.size() << endl;
 //    foreach (Team *team, teams){
@@ -432,7 +616,7 @@ void Protofinaal::updateSpectatorWindow()
 
 ////        QJsonObject teamJson;
 ////        team->toJson(teamJson);
-////        QJsonArray competitorsArray = teamJson["Members_in_team"].toArray();
+////        QJsonArray competitorsArray = teamJson["membersInTeam"].toArray();
 ////        for(QJsonValue jsonValue : competitorsArray){
 ////            QJsonObject competitorObj = jsonValue.toObject();
 ////            spectatorWindow.addRow("1. ", teamJson["teamName"].toString(), competitorObj["nameEdit"].toString(), competitorObj["Sum"].toString(),  competitorObj["Sum"].toString(), "0");
@@ -444,11 +628,12 @@ void Protofinaal::writeFinalsFile(QString fileName)
 {
     QFile file(fileName);
 
-    if(file.open(QIODevice::WriteOnly)){
+    if (file.open(QIODevice::WriteOnly)) {
         QJsonDocument jsonDoc(toJson());
         file.write(jsonDoc.toJson());
         statusBar()->showMessage(tr("Fail salvestatud"), 5000);
-    }else
+        m_modifiedAfterSave = false;
+    } else
         QMessageBox::critical(this, tr("Viga!"), tr("Faili kirjutamine ei ole võimalik!\nKontrollige, kas teil on sinna kausta kirjutamise õigused."), QMessageBox::Ok);
 }
 

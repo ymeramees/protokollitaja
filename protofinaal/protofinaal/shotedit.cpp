@@ -13,21 +13,21 @@ ShotEdit::ShotEdit(QJsonObject json)
     updateGui();
 }
 
-void ShotEdit::contextMenuEvent(QContextMenuEvent *event)
-{
-    QMenu *menu = createStandardContextMenu();
+//void ShotEdit::contextMenuEvent(QContextMenuEvent *event)
+//{
+//    QMenu *menu = createStandardContextMenu();
 
-        QAction ignoreAction(tr("Ignoreeri lasku"));
-        connect(&ignoreAction, &QAction::triggered, [this]() {setIgnored(true);});
-        menu->addAction(&ignoreAction);
+//        QAction ignoreAction(tr("Ignoreeri lasku"));
+//        connect(&ignoreAction, &QAction::triggered, [this]() {setIgnored(true);});
+//        menu->addAction(&ignoreAction);
 
-        QAction unignoreAction(tr("Eemalda ignoreerimine"));
-        connect(&unignoreAction, &QAction::triggered, [this]() {setIgnored(false);});
-        menu->addAction(&unignoreAction);
+//        QAction unignoreAction(tr("Eemalda ignoreerimine"));
+//        connect(&unignoreAction, &QAction::triggered, [this]() {setIgnored(false);});
+//        menu->addAction(&unignoreAction);
 
-    menu->exec(event->globalPos());
-    delete menu;
-}
+//    menu->exec(event->globalPos());
+//    delete menu;
+//}
 
 bool ShotEdit::ignored() const
 {

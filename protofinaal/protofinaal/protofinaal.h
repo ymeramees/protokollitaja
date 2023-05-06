@@ -12,6 +12,7 @@
 #include <QVBoxLayout>
 #include <QFileDialog>
 #include <QCloseEvent>
+#include <QScrollArea>
 #include <QStatusBar>
 #include <QLineEdit>
 #include <QMenuBar>
@@ -19,8 +20,8 @@
 #include <QTimer>
 #include <QFile>
 
-#include "team.h"
-#include "teamstable.h"
+#include "team2022.h"
+#include "teamstable2022.h"
 #include "initialdialog.h"
 #include "spectatorwindow.h"
 #include "lask.h"
@@ -42,39 +43,39 @@ public:
 
 public slots:
     void connectToSiusData();
-//    void readSiusInfo(SiusShotData shotData);
     void statusBarInfoChanged(QString newStatusInfo);
-//    void sumAllTeams();
     void updateSpectatorWindow();
 
 private slots:
     void connectionToSiusLost(int connectionIndex);
+    void importSiusStartList();
     void initialize();
     void loadFile(QString fileName);
     void updateInitialDialog();
 
 private:
     bool competitionStarted = false;
+    bool m_modifiedAfterSave = false;
+    bool m_scoringWithPoints = false;
     CommonSettings m_settings;
-    InitialDialog *initialDialog = nullptr;
+    InitialDialog *m_initialDialog = nullptr;
     SiusDataConnections *siusDataConnections = nullptr;
-    SpectatorWindow spectatorWindow;
+    SpectatorWindow m_spectatorWindow;
     QFile *logFile = nullptr;
     QFile *siusLog = nullptr;
     QString competitionName;
     QString currentFile;
     QString eventName;
+    QString eventType;
     QString timePlace;
     QTextStream logOut;
-//    QVector<Team*> teams;
     void clear();
     void closeEvent(QCloseEvent *event);
-//    void createLayout(QJsonObject &jsonObj);
     void createMenus();
     QJsonObject readFinalsFile(QString fileName, bool showErrors = true);
     void readSettings();
-//    void sortTeams();
-    TeamsTable *teamsTable = nullptr;
+    QVBoxLayout vBox;
+    QVector<TeamsTable2022*> m_teamsTables;
     void writeFinalsFile(QString fileName);
     void writeSettings();
 };
