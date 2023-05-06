@@ -19,7 +19,14 @@ class FinalsFileExport : public QDialog
     Q_OBJECT
 
 public:
-    explicit FinalsFileExport(QVector<QStringList> inputTable, QString competitionFileLocation, QString competitionName, QString eventName, QWidget *parent = 0);
+    explicit FinalsFileExport(
+            QVector<QStringList> inputTable,
+            QString competitionFileLocation,
+            QString competitionName,
+            QString eventName,
+            int eventType,
+            QWidget *parent = 0
+            );
     ~FinalsFileExport();
 
 public slots:
@@ -32,9 +39,10 @@ protected:
 //    void closeEvent(QCloseEvent *event);
 
 private:
-    QString competitionFileLocation;
-    QString competitionName;
-    QString eventName;
+    QString m_competitionFileLocation;
+    QString m_competitionName;
+    QString m_eventName;
+    int m_eventType;
     QString finalsFileName;
     Ui::FinalsFileExport *ui;
 

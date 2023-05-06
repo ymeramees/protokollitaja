@@ -5,6 +5,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 /// ToDo list:
+/// Pooleli:
 /// Print2() on pooleli, asendite pealkirju ei ole
 /// Protokollitaja lehelugeja vajab uuendamist:
 /// 1. Uue masinaga lugemine ei tööta?
@@ -102,12 +103,15 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         eksportCSVAct = new QAction(QIcon(":/images/eksport.png"), tr("Eksport csv..."), this);
         eksportCSVAct->setStatusTip(tr("Ekspordib selle lehe tulemused .csv faili"));
         connect(eksportCSVAct, SIGNAL(triggered()), this, SLOT(eksportCSV()));
+        eksportInbandStartListAct = new QAction(tr("Eksport Inband startlist..."), this);
+        eksportInbandStartListAct->setStatusTip(tr("Ekspordib valitud laskurid Inband'i startlisti faili"));
+        connect(eksportInbandStartListAct, &QAction::triggered, [this]{exportStartList(StartListWriter::INBAND);});
         eksportSiusStartListAct = new QAction(tr("Eksport Sius startlist..."), this);
         eksportSiusStartListAct->setStatusTip(tr("Ekspordib valitud laskurid Sius'i startlisti faili"));
-        connect(eksportSiusStartListAct, SIGNAL(triggered()), this, SLOT(eksportSiusStartList()));
+        connect(eksportSiusStartListAct, &QAction::triggered, [this]{exportStartList(StartListWriter::SIUS);});
         eksportFSiusStartListAct = new QAction(tr("Eksport finaali Sius startlist..."), this);
         eksportFSiusStartListAct->setStatusTip(tr("Ekspordib esimesed 8 laskurit Sius'i startlisti faili"));
-        connect(eksportFSiusStartListAct, SIGNAL(triggered()), this, SLOT(eksportFSiusStartList()));
+        connect(eksportFSiusStartListAct, SIGNAL(triggered()), this, SLOT(exportFinalsSiusStartList()));
         eksportXLSAct = new QAction(QIcon(":/images/eksport.png"), tr("Eksport xls..."), this);
         eksportXLSAct->setStatusTip(tr("Ekspordib selle lehe tulemused Excel'i .xls faili"));
         connect(eksportXLSAct, SIGNAL(triggered()), this, SLOT(eksportXLS()));
@@ -247,6 +251,8 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         tulemusedMenu->addAction(eksportTXTAct);
         tulemusedMenu->addAction(eksportCSVAct);
         tulemusedMenu->addAction(eksportXLSAct);
+        tulemusedMenu->addSeparator();
+        tulemusedMenu->addAction(eksportInbandStartListAct);
         tulemusedMenu->addAction(eksportSiusStartListAct);
         tulemusedMenu->addAction(eksportFSiusStartListAct);
         tulemusedMenu->addSeparator();
@@ -296,10 +302,10 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         toolBar->addAction(naitaTulAkenAct);
         toolBar->addAction(finaalAct);
 
-        aValik = new AlguseValik(this);
+        aValik = new InitialDialog(this);
         aValik->setWindowModality(Qt::ApplicationModal);
         aValik->setWindowIcon(QIcon(":/images/Protokollitaja.ico"));
-        valik = new ValikKast(this);
+        valik = new ValikKast(&m_settings, this);
         valik->setWindowIcon(QIcon(":/images/Protokollitaja.ico"));
         valik->setWindowModality(Qt::ApplicationModal);
         tulemus = new TulemuseAken();
@@ -350,7 +356,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         tabWidget->setTabPosition(QTabWidget::West);
         setCentralWidget(tabWidget);
 
-        seaded = new SeadedKast(voistluseNimi, aegKoht, this);
+        seaded = new SeadedKast(voistluseNimi, koht, this);
         seaded->setWindowModality(Qt::ApplicationModal);
         connect(seaded, SIGNAL(salvestatud()), this, SLOT(uuendaSeaded()));
         connect(seaded->ui.sakid, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(muudaTab(const QModelIndex&)));
@@ -468,37 +474,29 @@ Protokollitaja::Protokollitaja(QWidget *parent)
             kirjutaSeaded();
             voibSulgeda = true;
         }else{
-            while(voistluseNimi.isEmpty()){
-                if(aValik->exec() == QDialog::Accepted){
-#ifdef PROOV
-    qDebug() << "aValik accepted";
-#endif
-                    voistluseNimi = aValik->ui.voistluseNimi->text();
-                    seeFail = aValik->ui.failiNimi->text();
-                    aegKoht = aValik->ui.aegKohtEdit->text();
-                    setWindowTitle(programmiNimi + " - " + seeFail);
-                    logi = new QFile(QFileInfo(seeFail).dir().absolutePath() + QString("/Protokollitaja logi %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
-                    kirjutaSeaded();
-                    kaivitaServer();
+            if(aValik->exec() == QDialog::Accepted){
+                setDataFromInitialDialog(); // FIXME not working, as will be later overwritten by data read from file
+                logi = new QFile(QFileInfo(seeFail).dir().absolutePath() + QString("/Protokollitaja logi %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
+                kaivitaServer();
 
-                    if(logi->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){ //Muudatuste ja laskude logifail
-                        logiValja.setDevice(logi);
-                        logiValja << "///////////////////////////////" << voistluseNimi << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";
-                    }else{
-                        QMessageBox::warning(this, "Hoiatus", ("Logi faili kirjutamine ei õnnestunud! Kontrollige, et teil oleks kirjutamisõigus sinna kausta, kus asub võistluste fail."), "Selge");
-                    }
+                if(logi->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){ //Muudatuste ja laskude logifail
+                    logiValja.setDevice(logi);
+                    logiValja << "///////////////////////////////" << voistluseNimi << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";
                 }else{
-#ifdef PROOV
-    qDebug() << "aValik declined";
-#endif
-                    voistluseNimi = "ProtokollitajaKood::Väljumine<Välju>return code 0021947";
-                    sulgeja->start(50);
-                    return;
+                    QMessageBox::warning(this, "Hoiatus", ("Logi faili kirjutamine ei õnnestunud! Kontrollige, et teil oleks kirjutamisõigus sinna kausta, kus asub võistluste fail."), "Selge");
                 }
-            };
+            }else{
+#ifdef PROOV
+                qDebug() << "aValik declined";
+#endif
+                voistluseNimi = "ProtokollitajaKood::Väljumine<Välju>return code 0021947";
+                sulgeja->start(50);
+                return;
+            }
 
             if(voistluseNimi != "ProtokollitajaKood::Väljumine<Välju>return code 0021947" && !voistluseNimi.isEmpty()){
                 loefail();
+                setDataFromInitialDialog(); // A hack to implement changes from initial dialog
                 tulemus->voistluseNimi = voistluseNimi;
             }
         }
@@ -549,7 +547,9 @@ void Protokollitaja::algseaded()    //Seadistab algsed väärtused kas programmi
     kasNaidataTul = true;
     voibUuendadaNimekirja = true;
     voistluseNimi.clear();
-    aegKoht.clear();
+    m_startDate = QDate::currentDate();
+    m_endDate = QDate::currentDate();
+    koht.clear();
     kirjutusAbi = true;
     abi = Ohupuss;
     jarjestamine = KumneteArvuga;
@@ -562,8 +562,10 @@ void Protokollitaja::algseaded()    //Seadistab algsed väärtused kas programmi
     uhendusAutoriseeritud = false;
 
     seaded->ui.voistluseNimi->setText(voistluseNimi);
+    seaded->ui.startDateEdit->setDate(m_startDate);
+    seaded->ui.endDateEdit->setDate(m_endDate);
 //    seaded->voistluseNimi = voistluseNimi;
-    seaded->ui.aegKohtEdit->setText(aegKoht);
+    seaded->ui.kohtEdit->setText(koht);
 //    seaded->aegKoht = aegKoht;
     seaded->ui.sakiBox->setCurrentIndex(0);
 //    seaded->sakiAsukoht = 0;
@@ -715,7 +717,7 @@ void Protokollitaja::eelvaade()
                 if(!seeLeht->voistk)
                         painter.drawText(1100, 130, "Seeriad");
                 painter.setFont(kirjaFont);
-                painter.drawText(800, 50, 700, 50, Qt::AlignRight, aegKoht);
+                painter.drawText(800, 50, 700, 50, Qt::AlignRight, timeAndPlaceString());
                 kirjaFont.setBold(true);
                 painter.setFont(kirjaFont);
                 painter.drawText(75, 125, seeLeht->ekraaniNimi);
@@ -898,7 +900,7 @@ void Protokollitaja::eksportCSV()
         }else QMessageBox::critical(this, "Viga", tr("Ei õnnestu faili kirjutada."), QMessageBox::Ok);
 }
 
-void Protokollitaja::eksportSiusStartList()
+void Protokollitaja::exportStartList(StartListWriter::StartListType type)
 {
     Leht* leht = 0;
     if(tabWidget->count() > 0)
@@ -917,29 +919,37 @@ void Protokollitaja::eksportSiusStartList()
         return;
     }
 
-    QVector<QStringList> competitorsList;
+    QVector<StartListWriter::StartListCompetitor> competitorsList;
 
     for(int i = 0; i < leht->laskurid.count(); i++){
         if(leht->laskurid[i]->linnuke->isChecked()){
             QStringList row;    //target, ID, first name, name, club, result
             if(leht->laskurid[i]->rajaNr->text().contains("A") || leht->laskurid[i]->rajaNr->text().contains("B") || leht->laskurid[i]->rajaNr->text().contains("C") || leht->laskurid[i]->rajaNr->text().contains("D") || leht->laskurid[i]->rajaNr->text().contains("E") || leht->laskurid[i]->rajaNr->text().contains("F") || leht->laskurid[i]->rajaNr->text().contains("G") || leht->laskurid[i]->rajaNr->text().contains("H"))
                 QMessageBox::critical(this, "Viga", tr("Raja numbrites on tähti. Kui soovite finaali start listi eksportida, kasutage teist funktsiooni!"), QMessageBox::Ok);
-            row << leht->laskurid[i]->rajaNr->text();
-            row << QString("%1").arg(leht->laskurid[i]->id);
-            row << leht->laskurid[i]->eesNimi->text();
-            row << leht->laskurid[i]->perekNimi->text();
-            row << leht->laskurid[i]->klubi->text();
-            row << leht->laskurid[i]->getSumma().replace(",", ".");
 
-            competitorsList.append(row);
+            competitorsList.append(StartListWriter::StartListCompetitor{
+                                       leht->laskurid[i]->rajaNr->text(),
+                                       QString("%1").arg(leht->laskurid[i]->id),
+                                       leht->laskurid[i]->eesNimi->text(),
+                                       leht->laskurid[i]->perekNimi->text(),
+                                       leht->laskurid[i]->klubi->text(),
+                                       leht->laskurid[i]->getSumma().replace(",", "."),
+                                       m_settings.eventNames.indexOf(leht->harjutus),
+                                       ""  // TODO to be implemented
+                                   });
         }
     }
 
-    StartListWriter *startListWriter = new StartListWriter(competitorsList, seeFail, this);
-    startListWriter->deleteLater();
+    if(competitorsList.size() <= 0){
+        QMessageBox::critical(this, "Viga", tr("Märgitud laskurid puuduvad, ei ole midagi eksportida!"), QMessageBox::Ok);
+        return;
+    } else {
+        StartListWriter *startListWriter = new StartListWriter(competitorsList, seeFail, type, this);
+        startListWriter->deleteLater();
+    }
 }
 
-void Protokollitaja::eksportFSiusStartList()
+void Protokollitaja::exportFinalsSiusStartList()
 {
     Leht* leht = 0;
     if(tabWidget->count() > 0)
@@ -1149,7 +1159,7 @@ void Protokollitaja::eksportXLS()
                 sheet->label(0, 0, QString(voistluseNimi.toUtf8()).toStdString())->font(tiitelFont);
                 sheet->FindCell(0, 0)->halign(xlslib_core::HALIGN_CENTER);
 
-                sheet->label(1, 4 + leht->seeriateArv + lisa, QString(aegKoht.toUtf8()).toStdString())->font(paiseFont);
+                sheet->label(1, 4 + lisa, QString(timeAndPlaceString().toUtf8()).toStdString())->font(paiseFont);
                 sheet->label(4, 1, QString(leht->ekraaniNimi.toUtf8()).toStdString())->font(paiseFont);
                 sheet->label(5, 0, "Koht")->font(underlineFont);
                 sheet->FindCell(5, 0)->halign(xlslib_core::HALIGN_CENTER);
@@ -1479,7 +1489,14 @@ void Protokollitaja::finaaliFail()
             finalsTable << finalsRow;
         }
 
-        FinalsFileExport *finalsFileExport = new FinalsFileExport(finalsTable, seeFail, voistluseNimi, seeLeht->ekraaniNimi, this);
+        FinalsFileExport *finalsFileExport = new FinalsFileExport(
+                    finalsTable,
+                    seeFail,
+                    voistluseNimi,
+                    seeLeht->ekraaniNimi,
+                    m_settings.eventNames.indexOf(seeLeht->harjutus),
+                    this
+                    );
         finalsFileExport->setRelay(10 + seeLeht->leheIndeks);
         if(finalsFileExport->exec() == QDialog::Accepted){
             //Lisa kood, et lugeda finaalifailinimi
@@ -1653,10 +1670,12 @@ void Protokollitaja::kirjutaFail(QString failiNimi)
     if(fail.open(QIODevice::WriteOnly)){
             QDataStream valja(&fail);
             valja << quint32(0x00FA3848);	//Kontrollarv
-            valja << qint32(112);			//Millise faili versiooniga on tegu
-            valja.setVersion(QDataStream::Qt_4_3);
+            valja << qint32(113);			//Millise faili versiooniga on tegu
+            valja.setVersion(QDataStream::Qt_5_12);
             valja << voistluseNimi/*.toUtf8()*/;
-            valja << aegKoht/*.toUtf8()*/;
+            valja << m_startDate;
+            valja << m_endDate;
+            valja << koht/*.toUtf8()*/;
             valja << webCompetitionId;
             valja << seaded->ui.kirjutusAbiCombo->currentIndex();
             valja << seaded->ui.aegCombo->currentIndex();
@@ -2150,113 +2169,25 @@ void Protokollitaja::loefail()
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     QFile fail(seeFail);
     if(fail.open(QIODevice::ReadOnly)){
-        QDataStream sisse(&fail);
-        quint32 kontroll, versioon;
-        sisse >> kontroll >> versioon;
-        if(kontroll != 0x00FA3848){
-            QMessageBox::critical(this, tr("Protokollitaja"), tr("Vigane või vale fail!%1").arg(seeFail), QMessageBox::Ok);
+        QDataStream in(&fail);
+        CompetitionSettings competitionSettings = SimpleKllFileRW::readCompetitionSettings(&in, this);
+        if (competitionSettings.competitionName.isEmpty()) {
             QApplication::restoreOverrideCursor();
+            fail.close();
             return;
         }
-        if(versioon == 100){
+        if (competitionSettings.fileVersion >= 100 && competitionSettings.fileVersion <=113) {
             tabWidget->deleteLater();   //Vältimaks mälu leket, on vaja eelmine ära kustutada, aga see üksi ei ole piisav
             tabWidget = new QTabWidget(this);
             tabWidget->setTabPosition(QTabWidget::North);
             setCentralWidget(tabWidget);
-            //QString rida;
-            sisse >> voistluseNimi;
-            sisse >> aegKoht;
-            int sakkideArv = 0, kirjutusA = 1, autosave = 1, aeg = 5, sakiAsukoht = 2;
-            jarjestamine = KumneteArvuga;   //Vaja nullida, juhuks kui uues failis seda ei ole
-            sisse >> kirjutusA >> autosave >> aeg >> sakiAsukoht >> sakkideArv;
-            seaded->ui.voistluseNimi->setText(voistluseNimi);
-//            seaded->voistluseNimi = voistluseNimi;
-            seaded->ui.aegKohtEdit->setText(aegKoht);
-//            seaded->aegKoht = aegKoht;
-            seaded->ui.kirjutusAbiCombo->setCurrentIndex(kirjutusA);
-            seaded->ui.aegCombo->setCurrentIndex(autosave);
-            seaded->ui.aegEdit->setValue(aeg);
-            seaded->ui.sakiBox->setCurrentIndex(sakiAsukoht);
-            seaded->ui.jarjestamiseBox->setCurrentIndex(jarjestamine);
-            if(sakkideArv == 0){
-                QApplication::restoreOverrideCursor();
-                uusTab();
-            }else{
-                for(int i = 0; i < sakkideArv; i++){
-                    int s = 0, vs = 0, a = 0, laskuriteArv = 0, min = 0, max = 0, lIndeks = 0;
-                    bool voistk = false;
-                    QString sakiNimi, eNimi;
-                    sisse >> sakiNimi >> s >> a >> eNimi >> min >> max >> voistk >> lIndeks >> laskuriteArv;
-                    QScrollArea *area = new QScrollArea(tabWidget);
-                    area->setWidgetResizable(true);
-                    leheIndeks = lIndeks;
-                    area->setWidget(new Leht(&andmebaas, s, vs, a, &kirjutusAbi, eNimi, 0, "Muu", false, &jarjestamine, tabWidget, voistk, lValik,  leheIndeks));
-                    tabWidget->insertTab(-1, area, sakiNimi);
-                    tabWidget->setCurrentIndex(tabWidget->count()-1);
-                    for(int j = 0; j < laskuriteArv; j++){
-                        uusLaskur();    //Kuna nii vanal failil nagunii ID'd ei ole, võib lasta selle automaatselt luua
-                    }
-                    Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
-                    connect(leht, SIGNAL(uuendaLiikmeid()), this, SLOT(uuendaLiikmeteKast()));
-                    connect(leht, SIGNAL(uuendaVoistkondi()), this, SLOT(uuendaVoistkondi()));
-                    connect(leht, SIGNAL(muudatus()), this, SLOT(muudaSalvestamist()));
-                    connect(leht, SIGNAL(idMuutus(int,Laskur*)), this, SLOT(kontrolliIdKordust(int,Laskur*)));
-                    leht->alustamine = true;
-                    leht->minAeg = min;
-                    leht->maxAeg = max;
-                    if(leht->voistk){
-                        QString vnimi, nimi, pnimi, klubi, silt, summa, markus;
-                        for(int j = 0; j < laskuriteArv; j++){
-                            sisse >> vnimi;
-                            leht->voistkonnad[j]->nimi->setText(vnimi);
-                            for(int k = 0; k < s; k++){
-                                sisse >> nimi >> pnimi >> klubi >> summa >> silt;
-                                leht->voistkonnad[j]->voistlejad[k]->eesNimi = nimi;
-                                leht->voistkonnad[j]->voistlejad[k]->perekNimi = pnimi;
-                                leht->voistkonnad[j]->voistlejad[k]->klubi = klubi;
-                                leht->voistkonnad[j]->voistlejad[k]->summa = summa;
-                                leht->voistkonnad[j]->voistlejad[k]->silt->setText(silt);
-                            }
-                            sisse >> summa >> markus;
-                            leht->voistkonnad[j]->summa->setText(summa);
-                            leht->voistkonnad[j]->markus->setText(markus);
-                            //leht->voistkonnad[j]->muutus3();
-                        }
-                    }else{
-                        QString nimi, pnimi, sunnia, klubi, seeria, summa, finaal, kumned, markus;
-                        for(int j = 0; j < laskuriteArv; j++){
-                            sisse >> nimi >> pnimi >> sunnia >> klubi;
-                            leht->laskurid[j]->eesNimi->setText(nimi);
-                            leht->laskurid[j]->perekNimi->setText(pnimi);
-                            leht->laskurid[j]->sunniAasta->setText(sunnia);
-                            leht->laskurid[j]->klubi->setText(klubi);
-                            for(int k = 0; k < s; k++){
-                                sisse >> seeria;
-                                leht->laskurid[j]->seeriad[k]->setText(seeria);
-                            }
-                            sisse >> summa >> finaal >> kumned >> markus;
-                            leht->laskurid[j]->setSumma(summa);
-                            leht->laskurid[j]->finaal->setText(finaal);
-                            leht->laskurid[j]->kumned->setText(kumned);
-                            leht->laskurid[j]->markus->setText(markus);
-                            leht->laskurid[j]->liida();
-                        }
-                    }
-                    leht->alustamine = false;
-                }
-            }
-            uuendaSeaded();
-            voibSulgeda = true;
-        }else if(versioon >= 101 && versioon <= 112){
-            tabWidget->deleteLater();   //Vältimaks mälu leket, on vaja eelmine ära kustutada, aga see üksi ei ole piisav
-            tabWidget = new QTabWidget(this);
-            tabWidget->setTabPosition(QTabWidget::North);
-            setCentralWidget(tabWidget);
-            //QString rida;
-            sisse >> voistluseNimi;
-            sisse >> aegKoht;
-            if(versioon >= 112){
-                sisse >> webCompetitionId;
+            voistluseNimi = competitionSettings.competitionName;
+            m_startDate = competitionSettings.startDate;
+            m_endDate = competitionSettings.endDate;
+            koht = competitionSettings.place;
+
+            if(competitionSettings.fileVersion >= 112){
+                in >> webCompetitionId;
                 if(webCompetitionId.contains(QRegularExpression(QStringLiteral("[^\\x{0000}-\\x{007F}]")))){
                     if(QMessageBox::warning(
                                 this,
@@ -2264,23 +2195,26 @@ void Protokollitaja::loefail()
                                 tr("Võistluse veebi ID (%1) sisaldab kummalisi tähemärke ja on ilmselt vigane!"
                                    "\n\nKas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.").arg(webCompetitionId),
                                 QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
-                    webCompetitionId = "";
+                        webCompetitionId = "";
                 }
             }
             if(webCompetitionId == "Empty")
                 webCompetitionId = "";
+
             int sakkideArv = 0, kirjutusA = 1, autosave = 1, aeg = 5, sakiAsukoht = 2;
             jarjestamine = KumneteArvuga;   //Vaja nullida, juhuks kui uues failis seda ei ole
+            in >> kirjutusA >> autosave >> aeg >> sakiAsukoht >> sakkideArv;
+
             int uploadTime = 30;
-            sisse >> kirjutusA >> autosave >> aeg >> sakiAsukoht >> sakkideArv;
-            if(versioon >= 108)
-                sisse >> jarjestamine;
-            if(versioon >=111)
-                sisse >> uploadTime;
+
+            if(competitionSettings.fileVersion >= 108)
+                in >> jarjestamine;
+            if(competitionSettings.fileVersion >=111)
+                in >> uploadTime;
             seaded->ui.voistluseNimi->setText(voistluseNimi);
-//            seaded->voistluseNimi = voistluseNimi;
-            seaded->ui.aegKohtEdit->setText(aegKoht);
-//            seaded->aegKoht = aegKoht;
+            seaded->ui.kohtEdit->setText(koht);
+            seaded->ui.startDateEdit->setDate(m_startDate);
+            seaded->ui.endDateEdit->setDate(m_endDate);
             seaded->ui.kirjutusAbiCombo->setCurrentIndex(kirjutusA);
             seaded->ui.aegCombo->setCurrentIndex(autosave);
             seaded->ui.aegEdit->setValue(aeg);
@@ -2288,173 +2222,244 @@ void Protokollitaja::loefail()
             seaded->ui.jarjestamiseBox->setCurrentIndex(jarjestamine);
             seaded->ui.uploadTimeBox->setValue(uploadTime);
 #ifdef PROOV
-    qDebug() << "loefail(): << voistluseNimi << aegKoht << kirjutusA << autosave << aeg << sakiAsukoht << sakkideArv";
-    qDebug() << "loefail(): << " << voistluseNimi << " << " << aegKoht << " << " << kirjutusA << " << " << autosave << " << " << aeg << " << " << sakiAsukoht << " << " << sakkideArv;
+            qDebug() << "loefail(): << voistluseNimi << aegKoht << kirjutusA << autosave << aeg << sakiAsukoht << sakkideArv";
+            qDebug() << "loefail(): << " << voistluseNimi << " << " << koht << " << " << kirjutusA << " << " << autosave << " << " << aeg << " << " << sakiAsukoht << " << " << sakkideArv;
 #endif
-            if(sakkideArv == 0){
-                QApplication::restoreOverrideCursor();
-                uusTab();
-            }else{
-                for(int i = 0; i < sakkideArv; i++){
-                    int s = 0, laskudeArv = 10, vs = 0, a = 0, laskuriteArv = 0, min = 0, max = 0, lIndeks = 0, relv = 0;
-                    bool voistk = false;
-                    bool kumnendikega = false;
-                    bool naidata = true;
-                    QString sakiNimi, eNimi, harjutus = "Muu";
-                    sisse >> sakiNimi >> s;
-                    if(versioon >= 107)
-                        sisse >> laskudeArv;
-                    sisse >> vs >> a >> eNimi;
-                    if(versioon != 101)
-                        sisse >> relv;
-                    if(versioon >= 103)
-                        sisse >> harjutus;
-                    if(harjutus.isEmpty())
-                        harjutus = "Muu";
-                    if(versioon >= 105)
-                        sisse >> kumnendikega;
-                    if(versioon >= 108)
-                        sisse >> naidata;
-                    sisse >> min >> max >> voistk >> lIndeks >> laskuriteArv;
-#ifdef PROOV
-    qDebug() << "loefail(): << leheIndeks << sakiNimi << s << laskudeArv << vs << a << << eNimi << relv << harjutus";
-    qDebug() << "loefail(): << " << lIndeks << " << " << sakiNimi << " << " << s << " << " << laskudeArv << " << " << vs << " << " << a << " << " << eNimi << " << " << relv << " << " << harjutus;
-#endif
-                    QScrollArea *area = new QScrollArea(tabWidget);
-                    area->setWidgetResizable(true);
-                    leheIndeks = lIndeks;
-                    area->setWidget(new Leht(&andmebaas, s, vs, a, &kirjutusAbi, eNimi, relv, harjutus, kumnendikega, &jarjestamine, tabWidget, voistk, lValik, leheIndeks, laskudeArv));
-                    tabWidget->insertTab(-1, area, sakiNimi);
-                    tabWidget->setCurrentIndex(tabWidget->count()-1);
-                    for(int j = 0; j < laskuriteArv; j++){
-                        uusLaskur(0);   //Laskuri ID on algselt 0, et oleks aru saada, kui hiljem loeti failist õige ID
-                    }
 
-                    Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
-                    connect(leht, SIGNAL(uuendaLiikmeid()), this, SLOT(uuendaLiikmeteKast()));
-                    connect(leht, SIGNAL(uuendaVoistkondi()), this, SLOT(uuendaVoistkondi()));
-                    connect(leht, SIGNAL(muudatus()), this, SLOT(muudaSalvestamist()));
-                    connect(leht, SIGNAL(idMuutus(int,Laskur*)), this, SLOT(kontrolliIdKordust(int,Laskur*)));
-
-                    leht->alustamine = true;
-                    leht->naidata = naidata;    //Kas näidatakse tulemuste aknas seda lehte
-                    leht->minAeg = min; //Min näitamise aeg
-                    leht->maxAeg = max; //Max näitamise aeg
-                    if(leht->voistk){
-                        if(versioon >= 106){
-                            int jalgitavaid = 0, jalgitav = 0;
-                            sisse >> jalgitavaid;
-#ifdef PROOV
-    qDebug() << "loefail jalgitavaid: = " << jalgitavaid;
-#endif
-                            for(int i = 0; i < jalgitavaid; i++){
-                                sisse >> jalgitav;
-#ifdef PROOV
-    qDebug() << "sisse jalgitav " << i << ": = " << jalgitav;
-#endif
-                                leht->jalgitavad.append(jalgitav);
-                            }
-                        }
-                        QString vnimi, nimi, pnimi, klubi, harjutus, silt, summa, markus;
+            if(competitionSettings.fileVersion == 100) {
+                if(sakkideArv == 0){
+                    QApplication::restoreOverrideCursor();
+                    uusTab();
+                }else{
+                    for(int i = 0; i < sakkideArv; i++){
+                        int s = 0, vs = 0, a = 0, laskuriteArv = 0, min = 0, max = 0, lIndeks = 0;
+                        bool voistk = false;
+                        QString sakiNimi, eNimi;
+                        in >> sakiNimi >> s >> a >> eNimi >> min >> max >> voistk >> lIndeks >> laskuriteArv;
+                        QScrollArea *area = new QScrollArea(tabWidget);
+                        area->setWidgetResizable(true);
+                        leheIndeks = lIndeks;
+                        area->setWidget(new Leht(&andmebaas, s, vs, a, &kirjutusAbi, eNimi, 0, "Muu", false, &jarjestamine, tabWidget, voistk, lValik,  leheIndeks));
+                        tabWidget->insertTab(-1, area, sakiNimi);
+                        tabWidget->setCurrentIndex(tabWidget->count()-1);
                         for(int j = 0; j < laskuriteArv; j++){
-                            sisse >> vnimi;
-                            leht->voistkonnad[j]->nimi->setText(vnimi);
-                            for(int k = 0; k < s; k++){
-                                sisse >> nimi >> pnimi >> klubi;
-                                if(versioon >= 106){
-                                    sisse >> harjutus;
-                                }
-                                sisse >> summa >> silt;
-                                leht->voistkonnad[j]->voistlejad[k]->eesNimi = nimi;
-                                leht->voistkonnad[j]->voistlejad[k]->perekNimi = pnimi;
-                                leht->voistkonnad[j]->voistlejad[k]->klubi = klubi;
-                                if(versioon >= 106){
-                                    leht->voistkonnad[j]->voistlejad[k]->harjutus = harjutus;
-                                }
-                                leht->voistkonnad[j]->voistlejad[k]->summa = summa;
-                                leht->voistkonnad[j]->voistlejad[k]->silt->setText(silt);
-                            }
-                            sisse >> summa >> markus;
-                            leht->voistkonnad[j]->summa->setText(summa);
-                            leht->voistkonnad[j]->markus->setText(markus);
-                            //leht->voistkonnad[j]->muutus3();
+                            uusLaskur();    //Kuna nii vanal failil nagunii ID'd ei ole, võib lasta selle automaatselt luua
                         }
-                    }else{
-                        int lisaLask = -1, lask, id, lisaLaskudeArv = 10;   //Vanemates versioonides on lisalaske 10, uuemas 24, muudetakse allpool
-                        QString rajaNr, sifriAlgus, sifriLopp, nimi, pnimi, sunnia, klubi, seeria, summa, finaal, kumned, markus;
-                        for(int j = 0; j < laskuriteArv; j++){
-                            if(versioon >= 104)
-                                sisse >> rajaNr >> sifriAlgus >> sifriLopp;
-                            if(versioon >= 107)
-                                sisse >> id;
-                            sisse >> nimi >> pnimi >> sunnia >> klubi;
-                            leht->laskurid[j]->rajaNr->setText(rajaNr);
-                            leht->laskurid[j]->sifriAlgus->setText(sifriAlgus);
-                            leht->laskurid[j]->sifriLopp->setText(sifriLopp);
-                            leht->laskurid[j]->id = id;
-                            leht->laskurid[j]->eesNimi->setText(nimi);
-                            leht->laskurid[j]->perekNimi->setText(pnimi);
-                            leht->laskurid[j]->sunniAasta->setText(sunnia);
-                            leht->laskurid[j]->klubi->setText(klubi);
-#ifdef PROOV
-    qDebug() << "loefail(): << rajaNr << sifriAlgus << sifriLopp << nimi << pnimi << sunnia << klubi";
-    qDebug() << "loefail(): << " << rajaNr << " << " << sifriAlgus << " << " << sifriLopp << " << " << nimi << " << " << pnimi << " << " << sunnia << " << " << klubi;
-#endif
-                            for(int k = 0; k < s; k++){
-                                sisse >> seeria;
-                                leht->laskurid[j]->seeriad[k]->setText(seeria);
-#ifdef PROOV
-    qDebug() << "loefail(): leht->laskurid[" << j << "]->lasud[k].count() = " << leht->laskurid[j]->lasud[k].count();
-#endif
-                                if(versioon >= 107 && versioon <= 108){
-                                    int x, y;
-                                    for(int l = 0; l < leht->laskurid[j]->lasud[k].count(); l++){
-                                        sisse >> lask >> x >> y;
-                                        leht->laskurid[j]->lasud[k][l]->set10Lask(lask);
-                                        leht->laskurid[j]->lasud[k][l]->setMmX(x);
-                                        leht->laskurid[j]->lasud[k][l]->setMmY(y);
-                                    }
-                                }else if(versioon >= 109){
-                                    QString x, y;
-                                    QTime shotTime;
-                                    bool isInnerTen = false;
-                                    for(int l = 0; l < leht->laskurid[j]->lasud[k].count(); l++){
-                                        sisse >> lask >> x >> y;
-                                        if(versioon >= 111){
-                                            sisse >> shotTime >> isInnerTen;
-                                            leht->laskurid[j]->lasud[k][l]->setShotTime(shotTime);
-                                            leht->laskurid[j]->lasud[k][l]->setInnerTen(isInnerTen);
-                                        }
-                                        leht->laskurid[j]->lasud[k][l]->set10Lask(lask);
-                                        leht->laskurid[j]->lasud[k][l]->setMmX(x);
-                                        leht->laskurid[j]->lasud[k][l]->setMmY(y);
-                                    }
+                        Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
+                        connect(leht, SIGNAL(uuendaLiikmeid()), this, SLOT(uuendaLiikmeteKast()));
+                        connect(leht, SIGNAL(uuendaVoistkondi()), this, SLOT(uuendaVoistkondi()));
+                        connect(leht, SIGNAL(muudatus()), this, SLOT(muudaSalvestamist()));
+                        connect(leht, SIGNAL(idMuutus(int,Laskur*)), this, SLOT(kontrolliIdKordust(int,Laskur*)));
+                        leht->alustamine = true;
+                        leht->minAeg = min;
+                        leht->maxAeg = max;
+                        if(leht->voistk){
+                            QString vnimi, nimi, pnimi, klubi, silt, summa, markus;
+                            for(int j = 0; j < laskuriteArv; j++){
+                                in >> vnimi;
+                                leht->voistkonnad[j]->nimi->setText(vnimi);
+                                for(int k = 0; k < s; k++){
+                                    in >> nimi >> pnimi >> klubi >> summa >> silt;
+                                    leht->voistkonnad[j]->voistlejad[k]->eesNimi = nimi;
+                                    leht->voistkonnad[j]->voistlejad[k]->perekNimi = pnimi;
+                                    leht->voistkonnad[j]->voistlejad[k]->klubi = klubi;
+                                    leht->voistkonnad[j]->voistlejad[k]->summa = summa;
+                                    leht->voistkonnad[j]->voistlejad[k]->silt->setText(silt);
                                 }
-                                if(versioon >= 110){
-                                    lisaLaskudeArv = 24;    //Uuemas Finaalis on 24 lisalasku, seega peab olema ka Protokollitajas
+                                in >> summa >> markus;
+                                leht->voistkonnad[j]->summa->setText(summa);
+                                leht->voistkonnad[j]->markus->setText(markus);
+                                //leht->voistkonnad[j]->muutus3();
+                            }
+                        }else{
+                            QString nimi, pnimi, sunnia, klubi, seeria, summa, finaal, kumned, markus;
+                            for(int j = 0; j < laskuriteArv; j++){
+                                in >> nimi >> pnimi >> sunnia >> klubi;
+                                leht->laskurid[j]->eesNimi->setText(nimi);
+                                leht->laskurid[j]->perekNimi->setText(pnimi);
+                                leht->laskurid[j]->sunniAasta->setText(sunnia);
+                                leht->laskurid[j]->klubi->setText(klubi);
+                                for(int k = 0; k < s; k++){
+                                    in >> seeria;
+                                    leht->laskurid[j]->seeriad[k]->setText(seeria);
                                 }
+                                in >> summa >> finaal >> kumned >> markus;
+                                leht->laskurid[j]->setSumma(summa);
+                                leht->laskurid[j]->finaal->setText(finaal);
+                                leht->laskurid[j]->kumned->setText(kumned);
+                                leht->laskurid[j]->markus->setText(markus);
+                                leht->laskurid[j]->liida();
                             }
-                            sisse >> summa >> finaal;
-                            leht->laskurid[j]->lisaLasud.clear();
-                            for(int k = 0; k < lisaLaskudeArv; k++){
-                                sisse >> lisaLask;
-                                leht->laskurid[j]->lisaLasud << lisaLask;
-                            }
-                            if(leht->laskurid[j]->lisaLasud.count() < 24)
-                                for(int k = leht->laskurid[j]->lisaLasud.count(); k < 24; k++)
-                                    leht->laskurid[j]->lisaLasud << -1; //Kui lisalaske ei ole piisavalt, on vaja neid juurde lisada
-                            sisse >> kumned >> markus;
-                            leht->laskurid[j]->setSumma(summa);
-                            leht->laskurid[j]->finaal->setText(finaal);
-                            leht->laskurid[j]->kumned->setText(kumned);
-                            leht->laskurid[j]->markus->setText(markus);
-                            leht->laskurid[j]->liida();
                         }
+                        leht->alustamine = false;
                     }
-                    leht->alustamine = false;
                 }
+            } else if(competitionSettings.fileVersion >= 101 && competitionSettings.fileVersion <= 113) {
+                if(sakkideArv == 0){
+                    QApplication::restoreOverrideCursor();
+                    uusTab();
+                }else{
+                    for(int i = 0; i < sakkideArv; i++){
+                        int s = 0, laskudeArv = 10, vs = 0, a = 0, laskuriteArv = 0, min = 0, max = 0, lIndeks = 0, relv = 0;
+                        bool voistk = false;
+                        bool kumnendikega = false;
+                        bool naidata = true;
+                        QString sakiNimi, eNimi, harjutus = "Muu";
+                        in >> sakiNimi >> s;
+                        if(competitionSettings.fileVersion >= 107)
+                            in >> laskudeArv;
+                        in >> vs >> a >> eNimi;
+                        if(competitionSettings.fileVersion != 101)
+                            in >> relv;
+                        if(competitionSettings.fileVersion >= 103)
+                            in >> harjutus;
+                        if(harjutus.isEmpty())
+                            harjutus = "Muu";
+                        if(competitionSettings.fileVersion >= 105)
+                            in >> kumnendikega;
+                        if(competitionSettings.fileVersion >= 108)
+                            in >> naidata;
+                        in >> min >> max >> voistk >> lIndeks >> laskuriteArv;
+#ifdef PROOV
+                        qDebug() << "loefail(): << leheIndeks << sakiNimi << s << laskudeArv << vs << a << << eNimi << relv << harjutus";
+                        qDebug() << "loefail(): << " << lIndeks << " << " << sakiNimi << " << " << s << " << " << laskudeArv << " << " << vs << " << " << a << " << " << eNimi << " << " << relv << " << " << harjutus;
+#endif
+                        QScrollArea *area = new QScrollArea(tabWidget);
+                        area->setWidgetResizable(true);
+                        leheIndeks = lIndeks;
+                        area->setWidget(new Leht(&andmebaas, s, vs, a, &kirjutusAbi, eNimi, relv, harjutus, kumnendikega, &jarjestamine, tabWidget, voistk, lValik, leheIndeks, laskudeArv));
+                        tabWidget->insertTab(-1, area, sakiNimi);
+                        tabWidget->setCurrentIndex(tabWidget->count()-1);
+                        for(int j = 0; j < laskuriteArv; j++){
+                            uusLaskur(0);   //Laskuri ID on algselt 0, et oleks aru saada, kui hiljem loeti failist õige ID
+                        }
+
+                        Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
+                        connect(leht, SIGNAL(uuendaLiikmeid()), this, SLOT(uuendaLiikmeteKast()));
+                        connect(leht, SIGNAL(uuendaVoistkondi()), this, SLOT(uuendaVoistkondi()));
+                        connect(leht, SIGNAL(muudatus()), this, SLOT(muudaSalvestamist()));
+                        connect(leht, SIGNAL(idMuutus(int,Laskur*)), this, SLOT(kontrolliIdKordust(int,Laskur*)));
+
+                        leht->alustamine = true;
+                        leht->naidata = naidata;    //Kas näidatakse tulemuste aknas seda lehte
+                        leht->minAeg = min; //Min näitamise aeg
+                        leht->maxAeg = max; //Max näitamise aeg
+                        if(leht->voistk){
+                            if(competitionSettings.fileVersion >= 106){
+                                int jalgitavaid = 0, jalgitav = 0;
+                                in >> jalgitavaid;
+#ifdef PROOV
+                                qDebug() << "loefail jalgitavaid: = " << jalgitavaid;
+#endif
+                                for(int i = 0; i < jalgitavaid; i++){
+                                    in >> jalgitav;
+#ifdef PROOV
+                                    qDebug() << "sisse jalgitav " << i << ": = " << jalgitav;
+#endif
+                                    leht->jalgitavad.append(jalgitav);
+                                }
+                            }
+                            QString vnimi, nimi, pnimi, klubi, harjutus, silt, summa, markus;
+                            for(int j = 0; j < laskuriteArv; j++){
+                                in >> vnimi;
+                                leht->voistkonnad[j]->nimi->setText(vnimi);
+                                for(int k = 0; k < s; k++){
+                                    in >> nimi >> pnimi >> klubi;
+                                    if(competitionSettings.fileVersion >= 106){
+                                        in >> harjutus;
+                                    }
+                                    in >> summa >> silt;
+                                    leht->voistkonnad[j]->voistlejad[k]->eesNimi = nimi;
+                                    leht->voistkonnad[j]->voistlejad[k]->perekNimi = pnimi;
+                                    leht->voistkonnad[j]->voistlejad[k]->klubi = klubi;
+                                    if(competitionSettings.fileVersion >= 106){
+                                        leht->voistkonnad[j]->voistlejad[k]->harjutus = harjutus;
+                                    }
+                                    leht->voistkonnad[j]->voistlejad[k]->summa = summa;
+                                    leht->voistkonnad[j]->voistlejad[k]->silt->setText(silt);
+                                }
+                                in >> summa >> markus;
+                                leht->voistkonnad[j]->summa->setText(summa);
+                                leht->voistkonnad[j]->markus->setText(markus);
+                                //leht->voistkonnad[j]->muutus3();
+                            }
+                        }else{
+                            int lisaLask = -1, lask, id, lisaLaskudeArv = 10;   //Vanemates versioonides on lisalaske 10, uuemas 24, muudetakse allpool
+                            QString rajaNr, sifriAlgus, sifriLopp, nimi, pnimi, sunnia, klubi, seeria, summa, finaal, kumned, markus;
+                            for(int j = 0; j < laskuriteArv; j++){
+                                if(competitionSettings.fileVersion >= 104)
+                                    in >> rajaNr >> sifriAlgus >> sifriLopp;
+                                if(competitionSettings.fileVersion >= 107)
+                                    in >> id;
+                                in >> nimi >> pnimi >> sunnia >> klubi;
+                                leht->laskurid[j]->rajaNr->setText(rajaNr);
+                                leht->laskurid[j]->sifriAlgus->setText(sifriAlgus);
+                                leht->laskurid[j]->sifriLopp->setText(sifriLopp);
+                                leht->laskurid[j]->id = id;
+                                leht->laskurid[j]->eesNimi->setText(nimi);
+                                leht->laskurid[j]->perekNimi->setText(pnimi);
+                                leht->laskurid[j]->sunniAasta->setText(sunnia);
+                                leht->laskurid[j]->klubi->setText(klubi);
+#ifdef PROOV
+                                qDebug() << "loefail(): << rajaNr << sifriAlgus << sifriLopp << nimi << pnimi << sunnia << klubi";
+                                qDebug() << "loefail(): << " << rajaNr << " << " << sifriAlgus << " << " << sifriLopp << " << " << nimi << " << " << pnimi << " << " << sunnia << " << " << klubi;
+#endif
+                                for(int k = 0; k < s; k++){
+                                    in >> seeria;
+                                    leht->laskurid[j]->seeriad[k]->setText(seeria);
+#ifdef PROOV
+                                    qDebug() << "loefail(): leht->laskurid[" << j << "]->lasud[k].count() = " << leht->laskurid[j]->lasud[k].count();
+#endif
+                                    if(competitionSettings.fileVersion >= 107 && competitionSettings.fileVersion <= 108){
+                                        int x, y;
+                                        for(int l = 0; l < leht->laskurid[j]->lasud[k].count(); l++){
+                                            in >> lask >> x >> y;
+                                            leht->laskurid[j]->lasud[k][l]->set10Lask(lask);
+                                            leht->laskurid[j]->lasud[k][l]->setMmX(x);
+                                            leht->laskurid[j]->lasud[k][l]->setMmY(y);
+                                        }
+                                    }else if(competitionSettings.fileVersion >= 109){
+                                        QString x, y;
+                                        QTime shotTime;
+                                        bool isInnerTen = false;
+                                        for(int l = 0; l < leht->laskurid[j]->lasud[k].count(); l++){
+                                            in >> lask >> x >> y;
+                                            if(competitionSettings.fileVersion >= 111){
+                                                in >> shotTime >> isInnerTen;
+                                                leht->laskurid[j]->lasud[k][l]->setShotTime(shotTime);
+                                                leht->laskurid[j]->lasud[k][l]->setInnerTen(isInnerTen);
+                                            }
+                                            leht->laskurid[j]->lasud[k][l]->set10Lask(lask);
+                                            leht->laskurid[j]->lasud[k][l]->setMmX(x);
+                                            leht->laskurid[j]->lasud[k][l]->setMmY(y);
+                                        }
+                                    }
+                                    if(competitionSettings.fileVersion >= 110){
+                                        lisaLaskudeArv = 24;    //Uuemas Finaalis on 24 lisalasku, seega peab olema ka Protokollitajas
+                                    }
+                                }
+                                in >> summa >> finaal;
+                                leht->laskurid[j]->lisaLasud.clear();
+                                for(int k = 0; k < lisaLaskudeArv; k++){
+                                    in >> lisaLask;
+                                    leht->laskurid[j]->lisaLasud << lisaLask;
+                                }
+                                if(leht->laskurid[j]->lisaLasud.count() < 24)
+                                    for(int k = leht->laskurid[j]->lisaLasud.count(); k < 24; k++)
+                                        leht->laskurid[j]->lisaLasud << -1; //Kui lisalaske ei ole piisavalt, on vaja neid juurde lisada
+                                in >> kumned >> markus;
+                                leht->laskurid[j]->setSumma(summa);
+                                leht->laskurid[j]->finaal->setText(finaal);
+                                leht->laskurid[j]->kumned->setText(kumned);
+                                leht->laskurid[j]->markus->setText(markus);
+                                leht->laskurid[j]->liida();
+                            }
+                        }
+                        leht->alustamine = false;
+                    }
+                }
+                kontrolliIdKordusi();
             }
-            kontrolliIdKordusi();
             uuendaSeaded();
             voibSulgeda = true;
         }else QMessageBox::critical(this, tr("Protokollitaja"), tr("Vale versiooni fail!\n\nVõimalik, et tegu on uuema programmi versiooni failiga.\n\n(Protokollitaja::loefail())"),QMessageBox::Ok);
@@ -2594,7 +2599,7 @@ void Protokollitaja::loeSeaded()
     if(algF.open(QIODevice::ReadOnly | QIODevice::Text)){
             QTextStream sisse(&algF);
             sisse.setCodec("UTF-8");
-            aValik->ui.failiNimi->setText(sisse.readLine());
+            aValik->setFileName(sisse.readLine());
 
             while(!sisse.atEnd()){  //Loetakse seadete failist veel ka uued väärtused mõnedele konstantidele (kui need seal olemas on)
                 QString rida = sisse.readLine();
@@ -2616,33 +2621,8 @@ void Protokollitaja::loeSeaded()
 #endif
                 }
             }
-            //aValik->failiNimi = seeFail;
             algF.close();
-            algF.setFileName(aValik->ui.failiNimi->text());
-            if(algF.open(QIODevice::ReadOnly)){
-                    QDataStream sisse(&algF);
-                    quint32 kontroll, versioon;
-                    sisse >> kontroll >> versioon;
-                    if(kontroll != 0x00FA3848){
-#ifdef PROOV
-                            qDebug() << "Protokollitaja::loeSeaded(): Vigane või vale fail! Versioon: " << versioon << ", kontroll: " << kontroll;
-#endif
-                            QMessageBox::critical(this, tr("Protokollitaja"), tr("Vigane või vale fail!\n%1").arg(aValik->ui.failiNimi->text()),
-                                            QMessageBox::Ok);
-                            return;
-                    }
-                    if(versioon >= 100 && versioon <= 112){
-                            QString rida;
-                            //char *rida2;
-                            sisse >> rida;
-                            //rida = QString::fromUtf8(rida2);
-                            aValik->ui.voistluseNimi->setText(rida);
-                            rida.clear();
-                            sisse >> rida;
-                            aValik->ui.aegKohtEdit->setText(rida);
-                    }else QMessageBox::critical(this, tr("Protokollitaja"), QString("Vale versiooni fail!\n\nVõimalik, et "
-                            "tegu on uuema programmi versiooni failiga.\n\n(Protokollitaja::loeSeaded())").arg(aValik->ui.failiNimi->text()), QMessageBox::Ok);
-            }
+            aValik->setData(SimpleKllFileRW::readCompetitionSettingsFromKll(aValik->fileName(), this));
     }
 }
 
@@ -2941,8 +2921,10 @@ void Protokollitaja::naitaSeaded()
     seaded->ui.competitionTypesEdit->setText(m_settings.competitionShotTypesString());
 
         seaded->ui.voistluseNimi->setText(voistluseNimi);
+        seaded->ui.startDateEdit->setDate(m_startDate);
+        seaded->ui.endDateEdit->setDate(m_endDate);
 //        seaded->voistluseNimi = voistluseNimi;
-        seaded->ui.aegKohtEdit->setText(aegKoht);
+        seaded->ui.kohtEdit->setText(koht);
 //        seaded->aegKoht = aegKoht;
         seaded->ui.sakiBox->setCurrentIndex(tabWidget->tabPosition());
 //        seaded->sakiAsukoht = tabWidget->tabPosition();
@@ -3023,6 +3005,7 @@ void Protokollitaja::naitaTul()
         areaNr = 0;
         reaNr = 0;
     }
+
     if(tabWidget->count() > leheNr){
         if(leheNr >= 0){
             Leht *seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(leheNr))->widget());
@@ -3073,7 +3056,7 @@ void Protokollitaja::naitaTul()
                 if(naitaja->interval() > seeLeht->maxAeg) naitaja->setInterval(seeLeht->maxAeg);
 //                if(reaNr > 25) i = (reaNr - 25);
                 tulemus->voistluseNimi = voistluseNimi;
-                tulemus->aegKoht = aegKoht;
+                tulemus->aegKoht = timeAndPlaceString();
                 tulemus->pealKiri = seeLeht->ekraaniNimi;
                 for(int j = 0; j < tulemus->getRidadeArv(); j++)
                     for(int k = 0; k < 16; k++)
@@ -3178,7 +3161,7 @@ void Protokollitaja::naitaTul()
             if(naitaja->interval() > seeLeht->maxAeg) naitaja->setInterval(seeLeht->maxAeg);
             //if(reaNr > 25) i = (reaNr - 25);
             tulemus->voistluseNimi = voistluseNimi;
-            tulemus->aegKoht = aegKoht;
+            tulemus->aegKoht = timeAndPlaceString();
             tulemus->pealKiri = seeLeht->ekraaniNimi;
             for(int j = 0; j < tulemus->getRidadeArv(); j++)
                 for(int k = 0; k < 16; k++)
@@ -3501,7 +3484,7 @@ void Protokollitaja::prindi()
                     painter.drawText(1345, 130, "Summa");
                     //painter.drawText(1100, 130, "Seeriad");
                     painter.setFont(kirjaFont);
-                    painter.drawText(800, 50, 700, 50, Qt::AlignRight, aegKoht);
+                    painter.drawText(800, 50, 700, 50, Qt::AlignRight, timeAndPlaceString());
                     kirjaFont.setBold(true);
                     painter.setFont(kirjaFont);
                     painter.drawText(75, 125, seeLeht->ekraaniNimi);
@@ -3571,7 +3554,7 @@ void Protokollitaja::prindi()
                     painter.drawText(2120, 130, "Finaal");
                     painter.drawText(2220, 130, "Kokku");
                     painter.setFont(kirjaFont);
-                    painter.drawText(1500, 50, 700, 50, Qt::AlignRight, aegKoht);
+                    painter.drawText(1500, 50, 700, 50, Qt::AlignRight, timeAndPlaceString());
                     kirjaFont.setBold(true);
                     painter.setFont(kirjaFont);
                     painter.drawText(75, 125, seeLeht->ekraaniNimi);
@@ -3657,7 +3640,7 @@ void Protokollitaja::prindi()
                     painter.drawText(1345, 130, "Summa");
                     //painter.drawText(1010, 130, "Seeriad");
                     painter.setFont(kirjaFont);
-                    painter.drawText(800, 50, 700, 50, Qt::AlignRight, aegKoht);
+                    painter.drawText(800, 50, 700, 50, Qt::AlignRight, timeAndPlaceString());
                     kirjaFont.setBold(true);
                     painter.setFont(kirjaFont);
                     painter.drawText(75, 125, seeLeht->ekraaniNimi);
@@ -3743,7 +3726,7 @@ void Protokollitaja::prindi()
                     painter.drawText(1345, 130, "Summa");
                     painter.drawText(1100, 130, "Seeriad");
                     painter.setFont(kirjaFont);
-                    painter.drawText(800, 50, 700, 50, Qt::AlignRight, aegKoht);
+                    painter.drawText(800, 50, 700, 50, Qt::AlignRight, timeAndPlaceString());
                     kirjaFont.setBold(true);
                     painter.setFont(kirjaFont);
                     painter.drawText(75, 125, seeLeht->ekraaniNimi);
@@ -3819,7 +3802,7 @@ void Protokollitaja::prindi2()
 
         //Kõigepealt üldandmed
         pTekst.replace("#voistlusenimi#", voistluseNimi);
-        pTekst.replace("#aegkoht#", aegKoht);
+        pTekst.replace("#aegkoht#", timeAndPlaceString());
 
         pTekst.replace("#harjutus#", seeLeht->ekraaniNimi);
 
@@ -4171,8 +4154,8 @@ void Protokollitaja::readSiusInfo(SiusShotData shotData)
 
 //    for(QString row : lines){
         //Search for competitor whose line was received:
-        Laskur* thisCompetitor = nullptr;
-        Leht* sheet = nullptr;
+    Laskur* thisCompetitor = nullptr;
+    Leht* sheet = nullptr;
 //        QStringList rowParts = row.split(';');
 
 //        if(row.startsWith("_PRCH") || row.startsWith("_GRPH") || row.startsWith("_SHOT") || row.startsWith("_TOTL")){
@@ -4407,13 +4390,24 @@ void Protokollitaja::salvestaKui()
 
 void Protokollitaja::seiskaServer()
 {
-    if(!server == 0){
+    if(server != 0){
         server->closeConnections();
         server->close();
         statusBar()->showMessage(tr("Server seisatud"), 5000);
         server->deleteLater();
         server = 0;
     }
+}
+
+void Protokollitaja::setDataFromInitialDialog()
+{
+    voistluseNimi = aValik->competitionName();
+    seeFail = aValik->fileName();
+    m_startDate = aValik->startDate();
+    m_endDate = aValik->endDate();
+    koht = aValik->place();
+    setWindowTitle(programmiNimi + " - " + seeFail);
+    kirjutaSeaded();
 }
 
 void Protokollitaja::sifriLisa()
@@ -4592,6 +4586,15 @@ void Protokollitaja::taiendaAndmebaas()
         else QMessageBox::information(this, "Protokollitaja", "Uusi laskureid ei leitud", QMessageBox::Ok);
 }
 
+QString Protokollitaja::timeAndPlaceString()
+{
+    QString format = "dd.MM.yyyy";
+    return QString("%1 - %2 %3")
+            .arg(m_startDate.toString(format))
+            .arg(m_endDate.toString(format))
+            .arg(koht);
+}
+
 QJsonObject Protokollitaja::toExportJson()
 {
     QJsonObject json;
@@ -4603,7 +4606,9 @@ QJsonObject Protokollitaja::toExportJson()
         json["id"] = webCompetitionId;
     }
     json["competitionName"] = voistluseNimi;
-    json["timeAndPlace"] = aegKoht;
+    json["startDate"] = m_startDate.toString(Qt::ISODate);
+    json["endDate"] = m_endDate.toString(Qt::ISODate);
+    json["place"] = koht;
 
     Leht *sheet = nullptr;
     QJsonArray sheetsArray;
@@ -4867,7 +4872,9 @@ void Protokollitaja::uuendaSeaded()
     m_settings.setSighterShotTypes(seaded->ui.sighterTypesEdit->text());
 
         voistluseNimi = seaded->ui.voistluseNimi->text();
-        aegKoht = seaded->ui.aegKohtEdit->text();
+        m_startDate = seaded->ui.startDateEdit->date();
+        m_endDate = seaded->ui.endDateEdit->date();
+        koht = seaded->ui.kohtEdit->text();
         salvestaja->setInterval(seaded->ui.aegEdit->value() * 60000);
         switch(seaded->ui.sakiBox->currentIndex()){
         case 0: {
@@ -5186,18 +5193,12 @@ void Protokollitaja::uus()
                         tulemus->read[j][k] = " ";
         tulemus->joonista();
         valik->ui.indBox->setCurrentIndex(0);
-        while(voistluseNimi.isEmpty()){
-                if(aValik->exec() == QDialog::Accepted){
-                        voistluseNimi = aValik->ui.voistluseNimi->text();
-                        seeFail = aValik->ui.failiNimi->text();
-                        aegKoht = aValik->ui.aegKohtEdit->text();
-                        setWindowTitle(programmiNimi + " - " + seeFail);
-                        kirjutaSeaded();
-                }else{
-                        sulgeja->start(50);
-                        return;
-                }
-        };
+        if(aValik->exec() == QDialog::Accepted){
+            setDataFromInitialDialog();
+        }else{
+            sulgeja->start(50);
+            return;
+        }
         if(voistluseNimi.isEmpty()) sulgeja->start(50);
         loefail();
 }

@@ -6,7 +6,7 @@ HEADERS += $$PWD/lisalaskudeaken.h \
     $$PWD/voistkond.h \
     $$PWD/importaken.h \
     $$PWD/tulemuseaken.h \
-    $$PWD/algusevalik.h \
+    $$PWD/initialdialog.h \
     $$PWD/seadedkast.h \
     $$PWD/valikkast.h \
     $$PWD/andmebaas.h \
@@ -22,6 +22,8 @@ HEADERS += $$PWD/lisalaskudeaken.h \
     $$PWD/startlistwriter.h \
     $$PWD/protolehelugejaserver.h \
     $$PWD/protolehelugejaconnection.h \
+    $$PWD/kllfilerw.h \
+    $$PWD/simplekllfilerw.h \
     $$PWD/../common/src/commonsettings.h \
     $$PWD/../common/src/lask.h \
     $$PWD/../common/src/uhendumiseaken.h \
@@ -33,7 +35,7 @@ SOURCES += $$PWD/lisalaskudeaken.cpp \
     $$PWD/voistkond.cpp \
     $$PWD/importaken.cpp \
     $$PWD/tulemuseaken.cpp \
-    $$PWD/algusevalik.cpp \
+    $$PWD/initialdialog.cpp \
     $$PWD/seadedkast.cpp \
     $$PWD/valikkast.cpp \
     $$PWD/leht.cpp \
@@ -48,6 +50,8 @@ SOURCES += $$PWD/lisalaskudeaken.cpp \
     $$PWD/startlistwriter.cpp \
     $$PWD/protolehelugejaserver.cpp \
     $$PWD/protolehelugejaconnection.cpp \
+    $$PWD/kllfilerw.cpp \
+    $$PWD/simplekllfilerw.cpp \
     $$PWD/../common/src/commonsettings.cpp \
     $$PWD/../common/src/lask.cpp \
     $$PWD/../common/src/uhendumiseaken.cpp \
@@ -56,7 +60,7 @@ SOURCES += $$PWD/lisalaskudeaken.cpp \
 FORMS += $$PWD/lisalaskudeaken.ui \
     $$PWD/liikmetevalikkast.ui \
     $$PWD/importaken.ui \
-    $$PWD/algusevalik.ui \
+    $$PWD/initialdialog.ui \
     $$PWD/seadedkast.ui \
     $$PWD/valikkast.ui \
     $$PWD/lehelugejaaken.ui \

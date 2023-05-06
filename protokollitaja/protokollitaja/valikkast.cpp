@@ -1,10 +1,11 @@
 ﻿#include "valikkast.h"
 
-ValikKast::ValikKast(QWidget *parent)
+ValikKast::ValikKast(CommonSettings *settings, QWidget *parent)
     : QDialog(parent)
 {
 	ui.setupUi(this);
     relv = Ohupuss;
+    ui.harjutus->addItems(settings->eventNames);
     harjutus = ui.harjutus->currentText();
 	connect(ui.harjutus, SIGNAL(currentIndexChanged(int)), this, SLOT(muudaEkraaniNimi(int)));
 	connect(ui.laskjad, SIGNAL(currentIndexChanged(int)), this, SLOT(muudaEkraaniNimi(int)));

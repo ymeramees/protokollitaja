@@ -6,16 +6,17 @@
 #include "finalsfileexport.h"
 #include "ui_finalsfileexport.h"
 
-FinalsFileExport::FinalsFileExport(QVector<QStringList> inputTable, QString competitionFileLocation, QString competitionName, QString eventName, QWidget *parent) :
+FinalsFileExport::FinalsFileExport(QVector<QStringList> inputTable, QString competitionFileLocation, QString competitionName, QString eventName, int eventType, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::FinalsFileExport)
 {
     ui->setupUi(this);
     connect(ui->drawButton, &QPushButton::clicked, this, &FinalsFileExport::drawStartPositions);
 
-    this->competitionFileLocation = competitionFileLocation;
-    this->competitionName = competitionName;
-    this->eventName = eventName;
+    m_competitionFileLocation = competitionFileLocation;
+    m_competitionName = competitionName;
+    m_eventName = eventName;
+    m_eventType = eventType;
 
     ui->finalsCompetitorsTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     ui->finalsCompetitorsTable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -139,8 +140,8 @@ bool FinalsFileExport::writeFinalsFile()
     if(!sortCompetitors())
         return false;
 
-    QString fileLocation = competitionFileLocation.left(competitionFileLocation.lastIndexOf('/') + 1);
-    finalsFileName = QFileDialog::getSaveFileName(this, tr("Salvesta finaal"), fileLocation + eventName + ".fnl", tr("Finaali fail (*.fnl)"));
+    QString fileLocation = m_competitionFileLocation.left(m_competitionFileLocation.lastIndexOf('/') + 1);
+    finalsFileName = QFileDialog::getSaveFileName(this, tr("Salvesta finaal"), fileLocation + m_eventName + ".fnl", tr("Finaali fail (*.fnl)"));
     if(finalsFileName.isEmpty()) return false;
 
     QFile file(finalsFileName);
@@ -159,7 +160,7 @@ bool FinalsFileExport::writeFinalsFile()
         out << (qint32)15;            //Which QFinaal file version it is
         out.setVersion(QDataStream::Qt_4_3);
 
-        out << competitionName << eventName;
+        out << m_competitionName << m_eventName;
 
         for(int i = 0; i < ui->finalsCompetitorsTable->rowCount() && i < 8; i++){   //Currently only up to 8 shooters are supported in finals
             out << ui->finalsCompetitorsTable->item(i, 1)->text();
@@ -185,27 +186,28 @@ bool FinalsFileExport::writeFinalsStartListFile()
     if(finalsFileName.isEmpty())
         return false;
 
-//    QString fileLocation = competitionFileLocation.left(competitionFileLocation.lastIndexOf('/') + 1);
-//    finalsFileName = QFileDialog::getSaveFileName(this, tr("Salvesta finaali startlist"), fileLocation + eventName + ".csv", tr("Comma separated file (*.csv)"));
-//    if(finalsFileName.isEmpty()) return false;
-
-    QVector<QStringList> competitorsList;    //Each "row": target, ID, first name, name, club, result
+    QVector<StartListWriter::StartListCompetitor> competitorsList;
     //Each row in competitors table: target, ID, screen name, result, first name, name, club
     for(int i = 0; i < ui->finalsCompetitorsTable->rowCount() && i < 8; i++){   //Currently only up to 8 shooters are supported in finals
-        QStringList row;
-        row << QString("%1").arg(ui->targetNumberBox->value() + i);
-        row << ui->finalsCompetitorsTable->item(i, 1)->text();
-        row << ui->finalsCompetitorsTable->item(i, 4)->text();
-        row << ui->finalsCompetitorsTable->item(i, 5)->text();
-        row << ui->finalsCompetitorsTable->item(i, 6)->text();
-        row << ui->finalsCompetitorsTable->item(i, 3)->text();
-#ifdef PROOV
-        qDebug() << "Protokollitaja::writeFinalsStartListFile(), row: " << row;
-#endif
-        competitorsList.append(row);
+        competitorsList.append(StartListWriter::StartListCompetitor{
+                                   QString("%1").arg(ui->targetNumberBox->value() + i),
+                                   ui->finalsCompetitorsTable->item(i, 1)->text(),
+                                   ui->finalsCompetitorsTable->item(i, 4)->text(),
+                                   ui->finalsCompetitorsTable->item(i, 5)->text(),
+                                   ui->finalsCompetitorsTable->item(i, 6)->text(),
+                                   ui->finalsCompetitorsTable->item(i, 3)->text(),
+                                   m_eventType,
+                                   ""  // TODO to be implemented
+                               });
     }
 
-    StartListWriter *startListWriter = new StartListWriter(competitorsList, finalsFileName, this, ui->relayNumberBox->value());
+    StartListWriter *startListWriter = new StartListWriter(
+                competitorsList,
+                finalsFileName,
+                StartListWriter::SIUS,
+                this,
+                ui->relayNumberBox->value()
+                );
     startListWriter->deleteLater();
     return true;
 }
