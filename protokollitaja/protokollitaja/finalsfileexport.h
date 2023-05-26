@@ -7,6 +7,7 @@
 #include <QDialog>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QRandomGenerator>
 
 #include "startlistwriter.h"
 

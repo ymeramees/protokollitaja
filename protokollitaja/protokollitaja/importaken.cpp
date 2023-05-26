@@ -84,7 +84,7 @@ void ImportAken::fromFile()
                         if(rida.contains(' ') && ui.checkBoxTuhik->isChecked()){
                                 andmed2.clear();
                                 for(int i = 0; i < andmed.count(); i++){
-                                        vahepealne = andmed[i].split(QRegExp("\\s+"));
+                                        vahepealne = andmed[i].split(QRegularExpression("\\s+"));
                                         andmed2 << vahepealne;
                                 }
                                 andmed = andmed2;
@@ -225,7 +225,7 @@ void ImportAken::fromClipboard()
                 if(rida.contains(' ') && ui.checkBoxTuhik->isChecked()){
                         andmed2.clear();
                         for(int i = 0; i < andmed.count(); i++){
-                                vahepealne = andmed[i].split(QRegExp("\\s+"));
+                                vahepealne = andmed[i].split(QRegularExpression("\\s+"));
                                 andmed2 << vahepealne;
                         }
                         andmed = andmed2;

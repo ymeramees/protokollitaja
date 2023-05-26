@@ -5,7 +5,6 @@
 #-------------------------------------------------
 INCLUDEPATH += ./ \
 INCLUDEPATH += ../../common/src
-#include(qextserialport/src/qextserialport.pri)
 
 QT       += core gui network serialport
 

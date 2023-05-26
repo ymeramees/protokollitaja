@@ -1,7 +1,7 @@
 ﻿#include "siusdataconnection.h"
 
-#define CR 0x0d
-#define LF 0x0a
+#define CR QChar(0x0d)
+#define LF QChar(0x0a)
 
 extern bool verbose;
 
@@ -16,7 +16,7 @@ SiusDataConnection::SiusDataConnection(
         ) : QWidget(parent)
 {
     if(verbose)
-        QTextStream(stdout) << "SiusDataConnection()" << endl;
+        QTextStream(stdout) << "SiusDataConnection()" << Qt::endl;
     addressLabel = new QLabel(address);
     m_index = socketIndex;
     m_port = port;
@@ -25,7 +25,7 @@ SiusDataConnection::SiusDataConnection(
     m_settings = settings;
 
     if(verbose)
-        QTextStream(stdout) << "connectToSiusData()2" << endl;
+        QTextStream(stdout) << "connectToSiusData()2" << Qt::endl;
     disconnectButton = new QPushButton(tr("Sulge ühendus"));
     connect(disconnectButton, &QPushButton::clicked, this, &SiusDataConnection::disconnectFromSius);
 
@@ -60,7 +60,7 @@ SiusDataConnection::SiusDataConnection(
 SiusDataConnection::~SiusDataConnection()
 {
     if(verbose)
-        QTextStream(stdout) << "SiusDataConnection::~SiusDataConnection(): " << m_index << endl;
+        QTextStream(stdout) << "SiusDataConnection::~SiusDataConnection(): " << m_index << Qt::endl;
     addressLabel->deleteLater();
     addressLabel = nullptr;
     disconnectButton->deleteLater();
@@ -80,7 +80,7 @@ QString SiusDataConnection::address() const
 void SiusDataConnection::connected()
 {
     if(verbose)
-        QTextStream(stdout) << "SiusDataConnection::connected(): " << m_index << endl;
+        QTextStream(stdout) << "SiusDataConnection::connected(): " << m_index << Qt::endl;
     addressLabel->setEnabled(true);
     disconnectButton->setEnabled(true);
 }
@@ -209,7 +209,7 @@ void SiusDataConnection::readFromSius()
             }
 
             if(verbose)
-                QTextStream(stdout) << "SiusDataConnection::readFromSius() " << m_index << ": " << row << endl;
+                QTextStream(stdout) << "SiusDataConnection::readFromSius() " << m_index << ": " << row << Qt::endl;
 
             *log << QTime::currentTime().toString("hh:mm:ss") << " #rida: " << row;
 
@@ -273,7 +273,7 @@ void SiusDataConnection::stopProgress()
 void SiusDataConnection::wasDisconnected()
 {
     if(verbose)
-        QTextStream(stdout) << "SiusDataConnection::wasDisconnected(): " << m_index << endl;
+        QTextStream(stdout) << "SiusDataConnection::wasDisconnected(): " << m_index << Qt::endl;
     if(addressLabel != nullptr && disconnectButton != nullptr)
         if(addressLabel->isEnabled()){
             addressLabel->setEnabled(false);

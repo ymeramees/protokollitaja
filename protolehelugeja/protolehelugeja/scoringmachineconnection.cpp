@@ -5,15 +5,15 @@
 /////////////////////////////////////////////////////////////////////////////
 
 // Defines for scoring machine connection:
-#define EOT 0x04
-#define ENQ 0x05 	// Anfrage
-#define ACK 0x06
-#define STX 0x02	// Start Text
-#define NAK 0x15
-#define CR 0x0d
+#define EOT QChar(0x04)
+#define ENQ QChar(0x05) 	// Anfrage
+#define ACK QChar(0x06)
+#define STX QChar(0x02)	// Start Text
+#define NAK QChar(0x15)
+#define CR QChar(0x0d)
 
-const char m_enq = ENQ;
-const char m_ack = ACK;
+const char m_enq = ENQ.toLatin1();
+const char m_ack = ACK.toLatin1();
 
 ScoringMachineConnection::ScoringMachineConnection(QObject *parent) : QObject(parent)
 {
@@ -60,7 +60,7 @@ bool ScoringMachineConnection::calculateIsInnerTen(const float x, const float y)
 void ScoringMachineConnection::closeConnection()
 {
     if(m_logLevel > 0)
-        QTextStream(stdout) << "[ScoringMachineConnection]: closeConnection(), m_sendingStage = " << m_sendingStage << endl;
+        QTextStream(stdout) << "[ScoringMachineConnection]: closeConnection(), m_sendingStage = " << m_sendingStage << Qt::endl;
 
     m_dataToSend = QString("EXIT").toLatin1();
     m_sendingStage = 2;
@@ -80,7 +80,7 @@ void ScoringMachineConnection::connectToMachine()
     }
 
     if(m_logLevel > 0)
-        QTextStream(stdout) << "[ScoringMachineConnection]: connectToMachine(), m_sendingStage = " << m_sendingStage << endl;
+        QTextStream(stdout) << "[ScoringMachineConnection]: connectToMachine(), m_sendingStage = " << m_sendingStage << Qt::endl;
 
     if(m_portName.isEmpty()){
         emit connectionStatusChanged(tr("Viga: Pordi nime pole määratud, ei saa ühenduda!"));
@@ -103,7 +103,7 @@ void ScoringMachineConnection::connectToMachine()
 void ScoringMachineConnection::connectToRMIII()
 {
     if(m_logLevel > 0)
-        QTextStream(stdout) << "[ScoringMachineConnection]: connectToRMIII(), m_sendingStage = " << m_sendingStage << endl;
+        QTextStream(stdout) << "[ScoringMachineConnection]: connectToRMIII(), m_sendingStage = " << m_sendingStage << Qt::endl;
 
     if(m_connected){
         sendToMachine("V");
@@ -137,7 +137,7 @@ void ScoringMachineConnection::connectToRMIII()
 void ScoringMachineConnection::connectToRMIV()
 {
     if(m_logLevel > 0)
-        QTextStream(stdout) << "[ScoringMachineConnection]: connectToRMIV(), m_sendingStage = " << m_sendingStage << endl;
+        QTextStream(stdout) << "[ScoringMachineConnection]: connectToRMIV(), m_sendingStage = " << m_sendingStage << Qt::endl;
 
     m_serialPort.flush();
     m_serialPort.close();
@@ -168,7 +168,7 @@ int ScoringMachineConnection::CRC(const QByteArray *s) const
 Lask ScoringMachineConnection::extractRMIIIShot(QString shotInfo)
 {
     Lask shot;
-    QStringList list = shotInfo.split(';', QString::KeepEmptyParts);
+    QStringList list = shotInfo.split(';', Qt::KeepEmptyParts);
     if(list.size() > 5) {
         int x = 0, y = 0;
         float fx = 0, fy = 0;
@@ -286,7 +286,7 @@ void ScoringMachineConnection::readFromRMIII()
 
     if(m_serialPort.bytesAvailable() > 0) {
         if(m_logLevel > 0)
-            QTextStream(stdout) << "[ScoringMachineConnection]: readFromRMIII(), m_sendingStage = " << m_sendingStage << endl;
+            QTextStream(stdout) << "[ScoringMachineConnection]: readFromRMIII(), m_sendingStage = " << m_sendingStage << Qt::endl;
 //        static QString m_serialBuffer;
         QString currentText;
         m_serialBuffer.append(m_serialPort.readAll());
@@ -332,7 +332,7 @@ void ScoringMachineConnection::readFromRMIV()
         QString currentText;
         m_serialBuffer.append(m_serialPort.readAll());
         if(m_logLevel > 0)
-            QTextStream(stdout) << "[ScoringMachineConnection]: readFromRMIV(), m_serialBuffer = " << m_serialBuffer << ", m_sendingStage = " << m_sendingStage << endl;
+            QTextStream(stdout) << "[ScoringMachineConnection]: readFromRMIV(), m_serialBuffer = " << m_serialBuffer << ", m_sendingStage = " << m_sendingStage << Qt::endl;
         if(m_serialBuffer.contains(CR)) {
             currentText = m_serialBuffer.left(m_serialBuffer.indexOf(CR) + 1);
             currentText.replace(STX, "");
@@ -356,7 +356,7 @@ void ScoringMachineConnection::readFromRMIV()
             currentText.replace(STX, "STX");
             if(m_sendingStage == 1) {
                 if(m_logLevel > 0)
-                    QTextStream(stdout) << "[ScoringMachineConnection]: received: STX, m_sendingStage = " << m_sendingStage << endl;
+                    QTextStream(stdout) << "[ScoringMachineConnection]: received: STX, m_sendingStage = " << m_sendingStage << Qt::endl;
                 m_sendingStage = 2;  // STX received
                 sendToMachine("");  // If STX was received, then probably the machine is ready to receive text
             }
@@ -366,7 +366,7 @@ void ScoringMachineConnection::readFromRMIV()
             currentText.replace(NAK, "NAK");
             if(m_sendingStage == 3){
                 if(m_logLevel > 0)
-                    QTextStream(stdout) << "[ScoringMachineConnection]: received: NAK, m_sendingStage = " << m_sendingStage << endl;
+                    QTextStream(stdout) << "[ScoringMachineConnection]: received: NAK, m_sendingStage = " << m_sendingStage << Qt::endl;
 
                 m_sendingStage = 0;  // NAK received, so something is wrong -> initial stage
             }
@@ -376,7 +376,7 @@ void ScoringMachineConnection::readFromRMIV()
             currentText.replace(ACK, "ACK");
             if(m_sendingStage == 3){
                 if(m_logLevel > 0)
-                    QTextStream(stdout) << "[ScoringMachineConnection]: received: ACK, m_sendingStage = " << m_sendingStage << endl;
+                    QTextStream(stdout) << "[ScoringMachineConnection]: received: ACK, m_sendingStage = " << m_sendingStage << Qt::endl;
                 m_sendingStage = 0;  // ACK received -> initial stage
                 m_machineChoiceInProgress = false;
             }
@@ -446,7 +446,7 @@ void ScoringMachineConnection::sendSettings()
     }
 
     if(m_logLevel > 0)
-        QTextStream(stdout) << "[ScoringMachineConnection]: sendSettings(): " << settingString << endl;
+        QTextStream(stdout) << "[ScoringMachineConnection]: sendSettings(): " << settingString << Qt::endl;
     sendToMachine(settingString);
     emit connectionStatusChanged("Seadisamine: " + settingString);
 }
@@ -460,19 +460,19 @@ void ScoringMachineConnection::sendToMachine()
         m_serialPort.flush();
         m_sendingStage = 1; // ENQ sent
         if(m_logLevel > 0)
-            QTextStream(stdout) << "[ScoringMachineConnection]: sent: ENQ, m_sendingStage = " << m_sendingStage << endl;
+            QTextStream(stdout) << "[ScoringMachineConnection]: sent: ENQ, m_sendingStage = " << m_sendingStage << Qt::endl;
         break;
     case 2:
         if(m_scoringMachineType == RMIV)
             m_dataToSend.append(char(CRC(&m_dataToSend)));
-        m_dataToSend.append(CR);
+        m_dataToSend.append(CR.toLatin1());
         m_serialPort.write(m_dataToSend);
         emit dataSent(QString(m_dataToSend));
         m_serialPort.flush();
         if(m_scoringMachineType == RMIV)
             m_sendingStage = 3; // Text sent
         if(m_logLevel > 0)
-            QTextStream(stdout) << "[ScoringMachineConnection]: sent: " << m_dataToSend.replace(CR, "CR") << ", m_sendingStage = " << m_sendingStage << endl;
+            QTextStream(stdout) << "[ScoringMachineConnection]: sent: " << m_dataToSend.replace(CR.toLatin1(), "CR") << ", m_sendingStage = " << m_sendingStage << Qt::endl;
         break;
     case 4:
         m_serialPort.write(&m_ack);
@@ -480,7 +480,7 @@ void ScoringMachineConnection::sendToMachine()
         m_serialPort.flush();
         m_sendingStage = 0; // ACK sent
         if(m_logLevel > 0)
-            QTextStream(stdout) << "[ScoringMachineConnection]: sent: ACK, m_sendingStage = " << m_sendingStage << endl;
+            QTextStream(stdout) << "[ScoringMachineConnection]: sent: ACK, m_sendingStage = " << m_sendingStage << Qt::endl;
         break;
     default:
         break;
@@ -490,7 +490,7 @@ void ScoringMachineConnection::sendToMachine()
 void ScoringMachineConnection::sendToMachine(QString data)
 {
     if(m_logLevel > 0)
-        QTextStream(stdout) << "[ScoringMachineConnection]: sendToMachine(" << data << "), m_sendingStage = " << m_sendingStage << endl;
+        QTextStream(stdout) << "[ScoringMachineConnection]: sendToMachine(" << data << "), m_sendingStage = " << m_sendingStage << Qt::endl;
 
     if(!data.isEmpty()) // If this is empty, then probably it is second stage of sending
         m_dataToSend = data.toLatin1();

@@ -283,8 +283,9 @@ void CompetitorTest::test_seriesMissingShots()
     Laskur competitor(nullptr, 4, 0, 0, &writeAssistant, &withDecimals, 36, &sorting, &eventType, 10, nullptr);
     Lask shot("_SHOT;9;10;36;60;74;10:43:56.17;3;31;7;94;0;0;49;-0.00187626;0.00347202;900;0;0;655.35;98903519;61;450;0");
 
+    competitor.liida();
+    QColor original = competitor.seeriad[0]->palette().base().color();
     competitor.lasud[0][0]->set(&shot);
-    QVERIFY(competitor.seeriad[0]->palette().base().color() == Qt::white);
     competitor.liida();
     QVERIFY(competitor.seeriad[0]->palette().base().color() == Qt::yellow);
 
@@ -292,15 +293,15 @@ void CompetitorTest::test_seriesMissingShots()
         competitor.lasud[0][i]->set(&shot);
     }
     competitor.liida();
-    QVERIFY(competitor.seeriad[0]->palette().base().color() == Qt::white);
+    QCOMPARE(competitor.seeriad[0]->palette().base().color(), original);
 
     competitor.lasud[1][4]->set(&shot);
-    QVERIFY(competitor.seeriad[1]->palette().base().color() == Qt::white);
+    QCOMPARE(competitor.seeriad[1]->palette().base().color(), original);
     competitor.liida();
     QVERIFY(competitor.seeriad[1]->palette().base().color() == Qt::yellow);
 
     competitor.lasud[3][9]->set(&shot);
-    QVERIFY(competitor.seeriad[3]->palette().base().color() == Qt::white);
+    QCOMPARE(competitor.seeriad[3]->palette().base().color(), original);
     competitor.liida();
     QVERIFY(competitor.seeriad[3]->palette().base().color() == Qt::red);
     QVERIFY(competitor.seeriad[1]->palette().base().color() == Qt::red);
@@ -309,7 +310,7 @@ void CompetitorTest::test_seriesMissingShots()
         competitor.lasud[1][i]->set(&shot);
     }
     competitor.liida();
-    QVERIFY(competitor.seeriad[1]->palette().base().color() == Qt::white);
+    QCOMPARE(competitor.seeriad[1]->palette().base().color(), original);
 }
 
 QTEST_MAIN(CompetitorTest)

@@ -8,7 +8,7 @@
 struct CompetitionSettings {
     QString competitionName;
     QString fileName;
-    QString fileVersion;
+    int fileVersion;
     QDate startDate;
     QDate endDate;
     QString place;

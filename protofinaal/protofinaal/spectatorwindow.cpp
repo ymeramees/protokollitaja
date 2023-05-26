@@ -18,7 +18,7 @@ SpectatorWindow::SpectatorWindow(QWidget *parent) : QWidget(parent)
 SpectatorWindow::~SpectatorWindow()
 {
     if(verbose)
-        QTextStream(stdout) << "SpectatorWindow::~SpectatorWindow()" << endl;
+        QTextStream(stdout) << "SpectatorWindow::~SpectatorWindow()" << Qt::endl;
 }
 
 void SpectatorWindow::addRow(QString rank, QString teamName, QString competitorName, QString s1, QString sum, QString diff)
@@ -35,12 +35,12 @@ void SpectatorWindow::addRow(QString rank, QString teamName, QString competitorN
     m_resultRows.prepend(row);
 
 //    if(verbose)
-//        QTextStream(stdout) << "resultRows & resultsHTML:" << resultRows << endl << endl << resultsHTML << endl;
+//        QTextStream(stdout) << "resultRows & resultsHTML:" << resultRows << endl << endl << resultsHTML << Qt::endl;
 
 //    resultsHTML.arg(resultRows);
 
 //    if(verbose)
-//        QTextStream(stdout) << "resultsHTML:" << resultsHTML << endl;
+//        QTextStream(stdout) << "resultsHTML:" << resultsHTML << Qt::endl;
     QString newHTML = resultsTemplate.arg(m_resultRows);
     newHTML.replace(originalResultsFontSize, newResultsFontSize);
     resultsView.setHtml(newHTML);
@@ -87,9 +87,9 @@ void SpectatorWindow::initializeTemplates()
         originalResultsFontSize = rowTemplate.mid(fontSizeStart, fontSizeLength);
         newResultsFontSize = originalResultsFontSize;
         if(verbose){
-            QTextStream(stdout) << "rowTemplate:" << rowTemplate << endl;
-            QTextStream(stdout) << "resultsTemplate:" << resultsTemplate << endl;
-            QTextStream(stdout) << "originalResultsFontSize:" << originalResultsFontSize << endl;
+            QTextStream(stdout) << "rowTemplate:" << rowTemplate << Qt::endl;
+            QTextStream(stdout) << "resultsTemplate:" << resultsTemplate << Qt::endl;
+            QTextStream(stdout) << "originalResultsFontSize:" << originalResultsFontSize << Qt::endl;
         }
     }else {
         QFile::copy(":/templates/spectatorView_template.html", "spectatorView_template.html");
@@ -106,14 +106,14 @@ void SpectatorWindow::mouseDoubleClickEvent(QMouseEvent *event)
 void SpectatorWindow::resizeEvent(QResizeEvent *event)
 {
     if(verbose)
-        QTextStream(stdout) << "SpectatorWindow::resizeEvent()" << endl;
+        QTextStream(stdout) << "SpectatorWindow::resizeEvent()" << Qt::endl;
     bool success = false;
     int fontSize = originalResultsFontSize.mid(11, originalResultsFontSize.indexOf("pt") - 11).toInt(&success);
     if(success){
 //        newResultsFontSize = originalResultsFontSize;
         int newFontSize = fontSize * (resultsView.height() - 100) / 800;
         if(verbose)
-            QTextStream(stdout) << "SpectatorWindow::resizeEvent(), newFontSize = " << newFontSize << ", resultsView.height() = " << resultsView.height() << endl;
+            QTextStream(stdout) << "SpectatorWindow::resizeEvent(), newFontSize = " << newFontSize << ", resultsView.height() = " << resultsView.height() << Qt::endl;
         newResultsFontSize = QString("font-size: %1pt").arg(newFontSize);
         QString newHTML = resultsTemplate.arg(m_resultRows);
         newHTML.replace(originalResultsFontSize, newResultsFontSize);

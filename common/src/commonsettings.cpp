@@ -69,12 +69,11 @@ void CommonSettings::readSettings()
 {
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, m_folderName, m_fileName);
     QStringList allKeys = settings.allKeys();
-    QString fileName = settings.fileName();
     if(allKeys.length() > 0){
         settings.beginGroup("siusConnection");
-        if(allKeys.filter(QRegExp("siusConnection.competitionShotTypes")).length() > 0)
+        if(allKeys.filter("siusConnection/competitionShotTypes", Qt::CaseInsensitive).length() > 0)
             setCompetitionShotTypes(settings.value("competitionShotTypes").toString());
-        if(allKeys.filter(QRegExp("siusConnection.sighterShotTypes")).length() > 0)
+        if(allKeys.filter("siusConnection/sighterShotTypes", Qt::CaseInsensitive).length() > 0)
             setSighterShotTypes(settings.value("sighterShotTypes").toString());
         settings.endGroup();
     }

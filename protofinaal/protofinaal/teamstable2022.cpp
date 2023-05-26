@@ -71,9 +71,9 @@ QMap<int, TeamsTable2022::Result> TeamsTable2022::getCurrentResults() const
     return results;
 }
 
-QMap<int, TeamsTable2022::Result> TeamsTable2022::getSortedResults() const
+QMultiMap<int, TeamsTable2022::Result> TeamsTable2022::getSortedResults() const
 {
-    QMap<int, Result> results;
+    QMultiMap<int, Result> results;
     int currentShotNo = lastValidShotIndex();
 
     foreach(Team2022 *team, m_teams) {
@@ -86,7 +86,7 @@ QMap<int, TeamsTable2022::Result> TeamsTable2022::getSortedResults() const
             result = "";
 
 //        if (result != "0,0" && result != "-999")
-        results.insertMulti(team->teamTotal().replace(',', '.').toDouble() * 10, Result {
+        results.insert(team->teamTotal().replace(',', '.').toDouble() * 10, Result {
                 team->teamName(),
                 result,
                 team->resultAt(currentShotNo),
@@ -110,7 +110,7 @@ int TeamsTable2022::lastValidShotIndex() const
 void TeamsTable2022::setCompetitiorsData(QStringList rows)
 {
     if (m_teams.size() > 0) {
-        QVectorIterator<Team2022*> iterator(m_teams);
+        QListIterator<Team2022*> iterator(m_teams);
         foreach(QString row, rows) {
             //ID no;Startno;Name;Firstname;Disp name;Nat;Cat;Group;Team;Bay;Target;Relay;Starttime;BoxTg;Active;Q Tot;Avg;Rank;G1;...;G12;10s;...;0s;Mouches
             QStringList rowParts = row.split(";");
@@ -125,7 +125,7 @@ void TeamsTable2022::setCompetitiorsData(QStringList rows)
 void TeamsTable2022::readSiusInfo(SiusShotData shotData)
 {
     if(verbose)
-        QTextStream(stdout) << "readSiusInfo()" << endl;
+        QTextStream(stdout) << "readSiusInfo()" << Qt::endl;
 
 //    for(QString row : lines){
         //Search for competitor whose line was received:
@@ -138,9 +138,9 @@ void TeamsTable2022::readSiusInfo(SiusShotData shotData)
             bool success = thisCompetitor->readSiusShot(shotData);
             if (success) {
                 emit modified();
-                emit statusInfoChanged(QString("Lisatud: %1%2%3 = %4").arg(thisCompetitor->name()).arg(tr(" lask ")).arg(shotData.siusShotNo).arg(shotData.shot.getSLask()));
+                emit statusInfoChanged(tr("Lisatud: %1%2%3 = %4").arg(thisCompetitor->name()).arg(tr(" lask ")).arg(shotData.siusShotNo).arg(shotData.shot.getSLask()));
             } else
-                emit statusInfoChanged(QString("Viga, ei õnnestunud lisada: %1%2%3 = %4").arg(thisCompetitor->name()).arg(tr(" lask ")).arg(shotData.siusShotNo).arg(shotData.shot.getSLask()));
+                emit statusInfoChanged(tr("Viga, ei õnnestunud lisada: %1%2%3 = %4").arg(thisCompetitor->name()).arg(tr(" lask ")).arg(shotData.siusShotNo).arg(shotData.shot.getSLask()));
         }
     }
 //            if(row.startsWith("_SHOT") && !competitionStarted){   //Shot data, sighting shots
@@ -179,7 +179,7 @@ void TeamsTable2022::readSiusInfo(SiusShotData shotData)
 //            }
 //        }
     if(thisCompetitor == nullptr)
-            statusInfoChanged(tr("Sellise ID'ga võistlejat ei leitud: ") + shotData.id);
+        statusInfoChanged(tr("Sellise ID'ga võistlejat ei leitud: %1").arg(shotData.id));
 //    }
     sumAllTeams();
 }
@@ -192,7 +192,7 @@ void TeamsTable2022::setTableName(QString newName)
 void TeamsTable2022::sumAllTeams()
 {
     if(verbose)
-        QTextStream(stdout) << "TeamsTable2022::sumAllTeams()" << endl;
+        QTextStream(stdout) << "TeamsTable2022::sumAllTeams()" << Qt::endl;
 
     int currentShotIndex = lastValidShotIndex();
 
@@ -209,7 +209,7 @@ void TeamsTable2022::sumAllTeams()
         }
 
         if(verbose && shotNo == currentShotIndex)
-            QTextStream(stdout) << "TeamsTable2022::sumAllTeams(): currentShotIndex = " << currentShotIndex << " shotMissing = " << shotMissing << " results.size() = " << results.size() << endl;
+            QTextStream(stdout) << "TeamsTable2022::sumAllTeams(): currentShotIndex = " << currentShotIndex << " shotMissing = " << shotMissing << " results.size() = " << results.size() << Qt::endl;
 
         if (!shotMissing) { // Add points only if all competitors have finished or 0 is added if anyone is unable to shoot
             std::sort(results.begin(), results.end());
@@ -245,7 +245,7 @@ void TeamsTable2022::sumAllTeams()
                 int startingIndex = m_teams.size() - 1 - missingResults;
                 for (int j = startingIndex; j >= 0; j--) {
                     if(verbose)
-                        QTextStream(stdout) << "TeamsTable2022::sumAllTeams4(): j = " << j << " results.size() = " << (int)results.size() << endl;
+                        QTextStream(stdout) << "TeamsTable2022::sumAllTeams4(): j = " << j << " results.size() = " << (int)results.size() << Qt::endl;
 
                     int currentResultCount = counts.value(results[j]);
                     if (currentResultCount == 1)

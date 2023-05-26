@@ -48,7 +48,8 @@ TulemuseAken::TulemuseAken(QWidget *parent) : QWidget(parent)
         fullScreenAct->setStatusTip(tr("Näita seda akent täisekraan vaates"));
         connect(fullScreenAct, SIGNAL(triggered()), this, SLOT(fullScreen()));
 
-        connect(QApplication::desktop(), SIGNAL(screenCountChanged(int)), this, SLOT(fullScreen(int)));
+        connect(this, SIGNAL(QGuiApplication::screenAdded(QScreen*)), this, SLOT(TulemuseAken::fullScreen(QScreen*)));
+        connect(this, SIGNAL(QGuiApplication::screenRemoved(QScreen*)), this, SLOT(TulemuseAken::fullScreen(QScreen*)));
 
         popup = new QMenu(this);
         popup->addAction(fontAct);
@@ -102,10 +103,11 @@ void TulemuseAken::fullScreen()
         else this->setWindowState(Qt::WindowFullScreen);
 }
 
-void TulemuseAken::fullScreen(int s)
+void TulemuseAken::fullScreen(QScreen *s)
 {
-        if(this->windowState() == Qt::WindowFullScreen && s < 2)
-                this->setWindowState(Qt::WindowNoState);
+        Q_UNUSED(s);
+        if(this->windowState() == Qt::WindowFullScreen && QGuiApplication::screens().size() < 2)
+            this->setWindowState(Qt::WindowNoState);
         //else this->setWindowState(Qt::WindowFullScreen);
 }
 

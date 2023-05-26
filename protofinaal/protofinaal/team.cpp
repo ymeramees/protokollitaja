@@ -14,7 +14,7 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
 
     if(configJson["membersInTeam"].isDouble()){  //Event config file
         if(verbose)
-            QTextStream(stdout) << "Team::Team(uus)" << endl;
+            QTextStream(stdout) << "Team::Team(uus)" << Qt::endl;
         competitorsInTeam = configJson["membersInTeam"].toInt();
 
         Competitor *competitor = new Competitor(index * 10 + 1, configJson["shots"].toArray());
@@ -37,7 +37,7 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
 
     }else if(configJson["membersInTeam"].isArray()){  //Loaded finals file
         if(verbose)
-            QTextStream(stdout) << "Team::Team(failist laadimine)" << endl;
+            QTextStream(stdout) << "Team::Team(failist laadimine)" << Qt::endl;
         QJsonArray competitorsArray = configJson["membersInTeam"].toArray();
         competitorsInTeam = competitorsArray.size();
 
@@ -61,7 +61,7 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
     }
 
 //    if(verbose)
-//        QTextStream(stdout) << "layout->rowCount(): " << layout->rowCount() << endl;
+//        QTextStream(stdout) << "layout->rowCount(): " << layout->rowCount() << Qt::endl;
 
     layout->setContentsMargins(0, 2, 0, 2);
     setLayout(layout);
@@ -71,7 +71,7 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
 Team::~Team()
 {
     if(verbose)
-        QTextStream(stdout) << "Team::~Team()" << endl;
+        QTextStream(stdout) << "Team::~Team()" << Qt::endl;
     foreach (Competitor *competitor, m_teamCompetitors) {
         competitor->deleteLater();
     }
@@ -100,22 +100,22 @@ QString Team::lastSum()
 void Team::sum()
 {
     if(verbose)
-        QTextStream(stdout) << m_indexLabel.text() << " Team::sum()" << endl;
+        QTextStream(stdout) << m_indexLabel.text() << " Team::sum()" << Qt::endl;
     if(m_teamCompetitors.size() > 1){
         int teamSum = 0;
         for(int i = 0; i < m_teamCompetitors.size(); i++){
             teamSum += m_teamCompetitors.at(i)->current10Sum();
             if(verbose)
-                QTextStream(stdout) << "current10Sum: " << m_teamCompetitors.at(i)->current10Sum() << endl;
+                QTextStream(stdout) << "current10Sum: " << m_teamCompetitors.at(i)->current10Sum() << Qt::endl;
         }
 
         double dTeamSum = teamSum;
         dTeamSum /= 10;
-        QTextStream(stdout) << "dTeamSum = " << dTeamSum << endl;
+        QTextStream(stdout) << "dTeamSum = " << dTeamSum << Qt::endl;
         m_sumLabel.setText(QString("%1").arg(dTeamSum));
-        QTextStream(stdout) << "Team::sum()2" << endl;
+        QTextStream(stdout) << "Team::sum()2" << Qt::endl;
         m_sumLabel.setText(m_sumLabel.text().replace('.', ','));
-        QTextStream(stdout) << "Team::sum()3" << endl;
+        QTextStream(stdout) << "Team::sum()3" << Qt::endl;
     }else
         m_sumLabel.setText(m_teamCompetitors.at(0)->lastSum());
     emit teamUpdated();

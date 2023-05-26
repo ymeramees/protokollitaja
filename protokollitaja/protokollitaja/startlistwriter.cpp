@@ -30,7 +30,7 @@ QString StartListWriter::replaceLetterWithNumber(QString in)
 int StartListWriter::writeInbandData(QTextStream *out)
 {
     int exported = 0;
-    out->setCodec("UTF-8");
+//    out->setCodec("UTF-8"); // TODO Not needed in Qt 6.5?
     *out << QString::fromUtf8("Erä,Rata,Etunimi,Sukunimi,Seura,Laji,Sarja\n"); // Seems that header is needed
     for(int i = 0; i < m_competitorsList.count(); i++){
         // Relay,Firing point,Family name,First name,Shooting Club,Discipline,Class

@@ -125,7 +125,7 @@ void Voistkond::naitaLiikmeteValikKast()
                 }
                 for(int i = 0; i < lValik->ui.liikmed->count(); i++){
                         QString rida = lValik->ui.liikmed->item(i)->text();
-                        QStringList read = rida.split(',', QString::KeepEmptyParts);
+                        QStringList read = rida.split(',', Qt::KeepEmptyParts);
                         voistlejad[i]->perekNimi = read[0].trimmed();
                         voistlejad[i]->eesNimi = read[1].trimmed();
                         voistlejad[i]->klubi = read[2].trimmed();

@@ -2,7 +2,6 @@
 #define PROTOFINAAL_H
 
 #include <QCoreApplication>
-#include <QDesktopWidget>
 #include <QJsonDocument>
 #include <QApplication>
 #include <QMainWindow>

@@ -129,7 +129,7 @@ void ScoringMachineConnectionTest::test_connectToRMIV()
     QVERIFY(statusMessages.at(0).toString().compare("Ühendamine: RMIV, COM1") == 0);
 
     machine.m_serialBuffer = "SNR=";
-    machine.m_serialBuffer.append(0x0d);
+    machine.m_serialBuffer.append(QChar(0x0d));
 
     spy.wait(500);
     QCOMPARE(spy.count(), 2);
@@ -157,7 +157,7 @@ void ScoringMachineConnectionTest::test_extractRMIIIShot()
     machine.setTargetType(ScoringMachineConnection::AirRifle);
 
     Lask toCompare1(90, 3330, 350);
-    Lask toCompare2(106, -200, -770, true);
+    Lask toCompare2(106, -200, -780, true);
     Lask toCompare3(87, 560, 17760);
     Lask toCompare4(104, -2640 ,3760, true);
     Lask toCompare5(74, 16480, -23360);

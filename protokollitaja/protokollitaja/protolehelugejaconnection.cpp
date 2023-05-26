@@ -12,9 +12,8 @@ ProtolehelugejaConnection::ProtolehelugejaConnection(QTcpSocket *parent) : QObje
     connect(socket, &QTcpSocket::readyRead, this, &ProtolehelugejaConnection::readData);
     connect(socket, &QTcpSocket::disconnected, this, &ProtolehelugejaConnection::wasDisconnected);
 
-    qsrand(QTime::currentTime().msec());
     while(passwd < 1000)
-        passwd = qrand() % 9999;    //Password is needed to make sure it is not too easy to connect and start inserting results
+        passwd = QRandomGenerator::global()->generate() % 9999;    //Password is needed to make sure it is not too easy to connect and start inserting results
     messageBox.setText(tr("Serverisse on loodud uus ühendus.\n\nParool: %1").arg(passwd));
     messageBox.show();
 }
@@ -57,7 +56,7 @@ QString ProtolehelugejaConnection::lastReceivedLine()
 void ProtolehelugejaConnection::readData()
 {
     if(verbose)
-        QTextStream(stdout) << "ProtolehelugejaConnection::readData()" << endl;
+        QTextStream(stdout) << "ProtolehelugejaConnection::readData()" << Qt::endl;
     QDataStream in(socket);
     in.setVersion(QDataStream::Qt_4_8);
 
@@ -80,11 +79,11 @@ void ProtolehelugejaConnection::readData()
         blockSize = 0;
         messageBox.hide();
         if(verbose)
-            QTextStream(stdout) << "ProtolehelugejaConnection::readData() lineIn: " << lineIn << endl;
+            QTextStream(stdout) << "ProtolehelugejaConnection::readData() lineIn: " << lineIn << Qt::endl;
     }else{  //If the connection is not authorized, password must be received and checked
         in >> receivedPasswd;
         if(verbose)
-            QTextStream(stdout) << "ProtolehelugejaConnection::readData() receivedPasswd: " << receivedPasswd << endl;
+            QTextStream(stdout) << "ProtolehelugejaConnection::readData() receivedPasswd: " << receivedPasswd << Qt::endl;
         messageBox.hide();
 
         blockSize = 0;
@@ -135,7 +134,7 @@ void ProtolehelugejaConnection::readData()
 void ProtolehelugejaConnection::send(QString data)
 {
     if(verbose)
-        QTextStream(stdout) << "ProtolehelugejaConnection::send(): " << data << endl;
+        QTextStream(stdout) << "ProtolehelugejaConnection::send(): " << data << Qt::endl;
     blockSize = 0;
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);

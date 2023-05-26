@@ -4,7 +4,6 @@
 #include <QtGlobal>
 #if QT_VERSION >= 0x050000
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QWidget>
 #include <QLabel>
 #include <QVBoxLayout>
@@ -23,6 +22,7 @@
 #include <QShortcut>
 #include <QFontDialog>
 #include <QtCore/QVariant>
+#include <QScreen>
 
 class TulemuseAken : public QWidget
 {
@@ -66,7 +66,7 @@ public slots:
 	void muudaPealkirjaFont();
 	void muudaPaiseFont();
     void fullScreen();
-    void fullScreen(int);   //Kui projektor järelt ära võetakse, teha aken mitte fullscreeniks, et arvuti ekraan seda täis ei läheks
+    void fullScreen(QScreen*);   //Kui projektor järelt ära võetakse, teha aken mitte fullscreeniks, et arvuti ekraan seda täis ei läheks
 	void joonista();
 	void mouseDoubleClickEvent(QMouseEvent *event);
 	void mouseReleaseEvent(QMouseEvent *event);

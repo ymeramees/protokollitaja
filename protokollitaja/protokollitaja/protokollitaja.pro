@@ -4,7 +4,6 @@ INCLUDEPATH += ./ \
 INCLUDEPATH += ../../common/src
 DEPENDPATH += $${INCLUDEPATH}
 
-include(../../common/src/qextserialport/src/qextserialport.pri)
 include(xlslib/xlslib.pri)
 if ( !include( ../../common/src/asmCrashReport/asmCrashReport.pri ) ) {
     error( Could not find the asmCrashReport.pri file. )
@@ -14,7 +13,8 @@ QT += core \
     gui \
     sql \
     network \
-    printsupport
+    printsupport \
+    serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

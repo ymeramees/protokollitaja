@@ -870,7 +870,7 @@ void Laskur::naitaSifrit()
 bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, kui teine
 {
     if(veryVerbose)
-        QTextStream(stdout) << "Laskur::vaiksem(): t = " << t << ", " << this->perekNimi->text() << ", " << l->perekNimi->text() << endl;
+        QTextStream(stdout) << "Laskur::vaiksem(): t = " << t << ", " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
     QString seeria;
     bool onnestus = false;
     //Kõigepealt viiakse diskvalifitseeritud laskurid lõppu
@@ -910,7 +910,7 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
     switch(t){
     case 1: {   //1 - perekonnanimede järgi reastamine
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Perekonnanimede järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): Perekonnanimede järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
         if(this->perekNimi->text().localeAwareCompare(l->perekNimi->text()) > 0)
             return true;
         else if(this->perekNimi->text().localeAwareCompare(l->perekNimi->text()) < 0)
@@ -923,7 +923,7 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
     }
     case 2: { //2 - sünniaastate järgi reastamine
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Sünniaastate järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): Sünniaastate järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
         if(this->sunniAasta->text().toInt() < l->sunniAasta->text().toInt())
             return true;
         else if(this->sunniAasta->text().toInt() > l->sunniAasta->text().toInt())
@@ -942,7 +942,7 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
     }
     case 3: { //3 - raja nr'ite järgi reastamine
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Raja nr'ite järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): Raja nr'ite järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
 
         int tulemus = vaiksemRajaga(l);
 
@@ -952,7 +952,7 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
         }
 
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Raja nr'id samad" << endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): Raja nr'id samad" << Qt::endl;
         tulemus = vaiksemNimega(l);
 
         switch(tulemus){
@@ -963,7 +963,7 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
     }
     case 4: { //4 - sifrite järgi reastamine
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Sifrite järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): Sifrite järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
         if(this->sifriAlgus->text().toInt() < l->sifriAlgus->text().toInt()){
             if(this->sifriAlgus->text().isEmpty()) return true;
             else return false;
@@ -988,7 +988,7 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
 //            liida();
 //            l->liida();
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Üldine järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): Üldine järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
         if(this->finaal->text() != "Fin" && l->finaal->text() != "Fin"){
             float ksum = this->finaal->text().toFloat(&onnestus);
             if(!onnestus){  //Kui arvuks tegemine ei õnnestunud on vaja asendada koma punktiga, kasutame sama QString seeria't
@@ -1558,7 +1558,7 @@ QJsonObject Laskur::toExportJson()
 int Laskur::vaiksemNimega(Laskur *l) const //Tagastab kas laskur on nime järgi väiksem (-1), suurem (1) või võrdne (0)
 {
     if(veryVerbose)
-        QTextStream(stdout) << "Laskur::vaiksem(): Perekonnanimede võrdlus - " << this->perekNimi->text() << ", " << l->perekNimi->text() << endl;
+        QTextStream(stdout) << "Laskur::vaiksem(): Perekonnanimede võrdlus - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
     //Tühja perekonnanimega laskur reastatakse tahapoole
     if(this->perekNimi->text().isEmpty() && !l->perekNimi->text().isEmpty()){
         return -1;
@@ -1566,16 +1566,16 @@ int Laskur::vaiksemNimega(Laskur *l) const //Tagastab kas laskur on nime järgi 
         return 1;
     }else if(this->perekNimi->text().localeAwareCompare(l->perekNimi->text()) > 0){
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Perekonnanimede võrdlus - return true" << endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): Perekonnanimede võrdlus - return true" << Qt::endl;
         return -1;
     }else if(this->perekNimi->text().localeAwareCompare(l->perekNimi->text()) < 0){
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Perekonnanimede võrdlus - return false" << endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): Perekonnanimede võrdlus - return false" << Qt::endl;
         return 1;
     }else{
         if(this->eesNimi->text().localeAwareCompare(l->eesNimi->text()) > 0){
             if(veryVerbose)
-                QTextStream(stdout) << "Laskur::vaiksem(): Eesnimede võrdlus - return true" << endl;
+                QTextStream(stdout) << "Laskur::vaiksem(): Eesnimede võrdlus - return true" << Qt::endl;
             return -1;
         }else return 1;
     }
@@ -1592,34 +1592,34 @@ int Laskur::vaiksemRajaga(Laskur *l) const   //Tagastab kas laskur on raja järg
 
     this->rajaNr->text().toInt(&onnestus1);
 //        if(veryVerbose)
-//            QTextStream(stdout) << "Laskur::vaiksem(): this->rajaNr->text().toInt(&onnestus1); " << this->rajaNr->text().toInt(&onnestus1) << this->perekNimi->text() << endl;
+//            QTextStream(stdout) << "Laskur::vaiksem(): this->rajaNr->text().toInt(&onnestus1); " << this->rajaNr->text().toInt(&onnestus1) << this->perekNimi->text() << Qt::endl;
     l->rajaNr->text().toInt(&onnestus2);
 //        if(veryVerbose)
-//            QTextStream(stdout) << "Laskur::vaiksem(): l->rajaNr->text().toInt(&onnestus2); " << l->rajaNr->text().toInt(&onnestus2) << l->perekNimi->text() << endl;
+//            QTextStream(stdout) << "Laskur::vaiksem(): l->rajaNr->text().toInt(&onnestus2); " << l->rajaNr->text().toInt(&onnestus2) << l->perekNimi->text() << Qt::endl;
     if(onnestus1 && !onnestus2 && !l->rajaNr->text().isEmpty()){
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Arv vs täht" << endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): Arv vs täht" << Qt::endl;
         return -1;   //Kui üks kast on arvuga ja teine tähega on väiksem arvuga kast
     }else if(onnestus2 && !onnestus1 && !this->rajaNr->text().isEmpty()){
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Täht vs arv" << endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): Täht vs arv" << Qt::endl;
         return 1;
     }else if(!onnestus1 && !onnestus2 && this->rajaNr->text().localeAwareCompare(l->rajaNr->text()) > 0){
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Täht vs täht" << endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): Täht vs täht" << Qt::endl;
         return -1;  //Kui on tähed finaali jaoks
     }else if(!onnestus1 && !onnestus2 && this->rajaNr->text().localeAwareCompare(l->rajaNr->text()) < 0){
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Täht vs täht 2" << endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): Täht vs täht 2" << Qt::endl;
         return 1;
     }else if(onnestus1 && onnestus2){ //Kui mõlemas kastis on arvuline raja nr
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Arv vs arv" << endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): Arv vs arv" << Qt::endl;
         if(this->rajaNr->text().toInt() < l->rajaNr->text().toInt()){
             if(this->rajaNr->text().isEmpty()) return -1; //Rajanumbrite puhul on vastupidi, väiksem nr on eespool
             else{
                 if(veryVerbose)
-                    QTextStream(stdout) << "Laskur::vaiksem(): Arv vs arv, " << this->perekNimi->text() << "<" << l->perekNimi->text() << endl;
+                    QTextStream(stdout) << "Laskur::vaiksem(): Arv vs arv, " << this->perekNimi->text() << "<" << l->perekNimi->text() << Qt::endl;
                 return 1;
             }
 //                return true;
@@ -1627,18 +1627,18 @@ int Laskur::vaiksemRajaga(Laskur *l) const   //Tagastab kas laskur on raja järg
             if(l->rajaNr->text().isEmpty()) return 1; //Rajanumbrite puhul on vastupidi, väiksem nr on eespool
             else{
                 if(veryVerbose)
-                    QTextStream(stdout) << "Laskur::vaiksem(): Arv vs arv, " << this->perekNimi->text() << ">" << l->perekNimi->text() << endl;
+                    QTextStream(stdout) << "Laskur::vaiksem(): Arv vs arv, " << this->perekNimi->text() << ">" << l->perekNimi->text() << Qt::endl;
                 return -1;
             }
 //                return false;
         }
     }else if(l->rajaNr->text().isEmpty()){
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): l on tühi - " << l->perekNimi->text() << endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): l on tühi - " << l->perekNimi->text() << Qt::endl;
         return 1;
     }else if(this->rajaNr->text().isEmpty()){
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): This on tühi - " << this->perekNimi->text() << endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): This on tühi - " << this->perekNimi->text() << Qt::endl;
         return -1;
     }
     return 0;   //Kui jõudis siiani, siis ilmselt on võrdsed

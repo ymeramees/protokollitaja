@@ -7,13 +7,13 @@
 #include <QDebug>
 #include <QKeyEvent>
 #include <QShortcut>
+#include <QSerialPort>
+#include <QSerialPortInfo>
 //#include <qextserialport/qextserialbase.h>
 //#include <qextserialbase.h>
 //#include <qextserialport/qextserialport.h>
 //#include <qextserialport.h>
 #include "lask.h"
-#include "qextserialport.h"
-#include "qextserialenumerator.h"
 #include "ui_lehelugejaaken.h"
 //class QextSerialPort;
 
@@ -29,8 +29,8 @@ public:
     int lask;   //Loetava lasu järjekorra nr seerias
     int seeria; //Loetava seeria summa
     int aktiivseSeeriaNr;   //Seeria järjekorra nr (0-5), kuhu loetakse tulemus
-    QextSerialPort *serial;
-    QList<QextPortInfo> pordid;
+    QSerialPort serial;
+    QList<QSerialPortInfo> pordid;
     QImage *pilt;
     QList<Lask*> seeriaLasud;   //Loetava seeria lasud
     QList<QList<Lask*> > lasud; //Iga seeria lasud + koordinaadid
@@ -42,7 +42,7 @@ public:
     QTimer *fookus; //Viib kursori, peale uue seeria kasti aktiivseks tegemist, sifri kasti
     QTimer *seadistaja; //Viivis peale lehtede lugemist, enne kui uuesti seadistatakse
     Ui::LehelugejaAken m_ui;
-    LehelugejaAken(QWidget *parent = 0, Qt::WindowFlags f = 0);
+    LehelugejaAken(QWidget *parent = 0, Qt::WindowFlags f = Qt::Widget);
 
 public slots:
     void alustaUuesti();

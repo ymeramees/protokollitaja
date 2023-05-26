@@ -58,7 +58,7 @@ void ShotEditTest::test_ignored()
     ShotEdit shotEdit;
     QSignalSpy spyIgnored(&shotEdit, SIGNAL(shotIgnored()));
     QSignalSpy spyUnignored(&shotEdit, SIGNAL(shotUnignored()));
-    QVERIFY(shotEdit.palette().base().color() == Qt::white);
+    QColor original = shotEdit.palette().base().color();
     QCOMPARE(spyIgnored.count(), 0);
     QCOMPARE(spyUnignored.count(), 0);
     shotEdit.setIgnored(true);
@@ -69,22 +69,22 @@ void ShotEditTest::test_ignored()
     shotEdit.setIgnored(false);
     QCOMPARE(spyUnignored.count(), 1);
     QCOMPARE(spyIgnored.count(), 1);
-    QVERIFY(shotEdit.palette().base().color() == Qt::white);
+    QCOMPARE(shotEdit.palette().base().color(), original);
 }
 
 void ShotEditTest::test_setShotFromGui()
 {
     ShotEdit shotEdit;
 
-    QVERIFY(shotEdit.palette().base().color() == Qt::white);
+    QColor original = shotEdit.palette().base().color();
     shotEdit.setText("10,4");
     QTest::keyClick(&shotEdit, Qt::Key_Return);
-    QVERIFY(shotEdit.palette().base().color() == Qt::white);
+    QVERIFY(shotEdit.palette().base().color() == original);
     QVERIFY(shotEdit.shot().getSLask() == "10,4");
     QVERIFY(shotEdit.text() == "10,4");
 
     shotEdit.setSiusShot("_SHOT;9;10;36;60;74;10:43:56.17;3;31;7;94;0;0;49;-0.00187626;0.00347202;900;0;0;655.35;98903519;61;450;0");
-    QVERIFY(shotEdit.palette().base().color() == Qt::white);
+    QVERIFY(shotEdit.palette().base().color() == original);
     QVERIFY(shotEdit.shot().getSLask() == "9,4");
     QVERIFY(shotEdit.text() == "9,4");
     shotEdit.setText("10,4");
@@ -100,7 +100,7 @@ void ShotEditTest::test_setShotFromGui()
 
     shotEdit.setText("9,4");
     QTest::keyClick(&shotEdit, Qt::Key_Return);
-    QVERIFY(shotEdit.palette().base().color() == Qt::white);
+    QVERIFY(shotEdit.palette().base().color() == original);
     QVERIFY(shotEdit.shot().getSLask() == "9,4");
     QVERIFY(shotEdit.text() == "9,4");
 }

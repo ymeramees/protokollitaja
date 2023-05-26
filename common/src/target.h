@@ -3,6 +3,7 @@
 
 #include <QLabel>
 #include <QPainter>
+#include <QPainterPath>
 #ifdef PROOV
 #include <QDebug>
 #endif

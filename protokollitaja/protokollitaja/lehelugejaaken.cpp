@@ -1,6 +1,7 @@
 ﻿#include <QMessageBox>
 #include "lehelugejaaken.h"
 
+#define CR QChar(0x0d)
 
 LehelugejaAken::LehelugejaAken(QWidget *parent , Qt::WindowFlags f) :
     QDialog(parent, f){
@@ -65,7 +66,7 @@ LehelugejaAken::LehelugejaAken(QWidget *parent , Qt::WindowFlags f) :
 
     joonistaLeht();
 
-    serial = new QextSerialPort();
+//    serial = QSerialPort();
     timer = new QTimer(this);
     timer->setInterval(100);
     timer->setSingleShot(false);
@@ -84,7 +85,7 @@ LehelugejaAken::LehelugejaAken(QWidget *parent , Qt::WindowFlags f) :
     connect(seadistaja, SIGNAL(timeout()), this, SLOT(seadista()));
 
     // Make sure things are clear
-    serial->close();
+    serial.close();
 
     uuendaPorte();
 
@@ -252,16 +253,16 @@ void LehelugejaAken::liigneLask()
 
 void LehelugejaAken::loe()
 {
-    if(serial->bytesAvailable()>0){
+    if(serial.bytesAvailable()>0){
         static QString buffer;
         QString tekst;
         //char buffer[256];
-        //int rec = serial->readLine(buffer, 255);
+        //int rec = serial.readLine(buffer, 255);
         //buffer[rec]='\0';
-        buffer.append(serial->readAll());
-        if(buffer.contains(13)){
-            tekst = buffer.left(buffer.indexOf(13) + 1);
-            buffer.remove(0, buffer.indexOf(13) + 1);
+        buffer.append(serial.readAll());
+        if(buffer.contains(CR)){
+            tekst = buffer.left(buffer.indexOf(CR) + 1);
+            buffer.remove(0, buffer.indexOf(CR) + 1);
         }else return;
 
         m_ui.logi->append(tr("vastuvõtt:"));
@@ -274,7 +275,7 @@ void LehelugejaAken::loe()
                 return;
         }*/
         if(!tekst.contains("TART") && !tekst.contains("SCHEIBE") && !tekst.contains("Keine") && tekst.contains(';')){
-                QStringList list = tekst.split(';', QString::KeepEmptyParts);
+                QStringList list = tekst.split(';', Qt::KeepEmptyParts);
                 if(list.size() < 5){
                     m_ui.logi->append(tr("See rida oli liiga lühike!"));
                     return;
@@ -517,8 +518,8 @@ void LehelugejaAken::otsiPorti()
     }
     static int i = 0;
     loe();
-    serial->close();
-    if(m_ui.logi->toPlainText().split(QRegExp("\\n")).last().contains("H")){
+    serial.close();
+    if(m_ui.logi->toPlainText().split("\n").last().contains("H")){
         otsija->stop();
         uhenda();
         i = 0;
@@ -530,20 +531,20 @@ void LehelugejaAken::otsiPorti()
         return;
     }
     m_ui.comPort->setCurrentIndex(i);
-    serial->setPortName(m_ui.comPort->currentText());
-    serial->setBaudRate(BAUD2400);
-    serial->setDataBits(DATA_8 /*(DataBitsType)(3)*/ );
-    serial->setParity(PAR_NONE /*(ParityType)(0)*/ );
-    serial->setStopBits(STOP_1 /*(StopBitsType)(0)*/ );
-    serial->setFlowControl(FLOW_OFF /*(FlowType)(0)*/ );
-    serial->setTimeout(100);
-    serial->open(QIODevice::ReadWrite);
+    serial.setPortName(m_ui.comPort->currentText());
+    serial.setBaudRate(QSerialPort::Baud2400);
+    serial.setDataBits(QSerialPort::Data8);
+    serial.setParity(QSerialPort::NoParity);
+    serial.setStopBits(QSerialPort::OneStop);
+    serial.setFlowControl(QSerialPort::NoFlowControl);
+//    serial.setTimeout(100);   //TODO Not available in Qt 6.5
+    serial.open(QIODevice::ReadWrite);
 
-    serial->setDtr(true);
-    serial->setRts(true);
+    serial.setDataTerminalReady(true);
+    serial.setRequestToSend(true);
 
     saada(QString("%1. korda: %2").arg(++i).arg(m_ui.comPort->currentText()));
-    serial->flush();
+    serial.flush();
     otsija->start();
 }
 
@@ -584,10 +585,10 @@ void LehelugejaAken::saada(QString s)
 {
     QByteArray saadetis = s.toLatin1();
     saadetis.append(13);
-    //serial->writeData(saadetis, saadetis.size());
-    serial->write(saadetis);
+    //serial.writeData(saadetis, saadetis.size());
+    serial.write(saadetis);
     m_ui.logi->append("<font color=blue>"+s+"</font>");
-    serial->flush();
+    serial.flush();
 }
 
 void LehelugejaAken::saadaTekst()
@@ -626,7 +627,7 @@ void LehelugejaAken::seeriaLoetud()
 void LehelugejaAken::sulgeUhendus()
 {
     saada("EXIT");
-    serial->close();
+    serial.close();
     timer->stop();
     uhendatud = false;
 }
@@ -642,20 +643,20 @@ void LehelugejaAken::uhenda()
         uuendaPorte();
 
     m_ui.logi->append("Ühendamine: " + m_ui.comPort->currentText());
-    serial->setPortName(m_ui.comPort->currentText());
-    serial->setBaudRate(BAUD2400);
-    serial->setDataBits(DATA_8 /*(DataBitsType)(3)*/ );
-    serial->setParity(PAR_NONE /*(ParityType)(0)*/ );
-    serial->setStopBits(STOP_1 /*(StopBitsType)(0)*/ );
-    serial->setFlowControl(FLOW_OFF /*(FlowType)(0)*/ );
-    serial->setTimeout(100);
-    serial->open(QIODevice::ReadWrite);
+    serial.setPortName(m_ui.comPort->currentText());
+    serial.setBaudRate(QSerialPort::Baud2400);
+    serial.setDataBits(QSerialPort::Data8);
+    serial.setParity(QSerialPort::NoParity);
+    serial.setStopBits(QSerialPort::OneStop);
+    serial.setFlowControl(QSerialPort::NoFlowControl);
+//    serial.setTimeout(100);   // TODO Not available in Qt 6.5
+    serial.open(QIODevice::ReadWrite);
 
-    serial->setDtr(true);
-    serial->setRts(true);
+    serial.setDataTerminalReady(true);
+    serial.setRequestToSend(true);
 
     saada("V");
-    serial->flush();
+    serial.flush();
     timer->start();
     uhendatud = true;
 }
@@ -673,13 +674,13 @@ void LehelugejaAken::uuendaSifriga()
 
 void LehelugejaAken::uuendaPorte()
 {
-    pordid = QextSerialEnumerator::getPorts();
+    pordid = QSerialPortInfo::availablePorts();
     m_ui.comPort->clear();
-    foreach(QextPortInfo info, pordid){ //Kontroll, kas mõnes pordis on lugemismasina kaabel
-        m_ui.comPort->addItem(info.portName);
-        m_ui.logi->append(QString("%1, %2").arg(info.portName).arg(info.friendName));
-        if((info.friendName.contains("Prolific", Qt::CaseInsensitive) || info.friendName.contains("serial", Qt::CaseInsensitive))
-                && info.friendName.contains("USB", Qt::CaseInsensitive)){
+    foreach(QSerialPortInfo info, pordid){ //Kontroll, kas mõnes pordis on lugemismasina kaabel
+        m_ui.comPort->addItem(info.portName());
+        m_ui.logi->append(QString("%1, %2").arg(info.portName()).arg(info.description()));  // TODO To be checked if this still works
+        if((info.description().contains("Prolific", Qt::CaseInsensitive) || info.description().contains("serial", Qt::CaseInsensitive))
+                && info.description().contains("USB", Qt::CaseInsensitive)){
             m_ui.comPort->setCurrentIndex(m_ui.comPort->count() - 1);
             kaabelLeitud = true;
         }

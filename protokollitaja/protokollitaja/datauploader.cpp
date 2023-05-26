@@ -15,11 +15,11 @@ void DataUploader::restClientFinished(QNetworkReply *reply)
 {
     QString answer = reply->readAll();
     if(reply->error()){
-        QTextStream(stdout) << "Error with upload: " << reply->errorString() << " " << answer << endl;
+        QTextStream(stdout) << "Error with upload: " << reply->errorString() << " " << answer << Qt::endl;
 
         emit uploadFinished(false, answer, reply->errorString());
     }else{
-        QTextStream(stdout) << "Reply to upload: " << answer << endl;
+        QTextStream(stdout) << "Reply to upload: " << answer << Qt::endl;
 
         emit uploadFinished(true, answer);
     }
@@ -30,7 +30,7 @@ void DataUploader::uploadResults(const QUrl url, const QString headerData, const
     QNetworkRequest request;
     request.setUrl(url);
 
-    QTextStream(stdout) << "Url: " << request.url().toString() << endl;
+    QTextStream(stdout) << "Url: " << request.url().toString() << Qt::endl;
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setRawHeader("Authorization", headerData.toLocal8Bit());
 
@@ -49,7 +49,7 @@ void DataUploader::uploadResults(const QUrl url, const QString headerData, const
         m_restClient->post(request, data.toJson());
     } else {
         if(m_verbose)
-            QTextStream(stdout) << "PUT request, webCompetitionId: " << webCompetitionId << endl;
+            QTextStream(stdout) << "PUT request, webCompetitionId: " << webCompetitionId << Qt::endl;
         m_restClient->put(request, data.toJson());
     }
 }

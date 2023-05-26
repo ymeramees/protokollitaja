@@ -72,14 +72,12 @@ void FinalsFileExport::drawStartPositions()
     for(int i = 0; i < ui->finalsCompetitorsTable->rowCount(); i++)
         ui->finalsCompetitorsTable->item(i, 0)->setText("");
 
-    qsrand(QTime::currentTime().msec());
-
     QVector<int> positionsToDraw;
     for(int i = 0; i < ui->finalsCompetitorsTable->rowCount(); i++)
         positionsToDraw << i;
 
     for(int i = 0; i < ui->finalsCompetitorsTable->rowCount(); i++){
-        int index = qrand() % positionsToDraw.count();
+        int index = QRandomGenerator::global()->generate() % positionsToDraw.count();
         char target = 65 + positionsToDraw.takeAt(index);
         ui->finalsCompetitorsTable->item(i, 0)->setText(QString("%1").arg(target));
     }

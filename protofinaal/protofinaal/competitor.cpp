@@ -3,7 +3,7 @@
 Competitor::Competitor(const int id, const QJsonArray configJson, QWidget *parent) : QWidget(parent)
 {
     if(verbose)
-        QTextStream(stdout) << "Competitor::Competitor(QJsonArray)" << endl;
+        QTextStream(stdout) << "Competitor::Competitor(QJsonArray)" << Qt::endl;
     QHBoxLayout *hBox = new QHBoxLayout;
 
     m_id = id;
@@ -18,13 +18,13 @@ Competitor::Competitor(const int id, const QJsonArray configJson, QWidget *paren
     hBox->addWidget(&m_nameEdit);
 
     if(verbose)
-        QTextStream(stdout) << "Competitor::configJson.size(): " << configJson.size() << endl;
+        QTextStream(stdout) << "Competitor::configJson.size(): " << configJson.size() << Qt::endl;
 
     for(int i = 0; i < configJson.size(); i++){
         QVector<ShotEdit*> *thisSeries = new QVector<ShotEdit*>;
         for(int j = 0; j < configJson.at(i).toInt(); j++){
 //            if(verbose)
-//                QTextStream(stdout) << "Competitor::configJson.at(i).toInt(): " << configJson.at(i).toInt() << endl;
+//                QTextStream(stdout) << "Competitor::configJson.at(i).toInt(): " << configJson.at(i).toInt() << Qt::endl;
             ShotEdit *shotEdit = new ShotEdit;
             createShotEditConnections(shotEdit);
 
@@ -42,7 +42,7 @@ Competitor::Competitor(const int id, const QJsonArray configJson, QWidget *paren
     hBox->setContentsMargins(0, 2, 0, 2);
 
     if(verbose)
-        QTextStream(stdout) << "Competitor::shots: " << m_shots.size() << " , series: " << m_series.size() << " ,sumLabels: " << m_sumLabels.size() << endl;
+        QTextStream(stdout) << "Competitor::shots: " << m_shots.size() << " , series: " << m_series.size() << " ,sumLabels: " << m_sumLabels.size() << Qt::endl;
     setLayout(hBox);
     sum();
 }
@@ -50,7 +50,7 @@ Competitor::Competitor(const int id, const QJsonArray configJson, QWidget *paren
 Competitor::Competitor(const QJsonObject &json, QWidget *parent) : QWidget(parent)
 {
     if(verbose)
-        QTextStream(stdout) << "Competitor::Competitor(QJsonObject), json[Series].size = " << json["series"].toArray().size() << endl;
+        QTextStream(stdout) << "Competitor::Competitor(QJsonObject), json[Series].size = " << json["series"].toArray().size() << Qt::endl;
     if(!(json.contains("nameEdit") && json["nameEdit"].isString()) ||
             !(json.contains("series") && json["series"].isArray())){
         QMessageBox::critical(this, tr("Viga!"), tr("Vigane fail!"));
@@ -120,7 +120,7 @@ Competitor::Competitor(const QJsonObject &json, QWidget *parent) : QWidget(paren
 Competitor::~Competitor()
 {
     if(verbose)
-        QTextStream(stdout) << "Competitor::~Competitor()" << endl;
+        QTextStream(stdout) << "Competitor::~Competitor()" << Qt::endl;
     foreach (QLabel *sumLabel, m_sumLabels)
         sumLabel->deleteLater();
     m_sumLabels.clear();

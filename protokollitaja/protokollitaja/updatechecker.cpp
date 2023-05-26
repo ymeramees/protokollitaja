@@ -30,7 +30,7 @@ void UpdateChecker::getLatestVersionInfo(QString user, QString repo)
     QNetworkRequest request;
     request.setUrl(url);
 
-    QTextStream(stdout) << "Url: " << request.url().toString() << endl;
+    QTextStream(stdout) << "Url: " << request.url().toString() << Qt::endl;
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     if(m_restClient == nullptr)
@@ -62,8 +62,8 @@ void UpdateChecker::readWebVersionInfo()
     QString info(m_downloader->downloadedData());
     if(!info.startsWith("<!--proto")){
         if(allAddressesChecked){
-            QTextStream(stdout) << "#ERROR: Unable to get version info from Webzone!" << endl;
-            *m_log << "#ERROR: Unable to get version info from Webzone!" << endl;
+            QTextStream(stdout) << "#ERROR: Unable to get version info from Webzone!" << Qt::endl;
+            *m_log << "#ERROR: Unable to get version info from Webzone!" << Qt::endl;
             emit versionInfoResponse(false, "#ERROR: Unable to find version info! Program needs to be updated manually!");
         }else{
             checkVersionFromWeb("http://ymeramees.no-ip.org/protokollitaja/inf20150118");  // Fallback address
@@ -80,8 +80,8 @@ void UpdateChecker::restClientFinished(QNetworkReply *reply)
 {
     QByteArray answer = reply->readAll();
     if(reply->error()){
-        QTextStream(stdout) << "#ERROR: Unable to get version info from GitHub: " << reply << ", " << reply->errorString() << endl;
-        *m_log << "#ERROR: Unable to get version info from GitHub: " << reply << ", " << reply->errorString() << endl;
+        QTextStream(stdout) << "#ERROR: Unable to get version info from GitHub: " << reply << ", " << reply->errorString() << Qt::endl;
+        *m_log << "#ERROR: Unable to get version info from GitHub: " << reply << ", " << reply->errorString() << Qt::endl;
         checkVersionFromWeb("https://webzone.ee/protokollitaja/inf20150118");   // Check version info from a webpage
     } else {
         QJsonDocument json = QJsonDocument::fromJson(answer);

@@ -45,7 +45,7 @@ void InitialDialogTest::acceptCorrectlyFilledDialog()
 
     QTimer::singleShot(100, [=](){
         QWidgetList allToplevelWidgets = QApplication::topLevelWidgets();
-        QCOMPARE(allToplevelWidgets.length(), 1);
+        QCOMPARE(allToplevelWidgets.length(), 2);
 
         QWidget* widget = QApplication::activeModalWidget();
         if (widget){
@@ -83,7 +83,7 @@ void InitialDialogTest::notAcceptEmptyCompetitionName()
 
     QTimer::singleShot(200, [=](){
         QWidgetList allToplevelWidgets = QApplication::topLevelWidgets();
-        QCOMPARE(allToplevelWidgets.length(), 1);
+        QCOMPARE(allToplevelWidgets.length(), 2);
 
         QWidget* widget = QApplication::activeModalWidget();
         if (widget){

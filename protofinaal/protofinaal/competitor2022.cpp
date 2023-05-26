@@ -3,20 +3,20 @@
 Competitor2022::Competitor2022(const int id, const QJsonArray configJson, const bool scoringWithPoints, QWidget *parent) : QWidget(parent)
 {
     if(verbose)
-        QTextStream(stdout) << "Competitor::Competitor(QJsonArray)" << endl;
+        QTextStream(stdout) << "Competitor::Competitor(QJsonArray)" << Qt::endl;
     QHBoxLayout *hBox = new QHBoxLayout;
 
     setupCompetitor(hBox, true, id, "", "", scoringWithPoints);
 
     if(verbose)
-        QTextStream(stdout) << "Competitor::configJson.size(): " << configJson.size() << endl;
+        QTextStream(stdout) << "Competitor::configJson.size(): " << configJson.size() << Qt::endl;
 
     if (configJson.size() > 0)
         for(int i = 0; i < configJson.size(); i++){
             QVector<ShotEdit*> *thisSeries = new QVector<ShotEdit*>;
             for(int j = 0; j < configJson.at(i).toInt(); j++){
                 //            if(verbose)
-                //                QTextStream(stdout) << "Competitor::configJson.at(i).toInt(): " << configJson.at(i).toInt() << endl;
+                //                QTextStream(stdout) << "Competitor::configJson.at(i).toInt(): " << configJson.at(i).toInt() << Qt::endl;
                 ShotEdit *shotEdit = new ShotEdit;
                 createShotEditConnections(shotEdit);
 
@@ -39,7 +39,7 @@ Competitor2022::Competitor2022(const int id, const QJsonArray configJson, const 
 //            QVector<ShotEdit*> *thisSeries = new QVector<ShotEdit*>;
 //            for(int j = 0; j < configJson.at(i).toInt(); j++){
 //                //            if(verbose)
-//                //                QTextStream(stdout) << "Competitor::configJson.at(i).toInt(): " << configJson.at(i).toInt() << endl;
+//                //                QTextStream(stdout) << "Competitor::configJson.at(i).toInt(): " << configJson.at(i).toInt() << Qt::endl;
 //                ShotEdit *shotEdit = new ShotEdit;
 //                createShotEditConnections(shotEdit);
 
@@ -57,7 +57,7 @@ Competitor2022::Competitor2022(const int id, const QJsonArray configJson, const 
     hBox->setContentsMargins(0, 2, 0, 2);
 
     if(verbose)
-        QTextStream(stdout) << "Competitor::shots: " << m_shots.size() << " , series: " << m_series.size() << " ,sumLabels: " << m_totalLabels.size() << endl;
+        QTextStream(stdout) << "Competitor::shots: " << m_shots.size() << " , series: " << m_series.size() << " ,sumLabels: " << m_totalLabels.size() << Qt::endl;
     setLayout(hBox);
     sum();
 }
@@ -65,7 +65,7 @@ Competitor2022::Competitor2022(const int id, const QJsonArray configJson, const 
 Competitor2022::Competitor2022(const QJsonObject &json, const bool scoringWithPoints, QWidget *parent) : QWidget(parent)
 {
     if(verbose)
-        QTextStream(stdout) << "Competitor::Competitor(QJsonObject), json[Series].size = " << json["series"].toArray().size() << endl;
+        QTextStream(stdout) << "Competitor::Competitor(QJsonObject), json[Series].size = " << json["series"].toArray().size() << Qt::endl;
     if(!(json.contains("nameEdit") && json["nameEdit"].isString()) ||
             !(json.contains("series") && json["series"].isArray())){
         QMessageBox::critical(this, tr("Viga!"), tr("Vigane fail!"));
@@ -137,7 +137,7 @@ Competitor2022::Competitor2022(const QJsonObject &json, const bool scoringWithPo
 Competitor2022::~Competitor2022()
 {
     if(verbose)
-        QTextStream(stdout) << "Competitor::~Competitor()" << endl;
+        QTextStream(stdout) << "Competitor::~Competitor()" << Qt::endl;
     foreach (QLabel *sumLabel, m_totalLabels)
         sumLabel->deleteLater();
     m_totalLabels.clear();
@@ -447,11 +447,11 @@ void Competitor2022::setupCompetitor(QHBoxLayout *layout, bool active, int id, Q
 
 void Competitor2022::sum()
 {
-    // QTextStream(stdout) << "Competitor::sum(), m_scoringWithPoints: " << m_scoringWithPoints << endl;
+    // QTextStream(stdout) << "Competitor::sum(), m_scoringWithPoints: " << m_scoringWithPoints << Qt::endl;
 
     if (m_scoringWithPoints) {
     if(verbose)
-        QTextStream(stdout) << "Competitor2022::sumPoints()" << endl;
+        QTextStream(stdout) << "Competitor2022::sumPoints()" << Qt::endl;
 
     int pointsTotal = 0;
     for(int i = 0; i < m_series.size(); i++){
@@ -484,16 +484,16 @@ void Competitor2022::sum()
         for(int i = 0; i < m_series.size(); i++){
             int seriesSum = 0;
             for(int j = 0; j < m_series.at(i)->size(); j++){
-                // QTextStream(stdout) << "Competitor::sum(), m_series.at(i)->at(j)->text(): " << m_series.at(i)->at(j)->shot().getSLask() << endl;
+                // QTextStream(stdout) << "Competitor::sum(), m_series.at(i)->at(j)->text(): " << m_series.at(i)->at(j)->shot().getSLask() << Qt::endl;
                 if(!m_series.at(i)->at(j)->ignored())
                     seriesSum += qRound(m_series.at(i)->at(j)->shot().getSLask().replace(',','.').toDouble() * 10);
             }
-            // QTextStream(stdout) << "Competitor::sum(), seriesSum: " << seriesSum << endl;
+            // QTextStream(stdout) << "Competitor::sum(), seriesSum: " << seriesSum << Qt::endl;
             totalSum += seriesSum;
             double dSeriesSum = seriesSum;
             dSeriesSum /= 10;
             m_totalLabels.at(i)->setText(QString("%1").arg(dSeriesSum).replace('.', ','));
-            // QTextStream(stdout) << "Competitor::sum(), m_totalLabels.at(i): " << m_totalLabels.at(i)->text() << endl;
+            // QTextStream(stdout) << "Competitor::sum(), m_totalLabels.at(i): " << m_totalLabels.at(i)->text() << Qt::endl;
             if(!m_totalLabels.at(i)->text().contains(','))
                 m_totalLabels.at(i)->setText(m_totalLabels.at(i)->text() + ",0");
         }

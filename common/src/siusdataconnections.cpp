@@ -22,7 +22,7 @@ SiusDataConnections::SiusDataConnections(
 SiusDataConnections::~SiusDataConnections()
 {
     if(verbose)
-        QTextStream(stdout) << "SiusDataConnections::~SiusDataConnections()" << endl;
+        QTextStream(stdout) << "SiusDataConnections::~SiusDataConnections()" << Qt::endl;
     for(SiusDataConnection *socket : sockets){
         socket->deleteLater();
     }
@@ -33,7 +33,7 @@ SiusDataConnections::~SiusDataConnections()
 void SiusDataConnections::connectToSiusData()
 {
     if(verbose)
-        QTextStream(stdout) << "connectToSiusData()" << endl;
+        QTextStream(stdout) << "connectToSiusData()" << Qt::endl;
     bool existing = false;
     for(SiusDataConnection *socket : sockets)
         if(socket->address() == ui->addressEdit->text() && socket->port() == ui->portEdit->text().toInt()){
@@ -42,7 +42,7 @@ void SiusDataConnections::connectToSiusData()
         }
 
     if(verbose)
-        QTextStream(stdout) << "connectToSiusData(): existing = " << existing << endl;
+        QTextStream(stdout) << "connectToSiusData(): existing = " << existing << Qt::endl;
 
     if(!existing){
         SiusDataConnection *socket = new SiusDataConnection(

@@ -47,7 +47,7 @@ Protofinaal::Protofinaal(QWidget *parent)
     QTimer::singleShot(100, this, SLOT(initialize()));
 
     if(verbose)
-        QTextStream(stdout) << "currentFile = " << currentFile << endl;
+        QTextStream(stdout) << "currentFile = " << currentFile << Qt::endl;
 
     logFile = new QFile(QFileInfo(currentFile).dir().absolutePath() + QString("/Protofinaal logi %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
 
@@ -80,7 +80,7 @@ void Protofinaal::clear()
 void Protofinaal::closeEvent(QCloseEvent *event)
 {
     if(verbose)
-        QTextStream(stdout) << "Protofinaal::closeEvent()" << endl;
+        QTextStream(stdout) << "Protofinaal::closeEvent()" << Qt::endl;
     if (m_modifiedAfterSave) {
         int reply = QMessageBox::question(this, "Protofinaal", tr("Kas soovid muudatused salvestada ja programmist väljuda?"),	QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         if (reply == QMessageBox::Save) {
@@ -214,7 +214,7 @@ void Protofinaal::importSiusStartList()
 void Protofinaal::initialize()
 {
     if(verbose)
-        QTextStream(stdout) << "initialize" << endl;
+        QTextStream(stdout) << "initialize" << Qt::endl;
 
     if(m_initialDialog == nullptr){
         m_initialDialog = new InitialDialog(this);
@@ -234,12 +234,12 @@ void Protofinaal::initialize()
         QFile testOpenFile(m_initialDialog->fileName());
         if(testOpenFile.open(QIODevice::ReadOnly)){ //Check if file exists    // FIXME Re-enable
             if(verbose)
-                QTextStream(stdout) << "File exists: " << m_initialDialog->fileName() << endl;
+                QTextStream(stdout) << "File exists: " << m_initialDialog->fileName() << Qt::endl;
             testOpenFile.close();
             loadFile(currentFile);
         }else{  //File does not exist
             if(verbose)
-                QTextStream(stdout) << "Create new file: " << m_initialDialog->fileName() << endl;
+                QTextStream(stdout) << "Create new file: " << m_initialDialog->fileName() << Qt::endl;
 
             competitionName = m_initialDialog->competitionName();
             timePlace = m_initialDialog->timePlace();
@@ -294,7 +294,7 @@ void Protofinaal::initialize()
 void Protofinaal::loadFile(QString fileName)
 {
     if(verbose)
-        QTextStream(stdout) << "Protofinaal::loadFile()" << endl;
+        QTextStream(stdout) << "Protofinaal::loadFile()" << Qt::endl;
     clear();
     QJsonObject jsonObj = readFinalsFile(fileName);
 
@@ -311,7 +311,7 @@ void Protofinaal::loadFile(QString fileName)
         m_scoringWithPoints = jsonObj["scoringWithPoints"].toBool();
 
     if (verbose)
-        QTextStream(stdout) << "Protofinaal::loadFile(), scoringWithPoints: " << m_scoringWithPoints << endl;
+        QTextStream(stdout) << "Protofinaal::loadFile(), scoringWithPoints: " << m_scoringWithPoints << Qt::endl;
 
     QJsonArray relaysArray = jsonObj["relays"].toArray();
     int noOfRelays = relaysArray.size();
@@ -405,7 +405,7 @@ void Protofinaal::readSettings()
 //void Protofinaal::readSiusInfo(SiusShotData shotData)
 //{
 //    if(verbose)
-//        QTextStream(stdout) << "readSiusInfo()" << endl;
+//        QTextStream(stdout) << "readSiusInfo()" << Qt::endl;
 
 //    // FIXME To be implemented
 ////    for(QString row : lines){
@@ -468,33 +468,33 @@ void Protofinaal::save()
     writeFinalsFile(currentFile);
 }
 
-void Protofinaal::showSpecatorWindowOnSecondScreen()
+void Protofinaal::showSpecatorWindowOnSecondScreen()    // FIXME To be reimplemented
 {
-    if(qApp->desktop()->numScreens() >= 2 && qApp->desktop()->isVirtualDesktop()){
-        m_spectatorWindow.move(qApp->desktop()->screenGeometry(this).width() + 100, 100);
-        if(qApp->desktop()->screenNumber(this) != qApp->desktop()->screenNumber(&m_spectatorWindow) && qApp->desktop()->screenNumber(&m_spectatorWindow) != -1)
-            m_spectatorWindow.showFullScreen();
-        else{
-            m_spectatorWindow.move(-1000, 100);
-            if(qApp->desktop()->screenNumber(this) != qApp->desktop()->screenNumber(&m_spectatorWindow))
-                m_spectatorWindow.showFullScreen();
-        }
-    }else{
-        QMessageBox::critical(this, tr("Viga"), tr("Teist ekraani ei leitud. Programmi korralikuks"
-    " funktsioneerimiseks on vajalik kahe ekraani olemasolu."), QMessageBox::Ok);
-        m_spectatorWindow.show();
-    }
+//    if(QGuiApplication::screens().size() >= 2 /*&& qApp->desktop()->isVirtualDesktop()*/){
+//        m_spectatorWindow.move(QGuiApplication::primaryScreen()->screenGeometry(this).width() + 100, 100);
+//        if(qApp->desktop()->screenNumber(this) != qApp->desktop()->screenNumber(&m_spectatorWindow) && qApp->desktop()->screenNumber(&m_spectatorWindow) != -1)
+//            m_spectatorWindow.showFullScreen();
+//        else{
+//            m_spectatorWindow.move(-1000, 100);
+//            if(qApp->desktop()->screenNumber(this) != qApp->desktop()->screenNumber(&m_spectatorWindow))
+//                m_spectatorWindow.showFullScreen();
+//        }
+//    }else{
+//        QMessageBox::critical(this, tr("Viga"), tr("Teist ekraani ei leitud. Programmi korralikuks"
+//    " funktsioneerimiseks on vajalik kahe ekraani olemasolu."), QMessageBox::Ok);
+//        m_spectatorWindow.show();
+//    }
 
-    if(m_spectatorWindow.isFullScreen())
-        QMessageBox::information(this, tr("Teade"), tr("Tulemuse aken näidatud teisel ekraanil"), QMessageBox::Ok);
+//    if(m_spectatorWindow.isFullScreen())
+//        QMessageBox::information(this, tr("Teade"), tr("Tulemuse aken näidatud teisel ekraanil"), QMessageBox::Ok);
 
-    updateSpectatorWindow();
+//    updateSpectatorWindow();
 }
 
 void Protofinaal::statusBarInfoChanged(QString newStatusInfo)
 {
     statusBar()->showMessage(newStatusInfo, 5000);
-    logOut << QTime::currentTime().toString() << " " << newStatusInfo << endl;
+    logOut << QTime::currentTime().toString() << " " << newStatusInfo << Qt::endl;
 }
 
 //void Protofinaal::sumAllTeams()
@@ -548,7 +548,7 @@ void Protofinaal::updateInitialDialog()
 void Protofinaal::updateSpectatorWindow()
 {
     if(verbose)
-        QTextStream(stdout) << "Protofinaal::updateSpectatorWindow()" << endl;
+        QTextStream(stdout) << "Protofinaal::updateSpectatorWindow()" << Qt::endl;
 
     m_spectatorWindow.clearResults();
     int shotNo = m_teamsTables.first()->lastValidShotIndex() + 1;
@@ -591,25 +591,25 @@ void Protofinaal::updateSpectatorWindow()
 //                    );
 //    }
 //    if(verbose)
-//        QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), teams.size() = " << teams.size() << endl;
+//        QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), teams.size() = " << teams.size() << Qt::endl;
 //    foreach (Team *team, teams){
 //        QVector<Competitor*> teamCompetitors = team->teamCompetitors();
 //        if(verbose)
-//            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), teamCompetitors.size() = " << teamCompetitors.size() << endl;
+//            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), teamCompetitors.size() = " << teamCompetitors.size() << Qt::endl;
 //        if(teamCompetitors.size() == 0)
 //            return;
 ////        if(verbose){
-////            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), team->index() = " << team->index() << endl;
-////            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), team->teamName() = " << team->teamName() << endl;
-////            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), teamCompetitors.at(0)->name() = " << teamCompetitors.at(0)->name() << endl;
-////            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), teamCompetitors.at(0)->lastResult() = " << teamCompetitors.at(0)->lastResult() << endl;
-////            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), team->lastSum() = " << team->lastSum() << endl;
+////            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), team->index() = " << team->index() << Qt::endl;
+////            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), team->teamName() = " << team->teamName() << Qt::endl;
+////            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), teamCompetitors.at(0)->name() = " << teamCompetitors.at(0)->name() << Qt::endl;
+////            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), teamCompetitors.at(0)->lastResult() = " << teamCompetitors.at(0)->lastResult() << Qt::endl;
+////            QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), team->lastSum() = " << team->lastSum() << Qt::endl;
 ////        }
 //        spectatorWindow.addRow(team->index(), team->teamName(), teamCompetitors.at(0)->name(), teamCompetitors.at(0)->lastResult(), team->lastSum(), "0");
 //        if(teamCompetitors.size() > 1){
 //            for(int i = 1; i < teamCompetitors.size(); i++){
 //                if(verbose)
-//                    QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), teamCompetitors.at(i)->lastResult() = " << teamCompetitors.at(i)->lastResult() << endl;
+//                    QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), teamCompetitors.at(i)->lastResult() = " << teamCompetitors.at(i)->lastResult() << Qt::endl;
 //                spectatorWindow.addRow("", "", teamCompetitors.at(i)->name(), teamCompetitors.at(i)->lastResult(), "", "");
 //            }
 //        }

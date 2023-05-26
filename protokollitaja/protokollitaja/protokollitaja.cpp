@@ -370,7 +370,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         QFile fail(qApp->applicationDirPath() + "/Data/Laskuritenimekiri Puss.txt");
         if(fail.open(QIODevice::ReadOnly | QIODevice::Text)){
                 QTextStream sisse(&fail);
-                sisse.setCodec("UTF-8");
+//                sisse.setCodec("UTF-8");
                 while(!sisse.atEnd()){
                         QString str;
                         QStringList list;
@@ -401,7 +401,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
                 andmebaas.kirjutusabiPuss = true;
                 fail.close();
                 if(verbose)
-                    QTextStream(stdout) << "Püssilaskurite nimekiri loetud, leitud " << andmebaas.nimekiriPuss.size() << " rida" << endl;
+                    QTextStream(stdout) << "Püssilaskurite nimekiri loetud, leitud " << andmebaas.nimekiriPuss.size() << " rida" << Qt::endl;
         }else{
                 QMessageBox::warning(this, "Hoiatus", ("Püssilaskurite faili ei leitud! Püssilaskurite kirjutusabi pole võimaldatud"), "Selge");
                 andmebaas.kirjutusabiPuss = false;
@@ -410,7 +410,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         fail.setFileName(qApp->applicationDirPath() + "/Data/Laskuritenimekiri Pustol.txt");
         if(fail.open(QIODevice::ReadOnly | QIODevice::Text)){
                 QTextStream sisse(&fail);
-                sisse.setCodec("UTF-8");
+//                sisse.setCodec("UTF-8");
                 while(!sisse.atEnd()){
                         QString str;
                         QStringList list;
@@ -441,7 +441,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
                 andmebaas.kirjutusabiPustol = true;
                 fail.close();
                 if(verbose)
-                    QTextStream(stdout) << "Püstolilaskurite nimekiri loetud, leitud " << andmebaas.nimekiriPustol.size() << " rida" << endl;
+                        QTextStream(stdout) << "Püstolilaskurite nimekiri loetud, leitud " << andmebaas.nimekiriPustol.size() << " rida" << Qt::endl;
         }else{
                 QMessageBox::warning(this, "Hoiatus", ("Püstolilaskurite faili ei leitud! Püstolilaskurite kirjutusabi pole võimaldatud"), "Selge");
                 andmebaas.kirjutusabiPustol = false;
@@ -512,13 +512,13 @@ Protokollitaja::Protokollitaja(QWidget *parent)
 
         tulemus->joonista();
 
-        if(qApp->desktop()->numScreens() >= 2){
-            if(qApp->desktop()->screenNumber(this) == 0)
-                tulemus->setParent(qApp->desktop()->screen(1));
-            else tulemus->setParent(qApp->desktop()->screen(0));
-            tulemus->showFullScreen();
-            QMessageBox::information(this, "Teade", tr("Tulemuse aken näidatud teisel ekraanil"), QMessageBox::Ok);
-        }
+//        if(qApp->desktop()->numScreens() >= 2){   // FIXME To be implemented again
+//            if(qApp->desktop()->screenNumber(this) == 0)
+//                tulemus->setParent(qApp->desktop()->screen(1));
+//            else tulemus->setParent(qApp->desktop()->screen(0));
+//            tulemus->showFullScreen();
+//            QMessageBox::information(this, "Teade", tr("Tulemuse aken näidatud teisel ekraanil"), QMessageBox::Ok);
+//        }
 
 //        if(qApp->desktop()->numScreens() == 2 && qApp->desktop()->isVirtualDesktop() && qApp->desktop()->screenNumber(this) == 0){
 //            tulemus->show();
@@ -774,7 +774,7 @@ void Protokollitaja::eelvaade()
         }
         prindiEelvaade->setPixmap(*pilt);
         prindiEelvaade->setScaledContents(true);
-        prindiEelvaade->resize(0.3 * prindiEelvaade->pixmap()->size());
+        prindiEelvaade->resize(0.3 * prindiEelvaade->pixmap().size());
         prindiEelvaade->show();
 }
 
@@ -928,13 +928,13 @@ void Protokollitaja::exportStartList(StartListWriter::StartListType type)
                 QMessageBox::critical(this, "Viga", tr("Raja numbrites on tähti. Kui soovite finaali start listi eksportida, kasutage teist funktsiooni!"), QMessageBox::Ok);
 
             competitorsList.append(StartListWriter::StartListCompetitor{
-                                       leht->laskurid[i]->rajaNr->text(),
-                                       QString("%1").arg(leht->laskurid[i]->id),
-                                       leht->laskurid[i]->eesNimi->text(),
-                                       leht->laskurid[i]->perekNimi->text(),
-                                       leht->laskurid[i]->klubi->text(),
-                                       leht->laskurid[i]->getSumma().replace(",", "."),
-                                       m_settings.eventNames.indexOf(leht->harjutus),
+                leht->laskurid[i]->rajaNr->text(),
+                QString("%1").arg(leht->laskurid[i]->id),
+                leht->laskurid[i]->eesNimi->text(),
+                leht->laskurid[i]->perekNimi->text(),
+                leht->laskurid[i]->klubi->text(),
+                leht->laskurid[i]->getSumma().replace(",", "."),
+                static_cast<int>(m_settings.eventNames.indexOf(leht->harjutus)),
                                        ""  // TODO to be implemented
                                    });
         }
@@ -1558,7 +1558,7 @@ void Protokollitaja::kaivitaFinaal()
     QFile fail(qApp->applicationDirPath() + "/Data/Alg.ini");
     if(fail.open(QIODevice::WriteOnly | QIODevice::Text)){
         QTextStream valja(&fail);
-        valja.setCodec("UTF-8");
+//        valja.setCodec("UTF-8");
         valja << "Finaal 1.4 seadete fail.\n";
         valja << tr("Kui olete midagi siin ära rikkunud, siis lihtsalt kustutage see fail ja programm teeb uue.\n");
         valja << finaaliFailiNimi << "\n" << 0;
@@ -1762,7 +1762,7 @@ void Protokollitaja::kirjutaSeaded()
         QFile seaded(qApp->applicationDirPath() + "/Data/Seaded.ini");
         if(seaded.open(QIODevice::WriteOnly | QIODevice::Text)){
                 QTextStream valja(&seaded);
-                valja.setCodec("UTF-8");
+//                valja.setCodec("UTF-8");
                 valja << seeFail << "\n";
                 valja << "[lasuVSiusis]: " << lasuVSiusis << "\n";
                 valja << "[lasuNrSiusis]: " << lasuNrSiusis << "\n";
@@ -2148,7 +2148,7 @@ void Protokollitaja::loeBroadcast()
             for(int i = 0; i < ipAadressid.size(); ++i){
                 if (ipAadressid.at(i) != QHostAddress::LocalHost && ipAadressid.at(i).toIPv4Address()){
                    if(!ipAadressid.at(i).toString().startsWith("255.")){
-                       datagram.append(ipAadressid.at(i).toString() + ";");
+                        datagram.append((ipAadressid.at(i).toString() + ";").toLatin1());
                    }
                 }
             }
@@ -2598,7 +2598,7 @@ void Protokollitaja::loeSeaded()
     QFile algF(qApp->applicationDirPath() + "/Data/Seaded.ini");
     if(algF.open(QIODevice::ReadOnly | QIODevice::Text)){
             QTextStream sisse(&algF);
-            sisse.setCodec("UTF-8");
+//            sisse.setCodec("UTF-8");
             aValik->setFileName(sisse.readLine());
 
             while(!sisse.atEnd()){  //Loetakse seadete failist veel ka uued väärtused mõnedele konstantidele (kui need seal olemas on)
@@ -2992,7 +2992,7 @@ void Protokollitaja::naitaSeaded()
 void Protokollitaja::naitaTul()
 {
     if(verbose)
-        QTextStream(stdout) << "Protokollitaja::naitaTul()" << endl;
+        QTextStream(stdout) << "Protokollitaja::naitaTul()" << Qt::endl;
     static int leheNr = 0;
     static int reaNr = 0;
     static int areaNr = 0;
@@ -3108,7 +3108,7 @@ void Protokollitaja::naitaTul()
                 return;
             }
             if(verbose)
-                QTextStream(stdout) << "Protokollitaja::naitaTul(): individuaalne" << endl;
+                QTextStream(stdout) << "Protokollitaja::naitaTul(): individuaalne" << Qt::endl;
             bool kasOnRajaNr = false;
             bool kasOnSummasid = false;
             for(int i = 0; i < seeLeht->laskurid.count(); i++){
@@ -3119,15 +3119,15 @@ void Protokollitaja::naitaTul()
             }
             if(kasOnRajaNr && !kasOnSummasid){   //Kui on raja numbreid ja ei ole veel tulemusi, siis sorteerida rajanumbrite järgi
                 if(verbose)
-                    QTextStream(stdout) << "Protokollitaja::naitaTul(): Sorteerimine rajanumbrite järgi" << endl;
+                    QTextStream(stdout) << "Protokollitaja::naitaTul(): Sorteerimine rajanumbrite järgi" << Qt::endl;
                 seeLeht->sorteeri(3);
             }else{
                 if(verbose)
-                    QTextStream(stdout) << "Protokollitaja::naitaTul(): Sorteerimine tulemuste järgi" << endl;
+                    QTextStream(stdout) << "Protokollitaja::naitaTul(): Sorteerimine tulemuste järgi" << Qt::endl;
                 seeLeht->sorteeri(0);
             }
             if(verbose)
-                QTextStream(stdout) << "Protokollitaja::naitaTul(): Sorteeritud" << endl;
+                QTextStream(stdout) << "Protokollitaja::naitaTul(): Sorteeritud" << Qt::endl;
 
             int tulemusegaArv = 0;
             for(int i = 0; i < seeLeht->laskurid.count(); i++)
@@ -3157,7 +3157,7 @@ void Protokollitaja::naitaTul()
                 leheNr++;
             }
             if(verbose)
-                QTextStream(stdout) << "Protokollitaja::naitaTul(): vahepunkt" << endl;
+                QTextStream(stdout) << "Protokollitaja::naitaTul(): vahepunkt" << Qt::endl;
             if(naitaja->interval() > seeLeht->maxAeg) naitaja->setInterval(seeLeht->maxAeg);
             //if(reaNr > 25) i = (reaNr - 25);
             tulemus->voistluseNimi = voistluseNimi;
@@ -3169,7 +3169,7 @@ void Protokollitaja::naitaTul()
             if(seeLeht->seeriateArv <= 6 && seeLeht->vSummadeSamm == 0){ //Ilma vahesummadeta harjutused
                 if(tulemusegaArv > 1 && (reaNr - areaNr) > 1){  //Kui on mitu laskurit lehel
                     if(verbose)
-                        QTextStream(stdout) << "Protokollitaja::naitaTul(): tulemusegaArv > 1 && (reaNr - areaNr) > 1" << endl;
+                        QTextStream(stdout) << "Protokollitaja::naitaTul(): tulemusegaArv > 1 && (reaNr - areaNr) > 1" << Qt::endl;
                     int i = areaNr;
                     for(i; i < reaNr; i++){
                         tulemus->read[i-areaNr][0] = QString("%1.").arg(i + 1);
@@ -3200,7 +3200,7 @@ void Protokollitaja::naitaTul()
                     }
                 }else{  //Kui on ainult üks laskur lehel
                     if(verbose)
-                        QTextStream(stdout) << "Protokollitaja::naitaTul(): Üks laskur lehel" << endl;
+                        QTextStream(stdout) << "Protokollitaja::naitaTul(): Üks laskur lehel" << Qt::endl;
                     tulemus->read[0][0] = QString("%1.").arg(areaNr + 1);
                     tulemus->read[0][1] = seeLeht->reasLaskurid[areaNr]->eesNimi->text();
                     tulemus->read[0][2] = seeLeht->reasLaskurid[areaNr]->perekNimi->text();
@@ -3388,15 +3388,15 @@ void Protokollitaja::naitaTul()
 
 void Protokollitaja::naitaTulAken()
 {
-    if(qApp->desktop()->numScreens() >= 2){
-        if(QMessageBox::question(this, "Protokollitaja", tr("Kas tahate tulemused näidata teisel ekraanil?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes){
-            if(qApp->desktop()->screenNumber(this) == 0)
-                tulemus->setParent(qApp->desktop()->screen(1));
-            else tulemus->setParent(qApp->desktop()->screen(0));
-            tulemus->showFullScreen();
-            QMessageBox::information(this, "Teade", tr("Tulemuse aken näidatud teisel ekraanil"), QMessageBox::Ok);
-        }else tulemus->show();
-    }else tulemus->show();
+//    if(qApp->desktop()->numScreens() >= 2){   // FIXME to be implemented again
+//        if(QMessageBox::question(this, "Protokollitaja", tr("Kas tahate tulemused näidata teisel ekraanil?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes){
+//            if(QGuiApplication::->screenNumber(this) == 0)
+//                tulemus->setParent(qApp->desktop()->screen(1));
+//            else tulemus->setParent(qApp->desktop()->screen(0));
+//            tulemus->showFullScreen();
+//            QMessageBox::information(this, "Teade", tr("Tulemuse aken näidatud teisel ekraanil"), QMessageBox::Ok);
+//        }else tulemus->show();
+//    }else tulemus->show();
 
 //        if(qApp->desktop()->numScreens() == 2 && qApp->desktop()->isVirtualDesktop()){
 //                if(QMessageBox::question(this, "Protokollitaja", tr("Kas tahate tulemused näidata teisel ekraanil?"),
@@ -3440,9 +3440,9 @@ void Protokollitaja::prindi()
         Leht* seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
         if(seeLeht->laskurid.count() < 1 && seeLeht->voistkonnad.count() < 1) return;
         QPrinter printer(QPrinter::HighResolution);
-        printer.setPageSize(QPrinter::A4);
-        if(seeLeht->seeriateArv > 8) printer.setOrientation(QPrinter::Landscape);
-        else printer.setOrientation(QPrinter::Portrait);
+        printer.setPageSize(QPageSize::A4);
+        if(seeLeht->seeriateArv > 8) printer.setPageOrientation(QPageLayout::Landscape);
+        else printer.setPageOrientation(QPageLayout::Portrait);
         QPrintDialog dialog(&printer, this);
 /*          bool valitud = false;
                 for(int i = 0; i < seeLeht->laskurid.count(); i++)
@@ -3454,8 +3454,8 @@ void Protokollitaja::prindi()
             QPainter painter2;
             bool koik = false;
             painter2.begin(&printer);
-            int w = printer.pageRect().width();
-            int h = printer.pageRect().height();
+            int w = printer.pageRect(QPrinter::DevicePixel).width();
+            int h = printer.pageRect(QPrinter::DevicePixel).height();
             QRect page(0, 0, w, h);
             if(seeLeht->voistk){
                 int alg = 0, lopp = seeLeht->voistkonnad.count();
@@ -3791,7 +3791,7 @@ void Protokollitaja::prindi2()
         if(htmlFail.open(QIODevice::ReadOnly | QIODevice::Text)){
                 QTextStream sisse(&htmlFail);
                 sisse.setAutoDetectUnicode(true);
-                sisse.setCodec(QTextCodec::codecForName("UTF-8"));
+//                sisse.setCodec(QTextCodec::codecForName("UTF-8"));
                 pohi = sisse.readAll();
         }else{
             QMessageBox::warning(this, "Hoiatus", tr("Print_template.html faili ei leitud! Printimine ei toimi!"), "Selge");
@@ -4027,14 +4027,14 @@ void Protokollitaja::prindi2()
                 "</html>\n";*/
 
         QPrinter printer;
-        printer.setPaperSize(QPrinter::A4);
-        printer.setPageMargins(20, 10, 10, 10, QPrinter::Millimeter);
+        printer.setPageSize(QPageSize::A4);
+        printer.setPageMargins(QMarginsF(20, 10, 10, 10), QPageLayout::Millimeter);
         if(seeLeht->seeriateArv > 6)    //3x40 standard las olla landscape'is
-            printer.setOrientation(QPrinter::Landscape);
+            printer.setPageOrientation(QPageLayout::Landscape);
 
 //        QWebView *dokument = new QWebView();
         QTextDocument *dokument = new QTextDocument();
-        dokument->setPageSize(QSizeF(printer.pageRect().size()));
+        dokument->setPageSize(QSizeF(printer.pageRect(QPrinter::DevicePixel).size()));
         dokument->setHtml(pTekst);
 
 //#if QT_VERSION >= 0x050000
@@ -4067,7 +4067,7 @@ void Protokollitaja::readShotInfo(QString data, int socketIndex)
     //NEW: "Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;loetud seeria nr (0-5); loetud seeria; loetud seeria lasud; x; y;
 
     data.remove(0, 7);
-    QStringList dataList = data.split(";", QString::KeepEmptyParts);
+    QStringList dataList = data.split(";", Qt::KeepEmptyParts);
     QString targetNumbersStart = dataList.at(0).left(dataList.at(0).indexOf('-')).trimmed();
     QString targetNumbersEnd = dataList.at(0).mid(dataList.at(0).indexOf('-') + 1, dataList.at(0).length()).trimmed();
     dataList.takeFirst(); //Target numbers have been taken already
@@ -4150,7 +4150,7 @@ void Protokollitaja::readShotInfo(QString data, int socketIndex)
 void Protokollitaja::readSiusInfo(SiusShotData shotData)
 {
     if(verbose)
-        QTextStream(stdout) << "readSiusInfo()" << endl;
+        QTextStream(stdout) << "readSiusInfo()" << Qt::endl;
 
 //    for(QString row : lines){
         //Search for competitor whose line was received:
@@ -4352,7 +4352,7 @@ void Protokollitaja::saadaVorku(QString saadetis, int socketIndex)
 {
     server->send(saadetis, socketIndex);
     if(verbose)
-        QTextStream(stdout) << "Protokollitaja::saadaVorku(): " << saadetis << ", socketIndex = " << socketIndex << endl;
+        QTextStream(stdout) << "Protokollitaja::saadaVorku(): " << saadetis << ", socketIndex = " << socketIndex << Qt::endl;
 }
 
 void Protokollitaja::salvesta()
@@ -4460,7 +4460,7 @@ void Protokollitaja::taiendaAndmebaas()
         QFile fail(qApp->applicationDirPath() + "/Data/Laskuritenimekiri Puss.txt");
         if(fail.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){
                 QTextStream valja(&fail);
-                valja.setCodec("UTF-8");
+//                valja.setCodec("UTF-8");
                 valja.setAutoDetectUnicode(false);
 //                static bool esimene = true;
                 for(int i = 0; i < tabWidget->count(); i++){
@@ -4527,7 +4527,7 @@ void Protokollitaja::taiendaAndmebaas()
         fail.setFileName(qApp->applicationDirPath() + "/Data/Laskuritenimekiri Pustol.txt");
         if(fail.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){
                 QTextStream valja(&fail);
-                valja.setCodec("UTF-8");
+//                valja.setCodec("UTF-8");
                 valja.setAutoDetectUnicode(false);
 //                static bool esimene = true;
                 for(int i = 0; i < tabWidget->count(); i++){
@@ -4659,9 +4659,9 @@ void Protokollitaja::uploadResults()
 //    if(file.open(QIODevice::WriteOnly)){
 //        file.write(jsonDoc.toJson());
 //        if(verbose)
-//            QTextStream(stdout) << "Json written to a file" << endl;
+//            QTextStream(stdout) << "Json written to a file" << Qt::endl;
 //    }else
-//        QTextStream(stdout) << "Unable to open file" << endl;
+//        QTextStream(stdout) << "Unable to open file" << Qt::endl;
 
     if(dataUploader == nullptr)
         dataUploader = new DataUploader(verbose, this);

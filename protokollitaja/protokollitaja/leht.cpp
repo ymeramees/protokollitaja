@@ -138,7 +138,7 @@ void Leht::siusiReset(int connectionIndex)
 void Leht::sorteeri(int t)
 {
     if(verbose)
-        QTextStream(stdout) << "Leht::sorteeri(): t = " << t << endl;
+        QTextStream(stdout) << "Leht::sorteeri(): t = " << t << Qt::endl;
 
     if(laskurid.isEmpty() && voistkonnad.isEmpty()) return;
     int i = 0;

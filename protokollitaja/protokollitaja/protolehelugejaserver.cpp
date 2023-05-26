@@ -30,7 +30,7 @@ void ProtolehelugejaServer::closeConnection(int socketIndex)
 void ProtolehelugejaServer::closeConnections()
 {
     if(verbose)
-        QTextStream(stdout) << "ProtolehelugejaServer::closeConnections()" << endl;
+        QTextStream(stdout) << "ProtolehelugejaServer::closeConnections()" << Qt::endl;;
     while(hasPendingConnections()){
         QTcpSocket *socket = nextPendingConnection();
         connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
@@ -57,7 +57,7 @@ void ProtolehelugejaServer::newConnection()
         socket->setSocketIndex(sockets.length()-1);
 
         if(verbose)
-            QTextStream(stdout) << "ProtolehelugejaServer::newConnection(), index = " << socket->getSocketIndex() << endl;
+            QTextStream(stdout) << "ProtolehelugejaServer::newConnection(), index = " << socket->getSocketIndex() << Qt::endl;;
 
         connect(socket, &ProtolehelugejaConnection::shotInfoRead, this, &ProtolehelugejaServer::incomingShotInfo);
         connect(socket, &ProtolehelugejaConnection::renewWithTargetNumber, this, &ProtolehelugejaServer::readTargetNumber);

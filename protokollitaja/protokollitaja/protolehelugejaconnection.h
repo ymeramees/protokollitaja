@@ -4,6 +4,7 @@
 #include <QTime>
 #include <QTcpSocket>
 #include <QMessageBox>
+#include <QRandomGenerator>
 
 class ProtolehelugejaConnection : public QObject
 {

@@ -423,7 +423,7 @@ void Lehelugeja::loeBroadcast()
 #ifdef PROOV
             qDebug() << "Broadcasti rida: " << rida;
 #endif
-            QStringList ipAadressid = rida.split(";", QString::SkipEmptyParts);
+            QStringList ipAadressid = rida.split(";", Qt::SkipEmptyParts);
             //Mõnes arvutis on mitu IPv4 aadressi, saata tuleb kõik, mis ei alga 255 või 127'ga
             socket->abort();
 
@@ -506,7 +506,7 @@ void Lehelugeja::loeVorgust()   //Protokollitajast tulev info/käsk
         //"Laskur:siffer - siffer;Eesnimi;Perekonnanimi;seeriate arv;laskude arv;seeriad;selle seeria lasud; x; y; summa;
         //aktiivne seeria;harjutus;lasku lehes;kümnendikega lugemine (true/false)
         if(verbose)
-            QTextStream(stdout) << "Protolehelugeja::loeVorgust(): sisse = " << sisse << endl;
+            QTextStream(stdout) << "Protolehelugeja::loeVorgust(): sisse = " << sisse << Qt::endl;
         sisse.remove(0, 7);
 
         ui->nimeBox->clear();
@@ -729,7 +729,7 @@ void Lehelugeja::saadaParool()
     valja.device()->seek(0);
     valja << quint16(ulong(block.size()) - sizeof(quint16));
     if(verbose)
-        QTextStream(stdout) << QString("saadaVorku(): %1").arg(parool) << endl;
+        QTextStream(stdout) << QString("saadaVorku(): %1").arg(parool) << Qt::endl;
     socket->write(block);
     block.clear();
 }
@@ -745,7 +745,7 @@ void Lehelugeja::saadaVorku(QString saadetis)
     valja.device()->seek(0);
     valja << quint16(ulong(block.size()) - sizeof(quint16));
     if(verbose)
-        QTextStream(stdout) << "saadaVorku(): " << block << endl;
+        QTextStream(stdout) << "saadaVorku(): " << block << Qt::endl;
     socket->write(block);
     block.clear();
 }
@@ -844,7 +844,7 @@ void Lehelugeja::uhenduUuesti()
     blockSize = 0;
     uhendusAutoriseeritud = false;
     socket->abort();
-    QRegExp iPkontroll("^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$");  //Kontrollmuster, et sisestatud oleks ikkagi IP aadress
+    QRegularExpression iPkontroll("^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$");  //Kontrollmuster, et sisestatud oleks ikkagi IP aadress
 
     bool ok = true;
     do{
@@ -853,7 +853,7 @@ void Lehelugeja::uhenduUuesti()
 //            "0.0.0.0")), 50005);
 //    socket->connectToHost(QHostAddress("192.168.11.131"), 50005);
         if(!ok) break;
-    }while(iPkontroll.indexIn(aadress) == -1);  //Tsükkel käib nii kaua, kuni vajutatakse Cancel või on sisestatud korrektne IP aadress
+    }while(!iPkontroll.match(aadress).hasMatch());  //Tsükkel käib nii kaua, kuni vajutatakse Cancel või on sisestatud korrektne IP aadress
     if(aadress.isEmpty() || !ok) return;
     uhenduServeriga(aadress);
 }

@@ -73,7 +73,7 @@ void StartListWriterTest::test_writeInbandStartListInCorrectFormat()
     bool fileCorrect = true;
     if (file.open(QIODevice::ReadOnly)) {
         QTextStream in(&file);
-        in.setCodec("UTF-8");
+//        in.setCodec("UTF-8"); // TODO Not needed in Qt 6.5
         QString contents = in.readAll();
         QCOMPARE(contents, expectedOutput);
     } else {

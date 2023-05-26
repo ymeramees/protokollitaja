@@ -21,7 +21,7 @@ public:
     void clear();
     void createLayout(QJsonObject jsonObj, const bool scoringWithPoints);
     QMap<int, Result> getCurrentResults() const;
-    QMap<int, Result> getSortedResults() const;
+    QMultiMap<int, Result> getSortedResults() const;
     int lastValidShotIndex() const;
     void setCompetitiorsData(QStringList rows);
     void setTableName(QString newName);

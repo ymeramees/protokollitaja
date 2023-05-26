@@ -47,7 +47,7 @@ void TeamsTable::createLayout(QJsonObject &jsonObj)
 void TeamsTable::readSiusInfo(SiusShotData shotData)
 {
     if(verbose)
-        QTextStream(stdout) << "readSiusInfo()" << endl;
+        QTextStream(stdout) << "readSiusInfo()" << Qt::endl;
 
     // FIXME To be implemented
 //    for(QString row : lines){
@@ -100,7 +100,7 @@ void TeamsTable::readSiusInfo(SiusShotData shotData)
 //            }
 //        }
     if(thisCompetitor == nullptr)
-            statusInfoChanged(tr("Sellise ID'ga võistlejat ei leitud: ") + shotData.id);
+        statusInfoChanged(tr("Sellise ID'ga võistlejat ei leitud: %1").arg(shotData.id));
 //    }
     sumAllTeams();
 }
