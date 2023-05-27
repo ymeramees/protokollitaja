@@ -6,6 +6,7 @@
 #endif
 #include "globalvariables.h"
 #include "protokollitaja.h"
+#include "programname.h"
 #include "version.h"
 
 #ifdef ASM_CRASH_REPORT

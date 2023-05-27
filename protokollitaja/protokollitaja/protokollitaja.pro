@@ -26,6 +26,7 @@ HEADERS += lisalaskudeaken.h \
     initialdialog.h \
     kllfilerw.h \
     liikmetevalikkast.h \
+    programname.h \
     simplekllfilerw.h \
     tabwidgetwithsettings.h \
     updatechecker.h \
@@ -40,7 +41,6 @@ HEADERS += lisalaskudeaken.h \
     protokollitaja.h \
     lehelugejaaken.h \
     sifriseade.h \
-    version.h \
     laskudeaken.h \
     filedownloader.h \
     finalsfileexport.h \
@@ -53,7 +53,8 @@ HEADERS += lisalaskudeaken.h \
     ../../common/src/uhendumiseaken.h \
     ../../common/src/siusdataconnections.h \
     ../../common/src/siusdataconnection.h \
-    ../../common/src/siusshotdata.h
+    ../../common/src/siusshotdata.h \
+    ../../common/src/version.h
 SOURCES += lisalaskudeaken.cpp \
     datauploader.cpp \
     initialdialog.cpp \

@@ -2,7 +2,8 @@
 ISSF Shooting sport ranking and results display software suite. Now monorepo for previously separate programs:
 * [Protokollitaja](protokollitaja/README.md) - Main ranking and results display program and a server from a set of programs.
 * [Protofinaal](protofinaal) - New implementation of [QFinaal](https://github.com/ymeramees/qfinaal). In a very early stage at the moment.
-* Others will follow
+* [Protolehelugeja](protolehelugeja/README.md) - For reading results from paper target scoring machines. Disag RM-III and Disag RM-IV are currently supported.
+* [ProtoRangeControl](protorangecontrol/README.md) - For controlling multiple (InBand) electronic targets in a range.
 
 For more details about each program, see their respective readme files.
 
@@ -18,7 +19,8 @@ For more details about each program, see their respective readme files.
 * Sorting of competitors by different properties (name, date of birth, target no, etc.)
 * Moving/copying competitors between diciplines
 * Connection with [QFinaal](https://github.com/ymeramees/qfinaal)
-* Connection with [Protolehelugeja](https://github.com/ymeramees/protolehelugeja)
+* Connection with [Protolehelugeja](protolehelugeja/README.md)
+* Connection with [ProtoRangeControl](protorangecontrol/README.md)
 * Simulation of results from electronic targets with [Prototester](https://github.com/ymeramees/prototester)
 * Check for updates on startup
 

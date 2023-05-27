@@ -83,12 +83,27 @@ QString Lask::getSLask() const
     return l;
 }
 
+Lask Lask::fromInband(QStringList inbandRowParts)
+{
+    if (inbandRowParts.length() >= 5) {
+        // lane, "shot", value, index, x (in mm?), y (in mm?), "message end"
+        Lask shot;
+        shot.setLask(inbandRowParts.at(2));
+        shot.setMmX(inbandRowParts.at(4));
+        shot.setMmY(inbandRowParts.at(5));
+        shot.setShotTime(QTime::currentTime()); // Inband doesn't send shot's time
+        shot.setCompetitionShot(true);
+        shot.setShotOrigin(Lask::Inband);
+        return shot;
+    } else return Lask();
+}
+
 int Lask::get10Lask() const
 {
     return m_lask;
 }
 
-bool Lask::calcIfInnerTen(TargetType targetType, int x, int y)
+bool Lask::calcIfInnerTen(TargetType targetType, long x, long y)
 {
     //Calculate shot center distance for determing inner tens:
     if(x != -999 && y != -999){
@@ -319,10 +334,22 @@ float Lask::stringToFloat(QString s)
     return fx;
 }
 
+QString Lask::stringMX() const
+{
+    double fx = m_x;
+    return QString("%1").arg(fx / 1000000);
+}
+
 QString Lask::stringX() const
 {
     double fx = m_x;
     return QString("%1").arg(fx / 1000);
+}
+
+QString Lask::stringMY() const
+{
+    double fy = m_y;
+    return QString("%1").arg(fy / 1000000);
 }
 
 QString Lask::stringY() const

@@ -14,7 +14,7 @@ class Lask
 
 public:
     enum TargetType {Muu = 0, Ohupuss = 1, Ohupustol = 2, Sportpuss = 3, Spordipustol = 4, Puss = 5, Pustol = 6};
-    enum OriginType {Manual = 0, ScoringMachine = 1, Sius = 2};
+    enum OriginType {Manual = 0, ScoringMachine = 1, Sius = 2, Inband = 3};
     Lask();
     Lask(int shot10Times, int x = -999, int y = -999, bool innerTen = false, QTime shotTime = QTime(), bool competitionShot = true, OriginType shotOrigin = Manual);
     Lask(QString siusRow);
@@ -23,7 +23,8 @@ public:
     bool isEmpty();
 
 public:
-    static bool calcIfInnerTen(TargetType targetType, int x, int y);
+    static bool calcIfInnerTen(TargetType targetType, long x, long y);
+    static Lask fromInband(QStringList inbandRowParts);
 
     void clear();
     bool equals(const Lask other) const;
@@ -58,6 +59,8 @@ public:
     OriginType shotOrigin() const;
     QString stringX() const;
     QString stringY() const;
+    QString stringMX() const;
+    QString stringMY() const;
     QTime shotTime() const;
     QJsonObject toJson() const;
 

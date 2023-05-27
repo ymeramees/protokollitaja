@@ -17,12 +17,12 @@ skip_non_tags: true
 # Maximum number of concurrent jobs for the project
 max_jobs: 1
 
-image: Visual Studio 2017
+image: Visual Studio 2019
 clone_folder: C:\projects\protokollitaja
 
 install:
 - cmd: >-
-    set QTDIR=C:\Qt\5.12.6\mingw73_32
+    set QTDIR=C:\Qt\6.5.0\mingw_64
 
     set OPENSSL_INCLUDE_PATH=C:\OpenSSL-v111-Win32\include\openssl
 
@@ -43,7 +43,7 @@ build_script:
 
     dir
 
-    qmake.exe Protokollitaja.pro -spec win32-g++ "CONFIG+=qtquickcompiler" DEFINES+=ASM_CRASH_REPORT CONFIG+=c++17 && mingw32-make.exe qmake_all
+    qmake.exe Protokollitaja.pro -spec win32-g++ "CONFIG+=qtquickcompiler" DEFINES+=ASM_CRASH_REPORT && mingw32-make.exe qmake_all
 
     mingw32-make.exe -j4
 
@@ -53,7 +53,7 @@ build_script:
 
     cd qfinaal
 
-    qmake.exe QFinaal.pro -spec win32-g++ "CONFIG+=qtquickcompiler" DEFINES+=ASM_CRASH_REPORT CONFIG+=c++17 && mingw32-make.exe qmake_all
+    qmake.exe QFinaal.pro -spec win32-g++ "CONFIG+=qtquickcompiler" DEFINES+=ASM_CRASH_REPORT && mingw32-make.exe qmake_all
 
     mingw32-make.exe -j4
 
@@ -82,7 +82,7 @@ test_script:
 
     Copy-Item "$env:APPVEYOR_BUILD_FOLDER\protokollitaja\build\release\Data\Print_template.html" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\Data"
 
-    Copy-Item "C:\Qt\Tools\mingw730_32\bin\addr2line.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\tools"
+    Copy-Item "C:\Qt\Tools\mingw900_32\bin\addr2line.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\tools"
     
     Copy-Item "C:\OpenSSL-v111-Win32\bin\libcrypto-1_1.dll" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
 
