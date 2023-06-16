@@ -26,17 +26,27 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_5">
+     <item row="0" column="0">
+      <widget class="QLabel" name="competitionNameLabel">
        <property name="text">
-        <string>Alates:</string>
+        <string>Võistluse nimi:</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1" colspan="3">
-      <widget class="QLineEdit" name="placeEdit">
+     <item row="0" column="1" colspan="3">
+      <widget class="QLineEdit" name="competitionNameEdit">
        <property name="toolTip">
-        <string>Toimumise aeg ja koht</string>
+        <string>Praegu valitava võistluse nimi</string>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="fromLabel">
+       <property name="text">
+        <string>Alates:</string>
        </property>
       </widget>
      </item>
@@ -47,9 +57,9 @@
          <hour>0</hour>
          <minute>0</minute>
          <second>0</second>
-         <year>2020</year>
-         <month>1</month>
-         <day>1</day>
+         <year>2019</year>
+         <month>12</month>
+         <day>30</day>
         </datetime>
        </property>
        <property name="minimumDate">
@@ -67,30 +77,13 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="3">
-      <widget class="QPushButton" name="browseButton">
-       <property name="toolTip">
-        <string>Siia vajutades saate otsida teise faili, mida avada</string>
-       </property>
+     <item row="1" column="2">
+      <widget class="QLabel" name="toLabel">
        <property name="text">
-        <string>Lehitse...</string>
+        <string comment="10">kuni:</string>
        </property>
-      </widget>
-     </item>
-     <item row="0" column="1" colspan="3">
-      <widget class="QLineEdit" name="competitionNameEdit">
-       <property name="toolTip">
-        <string>Praegu valitava võistluse nimi</string>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Võistluse nimi:</string>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
@@ -114,27 +107,40 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Faili nimi:</string>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="placeLabel">
        <property name="text">
         <string>Koht:</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string comment="10">kuni:</string>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="placeEdit">
+       <property name="toolTip">
+        <string>Toimumise aeg ja koht</string>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="countryLabel">
+       <property name="text">
+        <string>Riik:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QComboBox" name="countryCombo">
+       <item>
+        <property name="text">
+         <string>Estonia</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="fileNameLabel">
+       <property name="text">
+        <string>Faili nimi:</string>
        </property>
       </widget>
      </item>
@@ -142,6 +148,16 @@
       <widget class="QLineEdit" name="fileNameEdit">
        <property name="toolTip">
         <string>Võistluse faili nimi</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="3">
+      <widget class="QPushButton" name="browseButton">
+       <property name="toolTip">
+        <string>Siia vajutades saate otsida teise faili, mida avada</string>
+       </property>
+       <property name="text">
+        <string>Lehitse...</string>
        </property>
       </widget>
      </item>

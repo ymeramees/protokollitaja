@@ -33,7 +33,7 @@ void DataUploaderTest::test_getUnauthorizedResponseWithTestUser()
 
     QUrl url;
     url.setScheme("https");
-#ifdef PROOV
+#ifdef QT_DEBUG
     url.setHost("localhost");
     url.setPath("/api/v1/competitions");
     url.setPort(3005);
@@ -56,7 +56,7 @@ void DataUploaderTest::test_getUnauthorizedResponseWithTestUser()
     QList<QVariant> arguments = spy.takeFirst();
     QCOMPARE(arguments[0].toBool(), false);
     QCOMPARE(arguments[1].toString(), "Insufficient access rights for username");
-    QCOMPARE(arguments[2].toString(), "Error transferring https://localhost:3005/api/v1/competitions - server replied: Forbidden");
+    QCOMPARE(arguments[2].toString(), "Error transferring https://ymeramees.no-ip.org:3005/api/v1/competitions - server replied: Forbidden");
 }
 
 QTEST_MAIN(DataUploaderTest)

@@ -44,9 +44,11 @@ public:
 	QList<Liige*> voistlejad;
 	LiikmeteValikKast *lValik;
     Voistkond(LiikmeteValikKast *lV, int vA, QList<int> *j, int *vI, QWidget *parent = nullptr);
+    Voistkond(QJsonObject json, LiikmeteValikKast *lV, int vA, QList<int> *j, int *vI, QWidget *parent = nullptr);
 	virtual ~Voistkond();
 	bool vaiksem(Voistkond *v) const;
     QJsonObject toExportJson();
+	QJsonObject toJson();
 
 public slots:
 	void liida();
@@ -55,6 +57,9 @@ public slots:
 
 signals:
 	void uuendaLiikmeid();
+
+private:
+	void setupFields();
 };
 
 #endif /* VOISTKOND_H_ */

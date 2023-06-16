@@ -63,7 +63,7 @@ int KllFileRW::checkDuplicateIds(QTabWidget *tabWidget, int lastId) // Needed fo
 
 TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
 {
-#ifdef PROOV
+#ifdef QT_DEBUG
     qDebug() << "readKllFile()";
 #endif
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -71,19 +71,22 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
     QFile fail(fileName);
     if(fail.open(QIODevice::ReadOnly)){
         QDataStream in(&fail);
-        quint32 kontroll, version;
-        in >> kontroll >> version;
-        if(kontroll != 0x00FA3848){
-            QMessageBox::critical(m_parentWindow, tr("Protokollitaja"), tr("Vigane või vale fail!%1").arg(fileName), QMessageBox::Ok);
-            QApplication::restoreOverrideCursor();
+
+        CompetitionSettings competitionSettings = SimpleKllFileRW::readCompetitionSettings(&in, nullptr);
+
+        if (!competitionSettings.competitionName.isEmpty()) {  // This should fail, when reading settings failed
+            kllData.competitionName = competitionSettings.competitionName;
+            kllData.startDate = competitionSettings.startDate;
+            kllData.endDate = competitionSettings.endDate;
+            kllData.timeAndPlace = competitionSettings.place;
+            kllData.country = competitionSettings.country;
+        } else {
             return kllData;
         }
         kllData.lastCompetitorId = startingId;  // For importing into already existing competition
-        if(version == 100){
+        if(competitionSettings.fileVersion == 100){
             kllData.tabWidget = new QTabWidget();
             kllData.tabWidget->setTabPosition(QTabWidget::North);
-            in >> kllData.competitionName;
-            in >> kllData.timeAndPlace;
             int noOfSheets = 0;
             in >> kllData.autoComplete >> kllData.autosave >> kllData.time >> kllData.tabLocation >> noOfSheets;
             for(int i = 0; i < noOfSheets; i++){
@@ -124,8 +127,8 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
 //                connect(sheet, SIGNAL(muudatus()), this, SLOT(muudaSalvestamist()));
 //                connect(sheet, SIGNAL(idMuutus(int,Laskur*)), this, SLOT(kontrolliIdKordust(int,Laskur*)));
                 sheet->alustamine = true;
-                sheet->minAeg = min;
-                sheet->maxAeg = max;
+                sheet->setMinTimeMs(min);
+                sheet->setMaxTimeMs(max);
                 if(sheet->voistk){
                     QString teamName, name, lastName, club, labelTxt, sum, notes;
                     for(int j = 0; j < noOfCompetitors; j++){
@@ -168,12 +171,10 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
             }
 //            uuendaSeaded();
 //            voibSulgeda = true;
-        }else if(version >= 101 && version <= 112){
+        } else if(competitionSettings.fileVersion >= 101 && competitionSettings.fileVersion <= 112) {   // TODO TO be updated
             kllData.tabWidget = new QTabWidget();
             kllData.tabWidget->setTabPosition(QTabWidget::North);
-            in >> kllData.competitionName;
-            in >> kllData.timeAndPlace;
-            if(version >= 112){
+            if(competitionSettings.fileVersion >= 112){
                 in >> kllData.webCompetitionId;
                 if(kllData.webCompetitionId.contains(QRegularExpression(QStringLiteral("[^\\x{0000}-\\x{007F}]")))){
                     if(QMessageBox::warning(
@@ -189,9 +190,9 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                 kllData.webCompetitionId = "";
             int noOfSheets = 0;
             in >> kllData.autoComplete >> kllData.autosave >> kllData.time >> kllData.tabLocation >> noOfSheets;
-            if(version >= 108)
+            if(competitionSettings.fileVersion >= 108)
                 in >> kllData.sorting;
-            if(version >=111)
+            if(competitionSettings.fileVersion >=111)
                 in >> kllData.uploadTime;
             if(kllData.uploadTime < 30)
                 kllData.uploadTime = 30;
@@ -203,18 +204,18 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                 bool toBeShown = true;
                 QString tabName, screenName, eventType = "Muu";
                 in >> tabName >> s;
-                if(version >= 107)
+                if(competitionSettings.fileVersion >= 107)
                     in >> noOfShots;
                 in >> vs >> a >> screenName;
-                if(version != 101)
+                if(competitionSettings.fileVersion != 101)
                     in >> weaponType;
-                if(version >= 103)
+                if(competitionSettings.fileVersion >= 103)
                     in >> eventType;
                 if(eventType.isEmpty())
                     eventType = "Muu";
-                if(version >= 105)
+                if(competitionSettings.fileVersion >= 105)
                     in >> withDecimals;
-                if(version >= 108)
+                if(competitionSettings.fileVersion >= 108)
                     in >> toBeShown;
                 in >> min >> max >> team >> tabIndex >> noOfCompetitors;
 
@@ -253,10 +254,10 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
 
                 sheet->alustamine = true;
                 sheet->naidata = toBeShown;    // Will this sheet be shown on spectators window
-                sheet->minAeg = min; // Min time to show
-                sheet->maxAeg = max; // Max time to show
+                sheet->setMinTimeMs(min); // Min time to show
+                sheet->setMaxTimeMs(max); // Max time to show
                 if(sheet->voistk){
-                    if(version >= 106){
+                    if(competitionSettings.fileVersion >= 106){
                         int following = 0, followee = 0;
                         in >> following;
                         for(int i = 0; i < following; i++){
@@ -270,14 +271,14 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                         sheet->voistkonnad[j]->nimi->setText(teamName);
                         for(int k = 0; k < s; k++){
                             in >> name >> lastName >> club;
-                            if(version >= 106){
+                            if(competitionSettings.fileVersion >= 106){
                                 in >> eventType;
                             }
                             in >> sum >> label;
                             sheet->voistkonnad[j]->voistlejad[k]->eesNimi = name;
                             sheet->voistkonnad[j]->voistlejad[k]->perekNimi = lastName;
                             sheet->voistkonnad[j]->voistlejad[k]->klubi = club;
-                            if(version >= 106){
+                            if(competitionSettings.fileVersion >= 106){
                                 sheet->voistkonnad[j]->voistlejad[k]->harjutus = eventType;
                             }
                             sheet->voistkonnad[j]->voistlejad[k]->summa = sum;
@@ -292,9 +293,9 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                     int shootOffShot = -1, shot, id, noOfShootOffShots = 10;   // In older versions there are 10 shoot off shots, in newer versions 24, will be changed below
                     QString targetNo, targetNumberingStart, targetNumberingEnd, name, lastName, birthY, club, currentSeries, sum, finals, innerTens, notes;
                     for(int j = 0; j < noOfCompetitors; j++){
-                        if(version >= 104)
+                        if(competitionSettings.fileVersion >= 104)
                             in >> targetNo >> targetNumberingStart >> targetNumberingEnd;
-                        if(version >= 107)
+                        if(competitionSettings.fileVersion >= 107)
                             in >> id;
                         in >> name >> lastName >> birthY >> club;
                         sheet->laskurid[j]->rajaNr->setText(targetNo);
@@ -309,7 +310,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                         for(int k = 0; k < s; k++){
                             in >> currentSeries;
                             sheet->laskurid[j]->seeriad[k]->setText(currentSeries);
-                            if(version >= 107 && version <= 108){
+                            if(competitionSettings.fileVersion >= 107 && competitionSettings.fileVersion <= 108){
                                 int x, y;
                                 for(int l = 0; l < sheet->laskurid[j]->lasud[k].count(); l++){
                                     in >> shot >> x >> y;
@@ -317,13 +318,13 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                                     sheet->laskurid[j]->lasud[k][l]->setMmX(x);
                                     sheet->laskurid[j]->lasud[k][l]->setMmY(y);
                                 }
-                            }else if(version >= 109){
+                            }else if(competitionSettings.fileVersion >= 109){
                                 QString x, y;
                                 QTime shotTime;
                                 bool isInnerTen = false;
                                 for(int l = 0; l < sheet->laskurid[j]->lasud[k].count(); l++){
                                     in >> shot >> x >> y;
-                                    if(version >= 111){
+                                    if(competitionSettings.fileVersion >= 111){
                                         in >> shotTime >> isInnerTen;
                                         sheet->laskurid[j]->lasud[k][l]->setShotTime(shotTime);
                                         sheet->laskurid[j]->lasud[k][l]->setInnerTen(isInnerTen);
@@ -333,7 +334,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                                     sheet->laskurid[j]->lasud[k][l]->setMmY(y);
                                 }
                             }
-                            if(version >= 110){
+                            if(competitionSettings.fileVersion >= 110){
                                 noOfShootOffShots = 24;    // Newer Finaal file has 24 shoot off shots
                             }
                         }
@@ -368,7 +369,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
         fail.close();
     }else QMessageBox::critical(m_parentWindow, tr("Protokollitaja"), tr("Ei leia faili!"), QMessageBox::Ok);
     QApplication::restoreOverrideCursor();
-#ifdef PROOV
+#ifdef QT_DEBUG
     qDebug() << "readKllFile() lõpp";
 #endif
     return kllData;

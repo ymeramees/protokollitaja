@@ -7,6 +7,21 @@ InitialDialog::InitialDialog(QWidget *parent)
         ui.fileNameEdit->setText("");
         resetDates();
 
+//        QList<QLocale> allLocales = QLocale::matchingLocales(
+//            QLocale::AnyLanguage,
+//            QLocale::AnyScript,
+//            QLocale::AnyCountry);
+
+        QStringList countryNames = {"Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "BiH", "Botswana", "Brazil", "Brunei ", "Bulgaria", "Burkina Faso", "Burundi", "Côte d'Ivoire", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czechia", "Denmark", "Djibouti", "Dominica", "Dominican", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Holy See", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Palestine State", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Rwanda", "Saint Lucia", "Samoa", "San Marino", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "UAE", "United Kingdom", "USA", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+};
+//        for(QLocale locale : allLocales) {
+//            countryNames.append(QLocale::territoryToString(locale.territory()));
+//        }
+        countryNames.removeDuplicates();
+        countryNames.sort();
+
+        ui.countryCombo->addItems(countryNames);
+
         connect(ui.browseButton, SIGNAL(clicked()), this, SLOT(avamine()));
         connect(ui.competitionNameEdit, SIGNAL(textEdited(QString)), this, SLOT(muutus(QString)));
         connect(ui.newButton, SIGNAL(clicked()), this, SLOT(newCompetition()));
@@ -27,33 +42,21 @@ void InitialDialog::avamine()
     else
         uusNimi = QFileDialog::getOpenFileName(this, tr("Ava fail"), ui.fileNameEdit->text(), tr("Protokollitaja fail (*.kll)"));
     if(!uusNimi.isEmpty()){
-                ui.fileNameEdit->setText(uusNimi);
-                //failiNimi.chop(4);
-                QFile fail(ui.fileNameEdit->text());
-                if(fail.open(QIODevice::ReadOnly)){
-                        QDataStream sisse(&fail);
-                        quint32 kontroll, versioon;
-                        sisse >> kontroll >> versioon;
-                        if(kontroll != 0x00FA3848){
-                                QMessageBox::critical(this, tr("Protokollitaja"), tr("Vigane või vale fail!\n%1").arg(ui.fileNameEdit->text()), QMessageBox::Ok);
-                                return;
-                        }
-                        if(versioon >= 100 && versioon <= 112){
-                                QString rida;
-                                //char *rida2;
-                                sisse >> rida;
-                                //rida = QString::fromUtf8(rida2);
-                                ui.competitionNameEdit->setText(rida);
-                                rida.clear();
-                                //*rida2 = 0;
-                                sisse >> rida;
-                                //rida = QString::fromUtf8(rida2);
-                                ui.placeEdit->setText(rida);
-                        }else QMessageBox::critical(this, tr("Protokollitaja"), tr("Vale versiooni fail!\n\nVõimalik, et "
-                                  "tegu on uuema programmi versiooni failiga.\n\n(AlguseValik::avamine())"),QMessageBox::Ok);
-                        fail.close();
-                }
-        }
+        ui.fileNameEdit->setText(uusNimi);
+        //failiNimi.chop(4);
+        QFile fail(ui.fileNameEdit->text());
+        if(fail.open(QIODevice::ReadOnly)) {
+            QDataStream sisse(&fail);
+            CompetitionSettings competitionSettings = SimpleKllFileRW::readCompetitionSettings(&sisse, this);
+            ui.competitionNameEdit->setText(competitionSettings.competitionName);
+            ui.startDateEdit->setDate(competitionSettings.startDate);
+            ui.endDateEdit->setDate(competitionSettings.endDate);
+            ui.placeEdit->setText(competitionSettings.place);
+            ui.countryCombo->setCurrentText(competitionSettings.country);
+        } else QMessageBox::critical(this, tr("Protokollitaja"), tr("Vale versiooni fail!\n\nVõimalik, et "
+                                                                 "tegu on uuema programmi versiooni failiga.\n\n(AlguseValik::avamine())"),QMessageBox::Ok);
+        fail.close();
+    }
 }
 
 void InitialDialog::closeEvent(QCloseEvent *event)
@@ -67,6 +70,11 @@ void InitialDialog::closeEvent(QCloseEvent *event)
 QString InitialDialog::competitionName() const
 {
     return ui.competitionNameEdit->text();
+}
+
+QString InitialDialog::country() const
+{
+    return ui.countryCombo->currentText();
 }
 
 void InitialDialog::edasi()
@@ -141,6 +149,11 @@ void InitialDialog::resetDates()
 void InitialDialog::setCompetitionName(QString newName)
 {
     ui.competitionNameEdit->setText(newName);
+}
+
+void InitialDialog::setCountry(QString newCountry)
+{
+    ui.countryCombo->setCurrentText(newCountry);
 }
 
 void InitialDialog::setData(CompetitionSettings data)

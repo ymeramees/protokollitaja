@@ -69,7 +69,7 @@ public:
     enum {Muu = 0, Ohupuss = 1, Ohupustol = 2, Sportpuss = 3, Spordipustol = 4, Puss = 5, Pustol = 6};
         //enum {vOhupuss = 0, sOhupuss = 1, vOhupustol = 2, sOhupustol = 3, lam = 4, vStandard = 5, sStandard = 6, vabap = 7, spordikas = 8, sumat = 9, olump = 10};
     enum {KumneteArvuga = 0, ViimaseSeeriaga = 1};  //Täisarvudega lugemise puhul järjestamise variandid
-    int jarjestamine;   //Täisarvudega lugemisel, millist järjestamist kasutada
+    int ranking;   //Täisarvudega lugemisel, millist järjestamist kasutada
 	int abi;
     int laskuriId;  //Suurim kasutusel olev laskuri ID
     int leheIndeks;
@@ -176,7 +176,7 @@ public:
     //bool lessThan(const Laskur*, const Laskur*);
     QJsonObject toExportJson();
 
-#ifdef PROOV    // Functionality for testing purposes
+#ifdef QT_DEBUG    // Functionality for testing purposes
     QAction *deleteAllShotsAct;
 
 private slots:
@@ -263,6 +263,7 @@ private slots:
     void uus();
     void uusLaskur();    //Uue laskuri loomine,  koos uue ID'ga
     void uusLaskur(int);   //Uue laskuri loomine, koos olemasoleva ID'ga (kasutatakse näiteks faili avamisel
+    void uusLaskur(QJsonObject);    // Create new competitor from json
     void uusTab();
     void viiLoppu();
 
@@ -275,6 +276,7 @@ private:
     QProgressDialog *progress;  //Näitab, et SiusDatast alles andmed tulevad
     CommonSettings m_settings;
     QString webCompetitionId = "";
+    QString m_country = "Estonia";
     QString m_restHeaderData = "";
     QTimer *progressTimer;  //Timer, et progressi aken mõne aja pärast kinni panna
 };

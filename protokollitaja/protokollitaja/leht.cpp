@@ -23,8 +23,8 @@ Leht::Leht(Andmebaas* baas, int s, int vs, int a, bool *k, QString eNimi, int r,
 	abi = a;
 	leheIndeks = lI;
 	kirjutusAbi = k;
-	minAeg = 10000;
-	maxAeg = 30000;
+	m_minTime = 10000;
+	m_maxTime = 30000;
     lValik = lV;
 	vKast = new QVBoxLayout(this);
 //	setMaximumWidth(1000);
@@ -96,6 +96,45 @@ void Leht::uusLaskur(int id)
     setMaximumHeight(vKast->count()*50+10);
 }
 
+void Leht::uusLaskur(QJsonObject json)
+{
+    if (voistk) {   // TODO To be implemented with json
+        Voistkond *voistKond = new Voistkond(json, lValik, seeriateArv, &jalgitavad, &viimaneIndex, this);
+        connect(voistKond->muudaNupp, SIGNAL(clicked()), voistKond, SLOT(naitaLiikmeteValikKast()));
+        connect(voistKond->muudaNupp, SIGNAL(clicked()), this, SLOT(teataMuudatusest()));
+        connect(voistKond, SIGNAL(uuendaLiikmeid()), this, SLOT(uuendaLiikmeteKast()));
+        connect(voistKond->nimi, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+        vKast->addWidget(voistKond);
+        voistkonnad << voistKond;
+        voistKond->show();
+    } else {
+        Laskur *las = new Laskur(json, andmebaas, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, jarjestamine, &harjutus, this);
+        connect(las, SIGNAL(sifrimuutus()), this, SLOT(naitaSifrit()));
+        connect(las, SIGNAL(idMuutus(int,Laskur*)), this, SLOT(idMuudatus(int,Laskur*)));
+        connect(las->eesNimi, SIGNAL(editingFinished()), this, SLOT(kontrolliKordusi()));
+        connect(las->perekNimi, SIGNAL(editingFinished()), this, SLOT(kontrolliKordusi()));
+        connect(las->klubi, SIGNAL(editingFinished()), this, SLOT(kontrolliKordusi()));
+        connect(las->eesNimi, SIGNAL(textChanged(QString)), this, SLOT(lubaKontrollimist(QString)));
+        connect(las->perekNimi, SIGNAL(textChanged(QString)), this, SLOT(lubaKontrollimist(QString)));
+        connect(las->klubi, SIGNAL(textChanged(QString)), this, SLOT(lubaKontrollimist(QString)));
+        connect(las, SIGNAL(muudatus()), this, SLOT(teataMuudatusest()));
+        connect(las, SIGNAL(enter(int)), this, SLOT(vajutaTab2(int)));
+        vKast->addWidget(las);
+        laskurid << las;
+        las->jrkArv = laskurid.count() - 1;
+        if(laskurid.count() > 1)
+            if(laskurid[0]->sifriAlgus->isVisible()){
+                las->rajaNr->show();
+                las->sifriAlgus->show();
+                las->sidekriips->show();
+                las->sifriLopp->show();
+                las->sifriNupp->setText("<<");
+            }
+        las->show();
+    }
+    setMaximumHeight(vKast->count()*50+10);
+}
+
 void Leht::eemaldaLaskur()
 {
 	if(voistk){
@@ -122,6 +161,32 @@ void Leht::eemaldaLaskur()
                     laskurid[i]->jrkArv = i;
                 }
 	}
+}
+
+int Leht::maxTime() const
+{
+    return m_maxTime;
+}
+
+int Leht::minTime() const
+{
+    return m_minTime;
+}
+
+void Leht::setMaxTimeMs(const int newTime)
+{
+    if (newTime < 10000)
+        m_maxTime = 10000;
+    else
+        m_maxTime = newTime;
+}
+
+void Leht::setMinTimeMs(const int newTime)
+{
+    if (newTime < 10000)
+        m_minTime = 10000;
+    else
+        m_minTime = newTime;
 }
 
 void Leht::setToBeUploaded(bool newStatus)

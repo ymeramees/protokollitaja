@@ -25,7 +25,8 @@ protected:
 public:
     InitialDialog(QWidget *parent = 0);
     ~InitialDialog();
-    void setCompetitionName(QString newName);
+    void setCompetitionName(const QString newName);
+    void setCountry(const QString newCountry);
     void setData(CompetitionSettings data);
     void setEndDate(const QDate endDate);
     void setFileName(QString newName);
@@ -33,6 +34,7 @@ public:
     QDate endDate() const;
     QDate startDate() const;
     QString competitionName() const;
+    QString country() const;
     QString fileName() const;
     QString place() const;
 

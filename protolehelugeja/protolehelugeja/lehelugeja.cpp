@@ -37,7 +37,7 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
 {
     ui->setupUi(this);
 
-#ifdef PROOV
+#ifdef QT_DEBUG
     ui->laskudeBox->setRange(1, 10);    // For testing purposes
 #endif
 
@@ -91,7 +91,7 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
     abiMenu = ui->menuBar->addMenu("&Abi");
     abiMenu->addAction(programmistAct);
 
-#ifdef PROOV
+#ifdef QT_DEBUG
     QAction* selfTestsAct = new QAction(tr("Käivita testid"), this);
     selfTestsAct->setStatusTip("Käivitab sisemised programmi testid");
     connect(selfTestsAct, SIGNAL(triggered()), this, SLOT(runSelfTests()));
@@ -209,7 +209,7 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
 
     showMaximized();
     broadcastiSaatja->start();
-#ifdef PROOV
+#ifdef QT_DEBUG
     QMessageBox::information(this, "Teade", "Debug versioon!", QMessageBox::Ok);
 #endif
 }
@@ -335,7 +335,7 @@ void Lehelugeja::drawTarget()
 
 void Lehelugeja::sumAndEndSeries()
 {
-//#ifdef PROOV    //For quick and dirty testing purposes
+//#ifdef QT_DEBUG    //For quick and dirty testing purposes
 //    for(int i = 0; i < laskudeArv; i++){
 //        seeriaLasud[i]->setX(qrand() % 100);
 //        seeriaLasud[i]->setY(qrand() % 100);
@@ -401,7 +401,7 @@ void Lehelugeja::liigneLask()
 
 void Lehelugeja::loeBroadcast()
 {
-#ifdef PROOV
+#ifdef QT_DEBUG
     qDebug() << "Loe broadcast:";
 #endif
 
@@ -420,7 +420,7 @@ void Lehelugeja::loeBroadcast()
         if(rida.startsWith("Protok:")){
             broadcastSaabunud = true;
             rida.remove(0, 7);
-#ifdef PROOV
+#ifdef QT_DEBUG
             qDebug() << "Broadcasti rida: " << rida;
 #endif
             QStringList ipAadressid = rida.split(";", Qt::SkipEmptyParts);
@@ -681,7 +681,7 @@ void Lehelugeja::readShot(Lask shot)
     }
 }
 
-#ifdef PROOV
+#ifdef QT_DEBUG
 void Lehelugeja::runSelfTests()
 {
     // Test to check target visual layout

@@ -24,7 +24,7 @@
 #include "scoringmachineconnection.h"
 
 // For testing
-#ifdef PROOV
+#ifdef QT_DEBUG
 #include "selftests.h"
 #endif
 
@@ -113,7 +113,7 @@ private slots:
     void paluSalvestada();
     void peidaNimi();
     void peidaNupud();
-#ifdef PROOV
+#ifdef QT_DEBUG
     void runSelfTests();
 #endif
     void saada(QString);

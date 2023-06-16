@@ -110,7 +110,7 @@ bool FinalsFileExport::sortCompetitors()
         return false;
     }
 
-#ifdef PROOV
+#ifdef QT_DEBUG
     qDebug() << "Protokollitaja::sortCompetitors()";
 #endif
     for(int x = 0; x < ui->finalsCompetitorsTable->rowCount(); x++){
@@ -127,7 +127,7 @@ bool FinalsFileExport::sortCompetitors()
             }
         }
     }
-#ifdef PROOV
+#ifdef QT_DEBUG
         qDebug() << "Protokollitaja::sortCompetitors(), return true";
 #endif
     return true;

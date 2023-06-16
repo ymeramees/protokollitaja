@@ -1,54 +1,91 @@
 ﻿#include "voistkond.h"
 
 Voistkond::Voistkond(LiikmeteValikKast *lV, int vA, QList<int> *j, int *vI, QWidget *parent)
-        : QWidget(parent)
+    : QWidget(parent)
 {
-        viimaneIndex = vI;
-        keskmLask = 0;
-        vArv = vA;
-        lValik = lV;
-        jalgitavad = j;
-        hKast = new QHBoxLayout(this);
-        hKast->setObjectName("hKast");
-        linnuke = new QCheckBox(this);
-        hKast->addWidget(linnuke);
-        nimi = new QLineEdit(this);
-        nimi->setMinimumHeight(28);
-        nimi->setMaximumWidth(100 + this->width() / 5);
-        hKast->addWidget(nimi);
-        muudaNupp = new QPushButton(this);
-        muudaNupp->setText("Liikmed");
-        hKast->addWidget(muudaNupp);
-        summa = new QLineEdit(this);
-        summa->setText("0");
-        summa->setMinimumHeight(28);
-        summa->setMaximumWidth(55);
-        summa->setReadOnly(true);
-        summa->setStyleSheet("border: 1px solid grey");
-        markus = new QLineEdit(this);
-        markus->setMinimumHeight(28);
-        markus->setMaximumWidth(85);
-        markus->setText(tr("Märkused"));
-        for(int i = 0; i < vArv; i++){
-                voistlejad << new Liige;
-                voistlejad[voistlejad.count() - 1]->eesNimi = tr("Võistleja 1");
-                voistlejad[voistlejad.count() - 1]->harjutus = "Harjutus";
-//                voistlejad[i]->silt = new QLabel(this);
-                voistlejad[i]->silt = new QLineEdit(this);
-                voistlejad[i]->silt->setText("0");
-                voistlejad[i]->silt->setReadOnly(true);
-                hKast->addWidget(voistlejad[i]->silt);
-//                hKast->addStretch();
-        }
-        hKast->addWidget(summa);
-        hKast->addWidget(markus);
-        hKast->addStretch();
-        //this->setMaximumWidth(800);
+    viimaneIndex = vI;
+    keskmLask = 0;
+    vArv = vA;
+    lValik = lV;
+    jalgitavad = j;
+
+    setupFields();
+
+    for(int i = 0; i < vArv; i++){
+        voistlejad << new Liige;
+        voistlejad[voistlejad.count() - 1]->eesNimi = tr("Võistleja 1");
+        voistlejad[voistlejad.count() - 1]->harjutus = "Harjutus";
+        voistlejad[i]->silt = new QLineEdit(this);
+        voistlejad[i]->silt->setText("0");
+        voistlejad[i]->silt->setReadOnly(true);
+        hKast->addWidget(voistlejad[i]->silt);
+    }
+    hKast->addWidget(summa);
+    hKast->addWidget(markus);
+    hKast->addStretch();
+}
+
+Voistkond::Voistkond(QJsonObject json, LiikmeteValikKast *lV, int vA, QList<int> *j, int *vI, QWidget *parent)
+    : QWidget(parent)
+{
+    viimaneIndex = vI;
+    keskmLask = 0;
+    vArv = vA;
+    lValik = lV;
+    jalgitavad = j;
+
+    setupFields();
+    nimi->setText(json["name"].toString());
+
+    QJsonArray membersArray = json["members"].toArray();
+    for (QJsonValue jsonValue : membersArray) {
+        QJsonObject memberJson = jsonValue.toObject();
+        voistlejad << new Liige;
+        voistlejad[voistlejad.count() - 1]->eesNimi = memberJson["firstName"].toString();
+        voistlejad[voistlejad.count() - 1]->perekNimi = memberJson["familyName"].toString();
+        voistlejad[voistlejad.count() - 1]->klubi = memberJson["club"].toString();
+        voistlejad[voistlejad.count() - 1]->harjutus = memberJson["event"].toString();
+        voistlejad[voistlejad.count() - 1]->summa = memberJson["total"].toString();
+        voistlejad[voistlejad.count() - 1]->silt = new QLineEdit(this);
+        voistlejad[voistlejad.count() - 1]->silt->setText(memberJson["label"].toString());
+        voistlejad[voistlejad.count() - 1]->silt->setReadOnly(true);
+        hKast->addWidget(voistlejad[voistlejad.count() - 1]->silt);
+    }
+    hKast->addWidget(summa);
+    summa->setText(json["total"].toString());
+    hKast->addWidget(markus);
+    markus->setText(json["remarks"].toString());
+    hKast->addStretch();
 }
 
 void Voistkond::otsiNime()
 {
 
+}
+
+void Voistkond::setupFields()
+{
+    hKast = new QHBoxLayout(this);
+    hKast->setObjectName("hKast");
+    linnuke = new QCheckBox(this);
+    hKast->addWidget(linnuke);
+    nimi = new QLineEdit(this);
+    nimi->setMinimumHeight(28);
+    nimi->setMaximumWidth(100 + this->width() / 5);
+    hKast->addWidget(nimi);
+    muudaNupp = new QPushButton(this);
+    muudaNupp->setText("Liikmed");
+    hKast->addWidget(muudaNupp);
+    summa = new QLineEdit(this);
+    summa->setText("0");
+    summa->setMinimumHeight(28);
+    summa->setMaximumWidth(55);
+    summa->setReadOnly(true);
+    summa->setStyleSheet("border: 1px solid grey");
+    markus = new QLineEdit(this);
+    markus->setMinimumHeight(28);
+    markus->setMaximumWidth(85);
+    markus->setText(tr("Märkused"));
 }
 
 QJsonObject Voistkond::toExportJson()
@@ -73,6 +110,28 @@ QJsonObject Voistkond::toExportJson()
         teamJson["remarks"] = "";
     else
         teamJson["remarks"] = markus->text();
+
+    return teamJson;
+}
+
+QJsonObject Voistkond::toJson()
+{
+    QJsonObject teamJson;
+    teamJson["name"] = nimi->text() /*.toUtf8()*/;
+    QJsonArray membersArray;
+    for (Voistkond::Liige *member : voistlejad) { // Kõik võistkonna liikmed
+        QJsonObject memberJson;
+        memberJson["firstName"] = member->eesNimi /*.toUtf8()*/;
+        memberJson["familyName"] = member->perekNimi /*.toUtf8()*/;
+        memberJson["club"] = member->klubi /*.toUtf8()*/;
+        memberJson["event"] = member->harjutus;
+        memberJson["total"] = member->summa;
+        memberJson["label"] = member->silt->text() /*.toUtf8()*/;
+        membersArray.append(memberJson);
+    }
+    teamJson["members"] = membersArray;
+    teamJson["total"] = summa->text();
+    teamJson["remarks"] = markus->text() /*.toUtf8()*/;
 
     return teamJson;
 }

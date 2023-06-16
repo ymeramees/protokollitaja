@@ -13,6 +13,7 @@
 #include "leht.h"
 #include "competitionsettings.h"
 #include "tabwidgetwithsettings.h"
+#include "simplekllfilerw.h"
 
 class KllFileRW : public QObject
 {

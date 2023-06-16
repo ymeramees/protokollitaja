@@ -81,7 +81,18 @@ public:
             QString *eventType,
             int laskudeArv,
             QWidget *parent = nullptr
-            );
+        );
+    Laskur(
+        QJsonObject json,
+        Andmebaas* autocompleteDb,
+        int vs,
+        int autocompleteAvailable,
+        bool *autocomplete,
+        bool *withDecimals,
+        int *sorting,
+        QString *eventType,
+        QWidget *parent = nullptr
+        );
     ~Laskur();
 //    bool operator<(const Laskur &l) const;
     QString* getEventType() const;
@@ -90,6 +101,7 @@ public:
     void set(const Laskur *l);
     void setSumma(QString);
     QJsonObject toExportJson();
+    QJsonObject toJson();
 
 
 public slots:
@@ -142,8 +154,10 @@ private:
     QString m_previousSiusRow;
     LaskudeAken *laskudeAken;
     void contextMenuEvent(QContextMenuEvent *event);
+    void createLayout();
     int findShotFromPreviousStages(const SiusShotData shotData) const;
     void setCompetitionStage(int newStage);
+    void setupFields();
 };
 
 #endif // LASKUR_H

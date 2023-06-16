@@ -66,7 +66,6 @@ public:
     int laskudeArv;
 	int seeriateArv;
     int vSummadeSamm;
-	int maxAeg, minAeg;
     int relv;
     int *jarjestamine;  //Kas sorteerimine käib kümnete arvu järgi või viimase seeria järgi
     QString harjutus;
@@ -83,6 +82,10 @@ public:
     Leht(Andmebaas*, int, int, int, bool*, QString, int, QString, bool kum, int*, QWidget *parent = 0, bool v = false, /* Leht *ind = 0
             ,*/ LiikmeteValikKast *lV = 0, int lI = 0, int ls = 10);
     ~Leht();
+	int maxTime() const;
+	int minTime() const;
+	void setMaxTimeMs(const int newTime);
+	void setMinTimeMs(const int newTime);
     void setToBeUploaded(bool newStatus);
     void sorteeri(int t);
     void reasta(int t);
@@ -99,6 +102,7 @@ public slots:
     void naitaSifrit();
 	void uuendaLiikmeteKast();
     void uusLaskur(int);
+    void uusLaskur(QJsonObject);
 	void vajutaTab();
     void vajutaTab2(int);
     void siusiReset(int connectionIndex);  //siusDatast lugemise progressi nullimine
@@ -113,6 +117,7 @@ signals:
 
 private:
     bool m_toBeUploaded = true;  //Shows if results on this page should be uploaded to web or not
+	int m_maxTime, m_minTime;	// Time limits for how long the results are shown on spectator screen, in ms
 };
 
 #endif // LEHT_H

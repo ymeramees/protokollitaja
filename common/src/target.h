@@ -4,7 +4,7 @@
 #include <QLabel>
 #include <QPainter>
 #include <QPainterPath>
-#ifdef PROOV
+#ifdef QT_DEBUG
 #include <QDebug>
 #endif
 

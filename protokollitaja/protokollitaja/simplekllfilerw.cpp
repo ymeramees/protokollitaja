@@ -13,15 +13,19 @@ CompetitionSettings SimpleKllFileRW::readCompetitionSettings(QDataStream *inStre
     competitionSettings.fileVersion = version;
     if(checkPattern != 0x00FA3848) {
         QMessageBox::critical(parent, tr("Protokollitaja"), tr("Vigane või vale fail!"), QMessageBox::Ok);
-    } else if(version >= 100 && version <= 113) {
+    } else if(version >= 100 && version <= 112) {
         *inStream >> competitionSettings.competitionName;
-        if(version >= 113) {
-            *inStream >> competitionSettings.startDate >> competitionSettings.endDate;
-        } else {
-            competitionSettings.startDate = QDate(2000, 1, 1);
-            competitionSettings.endDate = QDate(2000, 1, 1);
-        }
+        competitionSettings.startDate = QDate(2000, 1, 1);
+        competitionSettings.endDate = QDate(2000, 1, 1);
         *inStream >> competitionSettings.place;
+        competitionSettings.country = "Estonia";   // Versions before that were in Estonian language, so not likely being used anywhere else
+    } else if (version >= 113) {
+        *inStream >> competitionSettings.jsonData;
+        competitionSettings.competitionName = competitionSettings.jsonData["competitionName"].toString("");
+        competitionSettings.startDate = QDate::fromString(competitionSettings.jsonData["startDate"].toString(""));
+        competitionSettings.endDate = QDate::fromString(competitionSettings.jsonData["endDate"].toString(""));
+        competitionSettings.place = competitionSettings.jsonData["place"].toString("");
+        competitionSettings.country = competitionSettings.jsonData["country"].toString("Estonia");
     } else QMessageBox::critical(
                 parent,
                 tr("Protokollitaja"),
@@ -50,17 +54,19 @@ bool SimpleKllFileRW::writeInitialKll(QString fileName, CompetitionSettings data
 {
     QFile file(fileName);
     if(file.open(QIODevice::WriteOnly)){
-            QDataStream out(&file);
-            out << (quint32)0x00FA3848;   //Kontrollarv
-            out << (qint32)113;           //Millise programmi versiooni failiga on tegu
-            out.setVersion(QDataStream::Qt_5_12);
-            out << data.competitionName;
-            out << data.startDate;
-            out << data.endDate;
-            out << data.place;
-            out << QString("");
-            out << 1 << 1 << 5 << 0 << 0 << 0;  //kirjutusabi << autosave << autosave aeg << sakiAsukoht << sakkideArv << järjestamine;
-            return true;
+        QDataStream out(&file);
+        out << (quint32)0x00FA3848;   //Kontrollarv
+        out << (qint32)113;           //Millise programmi versiooni failiga on tegu
+        out.setVersion(QDataStream::Qt_6_5);
+
+        QJsonObject jsonObj;
+        jsonObj["competitionName"] = data.competitionName;
+        jsonObj["startDate"] = data.startDate.toString();
+        jsonObj["endDate"] = data.endDate.toString();
+        jsonObj["place"] = data.place;
+        jsonObj["country"] = data.country;
+        out << jsonObj;
+        return true;
     }else {
         QMessageBox::critical(
                 parent,

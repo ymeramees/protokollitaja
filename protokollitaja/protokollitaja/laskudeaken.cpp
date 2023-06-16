@@ -11,7 +11,7 @@ LaskudeAken::LaskudeAken(bool kum, int s, int ls, QWidget *parent) :
     laskudeArv = ls;
     seeriateArv = s;
     aktiivneSeeria = 0;
-//#ifdef PROOV
+//#ifdef QT_DEBUG
 //    qDebug() << "LaskudeAken";
 //#endif
 //    if(verbose)
@@ -94,7 +94,7 @@ void LaskudeAken::kirjutaLasud()    //Kirjutab tabelis olevad lasud seeriasse
 
 void LaskudeAken::loeLasud()    //Loeb seeriast tabelisse uued lasud
 {
-//#ifdef PROOV
+//#ifdef QT_DEBUG
 //    qDebug() << "LaskudeAken::loelasud()";
 //#endif
 //    if(verbose)

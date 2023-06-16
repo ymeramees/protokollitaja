@@ -7,7 +7,10 @@
 struct TabWidgetWithSettings {
     QTabWidget *tabWidget = nullptr;
     QString competitionName;
-    QString timeAndPlace;
+    QDate startDate;
+    QDate endDate;
+    QString place;
+    QString country;
     QString webCompetitionId;
     int autoComplete = 1;
     int autosave = 1;

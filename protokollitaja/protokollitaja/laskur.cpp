@@ -6,15 +6,8 @@ extern bool veryVerbose;
 Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i, int *jar, QString *eventType, int ls, QWidget *parent)
     : QWidget(parent)
 {
+    setupFields();
     id = i;
-        jrkArv = 0;
-        lisaAken = nullptr;
-        laskudeAken = nullptr;
-        arvutaja = new QTimer(this);
-        arvutaja->setInterval(60000);
-        arvutaja->setSingleShot(false);
-        connect(arvutaja, SIGNAL(timeout()), this, SLOT(liida()));
-        arvutaja->start();
         laskudeArv = ls;
         seeriateArv = s;
         vSummadeSamm = vs;
@@ -24,80 +17,17 @@ Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i,
         kumnendikega = kum;
         jarjestamine = jar;
         m_eventType = eventType;
-        keskmLask = 0;
-        muudetud = false;
-        onLehelugejaLaskur = false;
-        onVorguLaskur = false;
-        for(int i = 0; i < 24; i++)
-                lisaLasud << -1;
-        if(this->objectName().isEmpty()){
-                this->setObjectName("laskurClass");
-        }
-        m_competitionStage = 0;
-        m_siusConnectionIndex = -1;
 //  QMessageBox::information(this, "Teade", "Lasku::Laskur()", "OK");
 //	connect(eesNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus(QString)));
 //	connect(perekNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus2(QString)));
 //	QMessageBox::information(this, "Teade", "Lasku::Laskur()3", "OK");
 
-        hKast = new QHBoxLayout(this);
-        hKast->setObjectName("hKast");
-        linnuke = new QCheckBox(this);
-        rajaNr = new QLineEdit(this);
-        rajaNr->setMinimumHeight(28);
-        rajaNr->setMaximumWidth(20);
-        rajaNr->setToolTip("Raja number");
-        connect(rajaNr, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
-        connect(rajaNr, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
-        sifriAlgus = new QLineEdit(this);
-        sifriAlgus->setMinimumHeight(28);
-        sifriAlgus->setMaximumWidth(50);
-        sifriAlgus->setToolTip("Siffer");
-        connect(sifriAlgus, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
-        connect(sifriAlgus, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
-        sidekriips = new QLabel(this);
-        sidekriips->setText("-");
-        sifriLopp = new QLineEdit(this);
-        sifriLopp->setMinimumHeight(28);
-        sifriLopp->setMaximumWidth(50);
-        sifriLopp->setToolTip("Siffer");
-        connect(sifriLopp, SIGNAL(returnPressed()), this, SLOT(enterVajutatud()));
-        connect(sifriLopp, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
-        sifriNupp = new QPushButton(this);
-        sifriNupp->setText(">>");
-        sifriNupp->setMinimumWidth(20);
-        sifriNupp->setMaximumWidth(22);
-        connect(sifriNupp, SIGNAL(clicked()), this, SLOT(naitaSifrit()));
-        eesNimi = new QLineEdit(this);
-        eesNimi->setMinimumHeight(28);
-        eesNimi->setToolTip("Eesnimi");
-        connect(eesNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus(QString)));
-        connect(eesNimi, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
-        connect(eesNimi, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
-        perekNimi = new QLineEdit(this);
-        perekNimi->setMinimumHeight(28);
-        perekNimi->setToolTip("Perekonnanimi");
-        connect(perekNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus2(QString)));
-        connect(perekNimi, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
-        connect(perekNimi, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
-        sunniAasta = new QLineEdit(this);
-        sunniAasta->setMinimumHeight(28);
-        sunniAasta->setMaximumWidth(45);
-        sunniAasta->setToolTip(tr("Sünniaasta"));
-        connect(sunniAasta, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
-        connect(sunniAasta, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
-        klubi = new QLineEdit(this);
-        klubi->setMinimumHeight(28);
-        klubi->setMaxLength(12);
-        klubi->setToolTip("Klubi");
-        connect(klubi, SIGNAL(textEdited(QString)), this, SLOT(muutus4(QString)));
-        connect(klubi, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
-        connect(klubi, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+        
         for(int i = 0; i < seeriateArv; i++){
                 seeriad << new QLineEdit(this);
                 seeriad[i]->setMinimumHeight(28);
                 seeriad[i]->setMaximumWidth(40);
-                seeriad[i]->setToolTip("Seeriad");
+                seeriad[i]->setToolTip(tr("Seeriad"));
                 connect(seeriad[i], SIGNAL(editingFinished()), this, SLOT(liida()));
                 connect(seeriad[i], SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
                 connect(seeriad[i], SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
@@ -119,95 +49,81 @@ Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i,
                         vSummad[i]->setReadOnly(true);
                 }
         }
-        summa = new QLineEdit(this);
-        summa->setText("0");
-        summa->setMinimumHeight(28);
-        summa->setMaximumWidth(50);
-        summa->setToolTip("Summa");
-        summa->setStyleSheet("border: 1px solid grey");
-        summa->setReadOnly(true);
-        connect(summa, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
-        connect(summa, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
-        finaal = new QLineEdit(this);
-        finaal->setText("Fin");
-        finaal->setMinimumHeight(28);
-        finaal->setMaximumWidth(45);
-        finaal->setToolTip("Finaali seeria");
-        connect(finaal, SIGNAL(editingFinished()), this, SLOT(liida()));
-        connect(finaal, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
-        connect(finaal, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
-        koguSumma = new QLabel(this);
-        koguSumma->setText("0,0");
-        koguSumma->setToolTip("Summa");
-        kumned = new QLineEdit(this);
-        kumned->setText("0");
-        kumned->setMinimumHeight(28);
-        kumned->setMaximumWidth(25);
-        kumned->setToolTip(tr("Sisekümnete arv"));
-        connect(kumned, SIGNAL(editingFinished()), this, SLOT(muutus5()));
-        connect(kumned, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
-        connect(kumned, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
-        markus = new QLineEdit(this);
-        markus->setMinimumHeight(28);
-        markus->setMaximumWidth(85);
-        markus->setText(tr("Märkused"));
-        connect(markus, SIGNAL(editingFinished()), this, SLOT(markuseMuutus()));
-        connect(markus, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
-        connect(markus, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
-        lisaLNupp = new QPushButton("Lis.", this);
-        lisaLNupp->setMaximumWidth(25);
-        lisaLNupp->setMinimumWidth(25);
-        lisaLNupp->setToolTip("Lisalasud");
-        connect(lisaLNupp, SIGNAL(clicked()), this, SLOT(lisaLAken()));
-        hKast->addWidget(linnuke);
-        hKast->addWidget(rajaNr);
-        hKast->addWidget(sifriAlgus);
-        hKast->addWidget(sidekriips);
-        hKast->addWidget(sifriLopp);
-        hKast->addWidget(sifriNupp);
-        hKast->addWidget(eesNimi);
-        hKast->addWidget(perekNimi);
-        hKast->addWidget(sunniAasta);
-        hKast->addWidget(klubi);
-        int j = 0;
-        //QMessageBox::information(this, "Teade", QString("seeriad:%1").arg(seeriad.size()), "OK");
-        for(int i = 0; i < seeriad.size(); i++){
-            //QMessageBox::information(this, "Teade", "Lasku::Laskur()2", "OK");
-            hKast->addWidget(seeriad[i]);
-            if(vSummadeSamm != 0){
-                if(/*i != 0 &&*/ (i+1) % vSummadeSamm == 0){
-                    if(j >= vSummad.size()){
-                        QMessageBox::critical(this, "Viga!", "Ei ole nii palju vahesummasid!", "Selge");
-                        return;
-                    }
-                    hKast->addWidget(vSummad[j]);
-                    j++;
-                }
-            }
-        }
-        hKast->addWidget(summa);
-        hKast->addWidget(finaal);
-        hKast->addWidget(koguSumma);
-        hKast->addWidget(kumned);
-        hKast->addWidget(markus);
-        hKast->addWidget(lisaLNupp);
-        hKast->addStretch();
-        rajaNr->hide();
-        sifriAlgus->hide();
-        sidekriips->hide();
-        sifriLopp->hide();
+
+    createLayout();
 //        this->setMaximumWidth(1200);
+}
 
-        laskudeAkenAct = new QAction(tr("Lasud..."), this);
-        laskudeAkenAct->setStatusTip(tr("Ava laskuri laskude aken"));
-        connect(laskudeAkenAct, SIGNAL(triggered()), this, SLOT(naitaLaskudeAkent()));
-        idAct = new QAction(tr("ID..."), this);
-        idAct->setStatusTip(tr("Vaata/muuda laskuri ID'd"));
-        connect(idAct, SIGNAL(triggered()), this, SLOT(naitaIdAken()));
+Laskur::Laskur(
+    QJsonObject jsonObj,
+    Andmebaas* autocompleteDb,
+    int vs,
+    int autocompleteAvailable,
+    bool *autocomplete,
+    bool *withDecimals,
+    int *sorting,
+    QString *eventType, QWidget *parent)
+    : QWidget(parent){
+    setupFields();
+    andmebaas = autocompleteDb;
+    vSummadeSamm = vs;
+    abi = autocompleteAvailable;
+    kirjutusAbi = autocomplete;
+    kumnendikega = withDecimals;
+    jarjestamine = sorting;
+    m_eventType = eventType;
 
-        popup = new QMenu(this);
-        popup->addAction(laskudeAkenAct);
-        popup->addAction(idAct);
+    id = jsonObj["id"].toInt();
+    rajaNr->setText(jsonObj["targetNo"].toString());
+    sifriAlgus->setText(jsonObj["sifferStart"].toString());
+    sifriLopp->setText(jsonObj["sifferEnd"].toString());
+    eesNimi->setText(jsonObj["firstName"].toString());
+    perekNimi->setText(jsonObj["familyName"].toString());
+    sunniAasta->setText(jsonObj["yearOfBirth"].toString());
+    klubi->setText(jsonObj["club"].toString());
+    finaal->setText(jsonObj["finalsTotal"].toString());
+    summa->setText(jsonObj["total"].toString());
+    kumned->setText(jsonObj["innerTens"].toString());
+    markus->setText(jsonObj["remarks"].toString());
+
+    QJsonArray seriesArray = jsonObj["series"].toArray();
+    seeriateArv = seriesArray.size();
+    laskudeArv = seriesArray[0].toArray().size();
+
+    for (int i = 0; i < seriesArray.size(); i++) {
+                QJsonObject seriesJson = seriesArray[i].toObject();
+        seeriad << new QLineEdit(seriesJson["seriesSum"].toString(), this);
+        seeriad[i]->setMinimumHeight(28);
+        seeriad[i]->setMaximumWidth(40);
+        seeriad[i]->setToolTip(tr("Seeriad"));
+        connect(seeriad[i], SIGNAL(editingFinished()), this, SLOT(liida()));
+        connect(seeriad[i], SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
+        connect(seeriad[i], SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+        QList<Lask*> seeriaLasud;
+        QJsonArray shotsArray = seriesJson["shots"].toArray();
+        for(int j = 0; j < shotsArray.size(); j++){
+            seeriaLasud << new Lask(shotsArray[j].toObject());  // Series shots, including one for punishment
+        }
+        lasud << seeriaLasud;   //Seeria lasud laskuri laskude hulka
+    }
+
+    if (vSummadeSamm != 0) {
+        for (int i = 0; i < seeriateArv / vSummadeSamm; i++) {
+            vSummad << new QLineEdit(this);
+            vSummad[i]->setMinimumHeight(28);
+            vSummad[i]->setMaximumWidth(50);
+            vSummad[i]->setText("0");
+            vSummad[i]->setToolTip(tr("Vahesumma"));
+            vSummad[i]->setStyleSheet("border: 1px solid grey");
+            vSummad[i]->setReadOnly(true);
+        }
+    }
+
+    QJsonArray shootOffShotsArray = jsonObj["shootOffShots"].toArray();
+    for (int i = 0; i < shootOffShotsArray.size(); i++) {
+        lisaLasud.append(shootOffShotsArray[i].toInt());
+    }
+    createLayout();
 }
 
 int Laskur::competitionStage() const
@@ -218,6 +134,45 @@ int Laskur::competitionStage() const
 void Laskur::contextMenuEvent(QContextMenuEvent *event)
 {
     popup->exec(event->globalPos());
+}
+
+void Laskur::createLayout()
+{
+    hKast->addWidget(linnuke);
+    hKast->addWidget(rajaNr);
+    hKast->addWidget(sifriAlgus);
+    hKast->addWidget(sidekriips);
+    hKast->addWidget(sifriLopp);
+    hKast->addWidget(sifriNupp);
+    hKast->addWidget(eesNimi);
+    hKast->addWidget(perekNimi);
+    hKast->addWidget(sunniAasta);
+    hKast->addWidget(klubi);
+    int j = 0;
+    for(int i = 0; i < seeriad.size(); i++){
+        hKast->addWidget(seeriad[i]);
+        if(vSummadeSamm != 0){
+            if(/*i != 0 &&*/ (i+1) % vSummadeSamm == 0){
+                if(j >= vSummad.size()){
+                    QMessageBox::critical(this, "Viga!", "Ei ole nii palju vahesummasid!", "Selge");
+                    return;
+                }
+                hKast->addWidget(vSummad[j]);
+                j++;
+            }
+        }
+    }
+    hKast->addWidget(summa);
+    hKast->addWidget(finaal);
+    hKast->addWidget(koguSumma);
+    hKast->addWidget(kumned);
+    hKast->addWidget(markus);
+    hKast->addWidget(lisaLNupp);
+    hKast->addStretch();
+    rajaNr->hide();
+    sifriAlgus->hide();
+    sidekriips->hide();
+    sifriLopp->hide();
 }
 
 void Laskur::deleteAllShots()
@@ -785,7 +740,7 @@ void Laskur::naitaIdAken()
 
 void Laskur::naitaLaskudeAkent()
 {
-//#ifdef PROOV
+//#ifdef QT_DEBUG
 //    qDebug() << "naitaLaskudeAkent()";
 //#endif
     if(!laskudeAken){
@@ -1010,14 +965,14 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
                     return true;
                 else return false;
             }else{  //Kui finaaliseeriad on võrdsed, peavad olema tehtud lisalasud
-#ifdef PROOV
+#ifdef QT_DEBUG
                 qDebug() << "Laskur::vaiksem(), finaalid võrdsed, this->lisaLasud.count() = " << this->lisaLasud.count() << ", l->lisaLasud.count() = " << l->lisaLasud.count();
 #endif
                 if(this->lisaLasud.count() == 0 && l->lisaLasud.count() != 0)   //Juhul, kui finaali seeriad on võrdsed, aga millegipärast lisalaske ei ole
                     return true;
                 if(l->lisaLasud.count() == 0)
                     return false;
-#ifdef PROOV
+#ifdef QT_DEBUG
                 qDebug() << "Laskur::vaiksem(), vaadatakse lisalaske";
 #endif
                 for(int k = 0; k < this->lisaLasud.count(); k++){
@@ -1350,6 +1305,135 @@ void Laskur::setSumma(QString s)
     summa->setText(s);
 }
 
+void Laskur::setupFields()
+{
+    jrkArv = 0;
+    lisaAken = nullptr;
+    laskudeAken = nullptr;
+    keskmLask = 0;
+    muudetud = false;
+    onLehelugejaLaskur = false;
+    onVorguLaskur = false;
+    for(int i = 0; i < 24; i++)
+            lisaLasud << -1;
+    if(this->objectName().isEmpty()){
+            this->setObjectName("laskurClass");
+    }
+    m_competitionStage = 0;
+    m_siusConnectionIndex = -1;
+
+    arvutaja = new QTimer(this);
+    arvutaja->setInterval(60000);
+    arvutaja->setSingleShot(false);
+    connect(arvutaja, SIGNAL(timeout()), this, SLOT(liida()));
+    arvutaja->start();
+
+    hKast = new QHBoxLayout(this);
+    hKast->setObjectName("hKast");
+    linnuke = new QCheckBox(this);
+    rajaNr = new QLineEdit(this);
+    rajaNr->setMinimumHeight(28);
+    rajaNr->setMaximumWidth(20);
+    rajaNr->setToolTip(tr("Raja number"));
+    connect(rajaNr, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
+    connect(rajaNr, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+    sifriAlgus = new QLineEdit(this);
+    sifriAlgus->setMinimumHeight(28);
+    sifriAlgus->setMaximumWidth(50);
+    sifriAlgus->setToolTip(tr("Siffer"));
+    connect(sifriAlgus, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
+    connect(sifriAlgus, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+    sidekriips = new QLabel(this);
+    sidekriips->setText("-");
+    sifriLopp = new QLineEdit(this);
+    sifriLopp->setMinimumHeight(28);
+    sifriLopp->setMaximumWidth(50);
+    sifriLopp->setToolTip(tr("Siffer"));
+    connect(sifriLopp, SIGNAL(returnPressed()), this, SLOT(enterVajutatud()));
+    connect(sifriLopp, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+    sifriNupp = new QPushButton(this);
+    sifriNupp->setText(">>");
+    sifriNupp->setMinimumWidth(20);
+    sifriNupp->setMaximumWidth(22);
+    connect(sifriNupp, SIGNAL(clicked()), this, SLOT(naitaSifrit()));
+    eesNimi = new QLineEdit(this);
+    eesNimi->setMinimumHeight(28);
+    eesNimi->setToolTip(tr("Eesnimi"));
+    connect(eesNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus(QString)));
+    connect(eesNimi, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
+    connect(eesNimi, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+    perekNimi = new QLineEdit(this);
+    perekNimi->setMinimumHeight(28);
+    perekNimi->setToolTip(tr("Perekonnanimi"));
+    connect(perekNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus2(QString)));
+    connect(perekNimi, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
+    connect(perekNimi, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+    sunniAasta = new QLineEdit(this);
+    sunniAasta->setMinimumHeight(28);
+    sunniAasta->setMaximumWidth(45);
+    sunniAasta->setToolTip(tr("Sünniaasta"));
+    connect(sunniAasta, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
+    connect(sunniAasta, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+    klubi = new QLineEdit(this);
+    klubi->setMinimumHeight(28);
+    klubi->setMaxLength(12);
+    klubi->setToolTip(tr("Klubi"));
+    connect(klubi, SIGNAL(textEdited(QString)), this, SLOT(muutus4(QString)));
+    connect(klubi, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
+    connect(klubi, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+    summa = new QLineEdit(this);
+    summa->setText("0");
+    summa->setMinimumHeight(28);
+    summa->setMaximumWidth(50);
+    summa->setToolTip(tr("Summa"));
+    summa->setStyleSheet("border: 1px solid grey");
+    summa->setReadOnly(true);
+    connect(summa, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
+    connect(summa, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+    finaal = new QLineEdit(this);
+    finaal->setText("Fin");
+    finaal->setMinimumHeight(28);
+    finaal->setMaximumWidth(45);
+    finaal->setToolTip(tr("Finaali seeria"));
+    connect(finaal, SIGNAL(editingFinished()), this, SLOT(liida()));
+    connect(finaal, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
+    connect(finaal, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+    koguSumma = new QLabel(this);
+    koguSumma->setText("0,0");
+    koguSumma->setToolTip(tr("Summa"));
+    kumned = new QLineEdit(this);
+    kumned->setText("0");
+    kumned->setMinimumHeight(28);
+    kumned->setMaximumWidth(25);
+    kumned->setToolTip(tr("Sisekümnete arv"));
+    connect(kumned, SIGNAL(editingFinished()), this, SLOT(muutus5()));
+    connect(kumned, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
+    connect(kumned, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+    markus = new QLineEdit(this);
+    markus->setMinimumHeight(28);
+    markus->setMaximumWidth(85);
+    markus->setText(tr("Märkused"));
+    connect(markus, SIGNAL(editingFinished()), this, SLOT(markuseMuutus()));
+    connect(markus, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
+    connect(markus, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+    lisaLNupp = new QPushButton("Lis.", this);
+    lisaLNupp->setMaximumWidth(25);
+    lisaLNupp->setMinimumWidth(25);
+    lisaLNupp->setToolTip(tr("Lisalasud"));
+    connect(lisaLNupp, SIGNAL(clicked()), this, SLOT(lisaLAken()));
+
+    laskudeAkenAct = new QAction(tr("Lasud..."), this);
+    laskudeAkenAct->setStatusTip(tr("Ava laskuri laskude aken"));
+    connect(laskudeAkenAct, SIGNAL(triggered()), this, SLOT(naitaLaskudeAkent()));
+    idAct = new QAction(tr("ID..."), this);
+    idAct->setStatusTip(tr("Vaata/muuda laskuri ID'd"));
+    connect(idAct, SIGNAL(triggered()), this, SLOT(naitaIdAken()));
+
+    popup = new QMenu(this);
+    popup->addAction(laskudeAkenAct);
+    popup->addAction(idAct);
+}
+
 int Laskur::findShotFromPreviousStages(const SiusShotData shotData) const
 {
     if (vSummadeSamm != 0) {    // More than 1 stage
@@ -1553,6 +1637,45 @@ QJsonObject Laskur::toExportJson()
     else
         json["remarks"] = markus->text();
     return json;
+}
+
+QJsonObject Laskur::toJson()
+{
+    QJsonObject competitorJson;
+    competitorJson["targetNo"] = rajaNr->text();
+    competitorJson["sifferStart"] = sifriAlgus->text();
+    competitorJson["sifferEnd"] = sifriLopp->text();
+    competitorJson["id"] = id;
+    competitorJson["firstName"] = eesNimi->text()/*.toUtf8()*/;
+    competitorJson["familyName"] = perekNimi->text()/*.toUtf8()*/;
+    competitorJson["yearOfBirth"] = sunniAasta->text()/*.toUtf8()*/;
+    competitorJson["club"] = klubi->text()/*.toUtf8()*/;
+    
+    QJsonArray seriesArray;
+    for(int k = 0; k < seeriad.size(); k++){	//Kõik seeriad
+        QJsonObject seriesJson;
+        seriesJson["seriesSum"] = seeriad[k]->text()/*.toUtf8()*/;
+        
+        QJsonArray shotsArray;
+        for(int l = 0; l < lasud[k].count(); l++){  //Karistuse lask tuleb ka kirjutada
+            shotsArray.append(lasud[k][l]->toJson());
+        }
+        seriesJson["shots"] = shotsArray;
+        seriesArray.append(seriesJson);
+    }
+
+    competitorJson["series"] = seriesArray;
+    competitorJson["total"] = summa->text()/*.toUtf8()*/;
+    competitorJson["finalsTotal"] = finaal->text()/*.toUtf8()*/;
+                    
+    QJsonArray shootOffArray;
+    for(int k = 0; k < 24; k++)
+        shootOffArray.append(lisaLasud[k]);
+    competitorJson["shootOffShots"] = shootOffArray;
+    competitorJson["innerTens"] = kumned->text()/*.toUtf8()*/;
+    competitorJson["remarks"] = markus->text()/*.toUtf8()*/;
+
+    return competitorJson;
 }
 
 int Laskur::vaiksemNimega(Laskur *l) const //Tagastab kas laskur on nime järgi väiksem (-1), suurem (1) või võrdne (0)

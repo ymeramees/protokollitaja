@@ -34,7 +34,7 @@ void DataUploader::uploadResults(const QUrl url, const QString headerData, const
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setRawHeader("Authorization", headerData.toLocal8Bit());
 
-#ifdef PROOV
+#ifdef QT_DEBUG
     QSslConfiguration sslConf = request.sslConfiguration();
     sslConf.setPeerVerifyMode(QSslSocket::VerifyNone);
     request.setSslConfiguration(sslConf);
