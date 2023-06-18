@@ -1,6 +1,7 @@
 #ifndef TABWIDGETWITHSETTINGS_H
 #define TABWIDGETWITHSETTINGS_H
 
+#include <QDate>
 #include <QString>
 #include <QTabWidget>
 
@@ -13,12 +14,13 @@ struct TabWidgetWithSettings {
     QString country;
     QString webCompetitionId;
     int autoComplete = 1;
-    int autosave = 1;
+    int autosaveEnabled = 1;
     int lastCompetitorId = 0;
-    int sorting = 1;
+    int ranking = 1;
     int tabLocation = 2;
-    int time = 5;
-    int uploadTime = 30;
+    int tabCount = 0;
+    int autosaveInterval = 5;
+    int uploadInterval = 30;
 };
 
 #endif // TABWIDGETWITHSETTINGS_H

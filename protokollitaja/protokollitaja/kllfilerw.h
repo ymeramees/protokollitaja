@@ -22,7 +22,7 @@ public:
     explicit KllFileRW(
             Andmebaas *competitorDatabase,
             bool *autoComplete,
-            int *sorting,
+            int *ranking,
             LiikmeteValikKast *competitorsPickingBox,
             QWidget *parentWindow,
             QObject *parent = nullptr

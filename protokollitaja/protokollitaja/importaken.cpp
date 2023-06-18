@@ -306,35 +306,38 @@ void ImportAken::fromKllFile(QString fileName)
     KllFileRW reader(nullptr, &kirjutusabi, nullptr, nullptr, this, this);
     TabWidgetWithSettings contents = reader.readKllFile(fileName, currentCompetitorId());
 
-    QStringList tabNames;
-    for (int i = 0; i < contents.tabWidget->count(); i++) {
-        Leht *sheet = qobject_cast<Leht*>(qobject_cast<QScrollArea*>(contents.tabWidget->widget(i))->widget());
-        if (sheet != 0 && !sheet->voistk){  // Exclude team events for now
-            tabNames << (contents.tabWidget->tabText(i) + " - " + sheet->harjutus);
-        }
-    }
-    bool ok;
-    QString chosenTab = QInputDialog::getItem(this, tr("Vali leht"), tr("Leht millelt importida:"), tabNames, 0, false, &ok);
 
-    if (ok && !chosenTab.isEmpty()){
-        int tabIndex = tabNames.indexOf(chosenTab);
-        Leht* sheet = qobject_cast<Leht*>(qobject_cast<QScrollArea*>(contents.tabWidget->widget(tabIndex))->widget());
-
-        if (sheet != 0) {
-            if(leht == nullptr){
-                leht = new Leht(0, sheet->seeriateArv, sheet->vSummadeSamm, 0, &kirjutusabi, "Ekraaninimi", sheet->relv, sheet->harjutus, 0, 0, this);
-                ui.scrollArea->setWidget(leht);
-            }
-
-            for(int i = 0; i < sheet->laskurid.count(); i++){
-                leht->uusLaskur(0);
-                Laskur *competitor = leht->laskurid[leht->laskurid.count() - 1];
-                competitor->set(sheet->laskurid[i]);
-                competitor->linnuke->setCheckState(Qt::Checked);
+    if (contents.tabWidget != nullptr) {
+        QStringList tabNames;
+        for (int i = 0; i < contents.tabWidget->count(); i++) {
+            Leht *sheet = qobject_cast<Leht*>(qobject_cast<QScrollArea*>(contents.tabWidget->widget(i))->widget());
+            if (sheet != 0 && !sheet->voistk){  // Exclude team events for now
+                tabNames << (contents.tabWidget->tabText(i) + " - " + sheet->harjutus);
             }
         }
+        bool ok;
+        QString chosenTab = QInputDialog::getItem(this, tr("Vali leht"), tr("Leht millelt importida:"), tabNames, 0, false, &ok);
+
+        if (ok && !chosenTab.isEmpty()){
+            int tabIndex = tabNames.indexOf(chosenTab);
+            Leht* sheet = qobject_cast<Leht*>(qobject_cast<QScrollArea*>(contents.tabWidget->widget(tabIndex))->widget());
+
+            if (sheet != 0) {
+                if(leht == nullptr){
+                    leht = new Leht(0, sheet->seeriateArv, sheet->vSummadeSamm, 0, &kirjutusabi, "Ekraaninimi", sheet->relv, sheet->harjutus, 0, 0, this);
+                    ui.scrollArea->setWidget(leht);
+                }
+
+                for(int i = 0; i < sheet->laskurid.count(); i++){
+                    leht->uusLaskur(0);
+                    Laskur *competitor = leht->laskurid[leht->laskurid.count() - 1];
+                    competitor->set(sheet->laskurid[i]);
+                    competitor->linnuke->setCheckState(Qt::Checked);
+                }
+            }
+        }
+        contents.tabWidget->deleteLater();
     }
-    contents.tabWidget->deleteLater();
 }
 
 void ImportAken::setCurrentCompetitorId(int newId)

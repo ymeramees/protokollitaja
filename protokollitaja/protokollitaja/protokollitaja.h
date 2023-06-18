@@ -69,7 +69,7 @@ public:
     enum {Muu = 0, Ohupuss = 1, Ohupustol = 2, Sportpuss = 3, Spordipustol = 4, Puss = 5, Pustol = 6};
         //enum {vOhupuss = 0, sOhupuss = 1, vOhupustol = 2, sOhupustol = 3, lam = 4, vStandard = 5, sStandard = 6, vabap = 7, spordikas = 8, sumat = 9, olump = 10};
     enum {KumneteArvuga = 0, ViimaseSeeriaga = 1};  //Täisarvudega lugemise puhul järjestamise variandid
-    int ranking;   //Täisarvudega lugemisel, millist järjestamist kasutada
+    int m_ranking;   //Täisarvudega lugemisel, millist järjestamist kasutada
 	int abi;
     int laskuriId;  //Suurim kasutusel olev laskuri ID
     int leheIndeks;
@@ -79,8 +79,8 @@ public:
     ProtolehelugejaServer *server;  //For accepting connections from Protolehelugeja
     QFile *logi;    //Siusist tulnud info põhjal tehtud muudatuste logi
     QFile *siusLogi;    //Siusist saabunud võrguliikluse logi
-	QString voistluseNimi;
-    QString koht;
+	QString m_competitionName;
+    QString m_place;
 	QString seeFail;
     QString finaaliFailiNimi;   //Tehtava finaali faili nimi täies pikkuses
     QString ipAadress;

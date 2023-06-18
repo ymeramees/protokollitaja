@@ -3,7 +3,7 @@
 KllFileRW::KllFileRW(
         Andmebaas *competitorDatabase,
         bool *autoComplete,
-        int *sorting,
+        int *ranking,
         LiikmeteValikKast *competitorsPickingBox,
         QWidget *parentWindow,
         QObject *parent
@@ -13,7 +13,7 @@ KllFileRW::KllFileRW(
     m_competitorDatabase = competitorDatabase;
     m_competitorsPickingBox = competitorsPickingBox;
     m_parentWindow = parentWindow;
-    m_sorting = sorting;
+    m_sorting = ranking;
 }
 
 int KllFileRW::addCompetitor(QTabWidget *tabWidget, int previousId)
@@ -78,18 +78,68 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
             kllData.competitionName = competitionSettings.competitionName;
             kllData.startDate = competitionSettings.startDate;
             kllData.endDate = competitionSettings.endDate;
-            kllData.timeAndPlace = competitionSettings.place;
+            kllData.place = competitionSettings.place;
             kllData.country = competitionSettings.country;
         } else {
+            QApplication::restoreOverrideCursor();
             return kllData;
         }
+
+        if (competitionSettings.fileVersion == 112) {
+            in >> kllData.webCompetitionId;
+            if (kllData.webCompetitionId.contains(QRegularExpression(QStringLiteral("[^\\x{0000}-\\x{007F}]")))) {
+                if (QMessageBox::warning(
+                        m_parentWindow,
+                        tr("Viga!"),
+                        tr("Võistluse veebi ID (%1) sisaldab kummalisi tähemärke ja on ilmselt vigane!"
+                           "\n\nKas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.")
+                            .arg(kllData.webCompetitionId),
+                        QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+                    kllData.webCompetitionId = "";
+            }
+        }
+        else if (competitionSettings.fileVersion >= 113)
+            kllData.webCompetitionId = competitionSettings.jsonData["webCompetitionId"].toString("");
+
+        if (kllData.webCompetitionId == "Empty")
+            kllData.webCompetitionId = "";
+
+        int uploadInterval = 30;
+
+        if (competitionSettings.fileVersion < 113) {
+            in >> kllData.autoComplete >> kllData.autosaveEnabled >> kllData.autosaveInterval >> kllData.tabLocation >> kllData.tabCount;
+
+            if(competitionSettings.fileVersion >= 108)
+                in >> kllData.ranking;
+            else
+                kllData.ranking = 0;
+            if(competitionSettings.fileVersion >=111)
+                in >> uploadInterval;
+
+            if(uploadInterval < 30)
+                uploadInterval = 30;
+
+            kllData.uploadInterval = uploadInterval;
+        } else {
+            kllData.autoComplete = competitionSettings.jsonData["autoComplete"].toInt();
+            kllData.autosaveEnabled = competitionSettings.jsonData["autosaveEnabled"].toInt();
+            kllData.autosaveInterval = competitionSettings.jsonData["autosaveInterval"].toInt();
+            kllData.tabLocation = competitionSettings.jsonData["tabsLocation"].toInt();
+            kllData.tabCount = competitionSettings.jsonData["tabCount"].toInt();
+            kllData.ranking = competitionSettings.jsonData["ranking"].toInt();
+            kllData.uploadInterval = competitionSettings.jsonData["uploadInterval"].toInt();
+        }
+
+#ifdef QT_DEBUG
+        qDebug() << "readKllFile(): << fileVersion << competitionName << koht << m_country << kirjutusA << autosave << aeg << sakiAsukoht << sakkideArv";
+        qDebug() << "readKllFile(): << " << competitionSettings.fileVersion << " << " << kllData.competitionName << " << " << kllData.place << " << " << kllData.country << " << " << kllData.autoComplete << " << " << kllData.autosaveEnabled << " << " << kllData.autosaveInterval << " << " << kllData.tabLocation << " << " << kllData.tabCount;
+#endif
+
         kllData.lastCompetitorId = startingId;  // For importing into already existing competition
         if(competitionSettings.fileVersion == 100){
             kllData.tabWidget = new QTabWidget();
             kllData.tabWidget->setTabPosition(QTabWidget::North);
-            int noOfSheets = 0;
-            in >> kllData.autoComplete >> kllData.autosave >> kllData.time >> kllData.tabLocation >> noOfSheets;
-            for(int i = 0; i < noOfSheets; i++){
+            for(int i = 0; i < kllData.tabCount; i++){
                 int s = 0, vs = 0, a = 0, noOfCompetitors = 0, min = 0, max = 0, tabIndex = 0;
                 bool team = false;
                 QString tabName, screenName;
@@ -171,33 +221,11 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
             }
 //            uuendaSeaded();
 //            voibSulgeda = true;
-        } else if(competitionSettings.fileVersion >= 101 && competitionSettings.fileVersion <= 112) {   // TODO TO be updated
+        } else if(competitionSettings.fileVersion >= 101 && competitionSettings.fileVersion <= 112) {
             kllData.tabWidget = new QTabWidget();
             kllData.tabWidget->setTabPosition(QTabWidget::North);
-            if(competitionSettings.fileVersion >= 112){
-                in >> kllData.webCompetitionId;
-                if(kllData.webCompetitionId.contains(QRegularExpression(QStringLiteral("[^\\x{0000}-\\x{007F}]")))){
-                    if(QMessageBox::warning(
-                                m_parentWindow,
-                                tr("Viga!"),
-                                tr("Võistluse veebi ID (%1) sisaldab kummalisi tähemärke ja on ilmselt vigane!"
-                                   "\n\nKas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.").arg(kllData.webCompetitionId),
-                                QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
-                    kllData.webCompetitionId = "";
-                }
-            }
-            if(kllData.webCompetitionId == "Empty")
-                kllData.webCompetitionId = "";
-            int noOfSheets = 0;
-            in >> kllData.autoComplete >> kllData.autosave >> kllData.time >> kllData.tabLocation >> noOfSheets;
-            if(competitionSettings.fileVersion >= 108)
-                in >> kllData.sorting;
-            if(competitionSettings.fileVersion >=111)
-                in >> kllData.uploadTime;
-            if(kllData.uploadTime < 30)
-                kllData.uploadTime = 30;
 
-            for(int i = 0; i < noOfSheets; i++){
+            for(int i = 0; i < kllData.tabCount; i++){
                 int s = 0, noOfShots = 10, vs = 0, a = 0, noOfCompetitors = 0, min = 0, max = 0, tabIndex = 0, weaponType = 0;
                 bool team = false;
                 bool withDecimals = false;
@@ -360,7 +388,89 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
             kllData.lastCompetitorId = checkDuplicateIds(kllData.tabWidget, 0);
 //            uuendaSeaded();
 //            voibSulgeda = true;
-        }else QMessageBox::critical(
+        } else if (competitionSettings.fileVersion <= 113) {
+            kllData.tabWidget = new QTabWidget();
+            kllData.tabWidget->setTabPosition(QTabWidget::North);
+
+            QJsonArray tabsArray = competitionSettings.jsonData["tabs"].toArray();
+            for (QJsonValue tabJson : tabsArray) {
+                QJsonObject tabObject = tabJson.toObject();
+                int seriesCount = 0, noOfShots = 10, seriesInSubTotal = 0, autocomplete = 0, competitorCount = 0, tabIndex = 0, weaponType = 0;
+                bool teamEvent = false;
+                bool withDecimals = false;
+                bool toBeShown = true;
+                QString tabName, displayName, eventType = "Muu";
+
+                tabName = tabObject["name"].toString();
+                seriesCount = tabObject["seriesCount"].toInt();
+                noOfShots = tabObject["shotsCount"].toInt();
+                seriesInSubTotal = tabObject["shotsCount"].toInt();
+                autocomplete = tabObject["autocomplete"].toInt();
+                displayName = tabObject["displayName"].toString();
+                weaponType = tabObject["weaponType"].toInt();
+                eventType = tabObject["event"].toString();
+
+                if(eventType.isEmpty())
+                    eventType = "Muu";
+
+                withDecimals = tabObject["decimals"].toBool();
+                toBeShown = tabObject["toBeShown"].toBool();
+                teamEvent = tabObject["teamEvent"].toBool();
+                tabIndex = tabObject["tabIndex"].toInt();
+                competitorCount = tabObject["competitorCount"].toInt();
+
+#ifdef QT_DEBUG
+                qDebug() << "readKllFile(): << leheIndeks << tabName << seriesCount << shotsCount << seriesInSubTotal << autocomplete << << displayName << weaponType << event << competitorCount";
+                qDebug() << "readKllFile(): << " << tabIndex << " << " << tabName << " << " << seriesCount << " << " << noOfShots << " << " << seriesInSubTotal << " << " << autocomplete << " << " << displayName << " << " << weaponType << " << " << eventType << " << " << competitorCount;
+#endif
+
+                QScrollArea *area = new QScrollArea(kllData.tabWidget);
+                area->setWidgetResizable(true);
+                Leht* sheet = new Leht(
+                            m_competitorDatabase,
+                            seriesCount,
+                            seriesInSubTotal,
+                            autocomplete,
+                            m_autoComplete,
+                            displayName,
+                            weaponType,
+                            eventType,
+                            withDecimals,
+                            m_sorting,
+                            kllData.tabWidget,
+                            teamEvent,
+                            m_competitorsPickingBox,
+                            tabIndex,
+                            noOfShots
+                            );
+                area->setWidget(sheet);
+                kllData.tabWidget->insertTab(-1, area, tabName);
+                kllData.tabWidget->setCurrentIndex(kllData.tabWidget->count()-1);
+
+                sheet->alustamine = true;
+                sheet->naidata = toBeShown;    // Will this sheet be shown on spectators window
+                sheet->setMinTimeMs(tabObject["minTime"].toInt());
+                sheet->setMaxTimeMs(tabObject["maxTime"].toInt());
+                if (sheet->voistk) {
+                    QJsonArray followeesArray = tabObject["followees"].toArray();
+                    for (QJsonValue followeeIndex : followeesArray) {
+                        sheet->jalgitavad.append(followeeIndex.toInt());
+                    }
+
+                    QJsonArray teamsArray = tabObject["teams"].toArray();
+                    for (QJsonValue teamJson : teamsArray){
+                        sheet->uusLaskur(teamJson.toObject());
+                    }
+                } else {
+                    QJsonArray competitorsArray = tabObject["competitors"].toArray();
+                    for (QJsonValue competitorJson : competitorsArray){
+                        sheet->uusLaskur(competitorJson.toObject());
+                    }
+                }
+                sheet->alustamine = false;
+            }
+            kllData.lastCompetitorId = checkDuplicateIds(kllData.tabWidget, 0);
+        } else QMessageBox::critical(
                     m_parentWindow,
                     tr("Protokollitaja"),
                     tr("Vale versiooni fail!\n\nVõimalik, et tegu on uuema programmi versiooni failiga.\n\n(Protokollitaja::loefail())"),
