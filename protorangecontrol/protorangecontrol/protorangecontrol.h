@@ -31,7 +31,7 @@ class ProtoRangeControl : public QMainWindow
     Q_OBJECT
 
 public:
-    ProtoRangeControl(QWidget *parent = nullptr);
+    ProtoRangeControl(QString language = "", QWidget *parent = nullptr);
     ~ProtoRangeControl();
 
 private:
@@ -44,6 +44,7 @@ private:
     std::optional<Lane*> findLane(QString laneNo);
     void importStartList();
     void initialize();
+    void loadStartList(QStringList startList);
     void publishAllShots(DataConnection *connection);
     void publishSelectedCompetitorShots();
     void publishShot(SiusShotData shotData);
@@ -54,7 +55,6 @@ private:
     void sendMessage(Lane *lane, QString message);
     void sendMessageToAllSelected(QString message);
     void setCheckedAll();
-    void setClasses();
     void setNumberOfShots();
     void setTargetTypes();
     void showMessage(QString msg);

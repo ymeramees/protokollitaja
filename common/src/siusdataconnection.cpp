@@ -81,6 +81,7 @@ void SiusDataConnection::connected()
 {
     if(verbose)
         QTextStream(stdout) << "SiusDataConnection::connected(): " << m_index << Qt::endl;
+    m_isConnected = true;
     addressLabel->setEnabled(true);
     disconnectButton->setEnabled(true);
 }
@@ -88,6 +89,7 @@ void SiusDataConnection::connected()
 void SiusDataConnection::disconnectFromSius()
 {
     siusDataSocket->disconnectFromHost();
+    m_isConnected = false;
     emit disconnectedFromSius(m_index);
 }
 
@@ -163,6 +165,11 @@ std::optional<SiusShotData> SiusDataConnection::extractShotData(
     shotData.socketIndex = socketIndex;
 
     return  std::optional<SiusShotData>{shotData};
+}
+
+bool SiusDataConnection::isConnected()
+{
+    return m_isConnected;
 }
 
 int SiusDataConnection::port() const
@@ -251,6 +258,22 @@ void SiusDataConnection::reconnectToSius()
     siusDataSocket->connectToHost(addressLabel->text(), m_port);
 }
 
+void SiusDataConnection::sendData(QString data)
+{
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_6_5);
+    out << (quint16)0;
+    out << (quint16)1;  // Connection protocol version
+    out << data;
+    out.device()->seek(0);
+    out << (quint16)(block.size() - sizeof(quint16));
+    siusDataSocket->write(block);
+    block.clear();
+
+    emit statusInfo(tr("Nimekiri saadetud"));
+}
+
 void SiusDataConnection::setSocketIndex(int newIndex)
 {
     m_index = newIndex;
@@ -272,6 +295,7 @@ void SiusDataConnection::stopProgress()
 
 void SiusDataConnection::wasDisconnected()
 {
+    m_isConnected = false;
     if(verbose)
         QTextStream(stdout) << "SiusDataConnection::wasDisconnected(): " << m_index << Qt::endl;
     if(addressLabel != nullptr && disconnectButton != nullptr)

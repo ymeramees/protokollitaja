@@ -7,11 +7,45 @@ DataConnection::DataConnection(QTcpSocket *parent) : QObject(parent)
 {
     socket = parent;
     connect(socket, &QTcpSocket::disconnected, this, &DataConnection::wasDisconnected);
+    connect(socket, &QTcpSocket::readyRead, this, &DataConnection::readData);
 }
 
 void DataConnection::abort()
 {
     socket->abort();
+}
+
+void DataConnection::readData()
+{
+    static quint16 blockSize = 0;
+    static quint16 protocolVersion = 0;
+    QDataStream in(socket);
+    in.setVersion(QDataStream::Qt_6_5);
+
+    if (blockSize == 0){
+        if (socket->bytesAvailable() < (int)sizeof(quint16)){
+            return; //Packet size info (quint16) not yet received
+        }
+        in >> blockSize;
+    }
+
+    if (socket->bytesAvailable() < blockSize){
+        return; //Whole packet not yet received
+    }
+
+    QString message;
+
+    in >> protocolVersion;
+    in >> message;
+    blockSize = 0;
+
+    QTextStream(stdout) << "DataConnection::readData, protocolVersion: " << protocolVersion << ", message = " << message << Qt::endl;
+
+    if (protocolVersion == 1)
+        emit startListReceived(message.split('\n'));
+    else
+        emit error(tr("Tundmatu sissetuleva ühenduse versioon: %1\nKontrollige, kas Protokollitaja ja Range Control'i versioonid ühtivad!")
+                       .arg(protocolVersion));
 }
 
 void DataConnection::wasDisconnected()

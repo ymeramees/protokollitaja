@@ -17,8 +17,8 @@ QString programName = VER_INTERNALNAME_STR;
 QString programVersion = VER_PRODUCTVERSION_STR;
 extern bool verbose;
 
-ProtoRangeControl::ProtoRangeControl(QWidget *parent)
-    : QMainWindow(parent), m_server(&m_incomingLog)
+ProtoRangeControl::ProtoRangeControl(QString language, QWidget *parent)
+    : QMainWindow(parent), m_server(&m_incomingLog), m_language(language)
 {
     readSettings();
 
@@ -306,10 +306,6 @@ void ProtoRangeControl::createMenus()
     setCheckedTargetTypeAct->setStatusTip(tr("Muudab kõigil märgitud radadel märklehe tüüpi"));
     connect(setCheckedTargetTypeAct, &QAction::triggered, this, &ProtoRangeControl::setTargetTypes);
 
-    QAction *setCheckedClassAct = new QAction(tr("Võistlusklass"), this);
-    setCheckedClassAct->setStatusTip(tr("Muudab kõigil märgitud radadel võistlusklassi"));
-    connect(setCheckedClassAct, &QAction::triggered, this, &ProtoRangeControl::setClasses);
-
     QAction *setCheckedShotsAct = new QAction(tr("Laskude arv"), this);
     setCheckedShotsAct->setStatusTip(tr("Muudab kõigil märgitud radadel võistluslaskude arvu"));
     connect(setCheckedShotsAct, &QAction::triggered, this, &ProtoRangeControl::setNumberOfShots);
@@ -326,7 +322,6 @@ void ProtoRangeControl::createMenus()
     toolsMenu->addAction(unsetCheckedAllAct);
     toolsMenu->addSeparator();
     toolsMenu->addAction(setCheckedTargetTypeAct);
-    toolsMenu->addAction(setCheckedClassAct);
     toolsMenu->addAction(setCheckedShotsAct);
     toolsMenu->addSeparator();
     toolsMenu->addAction(clearLanesAct);
@@ -451,7 +446,7 @@ void ProtoRangeControl::importStartList()
                         targetNo = QInputDialog::getInt(this, tr("Sisesta raja number"), QString("%1 %2: ").arg(rowParts.at(3), rowParts.at(2)));
                     auto laneOpt = findLane(targetNo);
                     if (laneOpt) {
-                            laneOpt.value()->setCompetitorRow(row);
+                        laneOpt.value()->setSiusCompetitorRow(row);
                     } else {   // That means that existing lane was not found
                         QTextStream(stdout) << "ProtoRangeControl::importStartList: Lane with target " << rowParts.at(10) << " not found, ignoring!" << Qt::endl;
 //                        addLane(row, "");
@@ -488,10 +483,10 @@ void ProtoRangeControl::initialize()
     if (tcpSocket == nullptr)
         tcpSocket = new QTcpSocket(this);
 
-    connect(&m_server, &ConnectionServer::error, [this](QString error) {
+    connect(&m_server, &ConnectionServer::error, this, [this](QString error) {
         showMessage(error);
     });
-    connect(&m_server, &ConnectionServer::info, [this](QString info) {
+    connect(&m_server, &ConnectionServer::info, this, [this](QString info) {
         showMessage(info);
     });
     connect(&m_server, &ConnectionServer::newShot, this, &ProtoRangeControl::newShot);
@@ -499,7 +494,37 @@ void ProtoRangeControl::initialize()
     connect(&m_server, &ConnectionServer::statusUpdate, this, &ProtoRangeControl::updateStatus);
     connect(&m_server, &ConnectionServer::allShots, this, &ProtoRangeControl::allShotsDataReceived);
     connect(&m_server, &ConnectionServer::newProtokollitajaConnection, this, &ProtoRangeControl::publishAllShots);
+    connect(&m_server, &ConnectionServer::startListReceived, this, &ProtoRangeControl::loadStartList);
     m_server.start(m_serverPort, m_inbandPort);
+}
+
+void ProtoRangeControl::loadStartList(QStringList startList)
+{
+    // targetNo;id;firstName;lastName;club;discipline;decimals;numberOfShots
+    for (QString row : startList) {
+        QTextStream(stdout) << "ProtoRangeControl::loadStartList: Competitor row: " << row << Qt::endl;
+        QStringList rowParts = row.split(";");
+        if (row.size() > 0) {
+            if (rowParts.size() < 8) {
+                QMessageBox::critical(this, tr("Viga"), tr("Vigane stardinimekirja rida!\n%1").arg(row), QMessageBox::Ok);
+            } else {
+                QString targetNo = rowParts.at(0);
+                QTextStream(stdout) << "ProtoRangeControl::loadStartList: targetNo = " << targetNo << Qt::endl;
+                if (targetNo == "0" || targetNo.isEmpty())
+                    targetNo = QString("%1").arg(QInputDialog::getInt(this, tr("Sisesta raja number"), QString("%1 %2: ").arg(rowParts.at(2), rowParts.at(3))));
+                auto laneOpt = findLane(targetNo);
+                if (laneOpt) {
+                    QTextStream(stdout) << "ProtoRangeControl::loadStartList: laneOpt defined" << Qt::endl;
+                    if (!laneOpt.value()->inCompetition())
+                        laneOpt.value()->setStartListCompetitorRow(row);
+                    else
+                        QMessageBox::critical(this, tr("Viga"), tr("Rajal %1 on võistlus käimas, uut laskurit ei imporditud!").arg(targetNo), QMessageBox::Ok);
+                } else {   // That means that existing lane was not found
+                    QTextStream(stdout) << "ProtoRangeControl::loadStartList: Lane with target " << rowParts.at(0) << " not found, ignoring!" << Qt::endl;
+                }
+            }
+        }
+    }
 }
 
 void ProtoRangeControl::publishAllShots(DataConnection *connection)
@@ -722,7 +747,7 @@ void ProtoRangeControl::sendInit(Lane *lane)
     message.append(lane->firstName() + " " + lane->lastName() + "\n");
     message.append(lane->club() + "\n");
     message.append(lane->discipline() + "\n");
-    message.append(lane->competitionClass() + "\n");
+    message.append(" \n");
     message.append(lane->decimals() + "\n");
     message.append(lane->noOfShots());
 
@@ -784,17 +809,6 @@ void ProtoRangeControl::setCheckedAll()
     foreach (Lane *lane, m_lanes) {
         lane->setSelected(true);
     }
-}
-
-void ProtoRangeControl::setClasses()
-{
-    bool wasAccepted = false;
-    QString newClass =  QInputDialog::getText(this, tr("Sisesta võistlusklass"), tr("Võistlusklass: "), QLineEdit::Normal, "", &wasAccepted);
-    if (wasAccepted)
-        foreach (Lane *lane, m_lanes) {
-            if (lane->selected())
-                lane->setCompetitionClass(newClass);
-        }
 }
 
 void ProtoRangeControl::setNumberOfShots()

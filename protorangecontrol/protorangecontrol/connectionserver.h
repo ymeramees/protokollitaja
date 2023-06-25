@@ -39,6 +39,7 @@ signals:
     void error(QString errorInfo);
     void info(QString info);
     void shotInfoRead(QString shotInfo, int socketIndex);
+    void startListReceived(QStringList startList);
     void newProtokollitajaConnection(DataConnection *connection);
     void newShot(int target, SiusShotData);
     void newTarget(int target, QString ip);

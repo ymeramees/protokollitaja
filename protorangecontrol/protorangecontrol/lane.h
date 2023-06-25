@@ -31,12 +31,12 @@ public:
     QString lastName();
     QString club();
     QString discipline();
-    QString competitionClass();
     QString decimals();
     QString noOfShots();
     bool selected();
     void setCompetitionClass(QString newClass);
-    void setCompetitorRow(QString competitorRow);
+    void setSiusCompetitorRow(QString competitorRow);
+    void setStartListCompetitorRow(QString competitorRow);
     void setCurrentShotIndex(int newIndex);
     void setDiscipline(QString newDiscipline);
     void setIp(QString newIp);
@@ -66,7 +66,6 @@ private:
     QLineEdit m_clubEdit;
     QComboBox m_diciplineBox;
     QCheckBox m_decimals;
-    QLineEdit m_classEdit;
     QSpinBox m_shotsEdit;
     QLabel m_lastShotLabel;
     QLabel m_totalLabel;

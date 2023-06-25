@@ -29,6 +29,8 @@ public:
             QWidget *parent = nullptr
             );
     ~SiusDataConnection();
+    bool isConnected();
+    void sendData(QString data);
 
 signals:
     void disconnectedFromSius(int socketIndex);
@@ -47,6 +49,7 @@ public slots:
 
 private:
     int m_index;
+    bool m_isConnected = false;
     int m_port;
     CommonSettings *m_settings = nullptr;
     QFile *siusLog;

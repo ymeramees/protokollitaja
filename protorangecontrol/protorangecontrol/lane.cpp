@@ -19,7 +19,6 @@ void Lane::clear()
     m_clubEdit.clear();
     m_diciplineBox.setCurrentIndex(0);
     m_decimals.setChecked(true);
-    m_classEdit.clear();
     m_shotsEdit.setValue(0);
     m_lastShotLabel.clear();
     m_totalLabel.clear();
@@ -30,11 +29,6 @@ void Lane::clear()
 QString Lane::club()
 {
     return m_clubEdit.text();
-}
-
-QString Lane::competitionClass()
-{
-    return m_classEdit.text();
 }
 
 QString Lane::decimals()
@@ -106,10 +100,6 @@ void Lane::init(QStringList disciplines)
     m_decimals.setChecked(true);
     m_decimals.setToolTip(tr("Komadega"));
     hBox->addWidget(&m_decimals);
-    m_classEdit.setToolTip(tr("Klass"));
-    m_classEdit.setPlaceholderText(tr("Klass"));
-    m_classEdit.setMaximumWidth(50);
-    hBox->addWidget(&m_classEdit);
     m_shotsEdit.setToolTip(tr("Laskude arv"));
     m_shotsEdit.setMaximum(120);
     m_shotsEdit.setFocusPolicy(Qt::StrongFocus);
@@ -147,12 +137,7 @@ bool Lane::selected()
     return m_selected.isChecked();
 }
 
-void Lane::setCompetitionClass(QString newClass)
-{
-    m_classEdit.setText(newClass);
-}
-
-void Lane::setCompetitorRow(QString competitorRow)
+void Lane::setSiusCompetitorRow(QString competitorRow)
 {
     //ID no;Startno;Name;Firstname;Disp name;Nat;Cat;Group;Team;Bay;Target;Relay;Starttime;BoxTg;Active;Q Tot;Avg;Rank;G1;...;G12;10s;...;0s;Mouches
     QStringList parts = competitorRow.replace("\"", "").split(";");
@@ -164,6 +149,23 @@ void Lane::setCompetitorRow(QString competitorRow)
         m_clubEdit.setText(parts.at(8));
         updateDecimals(m_diciplineBox.currentText());
         updateShots(m_diciplineBox.currentText());
+        m_inCompetition = false;
+    }
+}
+
+void Lane::setStartListCompetitorRow(QString competitorRow)
+{
+    // targetNo;id;firstName;lastName;club;discipline;decimals;numberOfShots
+    QStringList parts = competitorRow.split(";");
+    if(parts.count() >= 6){    // Make sure the row is not too short
+        m_selected.setChecked(true);
+        m_idEdit.setText(parts.at(1));
+        m_firstNameEdit.setText(parts.at(2));
+        m_lastNameEdit.setText(parts.at(3));
+        m_clubEdit.setText(parts.at(4));
+        m_diciplineBox.setCurrentText(parts.at(5));
+        m_decimals.setChecked(parts.at(6).toInt());
+        m_shotsEdit.setValue(parts.at(7).toInt());
         m_inCompetition = false;
     }
 }

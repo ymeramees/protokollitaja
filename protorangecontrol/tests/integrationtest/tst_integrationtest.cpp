@@ -17,6 +17,7 @@ public:
 
 private slots:
     void test_acceptAllShotsTogether();
+    void test_acceptIncomingStartList();
     void test_sendAllShotsOnNewConnection();
     void test_sendNewShotsToExistingConnection();
     void test_togetherWithProtokollitaja();
@@ -33,9 +34,12 @@ IntegrationTest::~IntegrationTest()
 
 }
 
-void IntegrationTest::test_acceptAllShotsTogether() // TODO make it working without human input
+void IntegrationTest::test_acceptAllShotsTogether()
 {
-    ProtoRangeControl rangeControl;
+    QFile file("range_control_conf.json");  // Start with clean settings
+    file.remove();
+
+    ProtoRangeControl rangeControl("Eesti");
     QTcpSocket inband;
 
     inband.connectToHost("localhost", 5451);
@@ -103,9 +107,70 @@ void IntegrationTest::test_acceptAllShotsTogether() // TODO make it working with
     QVERIFY(protokollitaja.state() == QTcpSocket::ConnectedState);
 }
 
+void IntegrationTest::test_acceptIncomingStartList()
+{
+    QFile file("range_control_conf.json");  // Start with clean settings
+    file.remove();
+
+    ProtoRangeControl rangeControl("Eesti");
+    QTcpSocket inband;
+
+    inband.connectToHost("localhost", 5451);
+    inband.waitForConnected(1000);
+    QTest::qWait(100);
+    QVERIFY(inband.state() == QTcpSocket::ConnectedState);
+    inband.write("1\ncall in\nmessage end");
+    inband.waitForBytesWritten(1000);
+    QTest::qWait(100);
+    inband.write("2\ncall in\nmessage end");
+    inband.waitForBytesWritten(1000);
+    QTest::qWait(100);
+    inband.write("3\ncall in\nmessage end");
+    inband.waitForBytesWritten(1000);
+    QTest::qWait(500);
+
+    QTcpSocket protokollitaja;
+    protokollitaja.connectToHost("localhost", 4000);
+    protokollitaja.waitForConnected(1000);
+    QVERIFY(protokollitaja.state() == QTcpSocket::ConnectedState);
+    protokollitaja.waitForReadyRead(1000);
+    QTest::qWait(200);
+
+    QString data = "1;13;Isås;STRÖM;Ülenurme GSK;40l Õhupüss;1;40\n2;73;Mõttetu;MEES;Narva LSK;40l Õhupüss;1;40\n3;33;Jürto;NII-DOMMZONN;KL MäLK;40l Õhupüss;1;40";
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_6_5);
+    out << (quint16)0;
+    out << (quint16)1;  // Connection protocol version
+    out << data;
+    out.device()->seek(0);
+    out << (quint16)(block.size() - sizeof(quint16));
+    protokollitaja.write(block);
+    block.clear();
+
+    QTest::qWait(200);
+
+    QList<QLineEdit*> textBoxes = rangeControl.findChildren<QLineEdit*>();
+    QCOMPARE(textBoxes.at(0)->text(), "1");
+    QCOMPARE(textBoxes.at(1)->text(), "13");
+    QCOMPARE(textBoxes.at(2)->text(), "Isås");
+    QCOMPARE(textBoxes.at(3)->text(), "STRÖM");
+    QCOMPARE(textBoxes.at(4)->text(), "Ülenurme GSK");
+    QCOMPARE(textBoxes.at(5)->text(), "40");
+    QCOMPARE(textBoxes.at(7)->text(), "2");
+    QCOMPARE(textBoxes.at(8)->text(), "73");
+    QCOMPARE(textBoxes.at(9)->text(), "Mõttetu");
+    QCOMPARE(textBoxes.at(10)->text(), "MEES");
+    QCOMPARE(textBoxes.at(11)->text(), "Narva LSK");
+    QCOMPARE(textBoxes.at(12)->text(), "40");
+    QList<QSpinBox*> shotCountBoxes = rangeControl.findChildren<QSpinBox*>();
+    QCOMPARE(shotCountBoxes.at(0)->value(), 40);
+    QVERIFY(protokollitaja.state() == QTcpSocket::ConnectedState);
+}
+
 void IntegrationTest::test_sendAllShotsOnNewConnection()
 {
-    ProtoRangeControl rangeControl;
+    ProtoRangeControl rangeControl("Eesti");
     QTcpSocket inband;
 
     inband.connectToHost("localhost", 5451);
@@ -185,7 +250,7 @@ void IntegrationTest::test_sendAllShotsOnNewConnection()
 
 void IntegrationTest::test_sendNewShotsToExistingConnection()
 {
-    ProtoRangeControl rangeControl;
+    ProtoRangeControl rangeControl("Eesti");
     QTcpSocket inband;
 
     inband.connectToHost("localhost", 5451);
@@ -252,7 +317,7 @@ void IntegrationTest::test_sendNewShotsToExistingConnection()
 
 void IntegrationTest::test_togetherWithProtokollitaja()
 {
-    ProtoRangeControl rangeControl;
+    ProtoRangeControl rangeControl("Eesti");
     QTcpSocket inband;
 
     inband.connectToHost("localhost", 5451);

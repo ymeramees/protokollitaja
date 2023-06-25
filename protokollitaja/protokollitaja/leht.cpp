@@ -163,6 +163,33 @@ void Leht::eemaldaLaskur()
 	}
 }
 
+std::optional<QString> Leht::exportStartList()
+{
+    if(laskurid.count() < 1) {  // Make sure there is at least 1 competitor
+        return {};
+    } else {
+        // targetNo;id;firstName;lastName;club;discipline;decimals;numberOfShots
+        QStringList startList;
+        QString discipline = harjutus;
+        int numberOfShots = seeriateArv * laskudeArv;
+        for (Laskur *competitor : laskurid) {
+            if (competitor->linnuke->isChecked()) {
+                startList.append(QString("%1;%2;%3;%4;%5;%6;%7;%8")
+                                    .arg(competitor->rajaNr->text().trimmed())
+                                    .arg(competitor->id)
+                                    .arg(competitor->eesNimi->text().trimmed())
+                                    .arg(competitor->perekNimi->text().trimmed())
+                                    .arg(competitor->klubi->text().trimmed())
+                                    .arg(discipline)
+                                    .arg(int(kumnendikega))
+                                    .arg(numberOfShots));
+            }
+        }
+
+        return startList.join('\n');
+    }
+}
+
 int Leht::maxTime() const
 {
     return m_maxTime;

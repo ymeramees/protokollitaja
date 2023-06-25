@@ -141,10 +141,10 @@ void TulemuseAken::joonista()
         pilt->fill();
         //painter->setPen(QColor(Qt::red));
         painter->setFont(pisike);
-        painter->drawText(1460, 1190, "Protokollitaja " + versioon); // TODO uuendada nime
+        painter->drawText(1460, 1190, "Protokollitaja " + versioon);
         painter->drawText(1, 1190, "Autor: Ümeramees");
         painter->setFont(kirjaFont);
-        painter->drawText(450, 1190, "Vaata tulemusi internetis: https://webzone.ee/protokollitaja");
+        painter->drawText(450, 1190, "Vaata tulemusi internetis: https://protokollitaja.eu");
         painter->setFont(pealkirjaFont);
         painter->drawText(60, 50, voistluseNimi);
         painter->setFont(paiseFont);

@@ -70,6 +70,7 @@ public:
     int *jarjestamine;  //Kas sorteerimine käib kümnete arvu järgi või viimase seeria järgi
     QString harjutus;
 	QString ekraaniNimi;
+    std::optional<QString> exportStartList();
 	QVBoxLayout* vKast;
 	QList<int> jalgitavad;
 	QList<Laskur*> laskurid;

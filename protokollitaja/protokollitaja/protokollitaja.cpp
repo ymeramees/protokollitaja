@@ -182,9 +182,13 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         lehelugejaAct->setStatusTip(tr("Lehtede lugemine otse masinast"));
         connect(lehelugejaAct, SIGNAL(triggered()), this, SLOT(lehelugeja()));
 
-        uhenduSiusDatagaAct = new QAction(("SiusData"), this);
+        uhenduSiusDatagaAct = new QAction(("SiusData/RangeControl"), this);
         uhenduSiusDatagaAct->setStatusTip(tr("Ühendub SiusDataga"));
         connect(uhenduSiusDatagaAct, SIGNAL(triggered()), this, SLOT(uhenduSiusDataga()));
+
+        sendCompetitorsToRangeAct = new QAction(("Saada valitud RangeControl'i"), this);
+        sendCompetitorsToRangeAct->setStatusTip(tr("Saadab valitud laskurid ProtoRangeControl'i"));
+        connect(sendCompetitorsToRangeAct, SIGNAL(triggered()), this, SLOT(sendCompetitorsToRange()));
 
         uploadAct = new QAction(("Lae veebi"), this);
         uploadAct->setStatusTip(tr("Laeb tulemused veebi"));
@@ -243,6 +247,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         tooriistadMenu->addAction(seiskaServerAct);
         tooriistadMenu->addSeparator();
         tooriistadMenu->addAction(uhenduSiusDatagaAct);
+        tooriistadMenu->addAction(sendCompetitorsToRangeAct);
 
         tulemusedMenu = menuBar()->addMenu("T&ulemused");
         tulemusedMenu->addAction(importAct);
@@ -4122,6 +4127,28 @@ void Protokollitaja::seiskaServer()
         statusBar()->showMessage(tr("Server seisatud"), 5000);
         server->deleteLater();
         server = 0;
+    }
+}
+
+void Protokollitaja::sendCompetitorsToRange()
+{
+    if(tabWidget->count() < 1) return;  // Make sure there is at least 1 tab
+
+    Leht* sheet = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
+
+    if(sheet->voistk){
+        QMessageBox::critical(this, "Protokollitaja", tr("Võistkondade saatmine Range Control'i ei ole võimalik"),
+                QMessageBox::Ok);
+        return;
+    }
+
+    auto data = sheet->exportStartList();
+    if (data) {
+
+        if(siusDataConnections == nullptr)
+            uhenduSiusDataga();
+
+        siusDataConnections->sendDataToRangeControl(data.value());
     }
 }
 

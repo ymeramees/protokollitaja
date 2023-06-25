@@ -12,6 +12,8 @@ public:
 
 signals:
     void disconnected(int myIndex);
+    void error(QString errorMsg);
+    void startListReceived(QStringList startList);
 
 public slots:
     void abort();
@@ -23,10 +25,12 @@ public slots:
 private:
     int myIndex;
 //    QMessageBox messageBox;
-    QString lastRecvdLine;
+    QString m_buffer;
+//    QString lastRecvdLine;
     QTcpSocket *socket;
 
 private slots:
+    void readData();
     void wasDisconnected();
 };
 

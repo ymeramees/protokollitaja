@@ -69,3 +69,16 @@ void SiusDataConnections::connectToSiusData()
     }
     this->accept();
 }
+
+void SiusDataConnections::sendDataToRangeControl(QString data)
+{
+    bool sent = false;
+    for(SiusDataConnection *socket : sockets)
+        if (socket->isConnected()) {
+            socket->sendData(data);
+            sent = true;
+        }
+
+    if (!sent)
+        emit errorInfo(tr("Aktiivseid ühendusi ei leitud! Ei saanud infot saata!"));
+}

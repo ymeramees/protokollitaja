@@ -57,6 +57,8 @@ void ConnectionServer::newDataConnection()
     if(m_dataServer.hasPendingConnections()){
         DataConnection *socket = new DataConnection(m_dataServer.nextPendingConnection());
         connect(socket, &DataConnection::disconnected, this, &ConnectionServer::closeDataConnection);
+        connect(socket, &DataConnection::error, this, [this](const QString &msg) { emit error(msg); });
+        connect(socket, &DataConnection::startListReceived, this, [this](const QStringList &startList) { emit startListReceived(startList); });
         dataSockets.append(socket);
         socket->setSocketIndex(dataSockets.length()-1);
 

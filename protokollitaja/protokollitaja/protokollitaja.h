@@ -66,9 +66,9 @@ public:
     bool autoUuendus;   //Kas uuenduste kontroll on automaatne (true) või menüüst valitud (false)
 	bool voibUuendadaNimekirja;
     bool voistlus;   //Kasutatakse SiusDatast info vastuvõtmisel, näitab, kas finaali võistluslasud on alanud
-    enum {Muu = 0, Ohupuss = 1, Ohupustol = 2, Sportpuss = 3, Spordipustol = 4, Puss = 5, Pustol = 6};
+    enum TargetType {Muu = 0, Ohupuss = 1, Ohupustol = 2, Sportpuss = 3, Spordipustol = 4, Puss = 5, Pustol = 6};
         //enum {vOhupuss = 0, sOhupuss = 1, vOhupustol = 2, sOhupustol = 3, lam = 4, vStandard = 5, sStandard = 6, vabap = 7, spordikas = 8, sumat = 9, olump = 10};
-    enum {KumneteArvuga = 0, ViimaseSeeriaga = 1};  //Täisarvudega lugemise puhul järjestamise variandid
+    enum RankingOptions {KumneteArvuga = 0, ViimaseSeeriaga = 1};  //Täisarvudega lugemise puhul järjestamise variandid
     int m_ranking;   //Täisarvudega lugemisel, millist järjestamist kasutada
 	int abi;
     int laskuriId;  //Suurim kasutusel olev laskuri ID
@@ -130,6 +130,7 @@ public:
     QAction *salvestaAct;
     QAction *salvestaKuiAct;
     QAction *seiskaServerAct;
+    QAction *sendCompetitorsToRangeAct;
     QAction *sifriLisaAct;
     QAction *taiendaBaasAct;
     QAction *uhenduSiusDatagaAct;
@@ -244,6 +245,7 @@ private slots:
     void salvesta();
     void salvestaKui();
     void seiskaServer();
+    void sendCompetitorsToRange();
     void sifriLisa();
     void statusBarInfoChanged(QString newStatusInfo);
     void sulge();

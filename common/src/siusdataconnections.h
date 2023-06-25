@@ -21,6 +21,7 @@ public:
             QWidget *parent = 0
             );
     ~SiusDataConnections();
+    void sendDataToRangeControl(QString data);
 
 //public slots:
 //    void closeConnections();
@@ -39,6 +40,7 @@ private slots:
 
 signals:
     void disconnectedFromSius(int socketIndex);
+    void errorInfo(QString errorInfo);
 //    void linesRead(QStringList lines, int socketIndex);
     void shotRead(SiusShotData shotData);
     void statusInfo(QString statusInfo);
