@@ -48,7 +48,7 @@ private:
     void publishAllShots(DataConnection *connection);
     void publishSelectedCompetitorShots();
     void publishShot(SiusShotData shotData);
-    void readSettings();
+    QJsonDocument readSettings();
     void saveSettings();
     void sendAck(Lane *lane);
     void sendInit(Lane *lane);
@@ -78,7 +78,7 @@ private slots:
     void changeLanguage();
     void continueSendingMessage();
     void sendInitToAllSelected();
-    void setupLanes();
+    void setupLanes(QJsonDocument fileJson);
     void updateStatus(int target, QString newStatus);
     void newShot(int target, SiusShotData shotData);
     void newTargetIp(int target, QString ip);

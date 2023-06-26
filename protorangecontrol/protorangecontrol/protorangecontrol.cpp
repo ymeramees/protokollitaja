@@ -20,7 +20,7 @@ extern bool verbose;
 ProtoRangeControl::ProtoRangeControl(QString language, QWidget *parent)
     : QMainWindow(parent), m_server(&m_incomingLog), m_language(language)
 {
-    readSettings();
+    QJsonDocument settingsJson = readSettings();
 
     if (m_language.isEmpty()) {
         changeLanguage();
@@ -56,6 +56,8 @@ ProtoRangeControl::ProtoRangeControl(QString language, QWidget *parent)
     this->setGeometry(9, 36, 1000, 600);
     setWindowTitle(programName + " - " + programVersion);
 
+
+    setupLanes(settingsJson);
     initialize();
 }
 
@@ -462,10 +464,6 @@ void ProtoRangeControl::initialize()
 {
     QTextStream(stdout) << "ProtoRangeControl::initialize" << Qt::endl;
 
-    vBox->addWidget(new Header);
-
-    setupLanes();
-
     QFile *logFile = new QFile(QString("ProtoRangeControl sisse %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
     if (logFile->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)) {
         m_incomingLog.setDevice(logFile);
@@ -645,7 +643,7 @@ void ProtoRangeControl::newTargetIp(int target, QString ip)
         sendAck(currentLane);
 }
 
-void ProtoRangeControl::readSettings()
+QJsonDocument ProtoRangeControl::readSettings()
 {
     QFile file("range_control_conf.json");
     QJsonDocument fileJson;
@@ -681,6 +679,7 @@ void ProtoRangeControl::readSettings()
                     tr("Seadete faili avamine ei ole võimalik!\nKasutatakse vaikimisi seadeid.\n\nAsukoht: ").append(file.fileName()),
                     QMessageBox::Ok
                     );*/
+    return fileJson;
 }
 
 void ProtoRangeControl::saveSettings()
@@ -833,22 +832,18 @@ void ProtoRangeControl::setTargetTypes()
         }
 }
 
-void ProtoRangeControl::setupLanes()
+void ProtoRangeControl::setupLanes(QJsonDocument fileJson)
 {
-    QFile file("range_control_conf.json");
-    QJsonDocument fileJson;
+    vBox->addWidget(new Header);
 
-    if(file.open(QIODevice::ReadOnly)){
-        fileJson = QJsonDocument::fromJson(file.readAll());
-        QJsonObject jsonObj = fileJson.object();
+    QJsonObject jsonObj = fileJson.object();
 
-        if(jsonObj["lanes"].isArray()) {
-            foreach(const QJsonValue & value, jsonObj["lanes"].toArray()) {
-                QJsonObject laneObj = value.toObject();
-                QString target = laneObj["target"].toString();
-                QString ip = laneObj["ip"].toString();
-                addLane(target.toInt(), ip);
-            }
+    if(jsonObj["lanes"].isArray()) {
+        foreach(const QJsonValue & value, jsonObj["lanes"].toArray()) {
+            QJsonObject laneObj = value.toObject();
+            QString target = laneObj["target"].toString();
+            QString ip = laneObj["ip"].toString();
+            addLane(target.toInt(), ip);
         }
     }
 }
