@@ -368,14 +368,14 @@ void Lehelugeja::sumAndEndSeries()
 
         for(int i = 0; i < seriesShots.count(); i++)    //Loetud laskude kirjutamine aktiivsesse seeriasse
             lasud[aktiivseSeeriaNr][i]->set(seriesShots[i]);
-        logi.append(ui->nimeBox->currentText() + QString(" %1. seeria: %2").arg(aktiivneSeeria->objectName().at(6)).arg(double(fl / 10)));
+        logi.append(ui->nimeBox->currentText() + tr(" %1. seeria: %2").arg(aktiivneSeeria->objectName().at(6)).arg(double(fl / 10)));
 
         aktiivneSeeria->setFocus();
         QApplication::sendEvent(this, new QKeyEvent(QEvent::KeyPress, Qt::Key_Tab, Qt::NoModifier));
         QApplication::sendEvent(this, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Tab, Qt::NoModifier));
     } else {
         QMessageBox::critical(this, "Viga", "Puudus aktiivne seeria kast!", QMessageBox::Ok);
-        logi.append("Viga!:" + ui->nimeBox->currentText() + QString(" tundmatu seeria: %1").arg(double(fl / 10)));
+        logi.append("Viga!:" + ui->nimeBox->currentText() + tr(" tundmatu seeria: %1").arg(double(fl / 10)));
     }
 
     fookus->start();

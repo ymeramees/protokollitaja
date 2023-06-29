@@ -268,7 +268,7 @@ void LehelugejaAken::loe()
         m_ui.logi->append(tr("vastuvõtt:"));
 
         if(!tekst.contains("START") && !tekst.contains("SCHEIBE") && !tekst.contains("Keine") && tekst.contains(';'))
-            m_ui.logi->append(QString("     %1. lask").arg(lask + 1));
+            m_ui.logi->append(tr("     %1. lask").arg(lask + 1));
         m_ui.logi->append(tekst);
         /*if(tekst.startsWith('H', Qt::CaseInsensitive)){
                 saada("611101112");
@@ -444,7 +444,7 @@ void LehelugejaAken::loe()
                         m_ui.logi->append(m_ui.nimeBox->currentText() + QString(" %1. seeria: %2").arg(aktiivneSeeria->objectName().at(6)).arg(fl / 10));
                     }else{
                         QMessageBox::critical(this, "Viga", "Puudus aktiivne seeria kast!", QMessageBox::Ok);
-                        m_ui.logi->append("Viga!:" + m_ui.nimeBox->currentText() + QString(" tundmatu seeria: %1").arg(fl / 10));
+                        m_ui.logi->append("Viga!:" + m_ui.nimeBox->currentText() + tr(" tundmatu seeria: %1").arg(fl / 10));
                     }
                     /*for(int k = 0; k < seeriad.count(); k++)
                         if(seeriad[k]->hasFocus()){
@@ -543,7 +543,7 @@ void LehelugejaAken::otsiPorti()
     serial.setDataTerminalReady(true);
     serial.setRequestToSend(true);
 
-    saada(QString("%1. korda: %2").arg(++i).arg(m_ui.comPort->currentText()));
+    saada(tr("%1. korda: %2").arg(++i).arg(m_ui.comPort->currentText()));
     serial.flush();
     otsija->start();
 }

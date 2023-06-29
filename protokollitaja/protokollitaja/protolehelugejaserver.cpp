@@ -18,7 +18,7 @@ ProtolehelugejaServer::~ProtolehelugejaServer()
 
 void ProtolehelugejaServer::closeConnection(int socketIndex)
 {
-    QMessageBox::warning(dynamic_cast<QWidget*>(this->parent()), "Teade", QString("Protolehelugeja %1 ühendus katkes!").arg(socketIndex), QMessageBox::Ok);
+    QMessageBox::warning(dynamic_cast<QWidget*>(this->parent()), "Teade", tr("Protolehelugeja %1 ühendus katkes!").arg(socketIndex), QMessageBox::Ok);
     sockets.at(socketIndex)->deleteLater();
     sockets.removeAt(socketIndex);
 

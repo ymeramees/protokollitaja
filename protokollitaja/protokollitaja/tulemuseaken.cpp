@@ -142,24 +142,24 @@ void TulemuseAken::joonista()
         //painter->setPen(QColor(Qt::red));
         painter->setFont(pisike);
         painter->drawText(1460, 1190, "Protokollitaja " + versioon);
-        painter->drawText(1, 1190, "Autor: Ümeramees");
+        painter->drawText(1, 1190, tr("Autor: Ümeramees"));
         painter->setFont(kirjaFont);
-        painter->drawText(450, 1190, "Vaata tulemusi internetis: https://protokollitaja.eu");
+        painter->drawText(450, 1190, tr("Vaata tulemusi internetis: https://protokollitaja.eu"));
         painter->setFont(pealkirjaFont);
         painter->drawText(60, 50, voistluseNimi);
         painter->setFont(paiseFont);
-        painter->drawText(1345, 130, "Summa");
+        painter->drawText(1345, 130, tr("Summa"));
         if(ind){
                 if(loplik){
-                        painter->drawText(1450, 130, "Finaal");
-                }else painter->drawText(1450, 130, "Keskm. l.");
+                        painter->drawText(1450, 130, tr("Finaal"));
+                }else painter->drawText(1450, 130, tr("Keskm. l."));
                 if(mitmeJarel == 4){
-                        painter->drawText(1100, 130, "Seeriad");
+                        painter->drawText(1100, 130, tr("Seeriad"));
                         painter->drawText(850, 130, tr("Põlv"));
-                        painter->drawText(910, 130, "Lam.");
-                }else painter->drawText(1000, 130, "Seeriad");
+                            painter->drawText(910, 130, tr("Lam."));
+                }else painter->drawText(1000, 130, tr("Seeriad"));
         }else{
-                painter->drawText(1450, 130, "Keskm.");
+                painter->drawText(1450, 130, tr("Keskm."));
         }
         painter->setFont(kirjaFont);
         painter->drawText(800, 50, 700, 50, Qt::AlignRight, aegKoht);

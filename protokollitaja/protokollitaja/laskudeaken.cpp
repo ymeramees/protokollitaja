@@ -113,7 +113,7 @@ void LaskudeAken::loeLasud()    //Loeb seeriast tabelisse uued lasud
     if(karistus.isEmpty() || karistus == "-999")
         karistus.clear();
     ui->karistusEdit->setText(karistus);
-    ui->seeriaSilt->setText(QString("%1. seeria").arg(aktiivneSeeria + 1));
+    ui->seeriaSilt->setText(tr("%1. seeria").arg(aktiivneSeeria + 1));
 }
 
 void LaskudeAken::muudaPealkirja(QString uus)

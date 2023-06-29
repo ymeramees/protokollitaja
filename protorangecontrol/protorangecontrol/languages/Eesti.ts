@@ -9,19 +9,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../connectionserver.cpp" line="107"/>
-        <location filename="../connectionserver.cpp" line="113"/>
+        <location filename="../connectionserver.cpp" line="109"/>
+        <location filename="../connectionserver.cpp" line="115"/>
         <source>Unable to start the server: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../connectionserver.cpp" line="109"/>
+        <location filename="../connectionserver.cpp" line="111"/>
         <source>Data server started at port %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../connectionserver.cpp" line="115"/>
+        <location filename="../connectionserver.cpp" line="117"/>
         <source>InBand server started at port %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DataConnection</name>
+    <message>
+        <location filename="../dataconnection.cpp" line="47"/>
+        <source>Tundmatu sissetuleva ühenduse versioon: %1
+Kontrollige, kas Protokollitaja ja Range Control&apos;i versioonid ühtivad!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -36,68 +45,62 @@
 <context>
     <name>Lane</name>
     <message>
-        <location filename="../lane.cpp" line="83"/>
-        <location filename="../lane.cpp" line="84"/>
+        <location filename="../lane.cpp" line="77"/>
+        <location filename="../lane.cpp" line="78"/>
         <source>Rada</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lane.cpp" line="85"/>
+        <location filename="../lane.cpp" line="86"/>
+        <source>Eesnimi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lane.cpp" line="88"/>
+        <location filename="../lane.cpp" line="89"/>
+        <source>Perekonnanimi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../lane.cpp" line="91"/>
         <location filename="../lane.cpp" line="92"/>
-        <source>Eesnimi</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lane.cpp" line="94"/>
-        <location filename="../lane.cpp" line="95"/>
-        <source>Perekonnanimi</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lane.cpp" line="97"/>
-        <location filename="../lane.cpp" line="98"/>
         <source>Klubi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lane.cpp" line="100"/>
+        <location filename="../lane.cpp" line="94"/>
         <source>Harjutus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lane.cpp" line="107"/>
+        <location filename="../lane.cpp" line="101"/>
         <source>Komadega</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lane.cpp" line="109"/>
-        <location filename="../lane.cpp" line="110"/>
-        <source>Klass</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lane.cpp" line="113"/>
+        <location filename="../lane.cpp" line="103"/>
         <source>Laskude arv</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lane.cpp" line="117"/>
+        <location filename="../lane.cpp" line="107"/>
         <source>Viimane lask</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lane.cpp" line="119"/>
+        <location filename="../lane.cpp" line="109"/>
         <source>Summa</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lane.cpp" line="126"/>
-        <location filename="../lane.cpp" line="127"/>
+        <location filename="../lane.cpp" line="116"/>
+        <location filename="../lane.cpp" line="117"/>
         <source>Märgi IP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lane.cpp" line="129"/>
+        <location filename="../lane.cpp" line="119"/>
         <source>Staatus</source>
         <translation type="unfinished"></translation>
     </message>
@@ -105,109 +108,104 @@
 <context>
     <name>ProtoRangeControl</name>
     <message>
-        <location filename="../protorangecontrol.cpp" line="176"/>
+        <location filename="../protorangecontrol.cpp" line="180"/>
         <source>Teade</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="176"/>
+        <location filename="../protorangecontrol.cpp" line="180"/>
         <source>Keele vahetus rakendub programmi uuesti käivitamisel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="195"/>
-        <location filename="../protorangecontrol.cpp" line="712"/>
+        <location filename="../protorangecontrol.cpp" line="199"/>
+        <location filename="../protorangecontrol.cpp" line="740"/>
         <source>Võistlus käimas!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="264"/>
+        <location filename="../protorangecontrol.cpp" line="200"/>
+        <source>Rajal %1 on võistlus veel käimas, oled kindel, et tahad seda nullida?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../protorangecontrol.cpp" line="268"/>
         <source>&amp;Fail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="265"/>
+        <location filename="../protorangecontrol.cpp" line="269"/>
         <source>&amp;Tööriistad</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="266"/>
+        <location filename="../protorangecontrol.cpp" line="270"/>
         <source>&amp;Käsklused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="267"/>
+        <location filename="../protorangecontrol.cpp" line="271"/>
         <source>Keel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="269"/>
+        <location filename="../protorangecontrol.cpp" line="273"/>
         <source>&amp;Lisa rada</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="270"/>
+        <location filename="../protorangecontrol.cpp" line="274"/>
         <source>Lisab ühe raja rea</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="275"/>
+        <location filename="../protorangecontrol.cpp" line="279"/>
         <source>Import startlist...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="276"/>
+        <location filename="../protorangecontrol.cpp" line="280"/>
         <source>Impordi startlisti fail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="284"/>
+        <location filename="../protorangecontrol.cpp" line="288"/>
         <source>&amp;Välju</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="286"/>
+        <location filename="../protorangecontrol.cpp" line="290"/>
         <source>Välju programmist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="295"/>
+        <location filename="../protorangecontrol.cpp" line="299"/>
         <source>Märgi kõik</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="296"/>
+        <location filename="../protorangecontrol.cpp" line="300"/>
         <source>Lisab linnukesed kõigile radadele</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="299"/>
+        <location filename="../protorangecontrol.cpp" line="303"/>
         <source>Eemalda märgistused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="300"/>
+        <location filename="../protorangecontrol.cpp" line="304"/>
         <source>Eemaldab linnukesed kõigilt radadelt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="303"/>
+        <location filename="../protorangecontrol.cpp" line="307"/>
         <source>Märklehe tüüp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="304"/>
-        <source>Muudab kõigil märgitud radadel märklehe tüüpi</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../protorangecontrol.cpp" line="307"/>
-        <source>Võistlusklass</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../protorangecontrol.cpp" line="308"/>
-        <source>Muudab kõigil märgitud radadel võistlusklassi</source>
+        <source>Muudab kõigil märgitud radadel märklehe tüüpi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -241,172 +239,181 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="333"/>
+        <location filename="../protorangecontrol.cpp" line="332"/>
         <source>Saada nimed (init)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="334"/>
+        <location filename="../protorangecontrol.cpp" line="333"/>
         <source>Saadab võistlejate andmed märgitud radadele</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="337"/>
+        <location filename="../protorangecontrol.cpp" line="336"/>
         <source>Alusta proovidega</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="338"/>
+        <location filename="../protorangecontrol.cpp" line="337"/>
         <source>Annab käsu märgitud radadele alustada proovilaskudega</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="343"/>
+        <location filename="../protorangecontrol.cpp" line="342"/>
         <source>Lõpeta proovid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="344"/>
+        <location filename="../protorangecontrol.cpp" line="343"/>
         <source>Annab käsu märgitud radadele lõpetada proovilasud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="349"/>
+        <location filename="../protorangecontrol.cpp" line="348"/>
         <source>Alusta võistlust</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="350"/>
+        <location filename="../protorangecontrol.cpp" line="349"/>
         <source>Annab käsu märgitud radadele alustada võistlust</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="355"/>
+        <location filename="../protorangecontrol.cpp" line="354"/>
         <source>Jätka</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="356"/>
+        <location filename="../protorangecontrol.cpp" line="355"/>
         <source>Annab käsu märgitud radadele jätkata</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="361"/>
+        <location filename="../protorangecontrol.cpp" line="360"/>
         <source>Lõpeta võistlus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="362"/>
+        <location filename="../protorangecontrol.cpp" line="361"/>
         <source>Annab käsu märgitud radadele lõpetada võistlus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="367"/>
+        <location filename="../protorangecontrol.cpp" line="366"/>
         <source>Vilguta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="368"/>
+        <location filename="../protorangecontrol.cpp" line="367"/>
         <source>Annab käsu märgitud radadele vilgutada taustavalgusega</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="373"/>
+        <location filename="../protorangecontrol.cpp" line="372"/>
         <source>Küsi kõik lasud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="374"/>
+        <location filename="../protorangecontrol.cpp" line="373"/>
         <source>Küsib märgitud radadelt kõik lasud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="379"/>
+        <location filename="../protorangecontrol.cpp" line="378"/>
         <source>Reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="380"/>
+        <location filename="../protorangecontrol.cpp" line="379"/>
         <source>Reset&apos;ib märgitud rajad</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="385"/>
+        <location filename="../protorangecontrol.cpp" line="384"/>
         <source>Saada lasud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="386"/>
+        <location filename="../protorangecontrol.cpp" line="385"/>
         <source>Saadab märgitud laskurite olemasolevad lasud Protokollitajasse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="404"/>
+        <location filename="../protorangecontrol.cpp" line="403"/>
         <source>Programmi keel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="405"/>
+        <location filename="../protorangecontrol.cpp" line="404"/>
         <source>Programmi keele valik</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="430"/>
+        <location filename="../protorangecontrol.cpp" line="429"/>
         <source>Ava startlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="430"/>
+        <location filename="../protorangecontrol.cpp" line="429"/>
         <source>Comma separated file (*.csv)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="441"/>
+        <location filename="../protorangecontrol.cpp" line="440"/>
+        <location filename="../protorangecontrol.cpp" line="507"/>
+        <location filename="../protorangecontrol.cpp" line="519"/>
         <source>Viga</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="441"/>
+        <location filename="../protorangecontrol.cpp" line="440"/>
         <source>Kasutage Siusi startlisti formaati, kuna Inbandi omas ei ole ID&apos;sid!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="449"/>
+        <location filename="../protorangecontrol.cpp" line="448"/>
+        <location filename="../protorangecontrol.cpp" line="512"/>
         <source>Sisesta raja number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="598"/>
+        <location filename="../protorangecontrol.cpp" line="507"/>
+        <source>Vigane stardinimekirja rida!
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../protorangecontrol.cpp" line="519"/>
+        <source>Rajal %1 on võistlus käimas, uut laskurit ei imporditud!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../protorangecontrol.cpp" line="625"/>
         <source>Märgi IP: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="788"/>
-        <source>Sisesta võistlusklass</source>
+        <location filename="../protorangecontrol.cpp" line="741"/>
+        <source>Rajal %1 on võistlus veel käimas, oled kindel, et tahad seda uuesti alustada?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="788"/>
-        <source>Võistlusklass: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../protorangecontrol.cpp" line="799"/>
+        <location filename="../protorangecontrol.cpp" line="816"/>
         <source>Sisesta laskude arv</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="799"/>
+        <location filename="../protorangecontrol.cpp" line="816"/>
         <source>Laskude arv: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="810"/>
+        <location filename="../protorangecontrol.cpp" line="827"/>
         <source>Vali märklehe tüüp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="810"/>
+        <location filename="../protorangecontrol.cpp" line="827"/>
         <source>Märkleht: </source>
         <translation type="unfinished"></translation>
     </message>

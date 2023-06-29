@@ -16,8 +16,10 @@ public:
     QVector<int> sighterShotTypes() const;
     QString fileName() const;
     QString competitionShotTypesString() const;
+    QString language() const;
     QString sighterShotTypesString() const;
     void setCompetitionShotTypes(const QString newShotTypes);
+    void setLanguage(const QString newLanguage);
     void setSighterShotTypes(const QString newShotTypes);
     void readSettings();
     void writeSettings();
@@ -27,6 +29,7 @@ public:
 private:
     QString m_folderName;
     QString m_fileName;
+    QString m_language;
     QVector<int> m_competitionShotTypes;
     QVector<int> m_sighterShotTypes;
     QVector<int> toIntVector(const QString intsList);

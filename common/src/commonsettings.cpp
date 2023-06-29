@@ -6,6 +6,7 @@ CommonSettings::CommonSettings(QString organization, QString programName/*QObjec
     m_fileName = programName;
     m_sighterShotTypes = {32,35,36,37,39,544,547,551,1060};
     m_competitionShotTypes = {0,3,4,5,7,512,515,519,1028,1029,1036,2304};
+//    m_language = "Eesti";
 
     readSettings();
 }
@@ -31,6 +32,11 @@ QString CommonSettings::competitionShotTypesString() const
     return toString(m_competitionShotTypes);
 }
 
+QString CommonSettings::language() const
+{
+    return m_language;
+}
+
 QString CommonSettings::sighterShotTypesString() const
 {
     return toString(m_sighterShotTypes);
@@ -39,6 +45,11 @@ QString CommonSettings::sighterShotTypesString() const
 void CommonSettings::setCompetitionShotTypes(const QString newShotTypes)
 {
     m_competitionShotTypes = toIntVector(newShotTypes);
+}
+
+void CommonSettings::setLanguage(const QString newLanguage)
+{
+    m_language = newLanguage;
 }
 
 void CommonSettings::setSighterShotTypes(const QString newShotTypes)
@@ -76,6 +87,10 @@ void CommonSettings::readSettings()
         if(allKeys.filter("siusConnection/sighterShotTypes", Qt::CaseInsensitive).length() > 0)
             setSighterShotTypes(settings.value("sighterShotTypes").toString());
         settings.endGroup();
+        settings.beginGroup("general");
+        if(allKeys.filter("general/language", Qt::CaseInsensitive).length() > 0)
+            setLanguage(settings.value("language").toString());
+        settings.endGroup();
     }
 }
 
@@ -85,5 +100,8 @@ void CommonSettings::writeSettings()
     settings.beginGroup("siusConnection");
     settings.setValue("competitionShotTypes", competitionShotTypesString());
     settings.setValue("sighterShotTypes", sighterShotTypesString());
+    settings.endGroup();
+    settings.beginGroup("general");
+    settings.setValue("language", language());
     settings.endGroup();
 }

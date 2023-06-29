@@ -117,7 +117,7 @@ void StartListWriter::writeStartListFile(StartListType type)
             QMessageBox::information(
                         dynamic_cast<QWidget*>(this->parent()),
                         "Protokollitaja",
-                        QString("Startlist loodud. Eksporditi %1 laskurit\n%2").arg(exported).arg(m_filePath),
+                        tr("Startlist loodud. Eksporditi %1 laskurit\n%2").arg(exported).arg(m_filePath),
                         "Selge"
                         );
     } else QMessageBox::critical(dynamic_cast<QWidget*>(this->parent()), "Viga", tr("Ei õnnestu faili kirjutada."), QMessageBox::Ok);

@@ -29,7 +29,7 @@ CompetitionSettings SimpleKllFileRW::readCompetitionSettings(QDataStream *inStre
     } else QMessageBox::critical(
                 parent,
                 tr("Protokollitaja"),
-                QString("Vale versiooni fail!\n\nVõimalik, et tegu on uuema programmi versiooni failiga.\n\n(KllFileRW::readCompetitionSettingsFromKll())"),
+                tr("Vale versiooni fail!\n\nVõimalik, et tegu on uuema programmi versiooni failiga.\n\n(KllFileRW::readCompetitionSettingsFromKll())"),
                 QMessageBox::Ok
                 );
     return competitionSettings;

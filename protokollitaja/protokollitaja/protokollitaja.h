@@ -270,13 +270,16 @@ private slots:
     void viiLoppu();
 
 private:
+    void changeLanguage();
     void setDataFromInitialDialog();
     QString timeAndPlaceString();
     DataUploader *dataUploader = nullptr;
+    QString m_language;
     QDate m_startDate;
     QDate m_endDate;
     QProgressDialog *progress;  //Näitab, et SiusDatast alles andmed tulevad
     CommonSettings m_settings;
+    QTranslator m_translator;
     QString webCompetitionId = "";
     QString m_country = "Estonia";
     QString m_restHeaderData = "";

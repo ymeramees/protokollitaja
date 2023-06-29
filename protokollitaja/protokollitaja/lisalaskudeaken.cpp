@@ -31,7 +31,7 @@ void LisaLaskudeAken::eemalda()
 void LisaLaskudeAken::lisa()
 {
     bool onnestus = false;
-    double uus = QInputDialog::getDouble(this, "Sisestage uus lisalask", "Uus lisalask:", 0.0, 0, 10.9, 1, &onnestus);
+    double uus = QInputDialog::getDouble(this, tr("Sisestage uus lisalask"), tr("Uus lisalask:"), 0.0, 0, 10.9, 1, &onnestus);
     if(onnestus){
         QString lask = QString("%1").arg(uus);
         if(!lask.contains('.'))

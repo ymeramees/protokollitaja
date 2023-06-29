@@ -401,7 +401,7 @@ void ProtoRangeControl::createMenus()
     controlMenu->addAction(sendShotsAct);
 
     QAction *changeLanguageAct = new QAction(tr("Programmi keel"), this);
-    resetSelectedAct->setStatusTip(tr("Programmi keele valik"));
+    changeLanguageAct->setStatusTip(tr("Programmi keele valik"));
     connect(changeLanguageAct, &QAction::triggered, [this](){
         changeLanguage();
     });

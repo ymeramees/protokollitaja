@@ -25,5 +25,7 @@
         <file>images/uusTab.png</file>
         <file>images/Abi.bmp</file>
         <file>images/kopeeriLaskur.png</file>
+        <file>protokollitaja/languages/Eesti.qm</file>
+        <file>protokollitaja/languages/English.qm</file>
     </qresource>
 </RCC>
