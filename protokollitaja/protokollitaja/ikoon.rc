@@ -1,7 +1,8 @@
 IDI_ICON1	ICON	DISCARDABLE	"Protokollitaja.ico"
 
 #include <windows.h>
-#include "version.h"
+#include "programname.h"
+#include "../../common/src/version.h"
 
 VS_VERSION_INFO VERSIONINFO
 FILEVERSION     VER_FILEVERSION
