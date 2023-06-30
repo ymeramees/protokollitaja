@@ -34,7 +34,7 @@ install:
 
     ls C:\Qt\Tools
 
-    C:\Qt\Tools\mingw1120_64
+    ls C:\Qt\Tools\mingw1120_64\bin
 
     ls C:\Qt\6.5.0
 
