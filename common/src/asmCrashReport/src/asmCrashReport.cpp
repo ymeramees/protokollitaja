@@ -79,7 +79,7 @@ namespace asmCrashReport
 
          for ( const QString &data : cReportHeader + inFrameInfoList )
          {
-            stream << data << endl;
+             stream << data << Qt::endl;
          }
 
          fileWritten = true;
