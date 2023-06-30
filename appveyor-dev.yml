@@ -32,6 +32,8 @@ install:
 
     ls C:\
 
+    ls C:\OpenSSL-v111-Win64\lib
+
     ls C:\Qt
 
     ls C:\Qt\Tools
