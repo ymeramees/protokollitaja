@@ -17,7 +17,7 @@ skip_non_tags: false
 # Maximum number of concurrent jobs for the project
 max_jobs: 1
 
-image: Visual Studio 2019
+image: Visual Studio 2022
 clone_folder: C:\projects\protokollitaja
 
 install:
@@ -27,6 +27,10 @@ install:
     set OPENSSL_INCLUDE_PATH=C:\OpenSSL-v111-Win32\include\openssl
 
     set OPENSSL_LIB_PATH=C:\OpenSSL-v111-Win32\lib\MinGW
+
+    ls C:\Qt
+
+    ls C:\Qt\6.5.0
 
     ls %QTDIR%
 
