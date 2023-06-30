@@ -28,15 +28,13 @@ install:
 
     set OPENSSL_LIB_PATH=C:\OpenSSL-v111-Win32\lib\MinGW
 
-    echo PATH:
-
     echo %PATH:;=&echo.%
 
     ls C:\Qt
 
     ls C:\Qt\Tools
 
-    C:\Qt\Tools\mingw900_64\bin
+    C:\Qt\Tools\mingw1120_64\bin
 
     ls C:\Qt\6.5.0
 
@@ -100,7 +98,7 @@ test_script:
 
     Copy-Item "$env:APPVEYOR_BUILD_FOLDER\protokollitaja\build\release\Data\Print_template.html" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\Data"
 
-    Copy-Item "C:\Qt\Tools\mingw900_32\bin\addr2line.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\tools"
+    Copy-Item "C:\Qt\Tools\mingw1120_64\bin\addr2line.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\tools"
 
     Copy-Item "C:\OpenSSL-v111-Win32\bin\libcrypto-1_1.dll" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
 
