@@ -73,13 +73,13 @@ build_script:
 
     cd C:\projects
 
-    git clone https://github.com/ymeramees/qfinaal.git
+    rem git clone https://github.com/ymeramees/qfinaal.git
 
-    cd qfinaal
+    rem cd qfinaal
 
-    qmake.exe QFinaal.pro -spec win32-g++ "CONFIG+=qtquickcompiler" DEFINES+=ASM_CRASH_REPORT && mingw32-make.exe qmake_all
+    rem qmake.exe QFinaal.pro -spec win32-g++ "CONFIG+=qtquickcompiler" DEFINES+=ASM_CRASH_REPORT && mingw32-make.exe qmake_all
 
-    mingw32-make.exe -j4
+    rem mingw32-make.exe -j4
 
     dir
 test_script:
@@ -112,7 +112,7 @@ test_script:
 
     Copy-Item "C:\OpenSSL-v111-Win64\bin\libssl-1_1.dll" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
 
-    Copy-Item "C:\projects\qfinaal\release\Finaal.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
+    # Copy-Item "C:\projects\qfinaal\release\Finaal.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
 
     cd .\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION
 
