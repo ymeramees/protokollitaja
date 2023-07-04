@@ -99,7 +99,5 @@ FORMS += lisalaskudeaken.ui \
 RESOURCES += ../protokollitaja.qrc
 RC_FILE += ikoon.rc
 win32{
-INCLUDEPATH += $$(OPENSSL_INCLUDE_PATH)
-LIBS += -liconv \
- -L $$(OPENSSL_LIB_PATH) -lcrypto -lssl
+LIBS += -liconv
 }

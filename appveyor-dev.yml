@@ -88,10 +88,6 @@ test_script:
 
     Copy-Item "C:\Qt\Tools\mingw1120_64\bin\addr2line.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\tools"
 
-    Copy-Item "C:\OpenSSL-v30-Win64\bin\libcrypto-1_1.dll" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
-
-    Copy-Item "C:\OpenSSL-v30-Win64\bin\libssl-1_1.dll" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
-
     cd .\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION
 
     $copiedApps = Get-ChildItem -Path . -Name -Include *.exe
