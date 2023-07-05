@@ -96,7 +96,7 @@ test_script:
 
     foreach($app in $copiedApps) {
 
-        windeployqt.exe --release $app
+        windeployqt6.exe --release $app
 
     }
 
@@ -113,8 +113,6 @@ test_script:
         echo Testing: $test
 
         if ($test.IndexOf("IntegrationTest") -lt 0) {
-
-            windeployqt.exe --release $test
 
             & $test -xunitxml -tickcounter -o testresults.xml
 
