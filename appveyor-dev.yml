@@ -98,7 +98,7 @@ test_script:
 
     foreach($app in $copiedApps) {
 
-        windeployqt6.exe --release $app
+        windeployqt6.exe $app
 
     }
 
@@ -116,7 +116,7 @@ test_script:
 
         if ($test.IndexOf("IntegrationTest") -lt 0) {
 
-            & $test -xunitxml -tickcounter -o testresults.xml
+            & $test -junitxml -tickcounter -o testresults.xml
 
             $wc = New-Object 'System.Net.WebClient'
 
