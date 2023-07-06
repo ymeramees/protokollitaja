@@ -164,8 +164,8 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                             tabIndex
                             );
                 area->setWidget(sheet);
-                kllData.tabWidget->insertTab(-1, area, tabName);
-                kllData.tabWidget->setCurrentIndex(kllData.tabWidget->count()-1);
+                int newTabIndex = kllData.tabWidget->addTab(area, tabName);
+                kllData.tabWidget->setCurrentIndex(newTabIndex);
                 for(int j = 0; j < noOfCompetitors; j++){
                     // As so old kll file does not contain competitor ID, it can be created
                     kllData.lastCompetitorId = addCompetitor(kllData.tabWidget, kllData.lastCompetitorId);
@@ -268,8 +268,8 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                             noOfShots
                             );
                 area->setWidget(sheet);
-                kllData.tabWidget->insertTab(-1, area, tabName);
-                kllData.tabWidget->setCurrentIndex(kllData.tabWidget->count()-1);
+                int newTabIndex = kllData.tabWidget->addTab(area, tabName);
+                kllData.tabWidget->setCurrentIndex(newTabIndex);
                 for(int j = 0; j < noOfCompetitors; j++){
                     sheet->uusLaskur(0);   // First add competitor with ID 0, so it can be later determined if correct ID was read from the file
                 }
@@ -444,8 +444,8 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                             noOfShots
                             );
                 area->setWidget(sheet);
-                kllData.tabWidget->insertTab(-1, area, tabName);
-                kllData.tabWidget->setCurrentIndex(kllData.tabWidget->count()-1);
+                int newTabIndex = kllData.tabWidget->addTab(area, tabName);
+                kllData.tabWidget->setCurrentIndex(newTabIndex);
 
                 sheet->alustamine = true;
                 sheet->naidata = toBeShown;    // Will this sheet be shown on spectators window

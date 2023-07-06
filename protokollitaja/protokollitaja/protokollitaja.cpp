@@ -5084,8 +5084,8 @@ void Protokollitaja::uusTab()
                 QScrollArea *area = new QScrollArea(tabWidget);
                 area->setWidgetResizable(true);
                 area->setWidget(new Leht(&andmebaas, valik->ui.seeriateArv->value(), valik->ui.vSummadeArv->value(), a, &kirjutusAbi, valik->ui.nimiTulAknas->text(), valik->relv, valik->harjutus, kumnendikega, &m_ranking, tabWidget, voistk, lValik, leheIndeks, valik->ui.laskudeArv->value()));
-                tabWidget->insertTab(-1, area, valik->ui.sakiNimi->text());
-                tabWidget->setCurrentIndex(tabWidget->count()-1);
+                int newTabIndex = tabWidget->addTab(area, valik->ui.sakiNimi->text());
+                tabWidget->setCurrentIndex(newTabIndex);
                 connect(dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget())
                                 , SIGNAL(uuendaLiikmeid()), this, SLOT(uuendaLiikmeteKast()));
                 connect(dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget())
