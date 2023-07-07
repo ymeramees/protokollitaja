@@ -164,18 +164,13 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                             tabIndex
                             );
                 area->setWidget(sheet);
-                int newTabIndex = kllData.tabWidget->addTab(area, tabName);
-                kllData.tabWidget->setCurrentIndex(newTabIndex);
+                kllData.tabWidget->addTab(area, tabName);
+                kllData.tabWidget->setCurrentIndex(0);  // Otherwise in Windooz only last tab is visible and others are hidden
                 for(int j = 0; j < noOfCompetitors; j++){
                     // As so old kll file does not contain competitor ID, it can be created
                     kllData.lastCompetitorId = addCompetitor(kllData.tabWidget, kllData.lastCompetitorId);
                 }
 
-                // TODO To be refactored for reading full competition with this class, currently supports only importing
-//                connect(sheet, SIGNAL(uuendaLiikmeid()), this, SLOT(uuendaLiikmeteKast()));
-//                connect(sheet, SIGNAL(uuendaVoistkondi()), this, SLOT(uuendaVoistkondi()));
-//                connect(sheet, SIGNAL(muudatus()), this, SLOT(muudaSalvestamist()));
-//                connect(sheet, SIGNAL(idMuutus(int,Laskur*)), this, SLOT(kontrolliIdKordust(int,Laskur*)));
                 sheet->alustamine = true;
                 sheet->setMinTimeMs(min);
                 sheet->setMaxTimeMs(max);
@@ -219,8 +214,6 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                 }
                 sheet->alustamine = false;
             }
-//            uuendaSeaded();
-//            voibSulgeda = true;
         } else if(competitionSettings.fileVersion >= 101 && competitionSettings.fileVersion <= 112) {
             kllData.tabWidget = new QTabWidget();
             kllData.tabWidget->setTabPosition(QTabWidget::North);
@@ -268,17 +261,11 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                             noOfShots
                             );
                 area->setWidget(sheet);
-                int newTabIndex = kllData.tabWidget->addTab(area, tabName);
-                kllData.tabWidget->setCurrentIndex(newTabIndex);
+                kllData.tabWidget->addTab(area, tabName);
+                kllData.tabWidget->setCurrentIndex(0);  // Otherwise in Windooz only last tab is visible and others are hidden
                 for(int j = 0; j < noOfCompetitors; j++){
                     sheet->uusLaskur(0);   // First add competitor with ID 0, so it can be later determined if correct ID was read from the file
                 }
-
-                // TODO To be refactored for reading full competition with this class, currently supports only importing
-//                connect(sheet, SIGNAL(uuendaLiikmeid()), this, SLOT(uuendaLiikmeteKast()));
-//                connect(sheet, SIGNAL(uuendaVoistkondi()), this, SLOT(uuendaVoistkondi()));
-//                connect(sheet, SIGNAL(muudatus()), this, SLOT(muudaSalvestamist()));
-//                connect(sheet, SIGNAL(idMuutus(int,Laskur*)), this, SLOT(kontrolliIdKordust(int,Laskur*)));
 
                 sheet->alustamine = true;
                 sheet->naidata = toBeShown;    // Will this sheet be shown on spectators window
@@ -386,8 +373,6 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                 sheet->alustamine = false;
             }
             kllData.lastCompetitorId = checkDuplicateIds(kllData.tabWidget, 0);
-//            uuendaSeaded();
-//            voibSulgeda = true;
         } else if (competitionSettings.fileVersion <= 113) {
             kllData.tabWidget = new QTabWidget();
             kllData.tabWidget->setTabPosition(QTabWidget::North);
@@ -444,8 +429,8 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                             noOfShots
                             );
                 area->setWidget(sheet);
-                int newTabIndex = kllData.tabWidget->addTab(area, tabName);
-                kllData.tabWidget->setCurrentIndex(newTabIndex);
+                kllData.tabWidget->addTab(area, tabName);
+                kllData.tabWidget->setCurrentIndex(0);  // Otherwise in Windooz only last tab is visible and others are hidden
 
                 sheet->alustamine = true;
                 sheet->naidata = toBeShown;    // Will this sheet be shown on spectators window

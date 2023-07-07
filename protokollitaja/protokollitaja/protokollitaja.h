@@ -270,11 +270,11 @@ private slots:
     void viiLoppu();
 
 private:
-    void changeLanguage();
+    void changeLanguage(bool atStartup);
     void setDataFromInitialDialog();
+    void setupTranslator();
     QString timeAndPlaceString();
     DataUploader *dataUploader = nullptr;
-    QString m_language;
     QDate m_startDate;
     QDate m_endDate;
     QProgressDialog *progress;  //Näitab, et SiusDatast alles andmed tulevad

@@ -98,7 +98,7 @@ void Leht::uusLaskur(int id)
 
 void Leht::uusLaskur(QJsonObject json)
 {
-    if (voistk) {   // TODO To be implemented with json
+    if (voistk) {
         Voistkond *voistKond = new Voistkond(json, lValik, seeriateArv, &jalgitavad, &viimaneIndex, this);
         connect(voistKond->muudaNupp, SIGNAL(clicked()), voistKond, SLOT(naitaLiikmeteValikKast()));
         connect(voistKond->muudaNupp, SIGNAL(clicked()), this, SLOT(teataMuudatusest()));

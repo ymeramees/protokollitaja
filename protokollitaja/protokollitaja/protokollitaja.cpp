@@ -40,16 +40,11 @@ Protokollitaja::Protokollitaja(QWidget *parent)
     lasuNrSiusis = 13;   //Loetakse seadete failist üle
     autoUuendus = true;
 
-    if (m_language.isEmpty()) {
-        changeLanguage();
+    if (m_settings.language().isEmpty()) {
+        changeLanguage(true);
     }
 
-    QTranslator translator;
-    bool loadResult = translator.load(m_language, ":/protokollitaja/languages");
-    if(!loadResult) {
-        QTextStream(stdout) << "Translation file loading failed!, working dir: " << QDir::currentPath() << Qt::endl;
-    }
-    qApp->installTranslator(&translator);
+    setupTranslator();
 
         udpSocket = new QUdpSocket(this);
         udpSocket->bind(45743, QUdpSocket::ShareAddress);
@@ -114,9 +109,9 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         eksportCSVAct = new QAction(QIcon(":/images/eksport.png"), tr("Eksport csv..."), this);
         eksportCSVAct->setStatusTip(tr("Ekspordib selle lehe tulemused .csv faili"));
         connect(eksportCSVAct, SIGNAL(triggered()), this, SLOT(eksportCSV()));
-        eksportInbandStartListAct = new QAction(tr("Eksport Inband startlist..."), this);
-        eksportInbandStartListAct->setStatusTip(tr("Ekspordib valitud laskurid Inband'i startlisti faili"));
-        connect(eksportInbandStartListAct, &QAction::triggered, [this]{exportStartList(StartListWriter::INBAND);});
+//        eksportInbandStartListAct = new QAction(tr("Eksport Inband startlist..."), this); // There is no reason to use this anymore
+//        eksportInbandStartListAct->setStatusTip(tr("Ekspordib valitud laskurid Inband'i startlisti faili"));
+//        connect(eksportInbandStartListAct, &QAction::triggered, [this]{exportStartList(StartListWriter::INBAND);});
         eksportSiusStartListAct = new QAction(tr("Eksport Sius startlist..."), this);
         eksportSiusStartListAct->setStatusTip(tr("Ekspordib valitud laskurid Sius'i startlisti faili"));
         connect(eksportSiusStartListAct, &QAction::triggered, [this]{exportStartList(StartListWriter::SIUS);});
@@ -184,7 +179,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         QAction *changeLanguageAct = new QAction(tr("Programmi keel"), this);
         changeLanguageAct->setStatusTip(tr("Programmi keele valik"));
         connect(changeLanguageAct, &QAction::triggered, [this](){
-            changeLanguage();
+            changeLanguage(false);
         });
 
         impordiFinaalAct = new QAction(tr("Impordi finaal..."), this);
@@ -274,7 +269,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         tulemusedMenu->addAction(eksportCSVAct);
         tulemusedMenu->addAction(eksportXLSAct);
         tulemusedMenu->addSeparator();
-        tulemusedMenu->addAction(eksportInbandStartListAct);
+//        tulemusedMenu->addAction(eksportInbandStartListAct);
         tulemusedMenu->addAction(eksportSiusStartListAct);
         tulemusedMenu->addAction(eksportFSiusStartListAct);
         tulemusedMenu->addSeparator();
@@ -578,8 +573,6 @@ void Protokollitaja::algseaded()    //Seadistab algsed väärtused kas programmi
     seaded->ui.jarjestamiseBox->setCurrentIndex(m_ranking);
 
     seaded->ui.sakid->clear();
-
-    m_settings.readSettings();
     seaded->ui.competitionTypesEdit->setText(m_settings.competitionShotTypesString());
     seaded->ui.sighterTypesEdit->setText(m_settings.sighterShotTypesString());
 }
@@ -625,7 +618,7 @@ void Protokollitaja::ava()
         voibSulgeda = true;
 }
 
-void Protokollitaja::changeLanguage()
+void Protokollitaja::changeLanguage(bool atStartup)
 {
     QDir dir(":/protokollitaja/languages/");
     QStringList fileNames = dir.entryList(QStringList("*.qm"));
@@ -634,21 +627,17 @@ void Protokollitaja::changeLanguage()
         languages.append(language.remove(".qm"));
     }
     bool ok = false;
-    QString newLanguage = QInputDialog::getItem(this, "Choose a language", "Language:", languages, languages.indexOf(m_language), false, &ok);
+    QString newLanguage = QInputDialog::getItem(this, "Choose a language", "Language:", languages, languages.indexOf(m_settings.language()), false, &ok);
 
     if (ok) {
-        m_language = newLanguage;
-
-        qApp->removeTranslator(&m_translator);
-
-        bool loadResult = m_translator.load(m_language, ":/protokollitaja/languages");
-        if(!loadResult) {
-            QTextStream(stdout) << "Translation file loading failed!, working dir: " << QDir::currentPath() << Qt::endl;
-        }
-        qApp->installTranslator(&m_translator);
-
-        QMessageBox::information(this, tr("Teade"), tr("Keele vahetus rakendub programmi uuesti käivitamisel"));
+        m_settings.setLanguage(newLanguage);
+        m_settings.writeSettings();
     }
+
+    setupTranslator();
+
+    if (!atStartup)
+        QMessageBox::information(this, tr("Teade"), tr("Keele vahetus rakendub programmi uuesti käivitamisel"));
 }
 
 void Protokollitaja::checkForUpdates()
@@ -2366,7 +2355,6 @@ void Protokollitaja::loeSeaded()
     qDebug() << "loeseaded()";
 #endif
 
-    m_settings.readSettings();
     seaded->ui.competitionTypesEdit->setText(m_settings.competitionShotTypesString());
     seaded->ui.sighterTypesEdit->setText(m_settings.sighterShotTypesString());
 
@@ -4206,6 +4194,25 @@ void Protokollitaja::setDataFromInitialDialog()
     m_country = aValik->country();
     setWindowTitle(programmiNimi + " - " + seeFail);
     kirjutaSeaded();
+}
+
+void Protokollitaja::setupTranslator()
+{
+
+    // QTranslator translator;
+    // bool loadResult = translator.load(m_settings.language(), ":/protokollitaja/languages");
+    // if(!loadResult) {
+    //     QTextStream(stdout) << "Translation file loading failed!, working dir: " << QDir::currentPath() << Qt::endl;
+    // }
+    // qApp->installTranslator(&translator);
+
+    qApp->removeTranslator(&m_translator);
+
+    bool loadResult = m_translator.load(m_settings.language(), ":/protokollitaja/languages");
+    if(!loadResult) {
+        QTextStream(stdout) << "Translation file loading failed!, working dir: " << QDir::currentPath() << Qt::endl;
+    }
+    qApp->installTranslator(&m_translator);
 }
 
 void Protokollitaja::sifriLisa()
