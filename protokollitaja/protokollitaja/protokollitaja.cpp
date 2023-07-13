@@ -4415,6 +4415,11 @@ QJsonObject Protokollitaja::toExportJson()
     json["endDate"] = m_endDate.toString(Qt::ISODate);
     json["place"] = m_place;
 
+    json["timeAndPlace"] = QString("%1 - %2 %3")
+        .arg(m_startDate.toString(Qt::ISODate))
+        .arg(m_endDate.toString(Qt::ISODate))
+        .arg(m_place);
+
     Leht *sheet = nullptr;
     QJsonArray sheetsArray;
     for(int i = 0; i < tabWidget->count(); i++){

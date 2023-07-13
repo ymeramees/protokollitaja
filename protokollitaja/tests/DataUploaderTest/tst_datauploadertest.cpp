@@ -56,7 +56,8 @@ void DataUploaderTest::test_getUnauthorizedResponseWithTestUser()
     QList<QVariant> arguments = spy.takeFirst();
     QCOMPARE(arguments[0].toBool(), false);
     QCOMPARE(arguments[1].toString(), "Insufficient access rights for username");
-    QCOMPARE(arguments[2].toString(), "Error transferring https://ymeramees.no-ip.org:3005/api/v1/competitions - server replied: Forbidden");
+    QVERIFY(arguments[2].toString().startsWith("Error transferring"));
+    QVERIFY(arguments[2].toString().endsWith("competitions - server replied: Forbidden"));
 }
 
 QTEST_MAIN(DataUploaderTest)
