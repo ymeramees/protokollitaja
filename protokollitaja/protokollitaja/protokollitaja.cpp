@@ -4394,10 +4394,25 @@ void Protokollitaja::taiendaAndmebaas()
 QString Protokollitaja::timeAndPlaceString()
 {
     QString format = "dd.MM.yyyy";
-    return QString("%1 - %2 %3")
+
+    if (m_startDate == m_endDate) {
+        return QString("%1 %3")
             .arg(m_startDate.toString(format))
-            .arg(m_endDate.toString(format))
             .arg(m_place);
+    } else {
+        if (m_startDate.year() == m_endDate.year()) {
+            format.remove(".yyyy");
+
+            if (m_startDate.month() == m_endDate.month()) {
+                format.remove(".MM");
+            }
+        }
+
+        return QString("%1-%2 %3")
+            .arg(m_startDate.toString(format))
+            .arg(m_endDate.toString("dd.MM.yyyy"))
+            .arg(m_place);
+    }
 }
 
 QJsonObject Protokollitaja::toExportJson()
@@ -4415,10 +4430,7 @@ QJsonObject Protokollitaja::toExportJson()
     json["endDate"] = m_endDate.toString(Qt::ISODate);
     json["place"] = m_place;
 
-    json["timeAndPlace"] = QString("%1 - %2 %3")
-        .arg(m_startDate.toString(Qt::ISODate))
-        .arg(m_endDate.toString(Qt::ISODate))
-        .arg(m_place);
+    json["timeAndPlace"] = timeAndPlaceString();
 
     Leht *sheet = nullptr;
     QJsonArray sheetsArray;
