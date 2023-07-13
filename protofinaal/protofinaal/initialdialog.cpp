@@ -57,6 +57,7 @@ void InitialDialog::newFile()
     if(!fileName.isEmpty()){
         ui->fileNameEdit->setText(fileName);
         ui->competitionNameEdit->setReadOnly(false);
+        ui->competitionNameEdit->setDisabled(false);
         emit updateMe();
     }
 }
@@ -67,6 +68,7 @@ void InitialDialog::openFile()
     if(!fileName.isEmpty()){
         ui->fileNameEdit->setText(fileName);
         ui->competitionNameEdit->setReadOnly(true);
+        ui->competitionNameEdit->setDisabled(true);
         emit updateMe();
     }
 }

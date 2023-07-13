@@ -171,6 +171,12 @@ std::optional<QString> Leht::exportStartList()
         // targetNo;id;firstName;lastName;club;discipline;decimals;numberOfShots
         QStringList startList;
         QString discipline = harjutus;
+
+        if (discipline.contains("3x", Qt::CaseInsensitive) && discipline.contains("standard", Qt::CaseInsensitive)) // TODO clearly this whole discipline naming thing should be rewritten in more type-safe manner
+            discipline = "50m_3positions";
+        else if (discipline.contains("lamades", Qt::CaseInsensitive))
+            discipline = "50m_rifle";
+
         int numberOfShots = seeriateArv * laskudeArv;
         for (Laskur *competitor : laskurid) {
             if (competitor->linnuke->isChecked()) {

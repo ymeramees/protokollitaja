@@ -579,7 +579,7 @@ void ProtoRangeControl::newShot(int target, SiusShotData shotData)
 {
     showMessage(QString("Lasu info: %1;%2,%3,%4,%5")
                 .arg(target)
-                .arg(shotData.id)
+                .arg(shotData.siusShotNo)
                 .arg(shotData.shot.getSLask())
                 .arg(shotData.shot.X())
                 .arg(shotData.shot.Y())
@@ -588,12 +588,21 @@ void ProtoRangeControl::newShot(int target, SiusShotData shotData)
     if (laneOpt) {
         shotData.id = laneOpt.value()->id().toInt();    // TODO make it safer
 
+        laneOpt.value()->setLastShotLabel(QString("(%1.): %2").arg(shotData.siusShotNo).arg(shotData.shot.getSLask()));
+
+        if (laneOpt.value()->discipline().compare("50m_3positions", Qt::CaseInsensitive) == 0) {   // For compatibility with Sius data
+            shotData.siusShotNo = (shotData.siusShotNo - 1) % (laneOpt.value()->noOfShots().toInt() / 3) + 1;    // TODO make converting to int safer
+        }
+
         Lask::TargetType targetType;
         QTextStream(stdout) << "Discipline: " << laneOpt.value()->discipline() << Qt::endl;
         if (laneOpt.value()->discipline().compare("airrifle", Qt::CaseInsensitive) == 0) {
             targetType = Lask::Ohupuss;
         } else if (laneOpt.value()->discipline().compare("airpistol", Qt::CaseInsensitive) == 0) {
             targetType = Lask::Ohupustol;
+        } else if (laneOpt.value()->discipline().compare("50m_rifle", Qt::CaseInsensitive) == 0 ||
+                laneOpt.value()->discipline().compare("50m_3positions", Qt::CaseInsensitive) == 0) {
+            targetType = Lask::Sportpuss;
         } else
             targetType = Lask::Muu;
 
@@ -606,7 +615,6 @@ void ProtoRangeControl::newShot(int target, SiusShotData shotData)
         } else {
             shotData.shot.setCompetitionShot(false);
         }
-        laneOpt.value()->setLastShotLabel(QString("(%1.): %2").arg(shotData.siusShotNo).arg(shotData.shot.getSLask()));
         publishShot(shotData);
 //        QJsonDocument shotLogJson;
         QJsonObject shotLogJson;

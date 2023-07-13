@@ -22,7 +22,7 @@ Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i,
 //	connect(perekNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus2(QString)));
 //	QMessageBox::information(this, "Teade", "Lasku::Laskur()3", "OK");
 
-        
+
         for(int i = 0; i < seeriateArv; i++){
                 seeriad << new QLineEdit(this);
                 seeriad[i]->setMinimumHeight(28);
@@ -1126,7 +1126,7 @@ bool Laskur::readSiusShot(SiusShotData shotData)
             //If competitor's last shot has data in it, then probably these results have already been read and it is better not to read them again, to avoid mistakes
             if(seeriateArv > seriesIndex && lasud[seeriateArv - 1][laskudeArv - 1]->getILask() < 0){
                 //Check if series number and number of shots in each series is big enough
-                if(lasud.count() > seriesIndex && lasud[0].count() > shotIndex){
+                if(shotIndex >= 0 && lasud.count() > seriesIndex && lasud[0].count() > shotIndex){
                     if (lasud[seriesIndex][shotIndex]->isEmpty()){
                         lasud[seriesIndex][shotIndex]->set(&shotData.shot);
                         liida();
@@ -1650,12 +1650,12 @@ QJsonObject Laskur::toJson()
     competitorJson["familyName"] = perekNimi->text()/*.toUtf8()*/;
     competitorJson["yearOfBirth"] = sunniAasta->text()/*.toUtf8()*/;
     competitorJson["club"] = klubi->text()/*.toUtf8()*/;
-    
+
     QJsonArray seriesArray;
     for(int k = 0; k < seeriad.size(); k++){	//Kõik seeriad
         QJsonObject seriesJson;
         seriesJson["seriesSum"] = seeriad[k]->text()/*.toUtf8()*/;
-        
+
         QJsonArray shotsArray;
         for(int l = 0; l < lasud[k].count(); l++){  //Karistuse lask tuleb ka kirjutada
             shotsArray.append(lasud[k][l]->toJson());
@@ -1667,7 +1667,7 @@ QJsonObject Laskur::toJson()
     competitorJson["series"] = seriesArray;
     competitorJson["total"] = summa->text()/*.toUtf8()*/;
     competitorJson["finalsTotal"] = finaal->text()/*.toUtf8()*/;
-                    
+
     QJsonArray shootOffArray;
     for(int k = 0; k < 24; k++)
         shootOffArray.append(lisaLasud[k]);
