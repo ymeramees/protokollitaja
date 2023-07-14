@@ -42,7 +42,7 @@ void InitialDialog::forward()
             QMessageBox(
                         QMessageBox::Icon::Critical,
                         "Protofinaal",
-                        tr("Mõlemad lahtrid peavad olema täidetud!"),
+                        tr("Mõlemad lahtrid peavad olema täidetud!\n\nUue võistluse tegemiseks vajutage \"Uus\" nupule"),
                         QMessageBox::Ok,
                         this
                         ).exec();

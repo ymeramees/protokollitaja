@@ -389,7 +389,8 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                 tabName = tabObject["name"].toString();
                 seriesCount = tabObject["seriesCount"].toInt();
                 noOfShots = tabObject["shotsCount"].toInt();
-                seriesInSubTotal = tabObject["shotsCount"].toInt();
+                seriesInSubTotal = tabObject["seriesInSubTotal"].toInt();
+
                 autocomplete = tabObject["autocomplete"].toInt();
                 displayName = tabObject["displayName"].toString();
                 weaponType = tabObject["weaponType"].toInt();

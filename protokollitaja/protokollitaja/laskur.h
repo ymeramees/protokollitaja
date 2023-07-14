@@ -91,6 +91,7 @@ public:
         bool *withDecimals,
         int *sorting,
         QString *eventType,
+        int numberOfShots,
         QWidget *parent = nullptr
         );
     ~Laskur();

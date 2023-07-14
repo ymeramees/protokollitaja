@@ -62,8 +62,10 @@ Laskur::Laskur(
     bool *autocomplete,
     bool *withDecimals,
     int *sorting,
-    QString *eventType, QWidget *parent)
-    : QWidget(parent){
+    QString *eventType,
+    int numberOfShots,
+    QWidget *parent
+): QWidget(parent){
     setupFields();
     andmebaas = autocompleteDb;
     vSummadeSamm = vs;
@@ -88,7 +90,7 @@ Laskur::Laskur(
 
     QJsonArray seriesArray = jsonObj["series"].toArray();
     seeriateArv = seriesArray.size();
-    laskudeArv = seriesArray[0].toArray().size();
+    laskudeArv = numberOfShots;
 
     for (int i = 0; i < seriesArray.size(); i++) {
                 QJsonObject seriesJson = seriesArray[i].toObject();
