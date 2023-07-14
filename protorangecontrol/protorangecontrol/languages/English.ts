@@ -114,7 +114,7 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
     <name>ProtoRangeControl</name>
     <message>
         <location filename="../protorangecontrol.cpp" line="199"/>
-        <location filename="../protorangecontrol.cpp" line="740"/>
+        <location filename="../protorangecontrol.cpp" line="748"/>
         <source>Võistlus käimas!</source>
         <translation>Competition ongoing!</translation>
     </message>
@@ -406,12 +406,12 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation>Target %1 has competition in progress, new competitor was not imported!</translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="625"/>
+        <location filename="../protorangecontrol.cpp" line="633"/>
         <source>Märgi IP: </source>
         <translation>Target IP:</translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="741"/>
+        <location filename="../protorangecontrol.cpp" line="749"/>
         <source>Rajal %1 on võistlus veel käimas, oled kindel, et tahad seda uuesti alustada?</source>
         <translation>Target %1 has competition in progress, are you sure you want to reset it?</translation>
     </message>
@@ -424,22 +424,22 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation type="vanished">Class:</translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="816"/>
+        <location filename="../protorangecontrol.cpp" line="824"/>
         <source>Sisesta laskude arv</source>
         <translation>Enter number of shots</translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="816"/>
+        <location filename="../protorangecontrol.cpp" line="824"/>
         <source>Laskude arv: </source>
         <translation>Number of Shots:</translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="827"/>
+        <location filename="../protorangecontrol.cpp" line="835"/>
         <source>Vali märklehe tüüp</source>
         <translation>Choose a target type</translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="827"/>
+        <location filename="../protorangecontrol.cpp" line="835"/>
         <source>Märkleht: </source>
         <translation>Target:</translation>
     </message>

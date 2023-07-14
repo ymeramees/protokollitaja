@@ -760,7 +760,7 @@ void Protokollitaja::eelvaade()
                                                         summa);
                                 }
                                 painter.drawText(1375, 175 + i * 41, seeLeht->voistkonnad[alg]->summa->text());
-                                if(seeLeht->voistkonnad[alg]->markus->text() != tr("Märkused"))
+                                if(!seeLeht->voistkonnad[alg]->markus->text().isEmpty())
                                         painter.drawText(1460, 175 + i * 41, seeLeht->voistkonnad[alg]->markus->text());
                         i += 2;
                         }
@@ -776,15 +776,15 @@ void Protokollitaja::eelvaade()
                                 for(int j = 0; j < seeLeht->laskurid[i]->seeriateArv; j++)
                                         painter.drawText(985 + j * 65, 175 + i * 41, seeLeht->laskurid[i]->seeriad[j]->text());
                                 painter.drawText(1375, 175 + i * 41, seeLeht->laskurid[i]->getSumma());
-                                if(seeLeht->laskurid[i]->finaal->text() != "Fin"){
+                                if(!seeLeht->laskurid[i]->finaal->text().isEmpty()){
                                         painter.drawText(1450, 175 + i * 41, seeLeht->laskurid[i]->finaal->text());
 //                                        kirjaFont.setBold(true);
 //                                        painter.setFont(kirjaFont);
 //                                        painter.drawText(1520, 175 + i * 41, seeLeht->laskurid[i]->koguSumma->text());
                                         kirjaFont.setBold(false);
                                         painter.setFont(kirjaFont);
-                                }else if(seeLeht->laskurid[i]->markus->text() != tr("Märkused") && !seeLeht->
-                                                laskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive))
+                                }else if(!seeLeht->laskurid[i]->markus->text().isEmpty() &&
+                                            !seeLeht->laskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive))
                                         painter.drawText(1460, 175 + i * 41, seeLeht->laskurid[i]->markus->text());
                         }
                 }
@@ -879,8 +879,7 @@ void Protokollitaja::eksportCSV()
                                         valja << leht->voistkonnad[i]->voistlejad[j]->summa << ";";
                                 }
                                 valja << leht->voistkonnad[i]->summa->text() << ";";
-                                if(leht->voistkonnad[i]->markus->text() != tr("Märkused"))
-                                        valja << leht->voistkonnad[i]->markus->text();
+                                valja << leht->voistkonnad[i]->markus->text();
                                 valja << "\n\n";
                         }
                 }else{
@@ -904,13 +903,13 @@ void Protokollitaja::eksportCSV()
                                                 }
                                 }
                                 valja << leht->laskurid[i]->getSumma() << ";";
-                                if(leht->laskurid[i]->finaal->text() != "Fin"){
+                                if(!leht->laskurid[i]->finaal->text().isEmpty()){
                                         valja << leht->laskurid[i]->finaal->text() << ";";
 //                                        valja << leht->laskurid[i]->koguSumma->text() << ";";
                                 }
-                                if(leht->laskurid[i]->markus->text() != tr("Märkused") && !leht->laskurid[i]->markus->
-                                                text().contains("V.A", Qt::CaseInsensitive))
-                                        valja << leht->laskurid[i]->markus->text();
+                                if(!leht->laskurid[i]->markus->text().isEmpty() &&
+                                        !leht->laskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive))
+                                    valja << leht->laskurid[i]->markus->text();
                                 valja << "\n";
                         }
                 }
@@ -1056,8 +1055,7 @@ void Protokollitaja::eksportTXT()
                                         valja << leht->voistkonnad[i]->voistlejad[j]->summa << "\t";
                                 }
                                 valja << leht->voistkonnad[i]->summa->text() << "\t";
-                                if(leht->voistkonnad[i]->markus->text() != tr("Märkused"))
-                                        valja << leht->voistkonnad[i]->markus->text();
+                                valja << leht->voistkonnad[i]->markus->text();
                                 valja << "\n\n";
                         }
                 }else{
@@ -1081,13 +1079,13 @@ void Protokollitaja::eksportTXT()
                                                 }
                                 }
                                 valja << leht->laskurid[i]->getSumma() << "\t";
-                                if(leht->laskurid[i]->finaal->text() != "Fin"){
+                                if(!leht->laskurid[i]->finaal->text().isEmpty()){
                                         valja << leht->laskurid[i]->finaal->text() << "\t";
 //                                        valja << leht->laskurid[i]->koguSumma->text() << "\t";
                                 }
-                                if(leht->laskurid[i]->markus->text() != tr("Märkused") && !leht->laskurid[i]->markus->
-                                                text().contains("V.A", Qt::CaseInsensitive))
-                                        valja << leht->laskurid[i]->markus->text();
+                                if(!leht->laskurid[i]->markus->text().isEmpty() &&
+                                        !leht->laskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive))
+                                    valja << leht->laskurid[i]->markus->text();
                                 valja << "\n";
                         }
                 }
@@ -1334,7 +1332,7 @@ void Protokollitaja::eksportXLS()
                                     arv = leht->laskurid[j]->getSumma().replace(',', '.').toDouble(&onnestus);
                                 sheet->number(j + rida, 5 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), arv)->font(paiseFont);
                                 sheet->FindCell(j + rida, 5 + leht->seeriateArv + leht->laskurid[j]->vSummad.count())->halign(xlslib_core::HALIGN_CENTER);
-                                if(leht->laskurid[j]->finaal->text() != "Fin"){
+                                if(!leht->laskurid[j]->finaal->text().isEmpty()){
                                     sheet->colwidth(5 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), 32*47);
                                     sheet->colwidth(6 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), 32*47);
 
@@ -1349,9 +1347,9 @@ void Protokollitaja::eksportXLS()
 //                                    sheet->number(j + rida, 6 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), arv)->font(tekstiFont);
 //                                    sheet->number(j + rida, 7 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), arv)->font(paiseFont);
                                 }
-                                if(leht->laskurid[j]->markus->text() != tr("Märkused") && !leht->laskurid[j]->markus->text()
-                                    .contains("V.A", Qt::CaseInsensitive)){
-                                    if(leht->laskurid[j]->finaal->text() == "Fin")
+                                if(!leht->laskurid[j]->markus->text().isEmpty() &&
+                                        !leht->laskurid[j]->markus->text().contains("V.A", Qt::CaseInsensitive)){
+                                    if(leht->laskurid[j]->finaal->text().isEmpty())
                                         sheet->label(j + rida, 6 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), QString(leht->laskurid[j]->markus->text().toUtf8()).toStdString())->font(tekstiFont);
                                     else sheet->label(j + rida, 8 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), QString(leht->laskurid[j]->markus->text().toUtf8()).toStdString())->font(tekstiFont);
                                 }
@@ -1378,7 +1376,7 @@ void Protokollitaja::eksportXLS()
                                     arv = leht->laskurid[j]->getSumma().replace(',', '.').toDouble(&onnestus);
                                 sheet->number(j + rida, 5 + leht->seeriateArv, arv)->font(paiseFont);
                                 sheet->FindCell(j + rida, 5 + leht->seeriateArv)->halign(xlslib_core::HALIGN_CENTER);
-                                if(leht->laskurid[j]->finaal->text() != "Fin"){
+                                if(!leht->laskurid[j]->finaal->text().isEmpty()){
                                     sheet->colwidth(6 + leht->seeriateArv, 32*47);
                                     sheet->colwidth(7 + leht->seeriateArv, 32*47);
 
@@ -1395,9 +1393,9 @@ void Protokollitaja::eksportXLS()
                                     sheet->FindCell(j + rida, 6 + leht->seeriateArv)->halign(xlslib_core::HALIGN_CENTER);
                                     sheet->FindCell(j + rida, 7 + leht->seeriateArv)->halign(xlslib_core::HALIGN_CENTER);
                                 }
-                                if(leht->laskurid[j]->markus->text() != tr("Märkused") && !leht->laskurid[j]->markus->text()
-                                    .contains("V.A", Qt::CaseInsensitive)){
-                                    if(leht->laskurid[j]->finaal->text() == "Fin")
+                                if(!leht->laskurid[j]->markus->text().isEmpty() &&
+                                        !leht->laskurid[j]->markus->text().contains("V.A", Qt::CaseInsensitive)){
+                                    if(leht->laskurid[j]->finaal->text().isEmpty())
                                         sheet->label(j + rida, 6 + leht->seeriateArv, QString(leht->laskurid[j]->markus->text().toUtf8()).toStdString())->font(tekstiFont);
                                     else sheet->label(j + rida, 8 + leht->seeriateArv, QString(leht->laskurid[j]->markus->text().toUtf8()).toStdString())->font(tekstiFont);
                                 }
@@ -1905,8 +1903,7 @@ void Protokollitaja::kopeeriVah()
                                 tekst.append(leht->voistkonnad[i]->voistlejad[j]->summa + "\t");
                         }
                         tekst.append(leht->voistkonnad[i]->summa->text() + "\t");
-                        if(leht->voistkonnad[i]->markus->text() != tr("Märkused"))
-                                tekst.append(leht->voistkonnad[i]->markus->text());
+                        tekst.append(leht->voistkonnad[i]->markus->text());
                         tekst.append("\n\n");
                 }
         }else{
@@ -1927,11 +1924,10 @@ void Protokollitaja::kopeeriVah()
                         }
                         tekst.append(leht->laskurid[i]->getSumma() + "\t");
                         tekst.append(leht->laskurid[i]->kumned->text() + "\t");
-                        if(leht->laskurid[i]->finaal->text() != "Fin"){
+                        if(!leht->laskurid[i]->finaal->text().isEmpty()){
                                 tekst.append(leht->laskurid[i]->finaal->text() + "\t" /*+ leht->laskurid[i]->koguSumma->text() + "\t"*/);
                         }
-                        if(leht->laskurid[i]->markus->text() != tr("Märkused"))
-                                tekst.append(leht->laskurid[i]->markus->text());
+                        tekst.append(leht->laskurid[i]->markus->text());
                         tekst.append("\n");
                 }
         }
@@ -1958,8 +1954,7 @@ void Protokollitaja::kopeeriValitudVah()
                                         tekst.append(leht->voistkonnad[i]->voistlejad[j]->summa + "\t");
                                 }
                                 tekst.append(leht->voistkonnad[i]->summa->text() + "\t");
-                                if(leht->voistkonnad[i]->markus->text() != tr("Märkused"))
-                                        tekst.append(leht->voistkonnad[i]->markus->text());
+                                tekst.append(leht->voistkonnad[i]->markus->text());
                                 tekst.append("\n\n");
                         }
                 }
@@ -1982,11 +1977,10 @@ void Protokollitaja::kopeeriValitudVah()
                                 }
                                 tekst.append(leht->laskurid[i]->getSumma() + "\t");
                                 tekst.append(leht->laskurid[i]->kumned->text() + "\t");
-                                if(leht->laskurid[i]->finaal->text() != "Fin"){
+                                if(!leht->laskurid[i]->finaal->text().isEmpty()){
                                         tekst.append(leht->laskurid[i]->finaal->text() + "\t" /*+ leht->laskurid[i]->koguSumma->text() + "\t"*/);
                                 }
-                                if(leht->laskurid[i]->markus->text() != tr("Märkused"))
-                                        tekst.append(leht->laskurid[i]->markus->text());
+                                tekst.append(leht->laskurid[i]->markus->text());
                                 tekst.append("\n");
                         }
                 }
@@ -2835,7 +2829,7 @@ void Protokollitaja::naitaTul()
                         for(int j = 0; j < seeLeht->seeriateArv && j < 8; j++)
                             tulemus->read[i-areaNr][3 + j] = seeLeht->reasVoistkonnad[i]->voistlejad[j]->summa;
                         tulemus->read[i-areaNr][11] = seeLeht->reasVoistkonnad[i]->summa->text();
-                        if(seeLeht->reasVoistkonnad[i]->markus->text() == tr("Märkused")){
+                        if(seeLeht->reasVoistkonnad[i]->markus->text().isEmpty()){
                             tulemus->read[i-areaNr][12] = QString("%1").arg(float(seeLeht->reasVoistkonnad[i]->keskmLask) / 10);
                             tulemus->read[i-areaNr][12].replace('.', ',');
                         }else tulemus->read[i-areaNr][12] = seeLeht->reasVoistkonnad[i]->markus->text();
@@ -2849,7 +2843,7 @@ void Protokollitaja::naitaTul()
                     for(int j = 0; j < seeLeht->seeriateArv && j < 8; j++)
                         tulemus->read[0][3 + j] = seeLeht->reasVoistkonnad[areaNr]->voistlejad[j]->summa;
                     tulemus->read[0][11] = seeLeht->reasVoistkonnad[areaNr]->summa->text();
-                    if(seeLeht->reasVoistkonnad[areaNr]->markus->text() == tr("Märkused")){
+                    if(seeLeht->reasVoistkonnad[areaNr]->markus->text().isEmpty()){
                         tulemus->read[0][12] = QString("%1").arg(float(seeLeht->reasVoistkonnad[areaNr]->keskmLask) / 10);
                         tulemus->read[0][12].replace('.', ',');
                     }else tulemus->read[0][12] = seeLeht->voistkonnad[areaNr]->markus->text();
@@ -2943,7 +2937,7 @@ void Protokollitaja::naitaTul()
                         for(int j = 0; j < seeLeht->seeriateArv && j < 6; j++)
                             tulemus->read[i-areaNr][7 + j] = seeLeht->reasLaskurid[i]->seeriad[j]->text();
                         tulemus->read[i-areaNr][14] = seeLeht->reasLaskurid[i]->getSumma();
-                        if(seeLeht->reasLaskurid[i]->markus->text() == tr("Märkused") || seeLeht->reasLaskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive)){
+                        if(seeLeht->reasLaskurid[i]->markus->text().isEmpty() || seeLeht->reasLaskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive)){
                             tulemus->read[i-areaNr][15] = QString("%1").arg(float(seeLeht->reasLaskurid[i]->keskmLask) / 10000);
                             tulemus->read[i-areaNr][15].replace('.', ',');
                         }else tulemus->read[i-areaNr][15] = seeLeht->reasLaskurid[i]->markus->text();
@@ -2955,7 +2949,7 @@ void Protokollitaja::naitaTul()
                             tulemus->read[i-areaNr][0] = "DSQ";
                         if(tulemus->loplik)
                             tulemus->read[i-areaNr][15] = "";
-                        if(seeLeht->reasLaskurid[i]->finaal->text() != "Fin"){
+                        if(!seeLeht->reasLaskurid[i]->finaal->text().isEmpty()){
                             //Enam kogusummat koos finaaliga ei näidata:
                             tulemus->read[i-areaNr][15] = seeLeht->reasLaskurid[i]->finaal->text()/* + " " + seeLeht->reasLaskurid[i]->koguSumma->text()*/;
                             tulemus->loplik = true;
@@ -2972,7 +2966,7 @@ void Protokollitaja::naitaTul()
                     for(int j = 0; j < seeLeht->seeriateArv && j < 6; j++)
                         tulemus->read[0][7 + j] = seeLeht->reasLaskurid[areaNr]->seeriad[j]->text();
                     tulemus->read[0][14] = seeLeht->reasLaskurid[areaNr]->getSumma();
-                    if(seeLeht->reasLaskurid[areaNr]->markus->text() == tr("Märkused") || seeLeht->reasLaskurid[areaNr]->markus->text().contains("V.A", Qt::CaseInsensitive)){
+                    if(seeLeht->reasLaskurid[areaNr]->markus->text().isEmpty() || seeLeht->reasLaskurid[areaNr]->markus->text().contains("V.A", Qt::CaseInsensitive)){
                         tulemus->read[0][15] = QString("%1").arg(float(seeLeht->reasLaskurid[areaNr]->keskmLask)	/ 10000);
                         tulemus->read[0][15].replace('.', ',');
                     }else tulemus->read[0][15] = seeLeht->laskurid[areaNr]->markus->text();
@@ -2984,7 +2978,7 @@ void Protokollitaja::naitaTul()
                         tulemus->read[0][0] = "DSQ";
                     if(tulemus->loplik)
                         tulemus->read[0][15] = "";
-                    if(seeLeht->reasLaskurid[areaNr]->finaal->text() != "Fin"){
+                    if(!seeLeht->reasLaskurid[areaNr]->finaal->text().isEmpty()){
                         //Enam kogusummat koos finaaliga ei näidata:
                         tulemus->read[0][15] = seeLeht->reasLaskurid[areaNr]->finaal->text()/* + " " + seeLeht->reasLaskurid[areaNr]->koguSumma->text()*/;
                         tulemus->loplik = true;
@@ -3057,7 +3051,7 @@ void Protokollitaja::naitaTul()
                             }
                         }
                         tulemus->read[i-areaNr][14] = seeLeht->reasLaskurid[i]->getSumma();
-                        if(seeLeht->reasLaskurid[i]->markus->text() == tr("Märkused") || seeLeht->reasLaskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive)){
+                        if(seeLeht->reasLaskurid[i]->markus->text().isEmpty() || seeLeht->reasLaskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive)){
                             tulemus->read[i-areaNr][15] = QString("%1").arg(float(seeLeht->reasLaskurid[i]->keskmLask) / 10000);
                             tulemus->read[i-areaNr][15].replace('.', ',');
                         }else tulemus->read[i-areaNr][15] = seeLeht->reasLaskurid[i]->markus->text();
@@ -3069,7 +3063,7 @@ void Protokollitaja::naitaTul()
                             tulemus->read[i-areaNr][0] = "DSQ";
                         if(tulemus->loplik)
                             tulemus->read[i-areaNr][15] = "";
-                        if(seeLeht->reasLaskurid[i]->finaal->text() != "Fin"){
+                        if(!seeLeht->reasLaskurid[i]->finaal->text().isEmpty()){
                             //Enam kogusummat koos finaaliga ei näidata:
                             tulemus->read[i-areaNr][15] = seeLeht->reasLaskurid[i]->finaal->text() /*+ " " +
                                     seeLeht->reasLaskurid[i]->koguSumma->text()*/;
@@ -3119,7 +3113,7 @@ void Protokollitaja::naitaTul()
                         }
                     }
                     tulemus->read[0][14] = seeLeht->reasLaskurid[areaNr]->getSumma();
-                    if(seeLeht->reasLaskurid[areaNr]->markus->text() == tr("Märkused") || seeLeht->reasLaskurid[areaNr]->markus->text().contains("V.A", Qt::CaseInsensitive)){
+                    if(seeLeht->reasLaskurid[areaNr]->markus->text().isEmpty() || seeLeht->reasLaskurid[areaNr]->markus->text().contains("V.A", Qt::CaseInsensitive)){
                         tulemus->read[0][15] = QString("%1").arg(float(seeLeht->reasLaskurid[areaNr]->keskmLask)	/ 10000);
                         tulemus->read[0][15].replace('.', ',');
                     }else tulemus->read[0][15] = seeLeht->laskurid[areaNr]->markus->text();
@@ -3131,7 +3125,7 @@ void Protokollitaja::naitaTul()
                         tulemus->read[0][0] = "DSQ";
                     if(tulemus->loplik)
                         tulemus->read[0][15] = "";
-                    if(seeLeht->reasLaskurid[areaNr]->finaal->text() != "Fin"){
+                    if(!seeLeht->reasLaskurid[areaNr]->finaal->text().isEmpty()){
                         //Enam kogusummat koos finaaliga ei näidata:
                         tulemus->read[0][15] = seeLeht->reasLaskurid[areaNr]->finaal->text()/* + " " + seeLeht->reasLaskurid[areaNr]->koguSumma->text()*/;
                         tulemus->loplik = true;
@@ -3263,7 +3257,7 @@ void Protokollitaja::prindi()
                             }
                         }
                         painter.drawText(1375, 175 + i * 41, seeLeht->voistkonnad[alg]->summa->text());
-                        if(seeLeht->voistkonnad[alg]->markus->text() != tr("Märkused"))
+                        if(!seeLeht->voistkonnad[alg]->markus->text().isEmpty())
                             painter.drawText(1460, 175 + i * 41, seeLeht->voistkonnad[alg]->markus->text());
                         i += 2;
                     }
@@ -3344,13 +3338,13 @@ void Protokollitaja::prindi()
                         painter.setFont(summaF);
                         painter.drawText(2025, 175 + i * 41, seeLeht->laskurid[alg]->getSumma());
                         //painter.setFont(kirjaFont);
-                        if(seeLeht->laskurid[alg]->finaal->text() != "Fin"){
+                        if(!seeLeht->laskurid[alg]->finaal->text().isEmpty()){
                             //painter.setFont(kirjaFont);
                             painter.drawText(2120, 175 + i * 41, seeLeht->laskurid[alg]->finaal->text());
                             //painter.setFont(summaF);
                             //painter.drawText(2210, 175 + i * 41, seeLeht->laskurid[alg]->koguSumma->text());  //Kogusummat enam ei kasutata
                             painter.setFont(kirjaFont);
-                        }else if(seeLeht->laskurid[alg]->markus->text() != tr("Märkused") && !seeLeht->laskurid[alg]->markus->text().contains("V.A", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DNF", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DSQ", Qt::CaseInsensitive)){
+                        }else if(!seeLeht->laskurid[alg]->markus->text().isEmpty() && !seeLeht->laskurid[alg]->markus->text().contains("V.A", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DNF", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DSQ", Qt::CaseInsensitive)){
                             painter.setFont(kirjaFont);
                             painter.drawText(2300, 175 + i * 41, seeLeht->laskurid[alg]->markus->text());
                         }
@@ -3430,13 +3424,13 @@ void Protokollitaja::prindi()
                         painter.setFont(summaF);
                         painter.drawText(1375, 175 + i * 41, seeLeht->laskurid[alg]->getSumma());
                         //painter.setFont(kirjaFont);
-                        if(seeLeht->laskurid[alg]->finaal->text() != "Fin"){
+                        if(!seeLeht->laskurid[alg]->finaal->text().isEmpty()){
                             //painter.setFont(kirjaFont);
                             painter.drawText(1440, 175 + i * 41, seeLeht->laskurid[alg]->finaal->text());
                             //painter.setFont(summaF);
                             //painter.drawText(1520, 175 + i * 41, seeLeht->laskurid[alg]->koguSumma->text());  //Kogusummat enam ei kasutata
                             painter.setFont(kirjaFont);
-                        }else if(seeLeht->laskurid[alg]->markus->text() != tr("Märkused") && !seeLeht->laskurid[alg]->markus->text().contains("V.A", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DNF", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DSQ", Qt::CaseInsensitive)){
+                        }else if(!seeLeht->laskurid[alg]->markus->text().isEmpty() && !seeLeht->laskurid[alg]->markus->text().contains("V.A", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DNF", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DSQ", Qt::CaseInsensitive)){
                             painter.setFont(kirjaFont);
                             painter.drawText(1460, 175 + i * 41, seeLeht->laskurid[alg]->markus->text());
                         }
@@ -3510,13 +3504,13 @@ void Protokollitaja::prindi()
                         painter.setFont(summaF);
                         painter.drawText(1375, 175 + i * 41, seeLeht->laskurid[alg]->getSumma());
 //                        painter.setFont(kirjaFont);
-                        if(seeLeht->laskurid[alg]->finaal->text() != "Fin"){
+                        if(!seeLeht->laskurid[alg]->finaal->text().isEmpty()){
                             //painter.setFont(kirjaFont);
                             painter.drawText(1450, 175 + i * 41, seeLeht->laskurid[alg]->finaal->text());
 //                            painter.setFont(summaF);
 //                            painter.drawText(1520, 175 + i * 41, seeLeht->laskurid[alg]->koguSumma->text());  //Kogusummat enam ei kasutata
                             painter.setFont(kirjaFont);
-                        }else if(seeLeht->laskurid[alg]->markus->text() != tr("Märkused") && !seeLeht->laskurid[alg]->markus->text().contains("V.A", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DNF", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DSQ", Qt::CaseInsensitive)){
+                        }else if(!seeLeht->laskurid[alg]->markus->text().isEmpty() && !seeLeht->laskurid[alg]->markus->text().contains("V.A", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DNF", Qt::CaseInsensitive) && !seeLeht->laskurid[alg]->markus->text().contains("DSQ", Qt::CaseInsensitive)){
                             painter.setFont(kirjaFont);
                             painter.drawText(1460, 175 + i * 41, seeLeht->laskurid[alg]->markus->text());}
                         i++;
@@ -3667,14 +3661,14 @@ void Protokollitaja::prindi2()
                 rida.replace("#summa#", seeLeht->laskurid[i]->getSumma() + "-" + seeLeht->laskurid[i]->kumned->text() + "x");
             else rida.replace("#summa#", seeLeht->laskurid[i]->getSumma());
 
-            if(!seeLeht->laskurid[i]->finaal->text().contains("Fin")){
+            if(!seeLeht->laskurid[i]->finaal->text().isEmpty()){
                 rida.replace("#finaal#", seeLeht->laskurid[i]->finaal->text());
                 finalsResultExist = true;
             }else{
                 rida.remove("#finaal#");
             }
 
-            if(seeLeht->laskurid[i]->markus->text() != tr("Märkused") && !seeLeht->laskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive) && !seeLeht->laskurid[i]->markus->text().contains("DNF", Qt::CaseInsensitive) && !seeLeht->laskurid[i]->markus->text().contains("DSQ", Qt::CaseInsensitive)){
+            if(!seeLeht->laskurid[i]->markus->text().isEmpty() && !seeLeht->laskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive) && !seeLeht->laskurid[i]->markus->text().contains("DNF", Qt::CaseInsensitive) && !seeLeht->laskurid[i]->markus->text().contains("DSQ", Qt::CaseInsensitive)){
             rida.replace("#markus#", seeLeht->laskurid[i]->markus->text());
             }else rida.remove("#markus#");
             pTekst.insert(pTekst.indexOf("<tbody>") + 7, rida);
@@ -3716,7 +3710,7 @@ void Protokollitaja::prindi2()
                 rida.replace("#perekonnanimi#", seeLeht->voistkonnad[i]->voistlejad[0]->perekNimi);
                 rida.replace("#tulemus1#", seeLeht->voistkonnad[i]->voistlejad[0]->summa);
                 rida.replace("#summa#", seeLeht->voistkonnad[i]->summa->text());
-                if(seeLeht->voistkonnad[i]->markus->text() != tr("Märkused"))
+                if(!seeLeht->voistkonnad[i]->markus->text().isEmpty())
                     rida.replace("#markus#", seeLeht->voistkonnad[i]->markus->text());
                 else rida.replace("#markus#", "");
                 pTekst.insert(algus, rida);

@@ -83,10 +83,22 @@ Laskur::Laskur(
     perekNimi->setText(jsonObj["familyName"].toString());
     sunniAasta->setText(jsonObj["yearOfBirth"].toString());
     klubi->setText(jsonObj["club"].toString());
-    finaal->setText(jsonObj["finalsTotal"].toString());
+
+    QString finalsTotalString = jsonObj["finalsTotal"].toString();
+    if (finalsTotalString == "Fin")
+        finaal->setText("");
+    else
+        finaal->setText(finalsTotalString);
+
+
     summa->setText(jsonObj["total"].toString());
     kumned->setText(jsonObj["innerTens"].toString());
-    markus->setText(jsonObj["remarks"].toString());
+
+    QString remarksString = jsonObj["remarks"].toString();
+    if (remarksString == "Märkused")
+        markus->setText("");
+    else
+        markus->setText(remarksString);
 
     QJsonArray seriesArray = jsonObj["series"].toArray();
     seeriateArv = seriesArray.size();
@@ -126,6 +138,7 @@ Laskur::Laskur(
         lisaLasud.append(shootOffShotsArray[i].toInt());
     }
     createLayout();
+    liida();
 }
 
 int Laskur::competitionStage() const
@@ -258,12 +271,6 @@ void Laskur::lisaLAken()
                         for(int i = lisaLasud.count(); i < 24; i++)
                                 lisaLasud << -1;
         }else lisaAken->ui.lisaLasud->clear();
-}
-
-void Laskur::markuseMuutus()
-{
-    if(markus->text().isEmpty())
-        markus->setText(tr("Märkused"));
 }
 
 void Laskur::muutus(QString)
@@ -593,7 +600,6 @@ void Laskur::liida() //Laskude summeerimine
                     vSummad[i]->setText("0");
                 return;
         }
-//        if(finaal->text() == "Fin")
         koguSumma->setText(summa->text());  //Kuna finaali põhisummale ei liideta
 //        else{
 //            koguSumma->setText(QString("%1").arg((fsum + finaal->text().toFloat(&onnestus) * 10) / 10));
@@ -604,8 +610,7 @@ void Laskur::liida() //Laskude summeerimine
 //            }
 //        }
         sum *= 1000;
-        if(finaal->text().isEmpty()) finaal->setText("Fin");    //Kui lahter on tühi, tuleb taastada algseis
-        if(finaal->text() != "Fin"){
+        if(!finaal->text().isEmpty()){
             sum += qRound(finaal->text().toFloat(&onnestus) * 10000);
             if(!onnestus){  //Kui arvuks tegemine ei õnnestunud on vaja asendada koma punktiga, kasutame sama QString seeria't
                 seeria = finaal->text();
@@ -627,9 +632,9 @@ void Laskur::liida() //Laskude summeerimine
                 uus.replace('.', ',');
                 summa->setText(uus);
         }
-        if(finaal->text() != "Fin" && !finaal->text().contains(',', Qt::CaseInsensitive))
+        if(!finaal->text().isEmpty() && !finaal->text().contains(',', Qt::CaseInsensitive))
                 finaal->setText(finaal->text().append(",0"));
-        if(finaal->text() != "Fin" && !koguSumma->text().contains(',', Qt::CaseInsensitive))
+        if(!finaal->text().isEmpty() && !koguSumma->text().contains(',', Qt::CaseInsensitive))
                 koguSumma->setText(koguSumma->text().append(",0"));
         if(vSummadeSamm == 0) return;
         int x = 0;
@@ -946,7 +951,7 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
 //            l->liida();
         if(veryVerbose)
             QTextStream(stdout) << "Laskur::vaiksem(): Üldine järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
-        if(this->finaal->text() != "Fin" && l->finaal->text() != "Fin"){
+        if(!this->finaal->text().isEmpty() && !l->finaal->text().isEmpty()){
             float ksum = this->finaal->text().toFloat(&onnestus);
             if(!onnestus){  //Kui arvuks tegemine ei õnnestunud on vaja asendada koma punktiga, kasutame sama QString seeria't
                 seeria = this->finaal->text();
@@ -986,9 +991,9 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
                 }
             }
             //Kui ühel laskuril on finaali seeria ja teisel ei ole, on ees see, kellel on seeria, kuna ta oli finaalis
-        }else if(this->finaal->text() != "Fin" && l->finaal->text() == "Fin"){
+        }else if(!this->finaal->text().isEmpty() && l->finaal->text().isEmpty()){
             return false;
-        }else if(this->finaal->text() == "Fin" && l->finaal->text() != "Fin"){
+        }else if(this->finaal->text().isEmpty() && !l->finaal->text().isEmpty()){
             return true;
         }
 
@@ -1393,7 +1398,7 @@ void Laskur::setupFields()
     connect(summa, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(summa, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     finaal = new QLineEdit(this);
-    finaal->setText("Fin");
+    finaal->setPlaceholderText("Fin");
     finaal->setMinimumHeight(28);
     finaal->setMaximumWidth(45);
     finaal->setToolTip(tr("Finaali seeria"));
@@ -1414,8 +1419,7 @@ void Laskur::setupFields()
     markus = new QLineEdit(this);
     markus->setMinimumHeight(28);
     markus->setMaximumWidth(85);
-    markus->setText(tr("Märkused"));
-    connect(markus, SIGNAL(editingFinished()), this, SLOT(markuseMuutus()));
+    markus->setPlaceholderText(tr("Märkused"));
     connect(markus, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(markus, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     lisaLNupp = new QPushButton("Lis.", this);
@@ -1675,7 +1679,11 @@ QJsonObject Laskur::toJson()
         shootOffArray.append(lisaLasud[k]);
     competitorJson["shootOffShots"] = shootOffArray;
     competitorJson["innerTens"] = kumned->text()/*.toUtf8()*/;
-    competitorJson["remarks"] = markus->text()/*.toUtf8()*/;
+
+    if(markus->text() == "Märkused")
+        competitorJson["remarks"] = "";
+    else
+        competitorJson["remarks"] = markus->text();
 
     return competitorJson;
 }

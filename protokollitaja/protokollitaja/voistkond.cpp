@@ -54,8 +54,13 @@ Voistkond::Voistkond(QJsonObject json, LiikmeteValikKast *lV, int vA, QList<int>
     hKast->addWidget(summa);
     summa->setText(json["total"].toString());
     hKast->addWidget(markus);
-    markus->setText(json["remarks"].toString());
+    QString remarksString = json["remarks"].toString();
+    if (remarksString == "Märkused")
+        markus->setText("");
+    else
+        markus->setText(remarksString);
     hKast->addStretch();
+    liida();
 }
 
 void Voistkond::otsiNime()
@@ -85,7 +90,7 @@ void Voistkond::setupFields()
     markus = new QLineEdit(this);
     markus->setMinimumHeight(28);
     markus->setMaximumWidth(85);
-    markus->setText(tr("Märkused"));
+    markus->setPlaceholderText(tr("Märkused"));
 }
 
 QJsonObject Voistkond::toExportJson()
@@ -131,7 +136,10 @@ QJsonObject Voistkond::toJson()
     }
     teamJson["members"] = membersArray;
     teamJson["total"] = summa->text();
-    teamJson["remarks"] = markus->text() /*.toUtf8()*/;
+    if(markus->text() == "Märkused")
+        teamJson["remarks"] = "";
+    else
+        teamJson["remarks"] = markus->text();
 
     return teamJson;
 }

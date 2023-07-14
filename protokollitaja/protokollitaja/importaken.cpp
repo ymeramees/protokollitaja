@@ -157,10 +157,9 @@ void ImportAken::fromFile()
                         if(arv2 > 0)
                                 leht->laskurid[leht->laskurid.count() - 1]->markus->setText(andmed[andmed.count() - 1]
                                                                                                    .remove('\"').trimmed());
-                        if(leht->laskurid[leht->laskurid.count() - 1]->markus->text().isEmpty() ||
-                                        leht->laskurid[leht->laskurid.count() - 1]->markus->text() == leht->laskurid[leht->
-                                        laskurid.count() - 1]->klubi->text())
-                                leht->laskurid[leht->laskurid.count() - 1]->markus->setText(tr("Märkused"));
+                        if(leht->laskurid[leht->laskurid.count() - 1]->markus->text() ==
+                                leht->laskurid[leht->laskurid.count() - 1]->klubi->text())
+                            leht->laskurid[leht->laskurid.count() - 1]->markus->setText("");
                 }while(!sisse.atEnd());
         }
     } else if (fileName.endsWith(".kll")) {
@@ -294,10 +293,9 @@ void ImportAken::fromClipboard()
                 if(arv2 > 0)
                         leht->laskurid[leht->laskurid.count() - 1]->markus->setText(andmed[andmed.count() - 1]
                                                                                            .trimmed());
-                if(leht->laskurid[leht->laskurid.count() - 1]->markus->text().isEmpty() || leht->laskurid[leht->
-                         laskurid.count() - 1]->markus->text() == leht->laskurid[leht->laskurid.count() - 1]->
-                         klubi->text())
-                        leht->laskurid[leht->laskurid.count() - 1]->markus->setText(tr("Märkused"));
+                if(leht->laskurid[leht->laskurid.count() - 1]->markus->text() ==
+                        leht->laskurid[leht->laskurid.count() - 1]->klubi->text())
+                    leht->laskurid[leht->laskurid.count() - 1]->markus->setText("");
         }
 }
 

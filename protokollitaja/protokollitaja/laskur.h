@@ -123,7 +123,6 @@ private slots:
     void enterVajutatud();
     bool eventFilter(QObject* object, QEvent* event);
     void lisaLAken();
-    void markuseMuutus();
     void muutus(QString);
     void muutus2(QString);
     void muutus4(QString);

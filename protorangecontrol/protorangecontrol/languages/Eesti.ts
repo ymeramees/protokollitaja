@@ -119,7 +119,7 @@ Kontrollige, kas Protokollitaja ja Range Control&apos;i versioonid ühtivad!</so
     </message>
     <message>
         <location filename="../protorangecontrol.cpp" line="199"/>
-        <location filename="../protorangecontrol.cpp" line="740"/>
+        <location filename="../protorangecontrol.cpp" line="748"/>
         <source>Võistlus käimas!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -388,32 +388,32 @@ Kontrollige, kas Protokollitaja ja Range Control&apos;i versioonid ühtivad!</so
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="625"/>
+        <location filename="../protorangecontrol.cpp" line="633"/>
         <source>Märgi IP: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="741"/>
+        <location filename="../protorangecontrol.cpp" line="749"/>
         <source>Rajal %1 on võistlus veel käimas, oled kindel, et tahad seda uuesti alustada?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="816"/>
+        <location filename="../protorangecontrol.cpp" line="824"/>
         <source>Sisesta laskude arv</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="816"/>
+        <location filename="../protorangecontrol.cpp" line="824"/>
         <source>Laskude arv: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="827"/>
+        <location filename="../protorangecontrol.cpp" line="835"/>
         <source>Vali märklehe tüüp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protorangecontrol.cpp" line="827"/>
+        <location filename="../protorangecontrol.cpp" line="835"/>
         <source>Märkleht: </source>
         <translation type="unfinished"></translation>
     </message>

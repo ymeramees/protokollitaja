@@ -301,7 +301,11 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                         }
                         in >> sum >> notes;
                         sheet->voistkonnad[j]->summa->setText(sum);
-                        sheet->voistkonnad[j]->markus->setText(notes);
+
+                        if (notes == "Märkused")
+                            sheet->voistkonnad[j]->markus->setText("");
+                        else
+                            sheet->voistkonnad[j]->markus->setText(notes);
 //                        leht->voistkonnad[j]->muutus3();
                     }
                 }else{
@@ -364,9 +368,18 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                                 sheet->laskurid[j]->lisaLasud << -1; // If there are not enough shoot off shots, add empty shots
                         in >> innerTens >> notes;
                         sheet->laskurid[j]->setSumma(sum);
-                        sheet->laskurid[j]->finaal->setText(finals);
+
+                        if (finals == "Fin")
+                            sheet->laskurid[j]->finaal->setText("");
+                        else
+                            sheet->laskurid[j]->finaal->setText(finals);
+
                         sheet->laskurid[j]->kumned->setText(innerTens);
-                        sheet->laskurid[j]->markus->setText(notes);
+
+                        if (notes == "Märkused")
+                            sheet->laskurid[j]->markus->setText("");
+                        else
+                            sheet->laskurid[j]->markus->setText(notes);
                         sheet->laskurid[j]->liida();
                     }
                 }
