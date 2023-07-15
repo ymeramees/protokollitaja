@@ -48,7 +48,7 @@ TulemuseAken::TulemuseAken(QWidget *parent) : QWidget(parent)
         fullScreenAct->setStatusTip(tr("Näita seda akent täisekraan vaates"));
         connect(fullScreenAct, SIGNAL(triggered()), this, SLOT(fullScreen()));
 
-//        connect(this, SIGNAL(QGuiApplication::screenAdded(QScreen*)), this, SLOT(TulemuseAken::fullScreen(QScreen*)));    // FIXME To be fixed
+//        connect(this, SIGNAL(QGuiApplication::screenAdded(QScreen*)), this, SLOT(TulemuseAken::fullScreen(QScreen*)));    // FIXME To be implemented so, that it is shown on the other screen
 //        connect(this, SIGNAL(QGuiApplication::screenRemoved(QScreen*)), this, SLOT(TulemuseAken::fullScreen(QScreen*)));
 
         popup = new QMenu(this);
