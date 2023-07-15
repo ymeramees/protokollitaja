@@ -115,19 +115,36 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                 kllData.ranking = 0;
             if(competitionSettings.fileVersion >=111)
                 in >> uploadInterval;
+        } else {
+            if (competitionSettings.jsonData.contains("autoComplete"))
+                kllData.autoComplete = competitionSettings.jsonData["autoComplete"].toInt();
+            else
+                kllData.autoComplete = 1;
+
+            if (competitionSettings.jsonData.contains("autosaveEnabled"))
+                kllData.autosaveEnabled = competitionSettings.jsonData["autosaveEnabled"].toInt();
+            else
+                kllData.autosaveEnabled = 1;
+
+            if (competitionSettings.jsonData.contains("autosaveInterval"))
+                kllData.autosaveInterval = competitionSettings.jsonData["autosaveInterval"].toInt();
+            else
+                kllData.autosaveInterval = 5;
+
+            if (competitionSettings.jsonData.contains("uploadInterval"))
+                uploadInterval = competitionSettings.jsonData["uploadInterval"].toInt();
+            else
+                uploadInterval = 300;
 
             if(uploadInterval < 30)
                 uploadInterval = 30;
 
             kllData.uploadInterval = uploadInterval;
-        } else {
-            kllData.autoComplete = competitionSettings.jsonData["autoComplete"].toInt();
-            kllData.autosaveEnabled = competitionSettings.jsonData["autosaveEnabled"].toInt();
-            kllData.autosaveInterval = competitionSettings.jsonData["autosaveInterval"].toInt();
+
+            // These default to 0
             kllData.tabLocation = competitionSettings.jsonData["tabsLocation"].toInt();
             kllData.tabCount = competitionSettings.jsonData["tabCount"].toInt();
             kllData.ranking = competitionSettings.jsonData["ranking"].toInt();
-            kllData.uploadInterval = competitionSettings.jsonData["uploadInterval"].toInt();
         }
 
 #ifdef QT_DEBUG

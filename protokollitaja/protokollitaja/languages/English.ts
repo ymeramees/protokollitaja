@@ -190,9 +190,19 @@ It could be a newer version&apos;s file.
 (AlguseValik::avamine())</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="83"/>
         <source>Kõik lahtrid peavad olema täidetud!</source>
-        <translation>All fields must be filled!\n\nTo create a new competition click on &quot;New&quot;</translation>
+        <translation type="vanished">All fields must be filled!
+
+To create a new competition click on &quot;New&quot;</translation>
+    </message>
+    <message>
+        <location filename="../initialdialog.cpp" line="83"/>
+        <source>Kõik lahtrid peavad olema täidetud!
+
+Uue võistluse loomiseks vajutage &quot;Uus&quot; nupule</source>
+        <translation>All fields must be filled!
+
+To create a new competition click on &quot;New&quot;</translation>
     </message>
     <message>
         <location filename="../initialdialog.cpp" line="87"/>
@@ -347,13 +357,13 @@ Kas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.</s
 Do you want to delete it? It doesn&apos;t affect anything else than uploading to web.</translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="474"/>
-        <location filename="../kllfilerw.cpp" line="479"/>
+        <location filename="../kllfilerw.cpp" line="491"/>
+        <location filename="../kllfilerw.cpp" line="496"/>
         <source>Protokollitaja</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="475"/>
+        <location filename="../kllfilerw.cpp" line="492"/>
         <source>Vale versiooni fail!
 
 Võimalik, et tegu on uuema programmi versiooni failiga.
@@ -366,7 +376,7 @@ It could be a newer version&apos;s file.
 (Protokollitaja::loefail())</translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="479"/>
+        <location filename="../kllfilerw.cpp" line="496"/>
         <source>Ei leia faili!</source>
         <translation>Cannot find the file!</translation>
     </message>

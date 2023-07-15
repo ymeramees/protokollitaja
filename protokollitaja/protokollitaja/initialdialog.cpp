@@ -80,7 +80,7 @@ QString InitialDialog::country() const
 void InitialDialog::edasi()
 {
     if(competitionName().isEmpty() || fileName().isEmpty() || place().isEmpty()){
-        QMessageBox::critical(this, "Protokollitaja", tr("Kõik lahtrid peavad olema täidetud!"), QMessageBox::Ok);
+        QMessageBox::critical(this, "Protokollitaja", tr("Kõik lahtrid peavad olema täidetud!\n\nUue võistluse loomiseks vajutage \"Uus\" nupule"), QMessageBox::Ok);
         return;
     }
     if(ui.endDateEdit->date() < ui.startDateEdit->date()) {

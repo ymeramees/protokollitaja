@@ -19,7 +19,7 @@ CompetitionSettings SimpleKllFileRW::readCompetitionSettings(QDataStream *inStre
         competitionSettings.endDate = QDate(2000, 1, 1);
         *inStream >> competitionSettings.place;
         competitionSettings.country = "Estonia";   // Versions before that were in Estonian language, so not likely being used anywhere else
-    } else if (version >= 113) {
+    } else if (version == 113) {
         *inStream >> competitionSettings.jsonData;
         competitionSettings.competitionName = competitionSettings.jsonData["competitionName"].toString("");
         competitionSettings.startDate = QDate::fromString(competitionSettings.jsonData["startDate"].toString(""));

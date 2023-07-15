@@ -183,7 +183,9 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     </message>
     <message>
         <location filename="../initialdialog.cpp" line="83"/>
-        <source>Kõik lahtrid peavad olema täidetud!</source>
+        <source>Kõik lahtrid peavad olema täidetud!
+
+Uue võistluse loomiseks vajutage &quot;Uus&quot; nupule</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -337,13 +339,13 @@ Kas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.</s
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="474"/>
-        <location filename="../kllfilerw.cpp" line="479"/>
+        <location filename="../kllfilerw.cpp" line="491"/>
+        <location filename="../kllfilerw.cpp" line="496"/>
         <source>Protokollitaja</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="475"/>
+        <location filename="../kllfilerw.cpp" line="492"/>
         <source>Vale versiooni fail!
 
 Võimalik, et tegu on uuema programmi versiooni failiga.
@@ -352,7 +354,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="479"/>
+        <location filename="../kllfilerw.cpp" line="496"/>
         <source>Ei leia faili!</source>
         <translation type="unfinished"></translation>
     </message>
