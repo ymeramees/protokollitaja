@@ -28,7 +28,25 @@ install:
 
     set OPENSSL_LIB_PATH=C:\OpenSSL-v30-Win64\lib\MinGW
 
+    echo %PATH:;=&echo.%
+
+    ls C:\Qt
+
+    ls C:\Qt\Tools
+
+    ls C:\Qt\Tools\mingw1120_64\bin
+
+    ls C:\Qt\6.5.1
+
+    ls %QTDIR%
+
+    ls %QTDIR%\bin
+
+    type %QTDIR%\bin\qtenv2.bat
+
     %QTDIR%\bin\qtenv2.bat
+
+    set PATH=%PATH%;C:\Qt\Tools\mingw1120_64\bin
 
     qmake -v
 
