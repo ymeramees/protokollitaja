@@ -3,7 +3,7 @@ ISSF Shooting sport ranking and results display software suite. Now monorepo for
 * [Protokollitaja](protokollitaja/README.md) - Main ranking and results display program and a server from a set of programs.
 * [Protofinaal](protofinaal) - New implementation of [QFinaal](https://github.com/ymeramees/qfinaal). In a very early stage at the moment.
 * [Protolehelugeja](protolehelugeja/README.md) - For reading results from paper target scoring machines. Disag RM-III and Disag RM-IV are currently supported.
-* [ProtoRangeControl](protorangecontrol/README.md) - For controlling multiple (InBand) electronic targets in a range.
+* [Range Control](rangecontrol/README.md) - For controlling multiple (InBand) electronic targets in a range.
 
 For more details about each program, see their respective readme files.
 
@@ -13,14 +13,14 @@ For more details about each program, see their respective readme files.
 * Results display on separate screen with automatic ranking
 * Serial connection with Disag target scoring machines RM III Universal and RM IV
 * Connection with electronic targets through SiusData for live capturing of results
-* Results upload to a server from where these will be shown on a [webpage](https://webzone.ee/protokollitaja) 
+* Results upload to a server from where these will be shown on a [webpage](https://webzone.ee/protokollitaja)
 * Results export to .xls, .csv and *.txt files
 * Results import
 * Sorting of competitors by different properties (name, date of birth, target no, etc.)
 * Moving/copying competitors between diciplines
 * Connection with [QFinaal](https://github.com/ymeramees/qfinaal)
 * Connection with [Protolehelugeja](protolehelugeja/README.md)
-* Connection with [ProtoRangeControl](protorangecontrol/README.md)
+* Connection with [Range Control](rangecontrol/README.md)
 * Simulation of results from electronic targets with [Prototester](https://github.com/ymeramees/prototester)
 * Check for updates on startup
 

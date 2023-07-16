@@ -8,7 +8,7 @@ SOURCES += \
     $$PWD/inbandconnection.cpp \
     $$PWD/lane.cpp \
     $$PWD/../../common/src/lask.cpp \
-    $$PWD/protorangecontrol.cpp
+    $$PWD/rangecontrol.cpp
 
 HEADERS += \
     $$PWD/connectionserver.h \
@@ -16,7 +16,7 @@ HEADERS += \
     $$PWD/header.h \
     $$PWD/inbandconnection.h \
     $$PWD/lane.h \
-    $$PWD/protorangecontrol.h \
+    $$PWD/rangecontrol.h \
     $$PWD/programname.h \
     $$PWD/../../common/src/version.h \
     $$PWD/../../common/src/lask.h \

@@ -194,12 +194,12 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         lehelugejaAct->setStatusTip(tr("Lehtede lugemine otse masinast"));
         connect(lehelugejaAct, SIGNAL(triggered()), this, SLOT(lehelugeja()));
 
-        uhenduSiusDatagaAct = new QAction(("SiusData/RangeControl"), this);
+        uhenduSiusDatagaAct = new QAction(("SiusData/Range Control"), this);
         uhenduSiusDatagaAct->setStatusTip(tr("Ühendub SiusDataga"));
         connect(uhenduSiusDatagaAct, SIGNAL(triggered()), this, SLOT(uhenduSiusDataga()));
 
-        sendCompetitorsToRangeAct = new QAction(tr("Saada valitud RangeControl'i"), this);
-        sendCompetitorsToRangeAct->setStatusTip(tr("Saadab valitud laskurid ProtoRangeControl'i"));
+        sendCompetitorsToRangeAct = new QAction(tr("Saada valitud Range Control'i"), this);
+        sendCompetitorsToRangeAct->setStatusTip(tr("Saadab valitud laskurid Range Control'i"));
         connect(sendCompetitorsToRangeAct, SIGNAL(triggered()), this, SLOT(sendCompetitorsToRange()));
 
         uploadAct = new QAction(tr("Lae veebi"), this);

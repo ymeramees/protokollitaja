@@ -1,7 +1,7 @@
 #include <QtTest>
 #include <QCoreApplication>
 
-#include "protorangecontrol.h"
+#include "rangecontrol.h"
 #include "lane.h"
 
 #define CR QChar(0x0d)
@@ -39,7 +39,7 @@ void IntegrationTest::test_acceptAllShotsTogether()
     QFile file("range_control_conf.json");  // Start with clean settings
     file.remove();
 
-    ProtoRangeControl rangeControl("Eesti");
+    RangeControl rangeControl("Eesti");
     QTcpSocket inband;
 
     inband.connectToHost("localhost", 5451);
@@ -112,7 +112,7 @@ void IntegrationTest::test_acceptIncomingStartList()
     QFile file("range_control_conf.json");  // Start with clean settings
     file.remove();
 
-    ProtoRangeControl rangeControl("Eesti");
+    RangeControl rangeControl("Eesti");
     QTcpSocket inband;
 
     inband.connectToHost("localhost", 5451);
@@ -170,7 +170,7 @@ void IntegrationTest::test_acceptIncomingStartList()
 
 void IntegrationTest::test_sendAllShotsOnNewConnection()
 {
-    ProtoRangeControl rangeControl("Eesti");
+    RangeControl rangeControl("Eesti");
     QTcpSocket inband;
 
     inband.connectToHost("localhost", 5451);
@@ -250,7 +250,7 @@ void IntegrationTest::test_sendAllShotsOnNewConnection()
 
 void IntegrationTest::test_sendNewShotsToExistingConnection()
 {
-    ProtoRangeControl rangeControl("Eesti");
+    RangeControl rangeControl("Eesti");
     QTcpSocket inband;
 
     inband.connectToHost("localhost", 5451);
@@ -317,7 +317,7 @@ void IntegrationTest::test_sendNewShotsToExistingConnection()
 
 void IntegrationTest::test_togetherWithProtokollitaja()
 {
-    ProtoRangeControl rangeControl("Eesti");
+    RangeControl rangeControl("Eesti");
     QTcpSocket inband;
 
     inband.connectToHost("localhost", 5451);

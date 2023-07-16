@@ -1291,17 +1291,27 @@ It could be a newer version&apos;s file.
     <message>
         <location filename="../protokollitaja.cpp" line="198"/>
         <source>Ühendub SiusDataga</source>
-        <translation>Connects to SiusData or ProtoRangeControl</translation>
+        <translation>Connects to SiusData or Range Control</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="201"/>
-        <source>Saada valitud RangeControl&apos;i</source>
+        <source>Saada valitud Range Control&apos;i</source>
         <translation>Send selected to Range Control</translation>
     </message>
     <message>
+        <source>Saada valitud RangeControl&apos;i</source>
+        <translation type="vanished">Send selected to Range Control</translation>
+    </message>
+    <message>
+        <source>Server töötab,
+aadress: %1</source>
+        <translation type="vanished">Server up and running,
+address: %1</translation>
+    </message>
+    <message>
         <location filename="../protokollitaja.cpp" line="202"/>
-        <source>Saadab valitud laskurid ProtoRangeControl&apos;i</source>
-        <translation>Sends selected competitors to ProtoRangeControl</translation>
+        <source>Saadab valitud laskurid Range Control&apos;i</source>
+        <translation>Sends selected competitors to Range Control</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="205"/>
@@ -1752,6 +1762,10 @@ Finaal.exe file not found!</translation>
         <translation>Error</translation>
     </message>
     <message>
+        <source>Saadab valitud laskurid ProtoRangeControl&apos;i</source>
+        <translation type="vanished">Sends seleced shooters to Range Control</translation>
+    </message>
+    <message>
         <location filename="../protokollitaja.cpp" line="1640"/>
         <source>Unable to start the server: %1.</source>
         <translation></translation>
@@ -1765,7 +1779,7 @@ Finaal.exe file not found!</translation>
         <location filename="../protokollitaja.cpp" line="1674"/>
         <source>Server töötab, 
 aadress: %1</source>
-        <translation>Server running, 
+        <translation>Server up and running, 
 address: %1</translation>
     </message>
     <message>

@@ -1,4 +1,4 @@
-# ProtoRangeControl
+# Range Control
 Software for controlling multiple (InBand) electronic targets in a range from one computer. Allows importing competitors' data from [Protokollitaja](https://github.com/ymeramees/protokollitaja) and sending results back to [Protokollitaja](https://github.com/ymeramees/protokollitaja) for convenient competition organizing.
 
 ### Main Features

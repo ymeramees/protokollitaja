@@ -26,13 +26,13 @@
 #include "programname.h"
 #include "version.h"
 
-class ProtoRangeControl : public QMainWindow
+class RangeControl : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    ProtoRangeControl(QString language = "", QWidget *parent = nullptr);
-    ~ProtoRangeControl();
+    RangeControl(QString language = "", QWidget *parent = nullptr);
+    ~RangeControl();
 
 private:
     Lane* addLane(int targetNo, QString ip);

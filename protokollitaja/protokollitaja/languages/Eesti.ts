@@ -1264,16 +1264,6 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="201"/>
-        <source>Saada valitud RangeControl&apos;i</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../protokollitaja.cpp" line="202"/>
-        <source>Saadab valitud laskurid ProtoRangeControl&apos;i</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../protokollitaja.cpp" line="205"/>
         <source>Lae veebi</source>
         <translation type="unfinished"></translation>
@@ -1709,6 +1699,16 @@ Finaal.exe faili ei leitud!</source>
         <location filename="../protokollitaja.cpp" line="4579"/>
         <location filename="../protokollitaja.cpp" line="4611"/>
         <source>Viga</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../protokollitaja.cpp" line="201"/>
+        <source>Saada valitud Range Control&apos;i</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../protokollitaja.cpp" line="202"/>
+        <source>Saadab valitud laskurid Range Control&apos;i</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -8,5 +8,5 @@ TEMPLATE = subdirs
 SUBDIRS += protokollitaja \
     protolehelugeja \
     protofinaal \
-    protorangecontrol \
+    rangecontrol \
     common

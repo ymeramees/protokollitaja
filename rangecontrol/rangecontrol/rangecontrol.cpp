@@ -1,4 +1,4 @@
-#include "protorangecontrol.h"
+#include "rangecontrol.h"
 
 /////////////////////////////////////////////////////////////////////////////
 /// ToDo list:
@@ -17,7 +17,7 @@ QString programName = VER_INTERNALNAME_STR;
 QString programVersion = VER_PRODUCTVERSION_STR;
 extern bool verbose;
 
-ProtoRangeControl::ProtoRangeControl(QString language, QWidget *parent)
+RangeControl::RangeControl(QString language, QWidget *parent)
     : QMainWindow(parent), m_server(&m_incomingLog), m_language(language)
 {
     QJsonDocument settingsJson = readSettings();
@@ -61,15 +61,15 @@ ProtoRangeControl::ProtoRangeControl(QString language, QWidget *parent)
     initialize();
 }
 
-ProtoRangeControl::~ProtoRangeControl()
+RangeControl::~RangeControl()
 {
 }
 
-Lane* ProtoRangeControl::addLane(int targetNo, QString ip)
+Lane* RangeControl::addLane(int targetNo, QString ip)
 {
-    QTextStream(stdout) << "ProtoRangeControl::addLane, targetNo = " << targetNo << Qt::endl;
+    QTextStream(stdout) << "RangeControl::addLane, targetNo = " << targetNo << Qt::endl;
     Lane *lane = new Lane(targetNo, m_disciplines, ip);
-    connect(lane, &Lane::commandIssued, this, &ProtoRangeControl::sendInit);
+    connect(lane, &Lane::commandIssued, this, &RangeControl::sendInit);
     m_lanes.insert(lane->target().toInt(), lane);
     foreach (Lane* lane, m_lanes) { // Remove all lanes
         vBox->removeWidget(lane);
@@ -80,12 +80,12 @@ Lane* ProtoRangeControl::addLane(int targetNo, QString ip)
     return lane;
 }
 
-void ProtoRangeControl::addShot(SiusShotData shotData)
+void RangeControl::addShot(SiusShotData shotData)
 {
     m_shots.append(shotData);
 }
 
-void ProtoRangeControl::allShotsDataReceived(int target, QString shotsData)
+void RangeControl::allShotsDataReceived(int target, QString shotsData)
 {
     bool accepted = false;
     QStringList msgParts = shotsData.split('\n');
@@ -154,7 +154,7 @@ void ProtoRangeControl::allShotsDataReceived(int target, QString shotsData)
 //    }
 }
 
-void ProtoRangeControl::changeLanguage()
+void RangeControl::changeLanguage()
 {
     QDir dir(":/languages/");
     QStringList fileNames = dir.entryList(QStringList("*.qm"));
@@ -181,7 +181,7 @@ void ProtoRangeControl::changeLanguage()
     }
 }
 
-void ProtoRangeControl::continueSendingMessage()
+void RangeControl::continueSendingMessage()
 {
     int noSelected = 0;
     foreach (Lane* lane, m_lanes) {
@@ -218,7 +218,7 @@ void ProtoRangeControl::continueSendingMessage()
     }
 }
 
-QStringList ProtoRangeControl::convertToSiusRows(SiusShotData shotData)
+QStringList RangeControl::convertToSiusRows(SiusShotData shotData)
 {
     QStringList rowWithTotal;
     int shotType = 0;   // Smallbore rifle competition shot
@@ -255,7 +255,7 @@ QStringList ProtoRangeControl::convertToSiusRows(SiusShotData shotData)
     return rowWithTotal;
 }
 
-void ProtoRangeControl::clearLanes()
+void RangeControl::clearLanes()
 {
     foreach (Lane *lane, m_lanes) {
         if (lane->selected())
@@ -263,7 +263,7 @@ void ProtoRangeControl::clearLanes()
     }
 }
 
-void ProtoRangeControl::createMenus()
+void RangeControl::createMenus()
 {
     QMenu *fileMenu = this->menuBar()->addMenu(tr("&Fail"));
     QMenu *toolsMenu = this->menuBar()->addMenu(tr("&Tööriistad"));
@@ -278,7 +278,7 @@ void ProtoRangeControl::createMenus()
 
     QAction *importStartListAct = new QAction(tr("Import startlist..."), this);
     importStartListAct->setStatusTip(tr("Impordi startlisti fail"));
-    connect(importStartListAct, &QAction::triggered, this, &ProtoRangeControl::importStartList);
+    connect(importStartListAct, &QAction::triggered, this, &RangeControl::importStartList);
 
 //    QAction *openAct = new QAction(tr("&Ava..."), this);
 //    openAct->setShortcuts(QKeySequence::Open);
@@ -298,27 +298,27 @@ void ProtoRangeControl::createMenus()
 
     QAction *setCheckedAllAct = new QAction(tr("Märgi kõik"), this);
     setCheckedAllAct->setStatusTip(tr("Lisab linnukesed kõigile radadele"));
-    connect(setCheckedAllAct, &QAction::triggered, this, &ProtoRangeControl::setCheckedAll);
+    connect(setCheckedAllAct, &QAction::triggered, this, &RangeControl::setCheckedAll);
 
     QAction *unsetCheckedAllAct = new QAction(tr("Eemalda märgistused"), this);
     unsetCheckedAllAct->setStatusTip(tr("Eemaldab linnukesed kõigilt radadelt"));
-    connect(unsetCheckedAllAct, &QAction::triggered, this, &ProtoRangeControl::unsetCheckedAll);
+    connect(unsetCheckedAllAct, &QAction::triggered, this, &RangeControl::unsetCheckedAll);
 
     QAction *setCheckedTargetTypeAct = new QAction(tr("Märklehe tüüp"), this);
     setCheckedTargetTypeAct->setStatusTip(tr("Muudab kõigil märgitud radadel märklehe tüüpi"));
-    connect(setCheckedTargetTypeAct, &QAction::triggered, this, &ProtoRangeControl::setTargetTypes);
+    connect(setCheckedTargetTypeAct, &QAction::triggered, this, &RangeControl::setTargetTypes);
 
     QAction *setCheckedShotsAct = new QAction(tr("Laskude arv"), this);
     setCheckedShotsAct->setStatusTip(tr("Muudab kõigil märgitud radadel võistluslaskude arvu"));
-    connect(setCheckedShotsAct, &QAction::triggered, this, &ProtoRangeControl::setNumberOfShots);
+    connect(setCheckedShotsAct, &QAction::triggered, this, &RangeControl::setNumberOfShots);
 
     QAction *clearLanesAct = new QAction(tr("Tühjenda rajad"), this);
     clearLanesAct->setStatusTip(tr("Eemaldab kõigilt märgitud radadelt laskurid"));
-    connect(clearLanesAct, &QAction::triggered, this, &ProtoRangeControl::clearLanes);
+    connect(clearLanesAct, &QAction::triggered, this, &RangeControl::clearLanes);
 
     QAction *saveSettingsAct = new QAction(tr("Salvesta seaded"), this);
     saveSettingsAct->setStatusTip(tr("Salvestab praegused seaded ja rajad"));
-    connect(saveSettingsAct, &QAction::triggered, this, &ProtoRangeControl::saveSettings);
+    connect(saveSettingsAct, &QAction::triggered, this, &RangeControl::saveSettings);
 
     toolsMenu->addAction(setCheckedAllAct);
     toolsMenu->addAction(unsetCheckedAllAct);
@@ -331,7 +331,7 @@ void ProtoRangeControl::createMenus()
 
     QAction *initSelectedSightersAct = new QAction(tr("Saada nimed (init)"), this);
     initSelectedSightersAct->setStatusTip(tr("Saadab võistlejate andmed märgitud radadele"));
-    connect(initSelectedSightersAct, &QAction::triggered, this, &ProtoRangeControl::sendInitToAllSelected);
+    connect(initSelectedSightersAct, &QAction::triggered, this, &RangeControl::sendInitToAllSelected);
 
     QAction *startSelectedSightersAct = new QAction(tr("Alusta proovidega"), this);
     startSelectedSightersAct->setStatusTip(tr("Annab käsu märgitud radadele alustada proovilaskudega"));
@@ -409,12 +409,12 @@ void ProtoRangeControl::createMenus()
     languageMenu->addAction(changeLanguageAct);
 }
 
-std::optional<Lane*> ProtoRangeControl::findLane(int laneNo)
+std::optional<Lane*> RangeControl::findLane(int laneNo)
 {
     return findLane(QString("%1").arg(laneNo));
 }
 
-std::optional<Lane*> ProtoRangeControl::findLane(QString laneNo)
+std::optional<Lane*> RangeControl::findLane(QString laneNo)
 {
     foreach(Lane *lane, m_lanes) {
         if (lane->target().compare(laneNo) == 0) {
@@ -424,7 +424,7 @@ std::optional<Lane*> ProtoRangeControl::findLane(QString laneNo)
     return {};
 }
 
-void ProtoRangeControl::importStartList()
+void RangeControl::importStartList()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Ava startlist"), "", tr("Comma separated file (*.csv)"));
     if(fileName.isEmpty())
@@ -440,7 +440,7 @@ void ProtoRangeControl::importStartList()
                 QMessageBox::critical(this, tr("Viga"), tr("Kasutage Siusi startlisti formaati, kuna Inbandi omas ei ole ID'sid!"), QMessageBox::Ok);
                 return;
             } else {
-                QTextStream(stdout) << "ProtoRangeControl::importStartList: Competitor row: " << row << Qt::endl;
+                QTextStream(stdout) << "RangeControl::importStartList: Competitor row: " << row << Qt::endl;
                 QStringList rowParts = row.split(";");
                 if (rowParts.length() >= 15){
                     int targetNo = rowParts.at(10).toInt();
@@ -450,7 +450,7 @@ void ProtoRangeControl::importStartList()
                     if (laneOpt) {
                         laneOpt.value()->setSiusCompetitorRow(row);
                     } else {   // That means that existing lane was not found
-                        QTextStream(stdout) << "ProtoRangeControl::importStartList: Lane with target " << rowParts.at(10) << " not found, ignoring!" << Qt::endl;
+                        QTextStream(stdout) << "RangeControl::importStartList: Lane with target " << rowParts.at(10) << " not found, ignoring!" << Qt::endl;
 //                        addLane(row, "");
                     }
                 }
@@ -460,18 +460,18 @@ void ProtoRangeControl::importStartList()
         QMessageBox::critical(this, "Viga", "Ei õnnestunud faili avada!", QMessageBox::Ok);
 }
 
-void ProtoRangeControl::initialize()
+void RangeControl::initialize()
 {
-    QTextStream(stdout) << "ProtoRangeControl::initialize" << Qt::endl;
+    QTextStream(stdout) << "RangeControl::initialize" << Qt::endl;
 
-    QFile *logFile = new QFile(QString("ProtoRangeControl sisse %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
+    QFile *logFile = new QFile(QString("Range Control sisse %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
     if (logFile->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)) {
         m_incomingLog.setDevice(logFile);
         m_incomingLog << "///////////////////////////////" << programVersion << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";
     }
 
     if (m_shotsLog == nullptr) {
-        QFile *logFile = new QFile(QString("ProtoRangeControl lasud %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
+        QFile *logFile = new QFile(QString("Range Control lasud %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
         if (logFile->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)) {
             m_shotsLog = new QTextStream(logFile);
             *m_shotsLog << "///////////////////////////////" << programVersion << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";
@@ -487,47 +487,47 @@ void ProtoRangeControl::initialize()
     connect(&m_server, &ConnectionServer::info, this, [this](QString info) {
         showMessage(info);
     });
-    connect(&m_server, &ConnectionServer::newShot, this, &ProtoRangeControl::newShot);
-    connect(&m_server, &ConnectionServer::newTarget, this, &ProtoRangeControl::newTargetIp);
-    connect(&m_server, &ConnectionServer::statusUpdate, this, &ProtoRangeControl::updateStatus);
-    connect(&m_server, &ConnectionServer::allShots, this, &ProtoRangeControl::allShotsDataReceived);
-    connect(&m_server, &ConnectionServer::newProtokollitajaConnection, this, &ProtoRangeControl::publishAllShots);
-    connect(&m_server, &ConnectionServer::startListReceived, this, &ProtoRangeControl::loadStartList);
+    connect(&m_server, &ConnectionServer::newShot, this, &RangeControl::newShot);
+    connect(&m_server, &ConnectionServer::newTarget, this, &RangeControl::newTargetIp);
+    connect(&m_server, &ConnectionServer::statusUpdate, this, &RangeControl::updateStatus);
+    connect(&m_server, &ConnectionServer::allShots, this, &RangeControl::allShotsDataReceived);
+    connect(&m_server, &ConnectionServer::newProtokollitajaConnection, this, &RangeControl::publishAllShots);
+    connect(&m_server, &ConnectionServer::startListReceived, this, &RangeControl::loadStartList);
     m_server.start(m_serverPort, m_inbandPort);
 }
 
-void ProtoRangeControl::loadStartList(QStringList startList)
+void RangeControl::loadStartList(QStringList startList)
 {
     // targetNo;id;firstName;lastName;club;discipline;decimals;numberOfShots
     for (QString row : startList) {
-        QTextStream(stdout) << "ProtoRangeControl::loadStartList: Competitor row: " << row << Qt::endl;
+        QTextStream(stdout) << "RangeControl::loadStartList: Competitor row: " << row << Qt::endl;
         QStringList rowParts = row.split(";");
         if (row.size() > 0) {
             if (rowParts.size() < 8) {
                 QMessageBox::critical(this, tr("Viga"), tr("Vigane stardinimekirja rida!\n%1").arg(row), QMessageBox::Ok);
             } else {
                 QString targetNo = rowParts.at(0);
-                QTextStream(stdout) << "ProtoRangeControl::loadStartList: targetNo = " << targetNo << Qt::endl;
+                QTextStream(stdout) << "RangeControl::loadStartList: targetNo = " << targetNo << Qt::endl;
                 if (targetNo == "0" || targetNo.isEmpty())
                     targetNo = QString("%1").arg(QInputDialog::getInt(this, tr("Sisesta raja number"), QString("%1 %2: ").arg(rowParts.at(2), rowParts.at(3))));
                 auto laneOpt = findLane(targetNo);
                 if (laneOpt) {
-                    QTextStream(stdout) << "ProtoRangeControl::loadStartList: laneOpt defined" << Qt::endl;
+                    QTextStream(stdout) << "RangeControl::loadStartList: laneOpt defined" << Qt::endl;
                     if (!laneOpt.value()->inCompetition())
                         laneOpt.value()->setStartListCompetitorRow(row);
                     else
                         QMessageBox::critical(this, tr("Viga"), tr("Rajal %1 on võistlus käimas, uut laskurit ei imporditud!").arg(targetNo), QMessageBox::Ok);
                 } else {   // That means that existing lane was not found
-                    QTextStream(stdout) << "ProtoRangeControl::loadStartList: Lane with target " << rowParts.at(0) << " not found, ignoring!" << Qt::endl;
+                    QTextStream(stdout) << "RangeControl::loadStartList: Lane with target " << rowParts.at(0) << " not found, ignoring!" << Qt::endl;
                 }
             }
         }
     }
 }
 
-void ProtoRangeControl::publishAllShots(DataConnection *connection)
+void RangeControl::publishAllShots(DataConnection *connection)
 {
-    QTextStream(stdout) << "ProtoRangeControl::publishAllShots(), m_shots.size() = " << m_shots.size() << Qt::endl;
+    QTextStream(stdout) << "RangeControl::publishAllShots(), m_shots.size() = " << m_shots.size() << Qt::endl;
     QStringList shotRows;
     QVector<int> sentIds;
     foreach(SiusShotData shotData, m_shots) {
@@ -536,12 +536,12 @@ void ProtoRangeControl::publishAllShots(DataConnection *connection)
             sentIds.append(shotData.id);
         }
         shotRows.append(convertToSiusRows(shotData));
-        QTextStream(stdout) << "ProtoRangeControl::publishAllShots(): shotRows: " << shotRows.join("\n") << Qt::endl;
+        QTextStream(stdout) << "RangeControl::publishAllShots(): shotRows: " << shotRows.join("\n") << Qt::endl;
     }
     m_server.sendAllShotsData(shotRows, connection);
 }
 
-void ProtoRangeControl::publishSelectedCompetitorShots()
+void RangeControl::publishSelectedCompetitorShots()
 {
     QVector<int> idsToSend;
     foreach (Lane* lane, m_lanes) {
@@ -558,24 +558,24 @@ void ProtoRangeControl::publishSelectedCompetitorShots()
                 sentIds.append(shotData.id);
             }
             shotRows.append(convertToSiusRows(shotData));
-            QTextStream(stdout) << "ProtoRangeControl::publishSelectedCompetitorShots(): shotRows: " << shotRows.join("\n") << Qt::endl;
+            QTextStream(stdout) << "RangeControl::publishSelectedCompetitorShots(): shotRows: " << shotRows.join("\n") << Qt::endl;
         }
     }
     m_server.sendShotData(shotRows);
 }
 
-void ProtoRangeControl::publishShot(SiusShotData shotData)
+void RangeControl::publishShot(SiusShotData shotData)
 {
     QStringList rowsToSend = convertToSiusRows(shotData);
     if (shotData.siusShotNo == 1) {
         // Prepend _GRPH to competitor's shots, so that Protokollitaja considers these to be competition shots
         rowsToSend.prepend(QString("_GRPH;0;0;%1;60;73;11:15:50.75;8;0;6;1;0;0;61;2958939953").arg(shotData.id));
     }
-    QTextStream(stdout) << "ProtoRangeControl::publishShot: " << rowsToSend.join("\\n") << Qt::endl;
+    QTextStream(stdout) << "RangeControl::publishShot: " << rowsToSend.join("\\n") << Qt::endl;
     m_server.sendShotData(rowsToSend);
 }
 
-void ProtoRangeControl::newShot(int target, SiusShotData shotData)
+void RangeControl::newShot(int target, SiusShotData shotData)
 {
     showMessage(QString("Lasu info: %1;%2,%3,%4,%5")
                 .arg(target)
@@ -628,7 +628,7 @@ void ProtoRangeControl::newShot(int target, SiusShotData shotData)
     }
 }
 
-void ProtoRangeControl::newTargetIp(int target, QString ip)
+void RangeControl::newTargetIp(int target, QString ip)
 {
     showMessage(tr("Märgi IP: ") + ip);
     Lane *currentLane = nullptr;
@@ -651,7 +651,7 @@ void ProtoRangeControl::newTargetIp(int target, QString ip)
         sendAck(currentLane);
 }
 
-QJsonDocument ProtoRangeControl::readSettings()
+QJsonDocument RangeControl::readSettings()
 {
     QFile file("range_control_conf.json");
     QJsonDocument fileJson;
@@ -690,7 +690,7 @@ QJsonDocument ProtoRangeControl::readSettings()
     return fileJson;
 }
 
-void ProtoRangeControl::saveSettings()
+void RangeControl::saveSettings()
 {
     QFile file("range_control_conf.json");
     QJsonDocument fileJson;
@@ -731,16 +731,16 @@ void ProtoRangeControl::saveSettings()
 
         file.write(fileJson.toJson());
     } else
-        QTextStream(stdout) << "ProtoRangeControl::saveSettings: Unable to save settings!" << Qt::endl;
+        QTextStream(stdout) << "RangeControl::saveSettings: Unable to save settings!" << Qt::endl;
 }
 
-void ProtoRangeControl::sendAck(Lane *lane)
+void RangeControl::sendAck(Lane *lane)
 {
     QString message = "ack";
     sendMessage(lane, message);
 }
 
-void ProtoRangeControl::sendInit(Lane *lane)
+void RangeControl::sendInit(Lane *lane)
 {
     if (lane->inCompetition()) {
         if (QMessageBox::warning(
@@ -764,7 +764,7 @@ void ProtoRangeControl::sendInit(Lane *lane)
     sendMessage(lane, message);
 }
 
-void ProtoRangeControl::sendInitToAllSelected()
+void RangeControl::sendInitToAllSelected()
 {
     int noSelected = 0;
     foreach (Lane* lane, m_lanes) {
@@ -781,18 +781,18 @@ void ProtoRangeControl::sendInitToAllSelected()
         }
     }
 
-//    QTextStream(stdout) << "ProtoRangeControl::sendInitToAllSelected: sentLanes.size() = " << sentLanes.size() << " noSelected = " << noSelected << Qt::endl;
+//    QTextStream(stdout) << "RangeControl::sendInitToAllSelected: sentLanes.size() = " << sentLanes.size() << " noSelected = " << noSelected << Qt::endl;
     if (sentLanes.size() < noSelected) {
-//        QTextStream(stdout) << "ProtoRangeControl::sendInitToAllSelected: starting timer" << Qt::endl;
+//        QTextStream(stdout) << "RangeControl::sendInitToAllSelected: starting timer" << Qt::endl;
         QTimer::singleShot(50, this, SLOT(sendInitToAllSelected()));
     } else {
         sentLanes.clear();
     }
 }
 
-void ProtoRangeControl::sendMessage(Lane *lane, QString message)
+void RangeControl::sendMessage(Lane *lane, QString message)
 {
-    QTextStream(stdout) << "ProtoRangeControl::sendMessage(" << message << ")" << Qt::endl;
+    QTextStream(stdout) << "RangeControl::sendMessage(" << message << ")" << Qt::endl;
     if (tcpSocket != nullptr && !lane->ip().isEmpty()) {
         tcpSocket->connectToHost(lane->ip(), 5450);
         tcpSocket->waitForConnected(5000);
@@ -805,20 +805,20 @@ void ProtoRangeControl::sendMessage(Lane *lane, QString message)
     }
 }
 
-void ProtoRangeControl::sendMessageToAllSelected(QString message)
+void RangeControl::sendMessageToAllSelected(QString message)
 {
     m_message = message;
     continueSendingMessage();
 }
 
-void ProtoRangeControl::setCheckedAll()
+void RangeControl::setCheckedAll()
 {
     foreach (Lane *lane, m_lanes) {
         lane->setSelected(true);
     }
 }
 
-void ProtoRangeControl::setNumberOfShots()
+void RangeControl::setNumberOfShots()
 {
     bool wasAccepted = false;
     int newNumber =  QInputDialog::getInt(this, tr("Sisesta laskude arv"), tr("Laskude arv: "), 60, 0, 120, 1, &wasAccepted);
@@ -829,7 +829,7 @@ void ProtoRangeControl::setNumberOfShots()
         }
 }
 
-void ProtoRangeControl::setTargetTypes()
+void RangeControl::setTargetTypes()
 {
     bool wasAccepted = false;
     QString targetType = QInputDialog::getItem(this, tr("Vali märklehe tüüp"), tr("Märkleht: "), m_disciplines, 0, false, &wasAccepted);
@@ -840,7 +840,7 @@ void ProtoRangeControl::setTargetTypes()
         }
 }
 
-void ProtoRangeControl::setupLanes(QJsonDocument fileJson)
+void RangeControl::setupLanes(QJsonDocument fileJson)
 {
     vBox->addWidget(new Header);
 
@@ -856,20 +856,20 @@ void ProtoRangeControl::setupLanes(QJsonDocument fileJson)
     }
 }
 
-void ProtoRangeControl::showMessage(QString msg)
+void RangeControl::showMessage(QString msg)
 {
-    QTextStream(stdout) << "ProtoRangeControl::showMessage(" << msg << ")" << Qt::endl;
+    QTextStream(stdout) << "RangeControl::showMessage(" << msg << ")" << Qt::endl;
     statusBar()->showMessage(msg, 5000);
 }
 
-void ProtoRangeControl::unsetCheckedAll()
+void RangeControl::unsetCheckedAll()
 {
     foreach (Lane *lane, m_lanes) {
         lane->setSelected(false);
     }
 }
 
-void ProtoRangeControl::updateStatus(int target, QString newStatus)
+void RangeControl::updateStatus(int target, QString newStatus)
 {
     showMessage(QString("Uuendus: %1, ").arg(target) + newStatus);
     foreach(Lane *lane, m_lanes) {

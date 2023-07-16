@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = ProtoRangeControl
+TARGET = RangeControl
 INCLUDEPATH += ./ \
 INCLUDEPATH += ../../common/src
 DEPENDPATH += $${INCLUDEPATH}
@@ -20,7 +20,7 @@ SOURCES += \
     lane.cpp \
     main.cpp \
     ../../common/src/lask.cpp \
-    protorangecontrol.cpp
+    rangecontrol.cpp
 
 HEADERS += \
     connectionserver.h \
@@ -28,7 +28,7 @@ HEADERS += \
     header.h \
     inbandconnection.h \
     lane.h \
-    protorangecontrol.h \
+    rangecontrol.h \
     programname.h \
     ../../common/src/version.h \
     ../../common/src/lask.h \

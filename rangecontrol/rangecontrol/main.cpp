@@ -1,4 +1,4 @@
-#include "protorangecontrol.h"
+#include "rangecontrol.h"
 
 #include <QApplication>
 #include <QTranslator>
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
         }
 
     QApplication a(argc, argv);
-    ProtoRangeControl w;
+    RangeControl w;
     w.show();
     return a.exec();
 }
