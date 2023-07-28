@@ -19,6 +19,7 @@
 #include <QList>
 #include <QTimer>
 
+#include "qualificationevents.h"
 #include "lisalaskudeaken.h"
 #include "siusshotdata.h"
 #include "laskudeaken.h"
@@ -70,18 +71,18 @@ public:
 	QTimer *arvutaja;
 	LisaLaskudeAken *lisaAken;
     Laskur(
-            Andmebaas* andmebaas,
-            int seeriateArv,
-            int vahesummadeSamm,
-            int abi,
-            bool *kirjutusabi,
-            bool *kumnendikega,
-            int id,
-            int *jarjestamine,
-            QString *eventType,
-            int laskudeArv,
-            QWidget *parent = nullptr
-        );
+        Andmebaas* andmebaas,
+        int seeriateArv,
+        int vahesummadeSamm,
+        int abi,
+        bool *kirjutusabi,
+        bool *kumnendikega,
+        int id,
+        int *jarjestamine,
+        QualificationEvents::EventType *eventType,
+        int laskudeArv,
+        QWidget *parent = nullptr
+    );
     Laskur(
         QJsonObject json,
         Andmebaas* autocompleteDb,
@@ -90,13 +91,13 @@ public:
         bool *autocomplete,
         bool *withDecimals,
         int *sorting,
-        QString *eventType,
+        QualificationEvents::EventType *eventType,
         int numberOfShots,
         QWidget *parent = nullptr
         );
     ~Laskur();
 //    bool operator<(const Laskur &l) const;
-    QString* getEventType() const;
+    QualificationEvents::EventType* getEventType() const;
     QString getSumma();
     bool vaiksem(Laskur *l, int t) const;
     void set(const Laskur *l);
@@ -150,7 +151,7 @@ private:
     QAction *laskudeAkenAct;
     QLineEdit *summa;
     QMenu *popup;
-    QString *m_eventType;
+    QualificationEvents::EventType *m_eventType;
     QString m_previousSiusRow;
     LaskudeAken *laskudeAken;
     void contextMenuEvent(QContextMenuEvent *event);

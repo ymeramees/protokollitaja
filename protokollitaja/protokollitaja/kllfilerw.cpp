@@ -171,8 +171,8 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                             a,
                             m_autoComplete,
                             screenName,
-                            0,
-                            "Muu",
+                            TargetTypes::Other,
+                            QualificationEvents::OtherAirRifle,
                             false,
                             m_sorting,
                             kllData.tabWidget,
@@ -240,17 +240,19 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                 bool team = false;
                 bool withDecimals = false;
                 bool toBeShown = true;
-                QString tabName, screenName, eventType = "Muu";
+                QString tabName, screenName, eventTypeString;
                 in >> tabName >> s;
                 if(competitionSettings.fileVersion >= 107)
                     in >> noOfShots;
                 in >> vs >> a >> screenName;
-                if(competitionSettings.fileVersion != 101)
+                if(competitionSettings.fileVersion != 101) {
                     in >> weaponType;
+                    if (weaponType == 5 || weaponType == 6)
+                        weaponType += 4;
+                }
                 if(competitionSettings.fileVersion >= 103)
-                    in >> eventType;
-                if(eventType.isEmpty())
-                    eventType = "Muu";
+                    in >> eventTypeString;
+
                 if(competitionSettings.fileVersion >= 105)
                     in >> withDecimals;
                 if(competitionSettings.fileVersion >= 108)
@@ -261,22 +263,22 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                 area->setWidgetResizable(true);
 //                leheIndeks = lIndeks;
                 Leht* sheet = new Leht(
-                            m_competitorDatabase,
-                            s,
-                            vs,
-                            a,
-                            m_autoComplete,
-                            screenName,
-                            weaponType,
-                            eventType,
-                            withDecimals,
-                            m_sorting,
-                            kllData.tabWidget,
-                            team,
-                            m_competitorsPickingBox,
-                            tabIndex,
-                            noOfShots
-                            );
+                    m_competitorDatabase,
+                    s,
+                    vs,
+                    a,
+                    m_autoComplete,
+                    screenName,
+                    (TargetTypes::TargetType)weaponType,
+                    QualificationEvents::fromOldString(eventTypeString),
+                    withDecimals,
+                    m_sorting,
+                    kllData.tabWidget,
+                    team,
+                    m_competitorsPickingBox,
+                    tabIndex,
+                    noOfShots
+                    );
                 area->setWidget(sheet);
                 kllData.tabWidget->addTab(area, tabName);
                 kllData.tabWidget->setCurrentIndex(0);  // Otherwise in Windooz only last tab is visible and others are hidden
@@ -297,21 +299,21 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                             sheet->jalgitavad.append(followee);
                         }
                     }
-                    QString teamName, name, lastName, club, eventType, label, sum, notes;
+                    QString teamName, name, lastName, club, eventName, label, sum, notes;
                     for(int j = 0; j < noOfCompetitors; j++){
                         in >> teamName;
                         sheet->voistkonnad[j]->nimi->setText(teamName);
                         for(int k = 0; k < s; k++){
                             in >> name >> lastName >> club;
                             if(competitionSettings.fileVersion >= 106){
-                                in >> eventType;
+                                in >> eventName;
                             }
                             in >> sum >> label;
                             sheet->voistkonnad[j]->voistlejad[k]->eesNimi = name;
                             sheet->voistkonnad[j]->voistlejad[k]->perekNimi = lastName;
                             sheet->voistkonnad[j]->voistlejad[k]->klubi = club;
                             if(competitionSettings.fileVersion >= 106){
-                                sheet->voistkonnad[j]->voistlejad[k]->harjutus = eventType;
+                                sheet->voistkonnad[j]->voistlejad[k]->harjutus = eventName;
                             }
                             sheet->voistkonnad[j]->voistlejad[k]->summa = sum;
                             sheet->voistkonnad[j]->voistlejad[k]->silt->setText(label);
@@ -403,7 +405,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                 sheet->alustamine = false;
             }
             kllData.lastCompetitorId = checkDuplicateIds(kllData.tabWidget, 0);
-        } else if (competitionSettings.fileVersion <= 113) {
+        } else if (competitionSettings.fileVersion <= 114) {
             kllData.tabWidget = new QTabWidget();
             kllData.tabWidget->setTabPosition(QTabWidget::North);
 
@@ -414,7 +416,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                 bool teamEvent = false;
                 bool withDecimals = false;
                 bool toBeShown = true;
-                QString tabName, displayName, eventType = "Muu";
+                QString tabName, displayName, eventTypeString = "Muu";
 
                 tabName = tabObject["name"].toString();
                 seriesCount = tabObject["seriesCount"].toInt();
@@ -424,10 +426,17 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                 autocomplete = tabObject["autocomplete"].toInt();
                 displayName = tabObject["displayName"].toString();
                 weaponType = tabObject["weaponType"].toInt();
-                eventType = tabObject["event"].toString();
 
-                if(eventType.isEmpty())
-                    eventType = "Muu";
+                QualificationEvents::EventType eventType = QualificationEvents::OtherAirRifle;
+                if (competitionSettings.fileVersion == 113) {
+                    eventTypeString = tabObject["event"].toString();
+                    eventType = QualificationEvents::fromOldString(eventTypeString);
+                } else {
+                    eventType = (QualificationEvents::EventType)tabObject["eventType"].toInt();
+                }
+
+                if(eventTypeString.isEmpty())
+                    eventTypeString = "Muu";
 
                 withDecimals = tabObject["decimals"].toBool();
                 toBeShown = tabObject["toBeShown"].toBool();
@@ -449,7 +458,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                             autocomplete,
                             m_autoComplete,
                             displayName,
-                            weaponType,
+                            (TargetTypes::TargetType)weaponType,
                             eventType,
                             withDecimals,
                             m_sorting,

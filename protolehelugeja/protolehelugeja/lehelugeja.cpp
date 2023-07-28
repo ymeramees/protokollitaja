@@ -537,12 +537,11 @@ void Lehelugeja::loeVorgust()   //Protokollitajast tulev info/käsk
         }
         ui->summaEdit->setText(pakett.takeFirst());
         int aktiivneSeeria = pakett.takeFirst().toInt();
-        if(pakett.at(0).contains(tr("Õhupüss")))
+        if(pakett.at(0).toInt() == TargetTypes::AirRifle)
             ui->leheCombo->setCurrentIndex(0);
-        else if(pakett.at(0).contains(tr("Õhupüstol")))
+        else if(pakett.at(0).toInt() == TargetTypes::AirPistol)
         ui->leheCombo->setCurrentIndex(1);
-        else if(pakett.at(0).contains("Standard", Qt::CaseInsensitive)
-                || pakett.at(0).contains("Lamades", Qt::CaseInsensitive))
+        else if(pakett.at(0).toInt() == TargetTypes::SmallboreRifle)
         ui->leheCombo->setCurrentIndex(2);
         pakett.takeFirst();
         ui->laskudeBox->setValue(pakett.takeFirst().toInt());

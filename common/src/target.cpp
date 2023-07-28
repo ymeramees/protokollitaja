@@ -1,5 +1,6 @@
 #include "target.h"
 
+// old
 const QStringList Target::m_targetTypes = QStringList() << QString::fromLatin1("Õhupüss") << QString::fromLatin1("Õhupüstol") << QString::fromLatin1("Sportpüss");
 
 Target::Target(QWidget *parent) :

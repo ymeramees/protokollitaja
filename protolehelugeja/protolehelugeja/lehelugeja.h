@@ -20,7 +20,9 @@
 
 #include "lask.h"
 #include "target.h"
+#include "targettypes.h"
 #include "logandcmdwindow.h"
+#include "qualificationevents.h"
 #include "scoringmachineconnection.h"
 
 // For testing

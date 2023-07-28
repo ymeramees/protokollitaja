@@ -498,7 +498,7 @@ void RangeControl::initialize()
 
 void RangeControl::loadStartList(QStringList startList)
 {
-    // targetNo;id;firstName;lastName;club;discipline;decimals;numberOfShots
+    // targetNo;id;firstName;lastName;club;eventType;decimals;numberOfShots // TODO Lauri: Update to use new eventType
     for (QString row : startList) {
         QTextStream(stdout) << "RangeControl::loadStartList: Competitor row: " << row << Qt::endl;
         QStringList rowParts = row.split(";");

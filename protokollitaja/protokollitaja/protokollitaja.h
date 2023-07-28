@@ -50,6 +50,8 @@
 #include "uhendumiseaken.h"
 #include "updatechecker.h"
 #include "xlslib.h"
+#include "qualificationevents.h"
+#include "targettypes.h"
 
 class Protokollitaja : public QMainWindow
 {
@@ -66,7 +68,7 @@ public:
     bool autoUuendus;   //Kas uuenduste kontroll on automaatne (true) või menüüst valitud (false)
 	bool voibUuendadaNimekirja;
     bool voistlus;   //Kasutatakse SiusDatast info vastuvõtmisel, näitab, kas finaali võistluslasud on alanud
-    enum TargetType {Muu = 0, Ohupuss = 1, Ohupustol = 2, Sportpuss = 3, Spordipustol = 4, Puss = 5, Pustol = 6};
+    // enum TargetType {Muu = 0, Ohupuss = 1, Ohupustol = 2, Sportpuss = 3, Spordipustol = 4, Puss = 5, Pustol = 6};
         //enum {vOhupuss = 0, sOhupuss = 1, vOhupustol = 2, sOhupustol = 3, lam = 4, vStandard = 5, sStandard = 6, vabap = 7, spordikas = 8, sumat = 9, olump = 10};
     enum RankingOptions {KumneteArvuga = 0, ViimaseSeeriaga = 1};  //Täisarvudega lugemise puhul järjestamise variandid
     int m_ranking;   //Täisarvudega lugemisel, millist järjestamist kasutada

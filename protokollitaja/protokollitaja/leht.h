@@ -19,6 +19,7 @@
 #include "laskur.h"
 #include "voistkond.h"
 #include "liikmetevalikkast.h"
+#include "qualificationevents.h"
 
 class Leht : public QWidget
 {
@@ -66,9 +67,8 @@ public:
     int laskudeArv;
 	int seeriateArv;
     int vSummadeSamm;
-    int relv;
+    TargetTypes::TargetType m_targetType;
     int *jarjestamine;  //Kas sorteerimine käib kümnete arvu järgi või viimase seeria järgi
-    QString harjutus;
 	QString ekraaniNimi;
     std::optional<QString> exportStartList();
 	QVBoxLayout* vKast;
@@ -80,11 +80,13 @@ public:
     Andmebaas* andmebaas;
 	LiikmeteValikKast *lValik;
 	//Leht *nimedeLeht;
-    Leht(Andmebaas*, int, int, int, bool*, QString, int, QString, bool kum, int*, QWidget *parent = 0, bool v = false, /* Leht *ind = 0
+    Leht(Andmebaas*, int, int, int, bool*, QString, TargetTypes::TargetType target, QualificationEvents::EventType eventType, bool kum, int*, QWidget *parent = 0, bool v = false, /* Leht *ind = 0
             ,*/ LiikmeteValikKast *lV = 0, int lI = 0, int ls = 10);
     ~Leht();
+    QualificationEvents::EventType eventType() const;
 	int maxTime() const;
 	int minTime() const;
+    void setEventType(const QualificationEvents::EventType newEventType);
 	void setMaxTimeMs(const int newTime);
 	void setMinTimeMs(const int newTime);
     void setToBeUploaded(bool newStatus);
@@ -117,6 +119,7 @@ signals:
 	void muudatus();
 
 private:
+    QualificationEvents::EventType m_eventType;
     bool m_toBeUploaded = true;  //Shows if results on this page should be uploaded to web or not
 	int m_maxTime, m_minTime;	// Time limits for how long the results are shown on spectator screen, in ms
 };

@@ -11,15 +11,18 @@
 #include <QMessageBox>
 #include "ui_valikkast.h"
 #include "commonsettings.h"
+#include "ageclasses.h"
+#include "qualificationevents.h"
+#include "targettypes.h"
 
 class ValikKast : public QDialog
 {
     Q_OBJECT
 
 public:
-    int relv;   //defineeritud järgmiselt
-    enum Relv {Muu = 0, Ohupuss = 1, Ohupustol = 2, Sportpuss = 3, Spordipustol = 4, Puss = 5, Pustol = 6};
-    QString harjutus;   // TODO To be changed to int
+    TargetTypes::TargetType m_targetType;   //defineeritud järgmiselt
+    // enum Relv {Muu = 0, Ohupuss = 1, Ohupustol = 2, Sportpuss = 3, Spordipustol = 4, Puss = 5, Pustol = 6};
+    QualificationEvents::EventType eventType() const;
     ValikKast(CommonSettings *settings, QWidget *parent = 0);
     ~ValikKast();
     Ui::ValikKastClass ui;
@@ -31,6 +34,10 @@ public slots:
         void muudaHarjutus(int);
 	void voimalda(int indeks);
 	void sulge();
+
+private:
+    void changeEvent(QEvent *event);
+    void updateUi();
 };
 
 #endif // VALIKKAST_H

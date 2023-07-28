@@ -33,12 +33,12 @@ void SheetTest::test_exportStartList()
 {
     Andmebaas dataBase;
     LiikmeteValikKast membersBox;
-    QString eventType = "40l õhupüss";
+    QualificationEvents::EventType eventType = QualificationEvents::AirRifle40;
     bool writeAssistant = false;
     bool withDecimals = true;
     int sorting = 1;
 
-    Leht sheet = Leht(&dataBase, 4, 0, 1, &writeAssistant, "40 AR", 3, eventType, withDecimals, &sorting, nullptr, false, &membersBox, 1, 10);
+    Leht sheet = Leht(&dataBase, 4, 0, 1, &writeAssistant, "40 AR", TargetTypes::AirRifle, eventType, withDecimals, &sorting, nullptr, false, &membersBox, 1, 10);
 
     sheet.uusLaskur(13);
 
@@ -53,7 +53,7 @@ void SheetTest::test_exportStartList()
         sheet.laskurid[0]->perekNimi->setText("STRÖM");
         sheet.laskurid[0]->klubi->setText("Ülenurme GSK");
 
-    QString expectedData = ";13;Isås;STRÖM;Ülenurme GSK;40l õhupüss;1;40";
+    QString expectedData = ";13;Isås;STRÖM;Ülenurme GSK;1;1;40";
     auto exportData = sheet.exportStartList();
     QVERIFY(exportData.has_value());
     QCOMPARE(exportData.value(), expectedData);

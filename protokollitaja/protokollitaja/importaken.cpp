@@ -44,7 +44,7 @@ void ImportAken::fromFile()
         if(fail.open(QIODevice::ReadOnly | QIODevice::Text)){
             QTextStream sisse(&fail);
             if(leht == nullptr){
-                leht = new Leht(0, 6, 0, 0, &kirjutusabi, "Ekraaninimi", 0, "Muu", 0, 0, this);
+                leht = new Leht(0, 6, 0, 0, &kirjutusabi, "Ekraaninimi", TargetTypes::Other, QualificationEvents::OtherAirRifle, 0, 0, this);
                 ui.scrollArea->setWidget(leht);
             }
             int vSummadeSamm = 0;
@@ -174,7 +174,7 @@ void ImportAken::fromClipboard()
 {
     QMessageBox::warning(this, "Protokollitaja", tr("Kas teil .kll faili ei ole? Sealt importimisel (Failist... nupp) tuleb rohkem infot üle, kui vahemälust importimisel."), QMessageBox::Ok);
     if(leht == nullptr){
-        leht = new Leht(0, 6, 0, 0, &kirjutusabi, "Ekraaninimi", 0, "Muu", 0, 0, this);
+        leht = new Leht(0, 6, 0, 0, &kirjutusabi, "Ekraaninimi", TargetTypes::Other, QualificationEvents::OtherAirRifle, 0, 0, this);
         ui.scrollArea->setWidget(leht);
     }
 
@@ -310,7 +310,7 @@ void ImportAken::fromKllFile(QString fileName)
         for (int i = 0; i < contents.tabWidget->count(); i++) {
             Leht *sheet = qobject_cast<Leht*>(qobject_cast<QScrollArea*>(contents.tabWidget->widget(i))->widget());
             if (sheet != 0 && !sheet->voistk){  // Exclude team events for now
-                tabNames << (contents.tabWidget->tabText(i) + " - " + sheet->harjutus);
+                tabNames << (contents.tabWidget->tabText(i) + " - " + sheet->ekraaniNimi);
             }
         }
         bool ok;
@@ -322,7 +322,7 @@ void ImportAken::fromKllFile(QString fileName)
 
             if (sheet != 0) {
                 if(leht == nullptr){
-                    leht = new Leht(0, sheet->seeriateArv, sheet->vSummadeSamm, 0, &kirjutusabi, "Ekraaninimi", sheet->relv, sheet->harjutus, 0, 0, this);
+                            leht = new Leht(0, sheet->seeriateArv, sheet->vSummadeSamm, 0, &kirjutusabi, "Ekraaninimi", sheet->m_targetType, sheet->eventType(), 0, 0, this);
                     ui.scrollArea->setWidget(leht);
                 }
 

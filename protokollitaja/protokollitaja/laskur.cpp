@@ -3,7 +3,7 @@
 extern bool verbose;
 extern bool veryVerbose;
 
-Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i, int *jar, QString *eventType, int ls, QWidget *parent)
+Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i, int *jar, QualificationEvents::EventType *eventType, int ls, QWidget *parent)
     : QWidget(parent)
 {
     setupFields();
@@ -62,7 +62,7 @@ Laskur::Laskur(
     bool *autocomplete,
     bool *withDecimals,
     int *sorting,
-    QString *eventType,
+    QualificationEvents::EventType *eventType,
     int numberOfShots,
     QWidget *parent
 ): QWidget(parent){
@@ -222,7 +222,7 @@ bool Laskur::isFinished() const
     return lasud[seeriateArv - 1][laskudeArv - 1]->getILask() != -999;
 }
 
-QString* Laskur::getEventType() const
+QualificationEvents::EventType* Laskur::getEventType() const
 {
     return m_eventType;
 }
@@ -1506,7 +1506,8 @@ QJsonObject Laskur::toExportJson()
                 seriesArray.append(seriesJson);
             }
             subtotalJson["series"] = seriesArray;
-            if(*m_eventType == "3x20l Standard" || *m_eventType == "3x40l Standard"){
+            if(*m_eventType == QualificationEvents::Rifle3x20_50m || *m_eventType == QualificationEvents::Rifle3x40_50m ||
+                *m_eventType == QualificationEvents::Rifle3x20_300m || *m_eventType == QualificationEvents::Rifle3x40_300m){
                 switch (i) {
                 case 0: {
                     subtotalJson["label"] = "Kneeling";
@@ -1525,7 +1526,7 @@ QJsonObject Laskur::toExportJson()
                     break;
                 }
                 }
-            } else if(*m_eventType == tr("30+30l Spordipüstol")){
+            } else if(*m_eventType == *m_eventType == QualificationEvents::Pistol_25m){
                 switch (i) {
                 case 0: {
                     subtotalJson["label"] = "Precision";
@@ -1540,7 +1541,9 @@ QJsonObject Laskur::toExportJson()
                     break;
                 }
                 }
-            } else if(*m_eventType == tr("Olümpiakiirlaskmine") || *m_eventType == tr("20+20l Metssiga")){
+            } else if(*m_eventType == QualificationEvents::RapidFirePistol ||
+                       *m_eventType == QualificationEvents::RunningTargetMixed_10m ||
+                       *m_eventType == QualificationEvents::RunningTargetMixed_50m){
                 switch (i) {
                 case 0: {
                     subtotalJson["label"] = "Stage 1";
@@ -1555,7 +1558,7 @@ QJsonObject Laskur::toExportJson()
                     break;
                 }
                 }
-            } else if(*m_eventType == tr("20+20+20l Spordipüstol")){
+            } else if(*m_eventType == QualificationEvents::StandardPistol){
                 switch (i) {
                 case 0: {
                     subtotalJson["label"] = "150\'\'";
@@ -1574,7 +1577,7 @@ QJsonObject Laskur::toExportJson()
                     break;
                 }
                 }
-            } else if(*m_eventType == tr("CISM püstol")){
+            } else if(*m_eventType == QualificationEvents::PistolCISM_25m){
                 switch (i) {
                 case 0: {
                     subtotalJson["label"] = "10\'\'";
@@ -1593,7 +1596,8 @@ QJsonObject Laskur::toExportJson()
                     break;
                 }
                 }
-            } else if(*m_eventType == "30+30l Metssiga"){
+            } else if(*m_eventType == QualificationEvents::RunningTarget_10m ||
+                       *m_eventType == QualificationEvents::RunningTarget_50m){
                 switch (i) {
                 case 0: {
                     subtotalJson["label"] = "Slow run";

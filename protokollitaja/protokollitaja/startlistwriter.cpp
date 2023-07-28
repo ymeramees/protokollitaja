@@ -52,7 +52,7 @@ int StartListWriter::writeInbandData(QTextStream *out)
         }
 
         *out << inbandDiscipline << ","; // Discipline
-        *out << m_competitorsList.at(i).competitorClass << "\n"; // Class // FIXME To be implemented
+        *out << m_competitorsList.at(i).competitorClass << "\n"; // Class
         exported++;
     }
     return exported;

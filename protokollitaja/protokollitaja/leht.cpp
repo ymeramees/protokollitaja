@@ -2,11 +2,11 @@
 
 extern bool verbose;
 
-Leht::Leht(Andmebaas* baas, int s, int vs, int a, bool *k, QString eNimi, int r, QString h, bool kum, int *jar, QWidget *parent, bool v, LiikmeteValikKast *lV, int lI, int ls)
+Leht::Leht(Andmebaas* baas, int s, int vs, int a, bool *k, QString eNimi, TargetTypes::TargetType targetType, QualificationEvents::EventType eventType, bool kum, int *jar, QWidget *parent, bool v, LiikmeteValikKast *lV, int lI, int ls)
     : QWidget(parent)
 {
-    relv = r;
-    harjutus = h;
+    m_targetType = targetType;
+    m_eventType = eventType;
 	voistk = v;
 	viimaneIndex = 0;
 	naidata = true;
@@ -47,11 +47,6 @@ void Leht::deleteAllShotsFromSelectedCompetitors()
     }
 }
 
-QString Leht::getEventType()
-{
-    return harjutus;
-}
-
 void Leht::idMuudatus(int uusId, Laskur* las)
 {
     emit idMuutus(uusId, las);
@@ -69,7 +64,7 @@ void Leht::uusLaskur(int id)
         voistkonnad << voistKond;
         voistKond->show();
     }else{
-        Laskur *las = new Laskur(andmebaas, seeriateArv, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, id, jarjestamine, &harjutus, laskudeArv, this);
+        Laskur *las = new Laskur(andmebaas, seeriateArv, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, id, jarjestamine, &m_eventType, laskudeArv, this);
         connect(las, SIGNAL(sifrimuutus()), this, SLOT(naitaSifrit()));
         connect(las, SIGNAL(idMuutus(int,Laskur*)), this, SLOT(idMuudatus(int,Laskur*)));
         connect(las->eesNimi, SIGNAL(editingFinished()), this, SLOT(kontrolliKordusi()));
@@ -108,7 +103,7 @@ void Leht::uusLaskur(QJsonObject json)
         voistkonnad << voistKond;
         voistKond->show();
     } else {
-        Laskur *las = new Laskur(json, andmebaas, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, jarjestamine, &harjutus, laskudeArv, this);
+        Laskur *las = new Laskur(json, andmebaas, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, jarjestamine, &m_eventType, laskudeArv, this);
         connect(las, SIGNAL(sifrimuutus()), this, SLOT(naitaSifrit()));
         connect(las, SIGNAL(idMuutus(int,Laskur*)), this, SLOT(idMuudatus(int,Laskur*)));
         connect(las->eesNimi, SIGNAL(editingFinished()), this, SLOT(kontrolliKordusi()));
@@ -163,19 +158,18 @@ void Leht::eemaldaLaskur()
 	}
 }
 
+QualificationEvents::EventType Leht::eventType() const
+{
+    return m_eventType;
+}
+
 std::optional<QString> Leht::exportStartList()
 {
     if(laskurid.count() < 1) {  // Make sure there is at least 1 competitor
         return {};
     } else {
-        // targetNo;id;firstName;lastName;club;discipline;decimals;numberOfShots
+        // targetNo;id;firstName;lastName;club;eventType;decimals;numberOfShots
         QStringList startList;
-        QString discipline = harjutus;
-
-        if (discipline.contains("3x", Qt::CaseInsensitive) && discipline.contains("standard", Qt::CaseInsensitive)) // TODO clearly this whole discipline naming thing should be rewritten in more type-safe manner
-            discipline = "50m_3positions";
-        else if (discipline.contains("lamades", Qt::CaseInsensitive))
-            discipline = "50m_rifle";
 
         int numberOfShots = seeriateArv * laskudeArv;
         for (Laskur *competitor : laskurid) {
@@ -186,7 +180,7 @@ std::optional<QString> Leht::exportStartList()
                                     .arg(competitor->eesNimi->text().trimmed())
                                     .arg(competitor->perekNimi->text().trimmed())
                                     .arg(competitor->klubi->text().trimmed())
-                                    .arg(discipline)
+                                    .arg(m_eventType)
                                     .arg(int(kumnendikega))
                                     .arg(numberOfShots));
             }
@@ -204,6 +198,11 @@ int Leht::maxTime() const
 int Leht::minTime() const
 {
     return m_minTime;
+}
+
+void Leht::setEventType(const QualificationEvents::EventType newEventType)
+{
+    m_eventType = newEventType;
 }
 
 void Leht::setMaxTimeMs(const int newTime)
@@ -349,7 +348,7 @@ void Leht::reasta(int t)
 //                uus.lisaLasud << reasLaskurid[i]->lisaLasud[j];
 //            uus.kumned = reasLaskurid[i]->kumned->text();
 //            uus.markus = reasLaskurid[i]->markus->text();
-            Laskur* uus = new Laskur(andmebaas, seeriateArv, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, 0, jarjestamine, &harjutus, laskudeArv, this);
+            Laskur* uus = new Laskur(andmebaas, seeriateArv, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, 0, jarjestamine, &m_eventType, laskudeArv, this);
             uus->set(reasLaskurid[i]);
 			varuLaskurid << uus;
 		}

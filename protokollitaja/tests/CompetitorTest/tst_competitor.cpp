@@ -39,7 +39,7 @@ CompetitorTest::~CompetitorTest()
 
 void CompetitorTest::test_isFinished()
 {
-    QString eventType = "40l õhupüss";
+    QualificationEvents::EventType eventType = QualificationEvents::AirRifle40;
     bool writeAssistant = false;
     bool withDecimals = true;
     int sorting = 1;
@@ -55,7 +55,7 @@ void CompetitorTest::test_isFinished()
 
 void CompetitorTest::test_readSiusShotAdditionalShot()
 {
-    QString eventType = "3x40l Standard";
+    QualificationEvents::EventType eventType = QualificationEvents::Rifle3x40_50m;
     bool writeAssistant = false;
     bool withDecimals = false;
     int sorting = 0;
@@ -81,7 +81,7 @@ void CompetitorTest::test_readSiusShotAdditionalShot()
 
 void CompetitorTest::test_readSiusShotAdditionalShotInMultiStage()
 {
-    QString eventType = "3x40l Standard";
+    QualificationEvents::EventType eventType = QualificationEvents::Rifle3x40_50m;
     bool writeAssistant = false;
     bool withDecimals = false;
     int sorting = 0;
@@ -114,7 +114,7 @@ void CompetitorTest::test_readSiusShotAdditionalShotInMultiStage()
 
 void CompetitorTest::test_readSiusShotIgnoreWrongId()
 {
-    QString eventType = "3x40l Standard";
+    QualificationEvents::EventType eventType = QualificationEvents::Rifle3x40_50m;
     bool writeAssistant = false;
     bool withDecimals = false;
     int sorting = 0;
@@ -127,7 +127,7 @@ void CompetitorTest::test_readSiusShotIgnoreWrongId()
 
 void CompetitorTest::test_readSiusShotIgnoreWrongSocketIndex()
 {
-    QString eventType = "3x40l Standard";
+    QualificationEvents::EventType eventType = QualificationEvents::Rifle3x40_50m;
     bool writeAssistant = false;
     bool withDecimals = false;
     int sorting = 0;
@@ -143,7 +143,7 @@ void CompetitorTest::test_readSiusShotIgnoreWrongSocketIndex()
 
 void CompetitorTest::test_readSiusShotReadCompetitionShotsWithoutSighters()
 {
-    QString eventType = "3x40l Standard";
+    QualificationEvents::EventType eventType = QualificationEvents::Rifle3x40_50m;
     bool writeAssistant = false;
     bool withDecimals = false;
     int sorting = 0;
@@ -161,7 +161,7 @@ void CompetitorTest::test_readSiusShotReadCompetitionShotsWithoutSighters()
 
 void CompetitorTest::test_readSiusShotRepeatedShotDataInFirstStage()
 {
-    QString eventType = "3x40l Standard";
+    QualificationEvents::EventType eventType = QualificationEvents::Rifle3x40_50m;
     bool writeAssistant = false;
     bool withDecimals = false;
     int sorting = 0;
@@ -196,7 +196,7 @@ void CompetitorTest::test_readSiusShotRepeatedShotDataInFirstStage()
 
 void CompetitorTest::test_readSiusShotRepeatedShotDataInSecondStage()
 {
-    QString eventType = "3x40l Standard";
+    QualificationEvents::EventType eventType = QualificationEvents::Rifle3x40_50m;
     bool writeAssistant = false;
     bool withDecimals = false;
     int sorting = 0;
@@ -242,7 +242,7 @@ void CompetitorTest::test_readSiusShotRepeatedShotDataInSecondStage()
 
 void CompetitorTest::test_readSiusShotSecondStageCompetitionShots()
 {
-    QString eventType = "3x40l Standard";
+    QualificationEvents::EventType eventType = QualificationEvents::Rifle3x40_50m;
     bool writeAssistant = false;
     bool withDecimals = false;
     int sorting = 0;
@@ -275,7 +275,7 @@ void CompetitorTest::test_readSiusShotSecondStageCompetitionShots()
 
 void CompetitorTest::test_seriesMissingShots()
 {
-    QString eventType = "40l õhupüss";
+    QualificationEvents::EventType eventType = QualificationEvents::AirRifle40;
     bool writeAssistant = false;
     bool withDecimals = true;
     int sorting = 1;

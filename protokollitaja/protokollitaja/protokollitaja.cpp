@@ -544,7 +544,7 @@ void Protokollitaja::algseaded()    //Seadistab algsed väärtused kas programmi
     m_endDate = QDate::currentDate();
     m_place.clear();
     kirjutusAbi = true;
-    abi = Ohupuss;
+    abi = TargetTypes::TargetType::AirRifle;
     m_ranking = KumneteArvuga;
     laskuriId = 0;
     leheIndeks = 0;
@@ -952,7 +952,7 @@ void Protokollitaja::exportStartList(StartListWriter::StartListType type)
                 leht->laskurid[i]->perekNimi->text(),
                 leht->laskurid[i]->klubi->text(),
                 leht->laskurid[i]->getSumma().replace(",", "."),
-                static_cast<int>(m_settings.eventNames.indexOf(leht->harjutus)),
+                static_cast<int>(leht->eventType()),
                                        ""  // TODO to be implemented
                                    });
         }
@@ -1194,49 +1194,50 @@ void Protokollitaja::eksportXLS()
                     sheet->label(5, 3, "S.a.")->font(underlineFont);
                     sheet->label(5, 4, "Klubi")->font(underlineFont);
 
-                    if(leht->harjutus == tr("40l Õhupüss") || leht->harjutus == tr("40l Õhupüstol")){
+                    if(leht->eventType() == QualificationEvents::EventType::AirRifle40 || leht->eventType() == QualificationEvents::EventType::AirPistol40){
                         sheet->merge(5, 5, 5, 8);
                         sheet->label(5, 5, "Seeriad")->font(underlineFont);
-                    }else if(leht->harjutus == tr("60l Õhupüss") || leht->harjutus == tr("60l Õhupüstol")
-                             || leht->harjutus == tr("60l Lamades") || leht->harjutus == tr("60l Vabapüstol")){
+                    }else if(leht->eventType() == QualificationEvents::EventType::AirRifle60 || leht->eventType() == QualificationEvents::EventType::AirPistol60
+                             || leht->eventType() == QualificationEvents::EventType::RifleProne60_50m || leht->eventType() == QualificationEvents::EventType::FreePistol60_50m
+                             || leht->eventType() == QualificationEvents::EventType::RifleProne60_300m){
                         sheet->merge(5, 5, 5, 10);
                         sheet->label(5, 5, "Seeriad")->font(underlineFont);
-                    }else if(leht->harjutus == "3x20l Standard"){
+                    }else if(leht->eventType() == QualificationEvents::EventType::Rifle3x20_50m || leht->eventType() == QualificationEvents::EventType::Rifle3x20_300m){
                         sheet->merge(5, 5, 5, 7);
                         sheet->label(5, 5, tr("Põlvelt").toStdString())->font(underlineFont);
                         sheet->merge(5, 8, 5, 10);
-                        sheet->label(5, 8, "Lamades")->font(underlineFont);
+                        sheet->label(5, 8, tr("Lamades").toStdString())->font(underlineFont);
                         sheet->merge(5, 11, 5, 13);
                         sheet->label(5, 11, tr("Püsti").toStdString())->font(underlineFont);
-                    }else if(leht->harjutus == "3x40l Standard"){
+                    }else if(leht->eventType() == QualificationEvents::EventType::Rifle3x40_50m || leht->eventType() == QualificationEvents::EventType::Rifle3x40_300m){
                         sheet->merge(5, 5, 5, 9);
                         sheet->label(5, 5, tr("Põlvelt").toStdString())->font(underlineFont);
                         sheet->merge(5, 10, 5, 14);
-                        sheet->label(5, 10, "Lamades")->font(underlineFont);
+                        sheet->label(5, 10, tr("Lamades").toStdString())->font(underlineFont);
                         sheet->merge(5, 15, 5, 19);
                         sheet->label(5, 15, tr("Püsti").toStdString())->font(underlineFont);
-                    }else if(leht->harjutus == tr("30+30l Spordipüstol")){
+                    }else if(leht->eventType() == QualificationEvents::EventType::Pistol_25m){
                         sheet->merge(5, 5, 5, 8);
                         sheet->label(5, 5, tr("Ringmärk").toStdString())->font(underlineFont);
                         sheet->merge(5, 9, 5, 12);
                         sheet->label(5, 9, tr("Ilmuv märk").toStdString())->font(underlineFont);
-                    }else if(leht->harjutus == tr("Olümpiakiirlaskmine")){
+                    }else if(leht->eventType() == QualificationEvents::EventType::RapidFirePistol){
                         sheet->merge(5, 5, 5, 8);
-                        sheet->label(5, 5, "I pool")->font(underlineFont);
+                        sheet->label(5, 5, tr("I pool").toStdString())->font(underlineFont);
                         sheet->merge(5, 9, 5, 12);
-                        sheet->label(5, 9, "II pool")->font(underlineFont);
-                    }else if(leht->harjutus == tr("20+20+20l Spordipüstol")){
+                        sheet->label(5, 9, tr("II pool").toStdString())->font(underlineFont);
+                    }else if(leht->eventType() == QualificationEvents::EventType::StandardPistol){
                         sheet->merge(5, 5, 5, 7);
                         sheet->label(5, 5, "150\"")->font(underlineFont);
                         sheet->merge(5, 8, 5, 10);
                         sheet->label(5, 8, "20\"")->font(underlineFont);
                         sheet->merge(5, 11, 5, 13);
                         sheet->label(5, 11, "10\"")->font(underlineFont);
-                    }else if(leht->harjutus == "30+30l Metssiga"){
+                    }else if(leht->eventType() == QualificationEvents::EventType::RunningTarget_50m || leht->eventType() == QualificationEvents::EventType::RunningTarget_10m){
                         sheet->merge(5, 5, 5, 8);
-                        sheet->label(5, 5, "Aeglane jooks")->font(underlineFont);
+                        sheet->label(5, 5, tr("Aeglane jooks").toStdString())->font(underlineFont);
                         sheet->merge(5, 9, 5, 12);
-                        sheet->label(5, 9, "Kiire jooks")->font(underlineFont);
+                        sheet->label(5, 9, tr("Kiire jooks").toStdString())->font(underlineFont);
                     }
                 }
                 for(int i = 0; i < 15; i++)
@@ -1511,7 +1512,7 @@ void Protokollitaja::finaaliFail()
                     seeFail,
                     m_competitionName,
                     seeLeht->ekraaniNimi,
-                    m_settings.eventNames.indexOf(seeLeht->harjutus),
+                    seeLeht->eventType(),
                     this
                     );
         finalsFileExport->setRelay(10 + seeLeht->leheIndeks);
@@ -1721,8 +1722,8 @@ void Protokollitaja::kirjutaFail(QString failiNimi)
                 qDebug() << "leht->laskudeArv: " << leht->laskudeArv;
             #endif
 
-            tabJson["weaponType"] = leht->relv;
-            tabJson["event"] = leht->harjutus/*.toUtf8()*/;
+                tabJson["weaponType"] = leht->m_targetType;
+            tabJson["eventType"] = leht->eventType()/*.toUtf8()*/;
             tabJson["decimals"] = leht->kumnendikega;
             tabJson["toBeShown"] = leht->naidata;
             tabJson["minTime"] = leht->minTime();
@@ -2383,200 +2384,6 @@ void Protokollitaja::loeSeaded()
     }
 }
 
-//void Protokollitaja::loeSiusDatast()
-//{
-////    QMessageBox::information(this, "SiusData", QString("Lasu nr siusis: %1\nLasu väärtus siusis: %2").arg(lasuNrSiusis).arg(lasuVSiusis), QMessageBox::Ok);
-////    QMessageBox::critical(this, "Teade", "Seda funktsiooni ei ole veel loodud!", QMessageBox::Ok);
-////    return;
-//#ifdef QT_DEBUG
-//        qDebug() << "Esimene";
-//#endif
-//    if(siusDataSocket == 0){
-//        QMessageBox::critical(this, tr("Viga"), "Ühendus SiusData'ga on loomata!", QMessageBox::Ok);
-//        return;
-//    }
-//    if(siusDataSocket->bytesAvailable() > 5 || siusiBuffer.length() > 0){  //Kui on liiga vähe infot, ei ole mõtet lugeda
-//        progress->setLabelText(tr("SiusDatast andmete vastuvõtt..."));
-////        progress->show(); //Seda ei ole iga kord vaja, muutub tüütuks
-
-//        while(siusDataSocket->bytesAvailable() > 2){    //Kuni on uut infot, siis lugeda see puhvrisse
-////        QDataStream in(siusDataSocket);
-//        //QString info;
-////        siusiBuffer.append(siusDataSocket->readLine());  //Rea algus 5f, lõpp 0d 0a
-//          siusiBuffer.append(siusDataSocket->readAll());  //Rea algus 5f, lõpp 0d 0a
-//          statusBar()->showMessage(tr("Saabus info, buffer.length(): %1").arg(siusiBuffer.length()), 2000);
-////        in >> info;
-////        QMessageBox::information(this, "SiusData", QString("Saabus info:\n%1").arg(siusiBuffer), QMessageBox::Ok);
-//#ifdef QT_DEBUG
-//        qDebug() << "Saabus info: " << siusiBuffer;
-//#endif
-////    }
-////    QFile file("siusData.txt");
-////    if (file.open(QFile::ReadOnly)){
-////        siusDatast = file.readAll();
-////        QString rida;
-//        }
-
-////        logi->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append); //Saabunud muudatuste ja laskude logifail
-////        QTextStream logiValja(logi);
-
-//        while(siusiBuffer.contains('_')){
-
-//            progressTimer->start();
-
-//            if(siusLogi->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){ //Saabunud võrguliikluse logi
-//                QTextStream valja(siusLogi);
-////               valja << siusDatast;
-////                valja << siusiBuffer;
-////              valja << siusiBuffer.left(siusiBuffer.indexOf((QChar)10) + QString((QChar)10).length());
-//                valja << siusiBuffer.left(siusiBuffer.indexOf('_', 1));
-//                siusLogi->close();
-//            }
-
-//            logiValja << QTime::currentTime().toString("#hh:mm:ss") << " #buffer.length(): " << siusiBuffer.length() << "    buffer.indexOf('_'): " << siusiBuffer.indexOf('_', 1) << "\n";
-
-////            if(siusDatast.indexOf(13, 0) == -1) return;    //Ei ole terve rida kohale jõudnud
-//            QString rida = "";
-//            if(/*!siusiBuffer.contains((QChar)10) || */siusiBuffer.indexOf('_', 1) == -1){
-//                logiValja << "#clear()\n";
-//                rida = QString("%1").arg(siusiBuffer);
-//                siusiBuffer.clear();
-////                return;  //Rea lõppu ei ole, järelikult ei ole terve rida kohale jõudnud, siia ei tohiks tegelikult jõuda
-//            }else{
-////            QString rida = siusiBuffer.left(siusiBuffer.indexOf((QChar)10) + QString((QChar)10).length());
-//                rida = siusiBuffer.left(siusiBuffer.indexOf('_', 1));
-//                siusiBuffer.remove(0, siusiBuffer.indexOf('_', 1));    //Loetud rea eemaldamine
-//            }
-
-//            if(!rida.contains('_')){
-//                logiValja << "#break\n";
-//                break; //Et mõttetu reaga edasi ei mindaks
-//            }
-//            logiValja << "#rida: " << rida;
-
-////            siusiBuffer.remove(0, siusiBuffer.indexOf((QChar)10) + QString((QChar)10).length());    //Loetud rea eemaldamine
-
-//        //Leiame laskuri, kelle rida praegu just saabus:
-//            Laskur *seeLaskur = 0;  //Laskur, kelle rida praegu töödeldakse
-//            Leht* leht = 0;
-//            QStringList read = rida.split(';');
-
-//            if(rida.startsWith("_PRCH") || rida.startsWith("_GRPH") || rida.startsWith("_SHOT") || rida.startsWith("_TOTL")){
-//                for(int i = 0; i < tabWidget->count(); i++){
-//                    leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
-//                    for(int j = 0; j < leht->laskurid.count(); j++){
-//                        if(read[3].toInt() == leht->laskurid[j]->id){
-//                            seeLaskur = leht->laskurid[j];
-//                            logiValja << "#seeLaskur: " << seeLaskur->id << " " << seeLaskur->eesNimi->text() << " " << seeLaskur->perekNimi->text() << "\n";
-//                            j = leht->laskurid.count(); //Loop'ist väljumiseks
-//                            i = tabWidget->count(); //Loop'ist väljumiseks
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-
-//            if(seeLaskur == 0 || leht == 0)
-//                break;  //Järelikult ei ole huvitav rida
-
-//            if(rida.startsWith("_GRPH")){
-//                if(seeLaskur->eelmineRida.startsWith("_PRCH")){
-//                    if(seeLaskur->voistlus && (!leht->harjutus.contains("Lamades") || !leht->harjutus.contains("Õhupüss") || !leht->harjutus.contains("Õhupüstol") || !leht->harjutus.contains("Vabapüstol") || !leht->harjutus.contains("Muu"))){
-//                        seeLaskur->mitmesVoistlus++;  //Kui on proovilasud või ainult üks võistlus, ei ole mõtet riskida, et mingil põhjusel mitmesVoistlus suureneb
-//                    }
-//                    seeLaskur->voistlus = false;    //Tegu on proovilaskudega
-//                    logiValja << "#GRPH: proovilasud: " << seeLaskur->id << " " << seeLaskur->eesNimi->text() << " " << seeLaskur->perekNimi->text() << "\n";
-//                    logiValja << "#GRPH: mitmesVoistlus = " << seeLaskur->mitmesVoistlus;
-//                }else{
-//                    seeLaskur->voistlus = true; //Kui eelmine rida ei alga _PRCH'ga, siis on tegu võistluslaskudega
-//                    logiValja << "#GRPH: algavad võistluslasud: " << seeLaskur->id << " " << seeLaskur->eesNimi->text() << " " << seeLaskur->perekNimi->text() << "\n";
-//                }
-//            }else if(rida.startsWith("_SHOT") && seeLaskur->voistlus){   //Võistluslasu rida
-//                if(read.count() < 4){
-//                    logiValja << "\n#viga!: read lõhki! read.count() < 4\n";
-//                    break;
-//                }
-//                if(read.count() <= lasuNrSiusis){
-//                    logiValja << "\n#viga!: read lõhki! read.count() < lasuNrSiusis = " << lasuNrSiusis << "\n";
-//                    break;
-//                }
-//                logiValja << "#" << read[3] << ": " << seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm + read[lasuNrSiusis].toInt() << ". Lask\n";
-//                logiValja << "#SHOT: eelmineRida: " << seeLaskur->eelmineRida;
-//                logiValja << "#SHOT: buffer: " << siusiBuffer;
-//#ifdef QT_DEBUG
-//                qDebug() << "Read[3]: " << read[3] << ", rida: " << siusiBuffer << "QString((QChar)10).length() = " << QString((QChar)10).length();
-//                //qDebug() << "Eelminerida[0]: " << eelmineRida[0];
-//#endif
-
-//                if(seeLaskur->seeriateArv > ((seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10) && seeLaskur->lasud[seeLaskur->seeriateArv - 1][seeLaskur->laskudeArv - 1]->getILask() < 0){
-////Kui viimase lasu kast on täis, võib arvata, et tulemused on loetud ja vigade vältimiseks on parem neid mitte üle lugeda.
-//                    if(seeLaskur->lasud.count() > (seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10 && seeLaskur->lasud[0].count() > (read[lasuNrSiusis].toInt() - 1) % 10){ //Kontroll kas laskude seeriate arv ning laskude arv ühes seerias on piisav
-//                        if(read[11].toInt() == 0){  //Kui [11] on 0, siis järelikult loetakse komakohtadega ja lasu väärtus on [10]'s, kui ei ole 0, siis loetakse täisarvudega
-//                            seeLaskur->lasud[(seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10][(read[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(read[10]);
-//                        }else seeLaskur->lasud[(seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10][(read[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(read[11]);
-////                                     leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(eelmisedRead[lasuVSiusis]);
-//                        seeLaskur->lasud[(seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10][(read[lasuNrSiusis].toInt() - 1) % 10]->setX(read[14]);
-//                        seeLaskur->lasud[(seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10][(read[lasuNrSiusis].toInt() - 1) % 10]->setY(read[15]);
-//                        seeLaskur->liida();
-//                        muudaSalvestamist();
-
-//                        logiValja << "#" << seeLaskur->eesNimi->text() << " " << seeLaskur->perekNimi->text() << " lask 1 = " << seeLaskur->lasud[(seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10][(read[lasuNrSiusis].toInt() - 1) % 10]->getFLask() << "\n";
-//                    }else logiValja << "\n#viga!: laskur lõhki! (seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10 = " << (seeLaskur->mitmesVoistlus * seeLaskur->vSummadeSamm * 10 + read[lasuNrSiusis].toInt() - 1) / 10 << ", (read[lasuNrSiusis].toInt() - 1) % 10 = " << (read[lasuNrSiusis].toInt() - 1) % 10 << "\n";
-//                }
-
-//            }/*else if(rida.startsWith("_TOTL")){   //Tulemuse rida, kui seeria ei ole 0, on tegu võistluslasuga
-//            logiValja << "#TOTL: rida: " << rida;
-//            logiValja << "#TOTL: buffer: " << siusiBuffer;
-
-//            if(read.count() > 12){
-//                if(read[12] != "0"){   //Kui tegu on proovilasuga, on see 0, kui võistluslasuga, siis on seal seeria summa
-//                    logiValja << "#Võistluslask: rida: " << rida;
-//                    logiValja << "#Võistluslask: eelmineRida: " << eelmineRida;
-
-//                    QStringList eelmisedRead = eelmineRida.split(';');
-//                    if(eelmisedRead.count() > 15 && eelmisedRead.count() > lasuNrSiusis){
-//                        for(int i = 0; i < tabWidget->count(); i++){
-//                            Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
-//                            for(int j = 0; j < leht->laskurid.count(); j++){ //Kuna eelmine rida oli juba võistluslask, on vaja see kellelegi lisada
-//                                if(read[3].toInt() == leht->laskurid[j]->id && leht->seeriateArv > ((eelmisedRead[lasuNrSiusis].toInt() - 1) / 10) && eelmineRida.startsWith("_SHOT") && leht->laskurid[j]->lasud[leht->seeriateArv - 1][leht->laskurid[j]->laskudeArv - 1]->getILask() < 0){
-//                                    //Kui viimase lasu kast on täis, võib arvata, et tulemused on loetud ja vigade vältimiseks on parem neid mitte üle lugeda.
-//                                    if(leht->laskurid[j]->lasud.count() > (eelmisedRead[lasuNrSiusis].toInt() - 1) / 10 && leht->laskurid[j]->lasud[0].count() > (eelmisedRead[lasuNrSiusis].toInt() - 1) % 10){
-//                                        if(eelmisedRead[11].toInt() == 0){  //Kui [11] on 0, siis järelikult loetakse komakohtadega ja lasu väärtus on [10]'s, kui ei ole 0, siis loetakse täisarvudega
-//                                            leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(eelmisedRead[10]);
-//                                        }else leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(eelmisedRead[11]);
-////                                 leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->set10Lask(eelmisedRead[lasuVSiusis]);
-//                                        leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->setX(eelmisedRead[14]);
-//                                        leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->setY(eelmisedRead[15]);
-//                                        leht->laskurid[j]->liida();
-//                                        muudaSalvestamist();
-//                                        logiValja << "#" << leht->laskurid[j]->eesNimi->text() << " " << leht->laskurid[j]->perekNimi->text() << " lask 1 = " << leht->laskurid[j]->lasud[(eelmisedRead[lasuNrSiusis].toInt() - 1) / 10][(eelmisedRead[lasuNrSiusis].toInt() - 1) % 10]->getFLask() << "\n";
-//                                        i = tabWidget->count(); //Kuna tulemus sai sisestatud, ei ole mõtet rohkem lehti läbi kammida
-//                                        j = leht->laskurid.count();
-//#ifdef QT_DEBUG
-//                                        qDebug() << "read[6]: " << read[12] << "voistlus = true" << "eelmisedRead[10]: " << eelmisedRead[10] << "\n\n";
-//#endif
-//                                    }else logiValja << "\n#viga!: laskur lõhki! (eelmisedRead[lasuNrSiusis].toInt() - 1) / 10 = " << (eelmisedRead[lasuNrSiusis].toInt() - 1) / 10 << ", (eelmisedRead[lasuNrSiusis].toInt() - 1) % 10 = " << (eelmisedRead[lasuNrSiusis].toInt() - 1) % 10 << "\n";
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }*/
-//            if(seeLaskur != 0){
-//                seeLaskur->eelmineRida = rida;
-//                seeLaskur = 0;  //Et uuel ringil ikka laskurit uuesti kontrollitaks
-//            }
-
-//            logiValja << "#lõpp\n";
-//        }
-//    }
-//    if(siusiBuffer.length() > 0){   //Kui puhver ei ole tühi, aga millegipärast tuli loopist välja, siis käivitada funktsioon uuesti mõne aja pärast
-//        logiValja << "#buffer.length(): " << siusiBuffer.length() << ", uuele ringile minek" << "\n";
-//        QTimer::singleShot(170, this, SLOT(loeSiusDatast()));
-//    }
-//}
-
 void Protokollitaja::margi()
 {
         if(tabWidget->count() < 1) return;
@@ -2625,27 +2432,19 @@ void Protokollitaja::muudaTab(const QModelIndex &indeks)
                 break;
         }
         case 5: {
-                QStringList list;
                 int indeks = 0;
-                list << "Muu" << tr("Õhupüss") << tr("Õhupüstol") << tr("Sportpüss")
-                        << tr("Spordipüstol") << tr("Muu püss") << tr("Muu püstol");
-                for(int i = 0; i < list.count(); i++)
-                    if(list.at(i) == seaded->ui.sakid->currentItem()->text(5))
+                for(int i = 0; i < TargetTypes::targetNames().size(); i++)
+                    if(TargetTypes::targetNames().at(i) == seaded->ui.sakid->currentItem()->text(5))
                         indeks = i;
-                uusNimi = QString("%1").arg(QInputDialog::getItem(this, "Valige uus relvaliik", "Relv:", list,
-                        indeks, false, &ok));
+                uusNimi = QInputDialog::getItem(this, tr("Valige uus märkleht"), tr("Märkleht:"), TargetTypes::targetNames(), indeks, false, &ok);
                 break;
         }
         case 6: {
-                QStringList list;
                 int indeks = 0;
-                list << "Muu";
-                for(int i = 0; i < valik->ui.harjutus->count(); i++)
-                    list << valik->ui.harjutus->itemText(i);
-                for(int i = 0; i < list.count(); i++)
-                    if(list.at(i) == seaded->ui.sakid->currentItem()->text(6))
+                for(int i = 0; i < QualificationEvents::eventNames().count(); i++)
+                    if(QualificationEvents::eventNames().at(i) == seaded->ui.sakid->currentItem()->text(6))
                         indeks = i;
-                uusNimi = QInputDialog::getItem(this, "Sisestage uus harjutus", "Harjutus:", list, indeks, false, &ok);
+                uusNimi = QInputDialog::getItem(this, tr("Sisestage uus harjutus"), tr("Harjutus:"), QualificationEvents::eventNames(), indeks, false, &ok);
                 break;
         }
         }
@@ -2710,28 +2509,8 @@ void Protokollitaja::naitaSeaded()
                 if(leht->naidata)
                         item->setCheckState(4, Qt::Checked);
                 else item->setCheckState(4, Qt::Unchecked);
-                switch(leht->relv){
-                case Ohupuss :
-                    item->setText(5, tr("Õhupüss"));
-                    break;
-                case Ohupustol :
-                    item->setText(5, tr("Õhupüstol"));
-                    break;
-                case Sportpuss :
-                    item->setText(5, tr("Sportpüss"));
-                    break;
-                case Spordipustol :
-                    item->setText(5, tr("Spordipüstol"));
-                    break;
-                case Puss :
-                    item->setText(5, tr("Muu püss"));
-                    break;
-                case Pustol :
-                    item->setText(5, tr("Muu püstol"));
-                    break;
-                default :  item->setText(5, "Muu");
-                }
-                item->setText(6, leht->harjutus);
+                item->setText(5, TargetTypes::targetNames().at(leht->m_targetType));
+                item->setText(6, QualificationEvents::eventNames().at(leht->eventType()));
 
                 if(leht->kumnendikega)
                     item->setCheckState(7, Qt::Checked);
@@ -3884,7 +3663,7 @@ void Protokollitaja::readShotInfo(QString data, int socketIndex)
             thisCompetitor->lasud[seriesNo][j]->setNanoY(dataList.takeFirst());
             thisCompetitor->lasud[seriesNo][j]->setInnerTen(
                         Lask::calcIfInnerTen(
-                            Lask::TargetType(sheet->relv),
+                    Lask::TargetType(sheet->m_targetType),
                             thisCompetitor->lasud[seriesNo][j]->X(),
                             thisCompetitor->lasud[seriesNo][j]->Y()
                             )
@@ -3906,32 +3685,15 @@ void Protokollitaja::readSiusInfo(SiusShotData shotData)
     if(verbose)
         QTextStream(stdout) << "readSiusInfo()" << Qt::endl;
 
-//    for(QString row : lines){
-        //Search for competitor whose line was received:
     Laskur* thisCompetitor = nullptr;
     Leht* sheet = nullptr;
-//        QStringList rowParts = row.split(';');
-
-//        if(row.startsWith("_PRCH") || row.startsWith("_GRPH") || row.startsWith("_SHOT") || row.startsWith("_TOTL")){
         if(shotData.shot.isCompetitionShot()) // TODO: process and save also sighting shots
             for(int i = 0; i < tabWidget->count(); i++){
                 sheet = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
                 for(int j = 0; j < sheet->laskurid.count(); j++){
                     if(shotData.id == sheet->laskurid[j]->id && (shotData.socketIndex == sheet->laskurid[j]->siusConnectionIndex() || sheet->laskurid[j]->siusConnectionIndex() == -1)){ //To avoid different Sius connections reading into one competitor
                         thisCompetitor = sheet->laskurid[j];
-//                        static QStringList previousRowParts;
-//                        if(row.startsWith("_TOTL") && rowParts[3] == previousRowParts[3]){
-//                            SiusShotData siusShotData;
-//                            siusShotData.shotRow = previousRowParts;
-//                            siusShotData.totalRow = rowParts;
-//                            siusShotData.socketIndex = socketIndex;
-//                            siusShotData.shotFieldNoInSiusRow = lasuNrSiusis;
-//                            previousRowParts.clear();
                         thisCompetitor->readSiusShot(shotData);
-//                        } else if (row.startsWith("_SHOT")){
-//                            previousRowParts = rowParts;
-//                        }
-//                        thisCompetitor->setSiusConnectionIndex(socketIndex);
                         logiValja << "#thisCompetitor: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << "\n";
                         j = sheet->laskurid.count(); //To break out from all loops
                         i = tabWidget->count(); //To break out from all loops
@@ -3940,58 +3702,6 @@ void Protokollitaja::readSiusInfo(SiusShotData shotData)
                     }
                 }
             }
-//        }
-
-//        if(thisCompetitor != nullptr && sheet != nullptr){
-//            if(row.startsWith("_GRPH")){
-//                if(thisCompetitor->previousSiusRow().startsWith("_PRCH")){
-//                    if(thisCompetitor->isCompetitionStarted() && (!sheet->harjutus.contains("Lamades") || !sheet->harjutus.contains("Õhupüss") || !sheet->harjutus.contains("Õhupüstol") || !sheet->harjutus.contains("Vabapüstol") || !sheet->harjutus.contains("Muu"))){
-//                        thisCompetitor->nextCompetitionStage();  //If there are sighting shots or only one competition, no point to risk with increasing competition stage
-//                    }
-//                    thisCompetitor->setCompetitionStarted(false);    //These are sighting shots
-//                    logiValja << "#GRPH: proovilasud: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << "\n";
-//                    logiValja << "#GRPH: competitionStage = " << thisCompetitor->competitionStage();
-//                }else{
-//                    thisCompetitor->setCompetitionStarted(true); //If previous row does not start with _PRCH, then these are competition shots
-//                    logiValja << "#GRPH: algavad võistluslasud: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << "\n";
-//                }
-//            }else if(row.startsWith("_SHOT") && thisCompetitor->isCompetitionStarted()){   //Competition shot row
-//                if(rowParts.count() < 4){
-//                    logiValja << "\n#viga!: rowParts lõhki! rowParts.count() < 4\n";
-//                    break;
-//                }else if(rowParts.count() <= lasuNrSiusis){
-//                    logiValja << "\n#viga!: rowParts lõhki! rowParts.count() < lasuNrSiusis = " << lasuNrSiusis << "\n";
-//                    break;
-//                }
-
-//                logiValja << "#" << rowParts[3] << ": " << thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm + rowParts[lasuNrSiusis].toInt() << ". Lask\n";
-//                logiValja << "#SHOT: previousSiusRow(): " << thisCompetitor->previousSiusRow();
-////                Lask newShot(row);
-
-//                int seriesIndex = (thisCompetitor->competitionStage() * thisCompetitor->vSummadeSamm * 10 + rowParts[lasuNrSiusis].toInt() - 1) / 10;
-//                int shotIndex = (rowParts[lasuNrSiusis].toInt() - 1) % 10;
-
-//                //If competitor's last shot has data in it, then probably these results have already been read and it is better not to read them again, to avoid mistakes
-//                if(thisCompetitor->seeriateArv > seriesIndex
-//                        && thisCompetitor->lasud[thisCompetitor->seeriateArv - 1][thisCompetitor->laskudeArv - 1]->getILask() < 0){
-//                    //Check if series number and number of shots in each series is big enough
-//                    if(thisCompetitor->lasud.count() > seriesIndex && thisCompetitor->lasud[0].count() > shotIndex){
-//                        thisCompetitor->lasud[seriesIndex][shotIndex]->setSiusShot(row);
-//                        thisCompetitor->liida();
-//                        muudaSalvestamist();
-
-//                        logiValja << "#" << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << " lask 1 = " << thisCompetitor->lasud[seriesIndex][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->getSLask() << "\n";
-//                    }else
-//                        logiValja << "\n#viga!: laskur lõhki! seriesIndex = " << seriesIndex << ", (rowParts[lasuNrSiusis].toInt() - 1) % 10 = " << (rowParts[lasuNrSiusis].toInt() - 1) % 10 << "\n";
-//                }
-
-//            }
-
-//            thisCompetitor->setPreviousSiusRow(row);
-
-//            logiValja << "#lõpp\n";
-//        }
-//    }
 }
 
 void Protokollitaja::reasta()   //Tulemuste järgi reastamine
@@ -4264,7 +3974,7 @@ void Protokollitaja::taiendaAndmebaas()
 //                static bool esimene = true;
                 for(int i = 0; i < tabWidget->count(); i++){
                         Leht* seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
-                        if(seeLeht->relv == Ohupuss || seeLeht->relv == Sportpuss || seeLeht->relv == Puss)
+            if(TargetTypes::targetData(seeLeht->m_targetType).isRifleDB)
                                 for(int j = 0; j < seeLeht->laskurid.count(); j++){
                                         bool olemas = false;
                                         int mitukorda = 0;
@@ -4331,7 +4041,7 @@ void Protokollitaja::taiendaAndmebaas()
 //                static bool esimene = true;
                 for(int i = 0; i < tabWidget->count(); i++){
                         Leht* seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
-                        if(seeLeht->relv == Ohupustol || seeLeht->relv == Spordipustol || seeLeht->relv == Pustol)
+            if(!TargetTypes::targetData(seeLeht->m_targetType).isRifleDB)
                                 for(int j = 0; j < seeLeht->laskurid.count(); j++){
                                         bool olemas = false;
                                         for(int i = 0; i < andmebaas.nimekiriPustol.count(); i++){
@@ -4545,11 +4255,11 @@ void Protokollitaja::uuendaLehelugejat(QString nimi)
                 for(int j = lehelugejaLeht->seeriateArv; j < lehelugejaAken->seeriad.count(); j++)
                     lehelugejaAken->seeriad[j]->hide();
                 lehelugejaAken->seeriad[k]->setFocus();
-                if(lehelugejaLeht->harjutus.contains(tr("Õhupüss")))
+                if(QualificationEvents::eventData(lehelugejaLeht->eventType()).targetType == TargetTypes::AirRifle)
                     lehelugejaAken->m_ui.leheCombo->setCurrentIndex(0);
-                else if(lehelugejaLeht->harjutus.contains(tr("Õhupüstol")))
+                else if(QualificationEvents::eventData(lehelugejaLeht->eventType()).targetType == TargetTypes::AirPistol)
                     lehelugejaAken->m_ui.leheCombo->setCurrentIndex(1);
-                else if(lehelugejaLeht->harjutus.contains("Standard", Qt::CaseInsensitive) || lehelugejaLeht->harjutus.contains("Lamades", Qt::CaseInsensitive))
+                else if(QualificationEvents::eventData(lehelugejaLeht->eventType()).targetType == TargetTypes::SmallboreRifle)
                     lehelugejaAken->m_ui.leheCombo->setCurrentIndex(2);
                 //laskude arv lehes
                 if(!lehelugejaLeht->laskurid[i]->sifriAlgus->text().isEmpty() && !lehelugejaLeht->
@@ -4633,11 +4343,11 @@ void Protokollitaja::uuendaLehelugejatSifriga(int siffer)
                                 lehelugejaAken->seeriad[j]->hide();
                             lehelugejaAken->seeriad[k]->selectAll();
                             lehelugejaAken->seeriad[k]->setFocus();
-                            if(leht->harjutus.contains(tr("Õhupüss")))
+                            if(QualificationEvents::eventData(lehelugejaLeht->eventType()).targetType == TargetTypes::AirRifle)
                                 lehelugejaAken->m_ui.leheCombo->setCurrentIndex(0);
-                            else if(leht->harjutus.contains(tr("Õhupüstol")))
+                            else if(QualificationEvents::eventData(lehelugejaLeht->eventType()).targetType == TargetTypes::AirPistol)
                                 lehelugejaAken->m_ui.leheCombo->setCurrentIndex(1);
-                            else if(leht->harjutus.contains("Standard", Qt::CaseInsensitive) || leht->harjutus.contains("Lamades", Qt::CaseInsensitive))
+                            else if(QualificationEvents::eventData(lehelugejaLeht->eventType()).targetType == TargetTypes::SmallboreRifle)
                                 lehelugejaAken->m_ui.leheCombo->setCurrentIndex(2);
                             lehelugejaAken->m_ui.laskudeBox->setValue(laskuLehes);
                             lehelugejaAken->m_ui.kumnendikegaBox->setChecked(lehelugejaLeht->kumnendikega);
@@ -4675,7 +4385,7 @@ void Protokollitaja::uuendaLiikmeteNimekirja(int)
                         QString rida = leht->laskurid[i]->perekNimi->text().trimmed() + ", ";
                         rida.append(leht->laskurid[i]->eesNimi->text().trimmed() + ", ");
                         rida.append(leht->laskurid[i]->klubi->text().trimmed() + ", ");
-                        rida.append(leht->harjutus);
+                        rida.append(leht->ekraaniNimi);
                         lValik->ui.leheLaskurid->addItem(rida);
                 }
                 lValik->ui.leheLaskurid->setCurrentRow(0);
@@ -4737,20 +4447,20 @@ void Protokollitaja::uuendaSeaded()
                                 leht->naidata = false;
                         else leht->naidata = true;
                         if(seaded->ui.sakid->currentItem()->text(5) == tr("Õhupüss"))
-                                leht->relv = Ohupuss;
+                                leht->m_targetType = TargetTypes::AirRifle;
                         else if(seaded->ui.sakid->currentItem()->text(5) == tr("Õhupüstol"))
-                                leht->relv = Ohupustol;
+                                leht->m_targetType = TargetTypes::AirPistol;
                         else if(seaded->ui.sakid->currentItem()->text(5) == tr("Sportpüss"))
-                                leht->relv = Sportpuss;
+                                leht->m_targetType = TargetTypes::SmallboreRifle;
                         else if(seaded->ui.sakid->currentItem()->text(5) == tr("Spordipüstol"))
-                                leht->relv = Spordipustol;
+                                leht->m_targetType = TargetTypes::FreePistol;
                         else if(seaded->ui.sakid->currentItem()->text(5) == tr("Muu püss"))
-                                leht->relv = Puss;
+                                leht->m_targetType = TargetTypes::OtherRifle;
                         else if(seaded->ui.sakid->currentItem()->text(5) == tr("Muu püstol"))
-                                leht->relv = Pustol;
-                        else leht->relv = Muu;
-                        if(leht->harjutus != seaded->ui.sakid->currentItem()->text(6))
-                            leht->harjutus = seaded->ui.sakid->currentItem()->text(6);
+                                leht->m_targetType = TargetTypes::OtherPistol;
+                        else leht->m_targetType = TargetTypes::Other;
+                        if(leht->eventType() != QualificationEvents::fromString(seaded->ui.sakid->currentItem()->text(6)))
+                                leht->setEventType(QualificationEvents::fromString(seaded->ui.sakid->currentItem()->text(6)));
                         leht->kumnendikega = seaded->ui.sakid->currentItem()->checkState(7);
                         leht->setToBeUploaded(seaded->ui.sakid->currentItem()->checkState(8));
                 }
@@ -4778,7 +4488,7 @@ void Protokollitaja::uuendaVoistkondi() //Uuendadakse võistkondade tulemusi enn
                                             if(andmed->laskurid[b]->eesNimi->text().trimmed() == seeLeht->voistkonnad[i]->voistlejad[j]->eesNimi.trimmed()
                                                     && andmed->laskurid[b]->perekNimi->text().trimmed() == seeLeht->voistkonnad[i]->voistlejad[j]->perekNimi.trimmed()
                                                     && andmed->laskurid[b]->klubi->text().trimmed() == seeLeht->voistkonnad[i]->voistlejad[j]->klubi.trimmed()
-                                                    && andmed->harjutus == seeLeht->voistkonnad[i]->voistlejad[j]->harjutus){
+                                                    && andmed->ekraaniNimi == seeLeht->voistkonnad[i]->voistlejad[j]->harjutus){
                                                 seeLeht->voistkonnad[i]->voistlejad[j]->summa = andmed->laskurid[b]->getSumma().trimmed();
                                                 seeLeht->voistkonnad[i]->voistlejad[j]->silt->setText(seeLeht->voistkonnad[i]->voistlejad[j]->perekNimi.trimmed()
                                                                                                       + ": " + seeLeht->voistkonnad[i]->voistlejad[j]->summa);
@@ -4875,7 +4585,7 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
 //                        lehelugejaAken->seeriad[k]->selectAll();
 //                        lehelugejaAken->seeriad[k]->setFocus();
                         pakett.append(QString("%1;").arg(k));
-                        pakett.append(leht->harjutus + ";");
+                        pakett.append(QString("%1;").arg(leht->m_targetType));
 //                        if(leht->harjutus.contains(tr("Õhupüss")))
 //                            lehelugejaAken->m_ui.leheCombo->setCurrentIndex(0);
 //                        else if(leht->harjutus.contains(tr("Õhupüstol")))
@@ -5083,10 +4793,16 @@ void Protokollitaja::uusTab()
                 }
                 leheIndeks++;
                 voibSulgeda = false;
-                if((valik->relv == Ohupuss || valik->relv == Sportpuss || valik->relv == Puss) && abi != Muu)
-                        a = Ohupuss;
-                else if((valik->relv == Ohupustol || valik->relv == Spordipustol || valik->relv == Pustol) && abi != Muu)
-                        a = Ohupustol;
+                if((valik->m_targetType == TargetTypes::AirRifle ||
+                    valik->m_targetType == TargetTypes::SmallboreRifle ||
+                    valik->m_targetType == TargetTypes::OtherRifle) &&
+                    abi != (int)TargetTypes::Other)
+                        a = (int)TargetTypes::AirRifle;
+                else if((valik->m_targetType == TargetTypes::AirPistol ||
+                    valik->m_targetType == TargetTypes::FreePistol ||
+                    valik->m_targetType == TargetTypes::OtherPistol) &&
+                    abi != (int)TargetTypes::Other)
+                        a = (int)TargetTypes::AirPistol;
                 bool voistk = false;
                 if(valik->ui.indBox->currentIndex() == 0)
                         voistk = false;
@@ -5101,7 +4817,7 @@ void Protokollitaja::uusTab()
                 individualistid->jalgijad++;*/
                 QScrollArea *area = new QScrollArea(tabWidget);
                 area->setWidgetResizable(true);
-                area->setWidget(new Leht(&andmebaas, valik->ui.seeriateArv->value(), valik->ui.vSummadeArv->value(), a, &kirjutusAbi, valik->ui.nimiTulAknas->text(), valik->relv, valik->harjutus, kumnendikega, &m_ranking, tabWidget, voistk, lValik, leheIndeks, valik->ui.laskudeArv->value()));
+                area->setWidget(new Leht(&andmebaas, valik->ui.seeriateArv->value(), valik->ui.vSummadeArv->value(), a, &kirjutusAbi, valik->ui.nimiTulAknas->text(), valik->m_targetType, valik->eventType(), kumnendikega, &m_ranking, tabWidget, voistk, lValik, leheIndeks, valik->ui.laskudeArv->value()));
                 int newTabIndex = tabWidget->addTab(area, valik->ui.sakiNimi->text());
                 tabWidget->setCurrentIndex(newTabIndex);
                 connect(dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget())

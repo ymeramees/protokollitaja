@@ -162,46 +162,6 @@
      <property name="toolTip">
       <string/>
      </property>
-     <item>
-      <property name="text">
-       <string>M</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>N</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>MJ</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>NJ</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>P</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>T</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>MV</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>NV</string>
-      </property>
-     </item>
     </widget>
    </item>
    <item row="3" column="0">

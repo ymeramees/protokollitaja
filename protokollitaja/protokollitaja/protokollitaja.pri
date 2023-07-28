@@ -29,7 +29,10 @@ HEADERS += $$PWD/lisalaskudeaken.h \
     $$PWD/../common/src/uhendumiseaken.h \
     $$PWD/../common/src/siusdataconnections.h \
     $$PWD/../common/src/siusdataconnection.h \
-    $$PWD/../common/src/siusshotdata.h
+    $$PWD/../common/src/siusshotdata.h \
+    $$PWD/../common/src/qualificationevents.h \
+    $$PWD/../common/src/targettypes.h \
+    $$PWD/../common/src/ageclasses.h
 SOURCES += $$PWD/lisalaskudeaken.cpp \
     $$PWD/liikmetevalikkast.cpp \
     $$PWD/voistkond.cpp \
@@ -56,7 +59,10 @@ SOURCES += $$PWD/lisalaskudeaken.cpp \
     $$PWD/../common/src/lask.cpp \
     $$PWD/../common/src/uhendumiseaken.cpp \
     $$PWD/../common/src/siusdataconnections.cpp \
-    $$PWD/../common/src/siusdataconnection.cpp
+    $$PWD/../common/src/siusdataconnection.cpp \
+    $$PWD/../common/src/qualificationevents.cpp \
+    $$PWD/../common/src/targettypes.cpp \
+    $$PWD/../common/src/ageclasses.cpp
 FORMS += $$PWD/lisalaskudeaken.ui \
     $$PWD/liikmetevalikkast.ui \
     $$PWD/importaken.ui \

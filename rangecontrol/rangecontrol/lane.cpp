@@ -155,7 +155,7 @@ void Lane::setSiusCompetitorRow(QString competitorRow)
 
 void Lane::setStartListCompetitorRow(QString competitorRow)
 {
-    // targetNo;id;firstName;lastName;club;discipline;decimals;numberOfShots
+    // targetNo;id;firstName;lastName;club;eventType;decimals;numberOfShots // TODO Lauri: Update to use new eventType
     QStringList parts = competitorRow.split(";");
     if(parts.count() >= 6){    // Make sure the row is not too short
         m_selected.setChecked(true);

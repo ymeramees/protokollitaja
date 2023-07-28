@@ -15,6 +15,7 @@
 
 #include "ui_importaken.h"
 #include "tabwidgetwithsettings.h"
+#include "qualificationevents.h"
 #include "kllfilerw.h"
 #include "laskur.h"
 #include "leht.h"
