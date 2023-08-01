@@ -1,0 +1,139 @@
+<!DOCTYPE QPH>
+<QPH language="en_US">
+<phrase>
+    <source>60l Õhupüss</source>
+    <target>10m Air Rifle 60 Shots</target>
+</phrase>
+<phrase>
+    <source>40l Õhupüss</source>
+    <target>10m Air Rifle 40 Shots</target>
+</phrase>
+<phrase>
+    <source>20l Õhupüss</source>
+    <target>10m Air Rifle 20 Shots</target>
+</phrase>
+<phrase>
+    <source>60l Õhupüstol</source>
+    <target>10m Air Pistol 60 Shots</target>
+</phrase>
+<phrase>
+    <source>40l Õhupüstol</source>
+    <target>10m Air Pistol 40 Shots</target>
+</phrase>
+<phrase>
+    <source>20l Õhupüstol</source>
+    <target>10m Air Pistol 20 Shots</target>
+</phrase>
+<phrase>
+    <source>3x40l Standard</source>
+    <target>50m Rifle 3x40 3 Positions</target>
+</phrase>
+<phrase>
+    <source>3x20l Standard</source>
+    <target>50m Rifle 3x20 3 Positions</target>
+</phrase>
+<phrase>
+    <source>3x10l Standard</source>
+    <target>50m Rifle 3x10 3 Positions</target>
+</phrase>
+<phrase>
+    <source>60l Lamades</source>
+    <target>50m 60 Shots Prone</target>
+</phrase>
+<phrase>
+    <source>30l Lamades</source>
+    <target>50m 30 Shots Prone</target>
+</phrase>
+<phrase>
+    <source>Olümpiakiirlaskmine</source>
+    <target>25m Rapid Fire Pistol</target>
+</phrase>
+<phrase>
+    <source>30+30l Spordipüstol</source>
+    <target>25m Pistol</target>
+</phrase>
+<phrase>
+    <source>30l Ringmärk</source>
+    <target>25m Precision Pistol 30 Shots</target>
+</phrase>
+<phrase>
+    <source>30l Siluett</source>
+    <target>25m Rapid Pistol 30 Shots</target>
+</phrase>
+<phrase>
+    <source>20+20+20l Spordipüstol</source>
+    <target>25m Standard Pistol</target>
+</phrase>
+<phrase>
+    <source>60l Vabapüstol</source>
+    <target>50m Free Pistol 60 Shots</target>
+</phrase>
+<phrase>
+    <source>30l Vabapüstol</source>
+    <target>50m Free Pistol 30 Shots</target>
+</phrase>
+<phrase>
+    <source>CISM püstol</source>
+    <target>25m CISM Pistol</target>
+</phrase>
+<phrase>
+    <source>300m 3x40l Standard</source>
+    <target>300m Rifle 3x40 3 Positions</target>
+</phrase>
+<phrase>
+    <source>300m 3x20l Standard</source>
+    <target>300m Rifle 3x20 3 Positions</target>
+</phrase>
+<phrase>
+    <source>300m 3x10l Standard</source>
+    <target>300m Rifle 3x10 3 Positions</target>
+</phrase>
+<phrase>
+    <source>300m 60l Lamades</source>
+    <target>300m 60 Shots Prone</target>
+</phrase>
+<phrase>
+    <source>300m 30l Lamades</source>
+    <target>300m 30 Shots Prone</target>
+</phrase>
+<phrase>
+    <source>30+30l Metssiga</source>
+    <target>50m 30+30 Running Target</target>
+</phrase>
+<phrase>
+    <source>20+20l Metssiga</source>
+    <target>50m 20+20 Running Target Mixed</target>
+</phrase>
+<phrase>
+    <source>30+30l Liikuv Märk</source>
+    <target>10m 30+30 Running Target</target>
+</phrase>
+<phrase>
+    <source>20+20l Liikuv Märk</source>
+    <target>10m 20+20 Running Target Mixed</target>
+</phrase>
+<phrase>
+    <source>Muu Õhupüss</source>
+    <target>Other Air Rifle</target>
+</phrase>
+<phrase>
+    <source>Muu Õhupüstol</source>
+    <target>Other Air Pistol</target>
+</phrase>
+<phrase>
+    <source>Muu sportpüss</source>
+    <target>Other Smallbore rifle</target>
+</phrase>
+<phrase>
+    <source>Muu 300m</source>
+    <target>Other 300m Rifle</target>
+</phrase>
+<phrase>
+    <source>Muu püstol</source>
+    <target>Other Pistol</target>
+</phrase>
+<phrase>
+    <source>Muu</source>
+    <target>Other</target>
+</phrase>
+</QPH>
