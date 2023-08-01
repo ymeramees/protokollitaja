@@ -3662,12 +3662,12 @@ void Protokollitaja::readShotInfo(QString data, int socketIndex)
             thisCompetitor->lasud[seriesNo][j]->setNanoX(dataList.takeFirst());
             thisCompetitor->lasud[seriesNo][j]->setNanoY(dataList.takeFirst());
             thisCompetitor->lasud[seriesNo][j]->setInnerTen(
-                        Lask::calcIfInnerTen(
-                    Lask::TargetType(sheet->m_targetType),
-                            thisCompetitor->lasud[seriesNo][j]->X(),
-                            thisCompetitor->lasud[seriesNo][j]->Y()
-                            )
-                        );
+                Lask::calcIfInnerTen(
+                    sheet->m_targetType,
+                    thisCompetitor->lasud[seriesNo][j]->X(),
+                    thisCompetitor->lasud[seriesNo][j]->Y()
+                    )
+                );
         }
     }
 

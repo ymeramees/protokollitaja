@@ -8,6 +8,7 @@ SOURCES += \
     $$PWD/inbandconnection.cpp \
     $$PWD/lane.cpp \
     $$PWD/../../common/src/lask.cpp \
+    $$PWD/../../common/src/qualificationevents.cpp \
     $$PWD/rangecontrol.cpp
 
 HEADERS += \
@@ -20,5 +21,6 @@ HEADERS += \
     $$PWD/programname.h \
     $$PWD/../../common/src/version.h \
     $$PWD/../../common/src/lask.h \
-    $$PWD/../../common/src/siusshotdata.h
+    $$PWD/../../common/src/siusshotdata.h \
+    $$PWD/../../common/src/qualificationevents.h
 

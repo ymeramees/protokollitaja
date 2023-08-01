@@ -68,7 +68,7 @@ RangeControl::~RangeControl()
 Lane* RangeControl::addLane(int targetNo, QString ip)
 {
     QTextStream(stdout) << "RangeControl::addLane, targetNo = " << targetNo << Qt::endl;
-    Lane *lane = new Lane(targetNo, m_disciplines, ip);
+    Lane *lane = new Lane(targetNo, QualificationEvents::eventNames(), ip);
     connect(lane, &Lane::commandIssued, this, &RangeControl::sendInit);
     m_lanes.insert(lane->target().toInt(), lane);
     foreach (Lane* lane, m_lanes) { // Remove all lanes
@@ -121,16 +121,7 @@ void RangeControl::allShotsDataReceived(int target, QString shotsData)
                 inbandList.insert(3, QString("%1").arg(shotNo));
                 Lask shot = Lask::fromInband(inbandList);
 
-                Lask::TargetType targetType;
-                if (laneOpt.value()->discipline().compare("airrifle", Qt::CaseInsensitive) == 0) {
-                    targetType = Lask::Ohupuss;
-                } else if (laneOpt.value()->discipline().compare("airpistol", Qt::CaseInsensitive) == 0) {
-                    targetType = Lask::Ohupustol;
-                } else
-                    targetType = Lask::Muu;
-
-                if (targetType != Lask::Muu)
-                    shot.setInnerTen(Lask::calcIfInnerTen(targetType, shot.X(), shot.Y()));
+                shot.setInnerTen(Lask::calcIfInnerTen(laneOpt.value()->event().targetType, shot.X(), shot.Y()));
                 shot.setCompetitionShot(true);
 
                 SiusShotData shotData;
@@ -304,8 +295,8 @@ void RangeControl::createMenus()
     unsetCheckedAllAct->setStatusTip(tr("Eemaldab linnukesed kõigilt radadelt"));
     connect(unsetCheckedAllAct, &QAction::triggered, this, &RangeControl::unsetCheckedAll);
 
-    QAction *setCheckedTargetTypeAct = new QAction(tr("Märklehe tüüp"), this);
-    setCheckedTargetTypeAct->setStatusTip(tr("Muudab kõigil märgitud radadel märklehe tüüpi"));
+    QAction *setCheckedTargetTypeAct = new QAction(tr("Harjutus"), this);
+    setCheckedTargetTypeAct->setStatusTip(tr("Muudab kõigil märgitud radadel harjutuse tüüpi"));
     connect(setCheckedTargetTypeAct, &QAction::triggered, this, &RangeControl::setTargetTypes);
 
     QAction *setCheckedShotsAct = new QAction(tr("Laskude arv"), this);
@@ -498,7 +489,7 @@ void RangeControl::initialize()
 
 void RangeControl::loadStartList(QStringList startList)
 {
-    // targetNo;id;firstName;lastName;club;eventType;decimals;numberOfShots // TODO Lauri: Update to use new eventType
+    // targetNo;id;firstName;lastName;club;eventType;decimals;numberOfShots
     for (QString row : startList) {
         QTextStream(stdout) << "RangeControl::loadStartList: Competitor row: " << row << Qt::endl;
         QStringList rowParts = row.split(";");
@@ -590,24 +581,13 @@ void RangeControl::newShot(int target, SiusShotData shotData)
 
         laneOpt.value()->setLastShotLabel(QString("(%1.): %2").arg(shotData.siusShotNo).arg(shotData.shot.getSLask()));
 
-        if (laneOpt.value()->discipline().compare("50m_3positions", Qt::CaseInsensitive) == 0) {   // For compatibility with Sius data
+        if (laneOpt.value()->event().seriesInSubtotal > 0) {   // For compatibility with Sius data
             shotData.siusShotNo = (shotData.siusShotNo - 1) % (laneOpt.value()->noOfShots().toInt() / 3) + 1;    // TODO make converting to int safer
         }
 
-        Lask::TargetType targetType;
-        QTextStream(stdout) << "Discipline: " << laneOpt.value()->discipline() << Qt::endl;
-        if (laneOpt.value()->discipline().compare("airrifle", Qt::CaseInsensitive) == 0) {
-            targetType = Lask::Ohupuss;
-        } else if (laneOpt.value()->discipline().compare("airpistol", Qt::CaseInsensitive) == 0) {
-            targetType = Lask::Ohupustol;
-        } else if (laneOpt.value()->discipline().compare("50m_rifle", Qt::CaseInsensitive) == 0 ||
-                laneOpt.value()->discipline().compare("50m_3positions", Qt::CaseInsensitive) == 0) {
-            targetType = Lask::Sportpuss;
-        } else
-            targetType = Lask::Muu;
+        QTextStream(stdout) << "Discipline: " << laneOpt.value()->event().name << Qt::endl;
 
-        if (targetType != Lask::Muu)
-            shotData.shot.setInnerTen(Lask::calcIfInnerTen(targetType, shotData.shot.X(), shotData.shot.Y()));
+        shotData.shot.setInnerTen(Lask::calcIfInnerTen(laneOpt.value()->event().targetType, shotData.shot.X(), shotData.shot.Y()));
         if (laneOpt.value()->inCompetition()) {
             shotData.shot.setCompetitionShot(true);
 //            shotData.siusShotNo = laneOpt.value()->increaseAndGetCurrentShotIndex();    // not needed actually
@@ -660,13 +640,13 @@ QJsonDocument RangeControl::readSettings()
         fileJson = QJsonDocument::fromJson(file.readAll());
         QJsonObject jsonObj = fileJson.object();
 
-        if (jsonObj["disciplines"].isArray()){
-            m_disciplines.clear();
-            QJsonArray array = jsonObj["disciplines"].toArray();
-            foreach(QJsonValue item, array){
-                m_disciplines.append(item.toString());
-            }
-        }
+//        if (jsonObj["disciplines"].isArray()){
+//            m_disciplines.clear();
+//            QJsonArray array = jsonObj["disciplines"].toArray();
+//            foreach(QJsonValue item, array){
+//                m_disciplines.append(item.toString());
+//            }
+//        }
 
         if(jsonObj.contains("windowXLocation") && jsonObj["windowXLocation"].isDouble() && jsonObj.contains("windowYLocation") && jsonObj["windowYLocation"].isDouble())
             //For some reason window frame is not included, so 9 and 36 need to be added. At least on Win7
@@ -699,9 +679,9 @@ void RangeControl::saveSettings()
 
         QJsonObject settingsJson;
 
-        if (m_disciplines.size() > 0){
-            settingsJson["disciplines"] = QJsonArray::fromStringList(m_disciplines);
-        }
+//        if (m_disciplines.size() > 0){
+//            settingsJson["disciplines"] = QJsonArray::fromStringList(m_disciplines);
+//        }
 
         settingsJson["windowXLocation"] = this->x();
         settingsJson["windowYLocation"] = this->y();
@@ -753,7 +733,27 @@ void RangeControl::sendInit(Lane *lane)
     QString message = "init\n";
     message.append(lane->firstName() + " " + lane->lastName() + "\n");
     message.append(lane->club() + "\n");
-    message.append(lane->discipline() + "\n");
+
+    QString inBandEvent;
+    QualificationEvents::QualificationEvent event = lane->event();
+    switch (event.targetType) {
+    case TargetTypes::AirRifle:
+        inBandEvent = "airrifle";
+        break;
+    case TargetTypes::AirPistol:
+        inBandEvent = "airpistol";
+        break;
+    case TargetTypes::SmallboreRifle:
+        if (event.seriesInSubtotal > 0)
+            inBandEvent = "50m_3positions";
+        else
+            inBandEvent = "50m_rifle";
+        break;
+    default: QMessageBox::critical(this, tr("Viga!"), tr("See versioon Range Control'ist ei tea, kuidas valitud harjutust (%1) InBandile saata!").arg(event.name));
+        return;
+    };
+
+    message.append(inBandEvent + "\n");
     message.append(" \n");
     message.append(lane->decimals() + "\n");
     message.append(lane->noOfShots());
@@ -821,7 +821,7 @@ void RangeControl::setCheckedAll()
 void RangeControl::setNumberOfShots()
 {
     bool wasAccepted = false;
-    int newNumber =  QInputDialog::getInt(this, tr("Sisesta laskude arv"), tr("Laskude arv: "), 60, 0, 120, 1, &wasAccepted);
+    int newNumber =  QInputDialog::getInt(this, tr("Sisesta laskude arv"), tr("Laskude arv:"), 60, 0, 120, 1, &wasAccepted);
     if (wasAccepted)
         foreach (Lane *lane, m_lanes) {
             if (lane->selected())
@@ -832,11 +832,11 @@ void RangeControl::setNumberOfShots()
 void RangeControl::setTargetTypes()
 {
     bool wasAccepted = false;
-    QString targetType = QInputDialog::getItem(this, tr("Vali märklehe tüüp"), tr("Märkleht: "), m_disciplines, 0, false, &wasAccepted);
+    QString eventName = QInputDialog::getItem(this, tr("Vali harjutus"), tr("Harjutus:"), QualificationEvents::eventNames(), 0, false, &wasAccepted);
     if (wasAccepted)
         foreach (Lane *lane, m_lanes) {
             if (lane->selected())
-                lane->setDiscipline(targetType);
+                lane->setDiscipline(eventName);
         }
 }
 

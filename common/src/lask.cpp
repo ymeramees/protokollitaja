@@ -103,28 +103,29 @@ int Lask::get10Lask() const
     return m_lask;
 }
 
-bool Lask::calcIfInnerTen(TargetType targetType, long x, long y)
+bool Lask::calcIfInnerTen(TargetTypes::TargetType targetType, long x, long y)
 {
     //Calculate shot center distance for determing inner tens:
     if(x != -999 && y != -999){
         long centerDistance = qRound(qSqrt(x*x + y*y));
 
         switch(targetType){
-        case Ohupuss : {
+        case TargetTypes::AirRifle : {
             if(centerDistance <= 2000)
                 return true;
             break;
         }
-        case Ohupustol : {
+        case TargetTypes::AirPistol : {
             if(centerDistance <= 4750)
                 return true;
             break;
         }
-        case Sportpuss : {
+        case TargetTypes::SmallboreRifle : {
             if(centerDistance <= 5300)
                 return true;
             break;
         }
+        default : return false;
         }
     }
     return false;

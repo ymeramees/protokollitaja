@@ -10,8 +10,10 @@
 #include <QSpinBox>
 #include <QTextStream>
 #include <QWidget>
+#include <QEvent>
 
 #include "siusshotdata.h"
+#include "qualificationevents.h"
 
 class Lane : public QWidget
 {
@@ -30,7 +32,7 @@ public:
 //    int increaseAndGetCurrentShotIndex();
     QString lastName();
     QString club();
-    QString discipline();
+    QualificationEvents::QualificationEvent event();
     QString decimals();
     QString noOfShots();
     bool selected();
@@ -47,14 +49,16 @@ public:
     void setTargetAndIp(int targetNo, QString ip);
 
 public slots:
-    void updateDecimals(QString);
-    void updateShots(QString);
+    void updateDecimals(int);
+    void updateShots(int);
 
 signals:
     void commandIssued(Lane *lane);
 
 private:
+    void changeEvent(QEvent *event);
     void init(QStringList disciplines);
+    void updateUi();
 //    QHBoxLayout hBox;
     bool m_inCompetition;
     int m_currentShotIndex = 0;

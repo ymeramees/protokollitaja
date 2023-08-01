@@ -11,6 +11,17 @@ Lane::Lane(int laneNo, QStringList disciplines, QString ip, QWidget *parent) : Q
     setTargetAndIp(laneNo, ip);
 }
 
+void Lane::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        qDebug() << "Language changed!";
+        updateUi();
+    }
+    else {
+        QWidget::changeEvent(event);
+    }
+}
+
 void Lane::clear()
 {
     m_idEdit.clear();
@@ -39,9 +50,9 @@ QString Lane::decimals()
         return "OFF";
 }
 
-QString Lane::discipline()
+QualificationEvents::QualificationEvent Lane::event()
 {
-    return m_diciplineBox.currentText();
+    return QualificationEvents::eventData(m_diciplineBox.currentIndex());
 }
 
 QString Lane::firstName()
@@ -94,8 +105,8 @@ void Lane::init(QStringList disciplines)
     m_diciplineBox.setToolTip(tr("Harjutus"));
     m_diciplineBox.addItems(disciplines);
     m_diciplineBox.setFocusPolicy(Qt::StrongFocus);
-    connect(&m_diciplineBox, &QComboBox::currentTextChanged, this, &Lane::updateDecimals);
-    connect(&m_diciplineBox, &QComboBox::currentTextChanged, this, &Lane::updateShots);
+    connect(&m_diciplineBox, &QComboBox::currentIndexChanged, this, &Lane::updateDecimals);
+    connect(&m_diciplineBox, &QComboBox::currentIndexChanged, this, &Lane::updateShots);
     hBox->addWidget(&m_diciplineBox);
     m_decimals.setChecked(true);
     m_decimals.setToolTip(tr("Komadega"));
@@ -147,8 +158,8 @@ void Lane::setSiusCompetitorRow(QString competitorRow)
         m_firstNameEdit.setText(parts.at(3));
         m_lastNameEdit.setText(parts.at(2));
         m_clubEdit.setText(parts.at(8));
-        updateDecimals(m_diciplineBox.currentText());
-        updateShots(m_diciplineBox.currentText());
+        updateDecimals(m_diciplineBox.currentIndex());
+        updateShots(m_diciplineBox.currentIndex());
         m_inCompetition = false;
     }
 }
@@ -163,7 +174,7 @@ void Lane::setStartListCompetitorRow(QString competitorRow)
         m_firstNameEdit.setText(parts.at(2));
         m_lastNameEdit.setText(parts.at(3));
         m_clubEdit.setText(parts.at(4));
-        m_diciplineBox.setCurrentText(parts.at(5));
+        m_diciplineBox.setCurrentText(QualificationEvents::eventData((QualificationEvents::EventType)parts.at(5).toInt()).name);
         m_decimals.setChecked(parts.at(6).toInt());
         m_shotsEdit.setValue(parts.at(7).toInt());
         m_inCompetition = false;
@@ -234,25 +245,25 @@ QString Lane::target()
     return m_targetEdit.text();
 }
 
-void Lane::updateDecimals(QString newText)
+void Lane::updateDecimals(int newIndex)
 {
-    if (newText.contains("airrifle") || newText.contains("50m_rifle")) {
-        m_decimals.setChecked(true);
-    } else
-        m_decimals.setChecked(false);
+    if (newIndex >= 0) {
+        if (QualificationEvents::eventData(newIndex).decimals) {
+            m_decimals.setChecked(true);
+        } else
+            m_decimals.setChecked(false);
+    }
 }
 
-void Lane::updateShots(QString newText)
+void Lane::updateShots(int newIndex)
 {
-    if (newText.contains("airrifle") ||newText.contains("airpistol") ||
-            newText.contains("50m_rifle") || newText.contains("50m_3positions")) {
-        m_shotsEdit.setValue(60);
-//    } else if (newText.contains("50m_40prone")) {
-//        m_shotsEdit.setValue(40);
-//    } else if (newText.contains("50m_30prone")) {
-//        m_shotsEdit.setValue(30);
-    // } else if (newText.contains("50m_3positions")) {
-    //     m_shotsEdit.setValue(120);
-    } else
-        m_shotsEdit.setValue(60);
+    if (newIndex >= 0)
+        m_shotsEdit.setValue(QualificationEvents::eventData(newIndex).numberOfSeries * 10);
+}
+
+void Lane::updateUi()
+{
+    if (m_diciplineBox.count() > 0)
+        m_diciplineBox.clear();
+    m_diciplineBox.addItems(QualificationEvents::eventNames());
 }

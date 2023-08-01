@@ -4,82 +4,82 @@
 <context>
     <name>AgeClasses</name>
     <message>
-        <location filename="../../../common/src/ageclasses.cpp" line="5"/>
+        <location filename="../../../common/src/ageclasses.cpp" line="6"/>
         <source>Mehed</source>
         <translation>Men</translation>
     </message>
     <message>
-        <location filename="../../../common/src/ageclasses.cpp" line="5"/>
+        <location filename="../../../common/src/ageclasses.cpp" line="6"/>
         <source>M</source>
         <translation>M</translation>
     </message>
     <message>
-        <location filename="../../../common/src/ageclasses.cpp" line="6"/>
+        <location filename="../../../common/src/ageclasses.cpp" line="7"/>
         <source>Naised</source>
         <translation>Women</translation>
     </message>
     <message>
-        <location filename="../../../common/src/ageclasses.cpp" line="6"/>
+        <location filename="../../../common/src/ageclasses.cpp" line="7"/>
         <source>N</source>
         <translation>W</translation>
     </message>
     <message>
-        <location filename="../../../common/src/ageclasses.cpp" line="7"/>
+        <location filename="../../../common/src/ageclasses.cpp" line="8"/>
         <source>Meesjuuniorid</source>
         <translation>Men Junior</translation>
     </message>
     <message>
-        <location filename="../../../common/src/ageclasses.cpp" line="7"/>
+        <location filename="../../../common/src/ageclasses.cpp" line="8"/>
         <source>MJ</source>
         <translation>MJ</translation>
     </message>
     <message>
-        <location filename="../../../common/src/ageclasses.cpp" line="8"/>
+        <location filename="../../../common/src/ageclasses.cpp" line="9"/>
         <source>Naisjuuniorid</source>
         <translation>Women Junior</translation>
     </message>
     <message>
-        <location filename="../../../common/src/ageclasses.cpp" line="8"/>
+        <location filename="../../../common/src/ageclasses.cpp" line="9"/>
         <source>NJ</source>
         <translation>WJ</translation>
     </message>
     <message>
-        <location filename="../../../common/src/ageclasses.cpp" line="9"/>
+        <location filename="../../../common/src/ageclasses.cpp" line="10"/>
         <source>Poisid</source>
         <translation>Youth Men</translation>
     </message>
     <message>
-        <location filename="../../../common/src/ageclasses.cpp" line="9"/>
+        <location filename="../../../common/src/ageclasses.cpp" line="10"/>
         <source>P</source>
         <translation>YM</translation>
     </message>
     <message>
-        <location filename="../../../common/src/ageclasses.cpp" line="10"/>
+        <location filename="../../../common/src/ageclasses.cpp" line="11"/>
         <source>Tüdrukud</source>
         <translation>Youth Women</translation>
     </message>
     <message>
-        <location filename="../../../common/src/ageclasses.cpp" line="10"/>
+        <location filename="../../../common/src/ageclasses.cpp" line="11"/>
         <source>T</source>
         <translation>YW</translation>
     </message>
     <message>
-        <location filename="../../../common/src/ageclasses.cpp" line="11"/>
+        <location filename="../../../common/src/ageclasses.cpp" line="12"/>
         <source>Meesveteranid</source>
         <translation>Men Senior</translation>
     </message>
     <message>
-        <location filename="../../../common/src/ageclasses.cpp" line="11"/>
+        <location filename="../../../common/src/ageclasses.cpp" line="12"/>
         <source>MV</source>
         <translation>MS</translation>
     </message>
     <message>
-        <location filename="../../../common/src/ageclasses.cpp" line="12"/>
+        <location filename="../../../common/src/ageclasses.cpp" line="13"/>
         <source>Naisveteranid</source>
         <translation>Women Senior</translation>
     </message>
     <message>
-        <location filename="../../../common/src/ageclasses.cpp" line="12"/>
+        <location filename="../../../common/src/ageclasses.cpp" line="13"/>
         <source>NV</source>
         <translation>WS</translation>
     </message>
@@ -742,12 +742,12 @@ It could be a newer version&apos;s file.
     <message>
         <location filename="../lehelugejaaken.ui" line="444"/>
         <source>Õhupüss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Air Rifle</translation>
     </message>
     <message>
         <location filename="../lehelugejaaken.ui" line="449"/>
         <source>Õhupüstol</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Air Pistol</translation>
     </message>
     <message>
         <location filename="../lehelugejaaken.ui" line="454"/>
@@ -1494,9 +1494,9 @@ address: %1</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="609"/>
-        <location filename="../protokollitaja.cpp" line="3851"/>
-        <location filename="../protokollitaja.cpp" line="3854"/>
-        <location filename="../protokollitaja.cpp" line="3868"/>
+        <location filename="../protokollitaja.cpp" line="3830"/>
+        <location filename="../protokollitaja.cpp" line="3833"/>
+        <location filename="../protokollitaja.cpp" line="3847"/>
         <source>Protokollitaja fail (*.kll)</source>
         <translation>Protokollitaja file (*.kll)</translation>
     </message>
@@ -1626,14 +1626,14 @@ address: %1</translation>
     <message>
         <location filename="../protokollitaja.cpp" line="1207"/>
         <location filename="../protokollitaja.cpp" line="1214"/>
-        <location filename="../protokollitaja.cpp" line="3105"/>
+        <location filename="../protokollitaja.cpp" line="3084"/>
         <source>Põlvelt</source>
         <translation>Kneeling</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="1211"/>
         <location filename="../protokollitaja.cpp" line="1218"/>
-        <location filename="../protokollitaja.cpp" line="3107"/>
+        <location filename="../protokollitaja.cpp" line="3086"/>
         <source>Püsti</source>
         <translation>Standing</translation>
     </message>
@@ -1763,14 +1763,14 @@ Finaal.exe file not found!</translation>
         <location filename="../protokollitaja.cpp" line="2032"/>
         <location filename="../protokollitaja.cpp" line="2072"/>
         <location filename="../protokollitaja.cpp" line="2076"/>
-        <location filename="../protokollitaja.cpp" line="3373"/>
-        <location filename="../protokollitaja.cpp" line="3382"/>
-        <location filename="../protokollitaja.cpp" line="3388"/>
-        <location filename="../protokollitaja.cpp" line="3395"/>
-        <location filename="../protokollitaja.cpp" line="3495"/>
-        <location filename="../protokollitaja.cpp" line="4241"/>
-        <location filename="../protokollitaja.cpp" line="4310"/>
-        <location filename="../protokollitaja.cpp" line="4342"/>
+        <location filename="../protokollitaja.cpp" line="3352"/>
+        <location filename="../protokollitaja.cpp" line="3361"/>
+        <location filename="../protokollitaja.cpp" line="3367"/>
+        <location filename="../protokollitaja.cpp" line="3374"/>
+        <location filename="../protokollitaja.cpp" line="3474"/>
+        <location filename="../protokollitaja.cpp" line="4220"/>
+        <location filename="../protokollitaja.cpp" line="4289"/>
+        <location filename="../protokollitaja.cpp" line="4321"/>
         <source>Viga</source>
         <translation>Error</translation>
     </message>
@@ -1812,14 +1812,14 @@ address: %1</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2032"/>
-        <location filename="../protokollitaja.cpp" line="4241"/>
-        <location filename="../protokollitaja.cpp" line="4310"/>
+        <location filename="../protokollitaja.cpp" line="4220"/>
+        <location filename="../protokollitaja.cpp" line="4289"/>
         <source>Kahjuks see versioon Protokollitajast ei toeta lehelugemist 3x40 lasku standardi harjutustes!</source>
         <translation>Unfortunately this version of Protokollitaja doesn&apos;t support paper target scoring for 3x40 events!</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2072"/>
-        <location filename="../protokollitaja.cpp" line="4342"/>
+        <location filename="../protokollitaja.cpp" line="4321"/>
         <source>Liiga palju seeriaid, lugemine ei ole võimalik!</source>
         <translation>Too many series, scoring not possible!</translation>
     </message>
@@ -1879,32 +1879,32 @@ address: %1</translation>
         <translation>Enter new maximum showing time</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4470"/>
+        <location filename="../protokollitaja.cpp" line="4449"/>
         <source>Õhupüss</source>
         <translation>Air Rifle</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4472"/>
+        <location filename="../protokollitaja.cpp" line="4451"/>
         <source>Õhupüstol</source>
         <translation>Air Pistol</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4474"/>
+        <location filename="../protokollitaja.cpp" line="4453"/>
         <source>Sportpüss</source>
         <translation>Smallbore Rifle</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4476"/>
+        <location filename="../protokollitaja.cpp" line="4455"/>
         <source>Spordipüstol</source>
         <translation>Sport Pistol</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4478"/>
+        <location filename="../protokollitaja.cpp" line="4457"/>
         <source>Muu püss</source>
         <translation>Other Rifle</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4480"/>
+        <location filename="../protokollitaja.cpp" line="4459"/>
         <source>Muu püstol</source>
         <translation>Other Pistol</translation>
     </message>
@@ -1970,32 +1970,32 @@ Tallinn </source>
         <translation>Event:</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="2789"/>
+        <location filename="../protokollitaja.cpp" line="2768"/>
         <source>Mis harjutus see nii suure seeriate arvuga on ja seejuures ilma vahesummadeta? Selle näitamine ei ole võimalik.</source>
         <translation>It is not possible to show an event with so big number of series, but without subtotals.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="2951"/>
+        <location filename="../protokollitaja.cpp" line="2930"/>
         <source>Kas tahate tulemused näidata teisel ekraanil?</source>
         <translation>Do you want to show the spectator view on the other screen?</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="2958"/>
+        <location filename="../protokollitaja.cpp" line="2937"/>
         <source>Tulemuse aken näidatud teisel ekraanil</source>
         <translation>Spectator view shown on the other screen</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3351"/>
+        <location filename="../protokollitaja.cpp" line="3330"/>
         <source>Print_template.html faili ei leitud! Printimine ei toimi!</source>
         <translation>Print_template.html file not found! Printing not possible!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3520"/>
+        <location filename="../protokollitaja.cpp" line="3499"/>
         <source>Võistleja 1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3789"/>
+        <location filename="../protokollitaja.cpp" line="3768"/>
         <source>Programmist on saadaval uuem versioon. Praegune: %1
 Uus versioon: %2
 
@@ -2010,7 +2010,7 @@ The new version is available in Google Drive: https://drive.google.com/drive/fol
 Would you like to open that?</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3802"/>
+        <location filename="../protokollitaja.cpp" line="3781"/>
         <source>Teil on kõige uuem versioon programmist.
 
 Leitud uusim versioon: %1</source>
@@ -2019,12 +2019,12 @@ Leitud uusim versioon: %1</source>
 Newest version found: %1</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3824"/>
+        <location filename="../protokollitaja.cpp" line="3803"/>
         <source>Viga!</source>
         <translation>Error!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3825"/>
+        <location filename="../protokollitaja.cpp" line="3804"/>
         <source>Võistluse veebi ID (%1) sisaldab kummalisi tähemärke ja on ilmselt vigane!
 
 Kas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.</source>
@@ -2033,69 +2033,69 @@ Kas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.</s
 Do you want to delete it? It doesn&apos;t affect anything else than uploading to web.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3850"/>
-        <location filename="../protokollitaja.cpp" line="3853"/>
-        <location filename="../protokollitaja.cpp" line="3867"/>
+        <location filename="../protokollitaja.cpp" line="3829"/>
+        <location filename="../protokollitaja.cpp" line="3832"/>
+        <location filename="../protokollitaja.cpp" line="3846"/>
         <source>Salvesta nimega</source>
         <translation>Save As</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3884"/>
+        <location filename="../protokollitaja.cpp" line="3863"/>
         <source>Server seisatud</source>
         <translation>Server stopped</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3897"/>
+        <location filename="../protokollitaja.cpp" line="3876"/>
         <source>Võistkondade saatmine Range Control&apos;i ei ole võimalik</source>
         <translation>It is not possible to send teams to Range Control</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3953"/>
+        <location filename="../protokollitaja.cpp" line="3932"/>
         <source>Siffer on juba olemas, kas soovite üle kirjutada?</source>
         <translation>Cipher already present, would you like to overwrite it?</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4108"/>
+        <location filename="../protokollitaja.cpp" line="4087"/>
         <source>%1 uut püssilaskurit lisatud andmebaasi</source>
         <translation>%1 new rifle shooter(s) added to the database</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4111"/>
+        <location filename="../protokollitaja.cpp" line="4090"/>
         <source>%1 uut püstolilaskurit lisatud andmebaasi</source>
         <translation>%1 new pistol shooter(s) added to the database</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4114"/>
+        <location filename="../protokollitaja.cpp" line="4093"/>
         <source>%1 uut püssilaskurid ja %2 uut püstolilaskurit lisatud andmebaasi</source>
         <translation>%1 new rifle and %2 pistol shooters added to the database</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4188"/>
+        <location filename="../protokollitaja.cpp" line="4167"/>
         <source>Kasutajanimi andmebaasis</source>
         <translation>Username in the database</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4188"/>
+        <location filename="../protokollitaja.cpp" line="4167"/>
         <source>Kasutajanimi:</source>
         <translation>Username:</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4190"/>
+        <location filename="../protokollitaja.cpp" line="4169"/>
         <source>Kasutaja parool andmebaasis</source>
         <translation>Password in the database</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4190"/>
+        <location filename="../protokollitaja.cpp" line="4169"/>
         <source>Parool:</source>
         <translation>Password:</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4808"/>
+        <location filename="../protokollitaja.cpp" line="4787"/>
         <source>Töölehe nime lahter on tühi. Ei saa luua uut töölehte ilma nimeta.</source>
         <translation>Tab name field empty. Cannot create tab without name.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4812"/>
+        <location filename="../protokollitaja.cpp" line="4791"/>
         <source>Tulemuse aknas näidatava tabeli pealkirja lahter on tühi. Paluks see ka ikka täita</source>
         <translation>Tab screen name empty. Please fill that also</translation>
     </message>
@@ -2160,172 +2160,172 @@ Protolehelugeja is newer, therefore need to update Protokollitaja or both.</tran
 <context>
     <name>QualificationEvents</name>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="4"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="6"/>
         <source>60l Õhupüss</source>
         <translation>10m Air Rifle 60 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="5"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="7"/>
         <source>40l Õhupüss</source>
         <translation>10m Air Rifle 40 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="6"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="8"/>
         <source>20l Õhupüss</source>
         <translation>10m Air Rifle 20 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="7"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="9"/>
         <source>60l Õhupüstol</source>
         <translation>10m Air Pistol 60 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="8"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="10"/>
         <source>40l Õhupüstol</source>
         <translation>10m Air Pistol 40 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="9"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="11"/>
         <source>20l Õhupüstol</source>
         <translation>10m Air Pistol 20 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="10"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="12"/>
         <source>3x40l Standard</source>
         <translation>50m Rifle 3x40 3 Positions</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="11"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="13"/>
         <source>3x20l Standard</source>
         <translation>50m Rifle 3x20 3 Positions</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="12"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="14"/>
         <source>3x10l Standard</source>
         <translation>50m Rifle 3x10 3 Positions</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="13"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="15"/>
         <source>60l Lamades</source>
         <translation>50m 60 Shots Prone</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="14"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="16"/>
         <source>30l Lamades</source>
         <translation>50m 30 Shots Prone</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="15"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="17"/>
         <source>Olümpiakiirlaskmine</source>
         <translation>25m Rapid Fire Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="16"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="18"/>
         <source>30+30l Spordipüstol</source>
         <translation>25m Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="17"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="19"/>
         <source>30l Ringmärk</source>
         <translation>25m Precision Pistol 30 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="18"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="20"/>
         <source>30l Siluett</source>
         <translation>25m Rapid Pistol 30 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="19"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="21"/>
         <source>20+20+20l Spordipüstol</source>
         <translation>25m Standard Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="20"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="22"/>
         <source>60l Vabapüstol</source>
         <translation>50m Free Pistol 60 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="21"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="23"/>
         <source>30l Vabapüstol</source>
         <translation>50m Free Pistol 30 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="22"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="24"/>
         <source>CISM püstol</source>
         <translation>25m CISM Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="23"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="25"/>
         <source>300m 3x40l Standard</source>
         <translation>300m Rifle 3x40 3 Positions</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="24"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="26"/>
         <source>300m 3x20l Standard</source>
         <translation>300m Rifle 3x20 3 Positions</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="25"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="27"/>
         <source>300m 3x10l Standard</source>
         <translation>300m Rifle 3x10 3 Positions</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="26"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="28"/>
         <source>300m 60l Lamades</source>
         <translation>300m 60 Shots Prone</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="27"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="29"/>
         <source>300m 30l Lamades</source>
         <translation>300m 30 Shots Prone</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="28"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="30"/>
         <source>30+30l Metssiga</source>
         <translation>50m 30+30 Running Target</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="29"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="31"/>
         <source>20+20l Metssiga</source>
         <translation>50m 20+20 Running Target Mixed</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="30"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="32"/>
         <source>30+30l Liikuv Märk</source>
         <translation>10m 30+30 Running Target</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="31"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="33"/>
         <source>20+20l Liikuv Märk</source>
         <translation>10m 20+20 Running Target Mixed</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="32"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="34"/>
         <source>Muu Õhupüss</source>
         <translation>Other Air Rifle</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="33"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="35"/>
         <source>Muu Õhupüstol</source>
         <translation>Other Air Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="34"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="36"/>
         <source>Muu sportpüss</source>
         <translation>Other Smallbore rifle</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="35"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="37"/>
         <source>Muu 300m</source>
         <translation>Other 300m Rifle</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="36"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="38"/>
         <source>Muu püstol</source>
         <translation>Other Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="37"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="39"/>
         <source>Muu</source>
         <translation>Other</translation>
     </message>
@@ -2497,8 +2497,12 @@ Protolehelugeja is newer, therefore need to update Protokollitaja or both.</tran
     </message>
     <message>
         <location filename="../seadedkast.ui" line="332"/>
+        <source>Märkleht</source>
+        <translation>Target Type</translation>
+    </message>
+    <message>
         <source>Relv</source>
-        <translation>Weapon</translation>
+        <translation type="vanished">Weapon</translation>
     </message>
     <message>
         <location filename="../seadedkast.ui" line="337"/>
@@ -2726,57 +2730,57 @@ It could be a newer version&apos;s file.
 <context>
     <name>TargetTypes</name>
     <message>
-        <location filename="../../../common/src/targettypes.cpp" line="4"/>
+        <location filename="../../../common/src/targettypes.cpp" line="6"/>
         <source>Muu</source>
         <translation>Other</translation>
     </message>
     <message>
-        <location filename="../../../common/src/targettypes.cpp" line="5"/>
+        <location filename="../../../common/src/targettypes.cpp" line="7"/>
         <source>Õhupüss</source>
         <translation>Air Rifle</translation>
     </message>
     <message>
-        <location filename="../../../common/src/targettypes.cpp" line="6"/>
+        <location filename="../../../common/src/targettypes.cpp" line="8"/>
         <source>Õhupüstol</source>
         <translation>Air Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/targettypes.cpp" line="7"/>
+        <location filename="../../../common/src/targettypes.cpp" line="9"/>
         <source>Sportpüss</source>
         <translation>50m Rifle</translation>
     </message>
     <message>
-        <location filename="../../../common/src/targettypes.cpp" line="8"/>
+        <location filename="../../../common/src/targettypes.cpp" line="10"/>
         <source>Spordipüstol</source>
         <translation>Precision Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/targettypes.cpp" line="9"/>
+        <location filename="../../../common/src/targettypes.cpp" line="11"/>
         <source>Siluett</source>
         <translation>Rapid Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/targettypes.cpp" line="10"/>
+        <location filename="../../../common/src/targettypes.cpp" line="12"/>
         <source>300m püss</source>
         <translation>300m Rifle</translation>
     </message>
     <message>
-        <location filename="../../../common/src/targettypes.cpp" line="11"/>
+        <location filename="../../../common/src/targettypes.cpp" line="13"/>
         <source>50m liikuv märk</source>
         <translation>50m Running Target</translation>
     </message>
     <message>
-        <location filename="../../../common/src/targettypes.cpp" line="12"/>
+        <location filename="../../../common/src/targettypes.cpp" line="14"/>
         <source>10m liikuv märk</source>
         <translation>10m Running Target</translation>
     </message>
     <message>
-        <location filename="../../../common/src/targettypes.cpp" line="13"/>
+        <location filename="../../../common/src/targettypes.cpp" line="15"/>
         <source>Muu püss</source>
         <translation>Other Rifle</translation>
     </message>
     <message>
-        <location filename="../../../common/src/targettypes.cpp" line="14"/>
+        <location filename="../../../common/src/targettypes.cpp" line="16"/>
         <source>Muu püstol</source>
         <translation>Other Pistol</translation>
     </message>
@@ -2896,12 +2900,12 @@ It could be a newer version&apos;s file.
 <context>
     <name>ValikKast</name>
     <message>
-        <location filename="../valikkast.cpp" line="91"/>
+        <location filename="../valikkast.cpp" line="103"/>
         <source>uus tööleht</source>
         <translation>New Tab</translation>
     </message>
     <message>
-        <location filename="../valikkast.cpp" line="92"/>
+        <location filename="../valikkast.cpp" line="104"/>
         <source>Oled kindel, et soovid töölehe nimeks jätta uus tööleht?</source>
         <translation>Are you sure you want to name new tab &quot;New Tab&quot;?</translation>
     </message>

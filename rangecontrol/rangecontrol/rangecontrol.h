@@ -25,6 +25,7 @@
 #include "lask.h"
 #include "programname.h"
 #include "version.h"
+#include "qualificationevents.h"
 
 class RangeControl : public QMainWindow
 {
@@ -62,7 +63,6 @@ private:
     int m_inbandPort = 5451;
     int m_serverPort = 4000;
     ConnectionServer m_server;
-    QStringList m_disciplines = {"airrifle", "airpistol", "50m_rifle", "50m_3positions"};
     QMap<int, Lane*> m_lanes;
     QVector<SiusShotData> m_shots;
     QTcpSocket *tcpSocket = nullptr;

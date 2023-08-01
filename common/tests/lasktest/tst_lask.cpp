@@ -74,30 +74,30 @@ void LaskTest::test_coordinates()
 void LaskTest::test_calcIfInnerTen()
 {
     Lask empty;
-    QVERIFY(!Lask::calcIfInnerTen(Lask::Ohupuss, empty.X(), empty.Y()));
+    QVERIFY(!Lask::calcIfInnerTen(TargetTypes::AirRifle, empty.X(), empty.Y()));
 
     QTime time = QTime::currentTime();
 
     Lask shot(106, 477, -1042, true, time);
-    QVERIFY(Lask::calcIfInnerTen(Lask::Ohupuss, shot.X(), shot.Y()));
+    QVERIFY(Lask::calcIfInnerTen(TargetTypes::AirRifle, shot.X(), shot.Y()));
 
     Lask shot2("_SHOT;9;10;36;60;74;10:43:56.17;3;31;7;94;0;0;49;-0.00187626;0.00347202;900;0;0;655.35;98903519;61;450;0");
-    QVERIFY(!Lask::calcIfInnerTen(Lask::Ohupuss, shot2.X(), shot2.Y()));
+    QVERIFY(!Lask::calcIfInnerTen(TargetTypes::AirRifle, shot2.X(), shot2.Y()));
 
     Lask shot3(103, -3622, -3647, true, time);
-    QVERIFY(!Lask::calcIfInnerTen(Lask::Ohupustol, shot3.X(), shot3.Y()));
+    QVERIFY(!Lask::calcIfInnerTen(TargetTypes::AirPistol, shot3.X(), shot3.Y()));
 
     Lask shot4(100, -3292, 6872, true, time);
-    QVERIFY(!Lask::calcIfInnerTen(Lask::Ohupustol, shot4.X(), shot4.Y()));
+    QVERIFY(!Lask::calcIfInnerTen(TargetTypes::AirPistol, shot4.X(), shot4.Y()));
 
     Lask shot5(104, -478, 4404, true, time);
-    QVERIFY(Lask::calcIfInnerTen(Lask::Ohupustol, shot5.X(), shot5.Y()));
+    QVERIFY(Lask::calcIfInnerTen(TargetTypes::AirPistol, shot5.X(), shot5.Y()));
 
     Lask shot6(103, -759, 5469, true, time);
-    QVERIFY(!Lask::calcIfInnerTen(Lask::Ohupustol, shot6.X(), shot6.Y()));
+    QVERIFY(!Lask::calcIfInnerTen(TargetTypes::AirPistol, shot6.X(), shot6.Y()));
 
     Lask shot7(104, -4315, 1323, true, time);
-    QVERIFY(Lask::calcIfInnerTen(Lask::Ohupustol, shot7.X(), shot7.Y()));
+    QVERIFY(Lask::calcIfInnerTen(TargetTypes::AirPistol, shot7.X(), shot7.Y()));
 }
 
 void LaskTest::test_createShotFromJson()

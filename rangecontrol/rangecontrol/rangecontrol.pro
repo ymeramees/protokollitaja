@@ -20,6 +20,7 @@ SOURCES += \
     lane.cpp \
     main.cpp \
     ../../common/src/lask.cpp \
+    ../../common/src/qualificationevents.cpp \
     rangecontrol.cpp
 
 HEADERS += \
@@ -32,7 +33,8 @@ HEADERS += \
     programname.h \
     ../../common/src/version.h \
     ../../common/src/lask.h \
-    ../../common/src/siusshotdata.h
+    ../../common/src/siusshotdata.h \
+    ../../common/src/qualificationevents.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

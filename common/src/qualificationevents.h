@@ -54,6 +54,7 @@ public:
         TargetTypes::TargetType targetType;
         int numberOfSeries;
         int seriesInSubtotal;
+        bool decimals;
     };
 
     static QualificationEvent eventData(const EventType eventType);
