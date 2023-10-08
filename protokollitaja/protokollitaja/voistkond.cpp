@@ -14,7 +14,7 @@ Voistkond::Voistkond(LiikmeteValikKast *lV, int vA, QList<int> *j, int *vI, QWid
     for(int i = 0; i < vArv; i++){
         voistlejad << new Liige;
         voistlejad[voistlejad.count() - 1]->eesNimi = tr("Võistleja 1");
-        voistlejad[voistlejad.count() - 1]->harjutus = "Harjutus";
+        voistlejad[voistlejad.count() - 1]->harjutus = tr("Harjutus");
         voistlejad[i]->silt = new QLineEdit(this);
         voistlejad[i]->silt->setText("0");
         voistlejad[i]->silt->setReadOnly(true);
@@ -79,7 +79,7 @@ void Voistkond::setupFields()
     nimi->setMaximumWidth(100 + this->width() / 5);
     hKast->addWidget(nimi);
     muudaNupp = new QPushButton(this);
-    muudaNupp->setText("Liikmed");
+    muudaNupp->setText(tr("Liikmed"));
     hKast->addWidget(muudaNupp);
     summa = new QLineEdit(this);
     summa->setText("0");
@@ -166,11 +166,8 @@ bool Voistkond::vaiksem(Voistkond *v) const
 
 void Voistkond::naitaLiikmeteValikKast()
 {
-        //QMessageBox::information(this, "Teade", "naitaLiikemeteValikkast()", QMessageBox::Ok);
         emit uuendaLiikmeid();
-        //QMessageBox::information(this, "Teade", "naitaLiikemeteValikkast()1", QMessageBox::Ok);
         lValik->ui.liikmed->clear();
-        //QMessageBox::information(this, "Teade", "naitaLiikemeteValikkast()2", QMessageBox::Ok);
         lValik->maxArv = vArv;
         for(int i = 0; i < vArv; i++){
             QString rida = voistlejad[i]->perekNimi + ", " + voistlejad[i]->eesNimi + ", " + voistlejad[i]->klubi
@@ -179,7 +176,6 @@ void Voistkond::naitaLiikmeteValikKast()
                 lValik->ui.liikmed->addItem(rida);
         }
         lValik->ui.leheBox->setCurrentIndex(*viimaneIndex);
-        //QMessageBox::information(this, "Teade", "naitaLiikemeteValikkast()3", QMessageBox::Ok);
         lValik->ui.liikmed->setCurrentRow(0);
         if(lValik->exec() == QDialog::Accepted){
                 for(int i = 0; i < voistlejad.count(); i++){

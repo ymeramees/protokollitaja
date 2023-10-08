@@ -448,21 +448,27 @@ void RangeControl::importStartList()
             }
         }
     } else
-        QMessageBox::critical(this, "Viga", "Ei õnnestunud faili avada!", QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Viga"), tr("Ei õnnestunud faili avada!"), QMessageBox::Ok);
 }
 
 void RangeControl::initialize()
 {
     QTextStream(stdout) << "RangeControl::initialize" << Qt::endl;
 
-    QFile *logFile = new QFile(QString("Range Control sisse %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
+    QString logsDir = QDir(QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).filePath("Protokollitaja")).filePath("Range Control logs");
+    QDir dir;
+    dir.mkpath(logsDir);
+
+    QString incomingFileName = QString("Range Control incoming %1.log").arg(QDate::currentDate().toString(Qt::ISODate));
+    QFile *logFile = new QFile(QDir(logsDir).filePath(incomingFileName));
     if (logFile->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)) {
         m_incomingLog.setDevice(logFile);
         m_incomingLog << "///////////////////////////////" << programVersion << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";
     }
 
     if (m_shotsLog == nullptr) {
-        QFile *logFile = new QFile(QString("Range Control lasud %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
+        QString shotsFileName = QString("Range Control lasud %1.log").arg(QDate::currentDate().toString(Qt::ISODate));
+        QFile *logFile = new QFile(QDir(logsDir).filePath(shotsFileName));
         if (logFile->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)) {
             m_shotsLog = new QTextStream(logFile);
             *m_shotsLog << "///////////////////////////////" << programVersion << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";

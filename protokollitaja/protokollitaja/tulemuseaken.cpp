@@ -8,7 +8,7 @@ TulemuseAken::TulemuseAken(QWidget *parent) : QWidget(parent)
         if(this->objectName().isEmpty()){
                 this->setObjectName("TulemuseAken");
         }
-        setWindowTitle("Protokollitaja - tulemused");
+        setWindowTitle("Protokollitaja - " + tr("tulemused"));
         //setWindowIcon(QIcon(":/images/Finaal.ico"));
         ind = true;
         loplik = false;
@@ -26,7 +26,7 @@ TulemuseAken::TulemuseAken(QWidget *parent) : QWidget(parent)
         pisike.setPointSize(12);
         setBackgroundRole(QPalette::Base);
         setAutoFillBackground(true);
-        pealKiri = "Pealkiri";
+        pealKiri = tr("Pealkiri");
         ridadeArv = 25;
         for(int i = 0; i < ridadeArv; i++){
                 QStringList rida;

@@ -73,8 +73,8 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
     connect(udpSocket2, SIGNAL(readyRead()), this, SLOT(loeBroadcast()));
     connect(udpSocket2, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(naitaViga(QAbstractSocket::SocketError)));
 
-    programmistAct = new QAction("Programmist", this);
-    programmistAct->setStatusTip("Kuvab infot programmi kohta");
+    programmistAct = new QAction(tr("Programmist"), this);
+    programmistAct->setStatusTip(tr("Kuvab infot programmi kohta"));
     connect(programmistAct, SIGNAL(triggered()), this, SLOT(naitaInfot()));
     uhenduServerigaAct = new QAction(tr("Ühendu serveriga"), this);
     uhenduServerigaAct->setStatusTip(tr("Ühendu protokollitaja serveriga"));
@@ -84,16 +84,16 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
     valjuAct->setStatusTip(tr("Välju programmist"));
     connect(valjuAct, SIGNAL(triggered()), this, SLOT(close()));
 
-    failMenu = ui->menuBar->addMenu("&Fail");
+    failMenu = ui->menuBar->addMenu(tr("&Fail"));
     failMenu->addAction(uhenduServerigaAct);
     failMenu->addAction(valjuAct);
 
-    abiMenu = ui->menuBar->addMenu("&Abi");
+    abiMenu = ui->menuBar->addMenu(tr("&Abi"));
     abiMenu->addAction(programmistAct);
 
 #ifdef QT_DEBUG
     QAction* selfTestsAct = new QAction(tr("Käivita testid"), this);
-    selfTestsAct->setStatusTip("Käivitab sisemised programmi testid");
+                            selfTestsAct->setStatusTip(tr("Käivitab sisemised programmi testid"));
     connect(selfTestsAct, SIGNAL(triggered()), this, SLOT(runSelfTests()));
     abiMenu->addAction(selfTestsAct);
 #endif
@@ -210,7 +210,7 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
     showMaximized();
     broadcastiSaatja->start();
 #ifdef QT_DEBUG
-    QMessageBox::information(this, "Teade", "Debug versioon!", QMessageBox::Ok);
+    QMessageBox::information(this, tr("Teade"), "Debug versioon!", QMessageBox::Ok);
 #endif
 }
 
@@ -374,8 +374,8 @@ void Lehelugeja::sumAndEndSeries()
         QApplication::sendEvent(this, new QKeyEvent(QEvent::KeyPress, Qt::Key_Tab, Qt::NoModifier));
         QApplication::sendEvent(this, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Tab, Qt::NoModifier));
     } else {
-        QMessageBox::critical(this, "Viga", "Puudus aktiivne seeria kast!", QMessageBox::Ok);
-        logi.append("Viga!:" + ui->nimeBox->currentText() + tr(" tundmatu seeria: %1").arg(double(fl / 10)));
+        QMessageBox::critical(this, tr("Viga"), tr("Puudus aktiivne seeria kast!"), QMessageBox::Ok);
+        logi.append(tr("Viga!:") + ui->nimeBox->currentText() + tr(" tundmatu seeria: %1").arg(double(fl / 10)));
     }
 
     fookus->start();
@@ -483,7 +483,7 @@ void Lehelugeja::loeVorgust()   //Protokollitajast tulev info/käsk
 
     if(sisse.startsWith("Viga:")){    //Saadeti veateade
         sisse.remove(0, 5);
-        QMessageBox::critical(this, "Viga!", sisse, QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Viga!"), sisse, QMessageBox::Ok);
         return;
     }else if(sisse.startsWith("Hoiatus:")){ //Saadeti hoiatuse teade
         sisse.remove(0, 8);
@@ -823,7 +823,7 @@ void Lehelugeja::uhenda()
     if(!kaabelLeitud)   //Kui lugemismasina kaablit algul ei leitud, siis äkki vahepeal on see külge ühendatud
         updatePorts();
 
-    logi.append("Ühendamine: " + ui->comPort->currentText());
+    logi.append(tr("Ühendamine: ") + ui->comPort->currentText());
 
     scoringMachCon.setTargetType(ui->leheCombo->currentIndex());
     scoringMachCon.setNoOfShotsPerTarget(ui->laskudeBox->value());
@@ -884,7 +884,7 @@ void Lehelugeja::updatePorts()
             kaabelLeitud = true;
         }
     }
-    if(!kaabelLeitud) QMessageBox::warning(this, "Protokollitaja", "Lugemismasina kaablit ei leitud!", QMessageBox::Ok);
+    if(!kaabelLeitud) QMessageBox::warning(this, "Protokollitaja", tr("Lugemismasina kaablit ei leitud!"), QMessageBox::Ok);
 }
 
 Lehelugeja::~Lehelugeja()

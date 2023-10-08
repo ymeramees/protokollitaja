@@ -92,7 +92,7 @@ void ProtolehelugejaConnection::readData()
             passwd = 0;
             send("OK");
         }
-        else{ QMessageBox::information(dynamic_cast<QWidget*>(this->parent()), "Teade", tr("Keegi proovis ühenduda vale parooliga! Ühendust ei loodud!"), QMessageBox::Ok);
+        else{ QMessageBox::information(dynamic_cast<QWidget*>(this->parent()), tr("Teade"), tr("Keegi proovis ühenduda vale parooliga! Ühendust ei loodud!"), QMessageBox::Ok);
             socket->disconnect();
         }
         return;

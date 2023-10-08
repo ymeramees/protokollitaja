@@ -107,7 +107,7 @@ void InitialDialog::edasi()
         if(QMessageBox::question(
                     this,
                     tr("Küsimus"),
-                    "Sellise nimega faili ei ole. Kas soovite selle luua?",
+                tr("Sellise nimega faili ei ole. Kas soovite selle luua?"),
                     QMessageBox::Ok | QMessageBox::Cancel
                     ) == QMessageBox::Ok){
             if (SimpleKllFileRW::writeInitialKll(ui.fileNameEdit->text(), data, this))

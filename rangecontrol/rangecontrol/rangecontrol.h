@@ -16,6 +16,7 @@
 #include <QTcpSocket>
 #include <QVBoxLayout>
 #include <QScrollArea>
+#include <QStandardPaths>
 #include <QTranslator>
 
 #include "connectionserver.h"

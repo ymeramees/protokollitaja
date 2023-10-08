@@ -286,43 +286,43 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
 <context>
     <name>RangeControl</name>
     <message>
-        <location filename="../rangecontrol.cpp" line="192"/>
-        <location filename="../rangecontrol.cpp" line="730"/>
+        <location filename="../rangecontrol.cpp" line="190"/>
+        <location filename="../rangecontrol.cpp" line="728"/>
         <source>Võistlus käimas!</source>
         <translation>Competition ongoing!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="261"/>
+        <location filename="../rangecontrol.cpp" line="259"/>
         <source>&amp;Fail</source>
         <translation>&amp;File</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="262"/>
+        <location filename="../rangecontrol.cpp" line="260"/>
         <source>&amp;Tööriistad</source>
         <translation>&amp;Tools</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="263"/>
+        <location filename="../rangecontrol.cpp" line="261"/>
         <source>&amp;Käsklused</source>
         <translation>&amp;Commands</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="264"/>
+        <location filename="../rangecontrol.cpp" line="262"/>
         <source>Keel</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="266"/>
+        <location filename="../rangecontrol.cpp" line="264"/>
         <source>&amp;Lisa rada</source>
         <translation>&amp;Add Lane</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="267"/>
+        <location filename="../rangecontrol.cpp" line="265"/>
         <source>Lisab ühe raja rea</source>
         <translation>Adds one lane</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="272"/>
+        <location filename="../rangecontrol.cpp" line="270"/>
         <source>Import startlist...</source>
         <translation></translation>
     </message>
@@ -331,52 +331,52 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation type="vanished">Import Sius Startlist File</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="173"/>
+        <location filename="../rangecontrol.cpp" line="171"/>
         <source>Teade</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="173"/>
+        <location filename="../rangecontrol.cpp" line="171"/>
         <source>Keele vahetus rakendub programmi uuesti käivitamisel</source>
         <translation>Langugage changes take effect after restarting the program</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="193"/>
+        <location filename="../rangecontrol.cpp" line="191"/>
         <source>Rajal %1 on võistlus veel käimas, oled kindel, et tahad seda nullida?</source>
         <translation>Target %1 has competition in progress, are you sure you want to reset it?</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="273"/>
+        <location filename="../rangecontrol.cpp" line="271"/>
         <source>Impordi startlisti fail</source>
         <translation>Import Startlist File</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="281"/>
+        <location filename="../rangecontrol.cpp" line="279"/>
         <source>&amp;Välju</source>
         <translation>E&amp;xit</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="283"/>
+        <location filename="../rangecontrol.cpp" line="281"/>
         <source>Välju programmist</source>
         <translation>Close the program</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="292"/>
+        <location filename="../rangecontrol.cpp" line="290"/>
         <source>Märgi kõik</source>
         <translation>Select All</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="293"/>
+        <location filename="../rangecontrol.cpp" line="291"/>
         <source>Lisab linnukesed kõigile radadele</source>
         <translation>Selects all lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="296"/>
+        <location filename="../rangecontrol.cpp" line="294"/>
         <source>Eemalda märgistused</source>
         <translation>Deselect All</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="297"/>
+        <location filename="../rangecontrol.cpp" line="295"/>
         <source>Eemaldab linnukesed kõigilt radadelt</source>
         <translation>Deselects all lanes</translation>
     </message>
@@ -397,227 +397,233 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation type="vanished">Changes class on all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="300"/>
+        <location filename="../rangecontrol.cpp" line="298"/>
         <source>Harjutus</source>
         <translation>Event</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="301"/>
+        <location filename="../rangecontrol.cpp" line="299"/>
         <source>Muudab kõigil märgitud radadel harjutuse tüüpi</source>
         <translation>Changes event type for all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="304"/>
+        <location filename="../rangecontrol.cpp" line="302"/>
         <source>Laskude arv</source>
         <translation>Number of Shots</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="305"/>
+        <location filename="../rangecontrol.cpp" line="303"/>
         <source>Muudab kõigil märgitud radadel võistluslaskude arvu</source>
         <translation>Changes number of shots for all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="308"/>
+        <location filename="../rangecontrol.cpp" line="306"/>
         <source>Tühjenda rajad</source>
         <translation>Clear Lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="309"/>
+        <location filename="../rangecontrol.cpp" line="307"/>
         <source>Eemaldab kõigilt märgitud radadelt laskurid</source>
         <translation>Removes all data from all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="312"/>
+        <location filename="../rangecontrol.cpp" line="310"/>
         <source>Salvesta seaded</source>
         <translation>Save Settings</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="313"/>
+        <location filename="../rangecontrol.cpp" line="311"/>
         <source>Salvestab praegused seaded ja rajad</source>
         <translation>Saves current settings and lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="325"/>
+        <location filename="../rangecontrol.cpp" line="323"/>
         <source>Saada nimed (init)</source>
         <translation>Send Names (init)</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="326"/>
+        <location filename="../rangecontrol.cpp" line="324"/>
         <source>Saadab võistlejate andmed märgitud radadele</source>
         <translation>Sends competitiors&apos; data to all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="329"/>
+        <location filename="../rangecontrol.cpp" line="327"/>
         <source>Alusta proovidega</source>
         <translation>Sighting Start</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="330"/>
+        <location filename="../rangecontrol.cpp" line="328"/>
         <source>Annab käsu märgitud radadele alustada proovilaskudega</source>
         <translation>Sends a command to start with sighting shots for all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="335"/>
+        <location filename="../rangecontrol.cpp" line="333"/>
         <source>Lõpeta proovid</source>
         <translation>End Sighting</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="336"/>
+        <location filename="../rangecontrol.cpp" line="334"/>
         <source>Annab käsu märgitud radadele lõpetada proovilasud</source>
         <translation>Sends a command to stop sighting shots for all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="341"/>
+        <location filename="../rangecontrol.cpp" line="339"/>
         <source>Alusta võistlust</source>
         <translation>Competition Start</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="342"/>
+        <location filename="../rangecontrol.cpp" line="340"/>
         <source>Annab käsu märgitud radadele alustada võistlust</source>
         <translation>Sends a command to start with competition shots for all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="347"/>
+        <location filename="../rangecontrol.cpp" line="345"/>
         <source>Jätka</source>
         <translation>Continue Competition</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="348"/>
+        <location filename="../rangecontrol.cpp" line="346"/>
         <source>Annab käsu märgitud radadele jätkata</source>
         <translation>Sends a command to continue with the competition for all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="353"/>
+        <location filename="../rangecontrol.cpp" line="351"/>
         <source>Lõpeta võistlus</source>
         <translation>End Competition</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="354"/>
+        <location filename="../rangecontrol.cpp" line="352"/>
         <source>Annab käsu märgitud radadele lõpetada võistlus</source>
         <translation>Sends a command to stop competition shots for all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="359"/>
+        <location filename="../rangecontrol.cpp" line="357"/>
         <source>Vilguta</source>
         <translation>Blink</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="360"/>
+        <location filename="../rangecontrol.cpp" line="358"/>
         <source>Annab käsu märgitud radadele vilgutada taustavalgusega</source>
         <translation>Sends a command to blink the target light to all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="365"/>
+        <location filename="../rangecontrol.cpp" line="363"/>
         <source>Küsi kõik lasud</source>
         <translation>Ask All Shots</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="366"/>
+        <location filename="../rangecontrol.cpp" line="364"/>
         <source>Küsib märgitud radadelt kõik lasud</source>
         <translation>Asks existing shot data from all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="371"/>
+        <location filename="../rangecontrol.cpp" line="369"/>
         <source>Reset</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="372"/>
+        <location filename="../rangecontrol.cpp" line="370"/>
         <source>Reset&apos;ib märgitud rajad</source>
         <translation>Resets selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="377"/>
+        <location filename="../rangecontrol.cpp" line="375"/>
         <source>Saada lasud</source>
         <translation>Publish Shots</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="378"/>
+        <location filename="../rangecontrol.cpp" line="376"/>
         <source>Saadab märgitud laskurite olemasolevad lasud Protokollitajasse</source>
         <translation>Publishes existing shots for all selected lanes to connected programs (Protokollitaja)</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="396"/>
+        <location filename="../rangecontrol.cpp" line="394"/>
         <source>Programmi keel</source>
         <translation>Program Language</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="397"/>
+        <location filename="../rangecontrol.cpp" line="395"/>
         <source>Programmi keele valik</source>
         <translation>Change program language</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="422"/>
+        <location filename="../rangecontrol.cpp" line="420"/>
         <source>Ava startlist</source>
         <translation>Open Startlist</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="422"/>
+        <location filename="../rangecontrol.cpp" line="420"/>
         <source>Comma separated file (*.csv)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="433"/>
-        <location filename="../rangecontrol.cpp" line="500"/>
-        <location filename="../rangecontrol.cpp" line="512"/>
+        <location filename="../rangecontrol.cpp" line="431"/>
+        <location filename="../rangecontrol.cpp" line="451"/>
+        <location filename="../rangecontrol.cpp" line="498"/>
+        <location filename="../rangecontrol.cpp" line="510"/>
         <source>Viga</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="433"/>
+        <location filename="../rangecontrol.cpp" line="431"/>
         <source>Kasutage Siusi startlisti formaati, kuna Inbandi omas ei ole ID&apos;sid!</source>
         <translation>Use Sius startlist format, because Inband startlist doesn&apos;t contain IDs!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="441"/>
-        <location filename="../rangecontrol.cpp" line="505"/>
+        <location filename="../rangecontrol.cpp" line="439"/>
+        <location filename="../rangecontrol.cpp" line="503"/>
         <source>Sisesta raja number</source>
         <translation>Enter target number</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="500"/>
+        <location filename="../rangecontrol.cpp" line="451"/>
+        <source>Ei õnnestunud faili avada!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="498"/>
         <source>Vigane stardinimekirja rida!
 %1</source>
         <translation>Faulty row in start list!
 %1</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="512"/>
+        <location filename="../rangecontrol.cpp" line="510"/>
         <source>Rajal %1 on võistlus käimas, uut laskurit ei imporditud!</source>
         <translation>Target %1 has competition in progress, new competitor was not imported!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="615"/>
+        <location filename="../rangecontrol.cpp" line="613"/>
         <source>Märgi IP: </source>
         <translation>Target IP: </translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="731"/>
+        <location filename="../rangecontrol.cpp" line="729"/>
         <source>Rajal %1 on võistlus veel käimas, oled kindel, et tahad seda uuesti alustada?</source>
         <translation>Target %1 has competition in progress, are you sure you want to reset it?</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="754"/>
+        <location filename="../rangecontrol.cpp" line="752"/>
         <source>Viga!</source>
         <translation>Error!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="754"/>
+        <location filename="../rangecontrol.cpp" line="752"/>
         <source>See versioon Range Control&apos;ist ei tea, kuidas valitud harjutust (%1) InBandile saata!</source>
         <translation>This version of Range Control doesn&apos;t know how to send chosen event (%1) to InBand!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="826"/>
+        <location filename="../rangecontrol.cpp" line="824"/>
         <source>Laskude arv:</source>
         <translation>Number of Shots:</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="837"/>
+        <location filename="../rangecontrol.cpp" line="835"/>
         <source>Vali harjutus</source>
         <translation>Choose event type</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="837"/>
+        <location filename="../rangecontrol.cpp" line="835"/>
         <source>Harjutus:</source>
         <translation>Event:</translation>
     </message>
@@ -634,7 +640,7 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation type="vanished">Class:</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="826"/>
+        <location filename="../rangecontrol.cpp" line="824"/>
         <source>Sisesta laskude arv</source>
         <translation>Enter number of shots</translation>
     </message>

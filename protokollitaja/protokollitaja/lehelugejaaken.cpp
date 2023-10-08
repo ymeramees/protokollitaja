@@ -310,7 +310,6 @@ void LehelugejaAken::loe()
                 bool onnestus = false;
                 fl = list.at(1).toFloat(&onnestus);
                 if(!onnestus){
-                    //QMessageBox::critical(this, "Viga", "Ütle Laurile, et lugemismasinast tulnud punkt on vaja asendada komaga.", QMessageBox::Ok);
                     QString rida = list.at(1);
                     rida.replace('.', ',');
                     fl = rida.toFloat(&onnestus);
@@ -360,7 +359,6 @@ void LehelugejaAken::loe()
                     onnestus = false;
                     fl = list.at(6).toFloat();
                     if(!onnestus){
-                        //QMessageBox::critical(this, "Viga", "Ütle Laurile, et lugemismasinast tulnud punkt on vaja asendada komaga.", QMessageBox::Ok);
                         QString rida = list.at(6);
                         rida.replace('.', ',');
                         fl = rida.toFloat(&onnestus);
@@ -407,7 +405,6 @@ void LehelugejaAken::loe()
                     onnestus = false;
                     fl = list.at(11).toFloat();
                     if(!onnestus){
-                        //QMessageBox::critical(this, "Viga", "Ütle Laurile, et lugemismasinast tulnud punkt on vaja asendada komaga.", QMessageBox::Ok);
                         QString rida = list.at(11);
                         rida.replace('.', ',');
                         fl = rida.toFloat(&onnestus);
@@ -436,20 +433,18 @@ void LehelugejaAken::loe()
                 if(lask == 10){ //Seeria sai täis, vaja kirjutada väärtus aktiivsesse lahtrisse
                     if(aktiivneSeeria != nullptr){
                         fl = seeria;    //Kasutame lasu float muutujat seeria jagamiseks 10'ga, seeria enda jagamisel kaovad komakohad ära
-                        //m_ui.logi->append(QString("Seeria: %1, fl: %2, fl/10: %3").arg(seeria).arg(fl).arg(fl/10));
                         aktiivneSeeria->setText(QString("%1").arg(fl / 10));
                         aktiivneSeeria->setText(aktiivneSeeria->text().replace('.', ','));
                         for(int i = 0; i < seeriaLasud.count(); i++)    //Loetud laskude kirjutamine aktiivsesse seeriasse
                             lasud[aktiivseSeeriaNr][i]->set(seeriaLasud[i]);
                         m_ui.logi->append(m_ui.nimeBox->currentText() + QString(" %1. seeria: %2").arg(aktiivneSeeria->objectName().at(6)).arg(fl / 10));
                     }else{
-                        QMessageBox::critical(this, "Viga", "Puudus aktiivne seeria kast!", QMessageBox::Ok);
-                        m_ui.logi->append("Viga!:" + m_ui.nimeBox->currentText() + tr(" tundmatu seeria: %1").arg(fl / 10));
+                        QMessageBox::critical(this, tr("Viga"), tr("Puudus aktiivne seeria kast!"), QMessageBox::Ok);
+                        m_ui.logi->append(tr("Viga!:") + m_ui.nimeBox->currentText() + tr(" tundmatu seeria: %1").arg(fl / 10));
                     }
                     /*for(int k = 0; k < seeriad.count(); k++)
                         if(seeriad[k]->hasFocus()){
                             fl = seeria;    //Kasutame lasu float muutujat seeria jagamiseks 10'ga, seeria enda jagamisel kaovad komakohad ära
-                            //m_ui.logi->append(QString("Seeria: %1, fl: %2, fl/10: %3").arg(seeria).arg(fl).arg(fl/10));
                             seeriad[k]->setText(QString("%1").arg(fl / 10));
                             seeriad[k]->setText(seeriad[k]->text().replace('.', ','));
                             m_ui.logi->append(m_ui.nimeBox->currentText() + QString(" %1. seeria: %2").arg(k + 1).arg(fl / 10));
@@ -468,7 +463,7 @@ void LehelugejaAken::loe()
                     seadistaja->start();
                 }
                 if(oliKahtlane){ //Kui on vaja kontrollida, viskab teate
-                    QMessageBox::warning(this, "Teade", tr("Lehes olid kahtlased lasud, vaja kontrollida ning "
+                    QMessageBox::warning(this, tr("Teade"), tr("Lehes olid kahtlased lasud, vaja kontrollida ning "
                             "seejärel kaks korda Neustart vajutada. Alles siis vajutage siin \"OK\""), QMessageBox::Ok);
                     oliKahtlane = false;
                 }
@@ -596,10 +591,10 @@ void LehelugejaAken::saadaTekst()
     if(m_ui.tekstiEdit->text().isEmpty())
         return;
     else if(m_ui.tekstiEdit->text().contains("uuenda porte", Qt::CaseInsensitive)){
-        m_ui.logi->append("Uuenda porte:");
+        m_ui.logi->append(tr("Uuenda porte:"));
         uuendaPorte();
     }else if(m_ui.tekstiEdit->text().left(3) == "COM" && m_ui.tekstiEdit->text().length() == 4){
-        m_ui.logi->append("Lisatud: " + m_ui.tekstiEdit->text());
+        m_ui.logi->append(tr("Lisatud: ") + m_ui.tekstiEdit->text());
         m_ui.comPort->addItem(m_ui.tekstiEdit->text());
         m_ui.comPort->setCurrentIndex(m_ui.comPort->count() - 1);
     }else saada(m_ui.tekstiEdit->text());
@@ -642,7 +637,7 @@ void LehelugejaAken::uhenda()
     if(!kaabelLeitud)   //Kui lugemismasina kaablit algul ei leitud, siis äkki vahepeal on see külge ühendatud
         uuendaPorte();
 
-    m_ui.logi->append("Ühendamine: " + m_ui.comPort->currentText());
+    m_ui.logi->append(tr("Ühendamine: ") + m_ui.comPort->currentText());
     serial.setPortName(m_ui.comPort->currentText());
     serial.setBaudRate(QSerialPort::Baud2400);
     serial.setDataBits(QSerialPort::Data8);
@@ -685,5 +680,5 @@ void LehelugejaAken::uuendaPorte()
             kaabelLeitud = true;
         }
     }
-    if(!kaabelLeitud) QMessageBox::warning(this, "Protokollitaja", "Lugemismasina kaablit ei leitud!", QMessageBox::Ok);
+    if(!kaabelLeitud) QMessageBox::warning(this, "Protokollitaja", tr("Lugemismasina kaablit ei leitud!"), QMessageBox::Ok);
 }

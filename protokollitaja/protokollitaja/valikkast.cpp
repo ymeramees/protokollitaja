@@ -51,11 +51,11 @@ void ValikKast::muudaEkraaniNimi(int)
         ui.vSummadeSilt2->setVisible(false);
 
         if(ui.indBox->currentIndex() == 0){
-            ui.seeriateSilt->setText("Seeriate arv:");
+            ui.seeriateSilt->setText(tr("Seeriate arv:"));
             ui.seeriateArv->setMaximum(12);
             ui.kumnendikegaBox->setCheckable(true);
         }else{
-            ui.seeriateSilt->setText("Liikmete arv:");
+            ui.seeriateSilt->setText(tr("Liikmete arv:"));
             ui.seeriateArv->setMaximum(8);
             ui.seeriateSilt->setVisible(true);
             ui.seeriateArv->setVisible(true);

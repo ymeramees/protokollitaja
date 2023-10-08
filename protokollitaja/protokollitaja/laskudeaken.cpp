@@ -76,7 +76,7 @@ void LaskudeAken::kirjutaLasud()    //Kirjutab tabelis olevad lasud seeriasse
             else if(!onnestus && ui->laskudeTabel->item(i, 0)->text().contains('.'))
                 lask = ui->laskudeTabel->item(i, 0)->text().replace('.', ',').toFloat(&onnestus);
             if(!onnestus){
-                QMessageBox::critical(this, "Viga", "Vigane lasu väärtus tabelis!", QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Viga"), tr("Vigane lasu väärtus tabelis!"), QMessageBox::Ok);
                 return;
             }
             lasud[aktiivneSeeria][i]->setLask(lask);

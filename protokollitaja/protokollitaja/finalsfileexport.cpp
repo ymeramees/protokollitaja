@@ -23,7 +23,7 @@ FinalsFileExport::FinalsFileExport(QVector<QStringList> inputTable, QString comp
     ui->finalsCompetitorsTable->setColumnWidth(0, 70);
     ui->finalsCompetitorsTable->setColumnWidth(1, 70);
     QStringList headers;
-    headers << "Raja nr" << "ID" << "Nimi" << "Tulemus";
+    headers << tr("Raja nr") << tr("ID") << tr("Nimi") << tr("Tulemus");
     ui->finalsCompetitorsTable->setHorizontalHeaderLabels(headers);
 
     //Each "row" in inputTable: target, ID, screen name, result, first name, name, club

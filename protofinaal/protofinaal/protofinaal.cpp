@@ -208,7 +208,7 @@ void Protofinaal::importSiusStartList()
         }
 
     } else
-        QMessageBox::critical(this, "Viga", "Ei õnnestunud faili avada!", QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Viga"), tr("Ei õnnestunud faili avada!"), QMessageBox::Ok);
 }
 
 void Protofinaal::initialize()

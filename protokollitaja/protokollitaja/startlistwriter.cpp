@@ -115,10 +115,10 @@ void StartListWriter::writeStartListFile(StartListType type)
         file.close();
         if (exported > 0)
             QMessageBox::information(
-                        dynamic_cast<QWidget*>(this->parent()),
-                        "Protokollitaja",
-                        tr("Startlist loodud. Eksporditi %1 laskurit\n%2").arg(exported).arg(m_filePath),
-                        "Selge"
-                        );
-    } else QMessageBox::critical(dynamic_cast<QWidget*>(this->parent()), "Viga", tr("Ei õnnestu faili kirjutada."), QMessageBox::Ok);
+                dynamic_cast<QWidget*>(this->parent()),
+                "Protokollitaja",
+                tr("Startlist loodud. Eksporditi %1 laskurit\n%2").arg(exported).arg(m_filePath),
+                QMessageBox::Ok
+                );
+    } else QMessageBox::critical(dynamic_cast<QWidget*>(this->parent()), tr("Viga"), tr("Ei õnnestu faili kirjutada."), QMessageBox::Ok);
 }

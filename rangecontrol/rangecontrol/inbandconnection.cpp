@@ -25,11 +25,11 @@ void InbandConnection::readIncomingData()
 
     if (m_buffer.contains(MESSAGE_END)) {
         QString message = m_buffer.left(m_buffer.indexOf(MESSAGE_END) + MESSAGE_END.length());
+        *m_log << QTime::currentTime().toString() << ": " << message.replace("\n", ";") << Qt::endl;
         m_buffer.remove(0, message.length());
         QTextStream(stdout) << "InbandConnection::readIncomingData, message = " << message << Qt::endl;
 
         QStringList msgParts = message.split('\n');
-        *m_log << QTime::currentTime().toString() << ": " << msgParts.join(";") << Qt::endl;
         int target = msgParts.at(0).toInt();
         QTextStream(stdout) << "InbandConnection::readIncomingData, msgParts = " << msgParts.join(";") << Qt::endl;
 

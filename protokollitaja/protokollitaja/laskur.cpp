@@ -17,10 +17,8 @@ Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i,
         kumnendikega = kum;
         jarjestamine = jar;
         m_eventType = eventType;
-//  QMessageBox::information(this, "Teade", "Lasku::Laskur()", "OK");
 //	connect(eesNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus(QString)));
 //	connect(perekNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus2(QString)));
-//	QMessageBox::information(this, "Teade", "Lasku::Laskur()3", "OK");
 
 
         for(int i = 0; i < seeriateArv; i++){
@@ -44,7 +42,7 @@ Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i,
                         vSummad[i]->setMinimumHeight(28);
                         vSummad[i]->setMaximumWidth(50);
                         vSummad[i]->setText("0");
-                        vSummad[i]->setToolTip("Vahesumma");
+                        vSummad[i]->setToolTip(tr("Vahesumma"));
                         vSummad[i]->setStyleSheet("border: 1px solid grey");
                         vSummad[i]->setReadOnly(true);
                 }
@@ -169,7 +167,7 @@ void Laskur::createLayout()
         if(vSummadeSamm != 0){
             if(/*i != 0 &&*/ (i+1) % vSummadeSamm == 0){
                 if(j >= vSummad.size()){
-                    QMessageBox::critical(this, "Viga!", "Ei ole nii palju vahesummasid!", "Selge");
+                    QMessageBox::critical(this, tr("Viga!"), tr("Ei ole nii palju vahesummasid!"), QMessageBox::Ok);
                     return;
                 }
                 hKast->addWidget(vSummad[j]);
@@ -251,7 +249,7 @@ void Laskur::lisaLAken()
                 }
         }
         if(lisaLasud.count() == 0)
-                QMessageBox::critical(this, "Teade", "lisalasud.count() = 0", "Selge");
+                QMessageBox::critical(this, tr("Teade"), "lisalasud.count() = 0", QMessageBox::Ok);
         if(lisaAken->exec() == QDialog::Accepted){
                 emit muudatus();
                 lisaLasud.clear();
@@ -302,12 +300,9 @@ void Laskur::muutus(QString)
         }
         QString tekst = eesNimi->text();
         if(eelmine.length() > tekst.length() + 1) eelmine = "";
-//	QMessageBox::information(this, "Teade", "eelmine = " + eelmine + " ja tekst = " + tekst, "Selge");
         if(eelmine != tekst && eelmine.length() < tekst.length()){//Pikkuste võrdlus on samuti vajalik
                 if(abi == Puss){										//kustutamisest aru saamiseks.
-//			QMessageBox::information(this, "Teade", "abi == puss", "Selge");
                         if(andmebaas->kirjutusabiPuss){
-//				QMessageBox::information(this, "Teade", "Otsin püssilaskurite seast", "Selge");
                                 for(int i = 0; i < andmebaas->nimekiriPuss.count(); i++){
                                         if(tekst == andmebaas->nimekiriPuss[i]->eesnimi.mid(0, tekst.length())){
                                                                 //Võrdleb nime kastis olevat andmebaasi nimede algustega.
@@ -329,7 +324,6 @@ void Laskur::muutus(QString)
                         }
                         if(andmebaas->kirjutusabiPustol){
                                 if(tekst == eesNimi->text()){
-//					QMessageBox::information(this, "Teade", "Otsin püstolilaskurite seast", "Selge");
                                         for(int i = 0; i < andmebaas->nimekiriPustol.count(); i++){
                                                 if(tekst == andmebaas->nimekiriPustol[i]->eesnimi.mid(0, tekst.length())){
                                                                         //Võrdleb nime kastis olevat andmebaasi nimede algustega.
@@ -352,9 +346,7 @@ void Laskur::muutus(QString)
                         }
                 }
                 else if(abi == Pustol){
-//			QMessageBox::information(this, "Teade", "abi == pustol", "Selge");
                         if(andmebaas->kirjutusabiPustol){
-//				QMessageBox::information(this, "Teade", "Otsin püstolilaskurite seast", "Selge");
                                 for(int i = 0; i < andmebaas->nimekiriPustol.count(); i++){
                                         if(tekst == andmebaas->nimekiriPustol[i]->eesnimi.mid(0, tekst.length())){
                                                                 //Võrdleb nime kastis olevat andmebaasi nimede algustega.
@@ -376,7 +368,6 @@ void Laskur::muutus(QString)
                         }
                         if(andmebaas->kirjutusabiPuss){
                                 if(tekst == eesNimi->text()){
-//					QMessageBox::information(this, "Teade", "Otsin püssilaskurite seast", "Selge");
                                         for(int i = 0; i < andmebaas->nimekiriPuss.count(); i++){
                                                 if(tekst == andmebaas->nimekiriPuss[i]->eesnimi.mid(0, tekst.length())){
                                                                         //Võrdleb nime kastis olevat andmebaasi nimede algustega.
@@ -417,11 +408,9 @@ void Laskur::muutus2(QString)
             QString tekst = perekNimi->text().toUpper();
             perekNimi->setText(tekst);
             if(eelmine.length() > tekst.length() + 1) eelmine = "";
-//		QMessageBox::information(this, "Teade", "eelmine = " + eelmine + " ja tekst = " + tekst, "Selge");
             if(eelmine != tekst && eelmine.length() < tekst.length()){
                     if(abi == Puss){
                             if(andmebaas->kirjutusabiPuss){
-//					QMessageBox::information(this, "Teade", "Otsin püssilaskurite seast", "Selge");
                                     for(int i = 0; i < andmebaas->nimekiriPuss.count(); i++){
                                             if(eesNimi->text() == andmebaas->nimekiriPuss[i]->eesnimi &&
                                                             tekst == andmebaas->nimekiriPuss[i]->perekonnanimi.mid(0, tekst.length())){
@@ -441,7 +430,6 @@ void Laskur::muutus2(QString)
                             }
                             if(andmebaas->kirjutusabiPustol){
                                     if(tekst.length() == perekNimi->text().length()){
-//						QMessageBox::information(this, "Teade", "Otsin püstolilaskurite seast", "Selge");
                                             for(int i = 0; i < andmebaas->nimekiriPustol.count(); i++){
                                                     if(eesNimi->text() == andmebaas->nimekiriPustol[i]->eesnimi &&
                                                                     tekst == andmebaas->nimekiriPustol[i]->perekonnanimi.mid(0,
@@ -739,7 +727,7 @@ void Laskur::muutus5()
 void Laskur::naitaIdAken()
 {
     bool ok = false;
-    int uusId = QInputDialog::getInt(this, "Sisestage uus laskuri ID", "ID:", this->id, 0, 9999, 1, &ok);
+        int uusId = QInputDialog::getInt(this, tr("Sisestage uus laskuri ID"), "ID:", this->id, 0, 9999, 1, &ok);
     if(ok)
         emit idMuutus(uusId, this);
 //        this->id = uusId;
@@ -870,9 +858,9 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
     }
 
     switch(t){
-    case 1: {   //1 - perekonnanimede järgi reastamine
+    case 1: {   //1 - sorting by family names
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Perekonnanimede järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): by family names - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
         if(this->perekNimi->text().localeAwareCompare(l->perekNimi->text()) > 0)
             return true;
         else if(this->perekNimi->text().localeAwareCompare(l->perekNimi->text()) < 0)
@@ -883,9 +871,9 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
             else return false;
         }
     }
-    case 2: { //2 - sünniaastate järgi reastamine
+    case 2: { //2 - sorting by birth years
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Sünniaastate järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): by birth years - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
         if(this->sunniAasta->text().toInt() < l->sunniAasta->text().toInt())
             return true;
         else if(this->sunniAasta->text().toInt() > l->sunniAasta->text().toInt())
@@ -902,9 +890,9 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
             }
         }
     }
-    case 3: { //3 - raja nr'ite järgi reastamine
+    case 3: { //3 - sorting by target numbers
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Raja nr'ite järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): by target numbers - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
 
         int tulemus = vaiksemRajaga(l);
 
@@ -914,7 +902,7 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
         }
 
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Raja nr'id samad" << Qt::endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): Same target numbers" << Qt::endl;
         tulemus = vaiksemNimega(l);
 
         switch(tulemus){
@@ -923,9 +911,9 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
         default: return false;
         }
     }
-    case 4: { //4 - sifrite järgi reastamine
+    case 4: { //4 - by paper target ciphers
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Sifrite järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): by ciphers - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
         if(this->sifriAlgus->text().toInt() < l->sifriAlgus->text().toInt()){
             if(this->sifriAlgus->text().isEmpty()) return true;
             else return false;
@@ -950,7 +938,7 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
 //            liida();
 //            l->liida();
         if(veryVerbose)
-            QTextStream(stdout) << "Laskur::vaiksem(): Üldine järgi - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
+            QTextStream(stdout) << "Laskur::vaiksem(): general - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
         if(!this->finaal->text().isEmpty() && !l->finaal->text().isEmpty()){
             float ksum = this->finaal->text().toFloat(&onnestus);
             if(!onnestus){  //Kui arvuks tegemine ei õnnestunud on vaja asendada koma punktiga, kasutame sama QString seeria't
@@ -973,14 +961,14 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
                 else return false;
             }else{  //Kui finaaliseeriad on võrdsed, peavad olema tehtud lisalasud
 #ifdef QT_DEBUG
-                qDebug() << "Laskur::vaiksem(), finaalid võrdsed, this->lisaLasud.count() = " << this->lisaLasud.count() << ", l->lisaLasud.count() = " << l->lisaLasud.count();
+                qDebug() << "Laskur::vaiksem(), finals equal, this->lisaLasud.count() = " << this->lisaLasud.count() << ", l->lisaLasud.count() = " << l->lisaLasud.count();
 #endif
                 if(this->lisaLasud.count() == 0 && l->lisaLasud.count() != 0)   //Juhul, kui finaali seeriad on võrdsed, aga millegipärast lisalaske ei ole
                     return true;
                 if(l->lisaLasud.count() == 0)
                     return false;
 #ifdef QT_DEBUG
-                qDebug() << "Laskur::vaiksem(), vaadatakse lisalaske";
+                qDebug() << "Laskur::vaiksem(), looking at additional shots";
 #endif
                 for(int k = 0; k < this->lisaLasud.count(); k++){
                     if(this->lisaLasud[k] != l->lisaLasud[k]){
