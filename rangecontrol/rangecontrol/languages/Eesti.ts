@@ -292,7 +292,7 @@ Kontrollige, kas Protokollitaja ja Range Control&apos;i versioonid ühtivad!</so
     </message>
     <message>
         <location filename="../rangecontrol.cpp" line="190"/>
-        <location filename="../rangecontrol.cpp" line="728"/>
+        <location filename="../rangecontrol.cpp" line="734"/>
         <source>Võistlus käimas!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -534,8 +534,8 @@ Kontrollige, kas Protokollitaja ja Range Control&apos;i versioonid ühtivad!</so
     <message>
         <location filename="../rangecontrol.cpp" line="431"/>
         <location filename="../rangecontrol.cpp" line="451"/>
-        <location filename="../rangecontrol.cpp" line="498"/>
-        <location filename="../rangecontrol.cpp" line="510"/>
+        <location filename="../rangecontrol.cpp" line="504"/>
+        <location filename="../rangecontrol.cpp" line="516"/>
         <source>Viga</source>
         <translation type="unfinished"></translation>
     </message>
@@ -546,7 +546,7 @@ Kontrollige, kas Protokollitaja ja Range Control&apos;i versioonid ühtivad!</so
     </message>
     <message>
         <location filename="../rangecontrol.cpp" line="439"/>
-        <location filename="../rangecontrol.cpp" line="503"/>
+        <location filename="../rangecontrol.cpp" line="509"/>
         <source>Sisesta raja number</source>
         <translation type="unfinished"></translation>
     </message>
@@ -556,53 +556,53 @@ Kontrollige, kas Protokollitaja ja Range Control&apos;i versioonid ühtivad!</so
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="498"/>
+        <location filename="../rangecontrol.cpp" line="504"/>
         <source>Vigane stardinimekirja rida!
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="510"/>
+        <location filename="../rangecontrol.cpp" line="516"/>
         <source>Rajal %1 on võistlus käimas, uut laskurit ei imporditud!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="613"/>
+        <location filename="../rangecontrol.cpp" line="619"/>
         <source>Märgi IP: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="729"/>
+        <location filename="../rangecontrol.cpp" line="735"/>
         <source>Rajal %1 on võistlus veel käimas, oled kindel, et tahad seda uuesti alustada?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="752"/>
+        <location filename="../rangecontrol.cpp" line="758"/>
         <source>Viga!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="752"/>
+        <location filename="../rangecontrol.cpp" line="758"/>
         <source>See versioon Range Control&apos;ist ei tea, kuidas valitud harjutust (%1) InBandile saata!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="824"/>
+        <location filename="../rangecontrol.cpp" line="830"/>
         <source>Sisesta laskude arv</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="824"/>
+        <location filename="../rangecontrol.cpp" line="830"/>
         <source>Laskude arv:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="835"/>
+        <location filename="../rangecontrol.cpp" line="841"/>
         <source>Harjutus:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="835"/>
+        <location filename="../rangecontrol.cpp" line="841"/>
         <source>Vali harjutus</source>
         <translation type="unfinished"></translation>
     </message>

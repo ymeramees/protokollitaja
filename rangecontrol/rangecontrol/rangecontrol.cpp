@@ -467,7 +467,7 @@ void RangeControl::initialize()
     }
 
     if (m_shotsLog == nullptr) {
-        QString shotsFileName = QString("Range Control lasud %1.log").arg(QDate::currentDate().toString(Qt::ISODate));
+        QString shotsFileName = QString("Range Control shots %1.log").arg(QDate::currentDate().toString(Qt::ISODate));
         QFile *logFile = new QFile(QDir(logsDir).filePath(shotsFileName));
         if (logFile->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)) {
             m_shotsLog = new QTextStream(logFile);

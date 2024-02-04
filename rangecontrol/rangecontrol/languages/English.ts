@@ -287,7 +287,7 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
     <name>RangeControl</name>
     <message>
         <location filename="../rangecontrol.cpp" line="190"/>
-        <location filename="../rangecontrol.cpp" line="728"/>
+        <location filename="../rangecontrol.cpp" line="734"/>
         <source>Võistlus käimas!</source>
         <translation>Competition ongoing!</translation>
     </message>
@@ -559,8 +559,8 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
     <message>
         <location filename="../rangecontrol.cpp" line="431"/>
         <location filename="../rangecontrol.cpp" line="451"/>
-        <location filename="../rangecontrol.cpp" line="498"/>
-        <location filename="../rangecontrol.cpp" line="510"/>
+        <location filename="../rangecontrol.cpp" line="504"/>
+        <location filename="../rangecontrol.cpp" line="516"/>
         <source>Viga</source>
         <translation>Error</translation>
     </message>
@@ -571,7 +571,7 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
     </message>
     <message>
         <location filename="../rangecontrol.cpp" line="439"/>
-        <location filename="../rangecontrol.cpp" line="503"/>
+        <location filename="../rangecontrol.cpp" line="509"/>
         <source>Sisesta raja number</source>
         <translation>Enter target number</translation>
     </message>
@@ -581,49 +581,49 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="498"/>
+        <location filename="../rangecontrol.cpp" line="504"/>
         <source>Vigane stardinimekirja rida!
 %1</source>
         <translation>Faulty row in start list!
 %1</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="510"/>
+        <location filename="../rangecontrol.cpp" line="516"/>
         <source>Rajal %1 on võistlus käimas, uut laskurit ei imporditud!</source>
         <translation>Target %1 has competition in progress, new competitor was not imported!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="613"/>
+        <location filename="../rangecontrol.cpp" line="619"/>
         <source>Märgi IP: </source>
         <translation>Target IP: </translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="729"/>
+        <location filename="../rangecontrol.cpp" line="735"/>
         <source>Rajal %1 on võistlus veel käimas, oled kindel, et tahad seda uuesti alustada?</source>
         <translation>Target %1 has competition in progress, are you sure you want to reset it?</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="752"/>
+        <location filename="../rangecontrol.cpp" line="758"/>
         <source>Viga!</source>
         <translation>Error!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="752"/>
+        <location filename="../rangecontrol.cpp" line="758"/>
         <source>See versioon Range Control&apos;ist ei tea, kuidas valitud harjutust (%1) InBandile saata!</source>
         <translation>This version of Range Control doesn&apos;t know how to send chosen event (%1) to InBand!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="824"/>
+        <location filename="../rangecontrol.cpp" line="830"/>
         <source>Laskude arv:</source>
         <translation>Number of Shots:</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="835"/>
+        <location filename="../rangecontrol.cpp" line="841"/>
         <source>Vali harjutus</source>
         <translation>Choose event type</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="835"/>
+        <location filename="../rangecontrol.cpp" line="841"/>
         <source>Harjutus:</source>
         <translation>Event:</translation>
     </message>
@@ -640,7 +640,7 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation type="vanished">Class:</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="824"/>
+        <location filename="../rangecontrol.cpp" line="830"/>
         <source>Sisesta laskude arv</source>
         <translation>Enter number of shots</translation>
     </message>

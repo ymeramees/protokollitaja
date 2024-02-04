@@ -504,7 +504,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
 
                 if(logi->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){ //Muudatuste ja laskude logifail
                     logiValja.setDevice(logi);
-                    logiValja << "///////////////////////////////" << m_competitionName << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";
+                    logiValja << "/////////////////////" << m_competitionName << ", " << QDateTime::currentDateTime().toString() << ", " << programmiNimi << " (" << versioon <<  ")/////////////////////\n";
                 }else{
                     QMessageBox::warning(this, tr("Hoiatus"), tr("Logi faili kirjutamine ei õnnestunud! Kontrollige, et teil oleks kirjutamisõigus sinna kausta, kus asub võistluste fail."), QMessageBox::Ok);
                 }
@@ -3344,7 +3344,7 @@ void Protokollitaja::prindi2()
         algus = pTekst.indexOf("<tr>", pTekst.indexOf("<tbody>"));
         pikkus = pTekst.lastIndexOf("</tr>", pTekst.indexOf("</tbody>")) + 5 - algus;
         if(algus == -1 || pTekst.lastIndexOf("</tr>", pTekst.indexOf("</tbody>")) == -1)
-            QMessageBox::critical(this, tr("Viga"), "Ei leidnud Print_template.html failist <tr>, <tbody>, </tr> või </tbody> tag'e. Tabeli printimine ei ole võimalik", QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Viga"), tr("Ei leidnud Print_template.html failist <tr>, <tbody>, </tr> või </tbody> tag'e. Tabeli printimine ei ole võimalik"), QMessageBox::Ok);
 
         QString origRida = pTekst.mid(algus, pikkus);   //Tabeli rea template
         QString rida;    //Tabeli rida, mis korduma hakkab
@@ -3353,20 +3353,20 @@ void Protokollitaja::prindi2()
         algus = origRida.lastIndexOf("<td", origRida.indexOf("#S2#"));
         pikkus = origRida.indexOf("</td>", origRida.indexOf("#S6#")) + 5 - algus;
         if(algus == -1 || origRida.indexOf("</td>", origRida.indexOf("#S6#")) == -1)
-            QMessageBox::critical(this, tr("Viga"), "Ei leidnud Print_template.html failist <td>, #S2#, </td> või #S6# tag'e. Tabeli printimine ei ole võimalik", QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Viga"), tr("Ei leidnud Print_template.html failist <td>, #S2#, </td> või #S6# tag'e. Tabeli printimine ei ole võimalik"), QMessageBox::Ok);
         origRida.remove(algus, pikkus); //Seeriate 2-6 eemaldamine template'ist
 
         algus = origRida.lastIndexOf("<td", origRida.indexOf("#S1#"));
         pikkus = origRida.indexOf("</td>", origRida.indexOf("#S1#")) + 5 - algus;
         if(algus == -1 || origRida.indexOf("</td>", origRida.indexOf("#S1#")) == -1)
-            QMessageBox::critical(this, tr("Viga"), "Ei leidnud Print_template.html failist <td>, #S1# või </td> tag'e. Tabeli printimine ei ole võimalik", QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Viga"), tr("Ei leidnud Print_template.html failist <td>, #S1# või </td> tag'e. Tabeli printimine ei ole võimalik"), QMessageBox::Ok);
         QString origSeeriaRida = origRida.mid(algus, pikkus); //Tabeli rea seeriate osa (alates 2. seeriast), mis korduma hakkab
         QString seeriaRida = origSeeriaRida;
 
         algus = origRida.lastIndexOf("<td", origRida.indexOf("#summa#"));
         pikkus = origRida.indexOf("</td>", origRida.indexOf("#summa#")) + 5 - algus;
         if(algus == -1 || origRida.indexOf("</td>", origRida.indexOf("#summa#")) == -1)
-            QMessageBox::critical(this, tr("Viga"), "Ei leidnud Print_template.html failist <td>, #summa# või </td> tag'e. Tabeli printimine ei ole võimalik", QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Viga"), tr("Ei leidnud Print_template.html failist <td>, #summa# või </td> tag'e. Tabeli printimine ei ole võimalik"), QMessageBox::Ok);
         QString origVSummaRida = origRida.mid(algus, pikkus);   //Tabeli vahesumma rea template
         QString vSummaRida = origVSummaRida;
 //        QMessageBox::information(this, "Protokollitaja", "pTekst: " + pTekst, QMessageBox::Ok);
@@ -3414,7 +3414,7 @@ void Protokollitaja::prindi2()
             rida = origRida;
 
             if(seeLeht->laskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive)){
-                rida.replace("#nr#", "V.A.");
+                rida.replace("#nr#", tr("V.A."));
             }else if(seeLeht->laskurid[i]->markus->text().contains("DNF", Qt::CaseInsensitive)){
                 rida.replace("#nr#", "DNF");
             }else if(seeLeht->laskurid[i]->markus->text().contains("DSQ", Qt::CaseInsensitive)){
@@ -3466,7 +3466,7 @@ void Protokollitaja::prindi2()
             algus = pTekst.indexOf("<tr>", pTekst.indexOf("<tbody>"));
             pikkus = pTekst.lastIndexOf("</tr>", pTekst.indexOf("</tbody>")) + 5 - algus;
             if(algus == -1 || pTekst.lastIndexOf("</tr>", pTekst.indexOf("</tbody>")) == -1)
-                QMessageBox::critical(this, tr("Viga"), "Ei leidnud Print_template.html failist <tr>, <tbody>, </tr> või </tbody> tag'e. Tabeli printimine on vigane!", QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Viga"), tr("Ei leidnud Print_template.html failist <tr>, <tbody>, </tr> või </tbody> tag'e. Tabeli printimine on vigane!"), QMessageBox::Ok);
 
             QString origRida = pTekst.mid(algus, pikkus);   //Tabeli võistkonna rea template
             QString rida;    //Tabeli võistkonna rida, mis korduma hakkab
@@ -4619,7 +4619,7 @@ void Protokollitaja::uhenduSiusDataga()
 
     if(siusLogi->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){ //Saabunud võrguliikluse logi
         QTextStream valja(siusLogi);
-        valja << "///////////////////////////////" << m_competitionName << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";
+        valja << "/////////////////////" << m_competitionName << ", " << QDateTime::currentDateTime().toString() << ", " << programmiNimi << " (" << versioon << ")/////////////////////\n";
         siusLogi->close();
     }
 
