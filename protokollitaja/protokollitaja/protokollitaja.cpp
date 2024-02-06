@@ -1721,10 +1721,11 @@ void Protokollitaja::kirjutaFail(QString failiNimi)
                 qDebug() << "leht->laskudeArv: " << leht->laskudeArv;
             #endif
 
-                tabJson["weaponType"] = leht->m_targetType;
+            tabJson["weaponType"] = leht->m_targetType;
             tabJson["eventType"] = leht->eventType()/*.toUtf8()*/;
             tabJson["decimals"] = leht->kumnendikega;
             tabJson["toBeShown"] = leht->naidata;
+            tabJson["toBeUploaded"] = leht->toBeUploaded();
             tabJson["minTime"] = leht->minTime();
             tabJson["maxTime"] = leht->maxTime();
             tabJson["teamEvent"] = leht->voistk;
@@ -1843,9 +1844,11 @@ void Protokollitaja::kontrolliIdKordust(int uusId, Laskur* las)   //Kontrollib l
 
 void Protokollitaja::kopeeriLaskurid()
 {
-    if(tabWidget->count() < 1) return;  //Kui lehti on vähem kui üks, ei saa kopeerida
+    if(tabWidget->count() < 2) return;  //Kui lehti on vähem kui kaks, ei saa kopeerida
 
     Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
+    int currentIndex = tabWidget->currentIndex();
+
     if(leht->voistk){
         QMessageBox::critical(this, tr("Viga"), tr("Võistkondade kopeerimine lehtede vahel pole võimalik")
                 , QMessageBox::Ok);
@@ -1857,6 +1860,7 @@ void Protokollitaja::kopeeriLaskurid()
     voibSulgeda = false;
     QStringList sakid;
     for(int i = 0; i < tabWidget->count(); i++)
+        if (i != currentIndex)  // Exclude current tab
             sakid << tabWidget->tabText(i);
 
     bool Ok;
@@ -1864,12 +1868,15 @@ void Protokollitaja::kopeeriLaskurid()
 
     if(Ok && !valik.isEmpty()){
         for(int i = 0; i < tabWidget->count(); i++)
-            if(tabWidget->tabText(i) == valik){
+            if(i != currentIndex && tabWidget->tabText(i) == valik){
                 Leht* leht2 = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
                 if(leht2->voistk){
                     QMessageBox::critical(this, tr("Viga"), tr("Laskureid ei saa kopeerida võistkonna lehele"), QMessageBox::Ok);
                     return;
-                }else if(leht->seeriateArv > leht2->seeriateArv){
+                } else if (leht->leheIndeks == leht2->leheIndeks) {
+                    QMessageBox::critical(this, "Protokollitaja", tr("Laskureid ei saa kopeerida samale lehele"), QMessageBox::Ok);
+                    return;
+                } else if(leht->seeriateArv > leht2->seeriateArv){
                     if(QMessageBox::warning(this, tr("Hoiatus!"), tr("Lehel, kuhu laskureid kopeerida tahetakse, on seeriate arv väiksem! See"
                                                                   "tähendab, et osad seeriad lähevad kaduma.\n\nKas soovite jätkata"), QMessageBox::Yes | QMessageBox::No)
                             == QMessageBox::No)
@@ -2095,9 +2102,10 @@ void Protokollitaja::lehelugeja()
 
 void Protokollitaja::liiguta()
 {
-    if(tabWidget->count() < 1) return;  //Kui lehti on vähem kui üks, ei saa teisaldada
+    if(tabWidget->count() < 2) return;  //Kui lehti on vähem kui kaks, ei saa teisaldada
 
     Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
+    int currentIndex = tabWidget->currentIndex();
 
     if(leht->voistk){
         QMessageBox::critical(this, "Protokollitaja", tr("Võistkondade liigutamine lehtede vahel pole võimalik"),
@@ -2110,18 +2118,22 @@ void Protokollitaja::liiguta()
     voibSulgeda = false;
     QStringList sakid;
     for(int i = 0; i < tabWidget->count(); i++)
-        sakid << tabWidget->tabText(i);
+        if (i != currentIndex)  // Exclude current tab
+            sakid << tabWidget->tabText(i);
     bool Ok;
     QString valik = QInputDialog::getItem(this, tr("Vali leht, millele laskurid teisaldada"), tr("Töölehe nimi:"), sakid, 0, false, &Ok);
     if(Ok && !valik.isEmpty()){
         for(int i = 0; i < tabWidget->count(); i++)
-            if(tabWidget->tabText(i) == valik){
+            if(i != currentIndex && tabWidget->tabText(i) == valik){
                 Leht* leht2 = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
 
                 if(leht2->voistk){
                     QMessageBox::critical(this, "Protokollitaja", tr("Laskureid ei saa teisaldada võistkonna lehele"), QMessageBox::Ok);
                     return;
-                }else if(leht->seeriateArv > leht2->seeriateArv){
+                } else if (leht->leheIndeks == leht2->leheIndeks) {
+                    QMessageBox::critical(this, "Protokollitaja", tr("Laskureid ei saa teisaldada samale lehele"), QMessageBox::Ok);
+                    return;
+                } else if(leht->seeriateArv > leht2->seeriateArv){
                     if(QMessageBox::warning(this, tr("Hoiatus!"), tr("Lehel, kuhu laskureid teisaldada tahetakse, on seeriate arv väiksem! See"
                                                                   "tähendab, et osad seeriad lähevad kaduma.\n\nKas soovite jätkata"), QMessageBox::Yes | QMessageBox::No)
                             == QMessageBox::No)
@@ -2142,8 +2154,8 @@ void Protokollitaja::liiguta()
                         }
                     }
                 }
+                leht->eemaldaLaskur();
             }
-    leht->eemaldaLaskur();
     }
 }
 

@@ -1118,31 +1118,28 @@ bool Laskur::readSiusShot(SiusShotData shotData)
             int shotIndex = (shotData.siusShotNo - 1) % 10;
 
             // TODO: A solution to enable adding missing shots and ignoring wrong shots
-            //If competitor's last shot has data in it, then probably these results have already been read and it is better not to read them again, to avoid mistakes
-            if(seeriateArv > seriesIndex && lasud[seeriateArv - 1][laskudeArv - 1]->getILask() < 0){
-                //Check if series number and number of shots in each series is big enough
-                if(shotIndex >= 0 && lasud.count() > seriesIndex && lasud[0].count() > shotIndex){
-                    if (lasud[seriesIndex][shotIndex]->isEmpty()){
-                        lasud[seriesIndex][shotIndex]->set(&shotData.shot);
-                        liida();
-                        teataMuudatusest();
-                        result = true;
-                    } else if (lasud[seriesIndex][shotIndex]->getSLask().compare(shotData.shot.getSLask()) == 0 &&
-                               lasud[seriesIndex][shotIndex]->shotTime() == shotData.shot.shotTime()) {
-                        result = true;  // Shot already existing, ignore, but return true
-                    } else if (vSummadeSamm > 0 && findShotFromPreviousStages(shotData) != -1) {
-                        setCompetitionStage(findShotFromPreviousStages(shotData));  // If old shot was received, then set competition stage to that stage, because most likely shots will continue from there
-                        result = true;  // Shot already existing, ignore, but return true
-                    } else if (lasud[seriesIndex][shotIndex]->shotTime() < shotData.shot.shotTime()
-                               && vSummadeSamm != 0){  // Increase competition stage only if there are more than 1 stages
-                        nextCompetitionStage();
-                        result = readSiusShot(shotData); // Try again with new competitionstage
-                    } else
-                        result = false;
-                    //                    logiValja << "#" << eesNimi->text() << " " << perekNimi->text() << " lask 1 = " << lasud[seriesIndex][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->getSLask() << "\n";
-                }// else
-                //                    logiValja << "\n#viga!: laskur lõhki! seriesIndex = " << seriesIndex << ", (rowParts[lasuNrSiusis].toInt() - 1) % 10 = " << (rowParts[lasuNrSiusis].toInt() - 1) % 10 << "\n";
-            }
+            //Check if series number and number of shots in each series is big enough
+            if(shotIndex >= 0 && lasud.count() > seriesIndex && lasud[0].count() > shotIndex){
+                if (lasud[seriesIndex][shotIndex]->isEmpty()){
+                    lasud[seriesIndex][shotIndex]->set(&shotData.shot);
+                    liida();
+                    teataMuudatusest();
+                    result = true;
+                } else if (lasud[seriesIndex][shotIndex]->getSLask().compare(shotData.shot.getSLask()) == 0 &&
+                            lasud[seriesIndex][shotIndex]->shotTime() == shotData.shot.shotTime()) {
+                    result = true;  // Shot already existing, ignore, but return true
+                } else if (vSummadeSamm > 0 && findShotFromPreviousStages(shotData) != -1) {
+                    setCompetitionStage(findShotFromPreviousStages(shotData));  // If old shot was received, then set competition stage to that stage, because most likely shots will continue from there
+                    result = true;  // Shot already existing, ignore, but return true
+                } else if (lasud[seriesIndex][shotIndex]->shotTime() < shotData.shot.shotTime()
+                            && vSummadeSamm != 0){  // Increase competition stage only if there are more than 1 stages
+                    nextCompetitionStage();
+                    result = readSiusShot(shotData); // Try again with new competitionstage
+                } else
+                    result = false;
+                //                    logiValja << "#" << eesNimi->text() << " " << perekNimi->text() << " lask 1 = " << lasud[seriesIndex][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->getSLask() << "\n";
+            }// else
+            //                    logiValja << "\n#viga!: laskur lõhki! seriesIndex = " << seriesIndex << ", (rowParts[lasuNrSiusis].toInt() - 1) % 10 = " << (rowParts[lasuNrSiusis].toInt() - 1) % 10 << "\n";
         }
     }
 //    QStringList rowParts = row.split(';');

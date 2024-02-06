@@ -75,7 +75,7 @@ void ValikKast::muudaEkraaniNimi(int)
         ui.vSummadeArv->setValue(QualificationEvents::eventData(ui.harjutus->currentIndex()).seriesInSubtotal);
         m_targetType = QualificationEvents::eventData(ui.harjutus->currentIndex()).targetType;
 
-        int otherEventsStart = QualificationEvents::eventNames().size() - 5;
+        int otherEventsStart = QualificationEvents::eventNames().size() - 6;
         if (ui.harjutus->currentIndex() >= otherEventsStart) {
             ui.seeriateSilt->setVisible(true);
             ui.seeriateArv->setVisible(true);

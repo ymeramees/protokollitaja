@@ -405,7 +405,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                 sheet->alustamine = false;
             }
             kllData.lastCompetitorId = checkDuplicateIds(kllData.tabWidget, 0);
-        } else if (competitionSettings.fileVersion <= 114) {
+        } else if (competitionSettings.fileVersion <= 113) {
             kllData.tabWidget = new QTabWidget();
             kllData.tabWidget->setTabPosition(QTabWidget::North);
 
@@ -474,6 +474,9 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
 
                 sheet->alustamine = true;
                 sheet->naidata = toBeShown;    // Will this sheet be shown on spectators window
+                if (tabObject.contains("toBeUploaded"))
+                    sheet->setToBeUploaded(tabObject["toBeUploaded"].toBool());
+
                 sheet->setMinTimeMs(tabObject["minTime"].toInt());
                 sheet->setMaxTimeMs(tabObject["maxTime"].toInt());
                 if (sheet->voistk) {
