@@ -201,7 +201,7 @@ void Voistkond::naitaLiikmeteValikKast()
                                 if(jalgitavad->at(j) == lValik->jalgitavad[i])
                                         olemas = true;
                         if(!olemas){
-                                jalgitavad->insert(-1, lValik->jalgitavad[i]);
+                                jalgitavad->prepend(lValik->jalgitavad[i]);
                         }
                         olemas = false;
                 }

@@ -63,7 +63,8 @@ FORMS += \
     ../../common/src/siusdataconnections.ui
 
 RESOURCES += \
-    ../protofinaal.qrc
+    ../protofinaal.qrc \
+    resources.qrc
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

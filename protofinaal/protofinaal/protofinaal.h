@@ -12,6 +12,7 @@
 #include <QFileDialog>
 #include <QCloseEvent>
 #include <QScrollArea>
+#include <QTranslator>
 #include <QStatusBar>
 #include <QLineEdit>
 #include <QMenuBar>
@@ -68,6 +69,8 @@ private:
     QString eventType;
     QString timePlace;
     QTextStream logOut;
+    QTranslator m_translator;
+    void changeLanguage(bool);
     void clear();
     void closeEvent(QCloseEvent *event);
     void createMenus();
@@ -75,6 +78,7 @@ private:
     void readSettings();
     QVBoxLayout vBox;
     QVector<TeamsTable2022*> m_teamsTables;
+    void setupTranslator();
     void writeFinalsFile(QString fileName);
     void writeSettings();
 };

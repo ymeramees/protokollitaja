@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 ///ToDo:
 /// In progress:
-/// Enable switching from one final stage to another
 /// Would be good to create a new file immediately when going forward from initialdialog
 /// In Windows when exiting from initialdialog, the program won't exit?
 /// Crashes when big negative offset is used (same as number of shots) - OK
@@ -31,6 +30,12 @@
 Protofinaal::Protofinaal(QWidget *parent)
     : m_settings("Protofinaal", "Protofinaali conf"), QMainWindow(parent)
 {
+    if (m_settings.language().isEmpty()) {
+        changeLanguage(true);
+    }
+
+    setupTranslator();
+
     createMenus();
     setStatusBar(statusBar());
 //    QWidget *widget = new QWidget();
@@ -61,6 +66,28 @@ Protofinaal::Protofinaal(QWidget *parent)
 Protofinaal::~Protofinaal()
 {
 
+}
+
+void Protofinaal::changeLanguage(bool atStartup)
+{
+    QDir dir(":/languages/");
+    QStringList fileNames = dir.entryList(QStringList("*.qm"));
+    QStringList languages;
+    for (QString language : fileNames) {
+        languages.append(language.remove(".qm"));
+    }
+    bool ok = false;
+    QString newLanguage = QInputDialog::getItem(this, "Choose a language", "Language:", languages, languages.indexOf(m_settings.language()), false, &ok);
+
+    if (ok) {
+        m_settings.setLanguage(newLanguage);
+        m_settings.writeSettings();
+
+        setupTranslator();
+
+        if (!atStartup)
+            QMessageBox::information(this, tr("Teade"), tr("Keele vahetus rakendub programmi uuesti käivitamisel"));
+    }
 }
 
 void Protofinaal::clear()
@@ -103,6 +130,7 @@ void Protofinaal::createMenus()
 {
     QMenu *fileMenu = this->menuBar()->addMenu(tr("&Fail"));
     QMenu *editMenu = this->menuBar()->addMenu(tr("&Tulemused"));
+    QMenu *languageMenu = this->menuBar()->addMenu(tr("Keel"));
 
     QAction *openAct = new QAction(tr("&Ava..."), this);
     openAct->setShortcuts(QKeySequence::Open);
@@ -141,6 +169,14 @@ void Protofinaal::createMenus()
 
     editMenu->addAction(showSpectatorWindowAct);
     editMenu->addAction(connectToSiusDataAct);
+
+    QAction *changeLanguageAct = new QAction(tr("Programmi keel"), this);
+    changeLanguageAct->setStatusTip(tr("Programmi keele valik"));
+    connect(changeLanguageAct, &QAction::triggered, [this](){
+        changeLanguage(false);
+    });
+
+    languageMenu->addAction(changeLanguageAct);
 }
 
 void Protofinaal::connectToSiusData()
@@ -466,6 +502,17 @@ void Protofinaal::readSettings()
 void Protofinaal::save()
 {
     writeFinalsFile(currentFile);
+}
+
+void Protofinaal::setupTranslator()
+{
+    qApp->removeTranslator(&m_translator);
+
+    bool loadResult = m_translator.load(m_settings.language(), ":/languages");
+    if(!loadResult) {
+        QTextStream(stdout) << "Translation file for " << m_settings.language() << "loading failed!, working dir: " << QDir::currentPath() << Qt::endl;
+    }
+    qApp->installTranslator(&m_translator);
 }
 
 void Protofinaal::showSpecatorWindowOnSecondScreen()    // FIXME To be reimplemented

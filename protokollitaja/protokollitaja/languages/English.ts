@@ -1630,7 +1630,7 @@ address: %1</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="481"/>
-        <location filename="../protokollitaja.cpp" line="645"/>
+        <location filename="../protokollitaja.cpp" line="644"/>
         <location filename="../protokollitaja.cpp" line="1445"/>
         <location filename="../protokollitaja.cpp" line="1674"/>
         <location filename="../protokollitaja.cpp" line="2945"/>
@@ -1640,7 +1640,7 @@ address: %1</translation>
         <translation>Info</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="645"/>
+        <location filename="../protokollitaja.cpp" line="644"/>
         <source>Keele vahetus rakendub programmi uuesti käivitamisel</source>
         <translation>Language changes are applied when the program is started again</translation>
     </message>

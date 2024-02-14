@@ -1580,7 +1580,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="481"/>
-        <location filename="../protokollitaja.cpp" line="645"/>
+        <location filename="../protokollitaja.cpp" line="644"/>
         <location filename="../protokollitaja.cpp" line="1445"/>
         <location filename="../protokollitaja.cpp" line="1674"/>
         <location filename="../protokollitaja.cpp" line="2945"/>
@@ -1590,7 +1590,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="645"/>
+        <location filename="../protokollitaja.cpp" line="644"/>
         <source>Keele vahetus rakendub programmi uuesti käivitamisel</source>
         <translation type="unfinished"></translation>
     </message>

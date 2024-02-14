@@ -7,3 +7,5 @@ TEMPLATE = subdirs
 
 SUBDIRS += protofinaal \
     tests
+
+TRANSLATIONS = protofinaal/languages/English.ts protofinaal/languages/Eesti.ts

@@ -637,12 +637,12 @@ void Protokollitaja::changeLanguage(bool atStartup)
     if (ok) {
         m_settings.setLanguage(newLanguage);
         m_settings.writeSettings();
+
+        setupTranslator();
+
+        if (!atStartup)
+            QMessageBox::information(this, tr("Teade"), tr("Keele vahetus rakendub programmi uuesti käivitamisel"));
     }
-
-    setupTranslator();
-
-    if (!atStartup)
-        QMessageBox::information(this, tr("Teade"), tr("Keele vahetus rakendub programmi uuesti käivitamisel"));
 }
 
 void Protokollitaja::checkForUpdates()
@@ -4197,7 +4197,7 @@ void Protokollitaja::uuendaJalgitavaid()
 {
         Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(lValik->ui.leheBox->
                         currentIndex()))->widget());
-        lValik->jalgitavad.insert(-1,leht->leheIndeks);
+        lValik->jalgitavad.prepend(leht->leheIndeks);
 }
 
 void Protokollitaja::uuendaLehelugejat(QString nimi)
