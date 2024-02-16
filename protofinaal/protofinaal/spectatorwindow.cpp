@@ -21,13 +21,14 @@ SpectatorWindow::~SpectatorWindow()
         QTextStream(stdout) << "SpectatorWindow::~SpectatorWindow()" << Qt::endl;
 }
 
-void SpectatorWindow::addRow(QString rank, QString teamName, QString competitorName, QString s1, QString sum, QString diff)
+void SpectatorWindow::addRow(QString rank, QString teamName, QString competitorName, QString shot, QString series, QString sum, QString diff)
 {
     QString row = rowTemplate;
     row.replace("#no#", rank);
     row.replace("#teamName#", teamName);
     row.replace("#competitorName#", competitorName);
-    row.replace("#S1#", s1);
+    row.replace("#shot#", shot);
+    row.replace("#series#", series);
     row.replace("#sum#", sum);
     row.replace("#difference#", diff);
 //    row.replace(originalResultsFontSize, newResultsFontSize);
@@ -122,7 +123,7 @@ void SpectatorWindow::resizeEvent(QResizeEvent *event)
     event->accept();
 }
 
-void SpectatorWindow::setHeading(QString competitionName, QString timePlace, QString eventName, QString rankLabel, QString nameLabel, QString seriesLabel, QString pointsLabel, QString totalLabel)
+void SpectatorWindow::setHeading(QString competitionName, QString timePlace, QString eventName, QString rankLabel, QString nameLabel, QString shotLabel, QString seriesOrPointsLabel, QString diffLabel)
 {
     resultsTemplate = originalResultsTemplate;
     resultsTemplate.replace("#competitionName#", competitionName);
@@ -130,9 +131,9 @@ void SpectatorWindow::setHeading(QString competitionName, QString timePlace, QSt
     resultsTemplate.replace("#event#", eventName);
     resultsTemplate.replace("#rank#", rankLabel);
     resultsTemplate.replace("#name#", nameLabel);
-    resultsTemplate.replace("#series#", seriesLabel);
-    resultsTemplate.replace("#points#", pointsLabel);
-    resultsTemplate.replace("#totalPoints#", totalLabel);
+    resultsTemplate.replace("#shot#", shotLabel);
+    resultsTemplate.replace("#series#", seriesOrPointsLabel);
+    resultsTemplate.replace("#diff#", diffLabel);
 }
 
 void SpectatorWindow::setResults(QString resultsHTML)

@@ -23,7 +23,7 @@ public:
 signals:
 
 public slots:
-    void addRow(QString rank, QString teamName, QString competitorName, QString s1, QString sum, QString diff);
+    void addRow(QString rank, QString teamName, QString competitorName, QString shot, QString series, QString sum, QString diff);
     void clearResults();
     void fullscreen();
     void mouseDoubleClickEvent(QMouseEvent *event);

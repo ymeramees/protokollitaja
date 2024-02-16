@@ -10,16 +10,16 @@ INCLUDEPATH += ../../../common/src/
 
 TEMPLATE = app
 
-SOURCES +=  tst_teamstable2022test.cpp \
-    ../../protofinaal/competitor2022.cpp \
-    ../../protofinaal/team2022.cpp \
-    ../../protofinaal/teamstable2022.cpp \
+SOURCES +=  tst_teamstabletest.cpp \
+    ../../protofinaal/competitor.cpp \
+    ../../protofinaal/team.cpp \
+    ../../protofinaal/teamstable.cpp \
     ../../protofinaal/shotedit.cpp \
     ../../../common/src/lask.cpp
 
 HEADERS += \
-    ../../protofinaal/competitor2022.h \
-    ../../protofinaal/team2022.h \
-    ../../protofinaal/teamstable2022.h \
+    ../../protofinaal/competitor.h \
+    ../../protofinaal/team.h \
+    ../../protofinaal/teamstable.h \
     ../../protofinaal/shotedit.h \
     ../../../common/src/lask.h

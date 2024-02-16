@@ -26,37 +26,31 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    competitor2022.cpp \
-        main.cpp \
-        protofinaal.cpp \
+    competitor.cpp \
+    main.cpp \
+    protofinaal.cpp \
     shotedit.cpp \
     team.cpp \
-    competitor.cpp \
     initialdialog.cpp \
     spectatorwindow.cpp \
     ../../common/src/commonsettings.cpp \
     ../../common/src/siusdataconnection.cpp \
     ../../common/src/siusdataconnections.cpp \
     ../../common/src/lask.cpp \
-    team2022.cpp \
-    teamstable.cpp \
-    teamstable2022.cpp
+    teamstable.cpp
 
 HEADERS += \
-    competitor2022.h \
-        protofinaal.h \
+    competitor.h \
+    protofinaal.h \
     shotedit.h \
     team.h \
-    competitor.h \
     initialdialog.h \
     spectatorwindow.h \
     ../../common/src/commonsettings.h \
     ../../common/src/siusdataconnection.h \
     ../../common/src/siusdataconnections.h \
     ../../common/src/lask.h \
-    team2022.h \
-    teamstable.h \
-    teamstable2022.h
+    teamstable.h
 
 FORMS += \
     initialdialog.ui \

@@ -27,6 +27,11 @@
 
 #include "protofinaal.h"
 
+QString organization = "Ümeramees";
+QString programName = VER_INTERNALNAME_STR;
+QString programVersion = VER_PRODUCTVERSION_STR;
+extern bool verbose;
+
 Protofinaal::Protofinaal(QWidget *parent)
     : m_settings("Protofinaal", "Protofinaali conf"), QMainWindow(parent)
 {
@@ -44,9 +49,12 @@ Protofinaal::Protofinaal(QWidget *parent)
     QScrollArea *scrollArea = new QScrollArea();
     scrollArea->setWidgetResizable(true);
     setCentralWidget(scrollArea);
-    scrollArea->setLayout(&vBox);
 
-    this->setGeometry(9, 36, 1200, 600);
+    QWidget* testWidget = new QWidget;
+    testWidget->setLayout(&vBox);
+    scrollArea->setWidget(testWidget);
+
+    this->setGeometry(9, 36, 1500, 600);
     readSettings();
 
     QTimer::singleShot(100, this, SLOT(initialize()));
@@ -92,7 +100,7 @@ void Protofinaal::changeLanguage(bool atStartup)
 
 void Protofinaal::clear()
 {
-    foreach (TeamsTable2022 *teamsTable, m_teamsTables) {
+    foreach (TeamsTable *teamsTable, m_teamsTables) {
         teamsTable->clear();
         teamsTable->deleteLater();
     }
@@ -186,8 +194,8 @@ void Protofinaal::connectToSiusData()
     if(siusDataConnections == nullptr){
         siusDataConnections = new SiusDataConnections(siusLog, &logOut, &m_settings, this);
         connect(siusDataConnections, &SiusDataConnections::statusInfo, this, &Protofinaal::statusBarInfoChanged);
-        foreach (TeamsTable2022 *teamsTable, m_teamsTables) {
-            connect(siusDataConnections, &SiusDataConnections::shotRead, teamsTable, &TeamsTable2022::readSiusInfo);
+        foreach (TeamsTable *teamsTable, m_teamsTables) {
+            connect(siusDataConnections, &SiusDataConnections::shotRead, teamsTable, &TeamsTable::readSiusInfo);
         }
         connect(siusDataConnections, &SiusDataConnections::disconnectedFromSius, this, &Protofinaal::connectionToSiusLost);
     }
@@ -235,7 +243,7 @@ void Protofinaal::importSiusStartList()
                 rows.append(newRow);
         }
 
-        foreach(TeamsTable2022 *teamsTable, m_teamsTables) {
+        foreach(TeamsTable *teamsTable, m_teamsTables) {
             QStringList forCurrentTable;
             for(int i = 0; i < teamsTable->teamsCount(); i++)
                 if (!rows.isEmpty())
@@ -305,13 +313,13 @@ void Protofinaal::initialize()
 
             int numberOfRelaysTogether = jsonObj["relaysTogether"].toDouble();
             for (int relay = 1; relay <= numberOfRelaysTogether; relay++) {
-                TeamsTable2022 *m_teamsTable = new TeamsTable2022();
+                TeamsTable *m_teamsTable = new TeamsTable();
                 vBox.addWidget(m_teamsTable);
                 if (numberOfRelaysTogether > 1)
                     m_teamsTable->setTableName(QString("Grupp %1").arg(relay));
 
-                connect(m_teamsTable, &TeamsTable2022::updateSpectatorWindow, this, &Protofinaal::updateSpectatorWindow);
-                connect(m_teamsTable, &TeamsTable2022::modified, [this]() { m_modifiedAfterSave = true; });
+                connect(m_teamsTable, &TeamsTable::updateSpectatorWindow, this, &Protofinaal::updateSpectatorWindow);
+                connect(m_teamsTable, &TeamsTable::modified, [this]() { m_modifiedAfterSave = true; });
                 m_teamsTables.append(m_teamsTable);
                 m_teamsTable->createLayout(jsonObj, m_scoringWithPoints);
             }
@@ -324,7 +332,7 @@ void Protofinaal::initialize()
     }else if(m_initialDialog->result() == QDialog::Rejected)
         QCoreApplication::quit();
 
-    setWindowTitle("Protofinaal - test 3 - " + currentFile + " - " + competitionName + " - " + eventName);
+    setWindowTitle(programName + " - " + programVersion + " - " + currentFile + " - " + competitionName + " - " + eventName);
 }
 
 void Protofinaal::loadFile(QString fileName)
@@ -353,13 +361,13 @@ void Protofinaal::loadFile(QString fileName)
     int noOfRelays = relaysArray.size();
     int relayNo = 1;
     foreach (QJsonValue relayJson, relaysArray) {
-        TeamsTable2022 *m_teamsTable = new TeamsTable2022();
+        TeamsTable *m_teamsTable = new TeamsTable();
         vBox.addWidget(m_teamsTable);
         if (noOfRelays > 1)
             m_teamsTable->setTableName(QString("Grupp %1").arg(relayNo++));
 
-        connect(m_teamsTable, &TeamsTable2022::updateSpectatorWindow, this, &Protofinaal::updateSpectatorWindow);
-        connect(m_teamsTable, &TeamsTable2022::modified, [this]() { m_modifiedAfterSave = true; });
+        connect(m_teamsTable, &TeamsTable::updateSpectatorWindow, this, &Protofinaal::updateSpectatorWindow);
+        connect(m_teamsTable, &TeamsTable::modified, [this]() { m_modifiedAfterSave = true; });
         m_teamsTables.append(m_teamsTable);
         m_teamsTable->createLayout(relayJson.toObject(), m_scoringWithPoints);
     }
@@ -527,15 +535,31 @@ void Protofinaal::showSpecatorWindowOnSecondScreen()    // FIXME To be reimpleme
 //                m_spectatorWindow.showFullScreen();
 //        }
 //    }else{
-//        QMessageBox::critical(this, tr("Viga"), tr("Teist ekraani ei leitud. Programmi korralikuks"
-//    " funktsioneerimiseks on vajalik kahe ekraani olemasolu."), QMessageBox::Ok);
-//        m_spectatorWindow.show();
+
+       m_spectatorWindow.show();
 //    }
 
-//    if(m_spectatorWindow.isFullScreen())
-//        QMessageBox::information(this, tr("Teade"), tr("Tulemuse aken näidatud teisel ekraanil"), QMessageBox::Ok);
 
-//    updateSpectatorWindow();
+
+    QList<QScreen *> screens = QGuiApplication::screens();
+
+    if (screens.size() >= 2) {
+        QScreen *currentScreen = QGuiApplication::screenAt(this->geometry().center());
+        int currentIndex = screens.indexOf(currentScreen);
+        QScreen *otherScreen = screens.at((currentIndex + 1) % screens.size());
+        m_spectatorWindow.setScreen(otherScreen);
+        m_spectatorWindow.move(otherScreen->geometry().center() - m_spectatorWindow.rect().center());
+        m_spectatorWindow.showFullScreen();
+    } else {
+        QMessageBox::critical(this, tr("Viga"), tr("Teist ekraani ei leitud. Programmi korralikuks"
+   " funktsioneerimiseks on vajalik kahe ekraani olemasolu."), QMessageBox::Ok);
+        m_spectatorWindow.show();
+    }
+
+    updateSpectatorWindow();
+
+    if(m_spectatorWindow.isFullScreen())
+        QMessageBox::information(this, tr("Teade"), tr("Tulemuse aken näidatud teisel ekraanil"), QMessageBox::Ok);
 }
 
 void Protofinaal::statusBarInfoChanged(QString newStatusInfo)
@@ -561,7 +585,7 @@ QJsonObject Protofinaal::toJson() const
 //    QJsonObject json;
 //    json["teams"] = teamsArray;
     QJsonArray relaysArray;
-    foreach (TeamsTable2022 *teamsTable, m_teamsTables) {
+    foreach (TeamsTable *teamsTable, m_teamsTables) {
         relaysArray.append(teamsTable->toJson());
     }
 
@@ -603,26 +627,36 @@ void Protofinaal::updateSpectatorWindow()
     if (shotNo > 0)
         shotHeader.prepend(QString("%1. ").arg(shotNo));
     if (m_scoringWithPoints)
-        m_spectatorWindow.setHeading(competitionName, timePlace, eventName, tr("Koht"), tr("Nimi"), shotHeader, tr("Punktid"), tr("Kokku"));
+        m_spectatorWindow.setHeading(competitionName, timePlace, eventName, tr("Koht"), tr("Nimi"), shotHeader, tr("Punktid"), tr("Vahe"));
     else
-        m_spectatorWindow.setHeading(competitionName, timePlace, eventName, tr("Koht"), tr("Nimi"), shotHeader, tr("Seeria"), tr("Kokku"));
+        m_spectatorWindow.setHeading(competitionName, timePlace, eventName, tr("Koht"), tr("Nimi"), shotHeader, tr("Seeria"), tr("Vahe"));
 
     for (int i = m_teamsTables.size() - 1; i >= 0; i-- ) {
-        m_spectatorWindow.addRow("", "", "", "", "", "");   // To add some spacing between different groups
-        m_spectatorWindow.addRow("", "", "", "", "", "");
-        m_spectatorWindow.addRow("", "", "", "", "", "");
-//    foreach(TeamsTable2022 *m_teamsTable, m_teamsTables) {
-        auto results = m_teamsTables.at(i)->getSortedResults();
+        m_spectatorWindow.addRow("", "", "", "", "", "", "");   // To add some spacing between different groups
+        m_spectatorWindow.addRow("", "", "", "", "", "", "");
+        m_spectatorWindow.addRow("", "", "", "", "", "", "");
+//    foreach(TeamsTable *m_teamsTable, m_teamsTables) {
+        auto results = m_teamsTables.at(i)->getSortedResults().values();
 
         int index = results.size();
         foreach(auto currentResult, results) {
+            QString diff = "";
+            if (index - 2 >= 0) {
+                QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), total10Score = " << results.at(index - 2).total10Score << ", total10Score = " << currentResult.total10Score << Qt::endl;
+                diff = QString("%1").arg(results.at(index - 2).total10Score - currentResult.total10Score);
+                if (diff.length() > 1)
+                    diff.insert(diff.length() - 2, ",");
+                else diff.prepend("0,");
+                QTextStream(stdout) << "Protofinaal::updateSpectatorWindow(), diff = " << diff << Qt::endl;
+            }
             m_spectatorWindow.addRow(
                         QString("%1.").arg(index--),
-                        m_teamsTables.at(i)->tableName(),
+                        m_teamsTables.at(i)->tableName(),   // TODO Do we need this?
                         currentResult.name,
                         currentResult.shotValue,
                         currentResult.seriesOrPoints,
-                        currentResult.totalScore
+                        currentResult.totalScore,
+                        diff
                         );
         }
     }

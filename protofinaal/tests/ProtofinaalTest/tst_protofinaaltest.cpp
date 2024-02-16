@@ -88,15 +88,15 @@ void ProtofinaalTest::test_readSiusShotWithOffsetWithPoints()
 
     Protofinaal finaal; //("Test Competition", "today here");
     QTest::qWait(200);
-
-    TeamsTable2022 *teamsTable = finaal.findChild<TeamsTable2022*>();
+    
+    TeamsTable *teamsTable = finaal.findChild<TeamsTable*>();
     QVERIFY(teamsTable);
-    QList<Team2022*> teams = teamsTable->findChildren<Team2022*>();
+    QList<Team*> teams = teamsTable->findChildren<Team*>();
     QVERIFY(teams.size() > 0);
     QCOMPARE(teamsTable->lastValidShotIndex(), -1);
 
-    foreach(Team2022 *team, teams) {
-        Competitor2022 *competitor = team->findChild<Competitor2022*>();
+    foreach(Team *team, teams) {
+        Competitor *competitor = team->findChild<Competitor*>();
         QSpinBox *offsetBox = competitor->findChild<QSpinBox*>();
         offsetBox->setValue(-15);
     }
@@ -123,11 +123,11 @@ void ProtofinaalTest::test_readSiusShotWithOffsetWithPoints()
     }
 
     QCOMPARE(teamsTable->lastValidShotIndex(), 0);
-    QVector<TeamsTable2022::Result> expected1;
-    expected1.append(TeamsTable2022::Result { "Esimene", "10,1", "3", "3" });
-    expected1.append(TeamsTable2022::Result { "Teine", "10,7", "4", "4" });
-    expected1.append(TeamsTable2022::Result { "Kolmas", "9,7", "1", "1" });
-    expected1.append(TeamsTable2022::Result { "Neljas", "9,8", "2", "2" });
+    QVector<TeamsTable::Result> expected1;
+    expected1.append(TeamsTable::Result { "Esimene", "10,1", "3", "3", 101 });
+    expected1.append(TeamsTable::Result { "Teine", "10,7", "4", "4", 107 });
+    expected1.append(TeamsTable::Result { "Kolmas", "9,7", "1", "1", 97 });
+    expected1.append(TeamsTable::Result { "Neljas", "9,8", "2", "2", 98 });
 
     auto actual1 = teamsTable->getCurrentResults();
     for(int i = 0; i < 4; i++) {
@@ -135,6 +135,7 @@ void ProtofinaalTest::test_readSiusShotWithOffsetWithPoints()
         QCOMPARE(actual1.value(i + 1).shotValue, expected1.at(i).shotValue);
         QCOMPARE(actual1.value(i + 1).seriesOrPoints, expected1.at(i).seriesOrPoints);
         QCOMPARE(actual1.value(i + 1).totalScore, expected1.at(i).totalScore);
+        QCOMPARE(actual1.value(i + 1).total10Score, expected1.at(i).total10Score);
     }
 
     QTest::qWait(500);
@@ -146,15 +147,15 @@ void ProtofinaalTest::test_readSiusShotWithOffsetWithShots()
 
     Protofinaal finaal; //("Test Competition", "today here");
     QTest::qWait(200);
-
-    TeamsTable2022 *teamsTable = finaal.findChild<TeamsTable2022*>();
+    
+    TeamsTable *teamsTable = finaal.findChild<TeamsTable*>();
     QVERIFY(teamsTable);
-    QList<Team2022*> teams = teamsTable->findChildren<Team2022*>();
+    QList<Team*> teams = teamsTable->findChildren<Team*>();
     QVERIFY(teams.size() > 0);
     QCOMPARE(teamsTable->lastValidShotIndex(), -1);
 
-    foreach(Team2022 *team, teams) {
-        Competitor2022 *competitor = team->findChild<Competitor2022*>();
+    foreach(Team *team, teams) {
+        Competitor *competitor = team->findChild<Competitor*>();
         QSpinBox *offsetBox = competitor->findChild<QSpinBox*>();
         offsetBox->setValue(-15);
     }
@@ -181,11 +182,11 @@ void ProtofinaalTest::test_readSiusShotWithOffsetWithShots()
     }
 
     QCOMPARE(teamsTable->lastValidShotIndex(), 0);
-    QVector<TeamsTable2022::Result> expected1;
-    expected1.append(TeamsTable2022::Result { "Esimene", "10,1", "0", "10,1" });
-    expected1.append(TeamsTable2022::Result { "Teine", "10,7", "0", "10,7" });
-    expected1.append(TeamsTable2022::Result { "Kolmas", "9,7", "0", "9,7" });
-    expected1.append(TeamsTable2022::Result { "Neljas", "9,8", "0", "9,8" });
+    QVector<TeamsTable::Result> expected1;
+    expected1.append(TeamsTable::Result { "Esimene", "10,1", "0", "10,1" });
+    expected1.append(TeamsTable::Result { "Teine", "10,7", "0", "10,7" });
+    expected1.append(TeamsTable::Result { "Kolmas", "9,7", "0", "9,7" });
+    expected1.append(TeamsTable::Result { "Neljas", "9,8", "0", "9,8" });
 
     auto actual1 = teamsTable->getCurrentResults();
     for(int i = 0; i < 4; i++) {
@@ -212,12 +213,12 @@ void ProtofinaalTest::sanityCheckWithPoints()
 
 
 //    qApp->processEvents();
-
-    TeamsTable2022 *teamsTable = finaal.findChild<TeamsTable2022*>();
+    
+    TeamsTable *teamsTable = finaal.findChild<TeamsTable*>();
     QVERIFY(teamsTable);
-    QList<Team2022*> teams = teamsTable->findChildren<Team2022*>();
+    QList<Team*> teams = teamsTable->findChildren<Team*>();
     QVERIFY(teams.size() > 0);
-    QList<Competitor2022*> competitors = teams.first()->findChildren<Competitor2022*>();
+    QList<Competitor*> competitors = teams.first()->findChildren<Competitor*>();
     QVERIFY(competitors.size() > 0);
     QList<ShotEdit*> shotEdits = competitors.first()->findChildren<ShotEdit*>();
     QVERIFY(shotEdits.size() > 0);
@@ -240,12 +241,12 @@ void ProtofinaalTest::sanityCheckWithPoints()
     foreach(SiusShotData shotData, shot1) {
         teamsTable->readSiusInfo(shotData);
     }
-
-    QVector<TeamsTable2022::Result> expected1;
-    expected1.append(TeamsTable2022::Result { "Competitor0", "10,1", "2", "2" });
-    expected1.append(TeamsTable2022::Result { "Teine", "10,7", "3,5", "3,5" });
-    expected1.append(TeamsTable2022::Result { "Kolmas", "10,7", "3,5", "3,5" });
-    expected1.append(TeamsTable2022::Result { "Neljas", "9,8", "1", "1" });
+    
+    QVector<TeamsTable::Result> expected1;
+    expected1.append(TeamsTable::Result { "Competitor0", "10,1", "2", "2", 101 });
+    expected1.append(TeamsTable::Result { "Teine", "10,7", "3,5", "3,5", 107 });
+    expected1.append(TeamsTable::Result { "Kolmas", "10,7", "3,5", "3,5", 107 });
+    expected1.append(TeamsTable::Result { "Neljas", "9,8", "1", "1", 98 });
 
     auto actual1 = teamsTable->getCurrentResults();
     for(int i = 0; i < 4; i++) {
@@ -253,6 +254,7 @@ void ProtofinaalTest::sanityCheckWithPoints()
         QCOMPARE(actual1.value(i + 1).shotValue, expected1.at(i).shotValue);
         QCOMPARE(actual1.value(i + 1).seriesOrPoints, expected1.at(i).seriesOrPoints);
         QCOMPARE(actual1.value(i + 1).totalScore, expected1.at(i).totalScore);
+        QCOMPARE(actual1.value(i + 1).total10Score, expected1.at(i).total10Score);
     }
 
     QTest::qWait(500);
@@ -266,12 +268,12 @@ void ProtofinaalTest::sanityCheckWithShots()
 
     Protofinaal finaal; //("Test Competition", "today here");
     QTest::qWait(200);
-
-    TeamsTable2022 *teamsTable = finaal.findChild<TeamsTable2022*>();
+    
+    TeamsTable *teamsTable = finaal.findChild<TeamsTable*>();
     QVERIFY(teamsTable);
-    QList<Team2022*> teams = teamsTable->findChildren<Team2022*>();
+    QList<Team*> teams = teamsTable->findChildren<Team*>();
     QVERIFY(teams.size() > 0);
-    QList<Competitor2022*> competitors = teams.first()->findChildren<Competitor2022*>();
+    QList<Competitor*> competitors = teams.first()->findChildren<Competitor*>();
     QVERIFY(competitors.size() > 0);
     QList<ShotEdit*> shotEdits = competitors.first()->findChildren<ShotEdit*>();
     QVERIFY(shotEdits.size() > 0);
@@ -294,12 +296,12 @@ void ProtofinaalTest::sanityCheckWithShots()
     foreach(SiusShotData shotData, shot1) {
         teamsTable->readSiusInfo(shotData);
     }
-
-    QVector<TeamsTable2022::Result> expected1;
-    expected1.append(TeamsTable2022::Result { "Competitor0", "10,1", "0", "10,1" });
-    expected1.append(TeamsTable2022::Result { "Teine", "10,7", "0", "10,7" });
-    expected1.append(TeamsTable2022::Result { "Kolmas", "10,7", "0", "10,7" });
-    expected1.append(TeamsTable2022::Result { "Neljas", "9,8", "0", "9,8" });
+    
+    QVector<TeamsTable::Result> expected1;
+    expected1.append(TeamsTable::Result { "Competitor0", "10,1", "0", "10,1" });
+    expected1.append(TeamsTable::Result { "Teine", "10,7", "0", "10,7" });
+    expected1.append(TeamsTable::Result { "Kolmas", "10,7", "0", "10,7" });
+    expected1.append(TeamsTable::Result { "Neljas", "9,8", "0", "9,8" });
 
     auto actual1 = teamsTable->getCurrentResults();
     for(int i = 0; i < 4; i++) {

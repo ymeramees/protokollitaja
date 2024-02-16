@@ -25,13 +25,14 @@ void InbandConnection::readIncomingData()
 
     if (m_buffer.contains(MESSAGE_END)) {
         QString message = m_buffer.left(m_buffer.indexOf(MESSAGE_END) + MESSAGE_END.length());
-        *m_log << QTime::currentTime().toString() << ": " << message.replace("\n", ";") << Qt::endl;
+        QString forLog = message;
+        *m_log << QTime::currentTime().toString() << ": " << forLog.replace("\n", ";") << Qt::endl;
         m_buffer.remove(0, message.length());
         QTextStream(stdout) << "InbandConnection::readIncomingData, message = " << message << Qt::endl;
 
         QStringList msgParts = message.split('\n');
         int target = msgParts.at(0).toInt();
-        QTextStream(stdout) << "InbandConnection::readIncomingData, msgParts = " << msgParts.join(";") << Qt::endl;
+        QTextStream(stdout) << "InbandConnection::readIncomingData, msgParts = " << msgParts.join(",") << Qt::endl;
 
         if (msgParts.length() >= 3) {
             if (msgParts.at(1) == "shot") {
@@ -49,7 +50,8 @@ void InbandConnection::readIncomingData()
             } else if (msgParts.at(1) == "all shots") {
                 emit allShots(target, message);
             }
-        }
+        } else
+            QTextStream(stdout) << "Received too short message: " << msgParts.join(",") << Qt::endl;
         if (socket->state() == QAbstractSocket::UnconnectedState) {
             QTextStream(stdout) << "InbandConnection unconnected, deleting" << Qt::endl;
             deleteLater();  // If it has been disconnected, then no need to keep it around anymore

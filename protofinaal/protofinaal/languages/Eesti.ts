@@ -4,125 +4,66 @@
 <context>
     <name>Competitor</name>
     <message>
-        <location filename="../competitor.cpp" line="10"/>
-        <location filename="../competitor.cpp" line="63"/>
+        <location filename="../competitor.cpp" line="418"/>
         <source>Võistleja ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="17"/>
-        <location filename="../competitor.cpp" line="70"/>
+        <location filename="../competitor.cpp" line="425"/>
         <source>Võistleja nimi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="37"/>
-        <source>0,0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../competitor.cpp" line="56"/>
-        <source>Viga!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../competitor.cpp" line="56"/>
-        <source>Vigane fail!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../competitor.cpp" line="254"/>
-        <source>Võistleja ID muutmine</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../competitor.cpp" line="254"/>
-        <source>Sisestage uus ID:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../competitor.cpp" line="256"/>
-        <source>Võistleja ID muudetud, vana: %1 =&gt; uus: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../competitor.cpp" line="318"/>
-        <location filename="../competitor.cpp" line="329"/>
-        <source>Viga</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../competitor.cpp" line="318"/>
-        <location filename="../competitor.cpp" line="319"/>
-        <location filename="../competitor.cpp" line="329"/>
-        <location filename="../competitor.cpp" line="330"/>
-        <source>Laskude arv suurem, kui võimalik! Lask ei läinud kirja!</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Competitor2022</name>
-    <message>
-        <location filename="../competitor2022.cpp" line="33"/>
+        <location filename="../competitor.cpp" line="33"/>
         <source>0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor2022.cpp" line="71"/>
+        <location filename="../competitor.cpp" line="71"/>
         <source>Viga!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor2022.cpp" line="71"/>
+        <location filename="../competitor.cpp" line="71"/>
         <source>Vigane fail!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor2022.cpp" line="302"/>
+        <location filename="../competitor.cpp" line="302"/>
         <source>Võistleja ID muutmine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor2022.cpp" line="302"/>
+        <location filename="../competitor.cpp" line="302"/>
         <source>Sisestage uus ID:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor2022.cpp" line="304"/>
+        <location filename="../competitor.cpp" line="304"/>
         <source>Võistleja ID muudetud, vana: %1 =&gt; uus: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor2022.cpp" line="395"/>
-        <location filename="../competitor2022.cpp" line="406"/>
+        <location filename="../competitor.cpp" line="395"/>
+        <location filename="../competitor.cpp" line="406"/>
         <source>Viga</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor2022.cpp" line="395"/>
-        <location filename="../competitor2022.cpp" line="396"/>
-        <location filename="../competitor2022.cpp" line="406"/>
-        <location filename="../competitor2022.cpp" line="407"/>
+        <location filename="../competitor.cpp" line="395"/>
+        <location filename="../competitor.cpp" line="396"/>
+        <location filename="../competitor.cpp" line="406"/>
+        <location filename="../competitor.cpp" line="407"/>
         <source>Laskude arv suurem, kui võimalik! Lask ei läinud kirja!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor2022.cpp" line="418"/>
-        <source>Võistleja ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../competitor2022.cpp" line="425"/>
-        <source>Võistleja nimi</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../competitor2022.cpp" line="434"/>
+        <location filename="../competitor.cpp" line="434"/>
         <source>Tulemus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor2022.cpp" line="442"/>
+        <location filename="../competitor.cpp" line="442"/>
         <source>Arv, mille võrra Siusist tulnud lasud on nihkes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -281,193 +222,193 @@ Uue võistluse tegemiseks vajutage &quot;Uus&quot; nupule</source>
 <context>
     <name>Protofinaal</name>
     <message>
-        <location filename="../protofinaal.cpp" line="70"/>
-        <location filename="../protofinaal.cpp" line="255"/>
+        <location filename="../protofinaal.cpp" line="62"/>
+        <location filename="../protofinaal.cpp" line="247"/>
         <source>Viga</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="70"/>
+        <location filename="../protofinaal.cpp" line="62"/>
         <source>Logi faili kirjutamine ei õnnestunud! Kontrollige, et teil oleks kirjutamisõigus sinna kausta, kus asub võistluste fail.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="97"/>
+        <location filename="../protofinaal.cpp" line="89"/>
         <source>Teade</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="97"/>
+        <location filename="../protofinaal.cpp" line="89"/>
         <source>Keele vahetus rakendub programmi uuesti käivitamisel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="120"/>
+        <location filename="../protofinaal.cpp" line="112"/>
         <source>Kas soovid muudatused salvestada ja programmist väljuda?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="139"/>
+        <location filename="../protofinaal.cpp" line="131"/>
         <source>&amp;Fail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="140"/>
+        <location filename="../protofinaal.cpp" line="132"/>
         <source>&amp;Tulemused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="141"/>
+        <location filename="../protofinaal.cpp" line="133"/>
         <source>Keel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="143"/>
+        <location filename="../protofinaal.cpp" line="135"/>
         <source>&amp;Ava...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="145"/>
-        <location filename="../protofinaal.cpp" line="391"/>
+        <location filename="../protofinaal.cpp" line="137"/>
+        <location filename="../protofinaal.cpp" line="383"/>
         <source>Ava fail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="148"/>
+        <location filename="../protofinaal.cpp" line="140"/>
         <source>&amp;Salvesta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="150"/>
+        <location filename="../protofinaal.cpp" line="142"/>
         <source>Salvesta fail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="153"/>
+        <location filename="../protofinaal.cpp" line="145"/>
         <source>&amp;Impordi Sius startlist...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="155"/>
+        <location filename="../protofinaal.cpp" line="147"/>
         <source>Impordi Sius startlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="158"/>
+        <location filename="../protofinaal.cpp" line="150"/>
         <source>&amp;Välju</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="160"/>
+        <location filename="../protofinaal.cpp" line="152"/>
         <source>Välju programmist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="163"/>
+        <location filename="../protofinaal.cpp" line="155"/>
         <source>&amp;Tulemuste aken</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="164"/>
+        <location filename="../protofinaal.cpp" line="156"/>
         <source>Ava tulemuste aken</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="167"/>
+        <location filename="../protofinaal.cpp" line="159"/>
         <source>&amp;SiusData</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="168"/>
+        <location filename="../protofinaal.cpp" line="160"/>
         <source>Ühendu SiusData&apos;ga</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="181"/>
+        <location filename="../protofinaal.cpp" line="173"/>
         <source>Programmi keel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="182"/>
+        <location filename="../protofinaal.cpp" line="174"/>
         <source>Programmi keele valik</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="192"/>
+        <location filename="../protofinaal.cpp" line="184"/>
         <source>/Protofinaal sisse logi %1.log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="220"/>
+        <location filename="../protofinaal.cpp" line="212"/>
         <source>Ava startlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="220"/>
+        <location filename="../protofinaal.cpp" line="212"/>
         <source>Comma separated file (*.csv)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="255"/>
+        <location filename="../protofinaal.cpp" line="247"/>
         <source>Ei õnnestunud faili avada!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="298"/>
-        <location filename="../protofinaal.cpp" line="307"/>
-        <location filename="../protofinaal.cpp" line="351"/>
-        <location filename="../protofinaal.cpp" line="411"/>
-        <location filename="../protofinaal.cpp" line="421"/>
-        <location filename="../protofinaal.cpp" line="443"/>
-        <location filename="../protofinaal.cpp" line="692"/>
-        <location filename="../protofinaal.cpp" line="708"/>
+        <location filename="../protofinaal.cpp" line="290"/>
+        <location filename="../protofinaal.cpp" line="299"/>
+        <location filename="../protofinaal.cpp" line="343"/>
+        <location filename="../protofinaal.cpp" line="403"/>
+        <location filename="../protofinaal.cpp" line="413"/>
+        <location filename="../protofinaal.cpp" line="435"/>
+        <location filename="../protofinaal.cpp" line="684"/>
+        <location filename="../protofinaal.cpp" line="700"/>
         <source>Viga!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="298"/>
+        <location filename="../protofinaal.cpp" line="290"/>
         <source>Harjutuse faili ei leitud!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="307"/>
+        <location filename="../protofinaal.cpp" line="299"/>
         <source>Harjutuse fail vigane!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="329"/>
+        <location filename="../protofinaal.cpp" line="321"/>
         <source>Avatud fail: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="351"/>
+        <location filename="../protofinaal.cpp" line="343"/>
         <source>Finaali fail vigane!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="383"/>
+        <location filename="../protofinaal.cpp" line="375"/>
         <source>Kas soovid muudatused salvestada?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="391"/>
+        <location filename="../protofinaal.cpp" line="383"/>
         <source>Protofinaali fail (*.fin)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="411"/>
+        <location filename="../protofinaal.cpp" line="403"/>
         <source>Faili versioon on uuem, kui see versioon programmist. Faili avamisel võib tekkida vigu!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="421"/>
+        <location filename="../protofinaal.cpp" line="413"/>
         <source>Faili avamine ei ole võimalik!
 
 Asukoht: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="444"/>
+        <location filename="../protofinaal.cpp" line="436"/>
         <source>Seadete faili avamine ei ole võimalik!
 Kasutatakse vaikimisi seadeid.
 
@@ -475,51 +416,51 @@ Asukoht: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="610"/>
+        <location filename="../protofinaal.cpp" line="602"/>
         <source>Lask</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="614"/>
-        <location filename="../protofinaal.cpp" line="616"/>
+        <location filename="../protofinaal.cpp" line="606"/>
+        <location filename="../protofinaal.cpp" line="608"/>
         <source>Koht</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="614"/>
-        <location filename="../protofinaal.cpp" line="616"/>
+        <location filename="../protofinaal.cpp" line="606"/>
+        <location filename="../protofinaal.cpp" line="608"/>
         <source>Nimi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="614"/>
+        <location filename="../protofinaal.cpp" line="606"/>
         <source>Punktid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="614"/>
-        <location filename="../protofinaal.cpp" line="616"/>
+        <location filename="../protofinaal.cpp" line="606"/>
+        <location filename="../protofinaal.cpp" line="608"/>
         <source>Kokku</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="616"/>
+        <location filename="../protofinaal.cpp" line="608"/>
         <source>Seeria</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="689"/>
+        <location filename="../protofinaal.cpp" line="681"/>
         <source>Fail salvestatud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="692"/>
+        <location filename="../protofinaal.cpp" line="684"/>
         <source>Faili kirjutamine ei ole võimalik!
 Kontrollige, kas teil on sinna kausta kirjutamise õigused.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="708"/>
+        <location filename="../protofinaal.cpp" line="700"/>
         <source>Seadete faili kirjutamine ei ole võimalik!
 Kontrollige, kas teil on sinna kausta kirjutamise õigused.</source>
         <translation type="unfinished"></translation>
@@ -641,31 +582,12 @@ Programm lõi uue, vaikimisi seadistustega.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../team.cpp" line="54"/>
+        <location filename="../team.cpp" line="61"/>
         <source>Viga!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../team.cpp" line="54"/>
-        <source>Vigane fail!
-MembersInTeam != isDouble &amp;&amp; != isArray</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Team2022</name>
-    <message>
-        <location filename="../team2022.cpp" line="9"/>
-        <source>Võistkonna nimi</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../team2022.cpp" line="61"/>
-        <source>Viga!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../team2022.cpp" line="61"/>
+        <location filename="../team.cpp" line="61"/>
         <source>Vigane fail!
 MembersInTeam != isDouble &amp;&amp; != isArray</source>
         <translation type="unfinished"></translation>
@@ -674,37 +596,23 @@ MembersInTeam != isDouble &amp;&amp; != isArray</source>
 <context>
     <name>TeamsTable</name>
     <message>
-        <location filename="../teamstable.cpp" line="63"/>
-        <location filename="../teamstable.cpp" line="64"/>
+        <location filename="../teamstable.cpp" line="141"/>
+        <location filename="../teamstable.cpp" line="143"/>
         <source> lask </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../teamstable.cpp" line="103"/>
-        <source>Sellise ID&apos;ga võistlejat ei leitud: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>TeamsTable2022</name>
-    <message>
-        <location filename="../teamstable2022.cpp" line="141"/>
+        <location filename="../teamstable.cpp" line="141"/>
         <source>Lisatud: %1%2%3 = %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../teamstable2022.cpp" line="141"/>
-        <location filename="../teamstable2022.cpp" line="143"/>
-        <source> lask </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../teamstable2022.cpp" line="143"/>
+        <location filename="../teamstable.cpp" line="143"/>
         <source>Viga, ei õnnestunud lisada: %1%2%3 = %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../teamstable2022.cpp" line="182"/>
+        <location filename="../teamstable.cpp" line="182"/>
         <source>Sellise ID&apos;ga võistlejat ei leitud: %1</source>
         <translation type="unfinished"></translation>
     </message>

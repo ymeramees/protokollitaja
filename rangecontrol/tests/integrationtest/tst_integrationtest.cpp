@@ -151,6 +151,7 @@ void IntegrationTest::test_acceptIncomingStartList()
     QTest::qWait(200);
 
     QList<QLineEdit*> textBoxes = rangeControl.findChildren<QLineEdit*>();
+    QCOMPARE(textBoxes.size(), 21);
     QCOMPARE(textBoxes.at(0)->text(), "1");
     QCOMPARE(textBoxes.at(1)->text(), "13");
     QCOMPARE(textBoxes.at(2)->text(), "Isås");
@@ -164,6 +165,7 @@ void IntegrationTest::test_acceptIncomingStartList()
     QCOMPARE(textBoxes.at(11)->text(), "Narva LSK");
     QCOMPARE(textBoxes.at(12)->text(), "40");
     QList<QSpinBox*> shotCountBoxes = rangeControl.findChildren<QSpinBox*>();
+    QCOMPARE(shotCountBoxes.size(), 3);
     QCOMPARE(shotCountBoxes.at(0)->value(), 40);
     QVERIFY(protokollitaja.state() == QTcpSocket::ConnectedState);
 }

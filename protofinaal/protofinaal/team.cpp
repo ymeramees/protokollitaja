@@ -1,12 +1,13 @@
 #include "team.h"
 
-Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent)
+Team::Team(QJsonObject &configJson, int index, const bool scoringWithPoints, QWidget *parent) : QWidget(parent)
 {
-    int competitorsInTeam = 0;
+    int competitorsInTeam = 1;  // Defaults to 1
 
     QGridLayout *layout = new QGridLayout;
 
     m_teamName.setToolTip(tr("Võistkonna nimi"));
+    m_teamName.setPlaceholderText("Võistkond");
     m_teamName.setText("");
     m_indexLabel.setText(QString("%1.").arg(index));
     layout->addWidget(&m_indexLabel);
@@ -17,16 +18,20 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
             QTextStream(stdout) << "Team::Team(uus)" << Qt::endl;
         competitorsInTeam = configJson["membersInTeam"].toInt();
 
-        Competitor *competitor = new Competitor(index * 10 + 1, configJson["shots"].toArray());
-        connect(competitor, &Competitor::newShot, this, &Team::sum);
+        Competitor *competitor = new Competitor(index * 10 + 1, configJson["shots"].toArray(), scoringWithPoints);
+        connect(competitor, &Competitor::newShot, this, &Team::calculatePointsTotal);
+        connect(competitor, &Competitor::newShot, this, &Team::modified);
+        connect(competitor, &Competitor::modified, this, &Team::modified);
         connect(competitor, &Competitor::statusInfo, this, &Team::statusInfo);
 
         m_teamCompetitors.append(competitor);
         layout->addWidget(competitor, 0, 2);
 
         for(int i = 1; i < competitorsInTeam; i++){
-            Competitor *competitor = new Competitor(index * 10 + 1 + i, configJson["shots"].toArray());
-            connect(competitor, &Competitor::newShot, this, &Team::sum);
+            Competitor *competitor = new Competitor(index * 10 + 1 + i, configJson["shots"].toArray(), scoringWithPoints);
+            connect(competitor, &Competitor::newShot, this, &Team::calculatePointsTotal);
+            connect(competitor, &Competitor::newShot, this, &Team::modified);
+            connect(competitor, &Competitor::modified, this, &Team::modified);
             connect(competitor, &Competitor::statusInfo, this, &Team::statusInfo);
 
             m_teamCompetitors.append(competitor);
@@ -42,8 +47,10 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
         competitorsInTeam = competitorsArray.size();
 
         for (int i = 0; i < competitorsArray.size(); i++) {
-            Competitor *competitor = new Competitor(competitorsArray.at(i).toObject());
-            connect(competitor, &Competitor::newShot, this, &Team::sum);
+            Competitor *competitor = new Competitor(competitorsArray.at(i).toObject(), scoringWithPoints);
+            connect(competitor, &Competitor::newShot, this, &Team::calculatePointsTotal);
+            connect(competitor, &Competitor::newShot, this, &Team::modified);
+            connect(competitor, &Competitor::modified, this, &Team::modified);
             connect(competitor, &Competitor::statusInfo, this, &Team::statusInfo);
 
             m_teamCompetitors.append(competitor);
@@ -65,7 +72,7 @@ Team::Team(QJsonObject &configJson, int index, QWidget *parent) : QWidget(parent
 
     layout->setContentsMargins(0, 2, 0, 2);
     setLayout(layout);
-    sum();
+    calculatePointsTotal();
 }
 
 Team::~Team()
@@ -87,37 +94,108 @@ Competitor* Team::getCompetitorWithID(int id)
     return nullptr;
 }
 
-QString Team::index()
+int Team::index()
 {
-    return m_indexLabel.text();
+    return m_indexLabel.text().remove(".").toInt();
 }
 
-QString Team::lastSum()
+bool Team::isActive() const
 {
-    return m_sumLabel.text();
+    return m_teamCompetitors.at(0)->isActive();
 }
 
-void Team::sum()
+int Team::team10Total()
+{
+    if (m_teamCompetitors.size() > 0)
+        return m_teamCompetitors.at(0)->current10Sum();
+    else
+        return 0;
+}
+
+QString Team::teamTotal()
+{
+    if (m_teamCompetitors.size() > 0)
+        return m_teamCompetitors.at(0)->total();
+    else
+        return "";
+}
+
+int Team::lastValidShotIndex() const
+{
+    int largestIndex = -1;
+    foreach(Competitor *competitor, m_teamCompetitors) {
+        int lastIndex = competitor->lastValidShotIndex();
+        if (lastIndex > largestIndex)
+            largestIndex = lastIndex;
+    }
+
+    return largestIndex;
+}
+
+int Team::result10At(int index)
+{
+    int teamSum = -999;
+    foreach(Competitor *competitor, m_teamCompetitors) {
+        auto shotOpt = competitor->shotAt(index);
+        if (shotOpt.has_value()) {
+            if (teamSum == -999) {
+                teamSum = shotOpt.value().get10Lask();
+            } else {
+                teamSum += shotOpt.value().get10Lask();
+            }
+        }
+    }
+    return teamSum;
+}
+
+void Team::setFirstCompetitiorData(int id, QString displayName, QString result)
+{
+    if (m_teamCompetitors.size() > 0) {
+        m_teamCompetitors.first()->setId(id);
+        m_teamCompetitors.first()->setDisplayName(displayName);
+        m_teamCompetitors.first()->setQualificationResult(result);
+    }
+}
+
+bool Team::setPoints(int shotNo, int points)
+{
+    if (m_teamCompetitors.size() > 0) {
+        m_teamCompetitors.first()->setPoints(shotNo, points);   // Points are added and shown only on the first competitor
+        return true;
+    } else
+        return false;
+}
+
+QString Team::resultAt(int index)
+{
+    if (m_teamCompetitors.size() > 0)
+        return m_teamCompetitors.first()->resultAt(index);
+    else return 0;
+}
+
+void Team::calculatePointsTotal()
 {
     if(verbose)
-        QTextStream(stdout) << m_indexLabel.text() << " Team::sum()" << Qt::endl;
-    if(m_teamCompetitors.size() > 1){
-        int teamSum = 0;
-        for(int i = 0; i < m_teamCompetitors.size(); i++){
-            teamSum += m_teamCompetitors.at(i)->current10Sum();
-            if(verbose)
-                QTextStream(stdout) << "current10Sum: " << m_teamCompetitors.at(i)->current10Sum() << Qt::endl;
-        }
+        QTextStream(stdout) << m_indexLabel.text() << " Team::pointsTotal()" << Qt::endl;
+    if(m_teamCompetitors.size() > 0){
+//        int teamSum = 0;
+//        for(int i = 0; i < m_teamCompetitors.size(); i++){
+//            teamSum += m_teamCompetitors.at(i)->current10Sum();
+//            if(verbose)
+//                QTextStream(stdout) << "current10Sum: " << m_teamCompetitors.at(i)->current10Sum() << Qt::endl;
+//        }
 
-        double dTeamSum = teamSum;
-        dTeamSum /= 10;
-        QTextStream(stdout) << "dTeamSum = " << dTeamSum << Qt::endl;
-        m_sumLabel.setText(QString("%1").arg(dTeamSum));
-        QTextStream(stdout) << "Team::sum()2" << Qt::endl;
-        m_sumLabel.setText(m_sumLabel.text().replace('.', ','));
-        QTextStream(stdout) << "Team::sum()3" << Qt::endl;
-    }else
-        m_sumLabel.setText(m_teamCompetitors.at(0)->lastSum());
+//        double dTeamSum = teamSum;
+//        dTeamSum /= 10;
+//        QTextStream(stdout) << "dTeamSum = " << dTeamSum << Qt::endl;
+//        m_sumLabel.setText(QString("%1").arg(dTeamSum));
+//        QTextStream(stdout) << "Team::sum()2" << Qt::endl;
+//        m_sumLabel.setText(m_sumLabel.text().replace('.', ','));
+//        QTextStream(stdout) << "Team::sum()3" << Qt::endl;
+//    }else
+        m_teamCompetitors.at(0)->sum();
+        m_sumLabel.setText(m_teamCompetitors.at(0)->total());
+    }
     emit teamUpdated();
 }
 
@@ -135,7 +213,12 @@ QVector<Competitor *> Team::teamCompetitors()
 
 QString Team::teamName()
 {
-    return m_teamName.text();
+    QString name = m_teamCompetitors.first()->name();
+    if (m_teamCompetitors.size() == 2)
+        name.append("/" + m_teamCompetitors.at(1)->name());
+    else if (m_teamCompetitors.size() > 2)
+        name = m_teamName.text();
+    return name;
 }
 
 QJsonObject Team::toJson() const

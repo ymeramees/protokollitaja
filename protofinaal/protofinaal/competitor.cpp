@@ -1,53 +1,68 @@
 #include "competitor.h"
 
-Competitor::Competitor(const int id, const QJsonArray configJson, QWidget *parent) : QWidget(parent)
+Competitor::Competitor(const int id, const QJsonArray configJson, const bool scoringWithPoints, QWidget *parent) : QWidget(parent)
 {
     if(verbose)
         QTextStream(stdout) << "Competitor::Competitor(QJsonArray)" << Qt::endl;
     QHBoxLayout *hBox = new QHBoxLayout;
 
-    m_id = id;
-    m_idLabel.setToolTip(tr("Võistleja ID"));
-    m_idLabel.setText("0");
-    m_idLabel.installEventFilter(this);
-    hBox->addWidget(&m_idLabel);
-
-    m_nameEdit.setMinimumWidth(75);
-    m_nameEdit.setMinimumHeight(22);
-    m_nameEdit.setToolTip(tr("Võistleja nimi"));
-    hBox->addWidget(&m_nameEdit);
+    setupCompetitor(hBox, true, id, "", "", scoringWithPoints);
 
     if(verbose)
         QTextStream(stdout) << "Competitor::configJson.size(): " << configJson.size() << Qt::endl;
 
-    for(int i = 0; i < configJson.size(); i++){
-        QVector<ShotEdit*> *thisSeries = new QVector<ShotEdit*>;
-        for(int j = 0; j < configJson.at(i).toInt(); j++){
-//            if(verbose)
-//                QTextStream(stdout) << "Competitor::configJson.at(i).toInt(): " << configJson.at(i).toInt() << Qt::endl;
-            ShotEdit *shotEdit = new ShotEdit;
-            createShotEditConnections(shotEdit);
+    if (configJson.size() > 0)
+        for(int i = 0; i < configJson.size(); i++){
+            QVector<ShotEdit*> *thisSeries = new QVector<ShotEdit*>;
+            for(int j = 0; j < configJson.at(i).toInt(); j++){
+                //            if(verbose)
+                //                QTextStream(stdout) << "Competitor::configJson.at(i).toInt(): " << configJson.at(i).toInt() << Qt::endl;
+                ShotEdit *shotEdit = new ShotEdit;
+                createShotEditConnections(shotEdit);
 
-            m_shots.append(shotEdit);
-            thisSeries->append(shotEdit);
-            hBox->addWidget(shotEdit);
+                m_shots.append(shotEdit);
+                thisSeries->append(shotEdit);
+                hBox->addWidget(shotEdit);
+
+                QLabel *pointsLabel = new QLabel(tr(""));
+                m_pointsLabels.append(pointsLabel);
+                hBox->addWidget(pointsLabel);
+            }
+            m_series.append(thisSeries);
+
+            QLabel *sumLabel = new QLabel(tr("0"));
+            m_totalLabels.append(sumLabel);
+            hBox->addWidget(sumLabel);
         }
-        m_series.append(thisSeries);
+//    else
+//        for(int i = 0; i < 3; i++){
+//            QVector<ShotEdit*> *thisSeries = new QVector<ShotEdit*>;
+//            for(int j = 0; j < configJson.at(i).toInt(); j++){
+//                //            if(verbose)
+//                //                QTextStream(stdout) << "Competitor::configJson.at(i).toInt(): " << configJson.at(i).toInt() << Qt::endl;
+//                ShotEdit *shotEdit = new ShotEdit;
+//                createShotEditConnections(shotEdit);
 
-        QLabel *sumLabel = new QLabel(tr("0,0"));
-        m_sumLabels.append(sumLabel);
-        hBox->addWidget(sumLabel);
-    }
+//                m_shots.append(shotEdit);
+//                thisSeries->append(shotEdit);
+//                hBox->addWidget(shotEdit);
+//            }
+//            m_series.append(thisSeries);
+
+//            QLabel *sumLabel = new QLabel(tr("0"));
+//            m_sumLabels.append(sumLabel);
+//            hBox->addWidget(sumLabel);
+//    }
 
     hBox->setContentsMargins(0, 2, 0, 2);
 
     if(verbose)
-        QTextStream(stdout) << "Competitor::shots: " << m_shots.size() << " , series: " << m_series.size() << " ,sumLabels: " << m_sumLabels.size() << Qt::endl;
+        QTextStream(stdout) << "Competitor::shots: " << m_shots.size() << " , series: " << m_series.size() << " ,sumLabels: " << m_totalLabels.size() << Qt::endl;
     setLayout(hBox);
     sum();
 }
 
-Competitor::Competitor(const QJsonObject &json, QWidget *parent) : QWidget(parent)
+Competitor::Competitor(const QJsonObject &json, const bool scoringWithPoints, QWidget *parent) : QWidget(parent)
 {
     if(verbose)
         QTextStream(stdout) << "Competitor::Competitor(QJsonObject), json[Series].size = " << json["series"].toArray().size() << Qt::endl;
@@ -59,17 +74,15 @@ Competitor::Competitor(const QJsonObject &json, QWidget *parent) : QWidget(paren
 
     QHBoxLayout *hBox = new QHBoxLayout;
 
-    m_id = json["id"].toInt();
-    m_idLabel.setToolTip(tr("Võistleja ID"));
-    m_idLabel.setText(QString("%1").arg(m_id));
-    m_idLabel.installEventFilter(this);
-    hBox->addWidget(&m_idLabel);
+    QString resultText = "";
+    if (json.contains("resultEdit"))
+        resultText = json["resultEdit"].toString();
 
-    m_nameEdit.setMinimumWidth(75);
-    m_nameEdit.setMinimumHeight(22);
-    m_nameEdit.setToolTip(tr("Võistleja nimi"));
-    m_nameEdit.setText(json["nameEdit"].toString());
-    hBox->addWidget(&m_nameEdit);
+    bool isActive = true;
+    if (json.contains("isActive"))
+        isActive = json["isActive"].toBool();
+
+    setupCompetitor(hBox, isActive, json["id"].toInt(), json["nameEdit"].toString(), resultText, scoringWithPoints);
 
     QJsonArray seriesArray = json["series"].toArray();
 
@@ -84,9 +97,13 @@ Competitor::Competitor(const QJsonObject &json, QWidget *parent) : QWidget(paren
             m_shots.append(shotEdit);
             thisSeries->append(shotEdit);
             hBox->addWidget(shotEdit);
+
+            QLabel *pointsLabel = new QLabel;
+            m_pointsLabels.append(pointsLabel);
+            hBox->addWidget(pointsLabel);
         }
         QLabel *sumLabel = new QLabel(seriesObj["Sum"].toString());
-        m_sumLabels.append(sumLabel);
+        m_totalLabels.append(sumLabel);
         hBox->addWidget(sumLabel);
 
         m_series.append(thisSeries);
@@ -121,9 +138,9 @@ Competitor::~Competitor()
 {
     if(verbose)
         QTextStream(stdout) << "Competitor::~Competitor()" << Qt::endl;
-    foreach (QLabel *sumLabel, m_sumLabels)
+    foreach (QLabel *sumLabel, m_totalLabels)
         sumLabel->deleteLater();
-    m_sumLabels.clear();
+    m_totalLabels.clear();
 
     //series.clear();
     foreach (QVector<ShotEdit*> *serie, m_series) {  //Duplicate pointers to shots
@@ -137,14 +154,14 @@ Competitor::~Competitor()
 
 void Competitor::createShotEditConnections(ShotEdit *shotEdit)
 {
-    connect(shotEdit, &ShotEdit::valueChanged, this, &Competitor::sum);
+    connect(shotEdit, &ShotEdit::valueChanged, this, &Competitor::newShot);
     connect(shotEdit, &ShotEdit::shotIgnored, this, &Competitor::handleIgnoredShot);
     connect(shotEdit, &ShotEdit::shotUnignored, this, &Competitor::handleUnignoredShot);
 }
 
 int Competitor::current10Sum() const
 {
-    return m_sumLabels.at(m_sumLabels.size()-1)->text().remove(',').toInt();
+    return m_total10Sum;
 }
 
 void Competitor::handleIgnoredShot()
@@ -161,7 +178,7 @@ void Competitor::handleIgnoredShot()
         hBox->insertWidget(hBox->count() - 1, shotEdit);
         int indexOfIgnoredShot = hBox->indexOf(ignoredShotEdit);
         // Shift following lables forward
-        foreach(QLabel *sumLabel, m_sumLabels) {
+        foreach(QLabel *sumLabel, m_totalLabels) {
             int labelIndex = hBox->indexOf(sumLabel);
             if(labelIndex > indexOfIgnoredShot) {
                 hBox->insertItem(labelIndex + 1, hBox->takeAt(labelIndex));
@@ -190,7 +207,7 @@ void Competitor::handleUnignoredShot()
         QHBoxLayout *hBox = qobject_cast<QHBoxLayout*>(layout());
         int indexOfUnIgnoredShot = hBox->indexOf(unIgnoredShotEdit);
         // Shift following lables backwards
-        foreach(QLabel *sumLabel, m_sumLabels) {
+        foreach(QLabel *sumLabel, m_totalLabels) {
             int labelIndex = hBox->indexOf(sumLabel);
             if(labelIndex > indexOfUnIgnoredShot) {
                 hBox->insertItem(labelIndex - 1, hBox->takeAt(labelIndex));
@@ -217,34 +234,65 @@ int Competitor::id()
     return m_id;
 }
 
+bool Competitor::isActive() const
+{
+    return m_active.isChecked();
+}
+
 QString Competitor::lastResult()
 {
     if(m_series.size() == 0){
         return "0,0";
     } else {
-        // First check if there are single shots
-        QString lastShotValue = "";
-        for(int i = m_series.last()->size() - 1; i >= 0; i--)
-            if(!m_series.last()->at(i)->text().isEmpty() && !m_series.last()->at(i)->ignored()){
-                lastShotValue = m_series.last()->at(i)->text();
-                break;
-            }
+        for(int i = m_shots.size() - 1; i >= 0; i--)
+            if(!m_shots.at(i)->text().isEmpty() && !m_shots.at(i)->ignored())
+                return m_shots.at(i)->text();
 
-        if(!lastShotValue.isEmpty())
-            return lastShotValue;
-        else if(m_series.size() > 1){ //No shot in singleshots, so latest series with a result needs to be found
-            for(int i = m_series.size() - 2; i >= 0; i--)
-                if(m_sumLabels.at(i)->text() != "0,0")
-                    return m_sumLabels.at(i)->text();
-        }
+//        if(!lastShotValue.isEmpty())
+//            return lastShotValue;
+//        else if(m_series.size() > 1){ //No shot in singleshots, so latest series with a result needs to be found
+//            for(int i = m_series.size() - 2; i >= 0; i--)
+//                if(m_sumLabels.at(i)->text() != "0")
+//                    return m_sumLabels.at(i)->text();
+//        }
     }
     return "0,0";
 }
 
-QString Competitor::lastSum()
+int Competitor::lastValidShotIndex() const
 {
-    if(m_sumLabels.size() >= 1)
-        return m_sumLabels.at(m_sumLabels.size() - 1)->text();
+    for(int i = m_shots.size() - 1; i >= 0; i--)
+        if(!m_shots.at(i)->text().isEmpty() && !m_shots.at(i)->ignored())
+            return i;
+
+    //        if(!lastShotValue.isEmpty())
+    //            return lastShotValue;
+    //        else if(m_series.size() > 1){ //No shot in singleshots, so latest series with a result needs to be found
+    //            for(int i = m_series.size() - 2; i >= 0; i--)
+    //                if(m_sumLabels.at(i)->text() != "0")
+    //                    return m_sumLabels.at(i)->text();
+    //        }
+    return -1;
+}
+
+QString Competitor::resultAt(int index) const
+{
+    if (m_scoringWithPoints && (index >= 0 && index < m_pointsLabels.size()))
+        return m_pointsLabels.at(index)->text();
+    else if (!m_scoringWithPoints && (index >= 0 && index < m_shots.size())) {
+        for(int i = 0; i < m_series.size() - 1; i++) {
+            if (m_series.at(i)->contains(m_shots.at(index)))
+                return m_totalLabels.at(i)->text();
+        }
+        return m_totalLabels.at(m_totalLabels.size() - 1)->text();
+    } else
+        return "";
+}
+
+QString Competitor::total()
+{
+    if(m_totalLabels.size() >= 1)
+        return m_totalLabels.at(m_totalLabels.size() - 1)->text();
     else
         return "0";
 }
@@ -254,8 +302,8 @@ void Competitor::mouseDoubleClickEvent(QMouseEvent *event)
     int newID = QInputDialog::getInt(this, tr("Võistleja ID muutmine"), tr("Sisestage uus ID:"), m_id, 0);
     if(m_id != newID){
         emit statusInfo(QString(tr("Võistleja ID muudetud, vana: %1 => uus: %2")).arg(m_id).arg(newID));
-        m_id = newID;
-        m_idLabel.setText(QString("%1").arg(m_id));
+        setId(newID);
+        emit modified();
     }
     Q_UNUSED(event);
 }
@@ -270,43 +318,72 @@ QString Competitor::previousSiusRow()
     return m_previousSiusRow;
 }
 
+void Competitor::setDisplayName(QString newName)
+{
+    m_nameEdit.setText(newName);
+}
+
 bool Competitor::readSiusShot(SiusShotData shotData)
 {
     bool result = false;
 
     if(shotData.id == m_id){
+        int shotIndex = (shotData.siusShotNo - 1 + m_siusOffset.value());
 
-//        if(vSummadeSamm == 0 || (vSummadeSamm != 0 && shotData.siusShotNo <= vSummadeSamm * 10)) { // Ignore additional shots in all stages
-//            int seriesIndex = (competitionStage() * vSummadeSamm * 10 + shotData.siusShotNo - 1) / 10;
-            int shotIndex = (shotData.siusShotNo - 1);
-
-            if(shotData.shot.isCompetitionShot() && m_shots.length() > shotIndex){
-                if(m_shots.at(shotIndex)->shot().isEmpty()){
-                    result = setShot(shotIndex, shotData.shot);
-                } else if (m_shots.at(shotIndex)->shot().getSLask().compare(shotData.shot.getSLask()) == 0 &&
-                            m_shots.at(shotIndex)->shot().shotTime() == shotData.shot.shotTime()) {
-                     result = true;  // Shot already existing, ignore, but return true
-                } else
-                    result = false;
-            } else {
-                // TODO draw sighting shots on spectator's screen
-            }
-//        }
+        if(shotData.shot.isCompetitionShot() && shotIndex >= 0 && m_shots.length() > shotIndex){
+            if(m_shots.at(shotIndex)->shot().isEmpty()){
+                result = setShot(shotIndex, shotData.shot);
+            } else if (m_shots.at(shotIndex)->shot().getSLask().compare(shotData.shot.getSLask()) == 0 &&
+                       m_shots.at(shotIndex)->shot().shotTime() == shotData.shot.shotTime()) {
+                result = true;  // Shot already existing, ignore, but return true
+            } else
+                result = false;
+        } else {
+            // TODO draw sighting shots on spectator's screen
+        }
     }
     return result;
 }
 
 std::optional<Lask> Competitor::shotAt(int index)
 {
-    if(m_shots.length() > index)
+    if(index >= 0 && m_shots.length() > index)
         return std::optional<Lask>{m_shots.at(index)->shot()};
     else
         return std::nullopt;
 }
 
+void Competitor::setActive(bool active)
+{
+    m_active.setChecked(active);
+}
+
+void Competitor::setId(int newId)
+{
+    m_id = newId;
+    m_idLabel.setText(QString("%1").arg(newId));
+}
+
+bool Competitor::setPoints(int shotNo, int points)
+{
+    double dPoints = points;
+    dPoints /= 10;
+    if (m_scoringWithPoints && shotNo < m_pointsLabels.size()) {
+        m_pointsLabels.at(shotNo)->setText(QString("%1").arg(dPoints).replace('.', ','));
+        sum();
+        return true;
+    } else
+        return false;
+}
+
 void Competitor::setPreviousSiusRow(QString newSiusRow)
 {
     m_previousSiusRow = newSiusRow;
+}
+
+void Competitor::setQualificationResult(QString result)
+{
+    m_resultEdit.setText(result);
 }
 
 bool Competitor::setShot(int shotNo, Lask newShot)
@@ -331,36 +408,112 @@ void Competitor::setShot(int shotNo, QString siusRow)
     }
 }
 
+void Competitor::setupCompetitor(QHBoxLayout *layout, bool active, int id, QString name, QString result, const bool scoringWithPoints)
+{
+    m_active.setChecked(active);
+    connect(&m_active, &QCheckBox::stateChanged, this, &Competitor::modified);
+    layout->addWidget(&m_active);
+
+    m_id = id;
+    m_idLabel.setToolTip(tr("Võistleja ID"));
+    m_idLabel.setText(QString("%1").arg(m_id));
+    m_idLabel.installEventFilter(this);
+    layout->addWidget(&m_idLabel);
+
+    m_nameEdit.setMinimumWidth(100);
+    m_nameEdit.setMinimumHeight(22);
+    m_nameEdit.setToolTip(tr("Võistleja nimi"));
+    m_nameEdit.setPlaceholderText("Nimi");
+    m_nameEdit.setText(name);
+    connect(&m_nameEdit, &QLineEdit::editingFinished, this, &Competitor::modified);
+    layout->addWidget(&m_nameEdit);
+
+    m_resultEdit.setMinimumWidth(35);
+    m_resultEdit.setMaximumWidth(55);
+    m_resultEdit.setMinimumHeight(22);
+    m_resultEdit.setToolTip(tr("Tulemus"));
+    m_resultEdit.setPlaceholderText("Tulemus");
+    m_resultEdit.setText(result);
+    connect(&m_resultEdit, &QLineEdit::editingFinished, this, &Competitor::modified);
+    layout->addWidget(&m_resultEdit);
+
+    m_siusOffset.setMaximumWidth(45);
+    m_siusOffset.setMinimum(-99);
+    m_siusOffset.setToolTip(tr("Arv, mille võrra Siusist tulnud lasud on nihkes"));
+    layout->addWidget(&m_siusOffset);
+
+    m_scoringWithPoints = scoringWithPoints;
+}
+
 void Competitor::sum()
 {
-    // FIXME shot value without decimal places is divided by 10
-    int totalSum = 0;
+    // QTextStream(stdout) << "Competitor::sum(), m_scoringWithPoints: " << m_scoringWithPoints << Qt::endl;
+
+    if (m_scoringWithPoints) {
+    if(verbose)
+        QTextStream(stdout) << "Competitor::sumPoints()" << Qt::endl;
+
+    int pointsTotal = 0;
     for(int i = 0; i < m_series.size(); i++){
         int seriesSum = 0;
         for(int j = 0; j < m_series.at(i)->size(); j++){
-            if(!m_series.at(i)->at(j)->ignored())
-                seriesSum += m_series.at(i)->at(j)->text().remove(',').toInt();
+            if(!m_series.at(i)->at(j)->ignored()) {
+                QString points = m_pointsLabels.at(m_shots.indexOf(m_series.at(i)->at(j)))->text();
+//                if (points.contains(','))
+//                    seriesSum += points.remove(',').toInt();
+//                else
+                    seriesSum += qRound(points.replace(',','.').toDouble() * 10);
+            }
         }
-        totalSum += seriesSum;
+        pointsTotal += seriesSum;
         double dSeriesSum = seriesSum;
         dSeriesSum /= 10;
-        m_sumLabels.at(i)->setText(QString("%1").arg(dSeriesSum).replace('.', ','));
-        if(!m_sumLabels.at(i)->text().contains(','))
-            m_sumLabels.at(i)->setText(m_sumLabels.at(i)->text() + ",0");
-    }
-    double dTotalSum = totalSum;
-    dTotalSum /= 10;
-    m_sumLabels.at(m_sumLabels.size() - 1)->setText(QString("%1").arg(dTotalSum).replace('.', ','));
-    if(!m_sumLabels.at(m_sumLabels.size() - 1)->text().contains(','))
-        m_sumLabels.at(m_sumLabels.size() - 1)->setText(m_sumLabels.at(m_sumLabels.size() - 1)->text() + ",0");
-    emit newShot();
+        m_totalLabels.at(i)->setText(QString("%1").arg(dSeriesSum).replace('.', ','));
+//        if(!m_sumLabels.at(i)->text().contains(','))
+//            m_sumLabels.at(i)->setText(m_sumLabels.at(i)->text() + ",0");
+        }
+        m_total10Sum = pointsTotal;
+        double dPointsTotal = pointsTotal;
+        dPointsTotal /= 10;
+        m_totalLabels.at(m_totalLabels.size() - 1)->setText(QString("%1").arg(dPointsTotal).replace('.', ','));
+//    if(!m_sumLabels.at(m_sumLabels.size() - 1)->text().contains(','))
+//        m_sumLabels.at(m_sumLabels.size() - 1)->setText(m_sumLabels.at(m_sumLabels.size() - 1)->text() + ",0");
+//    emit newShot();
 //    return dTotalSum;
+    } else {
+        int totalSum = 0;
+        for(int i = 0; i < m_series.size(); i++){
+            int seriesSum = 0;
+            for(int j = 0; j < m_series.at(i)->size(); j++){
+                // QTextStream(stdout) << "Competitor::sum(), m_series.at(i)->at(j)->text(): " << m_series.at(i)->at(j)->shot().getSLask() << Qt::endl;
+                if(!m_series.at(i)->at(j)->ignored())
+                    seriesSum += qRound(m_series.at(i)->at(j)->shot().getSLask().replace(',','.').toDouble() * 10);
+            }
+            // QTextStream(stdout) << "Competitor::sum(), seriesSum: " << seriesSum << Qt::endl;
+            totalSum += seriesSum;
+            double dSeriesSum = seriesSum;
+            dSeriesSum /= 10;
+            m_totalLabels.at(i)->setText(QString("%1").arg(dSeriesSum).replace('.', ','));
+            // QTextStream(stdout) << "Competitor::sum(), m_totalLabels.at(i): " << m_totalLabels.at(i)->text() << Qt::endl;
+            if(!m_totalLabels.at(i)->text().contains(','))
+                m_totalLabels.at(i)->setText(m_totalLabels.at(i)->text() + ",0");
+        }
+        m_total10Sum = totalSum;
+        double dTotalSum = totalSum;
+        dTotalSum /= 10;
+        m_totalLabels.at(m_totalLabels.size() - 1)->setText(QString("%1").arg(dTotalSum).replace('.', ','));
+        if(!m_totalLabels.at(m_totalLabels.size() - 1)->text().contains(','))
+            m_totalLabels.at(m_totalLabels.size() - 1)->setText(m_totalLabels.at(m_totalLabels.size() - 1)->text() + ",0");
+//        emit newShot();
+    }
 }
 
 QJsonObject Competitor::toJson() const
 {
     QJsonObject json;
+    json["isActive"] = m_active.isChecked();
     json["nameEdit"] = m_nameEdit.text();
+    json["resultEdit"] = m_resultEdit.text();
     json["id"] = m_id;
     QJsonArray seriesArray;
     for(int i = 0; i < m_series.size(); i++){
@@ -370,7 +523,7 @@ QJsonObject Competitor::toJson() const
             seriesShotsJson.append(m_series.at(i)->at(j)->toJson());
         }
         seriesJson["shots"] = seriesShotsJson;
-        seriesJson["Sum"] = m_sumLabels.at(i)->text();
+        seriesJson["Sum"] = m_totalLabels.at(i)->text();
         seriesArray.append(seriesJson);
     }
     json["series"] = seriesArray;

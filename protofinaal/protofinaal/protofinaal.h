@@ -20,8 +20,10 @@
 #include <QTimer>
 #include <QFile>
 
-#include "team2022.h"
-#include "teamstable2022.h"
+#include "team.h"
+#include "version.h"
+#include "teamstable.h"
+#include "programname.h"
 #include "initialdialog.h"
 #include "spectatorwindow.h"
 #include "lask.h"
@@ -77,7 +79,7 @@ private:
     QJsonObject readFinalsFile(QString fileName, bool showErrors = true);
     void readSettings();
     QVBoxLayout vBox;
-    QVector<TeamsTable2022*> m_teamsTables;
+    QVector<TeamsTable*> m_teamsTables;
     void setupTranslator();
     void writeFinalsFile(QString fileName);
     void writeSettings();
