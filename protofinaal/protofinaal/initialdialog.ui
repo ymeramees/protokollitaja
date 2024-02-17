@@ -74,12 +74,22 @@
       <widget class="QComboBox" name="eventBox">
        <item>
         <property name="text">
+         <string>AR 2024</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>AR 2023</string>
         </property>
        </item>
        <item>
         <property name="text">
          <string>AR 2023 GMM</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>AP 2024</string>
         </property>
        </item>
        <item>

@@ -2949,6 +2949,8 @@ void Protokollitaja::naitaTulAken()
     } else {
         tulemus->show();
     }
+    kasNaidataTul = true;
+    kasNaitaTul(kasNaidataTul);
 }
 
 void Protokollitaja::naitaWAbi()
@@ -4735,7 +4737,6 @@ void Protokollitaja::uusLaskur()    //Uue laskuri loomine,  koos uue ID'ga
         if(seeLeht->voistk)
             seeLeht->voistkonnad[seeLeht->voistkonnad.count() - 1]->nimi->setFocus();
         else seeLeht->laskurid[seeLeht->laskurid.count() -1]->eesNimi->setFocus();
-        if(kasNaidataTul) naitaja->start();
         viiLopuni->start();
     }
 }
@@ -4748,7 +4749,6 @@ void Protokollitaja::uusLaskur(int i)   //Uue laskuri loomine, koos olemasoleva 
                 if(seeLeht->voistk)
                         seeLeht->voistkonnad[seeLeht->voistkonnad.count() - 1]->nimi->setFocus();
                 else seeLeht->laskurid[seeLeht->laskurid.count() -1]->eesNimi->setFocus();
-                if(kasNaidataTul) naitaja->start();
                 viiLopuni->start();
         }
 }
@@ -4762,7 +4762,6 @@ void Protokollitaja::uusLaskur(QJsonObject json)
             seeLeht->voistkonnad[seeLeht->voistkonnad.count() - 1]->nimi->setFocus();
         else
             seeLeht->laskurid[seeLeht->laskurid.count() -1]->eesNimi->setFocus();
-        if (kasNaidataTul) naitaja->start();
         viiLopuni->start();
     }
 }
