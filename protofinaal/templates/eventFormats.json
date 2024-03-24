@@ -1,0 +1,56 @@
+[
+    {
+        "id": "AP 2024",
+        "event": "60l Õhupüstol",
+        "relaysTogether": 1,
+        "teams": 8,
+        "membersInTeam": 1,
+        "shots": [5, 5, 14],
+        "scoringWithPoints": false
+    },
+    {
+        "id": "AR 2024",
+        "event": "60l Õhupüss",
+        "relaysTogether": 1,
+        "teams": 8,
+        "membersInTeam": 1,
+        "shots": [5, 5, 14],
+        "scoringWithPoints": false
+    },
+    {
+        "id": "AP 2023 mixed",
+        "event": "Õhupüstol mixed võistkonnad",
+        "relaysTogether": 1,
+        "teams": 2,
+        "membersInTeam": 2,
+        "shots": [20],
+        "scoringWithPoints": true
+    },
+    {
+        "id": "AP 2023 mixed 2 relays",
+        "event": "Õhupüstol mixed võistkonnad",
+        "relaysTogether": 2,
+        "teams": 2,
+        "membersInTeam": 2,
+        "shots": [20],
+        "scoringWithPoints": true
+    },
+    {
+        "id": "AR 2023 mixed",
+        "event": "Õhupüss mixed võistkonnad",
+        "relaysTogether": 1,
+        "teams": 2,
+        "membersInTeam": 2,
+        "shots": [20],
+        "scoringWithPoints": true
+    },
+    {
+        "id": "AR 2023 mixed 2 relays",
+        "event": "Õhupüss mixed võistkonnad",
+        "relaysTogether": 2,
+        "teams": 2,
+        "membersInTeam": 2,
+        "shots": [20],
+        "scoringWithPoints": true
+    }
+]

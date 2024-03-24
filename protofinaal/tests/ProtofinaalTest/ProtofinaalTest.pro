@@ -12,3 +12,5 @@ include(../../protofinaal/protofinaal.pri)
 TEMPLATE = app
 
 SOURCES +=  tst_protofinaaltest.cpp
+
+RESOURCES += ../testResources.qrc

@@ -148,6 +148,16 @@ int Team::result10At(int index)
     return teamSum;
 }
 
+void Team::setCompetitorsData(QJsonArray data)
+{
+    QListIterator<Competitor*> iterator(m_teamCompetitors);
+    iterator.toFront();
+    foreach (QJsonValue competitorJson, data) {
+        if (iterator.hasNext())
+            iterator.next()->setData(competitorJson.toObject());
+    }
+}
+
 void Team::setFirstCompetitiorData(int id, QString displayName, QString result)
 {
     if (m_teamCompetitors.size() > 0) {

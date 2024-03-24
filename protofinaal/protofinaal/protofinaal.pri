@@ -11,7 +11,8 @@ SOURCES += $$PWD/protofinaal.cpp \
     $$PWD/../../common/src/commonsettings.cpp \
     $$PWD/../../common/src/siusdataconnection.cpp \
     $$PWD/../../common/src/siusdataconnections.cpp \
-    $$PWD/../../common/src/lask.cpp
+    $$PWD/../../common/src/lask.cpp \
+    $$PWD/../../common/src/finalsformats.cpp
 
 HEADERS += $$PWD/protofinaal.h \
     $$PWD/shotedit.h \
@@ -23,7 +24,8 @@ HEADERS += $$PWD/protofinaal.h \
     $$PWD/../../common/src/commonsettings.h \
     $$PWD/../../common/src/siusdataconnection.h \
     $$PWD/../../common/src/siusdataconnections.h \
-    $$PWD/../../common/src/lask.h
+    $$PWD/../../common/src/lask.h \
+    $$PWD/../../common/src/finalsformats.h
 
 FORMS += $$PWD/initialdialog.ui \
     $$PWD/../../common/src/siusdataconnections.ui

@@ -1461,49 +1461,66 @@ void Protokollitaja::finaaliFail()
                 return;
         }
 
-        finaaliFailiNimi.clear();
+        m_finalsFileName.clear();
 
-        bool rajaNrOlemas = false;   //Kontrollimaks, kas kõigil on raja nr'id olemas või mitte
-//        bool valitud = false;   //Kui mõnel laskuril on linnuke ees, siis lähevad valitud finaali
-        seeLeht->sorteeri(0);
+        // bool rajaNrOlemas = false;   // Check if all competitors have target numbers
+        bool selected = false;   // If some competitior is selected, then the selected competitors will be sent to finals
         int competitorsInFinal = 8;
-        if(seeLeht->reasLaskurid.count() < 8)
-            competitorsInFinal = seeLeht->reasLaskurid.count();
+        if(seeLeht->laskurid.count() < 8)
+            competitorsInFinal = seeLeht->laskurid.count();
 
         for(int i = 0; i < competitorsInFinal; i++){ //Piisab, kui on osadel raja nr, mitte kõigil
-            if(!seeLeht->reasLaskurid[i]->rajaNr->text().isEmpty())
-                rajaNrOlemas = true;
-//            if(seeLeht->reasLaskurid[i]->linnuke->isChecked())
-//                valitud = true;
+            // if(!seeLeht->reasLaskurid[i]->rajaNr->text().isEmpty())
+                // rajaNrOlemas = true;
+            if(seeLeht->laskurid[i]->linnuke->isChecked())
+               selected = true;
         }
 
-        if(rajaNrOlemas)    //Kui raja nr on olemas, siis saab selle järgi sorteerida
-            seeLeht->sorteeri(3);   //Sorteerida raja nr'i järgi
-#ifdef QT_DEBUG
-        qDebug() << "Protokollitaja::finaaliFail(), Rajanr: " << seeLeht->reasLaskurid[0]->rajaNr->text();
-#endif
+        // if(rajaNrOlemas)    //Kui raja nr on olemas, siis saab selle järgi sorteerida
+        seeLeht->sorteeri(0);   //Sorteerida raja nr'i järgi
+// #ifdef QT_DEBUG
+//         qDebug() << "Protokollitaja::finaaliFail(), Rajanr: " << seeLeht->reasLaskurid[0]->rajaNr->text();
+// #endif
 
-        QString teateTekst; //Tekst, kus öeldakse, mille järgi laskurid finaali sorteeriti
-        if(seeLeht->reasLaskurid[0]->rajaNr->text() != "A"){
-            seeLeht->sorteeri(0);   //Kui radade nr'id ei alga A'ga, siis ilmselt ei ole finaali jaoks radu sisestatud ja tuleb summade järgi reastada
-            teateTekst = tr("Rajanumbreid ei leitud, laskurid reastati finaaliks tulemuse järgi.");
-        }else teateTekst = tr("Leitud rajanumbrid, laskurid reastati finaaliks rajanumbri järgi.");
+//        QString teateTekst; //Tekst, kus öeldakse, mille järgi laskurid finaali sorteeriti
+//        if(seeLeht->reasLaskurid[0]->rajaNr->text() != "A"){
+//            seeLeht->sorteeri(0);   //Kui radade nr'id ei alga A'ga, siis ilmselt ei ole finaali jaoks radu sisestatud ja tuleb summade järgi reastada
+//            teateTekst = tr("Rajanumbreid ei leitud, laskurid reastati finaaliks tulemuse järgi.");
+//        }else {
+//            seeLeht->sorteeri(3);
+//            teateTekst = tr("Leitud rajanumbrid, laskurid reastati finaaliks rajanumbri järgi.");
+//        }
 
-#ifdef QT_DEBUG
-        qDebug() << "Protokollitaja::finaaliFail(), Rajanr2: " << seeLeht->reasLaskurid[0]->rajaNr->text() << ", perekNimi: " << seeLeht->reasLaskurid[0]->perekNimi->text();
-#endif
+//#ifdef QT_DEBUG
+//        qDebug() << "Protokollitaja::finaaliFail(), Rajanr2: " << seeLeht->reasLaskurid[0]->rajaNr->text() << ", perekNimi: " << seeLeht->reasLaskurid[0]->perekNimi->text();
+//#endif
         QVector<QStringList> finalsTable; //Each "row": target, ID, screen name, result, first name, name, club
-
-        for(int i = 0; i < seeLeht->laskurid.count() && i < competitorsInFinal; i++){
-            QStringList finalsRow;
-            finalsRow << seeLeht->reasLaskurid[i]->rajaNr->text();
-            finalsRow << QString("%100%2").arg(seeLeht->leheIndeks).arg(seeLeht->reasLaskurid[i]->id);
-            finalsRow << QString("%1 %2.").arg(seeLeht->reasLaskurid[i]->perekNimi->text()).arg(seeLeht->reasLaskurid[i]->eesNimi->text().left(1));
-            finalsRow << seeLeht->reasLaskurid[i]->getSumma();
-            finalsRow << seeLeht->reasLaskurid[i]->eesNimi->text();
-            finalsRow << seeLeht->reasLaskurid[i]->perekNimi->text();
-            finalsRow << seeLeht->reasLaskurid[i]->klubi->text();
-            finalsTable << finalsRow;
+        if (selected) {
+            for(int i = 0; i < seeLeht->laskurid.count() && i < competitorsInFinal; i++){
+                if (seeLeht->reasLaskurid[i]->linnuke->isChecked()) {
+                    QStringList finalsRow;
+                    finalsRow << seeLeht->reasLaskurid[i]->rajaNr->text();
+                    finalsRow << QString("%100%2").arg(seeLeht->leheIndeks).arg(seeLeht->reasLaskurid[i]->id);
+                    finalsRow << QString("%1 %2.").arg(seeLeht->reasLaskurid[i]->perekNimi->text()).arg(seeLeht->reasLaskurid[i]->eesNimi->text().left(1));
+                    finalsRow << seeLeht->reasLaskurid[i]->getSumma();
+                    finalsRow << seeLeht->reasLaskurid[i]->eesNimi->text();
+                    finalsRow << seeLeht->reasLaskurid[i]->perekNimi->text();
+                    finalsRow << seeLeht->reasLaskurid[i]->klubi->text();
+                    finalsTable << finalsRow;
+                }
+            }
+        } else {
+            for(int i = 0; i < seeLeht->laskurid.count() && i < competitorsInFinal; i++){
+                QStringList finalsRow;
+                finalsRow << seeLeht->reasLaskurid[i]->rajaNr->text();
+                finalsRow << QString("%100%2").arg(seeLeht->leheIndeks).arg(seeLeht->reasLaskurid[i]->id);
+                finalsRow << QString("%1 %2.").arg(seeLeht->reasLaskurid[i]->perekNimi->text()).arg(seeLeht->reasLaskurid[i]->eesNimi->text().left(1));
+                finalsRow << seeLeht->reasLaskurid[i]->getSumma();
+                finalsRow << seeLeht->reasLaskurid[i]->eesNimi->text();
+                finalsRow << seeLeht->reasLaskurid[i]->perekNimi->text();
+                finalsRow << seeLeht->reasLaskurid[i]->klubi->text();
+                finalsTable << finalsRow;
+            }
         }
 
         FinalsFileExport *finalsFileExport = new FinalsFileExport(
@@ -1511,15 +1528,16 @@ void Protokollitaja::finaaliFail()
                     seeFail,
                     m_competitionName,
                     seeLeht->ekraaniNimi,
+                    timeAndPlaceString(),
                     seeLeht->eventType(),
                     this
                     );
         finalsFileExport->setRelay(10 + seeLeht->leheIndeks);
         if(finalsFileExport->exec() == QDialog::Accepted){
             //Lisa kood, et lugeda finaalifailinimi
-            finaaliFailiNimi = finalsFileExport->getFinalsFileName();
+            m_finalsFileName = finalsFileExport->getFinalsFileName();
             //QMessageBox::information(this, "Protokollitaja", teateTekst, QMessageBox::Ok);
-            QMessageBox::information(this, "Protokollitaja", tr("Finaali fail kirjutatud!\n%1").arg(finaaliFailiNimi), QMessageBox::Ok);
+            QMessageBox::information(this, "Protokollitaja", tr("Finaali fail kirjutatud!\n%1").arg(m_finalsFileName), QMessageBox::Ok);
         }
         finalsFileExport->deleteLater();
 }
@@ -1530,7 +1548,7 @@ void Protokollitaja::finaalValmis(const int exitCode, const QProcess::ExitStatus
     Q_UNUSED(exitCode);
     Q_UNUSED(exitStatus);
 
-    loeFinaaliFail(finaaliFailiNimi);
+    loeFinaaliFail(m_finalsFileName);
 }
 
 void Protokollitaja::impordiFinaal()
@@ -1570,7 +1588,7 @@ void Protokollitaja::import()
 void Protokollitaja::kaivitaFinaal()
 {
     finaaliFail();
-    if(finaaliFailiNimi.isEmpty()) return;
+    if(m_finalsFileName.isEmpty()) return;
 
     QFile fail(qApp->applicationDirPath() + "/Data/Alg.ini");
     if(fail.open(QIODevice::WriteOnly | QIODevice::Text)){
@@ -1578,7 +1596,7 @@ void Protokollitaja::kaivitaFinaal()
 //        valja.setCodec("UTF-8");
         valja << "Finaal 1.4 seadete fail.\n";
         valja << tr("Kui olete midagi siin ära rikkunud, siis lihtsalt kustutage see fail ja programm teeb uue.\n");
-        valja << finaaliFailiNimi << "\n" << 0;
+        valja << m_finalsFileName << "\n" << 0;
     }else{
         QMessageBox::critical(this, "Protokollitaja", tr("Ei õnnestu Finaali seadete faili luua! Kontrollige, "
                               "kas teil on sinna kausta kirjutamise õigused"), QMessageBox::Ok);

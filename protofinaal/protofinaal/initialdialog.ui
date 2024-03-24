@@ -71,58 +71,7 @@
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="QComboBox" name="eventBox">
-       <item>
-        <property name="text">
-         <string>AR 2024</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>AR 2023</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>AR 2023 GMM</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>AP 2024</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>AP 2023</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>AP 2023 GMM</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>AR 2023 mixed</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>AR 2023 mixed 2 relays</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>AP 2023 mixed</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>AP 2023 mixed 2 relays</string>
-        </property>
-       </item>
-      </widget>
+      <widget class="QComboBox" name="eventBox"/>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="eventLabel">

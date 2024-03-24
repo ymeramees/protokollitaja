@@ -57,7 +57,8 @@ HEADERS += lisalaskudeaken.h \
     ../../common/src/version.h \
     ../../common/src/qualificationevents.h \
     ../../common/src/targettypes.h \
-    ../../common/src/ageclasses.h
+    ../../common/src/ageclasses.h \
+    ../../common/src/finalsformats.h
 SOURCES += lisalaskudeaken.cpp \
     datauploader.cpp \
     initialdialog.cpp \
@@ -89,7 +90,8 @@ SOURCES += lisalaskudeaken.cpp \
     ../../common/src/siusdataconnection.cpp \
     ../../common/src/qualificationevents.cpp \
     ../../common/src/targettypes.cpp \
-    ../../common/src/ageclasses.cpp
+    ../../common/src/ageclasses.cpp \
+    ../../common/src/finalsformats.cpp
 FORMS += lisalaskudeaken.ui \
     initialdialog.ui \
     liikmetevalikkast.ui \

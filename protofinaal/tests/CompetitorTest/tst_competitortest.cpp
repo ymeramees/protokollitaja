@@ -30,6 +30,7 @@ private slots:
     void test_readSiusShotRepeatedShotDataInFirstStage();
     void test_readSiusShotWithOffset();
     void test_readSiusShotWithOffsetClean();
+    void test_setData();
     void test_shotAtOutOfBounds();
     void test_sumWithIgnoredShot();
     void test_toJson();
@@ -529,6 +530,24 @@ void CompetitorTest::test_readSiusShotWithOffsetClean()
     QCOMPARE(competitor.resultAt(0), "4");
     QCOMPARE(competitor.resultAt(1), "");
     QCOMPARE(competitor.lastValidShotIndex(), 0);
+}
+
+void CompetitorTest::test_setData()
+{
+    QJsonObject jsonObj;
+
+    jsonObj["id"] = 1601;
+    jsonObj["name"] = "HÕUM S.";
+    jsonObj["result"] = "391,8";
+
+    QJsonArray conf = {5, 5, 14};
+    Competitor competitor(13, conf, true);
+
+    competitor.setData(jsonObj);
+
+    QCOMPARE(competitor.id(), 1601);
+    QCOMPARE(competitor.name(), "HÕUM S.");
+    QCOMPARE(competitor.qualificationResult(), "391,8");
 }
 
 void CompetitorTest::test_shotAtOutOfBounds()

@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias = "testWithShots.fin">resources/testWithShots.fin</file>
+        <file alias = "testWithPoints.fin">resources/testWithPoints.fin</file>
+        <file alias = "testFromProtokollitaja.fin">resources/testFromProtokollitaja.fin</file>
+    </qresource>
+</RCC>

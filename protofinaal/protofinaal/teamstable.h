@@ -25,9 +25,11 @@ public:
     QMultiMap<int, Result> getSortedResults() const;
     int lastValidShotIndex() const;
     void setCompetitiorsData(QStringList rows);
+    void setCompetitiorsData(int index, QJsonArray data);
     void setTableName(QString newName);
     QString tableName() const;
     int teamsCount();
+    int totalCompetitorsCount();
     QJsonObject toJson() const;
 
 signals:

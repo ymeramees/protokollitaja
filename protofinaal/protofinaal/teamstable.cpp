@@ -124,6 +124,13 @@ void TeamsTable::setCompetitiorsData(QStringList rows)
     }
 }
 
+void TeamsTable::setCompetitiorsData(int index, QJsonArray data)
+{
+    if (m_teams.size() > index) {
+       m_teams.at(index)->setCompetitorsData(data);
+    }
+}
+
 void TeamsTable::readSiusInfo(SiusShotData shotData)
 {
     if(verbose)
@@ -298,4 +305,13 @@ QJsonObject TeamsTable::toJson() const
     QJsonObject json;
     json["teams"] = teamsArray;
     return json;
+}
+
+int TeamsTable::totalCompetitorsCount()
+{
+    int count = 0;
+    foreach(Team *team, m_teams)
+        count += team->teamCompetitors().size();
+
+    return count;
 }

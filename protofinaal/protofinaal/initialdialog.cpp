@@ -1,14 +1,17 @@
 #include "initialdialog.h"
 #include "ui_initialdialog.h"
 
-InitialDialog::InitialDialog(QWidget *parent) :
+InitialDialog::InitialDialog(QString finalsFormatsFileName, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::InitialDialog)
+    ui(new Ui::InitialDialog),
+    m_finalsFormats(finalsFormatsFileName)
 {
     ui->setupUi(this);
     connect(ui->browseButton, &QPushButton::clicked, this, &InitialDialog::openFile);
     connect(ui->newButton, &QPushButton::clicked, this, &InitialDialog::newFile);
     connect(ui->forwardButton, &QPushButton::clicked, this, &InitialDialog::forward);
+
+    ui->eventBox->addItems(m_finalsFormats.formatIds());
 }
 
 InitialDialog::~InitialDialog()
@@ -24,6 +27,11 @@ QString InitialDialog::competitionName()
 QString InitialDialog::fileName()
 {
     return ui->fileNameEdit->text();
+}
+
+QJsonObject InitialDialog::eventConf()
+{
+    return m_finalsFormats.confById(ui->eventBox->currentText());
 }
 
 QString InitialDialog::eventName()

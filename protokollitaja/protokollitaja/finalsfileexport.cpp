@@ -6,9 +6,10 @@
 #include "finalsfileexport.h"
 #include "ui_finalsfileexport.h"
 
-FinalsFileExport::FinalsFileExport(QVector<QStringList> inputTable, QString competitionFileLocation, QString competitionName, QString eventName, int eventType, QWidget *parent) :
+FinalsFileExport::FinalsFileExport(QVector<QStringList> inputTable, QString competitionFileLocation, QString competitionName, QString eventName, QString timeAndPlace, int eventType, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::FinalsFileExport)
+    ui(new Ui::FinalsFileExport),
+    m_eventFormats(":/eventFormats.json")
 {
     ui->setupUi(this);
     connect(ui->drawButton, &QPushButton::clicked, this, &FinalsFileExport::drawStartPositions);
@@ -17,6 +18,9 @@ FinalsFileExport::FinalsFileExport(QVector<QStringList> inputTable, QString comp
     m_competitionName = competitionName;
     m_eventName = eventName;
     m_eventType = eventType;
+    m_timeAndPlace = timeAndPlace;
+
+    ui->finalsFormatBox->addItems(m_eventFormats.formatIds());
 
     ui->finalsCompetitorsTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     ui->finalsCompetitorsTable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -44,6 +48,8 @@ FinalsFileExport::FinalsFileExport(QVector<QStringList> inputTable, QString comp
     ui->finalsCompetitorsTable->hideColumn(6);
     ui->finalsCompetitorsTable->hideColumn(5);
     ui->finalsCompetitorsTable->hideColumn(4);
+
+
 }
 
 FinalsFileExport::~FinalsFileExport()
@@ -138,39 +144,47 @@ bool FinalsFileExport::writeFinalsFile()
     if(!sortCompetitors())
         return false;
 
+    QJsonObject finalsObj;
+    finalsObj["fileVersion"] = 301;
+    finalsObj["competitionName"] = m_competitionName;
+    finalsObj["eventName"] = m_eventName;
+    finalsObj["eventType"] = m_eventType;
+    finalsObj["timePlace"] = m_timeAndPlace;
+
     QString fileLocation = m_competitionFileLocation.left(m_competitionFileLocation.lastIndexOf('/') + 1);
-    finalsFileName = QFileDialog::getSaveFileName(this, tr("Salvesta finaal"), fileLocation + m_eventName + ".fnl", tr("Finaali fail (*.fnl)"));
+    finalsFileName = QFileDialog::getSaveFileName(this, tr("Salvesta finaal"), fileLocation + m_eventName + ".fin", tr("Protofinaali fail (*.fin)"));
     if(finalsFileName.isEmpty()) return false;
 
     QFile file(finalsFileName);
-    /*if(file.open(QIODevice::ReadOnly))    //Why this is needed?
+    if(file.open(QIODevice::ReadOnly))
         if(QMessageBox::critical(this, "Protokollitaja", tr("Sellise nimega fail on juba olemas. Kas "
                 "soovite selle üle kirjutada?"), QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel){
             finalsFileName.clear();
             return false;
         }
-    file.close();*/
+    file.close();
 
-    if(file.open(QIODevice::WriteOnly)){
-        QDataStream out(&file);
+    if(file.open(QIODevice::WriteOnly)) {
+        finalsObj["eventType"] = ui->finalsFormatBox->currentText();
+        finalsObj["eventConf"] = m_eventFormats.confById(ui->finalsFormatBox->currentText());
+        QJsonArray startList;
 
-        out << (quint32)0x00FA3058;   //Number for verification
-        out << (qint32)15;            //Which QFinaal file version it is
-        out.setVersion(QDataStream::Qt_4_3);
-
-        out << m_competitionName << m_eventName;
-
-        for(int i = 0; i < ui->finalsCompetitorsTable->rowCount() && i < 8; i++){   //Currently only up to 8 shooters are supported in finals
-            out << ui->finalsCompetitorsTable->item(i, 1)->text();
-            out << ui->finalsCompetitorsTable->item(i, 2)->text();
-            out << ui->finalsCompetitorsTable->item(i, 3)->text();
-            for(int j = 0; j < 24; j++)
-                out << (QString)"00";
-            for(int j = 0; j < 24; j++)
-                out << (QString)"00";
+        for(int i = 0; i < ui->finalsCompetitorsTable->rowCount(); i++){
+            QJsonArray competitorsArray;    // This is an array, to support teams finals in future
+            QJsonObject competitor;
+            competitor["id"] = ui->finalsCompetitorsTable->item(i, 1)->text().toInt();
+            competitor["name"] = ui->finalsCompetitorsTable->item(i, 5)->text() + " " + ui->finalsCompetitorsTable->item(i, 4)->text().left(1) + ".";
+            competitor["result"] = ui->finalsCompetitorsTable->item(i, 3)->text();
+            competitorsArray.append(competitor);
+            startList.append(competitorsArray);
         }
+
+        finalsObj["startList"] = startList;
+
+        QJsonDocument jsonDoc(finalsObj);
+        file.write(jsonDoc.toJson());
         file.close();
-    }else{
+    } else {
         QMessageBox::critical(this, "Protokollitaja", tr("Ei õnnestu finaali faili luua! Kontrollige, "
                               "kas teil on sinna kausta kirjutamise õigused"), QMessageBox::Ok);
         finalsFileName.clear();

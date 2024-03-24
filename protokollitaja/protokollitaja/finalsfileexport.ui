@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>550</width>
-    <height>400</height>
+    <height>441</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -72,6 +72,33 @@
     </layout>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="finalsFormatLabel">
+       <property name="text">
+        <string>Finaali formaat:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="finalsFormatBox"/>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QCheckBox" name="exportStartListBox">
@@ -99,7 +126,7 @@
      <item>
       <widget class="QLabel" name="targetNumberLabel">
        <property name="text">
-        <string>Siusi rajanr'id alates:</string>
+        <string>Rajanumbrid alates:</string>
        </property>
       </widget>
      </item>

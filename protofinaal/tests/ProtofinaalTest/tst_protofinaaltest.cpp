@@ -17,28 +17,18 @@ public:
 private slots:
     void sanityCheckWithPoints();
     void sanityCheckWithShots();
+    void test_readProtokollitajaGeneratedFile();
     void test_readSiusShotWithOffsetWithPoints();
     void test_readSiusShotWithOffsetWithShots();
     void closeInitialDialog();
     void closeMessageBox();
+    void setupCompetitionFile(QString);
+    void writeConf(QString);
 
 };
 
 ProtofinaalTest::ProtofinaalTest()
 {
-    QFile confFile("conf.json");
-
-    if(confFile.open(QIODevice::WriteOnly)){
-        QJsonObject jsonObj;
-
-        jsonObj["lastFile"] = "test.fin";
-        jsonObj["windowXLocation"] = 0;
-        jsonObj["windowYLocation"] = 0;
-        QJsonDocument jsonDoc(jsonObj);
-        confFile.write(jsonDoc.toJson());
-        confFile.close();
-    }
-
 //    QFile file(":/templates/spectatorView_template.html");
 //    if(file.open(QIODevice::ReadOnly)) {
 //        QByteArray dump = file.readAll();
@@ -47,7 +37,7 @@ ProtofinaalTest::ProtofinaalTest()
 //        qDebug() << "error: " << file.error();
 //    }
     QFile::copy(":/templates/spectatorView_template.html", "spectatorView_template.html");
-    QFile::copy(":/templates/AR 2023 GMM.json", "AR 2023 GMM.json");
+    writeConf("test.fin");
 }
 
 ProtofinaalTest::~ProtofinaalTest()
@@ -82,13 +72,76 @@ void ProtofinaalTest::closeMessageBox()
     }
 }
 
+void ProtofinaalTest::setupCompetitionFile(QString templateName)
+{
+    QFile::remove("test.fin");
+    QFile::copy(QString(":/%1.fin").arg(templateName), "test.fin");
+    writeConf("test.fin");
+}
+
+void ProtofinaalTest::writeConf(QString fileName)
+{
+    QFile confFile("conf.json");
+
+    if(confFile.open(QIODevice::WriteOnly)){
+        QJsonObject jsonObj;
+
+        jsonObj["lastFile"] = fileName;
+        jsonObj["windowXLocation"] = 0;
+        jsonObj["windowYLocation"] = 0;
+        QJsonDocument jsonDoc(jsonObj);
+        confFile.write(jsonDoc.toJson());
+        confFile.close();
+    } else
+        qDebug() << "Unable to open conf file for writing: " << confFile.error();
+}
+
+void ProtofinaalTest::test_readProtokollitajaGeneratedFile()
+{
+    setupCompetitionFile("testFromProtokollitaja");
+
+    QFile openTest("readProtokollitajaGeneratedFile.fin");
+    if (!openTest.open(QIODevice::ReadOnly))
+        qDebug() << "Unable to open test competition file: " << openTest.error();
+
+    QTimer::singleShot(210, this, SLOT(closeInitialDialog()));
+
+    Protofinaal finaal;
+    QTest::qWait(200);
+
+    TeamsTable *teamsTable = finaal.findChild<TeamsTable*>();
+    QVERIFY(teamsTable);
+    QList<Team*> teams = teamsTable->findChildren<Team*>();
+    QCOMPARE(teams.size(), 8);
+    QList<Competitor*> firstTeamCompetitors = teams.first()->findChildren<Competitor*>();
+    QCOMPARE(firstTeamCompetitors.size(), 1);
+    QList<ShotEdit*> shotEdits = firstTeamCompetitors.first()->findChildren<ShotEdit*>();
+    QCOMPARE(shotEdits.size(), 24);
+
+    QCOMPARE(teams.first()->teamName(), "HÕUM S.");
+    QCOMPARE(teams.last()->teamName(), "");
+    QCOMPARE(firstTeamCompetitors.first()->id(), 1601);
+    QCOMPARE(firstTeamCompetitors.first()->name(), "HÕUM S.");
+    QCOMPARE(firstTeamCompetitors.first()->qualificationResult(), "391,8");
+
+    QList<Competitor*> fifthTeamCompetitors = teams.at(5)->findChildren<Competitor*>();
+    QCOMPARE(fifthTeamCompetitors.size(), 1);
+    QCOMPARE(fifthTeamCompetitors.first()->id(), 7701);
+    QCOMPARE(fifthTeamCompetitors.first()->name(), "STRÖM E.");
+    QCOMPARE(fifthTeamCompetitors.first()->qualificationResult(), "409,3");
+
+    QFile::remove("readProtokollitajaGeneratedFile.fin");
+}
+
 void ProtofinaalTest::test_readSiusShotWithOffsetWithPoints()
 {
+    setupCompetitionFile("testWithPoints");
+
     QTimer::singleShot(210, this, SLOT(closeInitialDialog()));
 
     Protofinaal finaal; //("Test Competition", "today here");
     QTest::qWait(200);
-    
+
     TeamsTable *teamsTable = finaal.findChild<TeamsTable*>();
     QVERIFY(teamsTable);
     QList<Team*> teams = teamsTable->findChildren<Team*>();
@@ -143,11 +196,13 @@ void ProtofinaalTest::test_readSiusShotWithOffsetWithPoints()
 
 void ProtofinaalTest::test_readSiusShotWithOffsetWithShots()
 {
+    setupCompetitionFile("testWithShots");
+
     QTimer::singleShot(210, this, SLOT(closeInitialDialog()));
 
     Protofinaal finaal; //("Test Competition", "today here");
     QTest::qWait(200);
-    
+
     TeamsTable *teamsTable = finaal.findChild<TeamsTable*>();
     QVERIFY(teamsTable);
     QList<Team*> teams = teamsTable->findChildren<Team*>();
@@ -201,6 +256,8 @@ void ProtofinaalTest::test_readSiusShotWithOffsetWithShots()
 
 void ProtofinaalTest::sanityCheckWithPoints()
 {
+    setupCompetitionFile("testWithPoints");
+
     QTimer::singleShot(210, this, SLOT(closeInitialDialog()));
 //    QTimer::singleShot(250, this, SLOT(closeMessageBox()));
 
@@ -213,7 +270,7 @@ void ProtofinaalTest::sanityCheckWithPoints()
 
 
 //    qApp->processEvents();
-    
+
     TeamsTable *teamsTable = finaal.findChild<TeamsTable*>();
     QVERIFY(teamsTable);
     QList<Team*> teams = teamsTable->findChildren<Team*>();
@@ -241,7 +298,7 @@ void ProtofinaalTest::sanityCheckWithPoints()
     foreach(SiusShotData shotData, shot1) {
         teamsTable->readSiusInfo(shotData);
     }
-    
+
     QVector<TeamsTable::Result> expected1;
     expected1.append(TeamsTable::Result { "Competitor0", "10,1", "2", "2", 101 });
     expected1.append(TeamsTable::Result { "Teine", "10,7", "3,5", "3,5", 107 });
@@ -264,11 +321,13 @@ void ProtofinaalTest::sanityCheckWithPoints()
 
 void ProtofinaalTest::sanityCheckWithShots()
 {
+    setupCompetitionFile("testWithShots");
+
     QTimer::singleShot(210, this, SLOT(closeInitialDialog()));
 
     Protofinaal finaal; //("Test Competition", "today here");
     QTest::qWait(200);
-    
+
     TeamsTable *teamsTable = finaal.findChild<TeamsTable*>();
     QVERIFY(teamsTable);
     QList<Team*> teams = teamsTable->findChildren<Team*>();
@@ -296,7 +355,7 @@ void ProtofinaalTest::sanityCheckWithShots()
     foreach(SiusShotData shotData, shot1) {
         teamsTable->readSiusInfo(shotData);
     }
-    
+
     QVector<TeamsTable::Result> expected1;
     expected1.append(TeamsTable::Result { "Competitor0", "10,1", "0", "10,1" });
     expected1.append(TeamsTable::Result { "Teine", "10,7", "0", "10,7" });

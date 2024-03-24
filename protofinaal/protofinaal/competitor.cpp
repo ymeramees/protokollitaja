@@ -275,6 +275,11 @@ int Competitor::lastValidShotIndex() const
     return -1;
 }
 
+QString Competitor::qualificationResult() const
+{
+    return m_resultEdit.text();
+}
+
 QString Competitor::resultAt(int index) const
 {
     if (m_scoringWithPoints && (index >= 0 && index < m_pointsLabels.size()))
@@ -356,6 +361,18 @@ std::optional<Lask> Competitor::shotAt(int index)
 void Competitor::setActive(bool active)
 {
     m_active.setChecked(active);
+}
+
+void Competitor::setData(QJsonObject data)
+{
+    if (data.contains("id") && data["id"].isDouble())
+        setId(data["id"].toInt());
+
+    if (data.contains("name") && data["name"].isString())
+        setDisplayName(data["name"].toString());
+
+    if (data.contains("result") && data["result"].isString())
+        setQualificationResult(data["result"].toString());
 }
 
 void Competitor::setId(int newId)

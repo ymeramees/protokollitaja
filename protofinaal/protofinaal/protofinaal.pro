@@ -37,6 +37,7 @@ SOURCES += \
     ../../common/src/siusdataconnection.cpp \
     ../../common/src/siusdataconnections.cpp \
     ../../common/src/lask.cpp \
+    ../../common/src/finalsformats.cpp \
     teamstable.cpp
 
 HEADERS += \
@@ -50,6 +51,7 @@ HEADERS += \
     ../../common/src/siusdataconnection.h \
     ../../common/src/siusdataconnections.h \
     ../../common/src/lask.h \
+    ../../common/src/finalsformats.h \
     teamstable.h
 
 FORMS += \

@@ -84,7 +84,7 @@ public:
 	QString m_competitionName;
     QString m_place;
 	QString seeFail;
-    QString finaaliFailiNimi;   //Tehtava finaali faili nimi täies pikkuses
+    QString m_finalsFileName;   //Tehtava finaali faili nimi täies pikkuses
     QString ipAadress;
 //    QString eelmineRida;    //SiusDatast loetud eelmise lasu rida, vaja, et aru saada, kas võistlus on alanud
     QString siusiBuffer;    //SiusDatast saabunud info vaheladu

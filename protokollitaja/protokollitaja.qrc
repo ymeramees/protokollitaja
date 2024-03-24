@@ -27,5 +27,6 @@
         <file>images/kopeeriLaskur.png</file>
         <file>protokollitaja/languages/Eesti.qm</file>
         <file>protokollitaja/languages/English.qm</file>
+        <file alias="eventFormats.json">../protofinaal/templates/eventFormats.json</file>
     </qresource>
 </RCC>

@@ -33,9 +33,11 @@ public:
     QString name();
     QString lastResult();
     int lastValidShotIndex() const;
+    QString qualificationResult() const;
     QString resultAt(int index) const;
     QString total();
     void setActive(bool active);
+    void setData(QJsonObject data);
     void setId(int id);
     QJsonObject toJson() const;
 

@@ -28,6 +28,7 @@
 #include "spectatorwindow.h"
 #include "lask.h"
 #include "siusdataconnections.h"
+#include "finalsformats.h"
 
 extern bool verbose;
 
@@ -56,21 +57,21 @@ private slots:
     void updateInitialDialog();
 
 private:
-    bool competitionStarted = false;
+    bool m_competitionStarted = false;
     bool m_modifiedAfterSave = false;
     bool m_scoringWithPoints = false;
     CommonSettings m_settings;
     InitialDialog *m_initialDialog = nullptr;
-    SiusDataConnections *siusDataConnections = nullptr;
+    SiusDataConnections *m_siusDataConnections = nullptr;
     SpectatorWindow m_spectatorWindow;
-    QFile *logFile = nullptr;
-    QFile *siusLog = nullptr;
-    QString competitionName;
-    QString currentFile;
-    QString eventName;
-    QString eventType;
-    QString timePlace;
-    QTextStream logOut;
+    QFile *m_logFile = nullptr;
+    QFile *m_siusLog = nullptr;
+    QString m_competitionName;
+    QString m_currentFile;
+    QString m_eventName;
+    QString m_eventType;
+    QString m_timePlace;
+    QTextStream m_logOut;
     QTranslator m_translator;
     void changeLanguage(bool);
     void clear();
@@ -78,8 +79,9 @@ private:
     void createMenus();
     QJsonObject readFinalsFile(QString fileName, bool showErrors = true);
     void readSettings();
-    QVBoxLayout vBox;
+    QVBoxLayout m_vBox;
     QVector<TeamsTable*> m_teamsTables;
+    void createLayoutFromConf(QJsonObject conf);
     void setupTranslator();
     void writeFinalsFile(QString fileName);
     void writeSettings();

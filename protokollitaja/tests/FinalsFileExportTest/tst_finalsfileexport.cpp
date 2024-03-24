@@ -38,7 +38,7 @@ void finalsfileexport::test_drawStartPositionsWith5()
     finalsTable << (QStringList() << "13" << "40047" << "MÕTTETU M." << "617,2" << "Mees" << "MÕTTETU" << "Aa LK");
     finalsTable << (QStringList() << "" << "40025" << "KREE T." << "615,8" << "Tiit" << "KREE" << "SK Võit");
 
-    FinalsFileExport finalsFileExport(finalsTable, "fileLocation", "Test Competition", "Test Event", 0);
+    FinalsFileExport finalsFileExport(finalsTable, "fileLocation", "Test Competition", "Test Event", "Today, Here and there", 0);
     finalsFileExport.setRelay(11);
 
     QTableWidget* competitorsTable = finalsFileExport.findChild<QTableWidget*>("finalsCompetitorsTable");
@@ -60,7 +60,7 @@ void finalsfileexport::test_drawStartPositionsWith8()
     finalsTable << (QStringList() << "24" << "400147" << "REKSIA A." << "613,2" << "Anu" << "REKSIA" << "Uugametsa LK");
     finalsTable << (QStringList() << "" << "400225" << "JAAVA V." << "612,8" << "Vassiili" << "JAAVA" << "LK Kümme");
 
-    FinalsFileExport finalsFileExport(finalsTable, "fileLocation", "Test Competition", "Test Event", 0);
+    FinalsFileExport finalsFileExport(finalsTable, "fileLocation", "Test Competition", "Test Event", "Today, Here and there", 0);
     finalsFileExport.setRelay(12);
 
     QTableWidget* competitorsTable = finalsFileExport.findChild<QTableWidget*>("finalsCompetitorsTable");

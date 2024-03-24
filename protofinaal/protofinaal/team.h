@@ -28,6 +28,7 @@ public:
     QJsonObject toJson() const;
     QString resultAt(int index);
     int result10At(int index);
+    void setCompetitorsData(QJsonArray data);
     void setFirstCompetitiorData(int id, QString displayName, QString result);
     bool setPoints(int shotNo, int points);
 
