@@ -209,7 +209,6 @@ private slots:
     void kaivitaServer();
     void kasNaitaTul(bool);
     void kirjutaFail(QString);
-    void kirjutaSeaded();
     void kontrolliIdKordusi();   //Kuna see funktsioon peaks midagi muutma ainult, kui avatakse vana faili, siis lisab see uued ID'd automaatselt
     void kontrolliIdKordust(int, Laskur*);   //Kontrollib laskuri uue ID varasemat olemasolu
     void kopeeriLaskurid();
@@ -221,7 +220,6 @@ private slots:
     void loeBroadcast();    //Loeb võrgust tulnud broadcasti
     void loefail();
     void loeFinaaliFail(QString);
-    void loeSeaded();
 //    void loeSiusDatast();   //Võtab vastu lasud SiusDatast
     void margi();
     void muudaSalvestamist();
@@ -234,6 +232,7 @@ private slots:
     void peataProgress();   //Sulgeb progressi akna, kui see on ees
     void prindi();
     void prindi2();
+    void readSettings();
     void readShotInfo(QString data, int socketIndex);
     void readSiusInfo(SiusShotData shotData);
     void reasta();
@@ -270,6 +269,7 @@ private slots:
     void uusLaskur(QJsonObject);    // Create new competitor from json
     void uusTab();
     void viiLoppu();
+    void writeSettings();
 
 private:
     void changeLanguage(bool atStartup);

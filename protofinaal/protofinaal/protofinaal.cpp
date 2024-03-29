@@ -130,8 +130,10 @@ void Protofinaal::closeEvent(QCloseEvent *event)
         event->accept();
     }
 
-    if(event->isAccepted())
+    if(event->isAccepted()) {
+        writeSettings();
         qApp->quit();
+    }
 }
 
 void Protofinaal::createMenus()
@@ -409,26 +411,8 @@ QJsonObject Protofinaal::readFinalsFile(QString fileName, bool showErrors)
 
 void Protofinaal::readSettings()
 {
-    QFile file("conf.json");
-    QJsonDocument fileJson;
-
-    if(file.open(QIODevice::ReadOnly)){
-        fileJson = QJsonDocument::fromJson(file.readAll());
-        QJsonObject jsonObj = fileJson.object();
-
-        m_currentFile = jsonObj["lastFile"].toString();
-
-        if(jsonObj.contains("windowXLocation") && jsonObj["windowXLocation"].isDouble() && jsonObj.contains("windowYLocation") && jsonObj["windowYLocation"].isDouble())
-            //For some reason window frame is not included, so 9 and 36 need to be added. At least on Win7
-            this->setGeometry(jsonObj["windowXLocation"].toInt() + 9, jsonObj["windowYLocation"].toInt() + 36, 1200, 600);
-
-    }else
-        QMessageBox::critical(
-                    this,
-                    tr("Viga!"),
-                    tr("Seadete faili avamine ei ole võimalik!\nKasutatakse vaikimisi seadeid.\n\nAsukoht: ").append(file.fileName()),
-                    QMessageBox::Ok
-                    );
+    m_currentFile = m_settings.lastOpenFileName();
+    this->setGeometry(m_settings.windowXLocation() + 9, m_settings.windowYLocation() + 36, 1200, 600);
 }
 
 //void Protofinaal::readSiusInfo(SiusShotData shotData)
@@ -734,16 +718,9 @@ void Protofinaal::writeFinalsFile(QString fileName)
 
 void Protofinaal::writeSettings()
 {
-    QFile file("conf.json");
+    m_settings.setLastOpenFileName(m_currentFile);
+    m_settings.setWindowXLocation(this->x());
+    m_settings.setWindowYLocation(this->y());
 
-    if(file.open(QIODevice::WriteOnly)){
-        QJsonObject jsonObj;
-
-        jsonObj["lastFile"] = m_currentFile;
-        jsonObj["windowXLocation"] = this->x();
-        jsonObj["windowYLocation"] = this->y();
-        QJsonDocument jsonDoc(jsonObj);
-        file.write(jsonDoc.toJson());
-    }else
-        QMessageBox::critical(this, tr("Viga!"), tr("Seadete faili kirjutamine ei ole võimalik!\nKontrollige, kas teil on sinna kausta kirjutamise õigused."), QMessageBox::Ok);
+    m_settings.writeSettings();
 }

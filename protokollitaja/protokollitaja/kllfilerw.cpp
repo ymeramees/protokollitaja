@@ -505,7 +505,9 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                     QMessageBox::Ok
                     );
         fail.close();
-    }else QMessageBox::critical(m_parentWindow, tr("Protokollitaja"), tr("Ei leia faili!"), QMessageBox::Ok);
+    } else if (!fileName.isEmpty())
+        QMessageBox::critical(m_parentWindow, tr("Protokollitaja"), tr("Ei leia faili!"), QMessageBox::Ok);
+
     QApplication::restoreOverrideCursor();
 #ifdef QT_DEBUG
     qDebug() << "readKllFile() lõpp";

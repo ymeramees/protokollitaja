@@ -43,7 +43,8 @@ CompetitionSettings SimpleKllFileRW::readCompetitionSettingsFromKll(QString file
     if(file.open(QIODevice::ReadOnly)) {
         QDataStream in(&file);
         competitionSettings = readCompetitionSettings(&in, parent);
-    } else QMessageBox::critical(parent, tr("Protokollitaja"), tr("Ei leia faili!"), QMessageBox::Ok);
+    } else if (!fileName.isEmpty())
+        QMessageBox::critical(parent, tr("Protokollitaja"), tr("Ei leia faili!"), QMessageBox::Ok);
     QApplication::restoreOverrideCursor();
 
     competitionSettings.fileName = fileName;

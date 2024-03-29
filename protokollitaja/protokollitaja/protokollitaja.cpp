@@ -383,7 +383,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         pilt2 = new QPixmap(2450, 1600);
 
         algseaded();    //Seadistab algsed väärtused
-        loeSeaded();
+        readSettings();
 
         QFile fail(qApp->applicationDirPath() + "/Data/Laskuritenimekiri Puss.txt");
         if(fail.open(QIODevice::ReadOnly | QIODevice::Text)){
@@ -489,7 +489,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
             valik->ui.indBox->setCurrentIndex(0);
             loefail();
             tulemus->voistluseNimi = m_competitionName;
-            kirjutaSeaded();
+            writeSettings();
             voibSulgeda = true;
         }else{
             if(aValik->exec() == QDialog::Accepted){
@@ -619,7 +619,7 @@ void Protokollitaja::ava()
         setWindowTitle(programmiNimi + " - " + seeFail);
         valik->ui.indBox->setCurrentIndex(0);
         loefail();
-        kirjutaSeaded();
+        writeSettings();
         voibSulgeda = true;
 }
 
@@ -1791,24 +1791,6 @@ void Protokollitaja::kirjutaFail(QString failiNimi)
                     "teil on sinna kausta kirjutamise õigus."), QMessageBox::Ok);
 }
 
-void Protokollitaja::kirjutaSeaded()
-{
-    // New settings class
-    m_settings.writeSettings();
-
-        QDir dir(qApp->applicationDirPath());
-        if(!dir.cd("Data"))
-                dir.mkdir("Data");
-        QFile seaded(qApp->applicationDirPath() + "/Data/Seaded.ini");
-        if(seaded.open(QIODevice::WriteOnly | QIODevice::Text)){
-                QTextStream valja(&seaded);
-//                valja.setCodec("UTF-8");
-                valja << seeFail << "\n";
-                valja << "[lasuVSiusis]: " << lasuVSiusis << "\n";
-                valja << "[lasuNrSiusis]: " << lasuNrSiusis << "\n";
-        }
-}
-
 void Protokollitaja::kontrolliIdKordusi()   //Kuna see funktsioon peaks muutma midagi ainult siis, kui avatakse vana faili, siis lisab see uued ID'd automaatselt
 {
     for(int i = 0; i < tabWidget->count(); i++){    //Kõigepealt tuleb leida suurim olemasolev ID, et sealt nummerdamist jätkata
@@ -2369,46 +2351,6 @@ void Protokollitaja::loeFinaaliFail(QString failiNimi)
         }
     }else{
             QMessageBox::critical(this, tr("Protokollitaja"), tr("Ei leia finaali faili!"), QMessageBox::Ok);
-    }
-}
-
-void Protokollitaja::loeSeaded()
-{
-#ifdef QT_DEBUG
-    qDebug() << "loeseaded()";
-#endif
-
-    seaded->ui.competitionTypesEdit->setText(m_settings.competitionShotTypesString());
-    seaded->ui.sighterTypesEdit->setText(m_settings.sighterShotTypesString());
-
-    QFile algF(qApp->applicationDirPath() + "/Data/Seaded.ini");
-    if(algF.open(QIODevice::ReadOnly | QIODevice::Text)){
-            QTextStream sisse(&algF);
-//            sisse.setCodec("UTF-8");
-            aValik->setFileName(sisse.readLine());
-
-            while(!sisse.atEnd()){  //Loetakse seadete failist veel ka uued väärtused mõnedele konstantidele (kui need seal olemas on)
-                QString rida = sisse.readLine();
-                if(rida.startsWith("[lasuVSiusis]:")){
-                    int vanaV = lasuVSiusis;
-                    lasuVSiusis = rida.split(':').at(1).toInt();
-                    if(lasuVSiusis == 0)    //Kui on 0, siis oli mingi viga ja on vaja vana väärtus taastada
-                        lasuVSiusis = vanaV;
-#ifdef QT_DEBUG
-    qDebug() << "lasuVSiusis = " << lasuVSiusis;
-#endif
-                }else if(rida.startsWith("[lasuNrSiusis]:")){
-                    int vanaV = lasuNrSiusis;
-                    lasuNrSiusis = rida.split(':').at(1).toInt();
-                    if(lasuNrSiusis == 0)    //Kui on 0, siis oli mingi viga ja on vaja vana väärtus taastada
-                        lasuNrSiusis = vanaV;
-#ifdef QT_DEBUG
-    qDebug() << "lasuNrSiusis = " << lasuNrSiusis;
-#endif
-                }
-            }
-            algF.close();
-            aValik->setData(SimpleKllFileRW::readCompetitionSettingsFromKll(aValik->fileName(), this));
     }
 }
 
@@ -3617,6 +3559,20 @@ void Protokollitaja::prindi2()
     }
 }
 
+void Protokollitaja::readSettings()
+{
+#ifdef QT_DEBUG
+    qDebug() << "readSettings()";
+#endif
+
+    seaded->ui.competitionTypesEdit->setText(m_settings.competitionShotTypesString());
+    seaded->ui.sighterTypesEdit->setText(m_settings.sighterShotTypesString());
+    lasuVSiusis = m_settings.shotValueIndexInSius();
+    lasuNrSiusis = m_settings.shotNoIndexInSius();
+    aValik->setFileName(m_settings.lastOpenFileName());
+    aValik->setData(SimpleKllFileRW::readCompetitionSettingsFromKll(aValik->fileName(), this));
+}
+
 void Protokollitaja::readShotInfo(QString data, int socketIndex)
 {
     if(data.isEmpty() || !data.startsWith("Laskur:")){  //This should not happen
@@ -3879,7 +3835,7 @@ void Protokollitaja::salvestaKui()
                 seeFail.append(".kll");
         setWindowTitle(programmiNimi + " - " + seeFail);
         salvesta();
-        kirjutaSeaded();
+        writeSettings();
 }
 
 void Protokollitaja::seiskaServer()
@@ -3924,7 +3880,7 @@ void Protokollitaja::setDataFromInitialDialog()
     m_place = aValik->place();
     m_country = aValik->country();
     setWindowTitle(programmiNimi + " - " + seeFail);
-    kirjutaSeaded();
+    writeSettings();
 }
 
 void Protokollitaja::setupTranslator()
@@ -4477,7 +4433,7 @@ void Protokollitaja::uuendaSeaded()
                 }
         }
         voibSulgeda = false;
-        kirjutaSeaded();
+        writeSettings();
 }
 
 void Protokollitaja::uuendaVoistkondi() //Uuendadakse võistkondade tulemusi enne ekraanil näitamist ja peale liikmete valiku kasti sulgemist
@@ -4656,53 +4612,6 @@ void Protokollitaja::uhenduSiusDataga()
     }
 
     siusDataConnections->exec();
-
-    /*if(siusDataSocket == 0){
-        siusDataSocket = new QTcpSocket(this);
-        connect(siusDataSocket, SIGNAL(readyRead()), this, SLOT(loeSiusDatast()));
-        connect(siusDataSocket, SIGNAL(disconnected()), SLOT(uhendusSiusigaKatkes()));
-    }else{
-        siusDataSocket->disconnectFromHost();   //Enne uue ühenduse loomist vana kinni
-#ifdef QT_DEBUG
-        qDebug() << "Siusi ühendus lahti";
-#endif
-    }
-    if(uhendumiseAken == 0){
-        uhendumiseAken = new UhendumiseAken(this);
-        if(uhendumiseAken->ui.aadressEdit->text().isEmpty())
-            uhendumiseAken->ui.aadressEdit->setText("127.0.0.1");
-        uhendumiseAken->ui.portEdit->setText("4000");
-    }
-    if(uhendumiseAken->exec() == QDialog::Accepted)
-        siusDataSocket->connectToHost(uhendumiseAken->ui.aadressEdit->text(), uhendumiseAken->ui.portEdit->text().toInt());
-    else return;
-
-    if(progress == 0){
-        progress = new QProgressDialog(tr("SiusData'ga ühendumine..."), "Loobu", 0, 0, this);
-        progress->setWindowModality(Qt::WindowModal);
-        connect(progress, SIGNAL(canceled()), this, SLOT(peataProgress())); //Et oleks võimalik ühendumist katkestada
-    }
-    progress->show();
-
-    voistlus = false;  //Kasutatakse SiusDatast info vastuvõtmisel, võiks tõsta Siusiga ühendumise fn alla
-    for(int i = 0; i < tabWidget->count(); i++){
-        Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
-        leht->siusiReset();
-    }
-
-    //Logi, kuhu pannakse lasud, võiks tõsta Siusiga ühendumise fn alla
-    //logi = new QFile(qApp->applicationDirPath() + QString("/Data/Protokollitaja logi %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
-
-    //Logi, andmed, mis tulevad Siusist, võiks tõsta Siusiga ühendumise fn alla
-    //siusLogi = new QFile(qApp->applicationDirPath() + QString("/Data/Protokollitaja sisse logi %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
-    siusLogi = new QFile(QFileInfo(seeFail).dir().absolutePath() + QString("/Protokollitaja sisse logi %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
-
-    if(siusLogi->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){ //Saabunud võrguliikluse logi
-        QTextStream valja(siusLogi);
-        valja << "///////////////////////////////" << m_competitionName << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";
-        siusLogi->close();
-    }
-    progressTimer->start();*/
 }
 
 void Protokollitaja::uhendusSiusigaKatkes(int connectionIndex)
@@ -4848,6 +4757,12 @@ void Protokollitaja::viiLoppu()
 {
         QScrollArea* area = dynamic_cast<QScrollArea*>(tabWidget->currentWidget());
         area->verticalScrollBar()->setValue(area->verticalScrollBar()->maximum());
+}
+
+void Protokollitaja::writeSettings()
+{
+    m_settings.setLastOpenFileName(seeFail);
+    m_settings.writeSettings();
 }
 
 Protokollitaja::~Protokollitaja()
