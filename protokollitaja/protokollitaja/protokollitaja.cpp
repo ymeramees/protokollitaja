@@ -166,7 +166,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
 
         finaalAct = new QAction(QIcon(":/images/finaal.png"), tr("Finaal"), this);
         finaalAct->setStatusTip(tr("Käivitab selle lehe andmetega Finaali programmi"));
-        connect(finaalAct, SIGNAL(triggered()), this, SLOT(kaivitaFinaal()));
+        connect(finaalAct, SIGNAL(triggered()), this, SLOT(runFinals()));
 
         programmistAct = new QAction(tr("Programmist"), this);
         programmistAct->setStatusTip(tr("Kuvab infot programmi kohta"));
@@ -188,7 +188,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
 
         finaaliFailAct = new QAction(tr("Finaali fail..."), this);
         finaaliFailAct->setStatusTip(tr("Loob selle lehe kohta finaali faili"));
-        connect(finaaliFailAct, SIGNAL(triggered()), this, SLOT(finaaliFail()));
+        connect(finaaliFailAct, SIGNAL(triggered()), this, SLOT(exportFinalsFile()));
 
         lehelugejaAct = new QAction(tr("Loe lehti..."), this);
         lehelugejaAct->setStatusTip(tr("Lehtede lugemine otse masinast"));
@@ -1447,7 +1447,7 @@ void Protokollitaja::eksportXLS()
     }
 }
 
-void Protokollitaja::finaaliFail()
+void Protokollitaja::exportFinalsFile()
 {
         if(tabWidget->count() < 1){
                 QMessageBox::critical(this, "Protokollitaja", tr("Ei ole ühtegi lehte, mille põhjal finaali teha!"),
@@ -1479,7 +1479,7 @@ void Protokollitaja::finaaliFail()
         // if(rajaNrOlemas)    //Kui raja nr on olemas, siis saab selle järgi sorteerida
         seeLeht->sorteeri(0);   //Sorteerida raja nr'i järgi
 // #ifdef QT_DEBUG
-//         qDebug() << "Protokollitaja::finaaliFail(), Rajanr: " << seeLeht->reasLaskurid[0]->rajaNr->text();
+//         qDebug() << "Protokollitaja::exportFinalsFile(), Rajanr: " << seeLeht->reasLaskurid[0]->rajaNr->text();
 // #endif
 
 //        QString teateTekst; //Tekst, kus öeldakse, mille järgi laskurid finaali sorteeriti
@@ -1492,7 +1492,7 @@ void Protokollitaja::finaaliFail()
 //        }
 
 //#ifdef QT_DEBUG
-//        qDebug() << "Protokollitaja::finaaliFail(), Rajanr2: " << seeLeht->reasLaskurid[0]->rajaNr->text() << ", perekNimi: " << seeLeht->reasLaskurid[0]->perekNimi->text();
+//        qDebug() << "Protokollitaja::exportFinalsFile(), Rajanr2: " << seeLeht->reasLaskurid[0]->rajaNr->text() << ", perekNimi: " << seeLeht->reasLaskurid[0]->perekNimi->text();
 //#endif
         QVector<QStringList> finalsTable; //Each "row": target, ID, screen name, result, first name, name, club
         if (selected) {
@@ -1542,21 +1542,21 @@ void Protokollitaja::finaaliFail()
         finalsFileExport->deleteLater();
 }
 
-void Protokollitaja::finaalValmis(const int exitCode, const QProcess::ExitStatus exitStatus)
+void Protokollitaja::finalsFinished(const int exitCode, const QProcess::ExitStatus exitStatus)
 {
     // TODO: Check exit code and status in future?
     Q_UNUSED(exitCode);
     Q_UNUSED(exitStatus);
 
-    loeFinaaliFail(m_finalsFileName);
+    readFinalsFile(m_finalsFileName);
 }
 
 void Protokollitaja::impordiFinaal()
 {
-        QString failiNimi = QFileDialog::getOpenFileName(this, tr("Ava"), seeFail.left(seeFail.length() - 3), tr("Finaali fail (*.fnl)"));
-        if(failiNimi.isEmpty() || failiNimi == ".fnl")
-                return;
-        loeFinaaliFail(failiNimi);
+    QString failiNimi = QFileDialog::getOpenFileName(this, tr("Ava"), seeFail.left(seeFail.length() - 3), tr("Finaali fail (*.fin)"));
+    if(failiNimi.isEmpty() || failiNimi == ".fin")
+            return;
+    readFinalsFile(failiNimi);
 }
 
 void Protokollitaja::import()
@@ -1585,34 +1585,22 @@ void Protokollitaja::import()
         importAken->clearSheet();
 }
 
-void Protokollitaja::kaivitaFinaal()
+void Protokollitaja::runFinals()
 {
-    finaaliFail();
+    exportFinalsFile();
     if(m_finalsFileName.isEmpty()) return;
 
-    QFile fail(qApp->applicationDirPath() + "/Data/Alg.ini");
-    if(fail.open(QIODevice::WriteOnly | QIODevice::Text)){
-        QTextStream valja(&fail);
-//        valja.setCodec("UTF-8");
-        valja << "Finaal 1.4 seadete fail.\n";
-        valja << tr("Kui olete midagi siin ära rikkunud, siis lihtsalt kustutage see fail ja programm teeb uue.\n");
-        valja << m_finalsFileName << "\n" << 0;
-    }else{
-        QMessageBox::critical(this, "Protokollitaja", tr("Ei õnnestu Finaali seadete faili luua! Kontrollige, "
-                              "kas teil on sinna kausta kirjutamise õigused"), QMessageBox::Ok);
-        return;
-    }
     //finaal.setWorkingDirectory("/home/lauri/Katsepolygon/QFinaal");
 
     if(lehelugejaAken){ //Finaali käivitades tasub lugemismasinaga ühendus katkestada, et Finaal saaks lehti lugeda
         lehelugejaAken->sulgeUhendus();
     }
 
-    finaal = new QProcess(this);
-    finaal->start(qApp->applicationDirPath() + "/Finaal", QStringList() << "8946Protokollitajast");
-    connect(finaal, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finaalValmis(int, QProcess::ExitStatus)));
+    m_protoFinaalProcess = new QProcess(this);
+    m_protoFinaalProcess->start(qApp->applicationDirPath() + "/Protofinaal", QStringList() << "-f" << m_finalsFileName);
+    connect(m_protoFinaalProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finalsFinished(int, QProcess::ExitStatus)));
 
-    if(!finaal->waitForStarted(5000)){   //Kontrollimaks, kas õnnestub käivitada
+    if(!m_protoFinaalProcess->waitForStarted(5000)){   //Kontrollimaks, kas õnnestub käivitada
 //        switch(finaal->state()){
 //        case QProcess::NotRunning : {
 //                QMessageBox::critical(this, "Protokollitaja", "QProcess::NotRunning", QMessageBox::Ok);
@@ -1628,23 +1616,23 @@ void Protokollitaja::kaivitaFinaal()
 //        }
 //        default : QMessageBox::critical(this, "Protokollitaja", "QProcess::Info puudub", QMessageBox::Ok);
 //        }
-        switch(finaal->error()){
+        switch(m_protoFinaalProcess->error()){
         case QProcess::FailedToStart : {
-            if(finaal->errorString() == "No such file or directory")
-                QMessageBox::critical(this, tr("Viga"), tr("Finaali käivitamine ei õnnestunud!\n\nFinaal.exe faili ei leitud!"), QMessageBox::Ok);
+            if(m_protoFinaalProcess->errorString() == "No such file or directory")
+                QMessageBox::critical(this, tr("Viga"), tr("Finaali käivitamine ei õnnestunud!\nProtofinaal.exe faili ei leitud!"), QMessageBox::Ok);
             else
-                QMessageBox::critical(this, tr("Viga"), tr("Finaali käivitamine ei õnnestunud!\n\n%1").arg(finaal->errorString()), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Viga"), tr("Finaali käivitamine ei õnnestunud!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
             break;
         }
         case QProcess::Crashed : {
-            QMessageBox::critical(this, tr("Viga"), tr("Finaali programm jooksis käivitamisel kokku!\n\n%1").arg(finaal->errorString()), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Viga"), tr("Finaali programm jooksis käivitamisel kokku!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
             break;
         }
         case QProcess::Timedout : {
-            QMessageBox::critical(this, tr("Viga"), tr("Finaali käivitamine ei õnnestunud! Võttis liiga palju aega!\n\n%1").arg(finaal->errorString()), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Viga"), tr("Finaali käivitamine ei õnnestunud! Võttis liiga palju aega!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
             break;
         }
-        default : QMessageBox::critical(this, tr("Viga"), tr("Finaali käivitamine ei õnnestunud! Põhjus teadmata!\n\n%1").arg(finaal->errorString()), QMessageBox::Ok);
+        default : QMessageBox::critical(this, tr("Viga"), tr("Finaali käivitamine ei õnnestunud! Põhjus teadmata!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
         }
     }
 }
@@ -2240,117 +2228,90 @@ void Protokollitaja::loefail()
 #endif
 }
 
-void Protokollitaja::loeFinaaliFail(QString failiNimi)
+void Protokollitaja::readFinalsFile(QString fileName)
 {
-    QFile fail(failiNimi);
-    if(fail.open(QIODevice::ReadOnly)){
-        QDataStream sisse(&fail);
-        while(!sisse.atEnd()){
-            quint32 kontroll, versioon;
-            sisse >> kontroll >> versioon;
-            if(kontroll != 0x00FA3058){
-                QMessageBox::critical(this, tr("Protokollitaja"), tr("Vigane või vale finaali fail!"), QMessageBox::Ok);
-                return;
-            }
-            QString voistluseNimi, alaNimi;
-            if(versioon >= 12 && versioon <= 15){
-                sisse >> voistluseNimi >> alaNimi;
-            }
-
-            if(versioon >= 11 && versioon <= 15){
-                int laskudeArv = 0;
-                if(versioon == 11 || versioon == 12)
-                    laskudeArv = 10;	//Vanade reeglite järgi on finaalis 10 lasku
-                else if(versioon == 13 || versioon == 14)
-                    laskudeArv = 20;	//uute järgi 20
-                else
-                    laskudeArv = 24;	//2017a reeglite järgi 24
-                QList<QStringList> read;
-                for(int i = 0; i < 8; i++){
-                    QStringList rida;
-                    QString id, nimi, tulemus;
-                    sisse >> id >> nimi >> tulemus;
 #ifdef QT_DEBUG
-                    qDebug() << "Finaali nimi: " << nimi << "Tulemus: " << tulemus;
+    qDebug() << "readFinalsFile fileName: " << fileName;
 #endif
-                    nimi = nimi.toUpper();
-                    tulemus = tulemus.remove(".").remove(",");
-                    if(nimi.at(1) == '.'){
-                        nimi.remove(0, 2);
-                        nimi = nimi.trimmed();
-                    }else if(nimi.at(nimi.length() - 1) == '.'){
-                        nimi.remove(nimi.length() - 3, 3);
-                        nimi = nimi.trimmed();
-                    }
-                    rida << nimi << tulemus;
-                    for(int j = 0; j < (laskudeArv * 2); j++){
-                        sisse >> nimi;
-                        rida << nimi;
-                    }
-                    read << rida;
-                }
+    QFile file(fileName);
+    QJsonDocument fileJson;
+    QJsonObject jsonObj;
 
-                Leht* seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
+    if(file.open(QIODevice::ReadOnly)){
+        fileJson = QJsonDocument::fromJson(file.readAll());
+        jsonObj = fileJson.object();
 
-                int lisatuteArv = 0;
-                for(int j = 0; j < seeLeht->laskurid.count(); j++)
-                    for(int k = 0; k < read.count(); k++)
-                        if(seeLeht->laskurid[j]->perekNimi->text().trimmed() == read[k].at(0) && seeLeht->laskurid[j]->getSumma().remove(".").remove(",") == read[k].at(1)){
-                            int sum = 0;
-                            int arv = 0;
-                            bool onnestus = false;
-                            for(int x = 0; x < laskudeArv; x++){
-                                arv = qRound(read[k].at(x+2).toFloat(&onnestus) * 10);
-                                if(!onnestus){
-                                    if(read[k].at(x+2).contains(",")){
-                                        read[k][x+2].replace(",", ".");
-                                    }else if(read[k].at(x+2).contains(".")){    //Seda ei tohiks kunagi vaja olla
-                                        read[k][x+2].replace(".", ",");
-                                    }
-                                    arv = qRound(read[k].at(x+2).toFloat(&onnestus) * 10);
-                                }
-                                //arv *= 10;
-                                //QString::number(arv);
-                                sum += arv;
-//                                QString::number(sum);
-                            }
-#ifdef QT_DEBUG
-                    qDebug() << "lisaLasud, read[" << k << "]: " << read[k];
-#endif
-                            seeLeht->laskurid[j]->lisaLasud.clear();
-                            for(int x = 0; x < laskudeArv; x++){
-                                if(read[k].at(x + 26) != "00"){
-                                    arv = qRound(read[k].at(x + 26).toFloat(&onnestus) * 10);
-                                    if(!onnestus){
-                                        if(read[k].at(x + 26).contains(",")){
-                                            read[k][x + 26].replace(",", ".");
-                                        }else if(read[k].at(x + 26).contains(".")){    //Seda ei tohiks kunagi vaja olla
-                                            read[k][x + 26].replace(".", ",");
+        if(jsonObj["fileVersion"].toInt() > 301)
+            QMessageBox::warning(this, tr("Viga!"), tr("Faili versioon on uuem, kui see versioon programmist. Faili avamisel võib tekkida vigu!"), QMessageBox::Ok);
+
+        if(!(jsonObj.contains("relays") && jsonObj["relays"].isArray())) {
+            QMessageBox::critical(this, tr("Viga!"), tr("Finaali fail vigane või ilma tulemusteta!"));
+        } else {
+            Leht* currentSheet = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
+            int addedCount = 0;
+            foreach (QJsonValue relayJson, jsonObj["relays"].toArray()) {
+                QJsonObject relayObj = relayJson.toObject();
+                if (relayObj["teams"].isArray()) {
+                    foreach (QJsonValue teamJson, relayObj["teams"].toArray()) {
+                        QJsonObject teamObj = teamJson.toObject();
+                        if (teamObj["membersInTeam"].isArray()) {
+                            foreach (QJsonValue competitorJson, teamObj["membersInTeam"].toArray()) {
+                                QJsonObject competitorObj = competitorJson.toObject();
+                                if (competitorObj.contains("id") && competitorObj["id"].isDouble() &&
+                                    competitorObj.contains("nameEdit") && competitorObj["nameEdit"].isString() &&
+                                    competitorObj.contains("series") && competitorObj["series"].isArray()) {
+
+                                    QString id = QString("%1").arg(competitorObj["id"].toInt());
+                                    QString name = competitorObj["nameEdit"].toString().toUpper();
+                                    QJsonObject seriesObj = competitorObj["series"].toArray().last().toObject();
+                                    if (seriesObj.contains("Sum") && seriesObj["Sum"].isString()) {
+                                        QString finalsResult = seriesObj["Sum"].toString();
+
+                                        if (name.at(1) == '.') {
+                                            name.remove(0, 2);
+                                            name = name.trimmed();
+                                        } else if(name.at(name.length() - 1) == '.') {
+                                            name.remove(name.length() - 3, 3);
+                                            name = name.trimmed();
                                         }
-                                        arv = qRound(read[k].at(x + 26).toFloat(&onnestus) * 10);
-                                    }
 #ifdef QT_DEBUG
-                    qDebug() << "lisaLasud[j][k], arv = " << j << ", " << k << ", " << arv << "read[" << k << "].at(): " << read[k].at(x + 26);
+                                        qDebug() << "Finals name: " << name << "result: " << finalsResult;
 #endif
-                                    //arv *= 10;
-                                    //QString::number(arv);
-                                    seeLeht->laskurid[j]->lisaLasud << arv;
-                                }else seeLeht->laskurid[j]->lisaLasud << -1;
+                                        foreach(Laskur* currentCompetitor, currentSheet->laskurid) {
+#ifdef QT_DEBUG
+                                            qDebug() << "currentCompetitor.name: " << currentCompetitor->perekNimi->text() << ", id: " << currentCompetitor->id << ", finals name: " << name << ", id: " << id;
+#endif
+                                            if(currentCompetitor->perekNimi->text().trimmed() == name && id.endsWith(QString("%1").arg(currentCompetitor->id))) {
+                                                currentCompetitor->finaal->setText(finalsResult);
+                                                addedCount++;
+                                                currentCompetitor->liida();
+                                            }
+                                        }
+                                    } else {
+                                        QMessageBox::critical(this, tr("Viga!"), tr("No Sum in series!"));
+                                    }
+                                } else {
+                                    QMessageBox::critical(this, tr("Viga!"), tr("Faulty competitorObj!"));
+                                }
                             }
-                            seeLeht->laskurid[j]->finaal->setText(QString("%1").arg((float)sum/10));
-                            lisatuteArv++;
-                            seeLeht->laskurid[j]->liida();
+                        } else {
+                            QMessageBox::critical(this, tr("Viga!"), tr("membersInTeam not an array!"));
                         }
-                if(lisatuteArv < 1)
-                    QMessageBox::warning(this, tr("Protokollitaja"), tr("Ei leidnud ühelegi laskurile finaali tulemust. Kontrollige faili õigsust."), QMessageBox::Ok);
-                else{
-                    voibSulgeda = false;
-                    QMessageBox::information(this, tr("Protokollitaja"), tr("Lisatud %1'le laskurile finaali tulemus.").arg(lisatuteArv), QMessageBox::Ok);
+                    }
+                } else {
+                    QMessageBox::critical(this, tr("Viga!"), tr("Teams not an array!"));
                 }
-            }else QMessageBox::critical(this, tr("Protokollitaja"), tr("Vale finaali versiooni fail!"), QMessageBox::Ok);
+            }
+            if(addedCount < 1)
+                QMessageBox::warning(this, tr("Protokollitaja"), tr("Ei leidnud ühelegi laskurile finaali tulemust. Kontrollige faili õigsust."), QMessageBox::Ok);
+            else {
+                voibSulgeda = false;
+                currentSheet->setFinalsData(jsonObj);
+                QMessageBox::information(this, tr("Protokollitaja"), tr("Lisatud %1'le laskurile finaali tulemus.").arg(addedCount), QMessageBox::Ok);
+            }
         }
-    }else{
-            QMessageBox::critical(this, tr("Protokollitaja"), tr("Ei leia finaali faili!"), QMessageBox::Ok);
+    } else {
+        QMessageBox::critical(this, tr("Viga!"), tr("Faili avamine ei ole võimalik!\n\nAsukoht: ") + file.fileName(), QMessageBox::Ok);
     }
 }
 

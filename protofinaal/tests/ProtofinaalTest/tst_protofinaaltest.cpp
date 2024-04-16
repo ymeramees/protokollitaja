@@ -23,11 +23,12 @@ private slots:
     void closeInitialDialog();
     void closeMessageBox();
     void setupCompetitionFile(QString);
-    void writeConf(QString);
 
+private:
+    CommonSettings m_originalSettings;
 };
 
-ProtofinaalTest::ProtofinaalTest()
+ProtofinaalTest::ProtofinaalTest() : m_originalSettings("Protofinaal", "Protofinaali conf")
 {
 //    QFile file(":/templates/spectatorView_template.html");
 //    if(file.open(QIODevice::ReadOnly)) {
@@ -37,12 +38,11 @@ ProtofinaalTest::ProtofinaalTest()
 //        qDebug() << "error: " << file.error();
 //    }
     QFile::copy(":/templates/spectatorView_template.html", "spectatorView_template.html");
-    writeConf("test.fin");
 }
 
 ProtofinaalTest::~ProtofinaalTest()
 {
-
+    m_originalSettings.writeSettings();
 }
 
 void ProtofinaalTest::closeInitialDialog()
@@ -76,24 +76,6 @@ void ProtofinaalTest::setupCompetitionFile(QString templateName)
 {
     QFile::remove("test.fin");
     QFile::copy(QString(":/%1.fin").arg(templateName), "test.fin");
-    writeConf("test.fin");
-}
-
-void ProtofinaalTest::writeConf(QString fileName)
-{
-    QFile confFile("conf.json");
-
-    if(confFile.open(QIODevice::WriteOnly)){
-        QJsonObject jsonObj;
-
-        jsonObj["lastFile"] = fileName;
-        jsonObj["windowXLocation"] = 0;
-        jsonObj["windowYLocation"] = 0;
-        QJsonDocument jsonDoc(jsonObj);
-        confFile.write(jsonDoc.toJson());
-        confFile.close();
-    } else
-        qDebug() << "Unable to open conf file for writing: " << confFile.error();
 }
 
 void ProtofinaalTest::test_readProtokollitajaGeneratedFile()
@@ -106,7 +88,7 @@ void ProtofinaalTest::test_readProtokollitajaGeneratedFile()
 
     QTimer::singleShot(210, this, SLOT(closeInitialDialog()));
 
-    Protofinaal finaal;
+    Protofinaal finaal("test.fin");
     QTest::qWait(200);
 
     TeamsTable *teamsTable = finaal.findChild<TeamsTable*>();
@@ -139,7 +121,7 @@ void ProtofinaalTest::test_readSiusShotWithOffsetWithPoints()
 
     QTimer::singleShot(210, this, SLOT(closeInitialDialog()));
 
-    Protofinaal finaal; //("Test Competition", "today here");
+    Protofinaal finaal("test.fin");
     QTest::qWait(200);
 
     TeamsTable *teamsTable = finaal.findChild<TeamsTable*>();
@@ -200,7 +182,7 @@ void ProtofinaalTest::test_readSiusShotWithOffsetWithShots()
 
     QTimer::singleShot(210, this, SLOT(closeInitialDialog()));
 
-    Protofinaal finaal; //("Test Competition", "today here");
+    Protofinaal finaal("test.fin");
     QTest::qWait(200);
 
     TeamsTable *teamsTable = finaal.findChild<TeamsTable*>();
@@ -261,7 +243,7 @@ void ProtofinaalTest::sanityCheckWithPoints()
     QTimer::singleShot(210, this, SLOT(closeInitialDialog()));
 //    QTimer::singleShot(250, this, SLOT(closeMessageBox()));
 
-    Protofinaal finaal; //("Test Competition", "today here");
+    Protofinaal finaal("test.fin");
     QTest::qWait(200);
 
 //    SiusShotData shot1(11, 0, 1, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;101;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0"));
@@ -325,7 +307,7 @@ void ProtofinaalTest::sanityCheckWithShots()
 
     QTimer::singleShot(210, this, SLOT(closeInitialDialog()));
 
-    Protofinaal finaal; //("Test Competition", "today here");
+    Protofinaal finaal("test.fin");
     QTest::qWait(200);
 
     TeamsTable *teamsTable = finaal.findChild<TeamsTable*>();

@@ -90,7 +90,7 @@ public:
     QString siusiBuffer;    //SiusDatast saabunud info vaheladu
     QTextStream logiValja;  //Logifaili kirjutamiseks
 	Andmebaas andmebaas;
-    QProcess *finaal;
+    QProcess *m_protoFinaalProcess;
     QProcess *protoUuendaja;
 	QMenu *failMenu;
 	QMenu *tooriistadMenu;
@@ -192,20 +192,20 @@ private slots:
     void ava();
     void checkForUpdates();   //Automaatne uuenduste kontroll
     void checkForUpdates(bool autoCheck);  // Check for newer versions of the program
+    void dataUploaderFinished(bool success, QString reply, QString errorString);
     void eelvaade();
     void eemaldaLaskur();
     void eemaldaMargid();
     void eemaldaTab();
     void eksportCSV();
+    void exportFinalsFile();
     void exportStartList(StartListWriter::StartListType type);    // For qualification event
     void exportFinalsSiusStartList();   // For finals
     void eksportTXT();
     void eksportXLS();
-    void finaaliFail();
-    void finaalValmis(const int exitCode, const QProcess::ExitStatus exitStatus);
+    void finalsFinished(const int exitCode, const QProcess::ExitStatus exitStatus);
     void impordiFinaal();
     void import();
-    void kaivitaFinaal();
     void kaivitaServer();
     void kasNaitaTul(bool);
     void kirjutaFail(QString);
@@ -219,7 +219,6 @@ private slots:
     void liiguta();
     void loeBroadcast();    //Loeb võrgust tulnud broadcasti
     void loefail();
-    void loeFinaaliFail(QString);
 //    void loeSiusDatast();   //Võtab vastu lasud SiusDatast
     void margi();
     void muudaSalvestamist();
@@ -232,6 +231,7 @@ private slots:
     void peataProgress();   //Sulgeb progressi akna, kui see on ees
     void prindi();
     void prindi2();
+    void readFinalsFile(QString);
     void readSettings();
     void readShotInfo(QString data, int socketIndex);
     void readSiusInfo(SiusShotData shotData);
@@ -241,7 +241,7 @@ private slots:
     void reastaS();
     void reastaSi();
     void receivedVersionInfo(bool updateExists, QString versionString);
-    void dataUploaderFinished(bool success, QString reply, QString errorString);
+    void runFinals();
     void saadaVorku(QString, int socketIndex);
     void salvesta();
     void salvestaKui();

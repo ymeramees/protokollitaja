@@ -190,6 +190,11 @@ std::optional<QString> Leht::exportStartList()
     }
 }
 
+std::optional<QJsonObject> Leht::finalsData()
+{
+    return m_finals;
+}
+
 int Leht::maxTime() const
 {
     return m_maxTime;
@@ -203,6 +208,11 @@ int Leht::minTime() const
 void Leht::setEventType(const QualificationEvents::EventType newEventType)
 {
     m_eventType = newEventType;
+}
+
+void Leht::setFinalsData(QJsonObject finalsData)
+{
+    m_finals = finalsData;
 }
 
 void Leht::setMaxTimeMs(const int newTime)

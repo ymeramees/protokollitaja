@@ -37,7 +37,7 @@ class Protofinaal : public QMainWindow
     Q_OBJECT
 
 public:
-    Protofinaal(QWidget *parent = nullptr);
+    Protofinaal(QString fileName = "", QWidget *parent = nullptr);
     ~Protofinaal();
     void open();
     void save();

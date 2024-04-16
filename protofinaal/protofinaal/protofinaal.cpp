@@ -32,7 +32,7 @@ QString programName = VER_INTERNALNAME_STR;
 QString programVersion = VER_PRODUCTVERSION_STR;
 extern bool verbose;
 
-Protofinaal::Protofinaal(QWidget *parent)
+Protofinaal::Protofinaal(QString fileName, QWidget *parent)
     : m_settings("Protofinaal", "Protofinaali conf"), QMainWindow(parent)
 {
     if (m_settings.language().isEmpty()) {
@@ -56,6 +56,8 @@ Protofinaal::Protofinaal(QWidget *parent)
 
     this->setGeometry(9, 36, 1500, 600);
     readSettings();
+    if (!fileName.isEmpty())
+        m_currentFile = fileName;
 
     QTimer::singleShot(100, this, SLOT(initialize()));
 
@@ -332,9 +334,7 @@ void Protofinaal::loadFile(QString fileName)
                     teamsTable->setCompetitiorsData(i, data);
                 }
         }
-     } else {
-        if(!(jsonObj.contains("relays") && jsonObj["relays"].isArray()))
-            QMessageBox::critical(this, tr("Viga!"), tr("Finaali fail vigane!"));
+     } else if (jsonObj.contains("relays") && jsonObj["relays"].isArray()) {
 
         m_scoringWithPoints = false;
         if (jsonObj.contains("scoringWithPoints"))
@@ -361,7 +361,8 @@ void Protofinaal::loadFile(QString fileName)
         m_modifiedAfterSave = false;
 
 //    centralWidget()->setLayout(vBox);
-     }
+     } else
+        QMessageBox::critical(this, tr("Viga!"), tr("Finaali fail vigane!"));
 }
 
 void Protofinaal::open()

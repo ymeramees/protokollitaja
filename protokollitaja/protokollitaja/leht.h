@@ -84,9 +84,11 @@ public:
             ,*/ LiikmeteValikKast *lV = 0, int lI = 0, int ls = 10);
     ~Leht();
     QualificationEvents::EventType eventType() const;
+    std::optional<QJsonObject> finalsData();
 	int maxTime() const;
 	int minTime() const;
     void setEventType(const QualificationEvents::EventType newEventType);
+    void setFinalsData(QJsonObject finalsData);
 	void setMaxTimeMs(const int newTime);
 	void setMinTimeMs(const int newTime);
     void setToBeUploaded(bool newStatus);
@@ -122,6 +124,7 @@ private:
     QualificationEvents::EventType m_eventType;
     bool m_toBeUploaded = true;  //Shows if results on this page should be uploaded to web or not
 	int m_maxTime, m_minTime;	// Time limits for how long the results are shown on spectator screen, in ms
+    std::optional<QJsonObject> m_finals = std::nullopt;
 };
 
 #endif // LEHT_H
