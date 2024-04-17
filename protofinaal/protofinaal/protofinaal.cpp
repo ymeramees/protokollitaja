@@ -33,7 +33,7 @@ QString programVersion = VER_PRODUCTVERSION_STR;
 extern bool verbose;
 
 Protofinaal::Protofinaal(QString fileName, QWidget *parent)
-    : m_settings("Protofinaal", "Protofinaali conf"), QMainWindow(parent)
+    : QMainWindow(parent), m_settings("Protofinaal", "Protofinaali conf")
 {
     if (m_settings.language().isEmpty()) {
         changeLanguage(true);
@@ -215,6 +215,7 @@ void Protofinaal::connectToSiusData()
 
 void Protofinaal::connectionToSiusLost(int connectionIndex)
 {
+    Q_UNUSED(connectionIndex);
     // TODO To be implemented
 }
 
@@ -265,7 +266,7 @@ void Protofinaal::initialize()
         QTextStream(stdout) << "initialize" << Qt::endl;
 
     if(m_initialDialog == nullptr){
-        m_initialDialog = new InitialDialog(":/eventFormats.json", this);
+        m_initialDialog = new InitialDialog(this);
         connect(m_initialDialog, &InitialDialog::updateMe, this, &Protofinaal::updateInitialDialog);
     }
 
@@ -346,7 +347,7 @@ void Protofinaal::loadFile(QString fileName)
         QJsonArray relaysArray = jsonObj["relays"].toArray();
         int noOfRelays = relaysArray.size();
         int relayNo = 1;
-        foreach (QJsonValue relayJson, relaysArray) {
+        for (const QJsonValue &relayJson: qAsConst(relaysArray)) {
             TeamsTable *m_teamsTable = new TeamsTable();
             m_vBox.addWidget(m_teamsTable);
             if (noOfRelays > 1)

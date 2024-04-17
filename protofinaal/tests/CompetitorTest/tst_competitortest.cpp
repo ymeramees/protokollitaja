@@ -72,22 +72,21 @@ void CompetitorTest::test_createCompetitorFromJsonArray_data()
     QTest::newRow("stage12") << QJsonArray{10, 5, 10, 5} << 69 << 35;
     QTest::newRow("medalMatch") << QJsonArray{17} << 40 << 19;
 
-    QTest::newRow("AR") << QJsonArray{5, 5, 14} << 29 << 4;
-    QTest::newRow("2") << QJsonArray{3, 3, 10} << 21 << 4;
-    QTest::newRow("3") << QJsonArray{5, 12} << 21 << 3;
-    QTest::newRow("4") << QJsonArray{10} << 13 << 2;
-    QTest::newRow("5") << QJsonArray{24} << 27 << 2;
-    QTest::newRow("3P") << QJsonArray{5, 5, 5, 5, 5, 5, 5, 5, 5} << 56 << 10;
+    QTest::newRow("AR") << QJsonArray{5, 5, 14} << 56 << 28;
+    QTest::newRow("2") << QJsonArray{3, 3, 10} << 40 << 20;
+    QTest::newRow("3") << QJsonArray{5, 12} << 41 << 20;
+    QTest::newRow("4") << QJsonArray{10} << 26 << 12;
+    QTest::newRow("5") << QJsonArray{24} << 54 << 26;
+    QTest::newRow("3P") << QJsonArray{5, 5, 5, 5, 5, 5, 5, 5, 5} << 104 << 55;
 }
 
 void CompetitorTest::test_createCompetitorFromJsonObject()
 {
-    QFETCH(QJsonObject, savedConf);
-    QFETCH(QString, name);
-    QFETCH(int, fieldCount);
-    QFETCH(int, idAndSumsCount);
-
     // FIXME To be implemented
+//    QFETCH(QJsonObject, savedConf);
+//    QFETCH(QString, name);
+//    QFETCH(int, fieldCount);
+//    QFETCH(int, idAndSumsCount);
 
 //    Competitor2022 *competitor = new Competitor2022(savedConf);
 //    QHBoxLayout* hBox = competitor->findChild<QHBoxLayout*>();
@@ -344,7 +343,7 @@ void CompetitorTest::test_lastResultAndSumWithShots()
     QCOMPARE(competitor.lastResult(), "0,0");
     QCOMPARE(competitor.total(), "0,0");
     QCOMPARE(competitor.shotAt(0)->get10Lask(), -999);
-    QCOMPARE(competitor.resultAt(0), "");
+    QCOMPARE(competitor.resultAt(0), "0,0");
     QCOMPARE(competitor.lastValidShotIndex(), -1);
 
     competitor.setShot(0, Lask(104, 354, -983, true, QTime::currentTime()));
@@ -355,7 +354,7 @@ void CompetitorTest::test_lastResultAndSumWithShots()
     QCOMPARE(competitor.lastValidShotIndex(), 0);
 
     competitor.setShot(1, Lask(83, 354, -983, true, QTime::currentTime()));
-    QCOMPARE(competitor.lastResult(), "18,7");
+    QCOMPARE(competitor.lastResult(), "8,3");
     QCOMPARE(competitor.total(), "18,7");
 
     competitor.setShot(5, Lask(100, 354, -983, true, QTime::currentTime()));
@@ -363,7 +362,7 @@ void CompetitorTest::test_lastResultAndSumWithShots()
     QCOMPARE(competitor.total(), "28,7");
 
     competitor.setShot(6, Lask(58, 354, -983, true, QTime::currentTime()));
-    QCOMPARE(competitor.lastResult(), "15,8");
+    QCOMPARE(competitor.lastResult(), "5,8");
     QCOMPARE(competitor.total(), "34,5");
 
     competitor.setShot(10, Lask(109, 354, -983, true, QTime::currentTime()));
@@ -571,16 +570,16 @@ void CompetitorTest::test_sumWithIgnoredShot()
    QCOMPARE(competitor.total(), "10,4");
 
    competitor.setShot(1, Lask(83, 354, -983, true, QTime::currentTime()));
-   QCOMPARE(competitor.lastResult(), "18,7");
+   QCOMPARE(competitor.lastResult(), "8,3");
    QCOMPARE(competitor.total(), "18,7");
 
    competitor.setShot(3, Lask(100, 354, -983, true, QTime::currentTime()));
-   QCOMPARE(competitor.lastResult(), "28,7");
+   QCOMPARE(competitor.lastResult(), "10,0");
    QCOMPARE(competitor.total(), "28,7");
 
    QList<ShotEdit*> shotEdits = competitor.findChildren<ShotEdit*>();
    shotEdits.at(3)->setIgnored(true);
-   QCOMPARE(competitor.lastResult(), "18,7");
+   QCOMPARE(competitor.lastResult(), "8,3");
    QCOMPARE(competitor.total(), "18,7");
 
    competitor.setShot(10, Lask(58, 354, -983, true, QTime::currentTime()));

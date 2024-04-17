@@ -16,7 +16,7 @@ class InitialDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit InitialDialog(QString, QWidget *parent = 0);
+    explicit InitialDialog(QWidget *parent = 0);
     ~InitialDialog();
     QString competitionName();
     QString fileName();

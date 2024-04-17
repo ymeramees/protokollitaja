@@ -517,5 +517,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
 
 bool KllFileRW::writeKllFile(QTabWidget *toWrite)
 {
+    Q_UNUSED(toWrite);
     // TODO To be implemented
+    return false;
 }

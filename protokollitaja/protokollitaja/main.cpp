@@ -9,7 +9,7 @@
 #include "programname.h"
 #include "version.h"
 
-#ifdef ASM_CRASH_REPORT
+#if defined(ASM_CRASH_REPORT) && defined(Q_OS_WIN)
 #include "asmCrashReport.h"
 #endif
 
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     a.setOrganizationName(organization);
     a.setApplicationVersion(versioon);
 
-#ifdef ASM_CRASH_REPORT
+#if defined(ASM_CRASH_REPORT) && defined(Q_OS_WIN)
   asmCrashReport::setSignalHandler( QString(), [] (const QString &inFileName, bool inSuccess) {
       QString  message;
 

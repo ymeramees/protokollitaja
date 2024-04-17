@@ -1,6 +1,6 @@
 ﻿#include "valikkast.h"
 
-ValikKast::ValikKast(CommonSettings *settings, QWidget *parent)
+ValikKast::ValikKast(QWidget *parent)
     : QDialog(parent)
 {
     ui.setupUi(this);

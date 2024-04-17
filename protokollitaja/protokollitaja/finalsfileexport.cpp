@@ -7,9 +7,7 @@
 #include "ui_finalsfileexport.h"
 
 FinalsFileExport::FinalsFileExport(QVector<QStringList> inputTable, QString competitionFileLocation, QString competitionName, QString eventName, QString timeAndPlace, int eventType, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::FinalsFileExport),
-    m_eventFormats(":/eventFormats.json")
+    QDialog(parent), ui(new Ui::FinalsFileExport)
 {
     ui->setupUi(this);
     connect(ui->drawButton, &QPushButton::clicked, this, &FinalsFileExport::drawStartPositions);

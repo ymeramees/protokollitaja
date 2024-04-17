@@ -31,7 +31,7 @@ InitialDialogTest::~InitialDialogTest()
 
 void InitialDialogTest::notAcceptEmptyCompetitionName()
 {
-    InitialDialog dialog(":/templates/eventFormats.json");
+    InitialDialog dialog;
     dialog.setFileName("Test.fin");
     QPushButton *forwardButton = dialog.findChild<QPushButton*>("forwardButton");
 
@@ -55,7 +55,7 @@ void InitialDialogTest::notAcceptEmptyCompetitionName()
 
 void InitialDialogTest::notAcceptEmptyFileName()
 {
-    InitialDialog dialog(":/templates/eventFormats.json");
+    InitialDialog dialog;
     dialog.setCompetitionName("Test");
     QPushButton *forwardButton = dialog.findChild<QPushButton*>("forwardButton");
 
@@ -79,7 +79,7 @@ void InitialDialogTest::notAcceptEmptyFileName()
 
 void InitialDialogTest::notAcceptEmptyCompetitionNorFileName()
 {
-    InitialDialog dialog(":/templates/eventFormats.json");
+    InitialDialog dialog;
     QPushButton *forwardButton = dialog.findChild<QPushButton*>("forwardButton");
 
     QTimer::singleShot(200, [=](){

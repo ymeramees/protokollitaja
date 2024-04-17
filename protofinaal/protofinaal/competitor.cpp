@@ -86,11 +86,11 @@ Competitor::Competitor(const QJsonObject &json, const bool scoringWithPoints, QW
 
     QJsonArray seriesArray = json["series"].toArray();
 
-    foreach (QJsonValue seriesJson, seriesArray) {
+    for (const QJsonValue &seriesJson: qAsConst(seriesArray)) {
         QVector<ShotEdit*> *thisSeries = new QVector<ShotEdit*>;
         QJsonObject seriesObj = seriesJson.toObject();
         QJsonArray shotsArray = seriesObj["shots"].toArray();
-        foreach (QJsonValue shotJson, shotsArray) {
+        for (const QJsonValue &shotJson: qAsConst(shotsArray)) {
             ShotEdit *shotEdit = new ShotEdit(shotJson.toObject());
             createShotEditConnections(shotEdit);
 
@@ -407,6 +407,7 @@ bool Competitor::setShot(int shotNo, Lask newShot)
 {
     if(shotNo < m_shots.size()){
         m_shots.at(shotNo)->setShot(newShot);
+        sum();
         return true;
     } else {
         QMessageBox::critical(this, tr("Viga"), tr("Laskude arv suurem, kui võimalik! Lask ei läinud kirja!"), QMessageBox::Ok);

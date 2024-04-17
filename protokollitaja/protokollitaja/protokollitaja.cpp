@@ -24,7 +24,7 @@ extern bool verbose;
 //extern QDir asukoht;
 
 Protokollitaja::Protokollitaja(QWidget *parent)
-    : m_settings(programmiNimi.mid(0, programmiNimi.indexOf(' ')), "Protokollitaja conf"), QMainWindow(parent)
+    : QMainWindow(parent), m_settings(programmiNimi.mid(0, programmiNimi.indexOf(' ')), "Protokollitaja conf")
 {
     setWindowTitle(programmiNimi); // TODO uuendada nime
     setWindowIcon(QIcon(":/images/Protokollitaja.ico"));
@@ -323,7 +323,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         aValik = new InitialDialog(this);
         aValik->setWindowModality(Qt::ApplicationModal);
         aValik->setWindowIcon(QIcon(":/images/Protokollitaja.ico"));
-        valik = new ValikKast(&m_settings, this);
+        valik = new ValikKast(this);
         valik->setWindowIcon(QIcon(":/images/Protokollitaja.ico"));
         valik->setWindowModality(Qt::ApplicationModal);
         tulemus = new TulemuseAken();
@@ -748,11 +748,11 @@ void Protokollitaja::eelvaade()
                 kirjaFont.setBold(false);
                 painter.setFont(kirjaFont);
                 if(seeLeht->voistk){
-                        int alg = 0, lopp = seeLeht->voistkonnad.count();
+                        int lopp = seeLeht->voistkonnad.count();
                         if(seeLeht->voistkonnad.count() > (56 / (seeLeht->seeriateArv + 1)))
                                 lopp = 56 / (seeLeht->seeriateArv + 1);
                         int i = 0;
-                        for(alg; alg < lopp; alg++){
+                        for(int alg = 0; alg < lopp; alg++){
                                 painter.drawText(25, 175 + i * 41, QString("%1.").arg(alg+1));
                                 painter.drawText(85, 175 + i * 41, seeLeht->voistkonnad[alg]->nimi->text());
                                 for(int j = 0; j < seeLeht->seeriateArv; j++){
@@ -2249,13 +2249,13 @@ void Protokollitaja::readFinalsFile(QString fileName)
         } else {
             Leht* currentSheet = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
             int addedCount = 0;
-            foreach (QJsonValue relayJson, jsonObj["relays"].toArray()) {
+            for (const QJsonValue &relayJson: jsonObj["relays"].toArray()) {
                 QJsonObject relayObj = relayJson.toObject();
                 if (relayObj["teams"].isArray()) {
-                    foreach (QJsonValue teamJson, relayObj["teams"].toArray()) {
+                    for (const QJsonValue &teamJson: relayObj["teams"].toArray()) {
                         QJsonObject teamObj = teamJson.toObject();
                         if (teamObj["membersInTeam"].isArray()) {
-                            foreach (QJsonValue competitorJson, teamObj["membersInTeam"].toArray()) {
+                            for (const QJsonValue &competitorJson: teamObj["membersInTeam"].toArray()) {
                                 QJsonObject competitorObj = competitorJson.toObject();
                                 if (competitorObj.contains("id") && competitorObj["id"].isDouble() &&
                                     competitorObj.contains("nameEdit") && competitorObj["nameEdit"].isString() &&
@@ -2529,8 +2529,7 @@ void Protokollitaja::naitaTul()
                     for(int k = 0; k < 16; k++)
                         tulemus->read[j][k] = " ";
                 if(seeLeht->voistkonnad.count() > 1 && (reaNr - areaNr) > 1){
-                    int i = areaNr;
-                    for(i; i < reaNr; i++){
+                    for(int i = areaNr; i < reaNr; i++){
                         tulemus->read[i-areaNr][0] = QString("%1.").arg(i + 1);
                         tulemus->read[i-areaNr][1] = seeLeht->reasVoistkonnad[i]->nimi->text();
                         //tulemus->read[i-areaNr][2] = seeLeht->reasVoistkonnad[i]->perekNimi->text();
@@ -2637,8 +2636,7 @@ void Protokollitaja::naitaTul()
                 if(tulemusegaArv > 1 && (reaNr - areaNr) > 1){  //Kui on mitu laskurit lehel
                     if(verbose)
                         QTextStream(stdout) << "Protokollitaja::naitaTul(): tulemusegaArv > 1 && (reaNr - areaNr) > 1" << Qt::endl;
-                    int i = areaNr;
-                    for(i; i < reaNr; i++){
+                    for(int i = areaNr; i < reaNr; i++){
                         tulemus->read[i-areaNr][0] = QString("%1.").arg(i + 1);
                         tulemus->read[i-areaNr][1] = seeLeht->reasLaskurid[i]->eesNimi->text();
                         tulemus->read[i-areaNr][2] = seeLeht->reasLaskurid[i]->perekNimi->text();
@@ -2708,8 +2706,7 @@ void Protokollitaja::naitaTul()
                             if(asend < i / seeLeht->vSummadeSamm)
                                 asend = i / seeLeht->vSummadeSamm;
                 if(tulemusegaArv > 1 && (reaNr - areaNr) > 1){
-                    int i = areaNr;
-                    for(i; i < reaNr; i++){
+                    for(int i = areaNr; i < reaNr; i++){
                         tulemus->read[i-areaNr][0] = QString("%1.").arg(i + 1);
                         tulemus->read[i-areaNr][1] = seeLeht->reasLaskurid[i]->eesNimi->text();
                         tulemus->read[i-areaNr][2] = seeLeht->reasLaskurid[i]->perekNimi->text();
@@ -2953,8 +2950,7 @@ void Protokollitaja::prindi()
                     painter.drawText(75, 125, seeLeht->ekraaniNimi);
                     kirjaFont.setBold(false);
                     painter.setFont(kirjaFont);
-                    int i = 0;
-                    for(alg; alg < lopp; alg++){
+                    for(int i = 0; alg < lopp; alg++){
                         painter.drawText(25, 175 + i * 41, QString("%1.").arg(alg+1));
                         painter.drawText(85, 175 + i * 41, seeLeht->voistkonnad[alg]->nimi->text());
                         for(int j = 0; j < seeLeht->seeriateArv; j++){
@@ -2985,7 +2981,7 @@ void Protokollitaja::prindi()
                 painter2.end();
             }else if(seeLeht->seeriateArv > 8){
                 //pilt2->scaled(2450, 1600);
-                int alg = 0, lopp = seeLeht->laskurid.count();
+                int lopp = seeLeht->laskurid.count();
                 if(seeLeht->laskurid.count() > 30)
                     lopp = 30;
                 do{
@@ -3024,7 +3020,7 @@ void Protokollitaja::prindi()
                     kirjaFont.setBold(false);
                     painter.setFont(kirjaFont);
                     int i = 0;
-                    for(alg; alg < lopp; alg++){
+                    for(int alg = 0; alg < lopp; alg++){
                         painter.setFont(kirjaFont);
                         if(seeLeht->laskurid[alg]->markus->text().contains("V.A", Qt::CaseInsensitive)){
                             painter.drawText(15, 175 + i * 41, "v.a.");
@@ -3075,7 +3071,7 @@ void Protokollitaja::prindi()
                 painter2.end();
                 //printer.setOrientation(QPrinter::Portrait);
             }else if(seeLeht->vSummadeSamm > 0){
-                int alg = 0, lopp = seeLeht->laskurid.count();
+                int lopp = seeLeht->laskurid.count();
                 if(seeLeht->laskurid.count() > 55)
                     lopp = 55;
                 do{
@@ -3110,7 +3106,7 @@ void Protokollitaja::prindi()
                     kirjaFont.setBold(false);
                     painter.setFont(kirjaFont);
                     int i = 0;
-                    for(alg; alg < lopp; alg++){
+                    for(int alg = 0; alg < lopp; alg++){
                         painter.setFont(kirjaFont);
                         if(seeLeht->laskurid[alg]->markus->text().contains("V.A", Qt::CaseInsensitive)){
                             painter.drawText(15, 175 + i * 41, "v.a.");
@@ -3161,7 +3157,7 @@ void Protokollitaja::prindi()
                 painter2.end();
             }else{
                 //pilt->scaled(1600, 2450);
-                int alg = 0, lopp = seeLeht->laskurid.count();
+                int lopp = seeLeht->laskurid.count();
                 if(seeLeht->laskurid.count() > 55)
                     lopp = 55;
                 do{
@@ -3196,7 +3192,7 @@ void Protokollitaja::prindi()
                     kirjaFont.setBold(false);
                     painter.setFont(kirjaFont);
                     int i = 0;
-                    for(alg; alg < lopp; alg++){
+                    for(int alg = 0; alg < lopp; alg++){
                         if(seeLeht->laskurid[alg]->markus->text().contains("V.A", Qt::CaseInsensitive)){
                             painter.drawText(25, 175 + i * 41, "v.a.");
                         }else if(seeLeht->laskurid[alg]->markus->text().contains("DNF", Qt::CaseInsensitive)){
@@ -3921,13 +3917,11 @@ void Protokollitaja::taiendaAndmebaas()
             if(TargetTypes::targetData(seeLeht->m_targetType).isRifleDB)
                                 for(int j = 0; j < seeLeht->laskurid.count(); j++){
                                         bool olemas = false;
-                                        int mitukorda = 0;
                                         for(int i = 0; i < andmebaas.nimekiriPuss.count(); i++){
                                                 if(seeLeht->laskurid[j]->eesNimi->text().trimmed() == andmebaas.nimekiriPuss[i]->eesnimi.trimmed() &&
                                                         seeLeht->laskurid[j]->perekNimi->text().trimmed() == andmebaas.nimekiriPuss[i]->perekonnanimi.trimmed() &&
                                                         seeLeht->laskurid[j]->sunniAasta->text().trimmed() == andmebaas.nimekiriPuss[i]->sunniaasta.trimmed())
                                                     olemas = true;
-                                                mitukorda++;
                                         }
                                         if(!olemas && !seeLeht->laskurid[j]->eesNimi->text().trimmed().isEmpty() &&
                                                 !seeLeht->laskurid[j]->perekNimi->text().trimmed().isEmpty() &&

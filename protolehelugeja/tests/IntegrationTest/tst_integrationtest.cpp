@@ -38,7 +38,7 @@ IntegrationTest::~IntegrationTest()
 
 void IntegrationTest::test_outputMessage()
 {
-    Lehelugeja lehelugeja;
+    Lehelugeja lehelugeja(true);
 
     QLineEdit* seriesBox = lehelugeja.findChild<QLineEdit*>("seeria1Edit");
     QApplication::setActiveWindow(seriesBox);

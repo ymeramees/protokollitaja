@@ -41,7 +41,7 @@ class Lehelugeja : public QMainWindow
     friend class IntegrationTest;
 
 public:
-    explicit Lehelugeja(QWidget *parent = nullptr);
+    explicit Lehelugeja(bool inTest, QWidget *parent = nullptr);
     ~Lehelugeja();
     int scoringMachineType() const;
 
@@ -102,7 +102,7 @@ private slots:
     int CRC(QByteArray *s);  //Arvutab lugemismasina ühenduse jaoks kontrollnumbri
     void fookusMuutus(QWidget *vana, QWidget *uus);    //Vaatab, kas mõni seeria kastidest sai fookuse, kui sai, muudab, et sinna loetaks tulemus
     void fookusSifrile();   //Viib kursori, peale uue seeria kasti aktiivseks tegemist, sifri kasti
-    void joonistaLask(QPointF p, bool kasMM);    //Joonistab lasu lehele, bool näitab, kas on vana lugemismasina koordinaadid või mm
+//    void joonistaLask(QPointF p, bool kasMM);    //Joonistab lasu lehele, bool näitab, kas on vana lugemismasina koordinaadid või mm
     void drawTarget();
     void hakkaOtsima();
     void sumAndEndSeries();
@@ -130,7 +130,7 @@ private slots:
     void uhenduServeriga(QString); //Ühendumine serveriga
     void uhenduUuesti();    //Et muuta serveri IP'd ja uuesti ühenduda
     void updateLog(QString);
-    void updatePorts();
+    void updatePorts(bool);
     void uuendaSifriga();
 
 protected slots:

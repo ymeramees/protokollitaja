@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
             if (currentArg == "-v" || currentArg == "-debug" || currentArg == "--debug") {
                 QTextStream(stdout) << "-v => Debug mode!" << Qt::endl;
                 verbose = true;
-            } else if (currentArg == "-f" || currentArg == "--file" && i + 1 < argc) {
+            } else if ((currentArg == "-f" || currentArg == "--file") && i + 1 < argc) {
                 fileName = QString("%1").arg(argv[i+1]);
             }
         }

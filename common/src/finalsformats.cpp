@@ -1,6 +1,6 @@
 #include "finalsformats.h"
 
-FinalsFormats::FinalsFormats(QString fileName)
+FinalsFormats::FinalsFormats()
 {
     QFile jsonFile(":/eventFormats.json");
     if (jsonFile.open(QIODevice::ReadOnly)) {
@@ -14,9 +14,10 @@ FinalsFormats::FinalsFormats(QString fileName)
 QJsonObject FinalsFormats::confById(const QString id)
 {
     for(QJsonValue eventJson: qAsConst(m_finalsFormats)) {
-            if (eventJson.toObject()["id"].toString().compare(id) == 0)
-                return eventJson.toObject();
-        }
+        if (eventJson.toObject()["id"].toString().compare(id) == 0)
+            return eventJson.toObject();
+    }
+    return QJsonObject();
 }
 
 QStringList FinalsFormats::formatIds()

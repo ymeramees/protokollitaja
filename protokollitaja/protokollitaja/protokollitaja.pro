@@ -5,8 +5,10 @@ INCLUDEPATH += ../../common/src
 DEPENDPATH += $${INCLUDEPATH}
 
 include(xlslib/xlslib.pri)
-if ( !include( ../../common/src/asmCrashReport/asmCrashReport.pri ) ) {
-    error( Could not find the asmCrashReport.pri file. )
+win32{
+    if ( !include( ../../common/src/asmCrashReport/asmCrashReport.pri ) ) {
+        error( Could not find the asmCrashReport.pri file. )
+    }
 }
 
 QT += core \

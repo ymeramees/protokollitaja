@@ -50,7 +50,7 @@ void LehelugejaTest::cleanupTestCase()
 
 void LehelugejaTest::test_changeComPort()
 {
-    Lehelugeja lehelugeja;
+    Lehelugeja lehelugeja(true);
     QSignalSpy spy(&lehelugeja, SIGNAL(changeVariable(QString)));
 
     lehelugeja.changeVariable("comPort;COM21");
@@ -62,7 +62,7 @@ void LehelugejaTest::test_changeComPort()
 
 void LehelugejaTest::test_changeScoringMachineType()
 {
-    Lehelugeja lehelugeja;
+    Lehelugeja lehelugeja(true);
     QSignalSpy spy(&lehelugeja, SIGNAL(changeVariable(QString)));
 
     lehelugeja.changeVariable("scoringMachineType;RMIV");

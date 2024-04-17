@@ -1,0 +1,887 @@
+{
+  "relays": [
+    {
+      "teams": [
+        {
+          "membersInTeam": [
+            {
+              "series": [
+                {
+                  "shots": [
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    }
+                  ],
+                  "Sum": "6,5"
+                },
+                {
+                  "shots": [
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    }
+                  ],
+                  "Sum": "6,5"
+                }
+              ],
+              "id": 11,
+              "isActive": true,
+              "nameEdit": "Esimene",
+              "resultEdit": "609,6"
+            }
+          ],
+          "teamName": ""
+        },
+        {
+          "membersInTeam": [
+            {
+              "series": [
+                {
+                  "shots": [
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    }
+                  ],
+                  "Sum": "7"
+                },
+                {
+                  "shots": [
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    }
+                  ],
+                  "Sum": "7"
+                }
+              ],
+              "id": 21,
+              "isActive": true,
+              "nameEdit": "Teine",
+              "resultEdit": "608,7"
+            }
+          ],
+          "teamName": ""
+        },
+        {
+          "membersInTeam": [
+            {
+              "series": [
+                {
+                  "shots": [
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    }
+                  ],
+                  "Sum": "4,5"
+                },
+                {
+                  "shots": [
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    }
+                  ],
+                  "Sum": "4,5"
+                }
+              ],
+              "id": 31,
+              "isActive": true,
+              "nameEdit": "Kolmas",
+              "resultEdit": "604,2"
+            }
+          ],
+          "teamName": ""
+        },
+        {
+          "membersInTeam": [
+            {
+              "series": [
+                {
+                  "shots": [
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    }
+                  ],
+                  "Sum": "2"
+                },
+                {
+                  "shots": [
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    },
+                    {
+                      "ignored": false,
+                      "originalShotValue": "",
+                      "shot": {
+                        "competitionShot": true,
+                        "innerTen": false,
+                        "shotOrigin": 0,
+                        "shotTime": "",
+                        "shotValue": "",
+                        "shotX": -999,
+                        "shotY": -999
+                      }
+                    }
+                  ],
+                  "Sum": "2"
+                }
+              ],
+              "id": 41,
+              "isActive": true,
+              "nameEdit": "Neljas",
+              "resultEdit": "599,9"
+            }
+          ],
+          "teamName": ""
+        }
+      ]
+    }
+  ],
+  "competitionName": "Testvõistlus",
+  "eventName": "60l Õhupüss",
+  "eventType": "AR 2022 2 relays",
+  "fileVersion": 300,
+  "timePlace": "Praegu ja siin",
+  "scoringWithPoints": true
+}
+

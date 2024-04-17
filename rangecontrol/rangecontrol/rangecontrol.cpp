@@ -87,7 +87,6 @@ void RangeControl::addShot(SiusShotData shotData)
 
 void RangeControl::allShotsDataReceived(int target, QString shotsData)
 {
-    bool accepted = false;
     QStringList msgParts = shotsData.split('\n');
     QStringList shotsList;
     for (int i = 2; i < (msgParts.count() - 1); i += 3) {  // First 2 parts and last are not related to shots
@@ -111,7 +110,7 @@ void RangeControl::allShotsDataReceived(int target, QString shotsData)
             int id = laneOpt.value()->id().toInt();    // TODO make it safer
             int shotNo = 1;
 //            for (int i = --firstCompetitionShotNo; i < shotsList.size(); i++) {
-            foreach (QString row, shotsList) {
+            for (QString row: shotsList) {
                 // lane, "shot", value, index, x (in mm?), y (in mm?), "message end"
 //                QStringList inbandList = shotsList.at(i).split(';');
                 QStringList inbandList = row.split(';');
@@ -828,22 +827,24 @@ void RangeControl::setNumberOfShots()
 {
     bool wasAccepted = false;
     int newNumber =  QInputDialog::getInt(this, tr("Sisesta laskude arv"), tr("Laskude arv:"), 60, 0, 120, 1, &wasAccepted);
-    if (wasAccepted)
-        foreach (Lane *lane, m_lanes) {
+    if (wasAccepted) {
+        for (Lane *lane: qAsConst(m_lanes)) {
             if (lane->selected())
                 lane->setShotsNumber(newNumber);
         }
+    }
 }
 
 void RangeControl::setTargetTypes()
 {
     bool wasAccepted = false;
     QString eventName = QInputDialog::getItem(this, tr("Vali harjutus"), tr("Harjutus:"), QualificationEvents::eventNames(), 0, false, &wasAccepted);
-    if (wasAccepted)
-        foreach (Lane *lane, m_lanes) {
+    if (wasAccepted) {
+        for (Lane *lane: qAsConst(m_lanes)) {
             if (lane->selected())
                 lane->setDiscipline(eventName);
         }
+    }
 }
 
 void RangeControl::setupLanes(QJsonDocument fileJson)
@@ -853,7 +854,7 @@ void RangeControl::setupLanes(QJsonDocument fileJson)
     QJsonObject jsonObj = fileJson.object();
 
     if(jsonObj["lanes"].isArray()) {
-        foreach(const QJsonValue & value, jsonObj["lanes"].toArray()) {
+        for (const QJsonValue &value: jsonObj["lanes"].toArray()) {
             QJsonObject laneObj = value.toObject();
             QString target = laneObj["target"].toString();
             QString ip = laneObj["ip"].toString();

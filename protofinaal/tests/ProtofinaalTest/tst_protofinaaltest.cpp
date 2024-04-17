@@ -159,10 +159,10 @@ void ProtofinaalTest::test_readSiusShotWithOffsetWithPoints()
 
     QCOMPARE(teamsTable->lastValidShotIndex(), 0);
     QVector<TeamsTable::Result> expected1;
-    expected1.append(TeamsTable::Result { "Esimene", "10,1", "3", "3", 101 });
-    expected1.append(TeamsTable::Result { "Teine", "10,7", "4", "4", 107 });
-    expected1.append(TeamsTable::Result { "Kolmas", "9,7", "1", "1", 97 });
-    expected1.append(TeamsTable::Result { "Neljas", "9,8", "2", "2", 98 });
+    expected1.append(TeamsTable::Result { "Esimene", "10,1", "3", "3", 30 });
+    expected1.append(TeamsTable::Result { "Teine", "10,7", "4", "4", 40 });
+    expected1.append(TeamsTable::Result { "Kolmas", "9,7", "1", "1", 10 });
+    expected1.append(TeamsTable::Result { "Neljas", "9,8", "2", "2", 20 });
 
     auto actual1 = teamsTable->getCurrentResults();
     for(int i = 0; i < 4; i++) {
@@ -220,10 +220,10 @@ void ProtofinaalTest::test_readSiusShotWithOffsetWithShots()
 
     QCOMPARE(teamsTable->lastValidShotIndex(), 0);
     QVector<TeamsTable::Result> expected1;
-    expected1.append(TeamsTable::Result { "Esimene", "10,1", "0", "10,1" });
-    expected1.append(TeamsTable::Result { "Teine", "10,7", "0", "10,7" });
-    expected1.append(TeamsTable::Result { "Kolmas", "9,7", "0", "9,7" });
-    expected1.append(TeamsTable::Result { "Neljas", "9,8", "0", "9,8" });
+    expected1.append(TeamsTable::Result { "Esimene", "10,1", "0", "10,1", 101 });
+    expected1.append(TeamsTable::Result { "Teine", "10,7", "0", "10,7", 107 });
+    expected1.append(TeamsTable::Result { "Kolmas", "9,7", "0", "9,7", 97 });
+    expected1.append(TeamsTable::Result { "Neljas", "9,8", "0", "9,8", 98 });
 
     auto actual1 = teamsTable->getCurrentResults();
     for(int i = 0; i < 4; i++) {
@@ -282,10 +282,10 @@ void ProtofinaalTest::sanityCheckWithPoints()
     }
 
     QVector<TeamsTable::Result> expected1;
-    expected1.append(TeamsTable::Result { "Competitor0", "10,1", "2", "2", 101 });
-    expected1.append(TeamsTable::Result { "Teine", "10,7", "3,5", "3,5", 107 });
-    expected1.append(TeamsTable::Result { "Kolmas", "10,7", "3,5", "3,5", 107 });
-    expected1.append(TeamsTable::Result { "Neljas", "9,8", "1", "1", 98 });
+    expected1.append(TeamsTable::Result { "Competitor0", "10,1", "2", "2", 20 });
+    expected1.append(TeamsTable::Result { "Teine", "10,7", "3,5", "3,5", 35 });
+    expected1.append(TeamsTable::Result { "Kolmas", "10,7", "3,5", "3,5", 35 });
+    expected1.append(TeamsTable::Result { "Neljas", "9,8", "1", "1", 10 });
 
     auto actual1 = teamsTable->getCurrentResults();
     for(int i = 0; i < 4; i++) {
@@ -339,10 +339,10 @@ void ProtofinaalTest::sanityCheckWithShots()
     }
 
     QVector<TeamsTable::Result> expected1;
-    expected1.append(TeamsTable::Result { "Competitor0", "10,1", "0", "10,1" });
-    expected1.append(TeamsTable::Result { "Teine", "10,7", "0", "10,7" });
-    expected1.append(TeamsTable::Result { "Kolmas", "10,7", "0", "10,7" });
-    expected1.append(TeamsTable::Result { "Neljas", "9,8", "0", "9,8" });
+    expected1.append(TeamsTable::Result { "Competitor0", "10,1", "0", "10,1", 101 });
+    expected1.append(TeamsTable::Result { "Teine", "10,7", "0", "10,7", 107 });
+    expected1.append(TeamsTable::Result { "Kolmas", "10,7", "0", "10,7", 107 });
+    expected1.append(TeamsTable::Result { "Neljas", "9,8", "0", "9,8", 98 });
 
     auto actual1 = teamsTable->getCurrentResults();
     for(int i = 0; i < 4; i++) {

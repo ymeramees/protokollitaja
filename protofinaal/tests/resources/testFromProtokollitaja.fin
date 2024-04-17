@@ -1,0 +1,52 @@
+{
+    "competitionName": "Eesti Noorte MV 2021",
+    "eventConf": {
+        "event": "60l Õhupüss",
+        "id": "AR 2024",
+        "membersInTeam": 1,
+        "relaysTogether": 1,
+        "scoringWithPoints": false,
+        "shots": [
+            5,
+            5,
+            14
+        ],
+        "teams": 8
+    },
+    "eventName": "40l Õhupüss Tüdrukud",
+    "eventType": "AR 2024",
+    "fileVersion": 301,
+    "startList": [
+        [{
+            "id": 1601,
+            "name": "HÕUM S.",
+            "result": "391,8"
+        }],
+        [{
+            "id": 7501,
+            "name": "ST.EE E.",
+            "result": "390,9"
+        }],
+        [{
+            "id": 2201,
+            "name": "PUNKTEE Ä.",
+            "result": "394,8"
+        }],
+        [{
+            "id": 2101,
+            "name": "SAAST K.",
+            "result": "407,1"
+        }],
+        [{
+            "id": 4601,
+            "name": "TIKO T.",
+            "result": "395,9"
+        }],
+        [{
+            "id": 7701,
+            "name": "STRÖM E.",
+            "result": "409,3"
+        }]
+    ],
+    "timePlace": "06.11.2021 Haapsalu"
+}

@@ -49,7 +49,7 @@ void TeamsTableTest::test_pointsGivenWithNoEqualResults()
 
     teamsTable.readSiusInfo(shot1.first());
     QCOMPARE(teamsTable.lastValidShotIndex(), 0);
-    TeamsTable::Result expected1 = { "", "10,1", "", "0" };
+    TeamsTable::Result expected1 = { "", "10,1", "", "0", 0 };
     TeamsTable::Result actual1 = teamsTable.getCurrentResults().first();
     QCOMPARE(actual1.shotValue, expected1.shotValue);
     QCOMPARE(actual1.seriesOrPoints, expected1.seriesOrPoints);
@@ -59,10 +59,10 @@ void TeamsTableTest::test_pointsGivenWithNoEqualResults()
         teamsTable.readSiusInfo(shotData);
     }
     QVector<TeamsTable::Result> expected2;
-    expected2.append(TeamsTable::Result { "", "10,1", "2", "2" });
-    expected2.append(TeamsTable::Result { "", "10,7", "4", "4" });
-    expected2.append(TeamsTable::Result { "", "10,5", "3", "3" });
-    expected2.append(TeamsTable::Result { "", "9,8", "1", "1" });
+    expected2.append(TeamsTable::Result { "", "10,1", "2", "2", 20 });
+    expected2.append(TeamsTable::Result { "", "10,7", "4", "4", 40 });
+    expected2.append(TeamsTable::Result { "", "10,5", "3", "3", 30 });
+    expected2.append(TeamsTable::Result { "", "9,8", "1", "1", 10 });
 
     auto actual2 = teamsTable.getCurrentResults();
     for(int i = 0; i < 4; i++) {
@@ -84,10 +84,10 @@ void TeamsTableTest::test_pointsGivenWithNoEqualResults()
     }
     QCOMPARE(teamsTable.lastValidShotIndex(), 11);
     QVector<TeamsTable::Result> expected3;
-    expected3.append(TeamsTable::Result { "", "10,3", "3", "5" });
-    expected3.append(TeamsTable::Result { "", "10,6", "4", "8" });
-    expected3.append(TeamsTable::Result { "", "10,0", "2", "5" });
-    expected3.append(TeamsTable::Result { "", "", "", "1" });
+    expected3.append(TeamsTable::Result { "", "10,3", "3", "5", 50 });
+    expected3.append(TeamsTable::Result { "", "10,6", "4", "8", 80 });
+    expected3.append(TeamsTable::Result { "", "10,0", "2", "5", 50 });
+    expected3.append(TeamsTable::Result { "", "", "", "1", 10 });
 
     auto actual3 = teamsTable.getCurrentResults();
     for(int i = 0; i < 4; i++) {
@@ -99,7 +99,7 @@ void TeamsTableTest::test_pointsGivenWithNoEqualResults()
     SiusShotData shot3(11, 0, 13, Lask("_SHOT;17;18;13;60;31;10:05:39.28;3;1;512;10;106;0;16;0.00128;-0.00261;900;0;0;655.35;387153707;64;559;0"));
     teamsTable.readSiusInfo(shot3);
     QCOMPARE(teamsTable.lastValidShotIndex(), 12);
-    TeamsTable::Result expected4 = { "", "10,6", "", "5" };
+    TeamsTable::Result expected4 = { "", "10,6", "", "5", 50 };
     TeamsTable::Result actual4 = teamsTable.getCurrentResults().first();
     QCOMPARE(actual4.shotValue, expected4.shotValue);
     QCOMPARE(actual4.seriesOrPoints, expected4.seriesOrPoints);
@@ -123,7 +123,7 @@ void TeamsTableTest::test_pointsGivenWithEqualResults()
 
     teamsTable.readSiusInfo(shot1.first());
     QCOMPARE(teamsTable.lastValidShotIndex(), 0);
-    TeamsTable::Result expected1 = { "", "10,1", "", "0" };
+    TeamsTable::Result expected1 = { "", "10,1", "", "0", 0 };
     TeamsTable::Result actual1 = teamsTable.getCurrentResults().first();
     QCOMPARE(actual1.shotValue, expected1.shotValue);
     QCOMPARE(actual1.seriesOrPoints, expected1.seriesOrPoints);
@@ -133,10 +133,10 @@ void TeamsTableTest::test_pointsGivenWithEqualResults()
         teamsTable.readSiusInfo(shotData);
     }
     QVector<TeamsTable::Result> expected2;
-    expected2.append(TeamsTable::Result { "", "10,1", "2", "2" });
-    expected2.append(TeamsTable::Result { "", "10,7", "3,5", "3,5" });
-    expected2.append(TeamsTable::Result { "", "10,7", "3,5", "3,5" });
-    expected2.append(TeamsTable::Result { "", "9,8", "1", "1" });
+    expected2.append(TeamsTable::Result { "", "10,1", "2", "2", 20 });
+    expected2.append(TeamsTable::Result { "", "10,7", "3,5", "3,5", 35 });
+    expected2.append(TeamsTable::Result { "", "10,7", "3,5", "3,5", 35 });
+    expected2.append(TeamsTable::Result { "", "9,8", "1", "1", 10 });
 
     auto actual2 = teamsTable.getCurrentResults();
     for(int i = 0; i < 4; i++) {
@@ -173,10 +173,10 @@ void TeamsTableTest::test_pointsGivenWithEqualResults()
     QCOMPARE(teams.first()->teamName(), "Competitor0");
 
     QVector<TeamsTable::Result> expected3;
-    expected3.append(TeamsTable::Result { "Competitor0", "10,7", "3", "5" });
-    expected3.append(TeamsTable::Result { "", "10,7", "3", "6,5" });
-    expected3.append(TeamsTable::Result { "", "10,7", "3", "6,5" });
-    expected3.append(TeamsTable::Result { "", "9,8", "1", "2" });
+    expected3.append(TeamsTable::Result { "Competitor0", "10,7", "3", "5", 50 });
+    expected3.append(TeamsTable::Result { "", "10,7", "3", "6,5", 65 });
+    expected3.append(TeamsTable::Result { "", "10,7", "3", "6,5", 65 });
+    expected3.append(TeamsTable::Result { "", "9,8", "1", "2", 20 });
 
     auto actual3 = teamsTable.getCurrentResults();
     for(int i = 0; i < 4; i++) {
@@ -212,8 +212,8 @@ void TeamsTableTest::test_readSiusShotWithOffset()
     QCOMPARE(teamsTable.lastValidShotIndex(), 0);
 
     QVector<TeamsTable::Result> expected1;
-    expected1.append(TeamsTable::Result { "", "10,1", "0", "0" });
-    expected1.append(TeamsTable::Result { "", "10,7", "2", "2" });
+    expected1.append(TeamsTable::Result { "", "10,1", "0", "0", 0 });
+    expected1.append(TeamsTable::Result { "", "10,7", "2", "2", 20 });
     auto actual1 = teamsTable.getCurrentResults();
     for(int i = 0; i < expected1.size(); i++) {
         QCOMPARE(actual1.value(i+1).name, expected1.at(i).name);
@@ -240,7 +240,7 @@ void TeamsTableTest::test_returnSortedResults()
 
     teamsTable.readSiusInfo(shot1.first());
     QCOMPARE(teamsTable.lastValidShotIndex(), 0);
-    TeamsTable::Result expected1 = { "", "10,1", "", "0" };
+    TeamsTable::Result expected1 = { "", "10,1", "", "0", 0 };
     TeamsTable::Result actual1 = teamsTable.getSortedResults().last();
     QCOMPARE(actual1.shotValue, expected1.shotValue);
     QCOMPARE(actual1.seriesOrPoints, expected1.seriesOrPoints);

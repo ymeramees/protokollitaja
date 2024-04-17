@@ -65,7 +65,9 @@ QMap<int, TeamsTable::Result> TeamsTable::getCurrentResults() const
                 team->teamName(),
                 result,
                 team->resultAt(currentShotNo),
-                team->teamTotal()};
+                team->teamTotal(),
+                team->team10Total()
+        };
     }
 
     return results;
@@ -227,7 +229,7 @@ void TeamsTable::sumAllTeams()
 
             QMap<int, int> counts;
 
-            foreach(int result, results) {
+            for (int result: results) {
                 int count = std::count(results.begin(), results.end(), result);
                 counts[result] = count;
             }

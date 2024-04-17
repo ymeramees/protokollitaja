@@ -31,7 +31,7 @@ extern bool verbose;
 char enq = ENQ;
 char ack = ACK;
 
-Lehelugeja::Lehelugeja(QWidget *parent) :
+Lehelugeja::Lehelugeja(bool inTest, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Lehelugeja)
 {
@@ -195,7 +195,7 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
     connect(&scoringMachCon, &ScoringMachineConnection::connectionStatusChanged, this, &Lehelugeja::updateLog);
     connect(&scoringMachCon, &ScoringMachineConnection::dataSent, this, &Lehelugeja::updateLog);
 
-    updatePorts();
+    updatePorts(inTest);
 
     ui->nimeBox->hide();
     ui->nimeSilt->hide();
@@ -210,7 +210,8 @@ Lehelugeja::Lehelugeja(QWidget *parent) :
     showMaximized();
     broadcastiSaatja->start();
 #ifdef QT_DEBUG
-    QMessageBox::information(this, tr("Teade"), "Debug versioon!", QMessageBox::Ok);
+    if (!inTest)
+        QMessageBox::information(this, tr("Teade"), "Debug versioon!", QMessageBox::Ok);
 #endif
 }
 
@@ -316,13 +317,13 @@ void Lehelugeja::hakkaOtsima()
         return;
     }
 
-    updatePorts();
+    updatePorts(false);
 //    otsija->start();
 }
 
-void Lehelugeja::joonistaLask(QPointF p, bool kasMM)
-{
-}
+//void Lehelugeja::joonistaLask(QPointF p, bool kasMM)
+//{
+//}
 
 void Lehelugeja::drawTarget()
 {
@@ -647,7 +648,7 @@ void Lehelugeja::processCommand(QString command)
         return;
     else if(command.contains("uuenda porte", Qt::CaseInsensitive)){
         logi.append(tr("Uuenda porte:"));
-        updatePorts();
+        updatePorts(false);
     }else if(command == "ACK"){
         saada("");  //Saadab ACK'i
     }else{
@@ -821,7 +822,7 @@ void Lehelugeja::uhenda()
 {
 //        QMessageBox::warning(this, "Protolehelugeja", tr("Ühendus juba loodud! Kui on mingi jama ja tahate uuesti ühendada, tuleb enne vajutada \"Sulge ühendus\"."), QMessageBox::Ok);
     if(!kaabelLeitud)   //Kui lugemismasina kaablit algul ei leitud, siis äkki vahepeal on see külge ühendatud
-        updatePorts();
+        updatePorts(false);
 
     logi.append(tr("Ühendamine: ") + ui->comPort->currentText());
 
@@ -868,7 +869,7 @@ void Lehelugeja::uuendaSifriga()
     fookus->start();
 }
 
-void Lehelugeja::updatePorts()
+void Lehelugeja::updatePorts(bool inTest)
 {
     kaabelLeitud = false;
     pordid = QSerialPortInfo::availablePorts();
@@ -884,7 +885,7 @@ void Lehelugeja::updatePorts()
             kaabelLeitud = true;
         }
     }
-    if(!kaabelLeitud) QMessageBox::warning(this, "Protokollitaja", tr("Lugemismasina kaablit ei leitud!"), QMessageBox::Ok);
+    if(!kaabelLeitud && !inTest) QMessageBox::warning(this, "Protokollitaja", tr("Lugemismasina kaablit ei leitud!"), QMessageBox::Ok);
 }
 
 Lehelugeja::~Lehelugeja()

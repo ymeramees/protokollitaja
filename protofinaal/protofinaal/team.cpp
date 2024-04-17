@@ -152,7 +152,7 @@ void Team::setCompetitorsData(QJsonArray data)
 {
     QListIterator<Competitor*> iterator(m_teamCompetitors);
     iterator.toFront();
-    foreach (QJsonValue competitorJson, data) {
+    for (const QJsonValue &competitorJson: qAsConst(data)) {
         if (iterator.hasNext())
             iterator.next()->setData(competitorJson.toObject());
     }

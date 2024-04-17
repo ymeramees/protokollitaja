@@ -1511,7 +1511,7 @@ QJsonObject Laskur::toExportJson()
                     break;
                 }
                 }
-            } else if(*m_eventType == *m_eventType == QualificationEvents::Pistol_25m){
+            } else if(*m_eventType == QualificationEvents::Pistol_25m){
                 switch (i) {
                 case 0: {
                     subtotalJson["label"] = "Precision";

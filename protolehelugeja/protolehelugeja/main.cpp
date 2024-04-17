@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 {
     QApplication::setAttribute(Qt::AA_Use96Dpi);    // Disable scaling as it does not work properly
 
-    if(argc > 1)
+    if(argc > 1) {
         for(int i = 0; i < argc; i++)
             if(QString("%1").arg(argv[i]) == "-v"){
                 QTextStream(stdout) << "-v => kuvatakse debug info" << Qt::endl;
@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
                 QTextStream(stdout) << "-vv => kuvatakse rohke debug info" << Qt::endl;
                 verbose = true;
             }
+    }
     QApplication a(argc, argv);
 
     QFont font = qApp->font();
@@ -32,7 +33,7 @@ int main(int argc, char *argv[])
 #endif
     qApp->setFont(font);    // Fix font size, as scaling does not work properly
 
-    Lehelugeja w;
+    Lehelugeja w(false);
     w.show();
 
     return a.exec();

@@ -23,7 +23,7 @@ public:
     TargetTypes::TargetType m_targetType;   //defineeritud järgmiselt
     // enum Relv {Muu = 0, Ohupuss = 1, Ohupustol = 2, Sportpuss = 3, Spordipustol = 4, Puss = 5, Pustol = 6};
     QualificationEvents::EventType eventType() const;
-    ValikKast(CommonSettings *settings, QWidget *parent = 0);
+    ValikKast(QWidget *parent = 0);
     ~ValikKast();
     Ui::ValikKastClass ui;
 

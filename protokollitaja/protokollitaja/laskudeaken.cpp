@@ -55,6 +55,7 @@ LaskudeAken::LaskudeAken(bool kum, int s, int ls, QWidget *parent) :
 
 void LaskudeAken::closeEvent(QCloseEvent *event)
 {
+    Q_UNUSED(event);
     kirjutaLasud();
 }
 

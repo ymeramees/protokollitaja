@@ -248,7 +248,6 @@ void Leht::sorteeri(int t)
         QTextStream(stdout) << "Leht::sorteeri(): t = " << t << Qt::endl;
 
     if(laskurid.isEmpty() && voistkonnad.isEmpty()) return;
-    int i = 0;
     if(voistk){ //Võistkondlik arvestus
         emit uuendaVoistkondi();
         reasVoistkonnad.clear();
@@ -258,7 +257,7 @@ void Leht::sorteeri(int t)
         }
         for(int j = 0; j < voistkonnad.count(); j++)
             reasVoistkonnad << voistkonnad[j];
-        for(i; i < (voistkonnad.count()-1) && i < (reasVoistkonnad.count() - 1); i++){
+        for(int i = 0; i < (voistkonnad.count()-1) && i < (reasVoistkonnad.count() - 1); i++){
             if(reasVoistkonnad[i]->vaiksem(reasVoistkonnad.at(i+1))){
                 Voistkond *vana = reasVoistkonnad[i];
                 reasVoistkonnad[i] = reasVoistkonnad.at(i+1);
@@ -276,7 +275,7 @@ void Leht::sorteeri(int t)
         for(int j = 0; j < laskurid.count(); j++)
             reasLaskurid << laskurid[j];
 
-        for(i; i < (laskurid.count()-1) && i < (reasLaskurid.count() - 1); i++){
+        for(int i = 0; i < (laskurid.count()-1) && i < (reasLaskurid.count() - 1); i++){
             reasLaskurid[i]->liida();
             reasLaskurid.at(i+1)->liida();
             if(reasLaskurid[i]->vaiksem(reasLaskurid.at(i+1), t)){

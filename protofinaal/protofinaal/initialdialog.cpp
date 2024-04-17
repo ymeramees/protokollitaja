@@ -1,10 +1,10 @@
 #include "initialdialog.h"
 #include "ui_initialdialog.h"
 
-InitialDialog::InitialDialog(QString finalsFormatsFileName, QWidget *parent) :
+InitialDialog::InitialDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::InitialDialog),
-    m_finalsFormats(finalsFormatsFileName)
+    m_finalsFormats()
 {
     ui->setupUi(this);
     connect(ui->browseButton, &QPushButton::clicked, this, &InitialDialog::openFile);

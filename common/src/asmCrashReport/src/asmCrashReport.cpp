@@ -36,7 +36,6 @@
 #include <csignal>
 #include <err.h>
 #include <execinfo.h>
-#include <dlfcn.h>
 #endif
 
 #include "asmCrashReport.h"
@@ -107,9 +106,10 @@ namespace asmCrashReport
          "-arch", "x86_64",
          cAddrStr
       };
-#elif defined (Q_OS_WIN)
+#else
       // Uses addr2line
       const QString  cProgram = QStringLiteral( "%1/tools/addr2line" ).arg( QCoreApplication::applicationDirPath() );
+
       const QStringList  cArguments = {
          "-f",
          "-p",
@@ -117,17 +117,6 @@ namespace asmCrashReport
          "-e", inProgramName,
          cAddrStr
       };
-#elif defined (Q_OS_LINUX)
-       // Uses addr2line
-       const QString  cProgram = QStringLiteral( "addr2line" );
-       const QStringList  cArguments = {
-           "-f",
-           "-p",
-           "-s",
-           "-C",
-           "-e", inProgramName,
-           cAddrStr
-       };
 #endif
 
       sProcess->setProgram( cProgram );
@@ -325,19 +314,13 @@ namespace asmCrashReport
 
          if ( !cSymbol.isNull() )
          {
-            #ifdef Q_OS_LINUX
-                Dl_info symbolInfo;
-                if ( dladdr(sStackTraces[i], &symbolInfo)!=0) {
-                    sStackTraces[i] = reinterpret_cast<void*>(qintptr(sStackTraces[i])-qintptr(symbolInfo.dli_fbase));
-                }
-            #endif
             QString  locationStr = _addressToLine( sProgramName, sStackTraces[i] );
 
             if ( !locationStr.isEmpty() )
             {
                int   matchStart = match.capturedStart( 1 );
 
-               message.replace( matchStart-1, message.length() - matchStart+1, locationStr );
+               message.replace( matchStart, message.length() - matchStart, locationStr );
             }
          }
 
@@ -430,10 +413,7 @@ namespace asmCrashReport
    void _posixSetupSignalHandler()
    {
       // setup alternate stack
-      stack_t ss;
-      ss.ss_sp = static_cast<void*>(sAlternateStack);
-      ss.ss_size = SIGSTKSZ;
-      ss.ss_flags = 0;
+      stack_t ss{ static_cast<void*>(sAlternateStack), SIGSTKSZ, 0 };
 
       if ( sigaltstack( &ss, nullptr ) != 0 )
       {
@@ -449,8 +429,6 @@ namespace asmCrashReport
 
 #ifdef __APPLE__
       // backtrace() doesn't work on macOS when we use an alternate stack
-      sigAction.sa_flags = SA_SIGINFO;
-#elif defined (Q_OS_LINUX)
       sigAction.sa_flags = SA_SIGINFO;
 #else
       sigAction.sa_flags = SA_SIGINFO | SA_ONSTACK;

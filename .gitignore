@@ -57,6 +57,9 @@ CMakeLists.txt.user*
 *.txt
 *.xls
 *.fin
+!*testFromProtokollitaja.fin
+!*testWithPoints.fin
+!*testWithShots.fin
 .vscode/
 save.json
 conf.json

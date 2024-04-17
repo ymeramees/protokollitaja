@@ -14,7 +14,7 @@ class FinalsFormats : public QObject
     Q_OBJECT
 public:
 
-    explicit FinalsFormats(QString fileName);
+    explicit FinalsFormats();
     QStringList formatIds();
     QJsonObject confById(QString id);
 
