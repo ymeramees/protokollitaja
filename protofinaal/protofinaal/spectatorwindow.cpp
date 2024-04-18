@@ -73,7 +73,7 @@ void SpectatorWindow::fullscreen()
 
 void SpectatorWindow::initializeTemplates()
 {
-    QFile templateFile("spectatorView_template.html");
+    QFile templateFile(":/spectatorView_template.html");
     if(templateFile.open(QIODevice::ReadOnly)){
         originalResultsTemplate = QString(templateFile.readAll());
         int rowStart = originalResultsTemplate.indexOf("<tr>", originalResultsTemplate.lastIndexOf("<tbody>"));
@@ -93,7 +93,7 @@ void SpectatorWindow::initializeTemplates()
             QTextStream(stdout) << "originalResultsFontSize:" << originalResultsFontSize << Qt::endl;
         }
     }else {
-        QFile::copy(":/templates/spectatorView_template.html", "spectatorView_template.html");
+        QFile::copy(":/spectatorView_template.html", "spectatorView_template.html");
         QMessageBox::warning(this, tr("Teade"), tr("Tulemuste akna template faili ei leitud!\nProgramm lõi uue, vaikimisi seadistustega."), QMessageBox::Ok);
     }
 }

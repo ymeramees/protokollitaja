@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>templates/spectatorView_template.html</file>
+        <file alias="spectatorView_template.html">templates/spectatorView_template.html</file>
         <file alias="eventFormats.json">templates/eventFormats.json</file>
     </qresource>
 </RCC>

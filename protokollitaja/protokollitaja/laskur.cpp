@@ -396,13 +396,13 @@ void Laskur::muutus(QString)
 
 void Laskur::muutus2(QString)
 {
-    if(abi == Puudub || !*kirjutusAbi) return;
     if(perekNimi->cursorPosition() < perekNimi->text().length()){
             int pos = perekNimi->cursorPosition();
             perekNimi->setText(perekNimi->text().toUpper());
             perekNimi->setCursorPosition(pos);
             return;
     }
+    if(abi == Puudub || !*kirjutusAbi) return;
     if(!andmebaas->kirjutusabiPuss && !andmebaas->kirjutusabiPustol) return;    //Kontrolliks kas abi on üldse võimalik.
             static QString eelmine = "";
             QString tekst = perekNimi->text().toUpper();
