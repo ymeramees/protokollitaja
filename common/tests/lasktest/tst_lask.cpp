@@ -98,6 +98,9 @@ void LaskTest::test_calcIfInnerTen()
 
     Lask shot7(104, -4315, 1323, true, time);
     QVERIFY(Lask::calcIfInnerTen(TargetTypes::AirPistol, shot7.X(), shot7.Y()));
+
+    Lask shot8(14, -81315, 1323, true, time);
+    QVERIFY(!Lask::calcIfInnerTen(TargetTypes::AirPistol, shot8.X(), shot8.Y()));
 }
 
 void LaskTest::test_createShotFromJson()

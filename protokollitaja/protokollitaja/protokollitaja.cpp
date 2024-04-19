@@ -1181,12 +1181,12 @@ void Protokollitaja::eksportXLS()
                 sheet->label(0, 0, QString(m_competitionName.toUtf8()).toStdString())->font(tiitelFont);
                 sheet->FindCell(0, 0)->halign(xlslib_core::HALIGN_CENTER);
 
-                sheet->label(1, 4 + lisa, QString(timeAndPlaceString().toUtf8()).toStdString())->font(paiseFont);
                 sheet->label(4, 1, QString(leht->ekraaniNimi.toUtf8()).toStdString())->font(paiseFont);
                 sheet->label(5, 0, tr("Koht").toStdString())->font(underlineFont);
                 sheet->FindCell(5, 0)->halign(xlslib_core::HALIGN_CENTER);
                 std::string sigma = "\u03A3";    //Summa märk
                 if(leht->voistk){
+                    sheet->label(1, 4 + lisa, QString(timeAndPlaceString().toUtf8()).toStdString())->font(paiseFont);
                     sheet->label(5, 1, tr("Võistkond").toStdString())->font(underlineFont);
                     sheet->label(5, 2, tr("Eesnimi").toStdString())->font(underlineFont);
                     sheet->label(5, 3, tr("Perenimi").toStdString())->font(underlineFont);
@@ -1194,6 +1194,7 @@ void Protokollitaja::eksportXLS()
                     sheet->label(5, 5, sigma)->font(underlineFont);
                     sheet->FindCell(5, 5)->halign(xlslib_core::HALIGN_CENTER);
                 }else{
+                    sheet->label(1, 4 + leht->seeriateArv + lisa, QString(timeAndPlaceString().toUtf8()).toStdString())->font(paiseFont);
                     sheet->label(5, 1, tr("Eesnimi").toStdString())->font(underlineFont);
                     sheet->label(5, 2, tr("Perenimi").toStdString())->font(underlineFont);
                     sheet->label(5, 3, tr("S.a.").toStdString())->font(underlineFont);
@@ -1253,9 +1254,15 @@ void Protokollitaja::eksportXLS()
                         if(leht->vSummadeSamm > 0){
                             sheet->label(5, 5 + leht->seeriateArv + leht->laskurid[0]->vSummad.count(), sigma)->font(underlineFont);
                             sheet->FindCell(5, 5 + leht->seeriateArv + leht->laskurid[0]->vSummad.count())->halign(xlslib_core::HALIGN_CENTER);
+                            sheet->label(5, 6 + leht->seeriateArv + leht->laskurid[0]->vSummad.count(), "10*")->font(underlineFont);
+                            sheet->colwidth(6 + leht->seeriateArv + leht->laskurid[0]->vSummad.count(), 32*31);
+                            sheet->FindCell(5, 6 + leht->seeriateArv + leht->laskurid[0]->vSummad.count())->halign(xlslib_core::HALIGN_CENTER);
                         }else{
                             sheet->label(5, 5 + leht->seeriateArv, sigma)->font(underlineFont);
                             sheet->FindCell(5, 5 + leht->seeriateArv)->halign(xlslib_core::HALIGN_CENTER);
+                            sheet->label(5, 6 + leht->seeriateArv, "10*")->font(underlineFont);
+                            sheet->colwidth(6 + leht->seeriateArv, 32*31);
+                            sheet->FindCell(5, 6 + leht->seeriateArv)->halign(xlslib_core::HALIGN_CENTER);
                         }
                     }
                     for(int j = 0; j < leht->laskurid.count(); j++){
@@ -1319,8 +1326,9 @@ void Protokollitaja::eksportXLS()
                                             arv = leht->laskurid[j]->seeriad[v * leht->vSummadeSamm + x]->text().replace(',', '.').toDouble(&onnestus);
                                         if(onnestus)
                                             sheet->number(j + rida, 5 + v * leht->vSummadeSamm + v + x, arv)->font(tekstiFont);
-                                        else
+                                        else {
                                             sheet->label(j + rida, 5 + v * leht->vSummadeSamm + v + x, QString(leht->laskurid[j]->seeriad[v * leht->vSummadeSamm + x]->text().toUtf8()).toStdString())->font(tekstiFont);
+                                        }
                                         sheet->FindCell(j + rida, 5 + v * leht->vSummadeSamm + v + x)->halign(xlslib_core::HALIGN_CENTER);
                                         sheet->colwidth(5 + v * leht->vSummadeSamm + v + x, 32*31);
                                     }
@@ -1345,7 +1353,7 @@ void Protokollitaja::eksportXLS()
                                     arv = leht->laskurid[j]->finaal->text().toDouble(&onnestus);
                                     if(!onnestus)
                                         arv = leht->laskurid[j]->finaal->text().replace(',', '.').toDouble(&onnestus);
-                                    sheet->number(j + rida, 6 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), arv)->font(tekstiFont);
+                                    sheet->number(j + rida, 7 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), arv)->font(tekstiFont);
 
 //                                    arv = leht->laskurid[j]->koguSumma->text().toDouble(&onnestus);
 //                                    if(!onnestus)
@@ -1356,8 +1364,8 @@ void Protokollitaja::eksportXLS()
                                 if(!leht->laskurid[j]->markus->text().isEmpty() &&
                                         !leht->laskurid[j]->markus->text().contains("V.A", Qt::CaseInsensitive)){
                                     if(leht->laskurid[j]->finaal->text().isEmpty())
-                                        sheet->label(j + rida, 6 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), QString(leht->laskurid[j]->markus->text().toUtf8()).toStdString())->font(tekstiFont);
-                                    else sheet->label(j + rida, 8 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), QString(leht->laskurid[j]->markus->text().toUtf8()).toStdString())->font(tekstiFont);
+                                        sheet->label(j + rida, 7 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), QString(leht->laskurid[j]->markus->text().toUtf8()).toStdString())->font(tekstiFont);
+                                    else sheet->label(j + rida, 9 + leht->seeriateArv + leht->laskurid[j]->vSummad.count(), QString(leht->laskurid[j]->markus->text().toUtf8()).toStdString())->font(tekstiFont);
                                 }
                             }else{
                                 for(int x = 0; x < leht->seeriateArv; x++){
@@ -1382,28 +1390,31 @@ void Protokollitaja::eksportXLS()
                                     arv = leht->laskurid[j]->getSumma().replace(',', '.').toDouble(&onnestus);
                                 sheet->number(j + rida, 5 + leht->seeriateArv, arv)->font(paiseFont);
                                 sheet->FindCell(j + rida, 5 + leht->seeriateArv)->halign(xlslib_core::HALIGN_CENTER);
+
+                                sheet->label(j + rida, 6 + leht->seeriateArv, leht->laskurid[j]->kumned->text().toStdString())->font(tekstiFont);
+                                sheet->FindCell(j + rida, 6 + leht->seeriateArv)->halign(xlslib_core::HALIGN_CENTER);
                                 if(!leht->laskurid[j]->finaal->text().isEmpty()){
-                                    sheet->colwidth(6 + leht->seeriateArv, 32*47);
                                     sheet->colwidth(7 + leht->seeriateArv, 32*47);
+                                    sheet->colwidth(8 + leht->seeriateArv, 32*47);
 
                                     arv = leht->laskurid[j]->finaal->text().toDouble(&onnestus);
                                     if(!onnestus)
                                         arv = leht->laskurid[j]->finaal->text().replace(',', '.').toDouble(&onnestus);
-                                    sheet->number(j + rida, 6 + leht->seeriateArv, arv)->font(tekstiFont);
+                                    sheet->number(j + rida, 7 + leht->seeriateArv, arv)->font(tekstiFont);
 
 //                                    arv = leht->laskurid[j]->koguSumma->text().toDouble(&onnestus);
 //                                    if(!onnestus)
 //                                        arv = leht->laskurid[j]->koguSumma->text().replace(',', '.').toDouble(&onnestus);
 //                                    sheet->number(j + rida, 7 + leht->seeriateArv, arv)->font(paiseFont);
 
-                                    sheet->FindCell(j + rida, 6 + leht->seeriateArv)->halign(xlslib_core::HALIGN_CENTER);
                                     sheet->FindCell(j + rida, 7 + leht->seeriateArv)->halign(xlslib_core::HALIGN_CENTER);
+                                    sheet->FindCell(j + rida, 8 + leht->seeriateArv)->halign(xlslib_core::HALIGN_CENTER);
                                 }
                                 if(!leht->laskurid[j]->markus->text().isEmpty() &&
                                         !leht->laskurid[j]->markus->text().contains("V.A", Qt::CaseInsensitive)){
                                     if(leht->laskurid[j]->finaal->text().isEmpty())
-                                        sheet->label(j + rida, 6 + leht->seeriateArv, QString(leht->laskurid[j]->markus->text().toUtf8()).toStdString())->font(tekstiFont);
-                                    else sheet->label(j + rida, 8 + leht->seeriateArv, QString(leht->laskurid[j]->markus->text().toUtf8()).toStdString())->font(tekstiFont);
+                                        sheet->label(j + rida, 7 + leht->seeriateArv, QString(leht->laskurid[j]->markus->text().toUtf8()).toStdString())->font(tekstiFont);
+                                    else sheet->label(j + rida, 9 + leht->seeriateArv, QString(leht->laskurid[j]->markus->text().toUtf8()).toStdString())->font(tekstiFont);
                                 }
                             }
                         }
