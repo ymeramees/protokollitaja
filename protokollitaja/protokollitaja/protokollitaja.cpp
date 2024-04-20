@@ -1489,6 +1489,35 @@ void Protokollitaja::exportFinalsFile()
                 return;
         }
 
+        if (seeLeht->finalsData().has_value()) {
+            QJsonObject finalsObj = seeLeht->finalsData().value();
+            QString fileLocation = seeFail.left(seeFail.lastIndexOf('/') + 1);
+            QString finalsFileName = QFileDialog::getSaveFileName(this, tr("Salvesta finaal"), fileLocation + finalsObj["eventName"].toString("") + ".fin", tr("Protofinaali fail (*.fin)"));
+            if(finalsFileName.isEmpty()) return;
+
+            QFile file(finalsFileName);
+            if(file.open(QIODevice::ReadOnly))
+                if(QMessageBox::critical(this, "Protokollitaja", tr("Sellise nimega fail on juba olemas. Kas "
+                        "soovite selle üle kirjutada?"), QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel){
+                    finalsFileName.clear();
+                    return;
+                }
+            file.close();
+
+            if(file.open(QIODevice::WriteOnly)) {
+                QJsonDocument jsonDoc(finalsObj);
+                file.write(jsonDoc.toJson());
+                file.close();
+                m_finalsFileName = finalsFileName;
+                return;
+            } else {
+                QMessageBox::critical(this, "Protokollitaja", tr("Ei õnnestu finaali faili luua! Kontrollige, "
+                                    "kas teil on sinna kausta kirjutamise õigused"), QMessageBox::Ok);
+                finalsFileName.clear();
+                return;
+            }
+        }
+
         m_finalsFileName.clear();
 
         // bool rajaNrOlemas = false;   // Check if all competitors have target numbers
@@ -1528,7 +1557,7 @@ void Protokollitaja::exportFinalsFile()
                 if (seeLeht->reasLaskurid[i]->linnuke->isChecked()) {
                     QStringList finalsRow;
                     finalsRow << seeLeht->reasLaskurid[i]->rajaNr->text();
-                    finalsRow << QString("%100%2").arg(seeLeht->leheIndeks).arg(seeLeht->reasLaskurid[i]->id);
+                    finalsRow << QString("%1%2").arg(seeLeht->leheIndeks, 2, 10, QChar('0')).arg(seeLeht->reasLaskurid[i]->id, 4, 10, QChar('0'));
                     finalsRow << QString("%1 %2.").arg(seeLeht->reasLaskurid[i]->perekNimi->text()).arg(seeLeht->reasLaskurid[i]->eesNimi->text().left(1));
                     finalsRow << seeLeht->reasLaskurid[i]->getSumma();
                     finalsRow << seeLeht->reasLaskurid[i]->eesNimi->text();
@@ -1541,7 +1570,7 @@ void Protokollitaja::exportFinalsFile()
             for(int i = 0; i < seeLeht->laskurid.count() && i < competitorsInFinal; i++){
                 QStringList finalsRow;
                 finalsRow << seeLeht->reasLaskurid[i]->rajaNr->text();
-                finalsRow << QString("%100%2").arg(seeLeht->leheIndeks).arg(seeLeht->reasLaskurid[i]->id);
+                finalsRow << QString("%1%2").arg(seeLeht->leheIndeks, 2, 10, QChar('0')).arg(seeLeht->reasLaskurid[i]->id, 4, 10, QChar('0'));
                 finalsRow << QString("%1 %2.").arg(seeLeht->reasLaskurid[i]->perekNimi->text()).arg(seeLeht->reasLaskurid[i]->eesNimi->text().left(1));
                 finalsRow << seeLeht->reasLaskurid[i]->getSumma();
                 finalsRow << seeLeht->reasLaskurid[i]->eesNimi->text();

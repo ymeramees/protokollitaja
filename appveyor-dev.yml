@@ -90,6 +90,8 @@ test_script:
 
     Copy-Item "C:\Qt\Tools\mingw1120_64\bin\addr2line.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\tools"
 
+    Copy-Item "$env:APPVEYOR_BUILD_FOLDER\Release-Notes.md" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
+
     cd .\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION
 
     $copiedApps = Get-ChildItem -Path . -Name -Include *.exe

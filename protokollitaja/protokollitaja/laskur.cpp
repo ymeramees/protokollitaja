@@ -624,8 +624,6 @@ void Laskur::liida() //Laskude summeerimine
         }
         if(!finaal->text().isEmpty() && !finaal->text().contains(',', Qt::CaseInsensitive))
                 finaal->setText(finaal->text().append(",0"));
-        if(!finaal->text().isEmpty() && !koguSumma->text().contains(',', Qt::CaseInsensitive))
-                koguSumma->setText(koguSumma->text().append(",0"));
         if(vSummadeSamm == 0) return;
         int x = 0;
         for(int i = 0; i < seeriateArv / vSummadeSamm; i++){
