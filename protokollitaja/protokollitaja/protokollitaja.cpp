@@ -1591,9 +1591,7 @@ void Protokollitaja::exportFinalsFile()
                     );
         finalsFileExport->setRelay(10 + seeLeht->leheIndeks);
         if(finalsFileExport->exec() == QDialog::Accepted){
-            //Lisa kood, et lugeda finaalifailinimi
             m_finalsFileName = finalsFileExport->getFinalsFileName();
-            //QMessageBox::information(this, "Protokollitaja", teateTekst, QMessageBox::Ok);
             QMessageBox::information(this, "Protokollitaja", tr("Finaali fail kirjutatud!\n%1").arg(m_finalsFileName), QMessageBox::Ok);
         }
         finalsFileExport->deleteLater();
@@ -1654,7 +1652,7 @@ void Protokollitaja::runFinals()
     }
 
     m_protoFinaalProcess = new QProcess(this);
-    m_protoFinaalProcess->start(qApp->applicationDirPath() + "/Protofinaal", QStringList() << "-f" << m_finalsFileName);
+    m_protoFinaalProcess->start(qApp->applicationDirPath() + "/Protofinaal", QStringList() << "-f" << QString::fromUtf8(m_finalsFileName.toLocal8Bit()));
     connect(m_protoFinaalProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finalsFinished(int, QProcess::ExitStatus)));
 
     if(!m_protoFinaalProcess->waitForStarted(5000)){   //Kontrollimaks, kas õnnestub käivitada
