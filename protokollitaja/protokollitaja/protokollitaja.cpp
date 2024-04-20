@@ -1110,15 +1110,6 @@ void Protokollitaja::eksportXLS()
                 failiNimi.append(".xls");
         xlslib_core::workbook book;
 
-        QFile file(failiNimi);
-        if(file.open(QIODevice::ReadOnly))
-            if(QMessageBox::critical(this, "Protokollitaja", tr("Sellise nimega fail on juba olemas. Kas "
-                "soovite selle üle kirjutada?"), QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel){
-                failiNimi.clear();
-                return;
-            }
-        file.close();
-
         xlslib_core::font_t *tiitelFont = book.font("Times New Roman");   //font, millega kirjutatakse võistluse nimi
         tiitelFont->SetBoldStyle(xlslib_core::BOLDNESS_BOLD);
         tiitelFont->SetHeight(20*16); //teksti kõrgus 16
@@ -1496,14 +1487,6 @@ void Protokollitaja::exportFinalsFile()
             if(finalsFileName.isEmpty()) return;
 
             QFile file(finalsFileName);
-            if(file.open(QIODevice::ReadOnly))
-                if(QMessageBox::critical(this, "Protokollitaja", tr("Sellise nimega fail on juba olemas. Kas "
-                        "soovite selle üle kirjutada?"), QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel){
-                    finalsFileName.clear();
-                    return;
-                }
-            file.close();
-
             if(file.open(QIODevice::WriteOnly)) {
                 QJsonDocument jsonDoc(finalsObj);
                 file.write(jsonDoc.toJson());
@@ -1645,14 +1628,16 @@ void Protokollitaja::runFinals()
     exportFinalsFile();
     if(m_finalsFileName.isEmpty()) return;
 
-    //finaal.setWorkingDirectory("/home/lauri/Katsepolygon/QFinaal");
-
     if(lehelugejaAken){ //Finaali käivitades tasub lugemismasinaga ühendus katkestada, et Finaal saaks lehti lugeda
         lehelugejaAken->sulgeUhendus();
     }
 
+    // This workaround using settings is needed due to Windoz encoding mess (unable to give unicode characters as program arguments)
+    CommonSettings finaalSettings("Protofinaal", "Protofinaali conf");
+    finaalSettings.setLastOpenFileName(m_finalsFileName);
+    finaalSettings.writeSettings();
     m_protoFinaalProcess = new QProcess(this);
-    m_protoFinaalProcess->start(qApp->applicationDirPath() + "/Protofinaal", QStringList() << "-f" << QString::fromUtf8(m_finalsFileName.toLocal8Bit()));
+    m_protoFinaalProcess->start(qApp->applicationDirPath() + "/Protofinaal");
     connect(m_protoFinaalProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finalsFinished(int, QProcess::ExitStatus)));
 
     if(!m_protoFinaalProcess->waitForStarted(5000)){   //Kontrollimaks, kas õnnestub käivitada
