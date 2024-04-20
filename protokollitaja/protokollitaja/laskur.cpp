@@ -402,11 +402,13 @@ void Laskur::muutus2(QString)
             perekNimi->setCursorPosition(pos);
             return;
     }
+
+    perekNimi->setText(perekNimi->text().toUpper());
+
     if(abi == Puudub || !*kirjutusAbi) return;
     if(!andmebaas->kirjutusabiPuss && !andmebaas->kirjutusabiPustol) return;    //Kontrolliks kas abi on üldse võimalik.
             static QString eelmine = "";
-            QString tekst = perekNimi->text().toUpper();
-            perekNimi->setText(tekst);
+            QString tekst = perekNimi->text();
             if(eelmine.length() > tekst.length() + 1) eelmine = "";
             if(eelmine != tekst && eelmine.length() < tekst.length()){
                     if(abi == Puss){

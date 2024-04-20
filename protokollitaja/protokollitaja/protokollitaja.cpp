@@ -1110,6 +1110,15 @@ void Protokollitaja::eksportXLS()
                 failiNimi.append(".xls");
         xlslib_core::workbook book;
 
+        QFile file(failiNimi);
+        if(file.open(QIODevice::ReadOnly))
+            if(QMessageBox::critical(this, "Protokollitaja", tr("Sellise nimega fail on juba olemas. Kas "
+                "soovite selle üle kirjutada?"), QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel){
+                failiNimi.clear();
+                return;
+            }
+        file.close();
+
         xlslib_core::font_t *tiitelFont = book.font("Times New Roman");   //font, millega kirjutatakse võistluse nimi
         tiitelFont->SetBoldStyle(xlslib_core::BOLDNESS_BOLD);
         tiitelFont->SetHeight(20*16); //teksti kõrgus 16
@@ -1153,6 +1162,7 @@ void Protokollitaja::eksportXLS()
                 if(leht->vSummadeSamm > 0)
                     lisa = leht->seeriateArv / leht->vSummadeSamm;
                 sheet->merge(0, 0, 0, 6 + leht->seeriateArv + lisa);
+                sheet->rowheight(0, 434);
 
                 //sheet->setCol(0, 0, 4.71);
                 if(leht->voistk){
@@ -1186,7 +1196,8 @@ void Protokollitaja::eksportXLS()
                 sheet->FindCell(5, 0)->halign(xlslib_core::HALIGN_CENTER);
                 std::string sigma = "\u03A3";    //Summa märk
                 if(leht->voistk){
-                    sheet->label(1, 4 + lisa, QString(timeAndPlaceString().toUtf8()).toStdString())->font(paiseFont);
+                    sheet->label(1, 6, QString(timeAndPlaceString().toUtf8()).toStdString())->font(paiseFont);
+                    sheet->FindCell(1, 6)->halign(xlslib_core::HALIGN_RIGHT);
                     sheet->label(5, 1, tr("Võistkond").toStdString())->font(underlineFont);
                     sheet->label(5, 2, tr("Eesnimi").toStdString())->font(underlineFont);
                     sheet->label(5, 3, tr("Perenimi").toStdString())->font(underlineFont);
@@ -1194,7 +1205,13 @@ void Protokollitaja::eksportXLS()
                     sheet->label(5, 5, sigma)->font(underlineFont);
                     sheet->FindCell(5, 5)->halign(xlslib_core::HALIGN_CENTER);
                 }else{
-                    sheet->label(1, 4 + leht->seeriateArv + lisa, QString(timeAndPlaceString().toUtf8()).toStdString())->font(paiseFont);
+                    if (leht->vSummadeSamm > 0) {
+                        sheet->label(1, 6 + leht->seeriateArv + leht->laskurid[0]->vSummad.count(), QString(timeAndPlaceString().toUtf8()).toStdString())->font(paiseFont);
+                        sheet->FindCell(1, 6 + leht->seeriateArv + leht->laskurid[0]->vSummad.count())->halign(xlslib_core::HALIGN_RIGHT);
+                    } else {
+                        sheet->label(1, 6 + leht->seeriateArv, QString(timeAndPlaceString().toUtf8()).toStdString())->font(paiseFont);
+                        sheet->FindCell(1, 6 + leht->seeriateArv)->halign(xlslib_core::HALIGN_RIGHT);
+                    }
                     sheet->label(5, 1, tr("Eesnimi").toStdString())->font(underlineFont);
                     sheet->label(5, 2, tr("Perenimi").toStdString())->font(underlineFont);
                     sheet->label(5, 3, tr("S.a.").toStdString())->font(underlineFont);
