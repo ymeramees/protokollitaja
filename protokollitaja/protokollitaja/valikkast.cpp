@@ -56,7 +56,7 @@ void ValikKast::muudaEkraaniNimi(int)
             ui.kumnendikegaBox->setCheckable(true);
         }else{
             ui.seeriateSilt->setText(tr("Liikmete arv:"));
-            ui.seeriateArv->setMaximum(8);
+            ui.seeriateArv->setMaximum(18);
             ui.seeriateSilt->setVisible(true);
             ui.seeriateArv->setVisible(true);
             ui.kumnendikegaBox->setChecked(false);
