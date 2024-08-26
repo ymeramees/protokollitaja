@@ -14,6 +14,7 @@
 #include <QMessageBox>
 #include <QStatusBar>
 #include <QTcpSocket>
+#include <QUdpSocket>
 #include <QVBoxLayout>
 #include <QScrollArea>
 #include <QStandardPaths>
@@ -78,6 +79,7 @@ private slots:
     void allShotsDataReceived(int target, QString shotsData);
     void changeLanguage();
     void continueSendingMessage();
+    void sendInbandBroadcast();
     void sendInitToAllSelected();
     void setupLanes(QJsonDocument fileJson);
     void updateStatus(int target, QString newStatus);

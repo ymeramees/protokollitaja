@@ -18,7 +18,7 @@ QMap<QualificationEvents::EventType, QualificationEvents::QualificationEvent>& Q
         {Pistol_25m, { tr("30+30l Spordipüstol"), TargetTypes::TargetType::FreePistol, 6, 3, false}},
         {Pistol30_25m, { tr("30l Ringmärk"), TargetTypes::TargetType::FreePistol, 3, 0, false}},
         {Pistol30Rapid_25m, { tr("30l Siluett"), TargetTypes::TargetType::RapidPistol, 3, 0, false}},
-        {StandardPistol, { tr("20+20+20l Spordipüstol"), TargetTypes::TargetType::RapidPistol, 6, 2, false}},
+        {StandardPistol, { tr("20+20+20l Spordipüstol"), TargetTypes::TargetType::FreePistol, 6, 2, false}},
         {FreePistol60_50m, { tr("60l Vabapüstol"), TargetTypes::TargetType::FreePistol, 6, 0, false}},
         {FreePistol30_50m, { tr("30l Vabapüstol"), TargetTypes::TargetType::FreePistol, 3, 0, false}},
         {PistolCISM_25m, { tr("CISM püstol"), TargetTypes::TargetType::RapidPistol, 6, 2, false}},

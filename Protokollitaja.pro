@@ -10,3 +10,9 @@ SUBDIRS += protokollitaja \
     protofinaal \
     rangecontrol \
     common
+
+HEADERS += \
+    common/src/utils.h
+
+SOURCES += \
+    common/src/utils.cpp

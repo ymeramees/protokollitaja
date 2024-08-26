@@ -377,6 +377,12 @@ void RangeControl::createMenus()
         publishSelectedCompetitorShots();
     });
 
+    QAction *searchInbandsAct = new QAction(tr("Otsi InBande"), this);
+    resetSelectedAct->setStatusTip(tr("Otsib võrgust töötavaid InBand Scoringuid"));
+    connect(searchInbandsAct, &QAction::triggered, [this](){
+        sendInbandBroadcast();
+    });
+
     controlMenu->addAction(initSelectedSightersAct);
     controlMenu->addAction(startSelectedSightersAct);
     controlMenu->addAction(stopSelectedSightersAct);
@@ -389,6 +395,9 @@ void RangeControl::createMenus()
     controlMenu->addAction(resetSelectedAct);
     controlMenu->addSeparator();
     controlMenu->addAction(sendShotsAct);
+    controlMenu->addSeparator();
+    // controlMenu->addAction(searchInbandsAct);    //TODO To be restored
+
 
     QAction *changeLanguageAct = new QAction(tr("Programmi keel"), this);
     changeLanguageAct->setStatusTip(tr("Programmi keele valik"));
@@ -725,6 +734,17 @@ void RangeControl::sendAck(Lane *lane)
     sendMessage(lane, message);
 }
 
+void RangeControl::sendInbandBroadcast()
+{
+    QStringList addresses = Utils::getLocalIps();
+    QByteArray datagram = "InBand uu?;" + addresses.first().toLocal8Bit() + ";?";
+    QUdpSocket udpSocket;
+    udpSocket.writeDatagram(datagram.data(), datagram.size(), QHostAddress::Broadcast, 45744);
+    udpSocket.waitForBytesWritten();
+    udpSocket.disconnectFromHost();
+    statusBar()->showMessage(tr("InBandi IP küsimus saadetud"), 2000);
+}
+
 void RangeControl::sendInit(Lane *lane)
 {
     if (lane->inCompetition()) {
@@ -754,8 +774,21 @@ void RangeControl::sendInit(Lane *lane)
         else
             inBandEvent = "50m_rifle";
         break;
-    default: QMessageBox::critical(this, tr("Viga!"), tr("See versioon Range Control'ist ei tea, kuidas valitud harjutust (%1) InBandile saata!").arg(event.name));
-        return;
+    case TargetTypes::FreePistol:
+        inBandEvent = "50m_pistol";
+        break;
+    default:
+        switch (QualificationEvents::fromString(event.name)) {
+        case QualificationEvents::Pistol30Rapid_25m:
+            inBandEvent = "rapid_SP";
+            break;
+        case QualificationEvents::PistolCISM_25m:
+            inBandEvent = "rapid_CFP";
+            break;
+        default:
+            QMessageBox::critical(this, tr("Viga!"), tr("See versioon Range Control'ist ei tea, kuidas valitud harjutust (%1) InBandile saata!").arg(event.name));
+            return;
+        };
     };
 
     message.append(inBandEvent + "\n");

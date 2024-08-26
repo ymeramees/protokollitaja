@@ -1,5 +1,7 @@
 #include "inbandconnection.h"
 
+#define CR QChar(0x0d)
+
 InbandConnection::InbandConnection(QTextStream *log, QTcpSocket *parent): QObject(parent)
 {
     socket = parent;
@@ -23,7 +25,7 @@ void InbandConnection::readIncomingData()
 
     QTextStream(stdout) << "InbandConnection::readIncomingData, m_buffer = " << m_buffer << Qt::endl;
 
-    if (m_buffer.contains(MESSAGE_END)) {
+    if (m_buffer.contains(MESSAGE_END)) {   // Old connection protocol
         QString message = m_buffer.left(m_buffer.indexOf(MESSAGE_END) + MESSAGE_END.length());
         QString forLog = message;
         *m_log << QTime::currentTime().toString() << ": " << forLog.replace("\n", ";") << Qt::endl;
@@ -47,6 +49,40 @@ void InbandConnection::readIncomingData()
                 emit statusUpdate(target, msgParts.at(2));
             } else if (msgParts.at(1) == "call in") {
                 emit newTarget(target, m_peerAddress);
+            } else if (msgParts.at(1) == "all shots") {
+                emit allShots(target, message);
+            }
+        } else
+            QTextStream(stdout) << "Received too short message: " << msgParts.join(",") << Qt::endl;
+        if (socket->state() == QAbstractSocket::UnconnectedState) {
+            QTextStream(stdout) << "InbandConnection unconnected, deleting" << Qt::endl;
+            deleteLater();  // If it has been disconnected, then no need to keep it around anymore
+        }
+    } else if (m_buffer.contains(CR)) {
+        QString message = m_buffer.left(m_buffer.indexOf(CR));
+        QString forLog = message;
+        *m_log << QTime::currentTime().toString() << ": " << forLog.replace("\n", ";") << Qt::endl;
+        m_buffer.remove(0, message.length());
+        QTextStream(stdout) << "InbandConnection::readIncomingData, message = " << message << Qt::endl;
+
+        QStringList msgParts = message.split(';');
+        int target = msgParts.at(0).toInt();
+        QTextStream(stdout) << "InbandConnection::readIncomingData, msgParts = " << msgParts.join(",") << Qt::endl;
+
+        if (msgParts.length() >= 4) {
+            if (msgParts.at(1) == "shot") {
+                QTextStream(stdout) << "Received shot: " << msgParts.join(",") << Qt::endl;
+                // _SHOT;14;target;Id;60;6;time;3;1;39;value;0;0;shotNo;X;Y;900;0;0;655.35;2154896560;64;560;0
+                Lask shot = Lask::fromInband(msgParts);
+                SiusShotData shotData;
+                shotData.shot = shot;
+                shotData.siusShotNo = msgParts.at(3).toInt();
+                emit newShot(target, shotData);
+            } else if (msgParts.at(1) == "status") {
+                emit statusUpdate(target, msgParts.at(2));
+            } else if (msgParts.at(1) == "InBand_Scoring") {
+                emit newTarget(target, m_peerAddress);
+                emit statusUpdate(target, msgParts.at(2));
             } else if (msgParts.at(1) == "all shots") {
                 emit allShots(target, message);
             }

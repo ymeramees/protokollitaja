@@ -9,6 +9,8 @@
 #include <QNetworkInterface>
 #include <QSet>
 
+#include "utils.h"
+
 class Header : public QWidget
 {
     Q_OBJECT
