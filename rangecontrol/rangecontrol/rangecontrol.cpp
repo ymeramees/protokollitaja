@@ -596,7 +596,7 @@ void RangeControl::newShot(int target, SiusShotData shotData)
         laneOpt.value()->setLastShotLabel(QString("(%1.): %2").arg(shotData.siusShotNo).arg(shotData.shot.getSLask()));
 
         if (laneOpt.value()->event().seriesInSubtotal > 0) {   // For compatibility with Sius data
-            shotData.siusShotNo = (shotData.siusShotNo - 1) % (laneOpt.value()->noOfShots().toInt() / 3) + 1;    // TODO make converting to int safer
+            shotData.siusShotNo = (shotData.siusShotNo - 1) % (laneOpt.value()->event().seriesInSubtotal * 10) + 1;
         }
 
         QTextStream(stdout) << "Discipline: " << laneOpt.value()->event().name << Qt::endl;
