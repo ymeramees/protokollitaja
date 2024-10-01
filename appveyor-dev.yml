@@ -61,14 +61,17 @@ build_script:
 
     dir
 
-    qmake.exe Protokollitaja.pro -spec win32-g++ "CONFIG+=qtquickcompiler" DEFINES+=ASM_CRASH_REPORT && mingw32-make.exe qmake_all
+    cmake -DCMAKE_PREFIX_PATH:PATH=C:\Qt\Tools\mingw1120_64 -S %APPVEYOR_BUILD_FOLDER% -B %APPVEYOR_BUILD_FOLDER% -DCMAKE_MAKE_PROGRAM=ninja
 
-    mingw32-make.exe -j4
+    cmake --build %APPVEYOR_BUILD_FOLDER%/build/debug/
+
 test_script:
 - ps: >-
     echo $env:APPVEYOR_BUILD_FOLDER
 
     cd $env:APPVEYOR_BUILD_FOLDER
+
+    dir
 
     New-Item -Path .\build -Name "Protokollitaja-$env:APPVEYOR_BUILD_VERSION" -ItemType "directory"
 

@@ -54,7 +54,6 @@ CMakeLists.txt.user*
 *.log
 *.fnl
 *.kll
-*.txt
 *.xls
 *.fin
 !*testFromProtokollitaja.fin

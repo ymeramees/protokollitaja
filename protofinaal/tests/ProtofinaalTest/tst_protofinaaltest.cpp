@@ -38,6 +38,11 @@ ProtofinaalTest::ProtofinaalTest() : m_originalSettings("Protofinaal", "Protofin
 //        qDebug() << "error: " << file.error();
 //    }
     QFile::copy(":/templates/spectatorView_template.html", "spectatorView_template.html");
+    CommonSettings m_settings("Protofinaal", "Protofinaali conf");
+    if (m_settings.language().isEmpty()) {
+        m_settings.setLanguage("English");
+        m_settings.writeSettings();
+    }
 }
 
 ProtofinaalTest::~ProtofinaalTest()

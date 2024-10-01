@@ -33,15 +33,9 @@ void DataUploaderTest::test_getUnauthorizedResponseWithTestUser()
 
     QUrl url;
     url.setScheme("https");
-#ifdef QT_DEBUG
-    url.setHost("localhost");
-    url.setPath("/api/v1/competitions");
-    url.setPort(3005);
-#else
     url.setHost("ymeramees.no-ip.org");
     url.setPath("/api/v1/competitions");
     url.setPort(3005);
-#endif
 
     QString concatenated = "testuser:TestPass";
     QByteArray data = concatenated.toLocal8Bit().toBase64();
