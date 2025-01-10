@@ -53,7 +53,6 @@ private:
     void publishShot(SiusShotData shotData);
     QJsonDocument readSettings();
     void saveSettings();
-    void sendAck(Lane *lane);
     void sendInit(Lane *lane);
     void sendMessage(Lane *lane, QString message);
     void sendMessageToAllSelected(QString message);
@@ -67,7 +66,6 @@ private:
     ConnectionServer m_server;
     QMap<int, Lane*> m_lanes;
     QVector<SiusShotData> m_shots;
-    QTcpSocket *tcpSocket = nullptr;
     QVBoxLayout *vBox = nullptr;
     QString m_language;
     QString m_message;

@@ -19,3 +19,13 @@ QStringList Utils::getLocalIps()
     cleanedAddresses.removeDuplicates();
     return cleanedAddresses;
 }
+
+void Utils::sendInbandBroadcast(QString target)
+{
+    QStringList addresses = Utils::getLocalIps();
+    QByteArray datagram = "InBand uu?;" + addresses.first().toLocal8Bit() + ";" + target.toLocal8Bit();
+    QUdpSocket udpSocket;
+    udpSocket.writeDatagram(datagram.data(), datagram.size(), QHostAddress::Broadcast, 45744);
+    udpSocket.waitForBytesWritten();
+    udpSocket.disconnectFromHost();
+}

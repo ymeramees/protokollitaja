@@ -396,7 +396,7 @@ void RangeControl::createMenus()
     controlMenu->addSeparator();
     controlMenu->addAction(sendShotsAct);
     controlMenu->addSeparator();
-    // controlMenu->addAction(searchInbandsAct);    //TODO To be restored
+    controlMenu->addAction(searchInbandsAct);
 
 
     QAction *changeLanguageAct = new QAction(tr("Programmi keel"), this);
@@ -482,9 +482,6 @@ void RangeControl::initialize()
             *m_shotsLog << "///////////////////////////////" << programVersion << ", " << QDateTime::currentDateTime().toString() <<  "///////////////////////////////\n";
         }
     }
-
-    if (tcpSocket == nullptr)
-        tcpSocket = new QTcpSocket(this);
 
     connect(&m_server, &ConnectionServer::error, this, [this](QString error) {
         showMessage(error);
@@ -640,9 +637,6 @@ void RangeControl::newTargetIp(int target, QString ip)
         currentLane = addLane(target, ip);
         saveSettings();
     }
-
-    if (currentLane != nullptr)
-        sendAck(currentLane);
 }
 
 QJsonDocument RangeControl::readSettings()
@@ -728,20 +722,9 @@ void RangeControl::saveSettings()
         QTextStream(stdout) << "RangeControl::saveSettings: Unable to save settings!" << Qt::endl;
 }
 
-void RangeControl::sendAck(Lane *lane)
-{
-    QString message = "ack";
-    sendMessage(lane, message);
-}
-
 void RangeControl::sendInbandBroadcast()
 {
-    QStringList addresses = Utils::getLocalIps();
-    QByteArray datagram = "InBand uu?;" + addresses.first().toLocal8Bit() + ";?";
-    QUdpSocket udpSocket;
-    udpSocket.writeDatagram(datagram.data(), datagram.size(), QHostAddress::Broadcast, 45744);
-    udpSocket.waitForBytesWritten();
-    udpSocket.disconnectFromHost();
+    Utils::sendInbandBroadcast("?");
     statusBar()->showMessage(tr("InBandi IP küsimus saadetud"), 2000);
 }
 
@@ -755,9 +738,9 @@ void RangeControl::sendInit(Lane *lane)
                     QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
             return;
     }
-    QString message = "init\n";
-    message.append(lane->firstName() + " " + lane->lastName() + "\n");
-    message.append(lane->club() + "\n");
+    QString message = "init;";
+    message.append(lane->firstName() + " " + lane->lastName() + ";");
+    message.append(lane->club() + ";");
 
     QString inBandEvent;
     QualificationEvents::QualificationEvent event = lane->event();
@@ -791,9 +774,9 @@ void RangeControl::sendInit(Lane *lane)
         };
     };
 
-    message.append(inBandEvent + "\n");
-    message.append(" \n");
-    message.append(lane->decimals() + "\n");
+    message.append(inBandEvent + ";");
+    message.append(" ;");
+    message.append(lane->decimals() + ";");
     message.append(lane->noOfShots());
 
     lane->setCurrentShotIndex(0);
@@ -831,15 +814,13 @@ void RangeControl::sendInitToAllSelected()
 void RangeControl::sendMessage(Lane *lane, QString message)
 {
     QTextStream(stdout) << "RangeControl::sendMessage(" << message << ")" << Qt::endl;
-    if (tcpSocket != nullptr && !lane->ip().isEmpty()) {
-        tcpSocket->connectToHost(lane->ip(), 5450);
-        tcpSocket->waitForConnected(5000);
-
-        QTextStream out(tcpSocket);
-        out << lane->target() << Qt::endl;
-        out << message << "\nmessage end" << Qt::endl;
-        tcpSocket->close();
-        showMessage("Sent: " + message.replace("\n", ";"));
+    if (!lane->ip().isEmpty()) {
+        bool ok = false;
+        int target = lane->target().toInt(&ok);
+        if (ok) {
+            m_server.sendMessage(target, lane->ip(), message);
+        } else
+            showMessage(tr("Viga: rada %s ei saa teisendada arvuks!").arg(lane->target()));
     }
 }
 

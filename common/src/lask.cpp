@@ -85,7 +85,7 @@ QString Lask::getSLask() const
 
 Lask Lask::fromInband(QStringList inbandRowParts)
 {
-    if (inbandRowParts.length() >= 5) {
+    if (inbandRowParts.length() >= 6) {
         // lane, "shot", value, index, x (in mm?), y (in mm?), "message end"
         Lask shot;
         shot.setLask(inbandRowParts.at(2));

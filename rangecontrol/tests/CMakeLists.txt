@@ -9,3 +9,4 @@ qt_standard_project_setup()
 
 
 add_subdirectory(integrationtest)
+add_subdirectory(connectionservertest)

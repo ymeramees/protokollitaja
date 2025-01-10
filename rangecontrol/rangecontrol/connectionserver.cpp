@@ -13,6 +13,11 @@ ConnectionServer::~ConnectionServer()
         dataSocket->abort();
         dataSocket->deleteLater();
     }
+
+    foreach(InbandConnection *connection, m_inbandConnections.values()){
+        connection->close();
+        connection->deleteLater();
+    }
 }
 
 void ConnectionServer::closeDataConnection(int socketIndex)
@@ -73,24 +78,81 @@ void ConnectionServer::newInbandConnection()
     QTextStream(stdout) << "ConnectionServer::newInbandConnection()" << Qt::endl;
 
     InbandConnection *inbandConnection = new InbandConnection(m_incomingLog, m_inbandServer.nextPendingConnection());
-    connect(inbandConnection, &InbandConnection::newShot, [this](int target, SiusShotData shotData){
+    connect(inbandConnection, &InbandConnection::newShot, inbandConnection, [this](int target, SiusShotData shotData){
         emit newShot(target, shotData);
     });
-    connect(inbandConnection, &InbandConnection::statusUpdate, [this](int target, QString newStatus){
+    connect(inbandConnection, &InbandConnection::statusUpdate, inbandConnection, [this](int target, QString newStatus){
         emit statusUpdate(target, newStatus);
     });
-    connect(inbandConnection, &InbandConnection::newTarget, [this](int target, QString ip){
+    connect(inbandConnection, &InbandConnection::newTarget, inbandConnection, [this](int target, QString ip, int protocolVersion){
+        m_inbandProtocolVersions.insert(ip, protocolVersion);
         emit newTarget(target, ip);
+        if (protocolVersion == 0)   // Need to ack here in case of old protocol, as a new connection is needed for that
+            sendMessage(target, ip, "ack");
+        sendFromQueue(target, ip);
     });
-    connect(inbandConnection, &InbandConnection::allShots, [this](int target, QString shotsData){
+    connect(inbandConnection, &InbandConnection::allShots, inbandConnection, [this](int target, QString shotsData){
         emit allShots(target, shotsData);
     });
+    connect(inbandConnection, &InbandConnection::disconnected, inbandConnection, [this, inbandConnection](){
+        if (m_inbandConnections.contains(inbandConnection->currentIp())) {
+            m_inbandConnections.remove(inbandConnection->currentIp());
+        }
+        inbandConnection->deleteLater();
+    });
+
+    if (inbandConnection->currentIp() != "0.0.0.0") {
+        m_inbandConnections.insert(inbandConnection->currentIp(), inbandConnection);
+    }
 }
 
 void ConnectionServer::sendAllShotsData(QStringList data, DataConnection *connection)
 {
     foreach (QString shotRow, data) {
         connection->send(shotRow);
+    }
+}
+
+void ConnectionServer::sendFromQueue(const int target, const QString ip)
+{
+    if (m_outgoingQueues.contains(ip)) {
+        QQueue msgsToSend = m_outgoingQueues.value(ip);
+        if (!msgsToSend.isEmpty()) {
+            QString msgToSend = msgsToSend.dequeue();
+            m_outgoingQueues.insert(ip, msgsToSend);
+            sendMessage(target, ip, msgToSend);
+        }
+    }
+}
+
+void ConnectionServer::sendInbandBroadcast(int target)
+{
+    Utils::sendInbandBroadcast(QString("%1").arg(target));
+    emit info(tr("Kadunud InBandi IP küsimus saadetud"));
+}
+
+void ConnectionServer::sendMessage(const int target, const QString ip, QString message)
+{
+    if (m_inbandConnections.contains(ip) && m_inbandProtocolVersions.contains(ip) && m_inbandProtocolVersions.value(ip) == 1) {
+        m_inbandConnections.value(ip)->sendMessage(target, message);
+        emit info("Sent: " + message.replace("\n", ";"));
+    } else {
+        if (m_inbandProtocolVersions.contains(ip) && m_inbandProtocolVersions.value(ip) == 0) { // old connection protocol
+            QTcpSocket tcpSocket;
+            tcpSocket.connectToHost(ip, 5450);
+            tcpSocket.waitForConnected(5000);
+
+            QTextStream out(&tcpSocket);
+            out << target << Qt::endl;
+            out << message << "\nmessage end" << Qt::endl;
+            tcpSocket.close();
+            emit info("Sent: " + message.replace("\n", ";"));
+        } else {
+            QQueue<QString> queue = m_outgoingQueues.value(ip);
+            queue.enqueue(message);
+            m_outgoingQueues.insert(ip, queue);
+            sendInbandBroadcast(target);
+        }
     }
 }
 

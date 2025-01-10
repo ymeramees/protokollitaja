@@ -3,8 +3,10 @@
 
 #include <QMessageBox>
 #include <QTcpServer>
+#include <QQueue>
 #include "dataconnection.h"
 #include "inbandconnection.h"
+#include "utils.h"
 
 class ConnectionServer : public QObject
 {
@@ -17,10 +19,14 @@ public slots:
     void closeDataConnections();
     void sendShotData(QStringList data);
     void sendAllShotsData(QStringList data, DataConnection *connection);
+    void sendMessage(const int target, const QString ip, QString message);
     void start(int dataPort, int inbandPort);
 
 private:
     QList<DataConnection*> dataSockets;
+    QMap<QString, InbandConnection*> m_inbandConnections;
+    QMap<QString, int> m_inbandProtocolVersions;
+    QMap<QString, QQueue<QString>> m_outgoingQueues;
     QMessageBox messageBox;
     QTextStream *m_incomingLog = nullptr;
     QStringList m_shotsData;
@@ -29,6 +35,8 @@ private:
     void closeDataConnection(int socketIndex);
     void newDataConnection();
     void newInbandConnection();
+    void sendFromQueue(const int target, const QString ip);
+    void sendInbandBroadcast(int target);
 
 private slots:
 //    void incomingShotInfo(int socketIndex);
