@@ -66,3 +66,4 @@ Koduleht/
 images_store/
 image_store/
 .qtc_clangd/
+.aider*

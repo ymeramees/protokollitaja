@@ -307,18 +307,21 @@ void ImportAken::fromKllFile(QString fileName)
 
     if (contents.tabWidget != nullptr) {
         QStringList tabNames;
+        QList<int> validTabIndices;
         for (int i = 0; i < contents.tabWidget->count(); i++) {
             Leht *sheet = qobject_cast<Leht*>(qobject_cast<QScrollArea*>(contents.tabWidget->widget(i))->widget());
             if (sheet != 0 && !sheet->voistk){  // Exclude team events for now
-                tabNames << (contents.tabWidget->tabText(i) + " - " + sheet->ekraaniNimi);
+                tabNames << (contents.tabWidget->tabText(i) + " - " + sheet->ekraaniNimi + QString(" - %1").arg(sheet->laskurid.size()));
+                validTabIndices << i;
             }
         }
         bool ok;
         QString chosenTab = QInputDialog::getItem(this, tr("Vali leht"), tr("Leht millelt importida:"), tabNames, 0, false, &ok);
 
         if (ok && !chosenTab.isEmpty()){
-            int tabIndex = tabNames.indexOf(chosenTab);
-            Leht* sheet = qobject_cast<Leht*>(qobject_cast<QScrollArea*>(contents.tabWidget->widget(tabIndex))->widget());
+            int selectedIndex = tabNames.indexOf(chosenTab);
+            int actualTabIndex = validTabIndices[selectedIndex];
+            Leht* sheet = qobject_cast<Leht*>(qobject_cast<QScrollArea*>(contents.tabWidget->widget(actualTabIndex))->widget());
 
             if (sheet != 0) {
                 if(leht == nullptr){

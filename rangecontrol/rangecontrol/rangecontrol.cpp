@@ -319,9 +319,9 @@ void RangeControl::createMenus()
     toolsMenu->addAction(clearLanesAct);
     toolsMenu->addAction(saveSettingsAct);
 
-    QAction *initSelectedSightersAct = new QAction(tr("Saada nimed (init)"), this);
-    initSelectedSightersAct->setStatusTip(tr("Saadab võistlejate andmed märgitud radadele"));
-    connect(initSelectedSightersAct, &QAction::triggered, this, &RangeControl::sendInitToAllSelected);
+    QAction *initSelectedAct = new QAction(tr("Saada nimed (init)"), this);
+    initSelectedAct->setStatusTip(tr("Saadab võistlejate andmed märgitud radadele"));
+    connect(initSelectedAct, &QAction::triggered, this, &RangeControl::sendInitToAllSelected);
 
     QAction *startSelectedSightersAct = new QAction(tr("Alusta proovidega"), this);
     startSelectedSightersAct->setStatusTip(tr("Annab käsu märgitud radadele alustada proovilaskudega"));
@@ -383,7 +383,7 @@ void RangeControl::createMenus()
         sendInbandBroadcast();
     });
 
-    controlMenu->addAction(initSelectedSightersAct);
+    controlMenu->addAction(initSelectedAct);
     controlMenu->addAction(startSelectedSightersAct);
     controlMenu->addAction(stopSelectedSightersAct);
     controlMenu->addAction(startSelectedMatchAct);
