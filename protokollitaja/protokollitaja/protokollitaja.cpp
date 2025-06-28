@@ -1197,8 +1197,8 @@ void Protokollitaja::eksportXLS()
                     sheet->FindCell(5, 5)->halign(xlslib_core::HALIGN_CENTER);
                 }else{
                     if (leht->vSummadeSamm > 0) {
-                        sheet->label(1, 6 + leht->seeriateArv + leht->laskurid[0]->vSummad.count(), QString(timeAndPlaceString().toUtf8()).toStdString())->font(paiseFont);
-                        sheet->FindCell(1, 6 + leht->seeriateArv + leht->laskurid[0]->vSummad.count())->halign(xlslib_core::HALIGN_RIGHT);
+                        sheet->label(1, 6 + leht->seeriateArv + leht->seeriateArv / leht->vSummadeSamm, QString(timeAndPlaceString().toUtf8()).toStdString())->font(paiseFont);
+                        sheet->FindCell(1, 6 + leht->seeriateArv + leht->seeriateArv / leht->vSummadeSamm)->halign(xlslib_core::HALIGN_RIGHT);
                     } else {
                         sheet->label(1, 6 + leht->seeriateArv, QString(timeAndPlaceString().toUtf8()).toStdString())->font(paiseFont);
                         sheet->FindCell(1, 6 + leht->seeriateArv)->halign(xlslib_core::HALIGN_RIGHT);
