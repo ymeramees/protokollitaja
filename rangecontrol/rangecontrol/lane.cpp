@@ -213,7 +213,15 @@ void Lane::setShotsNumber(int newNumber)
 
 void Lane::setStatus(QString newStatus)
 {
-    if (newStatus.compare("ip_match") == 0 || newStatus.compare("match") == 0)
+    if (newStatus.compare("ip_match") == 0 ||
+        newStatus.compare("ip_match_changeover_sighters") == 0 ||
+        newStatus.compare("ip_match_load") == 0 ||
+        newStatus.compare("ip_match_attention") == 0 ||
+        newStatus.compare("match") == 0 ||
+        newStatus.compare("match_changeover_sighters") == 0 ||
+        newStatus.compare("match_load") == 0 ||
+        newStatus.compare("match_attention") == 0
+        )
         m_inCompetition = true;
     else
         m_inCompetition = false;
