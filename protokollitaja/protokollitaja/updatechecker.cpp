@@ -43,15 +43,25 @@ void UpdateChecker::getLatestVersionInfo(QString user, QString repo)
 
 bool UpdateChecker::isCurrentVersionOld(QString currentVersion, QString newVersion)
 {
-    QStringList versionNo = currentVersion.split(".");
+    // Extract base version numbers (without -test suffixes)
+    QString currentBase = currentVersion;
+
+    if (currentVersion.contains("-")) {
+        currentBase = currentBase.left(currentBase.indexOf("-"));
+    }
+
+    QStringList versionNo = currentBase.split(".");
     QStringList newVersionNo = newVersion.split(".");
 
-    // Compare versions starting from major numbers
+    // Compare base versions starting from major numbers
     if(versionNo[0].toInt() < newVersionNo[0].toInt()
         || (versionNo[1].toInt() < newVersionNo[1].toInt() && versionNo[0].toInt() == newVersionNo[0].toInt())
         || (versionNo[2].toInt() < newVersionNo[2].toInt() && versionNo[1].toInt() == newVersionNo[1].toInt() && versionNo[0].toInt() == newVersionNo[0].toInt())){
         return true;
-    }else{  // If none of the previous, then current version is newest
+    } else if (currentBase == newVersion) {
+        // If base versions are equal, non-test version is newer than test version
+        return currentVersion.contains("-");
+    } else {  // If none of the previous, then current version is newest
         return false;
     }
 }
