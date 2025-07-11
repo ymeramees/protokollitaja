@@ -1,3 +1,4 @@
+---
 #---------------------------------#
 #      general configuration      #
 #---------------------------------#
@@ -21,125 +22,125 @@ image: Visual Studio 2022
 clone_folder: C:\projects\protokollitaja
 
 install:
-- cmd: >-
-    set QTDIR=C:\Qt\6.5\mingw_64
+  - cmd: >-
+      set QTDIR=C:\Qt\6.5\mingw_64
 
-    set OPENSSL_INCLUDE_PATH=C:\OpenSSL-v30-Win64\include\openssl
+      set OPENSSL_INCLUDE_PATH=C:\OpenSSL-v30-Win64\include\openssl
 
-    set OPENSSL_LIB_PATH=C:\OpenSSL-v30-Win64\lib\MinGW
+      set OPENSSL_LIB_PATH=C:\OpenSSL-v30-Win64\lib\MinGW
 
-    echo %PATH:;=&echo.%
+      echo %PATH:;=&echo.%
 
-    ls C:\Qt
+      ls C:\Qt
 
-    ls C:\Qt\Tools
+      ls C:\Qt\Tools
 
-    ls C:\Qt\Tools\mingw1120_64\bin
+      ls C:\Qt\Tools\mingw1120_64\bin
 
-    ls C:\Qt\6.5
+      ls C:\Qt\6.5
 
-    ls %QTDIR%
+      ls %QTDIR%
 
-    ls %QTDIR%\bin
+      ls %QTDIR%\bin
 
-    type %QTDIR%\bin\qtenv2.bat
+      type %QTDIR%\bin\qtenv2.bat
 
-    %QTDIR%\bin\qtenv2.bat
+      %QTDIR%\bin\qtenv2.bat
 
-    set PATH=%PATH%;C:\Qt\Tools\mingw1120_64\bin
+      set PATH=%PATH%;C:\Qt\Tools\mingw1120_64\bin
 
-    qmake -v
+      qmake -v
 
-    set make=mingw32-make.exe
+      set make=mingw32-make.exe
 
-    g++ --version
+      g++ --version
 
-    %make% --version
+      %make% --version
 build_script:
-- cmd: >-
-    cd %APPVEYOR_BUILD_FOLDER%
+  - cmd: >-
+      cd %APPVEYOR_BUILD_FOLDER%
 
-    dir
+      dir
 
-    cmake -DCMAKE_PREFIX_PATH:PATH=C:\Qt\Tools\mingw1120_64 -S %APPVEYOR_BUILD_FOLDER% -B %APPVEYOR_BUILD_FOLDER% -DCMAKE_MAKE_PROGRAM=ninja
+      cmake -DCMAKE_PREFIX_PATH:PATH=C:\Qt\6.5\mingw_64 -DCMAKE_C_COMPILER=C:\Qt\Tools\mingw1120_64\bin\gcc.exe -DCMAKE_CXX_COMPILER=C:\Qt\Tools\mingw1120_64\bin\g++.exe -G "MinGW Makefiles" -S %APPVEYOR_BUILD_FOLDER% -B %APPVEYOR_BUILD_FOLDER%\build
 
-    cmake --build %APPVEYOR_BUILD_FOLDER%/build/debug/
+      cmake --build %APPVEYOR_BUILD_FOLDER%\build
 
 test_script:
-- ps: >-
-    echo $env:APPVEYOR_BUILD_FOLDER
+  - ps: >-
+      echo $env:APPVEYOR_BUILD_FOLDER
 
-    cd $env:APPVEYOR_BUILD_FOLDER
+      cd $env:APPVEYOR_BUILD_FOLDER
 
-    dir
+      dir
 
-    New-Item -Path .\build -Name "Protokollitaja-$env:APPVEYOR_BUILD_VERSION" -ItemType "directory"
+      New-Item -Path .\build -Name "Protokollitaja-$env:APPVEYOR_BUILD_VERSION" -ItemType "directory"
 
-    New-Item -Path ".\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION" -Name "Data" -ItemType "directory"
+      New-Item -Path ".\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION" -Name "Data" -ItemType "directory"
 
-    New-Item -Path ".\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION" -Name "tools" -ItemType "directory"
+      New-Item -Path ".\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION" -Name "tools" -ItemType "directory"
 
-    $apps = Get-ChildItem -Path "$env:APPVEYOR_BUILD_FOLDER" -Recurse -Name -Include *.exe -Exclude *test.exe
+      $apps = Get-ChildItem -Path "$env:APPVEYOR_BUILD_FOLDER" -Recurse -Name -Include *.exe -Exclude *test.exe
 
-    echo $apps
+      echo $apps
 
-    foreach($app in $apps) {
+      foreach($app in $apps) {
 
-        Copy-Item "$app" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
+          Copy-Item "$app" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
 
-    }
+      }
 
-    Copy-Item "$env:APPVEYOR_BUILD_FOLDER\protokollitaja\build\release\Data\Print_template.html" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\Data"
+      Copy-Item "$env:APPVEYOR_BUILD_FOLDER\protokollitaja\build\release\Data\Print_template.html" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\Data"
 
-    Copy-Item "C:\Qt\Tools\mingw1120_64\bin\addr2line.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\tools"
+      Copy-Item "C:\Qt\Tools\mingw1120_64\bin\addr2line.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\tools"
 
-    Copy-Item "$env:APPVEYOR_BUILD_FOLDER\Release-Notes.md" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
+      Copy-Item "$env:APPVEYOR_BUILD_FOLDER\Release-Notes.md" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
 
-    cd .\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION
+      cd .\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION
 
-    $copiedApps = Get-ChildItem -Path . -Name -Include *.exe
+      $copiedApps = Get-ChildItem -Path . -Name -Include *.exe
 
-    echo $copiedApps
+      echo $copiedApps
 
-    foreach($app in $copiedApps) {
+      foreach($app in $copiedApps) {
 
-        windeployqt6.exe $app
+          windeployqt6.exe $app
 
-    }
+      }
 
-    dir
+      dir
 
-    cd $env:APPVEYOR_BUILD_FOLDER
+      cd $env:APPVEYOR_BUILD_FOLDER
 
-    & 7z a "Protokollitaja-$env:APPVEYOR_BUILD_VERSION.zip" ".\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
+      & 7z a "Protokollitaja-$env:APPVEYOR_BUILD_VERSION.zip" ".\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
 
-    $tests = Get-ChildItem -Path $env:APPVEYOR_BUILD_FOLDER -Recurse -Name -Include *test.exe
+      $tests = Get-ChildItem -Path $env:APPVEYOR_BUILD_FOLDER -Recurse -Name -Include *test.exe
 
-    foreach($test in $tests) {
+      foreach($test in $tests) {
 
-        echo Testing: $test
+          echo Testing: $test
 
-        if ($test.IndexOf("IntegrationTest") -lt 0) {
+          if ($test.IndexOf("IntegrationTest") -lt 0) {
 
-            & $test -junitxml -tickcounter -o testresults.xml
+              & $test -junitxml -tickcounter -o testresults.xml
 
-            $wc = New-Object 'System.Net.WebClient'
+              $wc = New-Object 'System.Net.WebClient'
 
-            $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\testresults.xml))
+              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\testresults.xml))
 
-        }
+          }
 
-    }
+      }
 
 artifacts:
-- path: '*.zip'
-  name: Protokollitaja
+  - path: "*.zip"
+    name: Protokollitaja
 notifications:
-- provider: Email
-  to:
-  - ymeramees@gmail.com
-  subject: Protokollitaja-dev Build {{status}}
-  message: "'{{message}}, {{commitId}}, ...'"
-  on_build_success: false
-  on_build_failure: false
-  on_build_status_changed: true
+  - provider: Email
+    to:
+      - ymeramees@gmail.com
+    subject: Protokollitaja-dev Build {{status}}
+    message: "'{{message}}, {{commitId}}, ...'"
+    on_build_success: false
+    on_build_failure: false
+    on_build_status_changed: true
