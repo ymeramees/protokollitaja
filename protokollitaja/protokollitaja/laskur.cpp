@@ -1113,6 +1113,11 @@ bool Laskur::readSiusShot(SiusShotData shotData)
         if(siusConnectionIndex() == -1)
             setSiusConnectionIndex(shotData.socketIndex);
 
+        int vSummadeSamm = vSummadeSamm;    // shadow the original value due to Sius shots numbering in standard pistol
+        if (*m_eventType == QualificationEvents::EventType::StandardPistol) {
+            vSummadeSamm = 0;   // Override the value here for standard pistol due to Sius shots numbering
+        }
+
         if(vSummadeSamm == 0 || (vSummadeSamm != 0 && shotData.siusShotNo <= vSummadeSamm * 10)) { // Ignore additional shots in all stages
             int seriesIndex = (competitionStage() * vSummadeSamm * 10 + shotData.siusShotNo - 1) / 10;
             int shotIndex = (shotData.siusShotNo - 1) % 10;
@@ -1120,7 +1125,8 @@ bool Laskur::readSiusShot(SiusShotData shotData)
             // TODO: A solution to enable adding missing shots and ignoring wrong shots
             //Check if series number and number of shots in each series is big enough
             if(shotIndex >= 0 && lasud.count() > seriesIndex && lasud[0].count() > shotIndex){
-                if (lasud[seriesIndex][shotIndex]->isEmpty()){
+                // allow overwriting shots in standard pistol due to allowed malfunctions and re-shoots
+                if (*m_eventType == QualificationEvents::EventType::StandardPistol || lasud[seriesIndex][shotIndex]->isEmpty()){
                     lasud[seriesIndex][shotIndex]->set(&shotData.shot);
                     liida();
                     teataMuudatusest();
