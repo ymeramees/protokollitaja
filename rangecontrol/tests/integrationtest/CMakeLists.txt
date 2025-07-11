@@ -1,4 +1,4 @@
-qt_add_executable(integrationtest
+qt_add_executable(rangecontrol_integrationtest
     ../../rangecontrol/../../common/src/lask.cpp ../../rangecontrol/../../common/src/lask.h
     ../../rangecontrol/../../common/src/qualificationevents.cpp ../../rangecontrol/../../common/src/qualificationevents.h
     ../../rangecontrol/../../common/src/siusshotdata.h
@@ -13,12 +13,12 @@ qt_add_executable(integrationtest
     ../../rangecontrol/rangecontrol.cpp ../../rangecontrol/rangecontrol.h
     tst_integrationtest.cpp
 )
-target_include_directories(integrationtest PRIVATE
+target_include_directories(rangecontrol_integrationtest PRIVATE
     ../../../common/src
     ../../rangecontrol ../../rangecontrol
 )
 
-target_link_libraries(integrationtest PRIVATE
+target_link_libraries(rangecontrol_integrationtest PRIVATE
     Qt::Core
     Qt::Gui
     Qt::Widgets
@@ -26,13 +26,13 @@ target_link_libraries(integrationtest PRIVATE
     Qt::Test
 )
 
-install(TARGETS integrationtest
+install(TARGETS rangecontrol_integrationtest
     BUNDLE DESTINATION .
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 qt_generate_deploy_app_script(
-    TARGET integrationtest
+    TARGET rangecontrol_integrationtest
     FILENAME_VARIABLE deploy_script
     NO_UNSUPPORTED_PLATFORM_ERROR
 )
