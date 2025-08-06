@@ -14,7 +14,7 @@ class Lask
 {
 
 public:
-    enum OriginType {Manual = 0, ScoringMachine = 1, Sius = 2, Inband = 3};
+    enum OriginType {Manual = 0, ScoringMachine = 1, Sius = 2, Inband = 3, NewInband = 4};
     Lask();
     Lask(int shot10Times, int x = -999, int y = -999, bool innerTen = false, QTime shotTime = QTime(), bool competitionShot = true, OriginType shotOrigin = Manual);
     Lask(QString siusRow);
@@ -76,5 +76,7 @@ private:
     QTime m_shotTime;
     float stringToFloat(QString s);
 };
+
+Q_DECLARE_METATYPE(Lask)
 
 #endif // LASK_H

@@ -598,23 +598,23 @@ void RangeControl::newShot(int target, SiusShotData shotData)
 
         QTextStream(stdout) << "Discipline: " << laneOpt.value()->event().name << Qt::endl;
 
-        shotData.shot.setInnerTen(Lask::calcIfInnerTen(laneOpt.value()->event().targetType, shotData.shot.X(), shotData.shot.Y()));
+        if (shotData.shot.shotOrigin() == Lask::OriginType::Inband)
+            shotData.shot.setInnerTen(Lask::calcIfInnerTen(laneOpt.value()->event().targetType, shotData.shot.X(), shotData.shot.Y()));
+
         if (laneOpt.value()->inCompetition()) {
-            shotData.shot.setCompetitionShot(true);
+            if (shotData.shot.shotOrigin() == Lask::OriginType::Inband)
+                shotData.shot.setCompetitionShot(true);
 //            shotData.siusShotNo = laneOpt.value()->increaseAndGetCurrentShotIndex();    // not needed actually
             addShot(shotData);  // Save only competition shots
         } else {
             shotData.shot.setCompetitionShot(false);
         }
         publishShot(shotData);
-//        QJsonDocument shotLogJson;
         QJsonObject shotLogJson;
         shotLogJson["time"] = QTime::currentTime().toString();
         shotLogJson["id"] = shotData.id;
         shotLogJson["shotNo"] = shotData.siusShotNo;
         shotLogJson["shot"] = shotData.shot.toJson();
-//        QString shotJson = QJsonDocument(shotData.shot.toJson()).toJson(QJsonDocument::Compact);
-//        *m_shotsLog << QString("%1;%2; %4").arg(shotData.id).arg(shotData.siusShotNo).arg(shotJson) << Qt::endl;
         *m_shotsLog << QJsonDocument(shotLogJson).toJson(QJsonDocument::Compact) << Qt::endl;
     }
 }

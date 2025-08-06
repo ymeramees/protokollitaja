@@ -77,15 +77,15 @@ void InbandConnection::readIncomingData()
         QString forLog = message;
         *m_log << QTime::currentTime().toString() << ": " << forLog.replace("\n", ";") << Qt::endl;
         m_buffer.remove(0, message.length());
-        QTextStream(stdout) << "InbandConnection::readIncomingData, message = " << message << Qt::endl;
+        QTextStream(stdout) << "InbandConnection::readIncomingData(new), message = " << message << Qt::endl;
 
         QStringList msgParts = message.split(';');
         int target = msgParts.at(0).toInt();
-        QTextStream(stdout) << "InbandConnection::readIncomingData, msgParts = " << msgParts.join(",") << Qt::endl;
+        QTextStream(stdout) << "InbandConnection::readIncomingData(new), msgParts = " << msgParts.join(",") << Qt::endl;
 
         if (msgParts.length() >= 3) {
             if (msgParts.at(1) == "shot") {
-                QTextStream(stdout) << "Received shot: " << msgParts.join(",") << Qt::endl;
+                QTextStream(stdout) << "Received shot(new): " << msgParts.join(",") << Qt::endl;
                 // _SHOT;14;target;Id;60;6;time;3;1;39;value;0;0;shotNo;X;Y;900;0;0;655.35;2154896560;64;560;0
                 Lask shot = Lask::fromInband(msgParts);
                 SiusShotData shotData;

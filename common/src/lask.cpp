@@ -91,9 +91,16 @@ Lask Lask::fromInband(QStringList inbandRowParts)
         shot.setLask(inbandRowParts.at(2));
         shot.setMmX(inbandRowParts.at(4));
         shot.setMmY(inbandRowParts.at(5));
-        shot.setShotTime(QTime::currentTime()); // Inband doesn't send shot's time
-        shot.setCompetitionShot(true);
-        shot.setShotOrigin(Lask::Inband);
+        if (inbandRowParts.length() >= 11) {  // New protocol
+            shot.setInnerTen(inbandRowParts.at(6).contains("true"));
+            shot.setShotTime(QTime::fromString(inbandRowParts.at(7)));
+            shot.setCompetitionShot(inbandRowParts.at(8).contains("true"));
+            shot.setShotOrigin(Lask::NewInband);
+        } else {
+            shot.setShotTime(QTime::currentTime()); // Old Inband doesn't send shot's time
+            shot.setCompetitionShot(true);
+            shot.setShotOrigin(Lask::Inband);
+        }
         return shot;
     } else return Lask();
 }

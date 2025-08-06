@@ -2,8 +2,8 @@
 
 #include "laskur.h"
 
-bool verbose = false;
-bool veryVerbose = false;
+bool verbose = true;
+bool veryVerbose = true;
 
 class CompetitorTest : public QObject
 {
