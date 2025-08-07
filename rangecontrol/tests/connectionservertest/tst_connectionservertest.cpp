@@ -34,7 +34,7 @@ void ConnectionServerTest::test_newProtocol()
     QTextStream log;
     ConnectionServer server(&log, this);
     server.start(4000, 5451);
-    QSignalSpy spy(&server, SIGNAL(newTarget(int, QString)));
+    QSignalSpy spy(&server, SIGNAL(statusUpdate(int, QString, QString)));
     qRegisterMetaType<Lask>();
     qRegisterMetaType<SiusShotData>();
     QSignalSpy shotsSpy(&server, SIGNAL(newShot(int, SiusShotData)));
@@ -114,7 +114,7 @@ void ConnectionServerTest::test_oldProtocol()
     QTextStream log;
     ConnectionServer server(&log, this);
     server.start(4000, 5451);
-    QSignalSpy spy(&server, SIGNAL(newTarget(int, QString)));
+    QSignalSpy spy(&server, SIGNAL(statusUpdate(int, QString, QString)));
     QSignalSpy infoSpy(&server, SIGNAL(info(QString)));
 
     QTcpSocket inband;
