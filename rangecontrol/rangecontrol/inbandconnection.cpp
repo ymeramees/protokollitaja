@@ -58,7 +58,7 @@ void InbandConnection::readIncomingData()
                 shotData.siusShotNo = msgParts.at(3).toInt();
                 emit newShot(target, shotData);
             } else if (msgParts.at(1) == "status") {
-                emit statusUpdate(target, msgParts.at(2));
+                emit statusUpdate(target, m_peerAddress, m_protocolVersion, msgParts.at(2));
             } else if (msgParts.at(1) == "call in") {
                 emit newTarget(target, m_peerAddress, m_protocolVersion);
             } else if (msgParts.at(1) == "all shots") {
@@ -94,12 +94,11 @@ void InbandConnection::readIncomingData()
                 emit newShot(target, shotData);
                 sendAck(target);
             } else if (msgParts.at(1) == "status") {
-                emit statusUpdate(target, msgParts.at(2));
+                emit statusUpdate(target, m_peerAddress, m_protocolVersion, msgParts.at(2));
                 sendAck(target);
             } else if (msgParts.at(1) == "InBand_Scoring") {
                 sendAck(target);
-                emit newTarget(target, m_peerAddress, m_protocolVersion);
-                emit statusUpdate(target, msgParts.at(2));
+                emit statusUpdate(target, m_peerAddress, m_protocolVersion, msgParts.at(2));
             } else if (msgParts.at(1) == "all shots") {
                 emit allShots(target, message);
                 sendAck(target);

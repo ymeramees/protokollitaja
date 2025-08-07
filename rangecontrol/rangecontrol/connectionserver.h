@@ -49,8 +49,7 @@ signals:
     void startListReceived(QStringList startList);
     void newProtokollitajaConnection(DataConnection *connection);
     void newShot(int target, SiusShotData);
-    void newTarget(int target, QString ip);
-    void statusUpdate(int target, QString newStatus);
+    void statusUpdate(int target, QString ip, QString newStatus);
 };
 
 #endif // RECEIVERSERVER_H

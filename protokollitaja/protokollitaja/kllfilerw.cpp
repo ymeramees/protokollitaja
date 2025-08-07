@@ -428,15 +428,12 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                 weaponType = tabObject["weaponType"].toInt();
 
                 QualificationEvents::EventType eventType = QualificationEvents::OtherAirRifle;
-                if (competitionSettings.fileVersion == 113) {
+                if (tabObject.contains("event")) {
                     eventTypeString = tabObject["event"].toString();
                     eventType = QualificationEvents::fromOldString(eventTypeString);
                 } else {
                     eventType = (QualificationEvents::EventType)tabObject["eventType"].toInt();
                 }
-
-                if(eventTypeString.isEmpty())
-                    eventTypeString = "Muu";
 
                 withDecimals = tabObject["decimals"].toBool();
                 toBeShown = tabObject["toBeShown"].toBool();

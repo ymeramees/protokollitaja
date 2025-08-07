@@ -80,8 +80,7 @@ private slots:
     void sendInbandBroadcast();
     void sendInitToAllSelected();
     void setupLanes(QJsonDocument fileJson);
-    void updateStatus(int target, QString newStatus);
+    void updateStatus(int target, QString ip, QString newStatus);
     void newShot(int target, SiusShotData shotData);
-    void newTargetIp(int target, QString ip);
 };
 #endif // PROTORANGECONTROL_H

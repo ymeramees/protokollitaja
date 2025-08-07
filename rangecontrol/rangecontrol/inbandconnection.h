@@ -25,7 +25,7 @@ signals:
     void disconnected();
     void newShot(int target, SiusShotData);
     void newTarget(int target, QString ip, int protocolVersion);
-    void statusUpdate(int target, QString newStatus);
+    void statusUpdate(int target, QString ip, int protocolVersion, QString newStatus);
 
 private:
     int m_protocolVersion = 0;

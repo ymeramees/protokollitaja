@@ -1821,6 +1821,8 @@ void Protokollitaja::kirjutaFail(QString failiNimi)
                 for (int i = 0; i < leht->laskurid.count(); i++) {
                     competitorsArray.append(leht->laskurid[i]->toJson());
                 }
+                if(verbose)
+                    QTextStream(stdout) << "Protokollitaja::kirjutaFail(: tabJson = " << QJsonDocument(tabJson).toJson() << Qt::endl;
                 tabJson["competitors"] = competitorsArray;
             }
             tabsArray.append(tabJson);

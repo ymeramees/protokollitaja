@@ -81,12 +81,17 @@ void ConnectionServer::newInbandConnection()
     connect(inbandConnection, &InbandConnection::newShot, inbandConnection, [this](int target, SiusShotData shotData){
         emit newShot(target, shotData);
     });
-    connect(inbandConnection, &InbandConnection::statusUpdate, inbandConnection, [this](int target, QString newStatus){
-        emit statusUpdate(target, newStatus);
+    connect(inbandConnection, &InbandConnection::statusUpdate, inbandConnection, [this](int target, QString ip, int protocolVersion, QString newStatus){
+        if (!m_inbandProtocolVersions.contains(ip)) {
+            m_inbandProtocolVersions.insert(ip, protocolVersion);
+        }
+        emit statusUpdate(target, ip, newStatus);
+        sendFromQueue(target, ip);
     });
+    // TODO Used only with old Scoring software, remove after testing with it
     connect(inbandConnection, &InbandConnection::newTarget, inbandConnection, [this](int target, QString ip, int protocolVersion){
         m_inbandProtocolVersions.insert(ip, protocolVersion);
-        emit newTarget(target, ip);
+        emit statusUpdate(target, ip, "main");
         if (protocolVersion == 0)   // Need to ack here in case of old protocol, as a new connection is needed for that
             sendMessage(target, ip, "ack");
         sendFromQueue(target, ip);

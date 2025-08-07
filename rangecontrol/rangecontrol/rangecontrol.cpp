@@ -490,7 +490,6 @@ void RangeControl::initialize()
         showMessage(info);
     });
     connect(&m_server, &ConnectionServer::newShot, this, &RangeControl::newShot);
-    connect(&m_server, &ConnectionServer::newTarget, this, &RangeControl::newTargetIp);
     connect(&m_server, &ConnectionServer::statusUpdate, this, &RangeControl::updateStatus);
     connect(&m_server, &ConnectionServer::allShots, this, &RangeControl::allShotsDataReceived);
     connect(&m_server, &ConnectionServer::newProtokollitajaConnection, this, &RangeControl::publishAllShots);
@@ -616,26 +615,6 @@ void RangeControl::newShot(int target, SiusShotData shotData)
         shotLogJson["shotNo"] = shotData.siusShotNo;
         shotLogJson["shot"] = shotData.shot.toJson();
         *m_shotsLog << QJsonDocument(shotLogJson).toJson(QJsonDocument::Compact) << Qt::endl;
-    }
-}
-
-void RangeControl::newTargetIp(int target, QString ip)
-{
-    showMessage(tr("Märgi IP: ") + ip);
-    Lane *currentLane = nullptr;
-    bool exists = false;
-    foreach(Lane *lane, m_lanes) {
-        if (lane->target().toInt() == target) {
-            lane->setIp(ip);
-            exists = true;
-            currentLane = lane;
-            break;
-        }
-    }
-
-    if (!exists) {
-        currentLane = addLane(target, ip);
-        saveSettings();
     }
 }
 
@@ -890,13 +869,26 @@ void RangeControl::unsetCheckedAll()
     }
 }
 
-void RangeControl::updateStatus(int target, QString newStatus)
+void RangeControl::updateStatus(int target, QString ip, QString newStatus)
 {
-    showMessage(QString("Uuendus: %1, ").arg(target) + newStatus);
+    showMessage(QString("Uuendus: %1 (%2), ").arg(target).arg(ip) + newStatus);
+
+    Lane *currentLane = nullptr;
+    bool exists = false;
+
     foreach(Lane *lane, m_lanes) {
         if (lane->target().toInt() == target) {
+            lane->setIp(ip);
+            exists = true;
+            currentLane = lane;
             lane->setStatus(newStatus);
             break;
         }
+    }
+
+    if (!exists) {
+        currentLane = addLane(target, ip);
+        currentLane->setStatus(newStatus);
+        saveSettings();
     }
 }
