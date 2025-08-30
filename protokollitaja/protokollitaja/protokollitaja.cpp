@@ -4137,7 +4137,7 @@ void Protokollitaja::uploadResults()
     url.setPath("/api/v1/competitions");
     url.setPort(3005);
 #else
-    url.setHost("ymeramees.no-ip.org");
+    url.setHost("protokollitaja.eu");
     url.setPath("/api/v1/competitions");
     url.setPort(3005);
 #endif

@@ -33,7 +33,7 @@ void DataUploaderTest::test_getUnauthorizedResponseWithTestUser()
 
     QUrl url;
     url.setScheme("https");
-    url.setHost("ymeramees.no-ip.org");
+    url.setHost("protokollitaja.eu");
     url.setPath("/api/v1/competitions");
     url.setPort(3005);
 

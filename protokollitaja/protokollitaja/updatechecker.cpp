@@ -76,7 +76,7 @@ void UpdateChecker::readWebVersionInfo()
             *m_log << "#ERROR: Unable to get version info from Webzone!" << Qt::endl;
             emit versionInfoResponse(false, "#ERROR: Unable to find version info! Program needs to be updated manually!");
         }else{
-            checkVersionFromWeb("http://ymeramees.no-ip.org/protokollitaja/inf20150118");  // Fallback address
+            checkVersionFromWeb("http://downloads.protokollitaja.eu/protokollitaja/inf20150118");  // Fallback address
             allAddressesChecked = true;
         }
     } else {
