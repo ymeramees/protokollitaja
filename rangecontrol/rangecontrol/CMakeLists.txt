@@ -27,6 +27,15 @@ target_link_libraries(RangeControl PRIVATE
     Qt::Network
 )
 
+qt_add_translations(${CMAKE_PROJECT_NAME}
+    TS_FILES languages/Eesti.ts languages/English.ts
+    TS_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/languages"
+    QM_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/languages"
+    TS_FILES_OUTPUT_VARIABLE UPDATED_TS_FILES
+    QM_FILES_OUTPUT_VARIABLE GENERATED_QM_FILES
+)
+
+add_dependencies(${CMAKE_PROJECT_NAME} update_translations)
 
 # Resources:
 set(resources_resource_files

@@ -4,23 +4,28 @@
 <context>
     <name>ConnectionServer</name>
     <message>
-        <location filename="../connectionserver.cpp" line="20"/>
+        <location filename="../connectionserver.cpp" line="25"/>
         <source>Data connection %1 disconnected!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../connectionserver.cpp" line="109"/>
-        <location filename="../connectionserver.cpp" line="115"/>
+        <location filename="../connectionserver.cpp" line="136"/>
+        <source>Kadunud InBandi IP küsimus saadetud</source>
+        <translation>Searching for lost InBands...</translation>
+    </message>
+    <message>
+        <location filename="../connectionserver.cpp" line="176"/>
+        <location filename="../connectionserver.cpp" line="182"/>
         <source>Unable to start the server: %1.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../connectionserver.cpp" line="111"/>
+        <location filename="../connectionserver.cpp" line="178"/>
         <source>Data server started at port %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../connectionserver.cpp" line="117"/>
+        <location filename="../connectionserver.cpp" line="184"/>
         <source>InBand server started at port %1</source>
         <translation></translation>
     </message>
@@ -188,8 +193,12 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation>25m Rapid Pistol 30 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="21"/>
         <source>20+20+20l Spordipüstol</source>
+        <translation type="vanished">25m Standard Pistol</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="21"/>
+        <source>20+20+20l Standardpüstol</source>
         <translation>25m Standard Pistol</translation>
     </message>
     <message>
@@ -287,7 +296,7 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
     <name>RangeControl</name>
     <message>
         <location filename="../rangecontrol.cpp" line="189"/>
-        <location filename="../rangecontrol.cpp" line="753"/>
+        <location filename="../rangecontrol.cpp" line="715"/>
         <source>Võistlus käimas!</source>
         <translation>Competition ongoing!</translation>
     </message>
@@ -569,8 +578,8 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
     <message>
         <location filename="../rangecontrol.cpp" line="439"/>
         <location filename="../rangecontrol.cpp" line="459"/>
-        <location filename="../rangecontrol.cpp" line="512"/>
-        <location filename="../rangecontrol.cpp" line="524"/>
+        <location filename="../rangecontrol.cpp" line="508"/>
+        <location filename="../rangecontrol.cpp" line="520"/>
         <source>Viga</source>
         <translation>Error</translation>
     </message>
@@ -581,7 +590,7 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
     </message>
     <message>
         <location filename="../rangecontrol.cpp" line="447"/>
-        <location filename="../rangecontrol.cpp" line="517"/>
+        <location filename="../rangecontrol.cpp" line="513"/>
         <source>Sisesta raja number</source>
         <translation>Enter target number</translation>
     </message>
@@ -591,54 +600,58 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation>Unable to open the file!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="512"/>
+        <location filename="../rangecontrol.cpp" line="508"/>
         <source>Vigane stardinimekirja rida!
 %1</source>
         <translation>Faulty row in start list!
 %1</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="524"/>
+        <location filename="../rangecontrol.cpp" line="520"/>
         <source>Rajal %1 on võistlus käimas, uut laskurit ei imporditud!</source>
         <translation>Target %1 has competition in progress, new competitor was not imported!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="627"/>
         <source>Märgi IP: </source>
-        <translation>Target IP: </translation>
+        <translation type="vanished">Target IP: </translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="745"/>
+        <location filename="../rangecontrol.cpp" line="707"/>
         <source>InBandi IP küsimus saadetud</source>
         <translation>InBand IP request sent</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="754"/>
+        <location filename="../rangecontrol.cpp" line="716"/>
         <source>Rajal %1 on võistlus veel käimas, oled kindel, et tahad seda uuesti alustada?</source>
         <translation>Target %1 has competition in progress, are you sure you want to reset it?</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="789"/>
+        <location filename="../rangecontrol.cpp" line="751"/>
         <source>Viga!</source>
         <translation>Error!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="789"/>
+        <location filename="../rangecontrol.cpp" line="751"/>
         <source>See versioon Range Control&apos;ist ei tea, kuidas valitud harjutust (%1) InBandile saata!</source>
         <translation>This version of Range Control doesn&apos;t know how to send chosen event (%1) to InBand!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="862"/>
+        <location filename="../rangecontrol.cpp" line="802"/>
+        <source>Viga: rada %s ei saa teisendada arvuks!</source>
+        <translation>Error: lane %s cannot be converted to a number!</translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="822"/>
         <source>Laskude arv:</source>
         <translation>Number of Shots:</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="874"/>
+        <location filename="../rangecontrol.cpp" line="834"/>
         <source>Vali harjutus</source>
         <translation>Choose event type</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="874"/>
+        <location filename="../rangecontrol.cpp" line="834"/>
         <source>Harjutus:</source>
         <translation>Event:</translation>
     </message>
@@ -655,7 +668,7 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation type="vanished">Class:</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="862"/>
+        <location filename="../rangecontrol.cpp" line="822"/>
         <source>Sisesta laskude arv</source>
         <translation>Enter number of shots</translation>
     </message>

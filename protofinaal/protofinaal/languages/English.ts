@@ -18,6 +18,11 @@
         <translation type="vanished">0,0</translation>
     </message>
     <message>
+        <location filename="../competitor.cpp" line="27"/>
+        <source></source>
+        <translation></translation>
+    </message>
+    <message>
         <location filename="../competitor.cpp" line="33"/>
         <source>0</source>
         <translation>0</translation>
@@ -614,6 +619,64 @@ Make sure you have write access to the folder.</translation>
 Programm lõi uue, vaikimisi seadistustega.</source>
         <translation>Unable to find spectator screen template!
 A new template was created with default settings.</translation>
+    </message>
+</context>
+<context>
+    <name>TargetTypes</name>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="6"/>
+        <source>Muu</source>
+        <translation>Other</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="7"/>
+        <source>Õhupüss</source>
+        <translation>Air Rifle</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="8"/>
+        <source>Õhupüstol</source>
+        <translation>AIr PIstol</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="9"/>
+        <source>Sportpüss</source>
+        <translation>Smallbore Rifle</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="10"/>
+        <source>Spordipüstol</source>
+        <translation>Precision Pistol</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="11"/>
+        <source>Siluett</source>
+        <translation>Rapid Pistol</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="12"/>
+        <source>300m püss</source>
+        <translation>300m Rifle</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="13"/>
+        <source>50m liikuv märk</source>
+        <translation>50m Running Target</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="14"/>
+        <source>10m liikuv märk</source>
+        <translation>10m Running Target</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="15"/>
+        <source>Muu püss</source>
+        <translation>Other Rifle</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="16"/>
+        <source>Muu püstol</source>
+        <translation>Other Pistol</translation>
     </message>
 </context>
 <context>

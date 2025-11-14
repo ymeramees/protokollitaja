@@ -19,6 +19,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../competitor.cpp" line="27"/>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../competitor.cpp" line="71"/>
         <source>Viga!</source>
         <translation type="unfinished"></translation>
@@ -536,6 +541,64 @@ Kontrollige, kas teil on sinna kausta kirjutamise õigused.</source>
         <location filename="../spectatorwindow.cpp" line="97"/>
         <source>Tulemuste akna template faili ei leitud!
 Programm lõi uue, vaikimisi seadistustega.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TargetTypes</name>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="6"/>
+        <source>Muu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="7"/>
+        <source>Õhupüss</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="8"/>
+        <source>Õhupüstol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="9"/>
+        <source>Sportpüss</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="10"/>
+        <source>Spordipüstol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="11"/>
+        <source>Siluett</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="12"/>
+        <source>300m püss</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="13"/>
+        <source>50m liikuv märk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="14"/>
+        <source>10m liikuv märk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="15"/>
+        <source>Muu püss</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/targettypes.cpp" line="16"/>
+        <source>Muu püstol</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
