@@ -13,7 +13,7 @@ FinalsFormats::FinalsFormats()
 
 QJsonObject FinalsFormats::confById(const QString id)
 {
-    for(QJsonValue eventJson: qAsConst(m_finalsFormats)) {
+    for(QJsonValue eventJson: std::as_const(m_finalsFormats)) {
         if (eventJson.toObject()["id"].toString().compare(id) == 0)
             return eventJson.toObject();
     }
@@ -23,7 +23,7 @@ QJsonObject FinalsFormats::confById(const QString id)
 QStringList FinalsFormats::formatIds()
 {
     QStringList names;
-    for(QJsonValue eventJson: qAsConst(m_finalsFormats)) {
+    for(QJsonValue eventJson: std::as_const(m_finalsFormats)) {
         names << eventJson.toObject()["id"].toString();
     }
     return names;

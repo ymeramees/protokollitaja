@@ -821,7 +821,7 @@ void RangeControl::setNumberOfShots()
     bool wasAccepted = false;
     int newNumber =  QInputDialog::getInt(this, tr("Sisesta laskude arv"), tr("Laskude arv:"), 60, 0, 120, 1, &wasAccepted);
     if (wasAccepted) {
-        for (Lane *lane: qAsConst(m_lanes)) {
+        for (Lane *lane: std::as_const(m_lanes)) {
             if (lane->selected())
                 lane->setShotsNumber(newNumber);
         }
@@ -833,7 +833,7 @@ void RangeControl::setTargetTypes()
     bool wasAccepted = false;
     QString eventName = QInputDialog::getItem(this, tr("Vali harjutus"), tr("Harjutus:"), QualificationEvents::eventNames(), 0, false, &wasAccepted);
     if (wasAccepted) {
-        for (Lane *lane: qAsConst(m_lanes)) {
+        for (Lane *lane: std::as_const(m_lanes)) {
             if (lane->selected())
                 lane->setDiscipline(eventName);
         }

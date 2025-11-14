@@ -86,11 +86,11 @@ Competitor::Competitor(const QJsonObject &json, const bool scoringWithPoints, QW
 
     QJsonArray seriesArray = json["series"].toArray();
 
-    for (const QJsonValue &seriesJson: qAsConst(seriesArray)) {
+    for (const QJsonValue &seriesJson: std::as_const(seriesArray)) {
         QVector<ShotEdit*> *thisSeries = new QVector<ShotEdit*>;
         QJsonObject seriesObj = seriesJson.toObject();
         QJsonArray shotsArray = seriesObj["shots"].toArray();
-        for (const QJsonValue &shotJson: qAsConst(shotsArray)) {
+        for (const QJsonValue &shotJson: std::as_const(shotsArray)) {
             ShotEdit *shotEdit = new ShotEdit(shotJson.toObject());
             createShotEditConnections(shotEdit);
 
@@ -429,7 +429,7 @@ void Competitor::setShot(int shotNo, QString siusRow)
 void Competitor::setupCompetitor(QHBoxLayout *layout, bool active, int id, QString name, QString result, const bool scoringWithPoints)
 {
     m_active.setChecked(active);
-    connect(&m_active, &QCheckBox::stateChanged, this, &Competitor::modified);
+    connect(&m_active, &QCheckBox::checkStateChanged, this, &Competitor::modified);
     layout->addWidget(&m_active);
 
     m_id = id;

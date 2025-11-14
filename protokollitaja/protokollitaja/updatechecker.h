@@ -7,6 +7,7 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QTextStream>
+#include <QJsonValue>
 #include <QJsonDocument>
 
 #include "filedownloader.h"

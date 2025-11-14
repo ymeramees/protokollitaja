@@ -347,7 +347,7 @@ void Protofinaal::loadFile(QString fileName)
         QJsonArray relaysArray = jsonObj["relays"].toArray();
         int noOfRelays = relaysArray.size();
         int relayNo = 1;
-        for (const QJsonValue &relayJson: qAsConst(relaysArray)) {
+        for (const QJsonValue &relayJson: std::as_const(relaysArray)) {
             TeamsTable *m_teamsTable = new TeamsTable();
             m_vBox.addWidget(m_teamsTable);
             if (noOfRelays > 1)
