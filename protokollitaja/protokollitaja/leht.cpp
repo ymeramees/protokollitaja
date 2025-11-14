@@ -278,7 +278,7 @@ void Leht::sorteeri(int t)
         for(int i = 0; i < (laskurid.count()-1) && i < (reasLaskurid.count() - 1); i++){
             reasLaskurid[i]->liida();
             reasLaskurid.at(i+1)->liida();
-            if(reasLaskurid[i]->vaiksem(reasLaskurid.at(i+1), t)){
+            if(reasLaskurid[i]->lessThan(reasLaskurid.at(i+1), t)){
                 Laskur *vana = reasLaskurid[i];
                 reasLaskurid[i] = reasLaskurid.at(i+1);
                 reasLaskurid[i+1] = vana;

@@ -46,12 +46,17 @@
          <widget class="QComboBox" name="jarjestamiseBox">
           <item>
            <property name="text">
-            <string>Sisekümnete arvuga</string>
+            <string>ISSF 2023</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Viimase seeriaga</string>
+            <string>Sisekümned-&gt;seeriad-&gt;täisarvudega lasud-&gt;komadega lasud</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Seeriad-&gt;komakohtadega lasud</string>
            </property>
           </item>
          </widget>

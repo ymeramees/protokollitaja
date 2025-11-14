@@ -18,6 +18,7 @@
 #include <QLabel>
 #include <QList>
 #include <QTimer>
+#include <optional>
 
 #include "qualificationevents.h"
 #include "lisalaskudeaken.h"
@@ -45,7 +46,7 @@ public:
 	int seeriateArv;
     int vSummadeSamm;
     int *jarjestamine;  //Kas sorteerimine käib kümnete arvu järgi või viimase seeria järgi
-    enum {KumneteArvuga = 0, ViimaseSeeriaga = 1};  //Täisarvudega lugemise puhul järjestamise variandid
+    enum {ISSF2023 = 0, InnerTensFullRingLastSeriesShots = 1, DecimalLastSeriesShots = 2};
 	Andmebaas* andmebaas;
     QCheckBox *linnuke;
 	QHBoxLayout *hKast;
@@ -69,7 +70,7 @@ public:
 	QLineEdit *markus;
 	QPushButton *lisaLNupp;
 	QTimer *arvutaja;
-	LisaLaskudeAken *lisaAken;
+    LisaLaskudeAken *lisaAken = nullptr;
     Laskur(
         Andmebaas* andmebaas,
         int seeriateArv,
@@ -99,7 +100,7 @@ public:
 //    bool operator<(const Laskur &l) const;
     QualificationEvents::EventType* getEventType() const;
     QString getSumma();
-    bool vaiksem(Laskur *l, int t) const;
+    bool lessThan(Laskur *l, int t) const;
     void set(const Laskur *l);
     void setSumma(QString);
     QJsonObject toExportJson();
@@ -153,10 +154,12 @@ private:
     QMenu *popup;
     QualificationEvents::EventType *m_eventType;
     QString m_previousSiusRow;
-    LaskudeAken *laskudeAken;
+    LaskudeAken *laskudeAken = nullptr;
     void contextMenuEvent(QContextMenuEvent *event);
     void createLayout();
     int findShotFromPreviousStages(const SiusShotData shotData) const;
+    std::optional<bool> lessThanByInnerTensLastSeriesShots(const Laskur *other) const;
+    std::optional<bool> lessThanByDecimalLastSeriesShots(const Laskur *other) const;
     void setCompetitionStage(int newStage);
     void setupFields();
 };

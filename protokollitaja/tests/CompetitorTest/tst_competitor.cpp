@@ -24,6 +24,9 @@ private slots:
     void test_readSiusShotRepeatedShotDataInSecondStage();
     void test_readSiusShotSecondStageCompetitionShots();
     void test_seriesMissingShots();
+    void test_tieBreakingFullRings();
+    void test_tieBreakingFullRingsEqualShots();
+    void test_tieBreakingDecimals();
 
 };
 
@@ -311,6 +314,124 @@ void CompetitorTest::test_seriesMissingShots()
     }
     competitor.liida();
     QCOMPARE(competitor.seeriad[1]->palette().base().color(), original);
+}
+
+void CompetitorTest::test_tieBreakingFullRings()
+{
+    QualificationEvents::EventType eventType = QualificationEvents::Rifle3x10_50m;
+    bool writeAssistant = false;
+    bool withDecimals = false;
+    int sorting = 0;
+
+    Laskur competitor1(nullptr, 3, 1, 0, &writeAssistant, &withDecimals, 11, &sorting, &eventType, 10, nullptr);
+    Laskur competitor2(nullptr, 3, 1, 0, &writeAssistant, &withDecimals, 12, &sorting, &eventType, 10, nullptr);
+
+    for(int series = 0; series < 3; series++) {
+        for(int shotNo = 0; shotNo < 10; shotNo++) {
+            Lask shot1 = Lask((shotNo + 1) * 10, shotNo, shotNo);
+            competitor1.lasud[series][shotNo]->set(&shot1);
+            Lask shot2 = Lask((10 - shotNo) * 10, shotNo, shotNo);
+            competitor2.lasud[series][shotNo]->set(&shot2);
+        }
+    }
+
+    competitor1.liida();
+    competitor2.liida();
+
+    QCOMPARE(competitor1.getSumma(), "165");
+    QCOMPARE(competitor1.getSumma(), competitor2.getSumma());
+
+    // equal inner tens and series, shots with inner tens are to be checked, starting from back
+    QVERIFY(!competitor1.lessThan(&competitor2, 0));
+    QVERIFY(competitor2.lessThan(&competitor1, 0));
+
+    Lask innerTen = Lask(104, 1, 1, true);
+    competitor1.lasud[2][0]->set(&innerTen);
+    competitor2.lasud[2][9]->set(&innerTen);
+    competitor1.liida();
+    competitor2.liida();
+
+    QCOMPARE(competitor1.getSumma(), "174");
+    QCOMPARE(competitor1.getSumma(), competitor2.getSumma());
+    QVERIFY(competitor1.lessThan(&competitor2, 0));
+    QVERIFY(!competitor2.lessThan(&competitor1, 0));
+}
+
+void CompetitorTest::test_tieBreakingFullRingsEqualShots()
+{
+    QualificationEvents::EventType eventType = QualificationEvents::Rifle3x10_50m;
+    bool writeAssistant = false;
+    bool withDecimals = false;
+    int sorting = 0;
+
+    Laskur competitor1(nullptr, 3, 1, 0, &writeAssistant, &withDecimals, 11, &sorting, &eventType, 10, nullptr);
+    Laskur competitor2(nullptr, 3, 1, 0, &writeAssistant, &withDecimals, 12, &sorting, &eventType, 10, nullptr);
+
+    for(int series = 0; series < 3; series++) {
+        for(int shotNo = 0; shotNo < 10; shotNo++) {
+            Lask shot = Lask((shotNo + 1) * 10, shotNo, shotNo);
+            competitor1.lasud[series][shotNo]->set(&shot);
+            competitor2.lasud[series][shotNo]->set(&shot);
+        }
+    }
+
+    Lask betterTen = Lask(102, 1, 1);
+    competitor2.lasud[1][9]->set(&betterTen);
+
+    competitor1.liida();
+    competitor2.liida();
+
+    QCOMPARE(competitor1.getSumma(), "165");
+    QCOMPARE(competitor1.getSumma(), competitor2.getSumma());
+
+    QVERIFY(competitor1.lessThan(&competitor2, 0));
+    QVERIFY(!competitor2.lessThan(&competitor1, 0));
+}
+
+void CompetitorTest::test_tieBreakingDecimals()
+{
+    QualificationEvents::EventType eventType = QualificationEvents::AirRifle20;
+    bool writeAssistant = false;
+    bool withDecimals = true;
+    int sorting = 0;
+
+    Laskur competitor1(nullptr, 2, 1, 0, &writeAssistant, &withDecimals, 11, &sorting, &eventType, 10, nullptr);
+    Laskur competitor2(nullptr, 2, 1, 0, &writeAssistant, &withDecimals, 12, &sorting, &eventType, 10, nullptr);
+
+    for(int series = 0; series < 2; series++) {
+        for(int shotNo = 0; shotNo < 10; shotNo++) {
+            Lask shot1 = Lask((shotNo + 1) * 10 + shotNo, shotNo, shotNo);
+            competitor1.lasud[series][shotNo]->set(&shot1);
+            Lask shot2 = Lask((10 - shotNo) * 10 + shotNo, shotNo, shotNo);
+            competitor2.lasud[series][shotNo]->set(&shot2);
+        }
+    }
+
+    competitor1.liida();
+    competitor2.liida();
+
+    QCOMPARE(competitor1.getSumma(), "119,0");
+    QCOMPARE(competitor1.getSumma(), competitor2.getSumma());
+
+    // series, shots with decimals are to be checked, starting from back
+    QVERIFY(!competitor1.lessThan(&competitor2, 0));
+    QVERIFY(competitor2.lessThan(&competitor1, 0));
+
+    Lask notAnInnerTen = Lask(100, 1, 1, false);
+    competitor1.lasud[1][0]->set(&notAnInnerTen);
+    Lask innerTen = Lask(109, 1, 1, true);
+    competitor2.lasud[1][9]->set(&innerTen);
+    competitor1.liida();
+    competitor2.liida();
+
+    // Inner tens are not considered
+    QCOMPARE(competitor1.kumned->text(), "0");
+    QCOMPARE(competitor2.kumned->text(), "1");
+
+    QCOMPARE(competitor1.getSumma(), "128,0");
+    QCOMPARE(competitor1.getSumma(), competitor2.getSumma());
+    QVERIFY(!competitor1.lessThan(&competitor2, 0));
+    QVERIFY(competitor2.lessThan(&competitor1, 0));
 }
 
 QTEST_MAIN(CompetitorTest)

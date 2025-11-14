@@ -31,10 +31,10 @@ Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i,
                 connect(seeriad[i], SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
                 QList<Lask*> seeriaLasud;
                 for(int j = 0; j < laskudeArv; j++){
-                    seeriaLasud << new Lask(/*this*/);  //Seeria lasud
+                    seeriaLasud << new Lask();
                 }
-                seeriaLasud << new Lask(/*this*/);  //Lisaks üks lask karistuse jaoks
-                lasud << seeriaLasud/*.toVector().toList()*/;   //Seeria lasud laskuri laskude hulka
+                seeriaLasud << new Lask();  // additional shot for adding possible penalty
+                lasud << seeriaLasud;
         }
         if(vSummadeSamm != 0){
                 for(int i = 0; i < seeriateArv / vSummadeSamm; i++){
@@ -738,7 +738,7 @@ void Laskur::naitaLaskudeAkent()
 //#ifdef QT_DEBUG
 //    qDebug() << "naitaLaskudeAkent()";
 //#endif
-    if(!laskudeAken){
+    if(laskudeAken == nullptr){
         laskudeAken = new LaskudeAken(kumnendikega, seeriateArv, laskudeArv, this);
     }
 
@@ -817,7 +817,7 @@ void Laskur::naitaSifrit()
                 return false;
 }*/
 
-bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, kui teine
+bool Laskur::lessThan(Laskur *l, int t) const    //Kas see laskur on väiksem, kui teine
 {
     if(veryVerbose)
         QTextStream(stdout) << "Laskur::vaiksem(): t = " << t << ", " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
@@ -934,9 +934,7 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
             }
         }
     }
-    default: {   //Kui ei ole eritingimusega sorteerimist, vaadatakse kõigepealt finaali seeriat
-//            liida();
-//            l->liida();
+    default: {   // If it is not a special sorting, then sort by results, starting from finals:
         if(veryVerbose)
             QTextStream(stdout) << "Laskur::vaiksem(): general - " << this->perekNimi->text() << ", " << l->perekNimi->text() << Qt::endl;
         if(!this->finaal->text().isEmpty() && !l->finaal->text().isEmpty()){
@@ -960,16 +958,14 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
                     return true;
                 else return false;
             }else{  //Kui finaaliseeriad on võrdsed, peavad olema tehtud lisalasud
-#ifdef QT_DEBUG
-                qDebug() << "Laskur::vaiksem(), finals equal, this->lisaLasud.count() = " << this->lisaLasud.count() << ", l->lisaLasud.count() = " << l->lisaLasud.count();
-#endif
+                if(veryVerbose)
+                    QTextStream(stdout) << "Laskur::vaiksem(), finals equal, this->lisaLasud.count() = " << this->lisaLasud.count() << ", l->lisaLasud.count() = " << l->lisaLasud.count();
                 if(this->lisaLasud.count() == 0 && l->lisaLasud.count() != 0)   //Juhul, kui finaali seeriad on võrdsed, aga millegipärast lisalaske ei ole
                     return true;
                 if(l->lisaLasud.count() == 0)
                     return false;
-#ifdef QT_DEBUG
-                qDebug() << "Laskur::vaiksem(), looking at additional shots";
-#endif
+                if(veryVerbose)
+                    QTextStream(stdout) << "Laskur::vaiksem(), looking at additional shots";
                 for(int k = 0; k < this->lisaLasud.count(); k++){
                     if(this->lisaLasud[k] != l->lisaLasud[k]){
                         if(this->lisaLasud[k] < l->lisaLasud[k])
@@ -978,56 +974,48 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
                     }
                 }
             }
-            //Kui ühel laskuril on finaali seeria ja teisel ei ole, on ees see, kellel on seeria, kuna ta oli finaalis
-        }else if(!this->finaal->text().isEmpty() && l->finaal->text().isEmpty()){
+        // If one of the competitors has a finals result and the other doesn't then they are first, becase they were in the finals
+        } else if(!this->finaal->text().isEmpty() && l->finaal->text().isEmpty()){
             return false;
-        }else if(this->finaal->text().isEmpty() && !l->finaal->text().isEmpty()){
+        } else if(this->finaal->text().isEmpty() && !l->finaal->text().isEmpty()){
             return true;
         }
 
-        if(this->keskmLask != l->keskmLask){    //Järgmiseks vaadatakse keskmist lasku
+        if(this->keskmLask != l->keskmLask){
             if(this->keskmLask < l->keskmLask)
                 return true;
             else return false;
         }
-        if(!*kumnendikega && *jarjestamine == KumneteArvuga){ //Kui loetakse täisarvudega, siis vaadatakse kõigepealt sisekümneid
-            if(this->kumned->text() != l->kumned->text()){  //Kui keskmine lask on võrdne ja loetakse täisarvudega, vaadatakse
-                if(this->kumned->text().toInt() < l->kumned->text().toInt())                        //sisekümnete arvu
-                    return true;
-                else return false;
-            }
-        }
-        //Kui ka sisekümned ja summad on võrdsed, vaadatakse seeriaid alustades viimasest ja liikudes ettepoole
-//                if(this->summa->text().toInt() == l->summa->text().toInt()){
-        for(int i = 0; i < seeriateArv; i++){
-            if(this->seeriad[seeriateArv-(i+1)]->text().isEmpty() && !l->seeriad[l->seeriateArv-(i+1)]->text().isEmpty())
-                return true;
-            else if(!this->seeriad[seeriateArv-(i+1)]->text().isEmpty() && l->seeriad[l->seeriateArv-(i+1)]->text().isEmpty())
-                return false;
-            if(!this->seeriad[seeriateArv-(i+1)]->text().isEmpty() && !l->seeriad[l->seeriateArv-(i+1)]->text().isEmpty() && this->seeriad[seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt() != l->seeriad[l->seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt()){
-                if(this->seeriad[seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt() < l->seeriad[l->seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt())
-                    return true;
-                else if(this->seeriad[seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt() > l->seeriad[l->seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt())
-                    return false;
-            }
-        }
 
-        if(*kumnendikega || *jarjestamine == ViimaseSeeriaga){  //Kui on komakohtadega seeriad võrdsed või täisarvudega seeriate puhul on valitud viimase seeria järgi reastamine
-            if(this->kumned->text() != l->kumned->text()){  //Kui loetakse komakohtadega, vaadatakse kõigepealt seeriaid ja siis alles sisekümnete arvu
-                if(this->kumned->text().toInt() < l->kumned->text().toInt())
-                    return true;
-                else return false;
+        switch(*jarjestamine) {
+        case InnerTensFullRingLastSeriesShots :
+            lessThanByInnerTensLastSeriesShots(l);
+            break;
+
+        case DecimalLastSeriesShots :
+            lessThanByDecimalLastSeriesShots(l);
+            break;
+
+        case ISSF2023 :
+        default :
+            std::optional<bool> result = std::nullopt;
+            if (*kumnendikega) {
+                result = lessThanByDecimalLastSeriesShots(l);
+            } else {
+                result = lessThanByInnerTensLastSeriesShots(l);
             }
+            if (result.has_value())
+                return result.value();
         }
 
         int tulemus = vaiksemNimega(l);
 
-        switch(tulemus){    //Kui on 0, siis läheb edasi sifrite võrdlemise juurde
+        switch(tulemus){    // If it is still 0, then continues with comparing paper target ciphers
         case -1 : return true;
         case 1 : return false;
         }
 
-        //Kui mõlemad perekonnanimed on tühjad, reastatakse sifri järgi
+        // if name fields are empty, then compare by cipher fields
         if(this->perekNimi->text().isEmpty() && l->perekNimi->text().isEmpty()){
             if(this->sifriAlgus->text().isEmpty() && !l->sifriAlgus->text().isEmpty())
                 return true;
@@ -1038,7 +1026,7 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
                     return false;
                 else return true;
             }
-            //Kui kummalgi sifrit ei ole, reastatakse rajanr'i järgi
+            // if none of them have paper target ciphers, then comparison is done using target numbers
             else if(this->sifriAlgus->text().isEmpty() && l->sifriAlgus->text().isEmpty() && (!this->rajaNr->text().isEmpty() || !l->rajaNr->text().isEmpty())){
                 if(this->rajaNr->text().toInt() < l->rajaNr->text().toInt())
                     return true;
@@ -1046,59 +1034,110 @@ bool Laskur::vaiksem(Laskur *l, int t) const    //Kas see laskur on väiksem, ku
                     return false;
             }
         }
-//                }
 
-        //Kui kõik eelnev ei andnud tulemust, siis vaadatakse summat (peaks olema väga harv juhus)
-        if(this->summa->text().toInt() < l->summa->text().toInt())
-            return true;
-        else if(this->summa->text().toInt() > l->summa->text().toInt())
-            return false;
-
-                //Kõige lõpus tagastatakse "false" et vältida lõputut sorteerimist võrdsete laskurite puhul
+        // in the end, return false to avoid endless sorting of equal (empty) competitors
         return false;
     }
     }
     return false;
 }
 
+std::optional<bool> Laskur::lessThanByInnerTensLastSeriesShots(const Laskur *other) const
+{
+    if(this->kumned->text() != other->kumned->text()){
+        if(this->kumned->text().toInt() < other->kumned->text().toInt())
+            return  std::optional<bool>{true};
+        else return  std::optional<bool>{false};
+    }
+
+    // If inner tens are equal, compare series, starting from the last
+    for(int i = 0; i < seeriateArv; i++){
+        if(this->seeriad[seeriateArv-(i+1)]->text().isEmpty() && !other->seeriad[other->seeriateArv-(i+1)]->text().isEmpty())
+            return  std::optional<bool>{true};
+        else if(!this->seeriad[seeriateArv-(i+1)]->text().isEmpty() && other->seeriad[other->seeriateArv-(i+1)]->text().isEmpty())
+            return  std::optional<bool>{false};
+        if(!this->seeriad[seeriateArv-(i+1)]->text().isEmpty() && !other->seeriad[other->seeriateArv-(i+1)]->text().isEmpty() && this->seeriad[seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt() != other->seeriad[other->seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt()){
+            if(this->seeriad[seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt() < other->seeriad[other->seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt())
+                return  std::optional<bool>{true};
+            else if(this->seeriad[seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt() > other->seeriad[other->seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt())
+                return  std::optional<bool>{false};
+        }
+    }
+
+    // If series are equal, compare full-ring shots, including inner tens, starting from the last
+    if (!this->lasud.isEmpty() && !other->lasud.isEmpty()) {
+        for (int seriesIndex = std::min(this->lasud.size(), other->lasud.size()) - 1; seriesIndex >= 0; seriesIndex--) {
+            for (int shotIndex = laskudeArv - 1; shotIndex >= 0; shotIndex--) {
+                if (!this->lasud[seriesIndex][shotIndex]->isEmpty() && !other->lasud[seriesIndex][shotIndex]->isEmpty()) {
+                    if (this->lasud[seriesIndex][shotIndex]->getILask() > other->lasud[seriesIndex][shotIndex]->getILask()) {
+                        return std::optional<bool>{false};
+                    } else if (this->lasud[seriesIndex][shotIndex]->getILask() < other->lasud[seriesIndex][shotIndex]->getILask()) {
+                        return std::optional<bool>{true};
+                    } else if (this->lasud[seriesIndex][shotIndex]->isInnerTen() && !other->lasud[seriesIndex][shotIndex]->isInnerTen()) {
+                        return std::optional<bool>{false};
+                    } else if (!this->lasud[seriesIndex][shotIndex]->isInnerTen() && other->lasud[seriesIndex][shotIndex]->isInnerTen()) {
+                        return std::optional<bool>{true};
+                    }
+                } else return std::nullopt;
+            }
+        }
+    }
+
+    // If full-ring shots are equal, then compare decimal shots
+    if (!this->lasud.isEmpty() && !other->lasud.isEmpty()) {
+        for (int seriesIndex = std::min(this->lasud.size(), other->lasud.size()) - 1; seriesIndex >= 0; seriesIndex--) {
+            for (int shotIndex = laskudeArv - 1; shotIndex >= 0; shotIndex--) {
+                if (!this->lasud[seriesIndex][shotIndex]->isEmpty() && !other->lasud[seriesIndex][shotIndex]->isEmpty()) {
+                    if (this->lasud[seriesIndex][shotIndex]->get10Lask() > other->lasud[seriesIndex][shotIndex]->get10Lask()) {
+                        return std::optional<bool>{false};
+                    } else if (this->lasud[seriesIndex][shotIndex]->get10Lask() < other->lasud[seriesIndex][shotIndex]->get10Lask()) {
+                        return std::optional<bool>{true};
+                    }
+                } else return std::nullopt;
+            }
+        }
+    }
+    
+    return std::nullopt;
+}
+
+std::optional<bool> Laskur::lessThanByDecimalLastSeriesShots(const Laskur *other) const
+{
+    for(int i = 0; i < seeriateArv; i++){
+        if(this->seeriad[seeriateArv-(i+1)]->text().isEmpty() && !other->seeriad[other->seeriateArv-(i+1)]->text().isEmpty())
+            return  std::optional<bool>{true};
+        else if(!this->seeriad[seeriateArv-(i+1)]->text().isEmpty() && other->seeriad[other->seeriateArv-(i+1)]->text().isEmpty())
+            return  std::optional<bool>{false};
+        if(!this->seeriad[seeriateArv-(i+1)]->text().isEmpty() && !other->seeriad[other->seeriateArv-(i+1)]->text().isEmpty() && this->seeriad[seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt() != other->seeriad[other->seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt()){
+            if(this->seeriad[seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt() < other->seeriad[other->seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt())
+                return  std::optional<bool>{true};
+            else if(this->seeriad[seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt() > other->seeriad[other->seeriateArv-(i+1)]->text().replace(',',"").replace('.',"").toInt())
+                return  std::optional<bool>{false};
+        }
+    }
+
+    // If series are equal, then compare decimal shots
+    if (!this->lasud.isEmpty() && !other->lasud.isEmpty()) {
+        for (int seriesIndex = std::min(this->lasud.size(), other->lasud.size()) - 1; seriesIndex >= 0; seriesIndex--) {
+            for (int shotIndex = laskudeArv - 1; shotIndex >= 0; shotIndex--) {
+                if (!this->lasud[seriesIndex][shotIndex]->isEmpty() && !other->lasud[seriesIndex][shotIndex]->isEmpty()) {
+                    if (this->lasud[seriesIndex][shotIndex]->get10Lask() > other->lasud[seriesIndex][shotIndex]->get10Lask()) {
+                        return std::optional<bool>{false};
+                    } else if (this->lasud[seriesIndex][shotIndex]->get10Lask() < other->lasud[seriesIndex][shotIndex]->get10Lask()) {
+                        return std::optional<bool>{true};
+                    }
+                } else return std::nullopt;
+            }
+        }
+    }
+
+    return std::nullopt;
+}
+
 void Laskur::nextCompetitionStage()
 {
     m_competitionStage++;
 }
-
-//bool Laskur::parseSiusCompetitionShot(QString row, QStringList rowParts, int shotFieldNoInSiusRow)
-//{
-//    if(rowParts.count() < 4){
-//        return false;
-////                logiValja << "\n#viga!: rowParts lõhki! rowParts.count() < 4\n";
-//    }else if(rowParts.count() <= shotFieldNoInSiusRow){
-//        return false;
-////                logiValja << "\n#viga!: rowParts lõhki! rowParts.count() < lasuNrSiusis = " << lasuNrSiusis << "\n";
-//    } else {
-
-////            logiValja << "#" << rowParts[3] << ": " << competitionStage() * vSummadeSamm + rowParts[lasuNrSiusis].toInt() << ". Lask\n";
-////            logiValja << "#SHOT: previousSiusRow(): " << previousSiusRow();
-////                Lask newShot(row);
-
-//        int seriesIndex = (competitionStage() * vSummadeSamm * 10 + rowParts[shotFieldNoInSiusRow].toInt() - 1) / 10;
-//        int shotIndex = (rowParts[shotFieldNoInSiusRow].toInt() - 1) % 10;
-
-//        //If competitor's last shot has data in it, then probably these results have already been read and it is better not to read them again, to avoid mistakes
-//        if(seeriateArv > seriesIndex && lasud[seeriateArv - 1][laskudeArv - 1]->getILask() < 0){
-//            //Check if series number and number of shots in each series is big enough
-//            if(lasud.count() > seriesIndex && lasud[0].count() > shotIndex){
-//                lasud[seriesIndex][shotIndex]->setSiusShot(row);
-//                liida();
-//                teataMuudatusest();
-//                return true;
-
-////                    logiValja << "#" << eesNimi->text() << " " << perekNimi->text() << " lask 1 = " << lasud[seriesIndex][(rowParts[lasuNrSiusis].toInt() - 1) % 10]->getSLask() << "\n";
-//            }// else
-////                    logiValja << "\n#viga!: laskur lõhki! seriesIndex = " << seriesIndex << ", (rowParts[lasuNrSiusis].toInt() - 1) % 10 = " << (rowParts[lasuNrSiusis].toInt() - 1) % 10 << "\n";
-//        }
-//    }
-//    return false;   // If flow reaches here, then there is some error in row
-//}
 
 QString Laskur::previousSiusRow() const
 {
@@ -1780,11 +1819,11 @@ void Laskur::vajutaTab()
 
 Laskur::~Laskur()
 {
-    if(!laskudeAken){
+    if(laskudeAken != nullptr){
         laskudeAken->deleteLater();
         laskudeAken = nullptr;
     }
-    if(!lisaAken){
+    if(lisaAken != nullptr){
         lisaAken->deleteLater();
         lisaAken = nullptr;
     }
