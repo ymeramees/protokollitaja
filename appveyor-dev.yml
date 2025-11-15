@@ -33,11 +33,19 @@ install:
 
       ls C:\Qt
 
-      Get-ChildItem -Recurse C:\Qt\6.9
+      cd C:\Qt\6.9
 
-      Get-ChildItem -Recurse C:\Qt\Tools
+      dir /A-D /S /B
 
-      Get-ChildItem -Recurse C:\Qt\mingw_64
+      cd C:\Qt\Tools
+
+      dir /A-D /S /B
+
+      cd C:\Qt\mingw_64
+
+      dir /A-D /S /B
+
+      cd %APPVEYOR_BUILD_FOLDER%
 
       ls %QTDIR%
 
