@@ -2688,7 +2688,7 @@ void Protokollitaja::naitaTul()
             for(int j = 0; j < tulemus->getRidadeArv(); j++)
                 for(int k = 0; k < 16; k++)
                     tulemus->read[j][k] = " ";
-            if(seeLeht->seeriateArv <= 6 && seeLeht->vSummadeSamm == 0){ //Ilma vahesummadeta harjutused
+            if(seeLeht->seeriateArv <= 6 && seeLeht->vSummadeSamm < 2){ // Diciplines with 1 stage and 1 series stages
                 if(tulemusegaArv > 1 && (reaNr - areaNr) > 1){  //Kui on mitu laskurit lehel
                     if(verbose)
                         QTextStream(stdout) << "Protokollitaja::naitaTul(): tulemusegaArv > 1 && (reaNr - areaNr) > 1" << Qt::endl;
