@@ -33,19 +33,13 @@ install:
 
       ls C:\Qt
 
-      cd C:\Qt\6.9
+      ls C:\Qt\6.9
 
-      dir /A-D /S /B
+      ls C:\Qt\mingw_64\Tools
 
-      cd C:\Qt\Tools
+      ls C:\Qt\mingw_64\Tools\mingw1310_64\bin
 
-      dir /A-D /S /B
-
-      cd C:\Qt\mingw_64
-
-      dir /A-D /S /B
-
-      cd %APPVEYOR_BUILD_FOLDER%
+      ls C:\Qt\6.9
 
       ls %QTDIR%
 
@@ -55,7 +49,7 @@ install:
 
       %QTDIR%\bin\qtenv2.bat
 
-      set PATH=%PATH%;C:\Qt\mingw_64\bin
+      set PATH=%PATH%;C:\Qt\mingw_64\Tools\mingw1310_64\bin
 
       qmake -v
 
@@ -70,7 +64,7 @@ build_script:
 
       dir
 
-      cmake -DCMAKE_PREFIX_PATH:PATH=C:\Qt\6.9\mingw_64 -DCMAKE_C_COMPILER=C:\Qt\Tools\mingw1120_64\bin\gcc.exe -DCMAKE_CXX_COMPILER=C:\Qt\Tools\mingw1120_64\bin\g++.exe -G "MinGW Makefiles" -S %APPVEYOR_BUILD_FOLDER% -B %APPVEYOR_BUILD_FOLDER%\build
+      cmake -DCMAKE_PREFIX_PATH:PATH=C:\Qt\6.9\mingw_64 -DCMAKE_C_COMPILER=C:\Qt\mingw_64\Tools\mingw1310_64\bin\gcc.exe -DCMAKE_CXX_COMPILER=C:\Qt\mingw_64\Tools\mingw1310_64\bin\g++.exe -G "MinGW Makefiles" -S %APPVEYOR_BUILD_FOLDER% -B %APPVEYOR_BUILD_FOLDER%\build
 
       cmake --build %APPVEYOR_BUILD_FOLDER%\build
 
@@ -100,7 +94,7 @@ test_script:
 
       Copy-Item "$env:APPVEYOR_BUILD_FOLDER\protokollitaja\build\release\Data\Print_template.html" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\Data"
 
-      Copy-Item "C:\Qt\Tools\mingw1120_64\bin\addr2line.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\tools"
+      Copy-Item "C:\Qt\mingw_64\Tools\mingw1310_64\bin\addr2line.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\tools"
 
       Copy-Item "$env:APPVEYOR_BUILD_FOLDER\Release-Notes.md" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
 
