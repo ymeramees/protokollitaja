@@ -26,6 +26,7 @@ Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i,
                 seeriad[i]->setMinimumHeight(28);
                 seeriad[i]->setMaximumWidth(40);
                 seeriad[i]->setToolTip(tr("Seeriad"));
+                seeriad[i]->setPlaceholderText(QString("S%1").arg(i + 1));
                 connect(seeriad[i], SIGNAL(editingFinished()), this, SLOT(liida()));
                 connect(seeriad[i], SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
                 connect(seeriad[i], SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
@@ -103,11 +104,12 @@ Laskur::Laskur(
     laskudeArv = numberOfShots;
 
     for (int i = 0; i < seriesArray.size(); i++) {
-                QJsonObject seriesJson = seriesArray[i].toObject();
+        QJsonObject seriesJson = seriesArray[i].toObject();
         seeriad << new QLineEdit(seriesJson["seriesSum"].toString(), this);
         seeriad[i]->setMinimumHeight(28);
         seeriad[i]->setMaximumWidth(40);
         seeriad[i]->setToolTip(tr("Seeriad"));
+        seeriad[i]->setPlaceholderText(QString("S%1").arg(i + 1));
         connect(seeriad[i], SIGNAL(editingFinished()), this, SLOT(liida()));
         connect(seeriad[i], SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
         connect(seeriad[i], SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
@@ -1372,12 +1374,14 @@ void Laskur::setupFields()
     rajaNr->setMinimumHeight(28);
     rajaNr->setMaximumWidth(20);
     rajaNr->setToolTip(tr("Raja number"));
+    rajaNr->setPlaceholderText(tr(""));
     connect(rajaNr, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(rajaNr, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     sifriAlgus = new QLineEdit(this);
     sifriAlgus->setMinimumHeight(28);
     sifriAlgus->setMaximumWidth(50);
     sifriAlgus->setToolTip(tr("Siffer"));
+    sifriAlgus->setPlaceholderText(tr("Algus"));
     connect(sifriAlgus, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(sifriAlgus, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     sidekriips = new QLabel(this);
@@ -1386,6 +1390,7 @@ void Laskur::setupFields()
     sifriLopp->setMinimumHeight(28);
     sifriLopp->setMaximumWidth(50);
     sifriLopp->setToolTip(tr("Siffer"));
+    sifriLopp->setPlaceholderText(tr("Lõpp"));
     connect(sifriLopp, SIGNAL(returnPressed()), this, SLOT(enterVajutatud()));
     connect(sifriLopp, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     sifriNupp = new QPushButton(this);
@@ -1396,12 +1401,14 @@ void Laskur::setupFields()
     eesNimi = new QLineEdit(this);
     eesNimi->setMinimumHeight(28);
     eesNimi->setToolTip(tr("Eesnimi"));
+    eesNimi->setPlaceholderText(tr("Eesnimi"));
     connect(eesNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus(QString)));
     connect(eesNimi, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(eesNimi, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     perekNimi = new QLineEdit(this);
     perekNimi->setMinimumHeight(28);
     perekNimi->setToolTip(tr("Perekonnanimi"));
+    perekNimi->setPlaceholderText(tr("Perekonnanimi"));
     connect(perekNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus2(QString)));
     connect(perekNimi, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(perekNimi, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
@@ -1409,12 +1416,14 @@ void Laskur::setupFields()
     sunniAasta->setMinimumHeight(28);
     sunniAasta->setMaximumWidth(45);
     sunniAasta->setToolTip(tr("Sünniaasta"));
+    sunniAasta->setPlaceholderText(tr("Sünniaasta"));
     connect(sunniAasta, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(sunniAasta, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     klubi = new QLineEdit(this);
     klubi->setMinimumHeight(28);
     klubi->setMaxLength(12);
     klubi->setToolTip(tr("Klubi"));
+    klubi->setPlaceholderText(tr("Klubi"));
     connect(klubi, SIGNAL(textEdited(QString)), this, SLOT(muutus4(QString)));
     connect(klubi, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(klubi, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));

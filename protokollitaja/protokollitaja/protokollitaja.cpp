@@ -2929,12 +2929,109 @@ void Protokollitaja::naitaTulAken()
 
 void Protokollitaja::naitaWAbi()
 {
-        QPixmap *pildike = new QPixmap(":/images/Abi.bmp");
-        QLabel *pilt = new QLabel();
-        pilt->setPixmap(*pildike);
-        pilt->setGeometry(pildike->rect());
-        //pilt->setWindowModality(Qt::ApplicationModal);
-        pilt->show();
+    QTextBrowser *viewer = new QTextBrowser;
+    viewer->setOpenLinks(false);
+    connect(viewer, &QTextBrowser::anchorClicked, this, &QDesktopServices::openUrl);
+    viewer->setHtml(R"(
+        <h1 id="quick-start-with-inband-targets">Quick Start with InBand Targets</h1>
+        <p><a href='https://docs.google.com/document/d/1spfZdMfFw_1QIqTnFJbBZozkXJkqsD1QN0Jzo6uwEnU'>Protokollitaja manual</a></p>
+        <ol>
+        <li><h2 id="set-up-inband-scoring-and-target-computers">Set up InBand Scoring and target computers</h2>
+        </li>
+        <li><h2 id="in-range-control-">In Range Control:</h2>
+        <ol>
+        <li><p>click on “Command->Find InBands”</p>
+        </li>
+        <li><p>check that all lane computers have reported to Range Control (corresponding rows have been added)</p>
+        </li>
+        </ol>
+        </li>
+        <li><h2 id="in-protokollitaja-">In Protokollitaja:</h2>
+        <ol>
+        <li><p>create a new competition</p>
+        </li>
+        <li><p>create an event (“Tools->New Tab” or from toolbar)</p>
+        </li>
+        <li><p>create competitors and add target (firing point) numbers</p>
+        </li>
+        <li><p>send the competitors that are going to begin the competition, to Range Control</p>
+        <ol>
+        <li>connect to Range Control (click on “Tools->SiusData/Range Control” from the menu or press corresponding button on the toolbar</li>
+        <li>mark the competitors that should be sent by ticking the boxes in front of each row  </li>
+        <li>send them to Range Control (“Tools->Send selected to Range Control)</li>
+        </ol>
+        </li>
+        <li><p>don’t forget to save the file from time-to-time (it is not done automatically. There is an autosave functionality, but that saves to another file. This file can be used, if the main file has not been saved for longer period and something happens to Protokollitaja)</p>
+        </li>
+        </ol>
+        </li>
+        <li><h2 id="in-range-control-">In Range Control:</h2>
+        <ol>
+        <li><p>check that all competitors are on correct lanes and event type, number of shots etc. is correct</p>
+        </li>
+        <li><p>select all competitors that you want to send to lanes and pick “Commands->Send Names (init)” from the menu or just click on “Init” button on each row without selecting the row beforehand</p>
+        </li>
+        <li><p>check that all lanes report with status “ip_match_wait_sighters”</p>
+        </li>
+        <li><p>when the time is right, make sure all needed lanes are still selected and pick “Commands->Sighting Start” from the menu</p>
+        </li>
+        <li><p>when sighters are over, pick “Commands->End Sighting” from the menu and after that “Commands->Competition Start” to start the competition and corresponding timer in InBand Scoring</p>
+        </li>
+        <li><p>when someone shoots, check that the shot number and value is shown on corresponding row between number of shots box and Init button</p>
+        </li>
+        </ol>
+        </li>
+        <li><h2 id="in-protokollitaja-">In Protokollitaja</h2>
+        <ol>
+        <li><p>check that results are arriving from Range Control. During sighters it can be verified by checking the lower left corner of Protokollitaja window where should be text starting with “Last row, …”</p>
+        </li>
+        <li><p>after the competition, check that there are no missing shots (no yellow or red series boxes)</p>
+        </li>
+        <li><p><strong>save the file!</strong></p>
+        </li>
+        <li><p>if there are some shots missing (shown by yellow or red background in series boxes), then in Range Control select only that lane and then pick “Commands->Ask All Shots” from the menu.</p>
+        </li>
+        </ol>
+        </li>
+        <li><h2 id="in-range-control-">In Range Control</h2>
+        <ol>
+        <li><p>if all results are in Protokollitaja then, with correct lanes selected, pick “Commands->Reset” from the menu to clear the lanes for the next relay</p>
+        </li>
+        <li><p>repeat the process of sending competitors from Protokollitaja and sending them to target computers etc. for the next relay</p>
+        </li>
+        </ol>
+        </li>
+        </ol>
+        <h1 id="quick-start-with-sius-targets-and-siusdata">Quick Start with Sius Targets and SiusData</h1>
+        <ol>
+        <li><h2 id="in-protokollitaja-">In Protokollitaja</h2>
+        <ol>
+        <li><p>follow the steps in previous guide to create a new competition with an event and competitors</p>
+        </li>
+        <li><p>select needed competitors and pick “Results->Export Sius startList…”</p>
+        </li>
+        <li><p>connect to SiusData (“Tools->SiusData/Range Control” from menu or by clicking on “SiusData/Range Control” button on the toolbar)</p>
+        </li>
+        </ol>
+        </li>
+        <li><h2 id="in-siusdata-">In SiusData</h2>
+        <ol>
+        <li>import the start list and use it to start a competition</li>
+        </ol>
+        </li>
+        <li><h2 id="in-protokollitaja-">In Protokollitaja:</h2>
+        <ol>
+        <li><p>when competition is ongoing, check that results are arriving, either from competitor’s results or from lower left corner by seeing a message starting with “Last row, …”</p>
+        </li>
+        <li><p>if after the match some shots are missing, then do “Reconnect” from “SiusData/Range Control” connections window (This will trigger re-sending of all the results that are available in SiusData. Therefore it is recommended to close SiusData after each relay or at least after all relays of one event)</p>
+        </li>
+        </ol>
+        </li>
+        </ol>
+    )");
+    viewer->setWindowTitle("Quick Start Guide");
+    viewer->resize(1000, 800);
+    viewer->show();
 }
 
 void Protokollitaja::peataProgress()

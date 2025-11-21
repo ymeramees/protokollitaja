@@ -77,6 +77,8 @@ void Voistkond::setupFields()
     nimi = new QLineEdit(this);
     nimi->setMinimumHeight(28);
     nimi->setMaximumWidth(100 + this->width() / 5);
+    nimi->setToolTip(tr("Võistkonna nimi"));
+    nimi->setPlaceholderText(tr("Võistkonna nimi"));
     hKast->addWidget(nimi);
     muudaNupp = new QPushButton(this);
     muudaNupp->setText(tr("Liikmed"));
