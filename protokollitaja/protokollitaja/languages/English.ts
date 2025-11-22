@@ -577,6 +577,11 @@ It could be a newer version&apos;s file.
         <translation></translation>
     </message>
     <message>
+        <location filename="../laskudeaken.cpp" line="52"/>
+        <source>1. seeria</source>
+        <translation>1. series</translation>
+    </message>
+    <message>
         <location filename="../laskudeaken.cpp" line="80"/>
         <source>Viga</source>
         <translation>Error</translation>
@@ -595,14 +600,12 @@ It could be a newer version&apos;s file.
 <context>
     <name>Laskur</name>
     <message>
-        <location filename="../laskur.cpp" line="28"/>
-        <location filename="../laskur.cpp" line="111"/>
+        <location filename="../laskur.cpp" line="1436"/>
         <source>Seeriad</source>
         <translation>Series</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="46"/>
-        <location filename="../laskur.cpp" line="130"/>
+        <location filename="../laskur.cpp" line="1454"/>
         <source>Vahesumma</source>
         <translation>Subtotal</translation>
     </message>
@@ -616,118 +619,118 @@ It could be a newer version&apos;s file.
 </translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1461"/>
+        <location filename="../laskur.cpp" line="1412"/>
         <source>Märkused</source>
         <translation>Remarks</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1376"/>
+        <location filename="../laskur.cpp" line="1327"/>
         <source>Raja number</source>
         <translation>Firing Point</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="172"/>
+        <location filename="../laskur.cpp" line="123"/>
         <source>Viga!</source>
         <translation>Error!</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="172"/>
+        <location filename="../laskur.cpp" line="123"/>
         <source>Ei ole nii palju vahesummasid!</source>
         <translation>There are not so many subtotals!</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="254"/>
+        <location filename="../laskur.cpp" line="205"/>
         <source>Teade</source>
         <translation>Info</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="732"/>
+        <location filename="../laskur.cpp" line="683"/>
         <source>Sisestage uus laskuri ID</source>
         <translation>Enter new shooter ID</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1377"/>
+        <location filename="../laskur.cpp" line="1328"/>
         <source></source>
         <translation>FP</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1383"/>
-        <location filename="../laskur.cpp" line="1392"/>
+        <location filename="../laskur.cpp" line="1334"/>
+        <location filename="../laskur.cpp" line="1343"/>
         <source>Siffer</source>
         <translation>Paper target numbers range</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1384"/>
+        <location filename="../laskur.cpp" line="1335"/>
         <source>Algus</source>
         <translation>Start</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1393"/>
+        <location filename="../laskur.cpp" line="1344"/>
         <source>Lõpp</source>
         <translation>End</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1403"/>
-        <location filename="../laskur.cpp" line="1404"/>
+        <location filename="../laskur.cpp" line="1354"/>
+        <location filename="../laskur.cpp" line="1355"/>
         <source>Eesnimi</source>
         <translation>First Name</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1410"/>
-        <location filename="../laskur.cpp" line="1411"/>
+        <location filename="../laskur.cpp" line="1361"/>
+        <location filename="../laskur.cpp" line="1362"/>
         <source>Perekonnanimi</source>
         <translation>Last Name</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1418"/>
-        <location filename="../laskur.cpp" line="1419"/>
+        <location filename="../laskur.cpp" line="1369"/>
+        <location filename="../laskur.cpp" line="1370"/>
         <source>Sünniaasta</source>
         <translation>Year of Birth</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1425"/>
-        <location filename="../laskur.cpp" line="1426"/>
+        <location filename="../laskur.cpp" line="1376"/>
+        <location filename="../laskur.cpp" line="1377"/>
         <source>Klubi</source>
         <translation>Club</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1434"/>
-        <location filename="../laskur.cpp" line="1449"/>
+        <location filename="../laskur.cpp" line="1385"/>
+        <location filename="../laskur.cpp" line="1400"/>
         <source>Summa</source>
         <translation>Total</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1443"/>
+        <location filename="../laskur.cpp" line="1394"/>
         <source>Finaali seeria</source>
         <translation>Finals</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1454"/>
+        <location filename="../laskur.cpp" line="1405"/>
         <source>Sisekümnete arv</source>
         <translation>Number of Inner Tens</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1467"/>
+        <location filename="../laskur.cpp" line="1418"/>
         <source>Lisalasud</source>
         <translation>Shoot-off Shots</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1470"/>
+        <location filename="../laskur.cpp" line="1421"/>
         <source>Lasud...</source>
         <translation>Shots...</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1471"/>
+        <location filename="../laskur.cpp" line="1422"/>
         <source>Ava laskuri laskude aken</source>
         <translation>Open competitor&apos;s shots window</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1473"/>
+        <location filename="../laskur.cpp" line="1424"/>
         <source>ID...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1474"/>
+        <location filename="../laskur.cpp" line="1425"/>
         <source>Vaata/muuda laskuri ID&apos;d</source>
         <translation>View/change competitor&apos;s ID</translation>
     </message>
@@ -2588,12 +2591,12 @@ Number of series is too big.</translation>
         <translation>This cipher was not found!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4817"/>
+        <location filename="../protokollitaja.cpp" line="4804"/>
         <source>Töölehe nime lahter on tühi. Ei saa luua uut töölehte ilma nimeta.</source>
         <translation>Tab name field empty. Cannot create tab without name.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4821"/>
+        <location filename="../protokollitaja.cpp" line="4808"/>
         <source>Tulemuse aknas näidatava tabeli pealkirja lahter on tühi. Paluks see ka ikka täita</source>
         <translation>Tab screen name empty. Please fill that also</translation>
     </message>

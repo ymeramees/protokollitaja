@@ -87,6 +87,7 @@ public:
     Laskur(
         QJsonObject json,
         Andmebaas* autocompleteDb,
+        int seriesCount,
         int vs,
         int autocompleteAvailable,
         bool *autocomplete,

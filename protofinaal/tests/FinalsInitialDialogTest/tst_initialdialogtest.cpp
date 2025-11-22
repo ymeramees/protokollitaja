@@ -37,7 +37,7 @@ void InitialDialogTest::notAcceptEmptyCompetitionName()
 
     QTimer::singleShot(200, [=](){
         QWidgetList allToplevelWidgets = QApplication::topLevelWidgets();
-        QCOMPARE(allToplevelWidgets.length(), 2);
+        QCOMPARE(allToplevelWidgets.length(), 3);
 
         QWidget* widget = QApplication::activeModalWidget();
         if (widget){
@@ -61,7 +61,7 @@ void InitialDialogTest::notAcceptEmptyFileName()
 
     QTimer::singleShot(200, [=](){
         QWidgetList allToplevelWidgets = QApplication::topLevelWidgets();
-        QCOMPARE(allToplevelWidgets.length(), 2);
+        QCOMPARE(allToplevelWidgets.length(), 3);
 
         QWidget* widget = QApplication::activeModalWidget();
         if (widget){
@@ -84,7 +84,7 @@ void InitialDialogTest::notAcceptEmptyCompetitionNorFileName()
 
     QTimer::singleShot(200, [=](){
         QWidgetList allToplevelWidgets = QApplication::topLevelWidgets();
-        QCOMPARE(allToplevelWidgets.length(), 2);
+        QCOMPARE(allToplevelWidgets.length(), 3);
 
         QWidget* widget = QApplication::activeModalWidget();
         if (widget){

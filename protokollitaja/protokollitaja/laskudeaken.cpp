@@ -49,7 +49,7 @@ LaskudeAken::LaskudeAken(bool kum, int s, int ls, QWidget *parent) :
             ui->laskudeTabel->item(i, 3)->setCheckState(Qt::Unchecked);
     }
     ui->karistusEdit->setText(lasud[0][lasud[aktiivneSeeria].count() - 1]->getSLask());
-    ui->seeriaSilt->setText("1. seeria");
+    ui->seeriaSilt->setText(tr("1. seeria"));
     ui->vasakuleNupp->setEnabled(false);
 }
 

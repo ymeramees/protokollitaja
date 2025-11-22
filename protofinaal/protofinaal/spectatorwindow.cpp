@@ -2,7 +2,7 @@
 
 SpectatorWindow::SpectatorWindow(QWidget *parent) : QWidget(parent)
 {
-    resultsView.setText("Finaali tulemused");
+    resultsView.setText(tr("Finaali tulemused"));
     vBox.addWidget(&resultsView);
     setLayout(&vBox);
 

@@ -4788,19 +4788,6 @@ void Protokollitaja::uusLaskur(int i)   //Uue laskuri loomine, koos olemasoleva 
         }
 }
 
-void Protokollitaja::uusLaskur(QJsonObject json)
-{
-    if (tabWidget->count() > 0) {
-        Leht* seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
-        seeLeht->uusLaskur(json);
-        if (seeLeht->voistk)
-            seeLeht->voistkonnad[seeLeht->voistkonnad.count() - 1]->nimi->setFocus();
-        else
-            seeLeht->laskurid[seeLeht->laskurid.count() -1]->eesNimi->setFocus();
-        viiLopuni->start();
-    }
-}
-
 void Protokollitaja::uusTab()
 {
         int a = abi;

@@ -7,7 +7,7 @@ Team::Team(QJsonObject &configJson, int index, const bool scoringWithPoints, QWi
     QGridLayout *layout = new QGridLayout;
 
     m_teamName.setToolTip(tr("Võistkonna nimi"));
-    m_teamName.setPlaceholderText("Võistkond");
+    m_teamName.setPlaceholderText(tr("Võistkond"));
     m_teamName.setText("");
     m_indexLabel.setText(QString("%1.").arg(index));
     layout->addWidget(&m_indexLabel);

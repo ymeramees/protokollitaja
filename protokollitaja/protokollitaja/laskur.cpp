@@ -6,48 +6,18 @@ extern bool veryVerbose;
 Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i, int *jar, QualificationEvents::EventType *eventType, int ls, QWidget *parent)
     : QWidget(parent)
 {
-    setupFields();
     id = i;
-        laskudeArv = ls;
-        seeriateArv = s;
-        vSummadeSamm = vs;
-        andmebaas = baas;
-        abi = a;
-        kirjutusAbi = k;
-        kumnendikega = kum;
-        jarjestamine = jar;
-        m_eventType = eventType;
-//	connect(eesNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus(QString)));
-//	connect(perekNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus2(QString)));
+    laskudeArv = ls;
+    seeriateArv = s;
+    vSummadeSamm = vs;
+    andmebaas = baas;
+    abi = a;
+    kirjutusAbi = k;
+    kumnendikega = kum;
+    jarjestamine = jar;
+    m_eventType = eventType;
 
-
-        for(int i = 0; i < seeriateArv; i++){
-                seeriad << new QLineEdit(this);
-                seeriad[i]->setMinimumHeight(28);
-                seeriad[i]->setMaximumWidth(40);
-                seeriad[i]->setToolTip(tr("Seeriad"));
-                seeriad[i]->setPlaceholderText(QString("S%1").arg(i + 1));
-                connect(seeriad[i], SIGNAL(editingFinished()), this, SLOT(liida()));
-                connect(seeriad[i], SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
-                connect(seeriad[i], SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
-                QList<Lask*> seeriaLasud;
-                for(int j = 0; j < laskudeArv; j++){
-                    seeriaLasud << new Lask();
-                }
-                seeriaLasud << new Lask();  // additional shot for adding possible penalty
-                lasud << seeriaLasud;
-        }
-        if(vSummadeSamm != 0){
-                for(int i = 0; i < seeriateArv / vSummadeSamm; i++){
-                        vSummad << new QLineEdit(this);
-                        vSummad[i]->setMinimumHeight(28);
-                        vSummad[i]->setMaximumWidth(50);
-                        vSummad[i]->setText("0");
-                        vSummad[i]->setToolTip(tr("Vahesumma"));
-                        vSummad[i]->setStyleSheet("border: 1px solid grey");
-                        vSummad[i]->setReadOnly(true);
-                }
-        }
+    setupFields();
 
     createLayout();
 //        this->setMaximumWidth(1200);
@@ -56,6 +26,7 @@ Laskur::Laskur(Andmebaas* baas, int s, int vs, int a, bool *k, bool *kum, int i,
 Laskur::Laskur(
     QJsonObject jsonObj,
     Andmebaas* autocompleteDb,
+    int seriesCount,
     int vs,
     int autocompleteAvailable,
     bool *autocomplete,
@@ -65,14 +36,16 @@ Laskur::Laskur(
     int numberOfShots,
     QWidget *parent
 ): QWidget(parent){
-    setupFields();
     andmebaas = autocompleteDb;
+    seeriateArv = seriesCount;
     vSummadeSamm = vs;
     abi = autocompleteAvailable;
     kirjutusAbi = autocomplete;
     kumnendikega = withDecimals;
     jarjestamine = sorting;
     m_eventType = eventType;
+    laskudeArv = numberOfShots;
+    setupFields();
 
     id = jsonObj["id"].toInt();
     rajaNr->setText(jsonObj["targetNo"].toString());
@@ -100,37 +73,15 @@ Laskur::Laskur(
         markus->setText(remarksString);
 
     QJsonArray seriesArray = jsonObj["series"].toArray();
-    seeriateArv = seriesArray.size();
-    laskudeArv = numberOfShots;
 
-    for (int i = 0; i < seriesArray.size(); i++) {
+    for (int i = 0; i < seriesArray.size() && i < seeriad.size(); i++) {
         QJsonObject seriesJson = seriesArray[i].toObject();
-        seeriad << new QLineEdit(seriesJson["seriesSum"].toString(), this);
-        seeriad[i]->setMinimumHeight(28);
-        seeriad[i]->setMaximumWidth(40);
-        seeriad[i]->setToolTip(tr("Seeriad"));
-        seeriad[i]->setPlaceholderText(QString("S%1").arg(i + 1));
-        connect(seeriad[i], SIGNAL(editingFinished()), this, SLOT(liida()));
-        connect(seeriad[i], SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
-        connect(seeriad[i], SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
         QList<Lask*> seeriaLasud;
         QJsonArray shotsArray = seriesJson["shots"].toArray();
         for(int j = 0; j < shotsArray.size(); j++){
-            seeriaLasud << new Lask(shotsArray[j].toObject());  // Series shots, including one for punishment
+            seeriaLasud << new Lask(shotsArray[j].toObject());  // Series shots, including one for adding penalties
         }
         lasud << seeriaLasud;   //Seeria lasud laskuri laskude hulka
-    }
-
-    if (vSummadeSamm != 0) {
-        for (int i = 0; i < seeriateArv / vSummadeSamm; i++) {
-            vSummad << new QLineEdit(this);
-            vSummad[i]->setMinimumHeight(28);
-            vSummad[i]->setMaximumWidth(50);
-            vSummad[i]->setText("0");
-            vSummad[i]->setToolTip(tr("Vahesumma"));
-            vSummad[i]->setStyleSheet("border: 1px solid grey");
-            vSummad[i]->setReadOnly(true);
-        }
     }
 
     QJsonArray shootOffShotsArray = jsonObj["shootOffShots"].toArray();
@@ -1477,6 +1428,34 @@ void Laskur::setupFields()
     popup = new QMenu(this);
     popup->addAction(laskudeAkenAct);
     popup->addAction(idAct);
+
+    for(int i = 0; i < seeriateArv; i++){
+        seeriad << new QLineEdit(this);
+        seeriad[i]->setMinimumHeight(28);
+        seeriad[i]->setMaximumWidth(40);
+        seeriad[i]->setToolTip(tr("Seeriad"));
+        seeriad[i]->setPlaceholderText(QString("S%1").arg(i + 1));
+        connect(seeriad[i], SIGNAL(editingFinished()), this, SLOT(liida()));
+        connect(seeriad[i], SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
+        connect(seeriad[i], SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+        QList<Lask*> seeriaLasud;
+        for(int j = 0; j < laskudeArv; j++){
+            seeriaLasud << new Lask();
+        }
+        seeriaLasud << new Lask();  // additional shot for adding possible penalty
+        lasud << seeriaLasud;
+    }
+    if(vSummadeSamm != 0){
+        for(int i = 0; i < seeriateArv / vSummadeSamm; i++){
+            vSummad << new QLineEdit(this);
+            vSummad[i]->setMinimumHeight(28);
+            vSummad[i]->setMaximumWidth(50);
+            vSummad[i]->setText("0");
+            vSummad[i]->setToolTip(tr("Vahesumma"));
+            vSummad[i]->setStyleSheet("border: 1px solid grey");
+            vSummad[i]->setReadOnly(true);
+        }
+    }
 }
 
 int Laskur::findShotFromPreviousStages(const SiusShotData shotData) const

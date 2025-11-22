@@ -266,7 +266,6 @@ private slots:
     void uus();
     void uusLaskur();    //Uue laskuri loomine,  koos uue ID'ga
     void uusLaskur(int);   //Uue laskuri loomine, koos olemasoleva ID'ga (kasutatakse näiteks faili avamisel
-    void uusLaskur(QJsonObject);    // Create new competitor from json
     void uusTab();
     void viiLoppu();
     void writeSettings();

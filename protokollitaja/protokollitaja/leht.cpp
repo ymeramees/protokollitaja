@@ -103,7 +103,7 @@ void Leht::uusLaskur(QJsonObject json)
         voistkonnad << voistKond;
         voistKond->show();
     } else {
-        Laskur *las = new Laskur(json, andmebaas, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, jarjestamine, &m_eventType, laskudeArv, this);
+        Laskur *las = new Laskur(json, andmebaas, seeriateArv, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, jarjestamine, &m_eventType, laskudeArv, this);
         connect(las, SIGNAL(sifrimuutus()), this, SLOT(naitaSifrit()));
         connect(las, SIGNAL(idMuutus(int,Laskur*)), this, SLOT(idMuudatus(int,Laskur*)));
         connect(las->eesNimi, SIGNAL(editingFinished()), this, SLOT(kontrolliKordusi()));

@@ -63,7 +63,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../competitor.cpp" line="444"/>
+        <source>Nimi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../competitor.cpp" line="452"/>
+        <location filename="../competitor.cpp" line="453"/>
         <source>Tulemus</source>
         <translation type="unfinished"></translation>
     </message>
@@ -533,6 +539,11 @@ Kontrollige, kas teil on sinna kausta kirjutamise õigused.</source>
 <context>
     <name>SpectatorWindow</name>
     <message>
+        <location filename="../spectatorwindow.cpp" line="5"/>
+        <source>Finaali tulemused</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../spectatorwindow.cpp" line="97"/>
         <source>Teade</source>
         <translation type="unfinished"></translation>
@@ -607,6 +618,11 @@ Programm lõi uue, vaikimisi seadistustega.</source>
     <message>
         <location filename="../team.cpp" line="9"/>
         <source>Võistkonna nimi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../team.cpp" line="10"/>
+        <source>Võistkond</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

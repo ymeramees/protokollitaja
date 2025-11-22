@@ -67,7 +67,13 @@
         <translation>Number of shots is bigger than possible! The shot was ignored!</translation>
     </message>
     <message>
+        <location filename="../competitor.cpp" line="444"/>
+        <source>Nimi</source>
+        <translation>Name</translation>
+    </message>
+    <message>
         <location filename="../competitor.cpp" line="452"/>
+        <location filename="../competitor.cpp" line="453"/>
         <source>Tulemus</source>
         <translation>Result</translation>
     </message>
@@ -609,6 +615,11 @@ Make sure you have write access to the folder.</translation>
 <context>
     <name>SpectatorWindow</name>
     <message>
+        <location filename="../spectatorwindow.cpp" line="5"/>
+        <source>Finaali tulemused</source>
+        <translation>Finals Results</translation>
+    </message>
+    <message>
         <location filename="../spectatorwindow.cpp" line="97"/>
         <source>Teade</source>
         <translation>Info</translation>
@@ -685,6 +696,11 @@ A new template was created with default settings.</translation>
         <location filename="../team.cpp" line="9"/>
         <source>Võistkonna nimi</source>
         <translation>Team name</translation>
+    </message>
+    <message>
+        <location filename="../team.cpp" line="10"/>
+        <source>Võistkond</source>
+        <translation>Team Name</translation>
     </message>
     <message>
         <location filename="../team.cpp" line="61"/>

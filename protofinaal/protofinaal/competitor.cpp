@@ -441,7 +441,7 @@ void Competitor::setupCompetitor(QHBoxLayout *layout, bool active, int id, QStri
     m_nameEdit.setMinimumWidth(100);
     m_nameEdit.setMinimumHeight(22);
     m_nameEdit.setToolTip(tr("Võistleja nimi"));
-    m_nameEdit.setPlaceholderText("Nimi");
+    m_nameEdit.setPlaceholderText(tr("Nimi"));
     m_nameEdit.setText(name);
     connect(&m_nameEdit, &QLineEdit::editingFinished, this, &Competitor::modified);
     layout->addWidget(&m_nameEdit);
@@ -450,7 +450,7 @@ void Competitor::setupCompetitor(QHBoxLayout *layout, bool active, int id, QStri
     m_resultEdit.setMaximumWidth(55);
     m_resultEdit.setMinimumHeight(22);
     m_resultEdit.setToolTip(tr("Tulemus"));
-    m_resultEdit.setPlaceholderText("Tulemus");
+    m_resultEdit.setPlaceholderText(tr("Tulemus"));
     m_resultEdit.setText(result);
     connect(&m_resultEdit, &QLineEdit::editingFinished, this, &Competitor::modified);
     layout->addWidget(&m_resultEdit);
