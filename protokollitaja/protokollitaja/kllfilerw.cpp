@@ -269,7 +269,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                     a,
                     m_autoComplete,
                     screenName,
-                    (TargetTypes::TargetType)weaponType,
+                    TargetTypes::fromOld(weaponType),
                     QualificationEvents::fromOldString(eventTypeString),
                     withDecimals,
                     m_sorting,
@@ -425,14 +425,26 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
 
                 autocomplete = tabObject["autocomplete"].toInt();
                 displayName = tabObject["displayName"].toString();
-                weaponType = tabObject["weaponType"].toInt();
 
-                QualificationEvents::EventType eventType = QualificationEvents::OtherAirRifle;
+                TargetTypes::TargetType targetType = TargetTypes::Other;
+                if (tabObject.contains("weaponType")) {
+                    targetType = TargetTypes::fromOld(tabObject["weaponType"].toInt());
+                } else if (tabObject.contains("targetType")) {
+                    targetType = TargetTypes::fromString(tabObject["targetType"].toString());
+                }
+
+                QualificationEvents::EventType eventType = QualificationEvents::Other;
                 if (tabObject.contains("event")) {
                     eventTypeString = tabObject["event"].toString();
                     eventType = QualificationEvents::fromOldString(eventTypeString);
+                } else if (tabObject.contains("eventType")) {
+                    if (tabObject["eventType"].isDouble()) {
+                    int key = tabObject["eventType"].toInt();
+                        eventType = QualificationEvents::fromOld(key);
+                    } else
+                        eventType = QualificationEvents::Other;
                 } else {
-                    eventType = (QualificationEvents::EventType)tabObject["eventType"].toInt();
+                    eventType = QualificationEvents::fromString(tabObject["eventId"].toString());
                 }
 
                 withDecimals = tabObject["decimals"].toBool();
@@ -455,7 +467,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                             autocomplete,
                             m_autoComplete,
                             displayName,
-                            (TargetTypes::TargetType)weaponType,
+                            targetType,
                             eventType,
                             withDecimals,
                             m_sorting,

@@ -179,106 +179,121 @@ Kontrollige, kas Protokollitaja ja Range Control&apos;i versioonid ühtivad!</so
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="19"/>
-        <source>30l Ringmärk</source>
+        <source>30+30l Täiskaliiber</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="20"/>
-        <source>30l Siluett</source>
+        <source>30l SP Ringmärk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="21"/>
-        <source>20+20+20l Standardpüstol</source>
+        <source>30l TK Ringmärk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="22"/>
-        <source>60l Vabapüstol</source>
+        <source>30l SP Siluett</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="23"/>
-        <source>30l Vabapüstol</source>
+        <source>30l TK Siluett</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="24"/>
-        <source>CISM püstol</source>
+        <source>20+20+20l Standardpüstol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="25"/>
-        <source>300m 3x40l Standard</source>
+        <source>60l Vabapüstol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="26"/>
-        <source>300m 3x20l Standard</source>
+        <source>30l Vabapüstol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="27"/>
-        <source>300m 3x10l Standard</source>
+        <source>CISM TK püstol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="28"/>
-        <source>300m 60l Lamades</source>
+        <source>300m 3x40l Standard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="29"/>
-        <source>300m 30l Lamades</source>
+        <source>300m 3x20l Standard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="30"/>
-        <source>30+30l Metssiga</source>
+        <source>300m 3x10l Standard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="31"/>
-        <source>20+20l Metssiga</source>
+        <source>300m 60l Lamades</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="32"/>
-        <source>30+30l Liikuv Märk</source>
+        <source>300m 30l Lamades</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="33"/>
-        <source>20+20l Liikuv Märk</source>
+        <source>30+30l Metssiga</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="34"/>
-        <source>Muu Õhupüss</source>
+        <source>20+20l Metssiga</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="35"/>
-        <source>Muu Õhupüstol</source>
+        <source>30+30l Liikuv Märk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="36"/>
-        <source>Muu sportpüss</source>
+        <source>20+20l Liikuv Märk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="37"/>
-        <source>Muu 300m</source>
+        <source>Muu Õhupüss</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="38"/>
-        <source>Muu püstol</source>
+        <source>Muu Õhupüstol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="39"/>
+        <source>Muu sportpüss</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="40"/>
+        <source>Muu 300m</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="41"/>
+        <source>Muu püstol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="42"/>
         <source>Muu</source>
         <translation type="unfinished"></translation>
     </message>
@@ -592,37 +607,37 @@ Kontrollige, kas Protokollitaja ja Range Control&apos;i versioonid ühtivad!</so
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="751"/>
+        <location filename="../rangecontrol.cpp" line="728"/>
         <source>Viga!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="751"/>
+        <location filename="../rangecontrol.cpp" line="728"/>
         <source>See versioon Range Control&apos;ist ei tea, kuidas valitud harjutust (%1) InBandile saata!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="802"/>
+        <location filename="../rangecontrol.cpp" line="778"/>
         <source>Viga: rada %s ei saa teisendada arvuks!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="822"/>
+        <location filename="../rangecontrol.cpp" line="798"/>
         <source>Sisesta laskude arv</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="822"/>
+        <location filename="../rangecontrol.cpp" line="798"/>
         <source>Laskude arv:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="834"/>
+        <location filename="../rangecontrol.cpp" line="810"/>
         <source>Harjutus:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="834"/>
+        <location filename="../rangecontrol.cpp" line="810"/>
         <source>Vali harjutus</source>
         <translation type="unfinished"></translation>
     </message>

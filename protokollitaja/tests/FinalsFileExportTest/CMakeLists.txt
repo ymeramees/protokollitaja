@@ -3,6 +3,7 @@ qt_add_executable(FinalsFileExportTest
     ../../../common/src/finalsformats.cpp ../../../common/src/finalsformats.h
     ../../protokollitaja/finalsfileexport.cpp ../../protokollitaja/finalsfileexport.h ../../protokollitaja/finalsfileexport.ui
     ../../protokollitaja/startlistwriter.cpp ../../protokollitaja/startlistwriter.h
+    ../../../common/src/qualificationevents.cpp ../../../common/src/qualificationevents.h
     tst_finalsfileexport.cpp
 )
 target_include_directories(FinalsFileExportTest PRIVATE

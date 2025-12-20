@@ -26,6 +26,7 @@ public:
         RifleProne30_50m,
         RapidFirePistol,
         Pistol_25m,
+        Pistol_25m_CFP,
         Pistol30_25m,
         Pistol30Rapid_25m,
         StandardPistol,
@@ -50,21 +51,26 @@ public:
     };
 
     struct QualificationEvent {
+        QString eventTypeId;
         QString name;
         TargetTypes::TargetType targetType;
         int numberOfSeries;
         int seriesInSubtotal;
         bool decimals;
+        QStringList InBandEventTypes;
     };
 
     static QualificationEvent eventData(const EventType eventType);
     static QualificationEvent eventData(const int eventTypeIndex);
     static QStringList eventNames();
     static EventType fromOldString(const QString eventTypeString);
+    static EventType fromEventName(const QString eventName);
+    static EventType fromOld(const int eventType);
     static EventType fromString(const QString eventTypeString);
 
 private:
     static QMap<EventType, QualificationEvent>& eventDefinitions();
+    static QMap<int, QString>& oldEventTypeToId(); // From pre 0.9.3 to current
 };
 
 #endif /* QUALIFICATIONEVENTS_H */

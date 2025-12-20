@@ -477,13 +477,13 @@ Kas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.</s
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="500"/>
-        <location filename="../kllfilerw.cpp" line="506"/>
+        <location filename="../kllfilerw.cpp" line="512"/>
+        <location filename="../kllfilerw.cpp" line="518"/>
         <source>Protokollitaja</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="501"/>
+        <location filename="../kllfilerw.cpp" line="513"/>
         <source>Vale versiooni fail!
 
 Võimalik, et tegu on uuema programmi versiooni failiga.
@@ -492,7 +492,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="506"/>
+        <location filename="../kllfilerw.cpp" line="518"/>
         <source>Ei leia faili!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1611,7 +1611,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="609"/>
-        <location filename="../protokollitaja.cpp" line="4739"/>
+        <location filename="../protokollitaja.cpp" line="4730"/>
         <source>Kas soovid muudatused salvestada?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2104,36 +2104,6 @@ Kas soovite jätkata</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4524"/>
-        <source>Õhupüss</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../protokollitaja.cpp" line="4526"/>
-        <source>Õhupüstol</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../protokollitaja.cpp" line="4528"/>
-        <source>Sportpüss</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../protokollitaja.cpp" line="4530"/>
-        <source>Spordipüstol</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../protokollitaja.cpp" line="4532"/>
-        <source>Muu püss</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../protokollitaja.cpp" line="4534"/>
-        <source>Muu püstol</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../protokollitaja.cpp" line="2446"/>
         <source> on vabavaraline programm, mis on loodud kasutamiseks laskevõistlustel protokollide tegemiseks ning tulemuste näitamiseks. Kasutamine omal vastutusel. Autor ei võta endale mingit vastutust kahjude eest, mis programmi kasutamisega võivad kaasneda! Tegu on beta versiooniga ehk siis alles katsetamisjärgus oleva programmiga.
 
@@ -2427,28 +2397,28 @@ Kas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.</s
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4593"/>
+        <location filename="../protokollitaja.cpp" line="4584"/>
         <source>Sellele laskurile juba loetakse lehti Protokollitajas!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4631"/>
+        <location filename="../protokollitaja.cpp" line="4622"/>
         <source>Sellist harjutust ei toetata!
 Seeriate arv liiga suur.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4689"/>
+        <location filename="../protokollitaja.cpp" line="4680"/>
         <source>Sellist sifrit ei leitud!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4804"/>
+        <location filename="../protokollitaja.cpp" line="4795"/>
         <source>Töölehe nime lahter on tühi. Ei saa luua uut töölehte ilma nimeta.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4808"/>
+        <location filename="../protokollitaja.cpp" line="4799"/>
         <source>Tulemuse aknas näidatava tabeli pealkirja lahter on tühi. Paluks see ka ikka täita</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2597,106 +2567,121 @@ Võimalik, et mõni ühendus on vahepeal katkenud.</source>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="19"/>
-        <source>30l Ringmärk</source>
+        <source>30+30l Täiskaliiber</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="20"/>
-        <source>30l Siluett</source>
+        <source>30l SP Ringmärk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="21"/>
-        <source>20+20+20l Standardpüstol</source>
+        <source>30l TK Ringmärk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="22"/>
-        <source>60l Vabapüstol</source>
+        <source>30l SP Siluett</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="23"/>
-        <source>30l Vabapüstol</source>
+        <source>30l TK Siluett</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="24"/>
-        <source>CISM püstol</source>
+        <source>20+20+20l Standardpüstol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="25"/>
-        <source>300m 3x40l Standard</source>
+        <source>60l Vabapüstol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="26"/>
-        <source>300m 3x20l Standard</source>
+        <source>30l Vabapüstol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="27"/>
-        <source>300m 3x10l Standard</source>
+        <source>CISM TK püstol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="28"/>
-        <source>300m 60l Lamades</source>
+        <source>300m 3x40l Standard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="29"/>
-        <source>300m 30l Lamades</source>
+        <source>300m 3x20l Standard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="30"/>
-        <source>30+30l Metssiga</source>
+        <source>300m 3x10l Standard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="31"/>
-        <source>20+20l Metssiga</source>
+        <source>300m 60l Lamades</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="32"/>
-        <source>30+30l Liikuv Märk</source>
+        <source>300m 30l Lamades</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="33"/>
-        <source>20+20l Liikuv Märk</source>
+        <source>30+30l Metssiga</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="34"/>
-        <source>Muu Õhupüss</source>
+        <source>20+20l Metssiga</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="35"/>
-        <source>Muu Õhupüstol</source>
+        <source>30+30l Liikuv Märk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="36"/>
-        <source>Muu sportpüss</source>
+        <source>20+20l Liikuv Märk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="37"/>
-        <source>Muu 300m</source>
+        <source>Muu Õhupüss</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="38"/>
-        <source>Muu püstol</source>
+        <source>Muu Õhupüstol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="39"/>
+        <source>Muu sportpüss</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="40"/>
+        <source>Muu 300m</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="41"/>
+        <source>Muu püstol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="42"/>
         <source>Muu</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3292,12 +3277,12 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../valikkast.cpp" line="103"/>
+        <location filename="../valikkast.cpp" line="104"/>
         <source>uus tööleht</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../valikkast.cpp" line="104"/>
+        <location filename="../valikkast.cpp" line="105"/>
         <source>Oled kindel, et soovid töölehe nimeks jätta uus tööleht?</source>
         <translation type="unfinished"></translation>
     </message>

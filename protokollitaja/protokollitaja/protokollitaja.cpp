@@ -1781,8 +1781,8 @@ void Protokollitaja::kirjutaFail(QString failiNimi)
                 qDebug() << "leht->laskudeArv: " << leht->laskudeArv;
             #endif
 
-            tabJson["weaponType"] = leht->m_targetType;
-            tabJson["eventType"] = leht->eventType()/*.toUtf8()*/;
+            tabJson["targetType"] = TargetTypes::targetData(leht->m_targetType).targetId;
+            tabJson["eventId"] = QualificationEvents::eventData(leht->eventType()).eventTypeId;
             tabJson["decimals"] = leht->kumnendikega;
             tabJson["toBeShown"] = leht->naidata;
             tabJson["toBeUploaded"] = leht->toBeUploaded();
@@ -2496,8 +2496,8 @@ void Protokollitaja::naitaSeaded()
                 if(leht->naidata)
                         item->setCheckState(4, Qt::Checked);
                 else item->setCheckState(4, Qt::Unchecked);
-                item->setText(5, TargetTypes::targetNames().at(leht->m_targetType));
-                item->setText(6, QualificationEvents::eventNames().at(leht->eventType()));
+                item->setText(5, TargetTypes::targetData(leht->m_targetType).name);
+                item->setText(6, QualificationEvents::eventData(leht->eventType()).name);
 
                 if(leht->kumnendikega)
                     item->setCheckState(7, Qt::Checked);
@@ -4521,21 +4521,12 @@ void Protokollitaja::uuendaSeaded()
                         if(seaded->ui.sakid->currentItem()->checkState(4) == Qt::Unchecked)
                                 leht->naidata = false;
                         else leht->naidata = true;
-                        if(seaded->ui.sakid->currentItem()->text(5) == tr("Õhupüss"))
-                                leht->m_targetType = TargetTypes::AirRifle;
-                        else if(seaded->ui.sakid->currentItem()->text(5) == tr("Õhupüstol"))
-                                leht->m_targetType = TargetTypes::AirPistol;
-                        else if(seaded->ui.sakid->currentItem()->text(5) == tr("Sportpüss"))
-                                leht->m_targetType = TargetTypes::SmallboreRifle;
-                        else if(seaded->ui.sakid->currentItem()->text(5) == tr("Spordipüstol"))
-                                leht->m_targetType = TargetTypes::FreePistol;
-                        else if(seaded->ui.sakid->currentItem()->text(5) == tr("Muu püss"))
-                                leht->m_targetType = TargetTypes::OtherRifle;
-                        else if(seaded->ui.sakid->currentItem()->text(5) == tr("Muu püstol"))
-                                leht->m_targetType = TargetTypes::OtherPistol;
-                        else leht->m_targetType = TargetTypes::Other;
-                        if(leht->eventType() != QualificationEvents::fromString(seaded->ui.sakid->currentItem()->text(6)))
-                                leht->setEventType(QualificationEvents::fromString(seaded->ui.sakid->currentItem()->text(6)));
+
+                        leht->m_targetType = TargetTypes::fromTargetName(seaded->ui.sakid->currentItem()->text(5));
+
+                        if(leht->eventType() != QualificationEvents::fromEventName(seaded->ui.sakid->currentItem()->text(6)))
+                            leht->setEventType(QualificationEvents::fromEventName(seaded->ui.sakid->currentItem()->text(6)));
+
                         leht->kumnendikega = seaded->ui.sakid->currentItem()->checkState(7);
                         leht->setToBeUploaded(seaded->ui.sakid->currentItem()->checkState(8));
                 }

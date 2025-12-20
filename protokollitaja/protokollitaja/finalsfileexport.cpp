@@ -6,7 +6,7 @@
 #include "finalsfileexport.h"
 #include "ui_finalsfileexport.h"
 
-FinalsFileExport::FinalsFileExport(QVector<QStringList> inputTable, QString competitionFileLocation, QString competitionName, QString eventName, QString timeAndPlace, int eventType, QWidget *parent) :
+FinalsFileExport::FinalsFileExport(QVector<QStringList> inputTable, QString competitionFileLocation, QString competitionName, QString eventName, QString timeAndPlace, QualificationEvents::EventType eventType, QWidget *parent) :
     QDialog(parent), ui(new Ui::FinalsFileExport)
 {
     ui->setupUi(this);
@@ -146,7 +146,7 @@ bool FinalsFileExport::writeFinalsFile()
     finalsObj["fileVersion"] = 301;
     finalsObj["competitionName"] = m_competitionName;
     finalsObj["eventName"] = m_eventName;
-    finalsObj["eventType"] = m_eventType;
+    finalsObj["eventType"] = QualificationEvents::eventData(m_eventType).eventTypeId;   //TODO This is wrong, but overwritten below
     finalsObj["timePlace"] = m_timeAndPlace;
 
     QString fileLocation = m_competitionFileLocation.left(m_competitionFileLocation.lastIndexOf('/') + 1);

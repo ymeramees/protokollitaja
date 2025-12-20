@@ -183,111 +183,138 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation>25m Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="19"/>
         <source>30l Ringmärk</source>
-        <translation>25m Precision Pistol 30 Shots</translation>
+        <translation type="vanished">25m Precision Pistol 30 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="20"/>
         <source>30l Siluett</source>
-        <translation>25m Rapid Pistol 30 Shots</translation>
+        <translation type="vanished">25m Rapid Pistol 30 Shots</translation>
     </message>
     <message>
         <source>20+20+20l Spordipüstol</source>
         <translation type="vanished">25m Standard Pistol</translation>
     </message>
     <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="19"/>
+        <source>30+30l Täiskaliiber</source>
+        <translation>30+30 Center Fire Pistol</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="20"/>
+        <source>30l SP Ringmärk</source>
+        <translation>25m 30 shots Precision Pistol</translation>
+    </message>
+    <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="21"/>
+        <source>30l TK Ringmärk</source>
+        <translation>25m 30 shots CFP Precision</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="22"/>
+        <source>30l SP Siluett</source>
+        <translation>25m 30 shots Rapid</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="23"/>
+        <source>30l TK Siluett</source>
+        <translation>25m 30 shots CFP Rapid</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="24"/>
         <source>20+20+20l Standardpüstol</source>
         <translation>25m Standard Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="22"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="25"/>
         <source>60l Vabapüstol</source>
         <translation>50m Free Pistol 60 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="23"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="26"/>
         <source>30l Vabapüstol</source>
         <translation>50m Free Pistol 30 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="24"/>
         <source>CISM püstol</source>
-        <translation>25m CISM Pistol</translation>
+        <translation type="vanished">25m CISM Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="25"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="27"/>
+        <source>CISM TK püstol</source>
+        <translation>CISM Center Fire Pistol</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="28"/>
         <source>300m 3x40l Standard</source>
         <translation>300m Rifle 3x40 3 Positions</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="26"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="29"/>
         <source>300m 3x20l Standard</source>
         <translation>300m Rifle 3x20 3 Positions</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="27"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="30"/>
         <source>300m 3x10l Standard</source>
         <translation>300m Rifle 3x10 3 Positions</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="28"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="31"/>
         <source>300m 60l Lamades</source>
         <translation>300m 60 Shots Prone</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="29"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="32"/>
         <source>300m 30l Lamades</source>
         <translation>300m 30 Shots Prone</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="30"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="33"/>
         <source>30+30l Metssiga</source>
         <translation>50m 30+30 Running Target</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="31"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="34"/>
         <source>20+20l Metssiga</source>
         <translation>50m 20+20 Running Target Mixed</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="32"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="35"/>
         <source>30+30l Liikuv Märk</source>
         <translation>10m 30+30 Running Target</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="33"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="36"/>
         <source>20+20l Liikuv Märk</source>
         <translation>10m 20+20 Running Target Mixed</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="34"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="37"/>
         <source>Muu Õhupüss</source>
         <translation>Other Air Rifle</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="35"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="38"/>
         <source>Muu Õhupüstol</source>
         <translation>Other Air Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="36"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="39"/>
         <source>Muu sportpüss</source>
         <translation>Other Smallbore rifle</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="37"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="40"/>
         <source>Muu 300m</source>
         <translation>Other 300m Rifle</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="38"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="41"/>
         <source>Muu püstol</source>
         <translation>Other Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="39"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="42"/>
         <source>Muu</source>
         <translation>Other</translation>
     </message>
@@ -626,32 +653,32 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation>Target %1 has competition in progress, are you sure you want to reset it?</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="751"/>
+        <location filename="../rangecontrol.cpp" line="728"/>
         <source>Viga!</source>
         <translation>Error!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="751"/>
+        <location filename="../rangecontrol.cpp" line="728"/>
         <source>See versioon Range Control&apos;ist ei tea, kuidas valitud harjutust (%1) InBandile saata!</source>
         <translation>This version of Range Control doesn&apos;t know how to send chosen event (%1) to InBand!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="802"/>
+        <location filename="../rangecontrol.cpp" line="778"/>
         <source>Viga: rada %s ei saa teisendada arvuks!</source>
         <translation>Error: lane %s cannot be converted to a number!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="822"/>
+        <location filename="../rangecontrol.cpp" line="798"/>
         <source>Laskude arv:</source>
         <translation>Number of Shots:</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="834"/>
+        <location filename="../rangecontrol.cpp" line="810"/>
         <source>Vali harjutus</source>
         <translation>Choose event type</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="834"/>
+        <location filename="../rangecontrol.cpp" line="810"/>
         <source>Harjutus:</source>
         <translation>Event:</translation>
     </message>
@@ -668,7 +695,7 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation type="vanished">Class:</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="822"/>
+        <location filename="../rangecontrol.cpp" line="798"/>
         <source>Sisesta laskude arv</source>
         <translation>Enter number of shots</translation>
     </message>

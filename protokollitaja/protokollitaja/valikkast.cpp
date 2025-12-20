@@ -66,7 +66,7 @@ void ValikKast::muudaEkraaniNimi(int)
 
         if(ui.indBox->currentIndex() == 1){
             laskjad.append(" " + ui.indBox->currentText());
-            ui.nimiTulAknas->setText(QualificationEvents::eventNames().at(ui.harjutus->currentIndex()) + " " + laskjad);
+            ui.nimiTulAknas->setText(QualificationEvents::eventData(QualificationEvents::fromEventName(ui.harjutus->currentText())).name + " " + laskjad);
             m_targetType = TargetTypes::TargetType::Other;
             return;
         }
@@ -86,7 +86,8 @@ void ValikKast::muudaEkraaniNimi(int)
             ui.vSummadeSilt2->setVisible(true);
 
         }
-        ui.nimiTulAknas->setText(QualificationEvents::eventNames().at(ui.harjutus->currentIndex()) + " " + laskjad);
+        // Overcomplicated, but meant to be future proof in case we allow manual edits to event names
+        ui.nimiTulAknas->setText(QualificationEvents::eventData(QualificationEvents::fromEventName(ui.harjutus->currentText())).name + " " + laskjad);
     }
 }
 
@@ -121,6 +122,7 @@ void ValikKast::updateUi()
     if (ui.laskjad->count() > 0)
         ui.laskjad->clear();
     ui.laskjad->addItems(AgeClasses::classAbbreviations());
+    ui.kumnendikegaBox->setChecked(QualificationEvents::eventData(QualificationEvents::fromEventName(ui.harjutus->currentText())).decimals);
 }
 
 ValikKast::~ValikKast()

@@ -507,13 +507,13 @@ Kas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.</s
 Do you want to delete it? It doesn&apos;t affect anything else than uploading to web.</translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="500"/>
-        <location filename="../kllfilerw.cpp" line="506"/>
+        <location filename="../kllfilerw.cpp" line="512"/>
+        <location filename="../kllfilerw.cpp" line="518"/>
         <source>Protokollitaja</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="501"/>
+        <location filename="../kllfilerw.cpp" line="513"/>
         <source>Vale versiooni fail!
 
 Võimalik, et tegu on uuema programmi versiooni failiga.
@@ -526,7 +526,7 @@ It could be a newer version&apos;s file.
 (Protokollitaja::loefail())</translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="506"/>
+        <location filename="../kllfilerw.cpp" line="518"/>
         <source>Ei leia faili!</source>
         <translation>Cannot find the file!</translation>
     </message>
@@ -1682,7 +1682,7 @@ address: %1</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="609"/>
-        <location filename="../protokollitaja.cpp" line="4739"/>
+        <location filename="../protokollitaja.cpp" line="4730"/>
         <source>Kas soovid muudatused salvestada?</source>
         <translation>Do you want to save the changes?</translation>
     </message>
@@ -2127,34 +2127,28 @@ address: %1</translation>
         <translation>Enter new maximum showing time</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4524"/>
         <source>Õhupüss</source>
-        <translation>Air Rifle</translation>
+        <translation type="vanished">Air Rifle</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4526"/>
         <source>Õhupüstol</source>
-        <translation>Air Pistol</translation>
+        <translation type="vanished">Air Pistol</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4528"/>
         <source>Sportpüss</source>
-        <translation>Smallbore Rifle</translation>
+        <translation type="vanished">Smallbore Rifle</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4530"/>
         <source>Spordipüstol</source>
-        <translation>Sport Pistol</translation>
+        <translation type="vanished">Sport Pistol</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4532"/>
         <source>Muu püss</source>
-        <translation>Other Rifle</translation>
+        <translation type="vanished">Other Rifle</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4534"/>
         <source>Muu püstol</source>
-        <translation>Other Pistol</translation>
+        <translation type="vanished">Other Pistol</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2446"/>
@@ -2574,29 +2568,29 @@ Do you want to delete it? It doesn&apos;t affect anything else than uploading to
         <translation>Password:</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4593"/>
+        <location filename="../protokollitaja.cpp" line="4584"/>
         <source>Sellele laskurile juba loetakse lehti Protokollitajas!</source>
         <translation>Paper targets for this shooter are already being read in Protokollitaja!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4631"/>
+        <location filename="../protokollitaja.cpp" line="4622"/>
         <source>Sellist harjutust ei toetata!
 Seeriate arv liiga suur.</source>
         <translation>This event is not supported!
 Number of series is too big.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4689"/>
+        <location filename="../protokollitaja.cpp" line="4680"/>
         <source>Sellist sifrit ei leitud!</source>
         <translation>This cipher was not found!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4804"/>
+        <location filename="../protokollitaja.cpp" line="4795"/>
         <source>Töölehe nime lahter on tühi. Ei saa luua uut töölehte ilma nimeta.</source>
         <translation>Tab name field empty. Cannot create tab without name.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4808"/>
+        <location filename="../protokollitaja.cpp" line="4799"/>
         <source>Tulemuse aknas näidatava tabeli pealkirja lahter on tühi. Paluks see ka ikka täita</source>
         <translation>Tab screen name empty. Please fill that also</translation>
     </message>
@@ -2750,111 +2744,138 @@ It is possible that some connection has been lost.</translation>
         <translation>25m Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="19"/>
         <source>30l Ringmärk</source>
-        <translation>25m Precision Pistol 30 Shots</translation>
+        <translation type="vanished">25m Precision Pistol 30 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="20"/>
         <source>30l Siluett</source>
-        <translation>25m Rapid Pistol 30 Shots</translation>
+        <translation type="vanished">25m Rapid Pistol 30 Shots</translation>
     </message>
     <message>
         <source>20+20+20l Spordipüstol</source>
         <translation type="vanished">25m Standard Pistol</translation>
     </message>
     <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="19"/>
+        <source>30+30l Täiskaliiber</source>
+        <translation>30+30 Center Fire Pistol</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="20"/>
+        <source>30l SP Ringmärk</source>
+        <translation>25m 30 shots Precision Pistol</translation>
+    </message>
+    <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="21"/>
+        <source>30l TK Ringmärk</source>
+        <translation>25m 30 shots CFP Precision</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="22"/>
+        <source>30l SP Siluett</source>
+        <translation>25m 30 shots Rapid</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="23"/>
+        <source>30l TK Siluett</source>
+        <translation>25m 30 shots CFP Rapid</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="24"/>
         <source>20+20+20l Standardpüstol</source>
         <translation>25m Standard Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="22"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="25"/>
         <source>60l Vabapüstol</source>
         <translation>50m Free Pistol 60 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="23"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="26"/>
         <source>30l Vabapüstol</source>
         <translation>50m Free Pistol 30 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="24"/>
         <source>CISM püstol</source>
-        <translation>25m CISM Pistol</translation>
+        <translation type="vanished">25m CISM Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="25"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="27"/>
+        <source>CISM TK püstol</source>
+        <translation>CISM Center Fire Pistol</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="28"/>
         <source>300m 3x40l Standard</source>
         <translation>300m Rifle 3x40 3 Positions</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="26"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="29"/>
         <source>300m 3x20l Standard</source>
         <translation>300m Rifle 3x20 3 Positions</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="27"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="30"/>
         <source>300m 3x10l Standard</source>
         <translation>300m Rifle 3x10 3 Positions</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="28"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="31"/>
         <source>300m 60l Lamades</source>
         <translation>300m 60 Shots Prone</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="29"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="32"/>
         <source>300m 30l Lamades</source>
         <translation>300m 30 Shots Prone</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="30"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="33"/>
         <source>30+30l Metssiga</source>
         <translation>50m 30+30 Running Target</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="31"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="34"/>
         <source>20+20l Metssiga</source>
         <translation>50m 20+20 Running Target Mixed</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="32"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="35"/>
         <source>30+30l Liikuv Märk</source>
         <translation>10m 30+30 Running Target</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="33"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="36"/>
         <source>20+20l Liikuv Märk</source>
         <translation>10m 20+20 Running Target Mixed</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="34"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="37"/>
         <source>Muu Õhupüss</source>
         <translation>Other Air Rifle</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="35"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="38"/>
         <source>Muu Õhupüstol</source>
         <translation>Other Air Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="36"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="39"/>
         <source>Muu sportpüss</source>
         <translation>Other Smallbore rifle</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="37"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="40"/>
         <source>Muu 300m</source>
         <translation>Other 300m Rifle</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="38"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="41"/>
         <source>Muu püstol</source>
         <translation>Other Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="39"/>
+        <location filename="../../../common/src/qualificationevents.cpp" line="42"/>
         <source>Muu</source>
         <translation>Other</translation>
     </message>
@@ -3471,12 +3492,12 @@ It could be a newer version&apos;s file.
         <translation>Members count:</translation>
     </message>
     <message>
-        <location filename="../valikkast.cpp" line="103"/>
+        <location filename="../valikkast.cpp" line="104"/>
         <source>uus tööleht</source>
         <translation>New Tab</translation>
     </message>
     <message>
-        <location filename="../valikkast.cpp" line="104"/>
+        <location filename="../valikkast.cpp" line="105"/>
         <source>Oled kindel, et soovid töölehe nimeks jätta uus tööleht?</source>
         <translation>Are you sure you want to name new tab &quot;New Tab&quot;?</translation>
     </message>

@@ -25,11 +25,15 @@ public:
     };
 
     struct Target {
+        QString targetId;
         QString name;
         bool isRifleDB;
     };
 
     static Target targetData(const TargetType targetType);
+    static TargetType fromOld(const int targetType);
+    static TargetType fromString(const QString targetId);
+    static TargetType fromTargetName(const QString targetName);
     static QStringList targetNames();
 
     // static const TargetType All[] = {
@@ -47,6 +51,7 @@ public:
     // };
 private:
     static QMap<TargetType, Target>& targetDefinitions();
+    static QMap<int, QString>& oldTargetTypeToId();
 };
 
 #endif /* TARGETTYPES_H */

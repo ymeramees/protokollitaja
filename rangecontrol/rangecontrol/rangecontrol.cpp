@@ -723,37 +723,13 @@ void RangeControl::sendInit(Lane *lane)
 
     QString inBandEvent;
     QualificationEvents::QualificationEvent event = lane->event();
-    switch (event.targetType) {
-    case TargetTypes::AirRifle:
-        inBandEvent = "airrifle";
-        break;
-    case TargetTypes::AirPistol:
-        inBandEvent = "airpistol";
-        break;
-    case TargetTypes::SmallboreRifle:
-        if (event.seriesInSubtotal > 0)
-            inBandEvent = "50m_3positions";
-        else
-            inBandEvent = "50m_rifle";
-        break;
-    case TargetTypes::FreePistol:
-        inBandEvent = "50m_pistol";
-        break;
-    default:
-        switch (QualificationEvents::fromString(event.name)) {
-        case QualificationEvents::Pistol30Rapid_25m:
-            inBandEvent = "rapid_SP";
-            break;
-        case QualificationEvents::PistolCISM_25m:
-            inBandEvent = "rapid_CFP";
-            break;
-        default:
-            QMessageBox::critical(this, tr("Viga!"), tr("See versioon Range Control'ist ei tea, kuidas valitud harjutust (%1) InBandile saata!").arg(event.name));
-            return;
-        };
-    };
 
-    message.append(inBandEvent + ";");
+    if (event.targetType == TargetTypes::Other){
+        QMessageBox::critical(this, tr("Viga!"), tr("See versioon Range Control'ist ei tea, kuidas valitud harjutust (%1) InBandile saata!").arg(event.name));
+        return;
+    }
+
+    message.append(event.InBandEventTypes.first() + ";");
     message.append(" ;");
     message.append(lane->decimals() + ";");
     message.append(lane->noOfShots());

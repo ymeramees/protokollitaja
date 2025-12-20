@@ -14,6 +14,7 @@
 
 #include "finalsformats.h"
 #include "startlistwriter.h"
+#include "qualificationevents.h"
 
 namespace Ui {
 class FinalsFileExport;
@@ -30,7 +31,7 @@ public:
             QString competitionName,
             QString eventName,
             QString timeAndPlace,
-            int eventType,
+            QualificationEvents::EventType eventType,
             QWidget *parent = 0
             );
     ~FinalsFileExport();
@@ -49,7 +50,7 @@ private:
     QString m_competitionName;
     QString m_eventName;
     QString m_timeAndPlace;
-    int m_eventType;
+    QualificationEvents::EventType m_eventType;
     FinalsFormats m_eventFormats;
     QString finalsFileName;
     Ui::FinalsFileExport *ui;
