@@ -1455,7 +1455,7 @@ It could be a newer version&apos;s file.
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="167"/>
-        <location filename="../protokollitaja.cpp" line="3166"/>
+        <location filename="../protokollitaja.cpp" line="3168"/>
         <source>Finaal</source>
         <translation></translation>
     </message>
@@ -1682,15 +1682,15 @@ address: %1</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="609"/>
-        <location filename="../protokollitaja.cpp" line="4730"/>
+        <location filename="../protokollitaja.cpp" line="4732"/>
         <source>Kas soovid muudatused salvestada?</source>
         <translation>Do you want to save the changes?</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="614"/>
-        <location filename="../protokollitaja.cpp" line="3923"/>
-        <location filename="../protokollitaja.cpp" line="3926"/>
-        <location filename="../protokollitaja.cpp" line="3940"/>
+        <location filename="../protokollitaja.cpp" line="3925"/>
+        <location filename="../protokollitaja.cpp" line="3928"/>
+        <location filename="../protokollitaja.cpp" line="3942"/>
         <source>Protokollitaja fail (*.kll)</source>
         <translation>Protokollitaja file (*.kll)</translation>
     </message>
@@ -1699,9 +1699,9 @@ address: %1</translation>
         <location filename="../protokollitaja.cpp" line="644"/>
         <location filename="../protokollitaja.cpp" line="1478"/>
         <location filename="../protokollitaja.cpp" line="1734"/>
-        <location filename="../protokollitaja.cpp" line="2919"/>
-        <location filename="../protokollitaja.cpp" line="3860"/>
-        <location filename="../protokollitaja.cpp" line="3873"/>
+        <location filename="../protokollitaja.cpp" line="2921"/>
+        <location filename="../protokollitaja.cpp" line="3862"/>
+        <location filename="../protokollitaja.cpp" line="3875"/>
         <source>Teade</source>
         <translation>Info</translation>
     </message>
@@ -1858,21 +1858,21 @@ address: %1</translation>
     <message>
         <location filename="../protokollitaja.cpp" line="1223"/>
         <location filename="../protokollitaja.cpp" line="1228"/>
-        <location filename="../protokollitaja.cpp" line="3339"/>
+        <location filename="../protokollitaja.cpp" line="3341"/>
         <source>Seeriad</source>
         <translation>Series</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="1231"/>
         <location filename="../protokollitaja.cpp" line="1238"/>
-        <location filename="../protokollitaja.cpp" line="3163"/>
+        <location filename="../protokollitaja.cpp" line="3165"/>
         <source>Põlvelt</source>
         <translation>Kneeling</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="1235"/>
         <location filename="../protokollitaja.cpp" line="1242"/>
-        <location filename="../protokollitaja.cpp" line="3165"/>
+        <location filename="../protokollitaja.cpp" line="3167"/>
         <source>Püsti</source>
         <translation>Standing</translation>
     </message>
@@ -2012,14 +2012,14 @@ Finaal.exe file not found!</translation>
         <location filename="../protokollitaja.cpp" line="2082"/>
         <location filename="../protokollitaja.cpp" line="2122"/>
         <location filename="../protokollitaja.cpp" line="2126"/>
-        <location filename="../protokollitaja.cpp" line="3431"/>
-        <location filename="../protokollitaja.cpp" line="3440"/>
-        <location filename="../protokollitaja.cpp" line="3446"/>
-        <location filename="../protokollitaja.cpp" line="3453"/>
-        <location filename="../protokollitaja.cpp" line="3553"/>
-        <location filename="../protokollitaja.cpp" line="4297"/>
-        <location filename="../protokollitaja.cpp" line="4366"/>
-        <location filename="../protokollitaja.cpp" line="4398"/>
+        <location filename="../protokollitaja.cpp" line="3433"/>
+        <location filename="../protokollitaja.cpp" line="3442"/>
+        <location filename="../protokollitaja.cpp" line="3448"/>
+        <location filename="../protokollitaja.cpp" line="3455"/>
+        <location filename="../protokollitaja.cpp" line="3555"/>
+        <location filename="../protokollitaja.cpp" line="4299"/>
+        <location filename="../protokollitaja.cpp" line="4368"/>
+        <location filename="../protokollitaja.cpp" line="4400"/>
         <source>Viga</source>
         <translation>Error</translation>
     </message>
@@ -2061,14 +2061,14 @@ address: %1</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2082"/>
-        <location filename="../protokollitaja.cpp" line="4297"/>
-        <location filename="../protokollitaja.cpp" line="4366"/>
+        <location filename="../protokollitaja.cpp" line="4299"/>
+        <location filename="../protokollitaja.cpp" line="4368"/>
         <source>Kahjuks see versioon Protokollitajast ei toeta lehelugemist 3x40 lasku standardi harjutustes!</source>
         <translation>Unfortunately this version of Protokollitaja doesn&apos;t support paper target scoring for 3x40 events!</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2122"/>
-        <location filename="../protokollitaja.cpp" line="4398"/>
+        <location filename="../protokollitaja.cpp" line="4400"/>
         <source>Liiga palju seeriaid, lugemine ei ole võimalik!</source>
         <translation>Too many series, scoring not possible!</translation>
     </message>
@@ -2172,7 +2172,7 @@ Tallinn </source>
     <message>
         <location filename="../protokollitaja.cpp" line="1233"/>
         <location filename="../protokollitaja.cpp" line="1240"/>
-        <location filename="../protokollitaja.cpp" line="3164"/>
+        <location filename="../protokollitaja.cpp" line="3166"/>
         <source>Lamades</source>
         <translation>Prone</translation>
     </message>
@@ -2241,7 +2241,7 @@ Unable to find Protofinaal.exe!</translation>
     <message>
         <location filename="../protokollitaja.cpp" line="1924"/>
         <location filename="../protokollitaja.cpp" line="2181"/>
-        <location filename="../protokollitaja.cpp" line="4437"/>
+        <location filename="../protokollitaja.cpp" line="4439"/>
         <source>Hoiatus!</source>
         <translation>Warning!</translation>
     </message>
@@ -2364,75 +2364,75 @@ Location: </translation>
         <translation>Event:</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="2753"/>
+        <location filename="../protokollitaja.cpp" line="2758"/>
         <source>Mis harjutus see nii suure seeriate arvuga on ja seejuures ilma vahesummadeta? Selle näitamine ei ole võimalik.</source>
         <translation>It is not possible to show an event with so big number of series, but without subtotals.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="2912"/>
+        <location filename="../protokollitaja.cpp" line="2914"/>
         <source>Kas tahate tulemused näidata teisel ekraanil?</source>
         <translation>Do you want to show the spectator view on the other screen?</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="2919"/>
+        <location filename="../protokollitaja.cpp" line="2921"/>
         <source>Tulemuse aken näidatud teisel ekraanil</source>
         <translation>Spectator view shown on the other screen</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3097"/>
-        <location filename="../protokollitaja.cpp" line="3162"/>
-        <location filename="../protokollitaja.cpp" line="3252"/>
-        <location filename="../protokollitaja.cpp" line="3338"/>
+        <location filename="../protokollitaja.cpp" line="3099"/>
+        <location filename="../protokollitaja.cpp" line="3164"/>
+        <location filename="../protokollitaja.cpp" line="3254"/>
+        <location filename="../protokollitaja.cpp" line="3340"/>
         <source>Summa</source>
         <translation>Total</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3167"/>
+        <location filename="../protokollitaja.cpp" line="3169"/>
         <source>Kokku</source>
         <translation>Total</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3409"/>
+        <location filename="../protokollitaja.cpp" line="3411"/>
         <source>Print_template.html faili ei leitud! Printimine ei toimi!</source>
         <translation>Print_template.html file not found! Printing not possible!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3431"/>
+        <location filename="../protokollitaja.cpp" line="3433"/>
         <source>Ei leidnud Print_template.html failist &lt;tr&gt;, &lt;tbody&gt;, &lt;/tr&gt; või &lt;/tbody&gt; tag&apos;e. Tabeli printimine ei ole võimalik</source>
         <translation>Could not find &lt;tr&gt;, &lt;tbody&gt;, &lt;/tr&gt; or &lt;/tbody&gt; tags from Print_template.html file. Printing of the table is not possible</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3440"/>
+        <location filename="../protokollitaja.cpp" line="3442"/>
         <source>Ei leidnud Print_template.html failist &lt;td&gt;, #S2#, &lt;/td&gt; või #S6# tag&apos;e. Tabeli printimine ei ole võimalik</source>
         <translation>Could not find &lt;td&gt;, #S2#, &lt;/td&gt; or #S6# tags from Print_template.html file. Printing of the table is not possible</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3446"/>
+        <location filename="../protokollitaja.cpp" line="3448"/>
         <source>Ei leidnud Print_template.html failist &lt;td&gt;, #S1# või &lt;/td&gt; tag&apos;e. Tabeli printimine ei ole võimalik</source>
         <translation>Could not find &lt;td&gt;, #S1# or &lt;/td&gt; tags from Print_template.html file. Printing of the table is not possible</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3453"/>
+        <location filename="../protokollitaja.cpp" line="3455"/>
         <source>Ei leidnud Print_template.html failist &lt;td&gt;, #summa# või &lt;/td&gt; tag&apos;e. Tabeli printimine ei ole võimalik</source>
         <translation>Could not find &lt;td&gt;, #summa# or &lt;/td&gt; tags from Print_template.html file. Printing of the table is not possible</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3501"/>
+        <location filename="../protokollitaja.cpp" line="3503"/>
         <source>V.A.</source>
         <translation>Quest</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3553"/>
+        <location filename="../protokollitaja.cpp" line="3555"/>
         <source>Ei leidnud Print_template.html failist &lt;tr&gt;, &lt;tbody&gt;, &lt;/tr&gt; või &lt;/tbody&gt; tag&apos;e. Tabeli printimine on vigane!</source>
         <translation>Could not find &lt;tr&gt;, &lt;tbody&gt;, &lt;/tr&gt; or &lt;/tbody&gt; tags from Print_template.html file. Printing of the table is faulty!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3578"/>
+        <location filename="../protokollitaja.cpp" line="3580"/>
         <source>Võistleja 1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3726"/>
+        <location filename="../protokollitaja.cpp" line="3728"/>
         <source>Ei leitud sellist sifrit!
 
 Tulemusi ei uuendatud!</source>
@@ -2441,7 +2441,7 @@ Tulemusi ei uuendatud!</source>
 Results were not updated!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3729"/>
+        <location filename="../protokollitaja.cpp" line="3731"/>
         <source>Seeriate arv ei ühti Protokollitajaga!
 
 Tulemusi ei uuendatud!</source>
@@ -2450,7 +2450,7 @@ Tulemusi ei uuendatud!</source>
 Results were not updated!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3748"/>
+        <location filename="../protokollitaja.cpp" line="3750"/>
         <source>Sellel seerial on juba tulemus olemas!
 
 Tulemusi ei uuendatud, kui tahate üle kirjutada, kustutage Protokollitajast eelmine seeria ära!</source>
@@ -2459,7 +2459,7 @@ Tulemusi ei uuendatud, kui tahate üle kirjutada, kustutage Protokollitajast eel
 Results were not updated. If you want to overwrite the existing results, delete the existing serie first!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3861"/>
+        <location filename="../protokollitaja.cpp" line="3863"/>
         <source>Programmist on saadaval uuem versioon. Praegune: %1
 Uus versioon: %2
 
@@ -2474,7 +2474,7 @@ The new version is available in Google Drive: https://drive.google.com/drive/fol
 Would you like to open that?</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3874"/>
+        <location filename="../protokollitaja.cpp" line="3876"/>
         <source>Teil on kõige uuem versioon programmist.
 
 Leitud uusim versioon: %1</source>
@@ -2491,13 +2491,13 @@ Newest version found: %1</translation>
         <location filename="../protokollitaja.cpp" line="2354"/>
         <location filename="../protokollitaja.cpp" line="2358"/>
         <location filename="../protokollitaja.cpp" line="2370"/>
-        <location filename="../protokollitaja.cpp" line="2753"/>
-        <location filename="../protokollitaja.cpp" line="3896"/>
+        <location filename="../protokollitaja.cpp" line="2758"/>
+        <location filename="../protokollitaja.cpp" line="3898"/>
         <source>Viga!</source>
         <translation>Error!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3897"/>
+        <location filename="../protokollitaja.cpp" line="3899"/>
         <source>Võistluse veebi ID (%1) sisaldab kummalisi tähemärke ja on ilmselt vigane!
 
 Kas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.</source>
@@ -2506,91 +2506,91 @@ Kas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.</s
 Do you want to delete it? It doesn&apos;t affect anything else than uploading to web.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3922"/>
-        <location filename="../protokollitaja.cpp" line="3925"/>
-        <location filename="../protokollitaja.cpp" line="3939"/>
+        <location filename="../protokollitaja.cpp" line="3924"/>
+        <location filename="../protokollitaja.cpp" line="3927"/>
+        <location filename="../protokollitaja.cpp" line="3941"/>
         <source>Salvesta nimega</source>
         <translation>Save As</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3956"/>
+        <location filename="../protokollitaja.cpp" line="3958"/>
         <source>Server seisatud</source>
         <translation>Server stopped</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3969"/>
+        <location filename="../protokollitaja.cpp" line="3971"/>
         <source>Võistkondade saatmine Range Control&apos;i ei ole võimalik</source>
         <translation>It is not possible to send teams to Range Control</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4025"/>
+        <location filename="../protokollitaja.cpp" line="4027"/>
         <source>Siffer on juba olemas, kas soovite üle kirjutada?</source>
         <translation>Cipher already present, would you like to overwrite it?</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4164"/>
+        <location filename="../protokollitaja.cpp" line="4166"/>
         <source>%1 uut püssilaskurit lisatud andmebaasi</source>
         <translation>%1 new rifle shooter(s) added to the database</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4167"/>
+        <location filename="../protokollitaja.cpp" line="4169"/>
         <source>%1 uut püstolilaskurit lisatud andmebaasi</source>
         <translation>%1 new pistol shooter(s) added to the database</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4170"/>
+        <location filename="../protokollitaja.cpp" line="4172"/>
         <source>%1 uut püssilaskurid ja %2 uut püstolilaskurit lisatud andmebaasi</source>
         <translation>%1 new rifle and %2 pistol shooters added to the database</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4172"/>
+        <location filename="../protokollitaja.cpp" line="4174"/>
         <source>Uusi laskureid ei leitud</source>
         <translation>No new shooters were found</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4244"/>
+        <location filename="../protokollitaja.cpp" line="4246"/>
         <source>Kasutajanimi andmebaasis</source>
         <translation>Username in the database</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4244"/>
+        <location filename="../protokollitaja.cpp" line="4246"/>
         <source>Kasutajanimi:</source>
         <translation>Username:</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4246"/>
+        <location filename="../protokollitaja.cpp" line="4248"/>
         <source>Kasutaja parool andmebaasis</source>
         <translation>Password in the database</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4246"/>
+        <location filename="../protokollitaja.cpp" line="4248"/>
         <source>Parool:</source>
         <translation>Password:</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4584"/>
+        <location filename="../protokollitaja.cpp" line="4586"/>
         <source>Sellele laskurile juba loetakse lehti Protokollitajas!</source>
         <translation>Paper targets for this shooter are already being read in Protokollitaja!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4622"/>
+        <location filename="../protokollitaja.cpp" line="4624"/>
         <source>Sellist harjutust ei toetata!
 Seeriate arv liiga suur.</source>
         <translation>This event is not supported!
 Number of series is too big.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4680"/>
+        <location filename="../protokollitaja.cpp" line="4682"/>
         <source>Sellist sifrit ei leitud!</source>
         <translation>This cipher was not found!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4795"/>
+        <location filename="../protokollitaja.cpp" line="4797"/>
         <source>Töölehe nime lahter on tühi. Ei saa luua uut töölehte ilma nimeta.</source>
         <translation>Tab name field empty. Cannot create tab without name.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4799"/>
+        <location filename="../protokollitaja.cpp" line="4801"/>
         <source>Tulemuse aknas näidatava tabeli pealkirja lahter on tühi. Paluks see ka ikka täita</source>
         <translation>Tab screen name empty. Please fill that also</translation>
     </message>

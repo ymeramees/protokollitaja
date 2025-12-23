@@ -2528,18 +2528,23 @@ void Protokollitaja::naitaTul()
         areaNr = 0;
         reaNr = 0;
     }
-
-    if(tabWidget->count() > leheNr){
-        if(leheNr >= 0){
+    if(verbose)
+        QTextStream(stdout) << "Protokollitaja::naitaTul(): tabWidget->count() = " << tabWidget->count() << Qt::endl;
+    if(leheNr >= tabWidget->count() || leheNr < 0) leheNr = 0;
             Leht *seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(leheNr))->widget());
-            while(!seeLeht->naidata){
-                leheNr++;
-                if(leheNr >= tabWidget->count())
-                    leheNr = 0;
-                reaNr = 0;
-                areaNr = 0;
-                naidatud = false;
-                seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(leheNr))->widget());
+            if (!seeLeht->naidata) {
+                int start = leheNr;
+                if(verbose)
+                    QTextStream(stdout) << "Protokollitaja::naitaTul(): going in da loop" << Qt::endl;
+                do {
+                    leheNr++;
+                    if(leheNr >= tabWidget->count())
+                        leheNr = 0;
+                    reaNr = 0;
+                    areaNr = 0;
+                    naidatud = false;
+                    seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(leheNr))->widget());
+                } while(start != leheNr && !seeLeht->naidata);
             }
             if(seeLeht->voistk){
                 tulemus->ind = false;
@@ -2899,9 +2904,6 @@ void Protokollitaja::naitaTul()
                 naidatud = false;
                 tulemus->loplik = false;
             }
-            if(leheNr >= tabWidget->count()) leheNr = 0;
-        }
-    }else leheNr = 0;
 }
 
 void Protokollitaja::naitaTulAken()
