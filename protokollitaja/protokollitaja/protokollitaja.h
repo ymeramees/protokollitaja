@@ -35,7 +35,7 @@
 #include "leht.h"
 #include "initialdialog.h"
 #include "datauploader.h"
-#include "valikkast.h"
+#include "newtabdialog.h"
 #include "seadedkast.h"
 #include "commonsettings.h"
 #include "sifriseade.h"
@@ -165,7 +165,7 @@ public:
     Laskur *lehelugejaLaskur;   //Pointer laskurile, kellele loetakse parasjagu tulemusi
 //    Laskur *vorguLaskur;    //Pointer laskurile, kelle siffer saadeti viimati Protolehelugejale
     InitialDialog *aValik;
-	ValikKast *valik;
+	NewTabDialog *valik;
 	SeadedKast *seaded;
     SifriSeade *sifriLisaAken;
     SiusDataConnections *siusDataConnections = nullptr;

@@ -323,7 +323,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         aValik = new InitialDialog(this);
         aValik->setWindowModality(Qt::ApplicationModal);
         aValik->setWindowIcon(QIcon(":/images/Protokollitaja.ico"));
-        valik = new ValikKast(this);
+        valik = new NewTabDialog(this);
         valik->setWindowIcon(QIcon(":/images/Protokollitaja.ico"));
         valik->setWindowModality(Qt::ApplicationModal);
         tulemus = new TulemuseAken();
@@ -2277,6 +2277,7 @@ void Protokollitaja::loefail()
             uusTab();
         }
         uuendaSeaded();
+        voibSulgeda = true;
     }
 
 #ifdef QT_DEBUG
@@ -2528,9 +2529,10 @@ void Protokollitaja::naitaTul()
         areaNr = 0;
         reaNr = 0;
     }
-    if(verbose)
-        QTextStream(stdout) << "Protokollitaja::naitaTul(): tabWidget->count() = " << tabWidget->count() << Qt::endl;
-    if(leheNr >= tabWidget->count() || leheNr < 0) leheNr = 0;
+    if (tabWidget->count() > 0) {
+        if(verbose)
+            QTextStream(stdout) << "Protokollitaja::naitaTul(): tabWidget->count() = " << tabWidget->count() << Qt::endl;
+        if(leheNr >= tabWidget->count() || leheNr < 0) leheNr = 0;
             Leht *seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(leheNr))->widget());
             if (!seeLeht->naidata) {
                 int start = leheNr;
@@ -2904,6 +2906,7 @@ void Protokollitaja::naitaTul()
                 naidatud = false;
                 tulemus->loplik = false;
             }
+    }
 }
 
 void Protokollitaja::naitaTulAken()

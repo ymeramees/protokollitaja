@@ -37,7 +37,7 @@ qt_add_executable(Protokollitaja WIN32 MACOSX_BUNDLE
     tabwidgetwithsettings.h
     tulemuseaken.cpp tulemuseaken.h
     updatechecker.cpp updatechecker.h
-    valikkast.cpp valikkast.h valikkast.ui
+    newtabdialog.cpp newtabdialog.h newtabdialog.ui
     voistkond.cpp voistkond.h
     xlslib/common/overnew.cpp xlslib/common/overnew.h
     xlslib/common/stringtok.h
