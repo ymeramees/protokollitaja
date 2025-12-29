@@ -25,6 +25,7 @@ jobs:
           target: "desktop"
           arch: "win64_mingw"
           tools: "tools_mingw90"
+          modules: "qtserialport qt5compat"
           cache: true
 
       - name: Configure CMake
@@ -104,6 +105,7 @@ jobs:
           version: "6.9.*"
           host: "linux"
           target: "desktop"
+          modules: "qtserialport qt5compat"
           cache: true
 
       - name: Configure CMake
@@ -163,6 +165,7 @@ jobs:
           version: "6.9.*"
           host: "mac"
           target: "desktop"
+          modules: "qtserialport qt5compat"
           cache: true
 
       - name: Configure CMake
