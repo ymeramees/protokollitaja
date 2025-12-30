@@ -162,7 +162,7 @@ for:
       - sh: >-
           sudo apt-get update
 
-          sudo apt-get install -y build-essential ninja-build qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools libqt6serialport6-dev libqt6sql6-sqlite libgl1-mesa-dev libglu1-mesa-dev python3-pip
+          sudo apt-get install -y build-essential ninja-build qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libqt6serialport6-dev libqt6sql6-sqlite libgl1-mesa-dev libglu1-mesa-dev python3-pip
 
           sudo pip3 install cmake --upgrade
 
@@ -230,7 +230,13 @@ for:
       - sh: >-
           brew install qt@6 cmake
 
+          export Qt6_DIR=$(brew --prefix qt@6)/lib/cmake/Qt6
+
           export PATH="$(brew --prefix qt@6)/bin:$PATH"
+
+          echo "Qt6_DIR=$Qt6_DIR"
+
+          ls -la $(brew --prefix qt@6)/lib/cmake/ || true
 
           qmake -v || true
 
@@ -245,6 +251,8 @@ for:
           ls -la
 
           export PATH="$(brew --prefix qt@6)/bin:$PATH"
+
+          export Qt6_DIR=$(brew --prefix qt@6)/lib/cmake/Qt6
 
           cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$(brew --prefix qt@6) -S $APPVEYOR_BUILD_FOLDER -B $APPVEYOR_BUILD_FOLDER/build
 
