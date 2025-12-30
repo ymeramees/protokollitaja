@@ -180,9 +180,13 @@ for:
 
           export PATH="$HOME/.local/bin:$PATH"
 
+          export CMAKE_PREFIX_PATH="/usr/lib/x86_64-linux-gnu/cmake/Qt6:$CMAKE_PREFIX_PATH"
+
           ls -la
 
-          cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -S $APPVEYOR_BUILD_FOLDER -B $APPVEYOR_BUILD_FOLDER/build
+          echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH"
+
+          cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6 -S $APPVEYOR_BUILD_FOLDER -B $APPVEYOR_BUILD_FOLDER/build
 
           cmake --build $APPVEYOR_BUILD_FOLDER/build
 
@@ -250,11 +254,17 @@ for:
 
           ls -la
 
-          export PATH="$(brew --prefix qt@6)/bin:$PATH"
+          QT_PREFIX=$(brew --prefix qt@6)
 
-          export Qt6_DIR=$(brew --prefix qt@6)/lib/cmake/Qt6
+          echo "Qt prefix: $QT_PREFIX"
 
-          cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$(brew --prefix qt@6) -S $APPVEYOR_BUILD_FOLDER -B $APPVEYOR_BUILD_FOLDER/build
+          export PATH="$QT_PREFIX/bin:$PATH"
+
+          export CMAKE_PREFIX_PATH="$QT_PREFIX"
+
+          ls -la "$QT_PREFIX/lib/cmake/Qt6" || true
+
+          cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$QT_PREFIX" -S $APPVEYOR_BUILD_FOLDER -B $APPVEYOR_BUILD_FOLDER/build
 
           cmake --build $APPVEYOR_BUILD_FOLDER/build
 

@@ -3,10 +3,10 @@ name: Build
 on:
   push:
     branches:
-      - devel
+      - feature/macos-and-linux-builds
   pull_request:
     branches:
-      - devel
+      - feature/macos-and-linux-builds
 
 jobs:
   build-windows:
@@ -24,13 +24,17 @@ jobs:
           host: "windows"
           target: "desktop"
           arch: "win64_mingw"
-          tools: "tools_mingw1310_64 tools_cmake tools_ninja"
           modules: "qtserialport qt5compat"
           cache: true
 
       - name: Configure CMake
         run: |
-          $env:PATH = "D:\a\protokollitaja\protokollitaja\Qt\Tools\mingw1310_64\bin;$env:PATH"
+          # Find MinGW path from Qt installation
+          $mingwPath = Get-ChildItem -Path "$env:Qt6_DIR\..\..\Tools" -Directory -Filter "mingw*" | Select-Object -First 1
+          if ($mingwPath) {
+            $env:PATH = "$($mingwPath.FullName)\bin;$env:PATH"
+            Write-Host "Added MinGW to PATH: $($mingwPath.FullName)\bin"
+          }
           cmake -G "MinGW Makefiles" `
             -DCMAKE_PREFIX_PATH="${env:Qt6_DIR}" `
             -DCMAKE_BUILD_TYPE=Release `
@@ -166,14 +170,25 @@ jobs:
               basename=$(basename "$exe")
               mv "$exe" "${exe}.bin"
               cat > "$exe" << 'EOF'
-              #!/bin/bash
-              DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-              export LD_LIBRARY_PATH="${DIR}/lib:${LD_LIBRARY_PATH}"
-              export QT_PLUGIN_PATH="${DIR}/plugins"
-              exec "${DIR}/$(basename "$0").bin" "$@"
-              EOF
+#!/bin/bash
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export LD_LIBRARY_PATH="${DIR}/lib:${LD_LIBRARY_PATH}"
+export QT_PLUGIN_PATH="${DIR}/plugins"
+exec "${DIR}/$(basename "$0").bin" "$@"
+EOF
               chmod +x "$exe"
             fi
+          done
+
+          # Look for Print_template.html in various locations
+          find . -name "Print_template.html" -type f | head -n 1 | xargs -I {} cp {} build/Protokollitaja-Linux/Data/ 2>/dev/null || true
+
+          cp Release-Notes.md build/Protokollitaja-Linux/ 2>/dev/null || true
+
+          echo "Packaged files:"
+          ls -la build/Protokollitaja-Linux/
+          echo "Libraries:"
+          ls -la build/Protokollitaja-Linux/lib/ | head -20
           done
 
           # Look for Print_template.html in various locations
@@ -221,6 +236,7 @@ jobs:
             -DCMAKE_PREFIX_PATH="${Qt6_DIR}" \
             -DCMAKE_BUILD_TYPE=Release \
             -DBUILD_TESTING=ON \
+            -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" \
             -DCMAKE_EXE_LINKER_FLAGS="-liconv" \
             -DCMAKE_SHARED_LINKER_FLAGS="-liconv" \
             -S . \
