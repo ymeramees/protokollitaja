@@ -167,15 +167,13 @@ jobs:
           # Create wrapper scripts with LD_LIBRARY_PATH
           for exe in build/Protokollitaja-Linux/Protokollitaja build/Protokollitaja-Linux/Protolehelugeja build/Protokollitaja-Linux/Protofinaal build/Protokollitaja-Linux/Rangecontrol; do
             if [ -f "$exe" ]; then
-              basename=$(basename "$exe")
+              exename=$(basename "$exe")
               mv "$exe" "${exe}.bin"
-              cat > "$exe" << 'EOF'
-#!/bin/bash
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-export LD_LIBRARY_PATH="${DIR}/lib:${LD_LIBRARY_PATH}"
-export QT_PLUGIN_PATH="${DIR}/plugins"
-exec "${DIR}/$(basename "$0").bin" "$@"
-EOF
+              echo '#!/bin/bash' > "$exe"
+              echo 'DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"' >> "$exe"
+              echo 'export LD_LIBRARY_PATH="${DIR}/lib:${LD_LIBRARY_PATH}"' >> "$exe"
+              echo 'export QT_PLUGIN_PATH="${DIR}/plugins"' >> "$exe"
+              echo 'exec "${DIR}/$(basename "$0").bin" "$@"' >> "$exe"
               chmod +x "$exe"
             fi
           done

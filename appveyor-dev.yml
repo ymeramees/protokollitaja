@@ -180,13 +180,17 @@ for:
 
           export PATH="$HOME/.local/bin:$PATH"
 
-          export CMAKE_PREFIX_PATH="/usr/lib/x86_64-linux-gnu/cmake/Qt6:$CMAKE_PREFIX_PATH"
+          export QT_PREFIX=/usr
+
+          export CMAKE_PREFIX_PATH="$QT_PREFIX:$CMAKE_PREFIX_PATH"
 
           ls -la
 
           echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH"
 
-          cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6 -S $APPVEYOR_BUILD_FOLDER -B $APPVEYOR_BUILD_FOLDER/build
+          ls -la /usr/lib/x86_64-linux-gnu/cmake/Qt6 || true
+
+          cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$QT_PREFIX -S $APPVEYOR_BUILD_FOLDER -B $APPVEYOR_BUILD_FOLDER/build
 
           cmake --build $APPVEYOR_BUILD_FOLDER/build
 
@@ -231,16 +235,25 @@ for:
         - image: macos
 
     install:
+    install:
       - sh: >-
-          brew install qt@6 cmake
+          brew update
 
-          export Qt6_DIR=$(brew --prefix qt@6)/lib/cmake/Qt6
+          brew install qt@6.5 cmake
 
-          export PATH="$(brew --prefix qt@6)/bin:$PATH"
+          QT_PREFIX=$(brew --prefix qt@6.5)
+
+          echo "Qt installed at: $QT_PREFIX"
+
+          export Qt6_DIR="$QT_PREFIX/lib/cmake/Qt6"
+
+          export PATH="$QT_PREFIX/bin:$PATH"
 
           echo "Qt6_DIR=$Qt6_DIR"
 
-          ls -la $(brew --prefix qt@6)/lib/cmake/ || true
+          ls -la "$QT_PREFIX/lib/cmake/" || echo "CMake directory not found"
+
+          ls -la "$Qt6_DIR" || echo "Qt6 CMake config not found"
 
           qmake -v || true
 
@@ -254,17 +267,24 @@ for:
 
           ls -la
 
-          QT_PREFIX=$(brew --prefix qt@6)
+          QT_PREFIX=$(brew --prefix qt@6.5)
 
           echo "Qt prefix: $QT_PREFIX"
+
+          if [ ! -d "$QT_PREFIX" ]; then
+            echo "ERROR: Qt6 not found at $QT_PREFIX"
+            exit 1
+          fi
 
           export PATH="$QT_PREFIX/bin:$PATH"
 
           export CMAKE_PREFIX_PATH="$QT_PREFIX"
 
-          ls -la "$QT_PREFIX/lib/cmake/Qt6" || true
+          export Qt6_DIR="$QT_PREFIX/lib/cmake/Qt6"
 
-          cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$QT_PREFIX" -S $APPVEYOR_BUILD_FOLDER -B $APPVEYOR_BUILD_FOLDER/build
+          ls -la "$QT_PREFIX/lib/cmake/Qt6" || echo "Qt6 config not found"
+
+          cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$QT_PREFIX" -DQt6_DIR="$Qt6_DIR" -S $APPVEYOR_BUILD_FOLDER -B $APPVEYOR_BUILD_FOLDER/build
 
           cmake --build $APPVEYOR_BUILD_FOLDER/build
 
