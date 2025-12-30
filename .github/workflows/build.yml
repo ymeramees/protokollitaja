@@ -30,11 +30,23 @@ jobs:
       - name: Configure CMake
         run: |
           # Find MinGW path from Qt installation
-          $mingwPath = Get-ChildItem -Path "$env:Qt6_DIR\..\..\Tools" -Directory -Filter "mingw*" | Select-Object -First 1
-          if ($mingwPath) {
-            $env:PATH = "$($mingwPath.FullName)\bin;$env:PATH"
-            Write-Host "Added MinGW to PATH: $($mingwPath.FullName)\bin"
+          $qtDir = Resolve-Path "$env:Qt6_DIR"
+          $qtRoot = Split-Path (Split-Path (Split-Path (Split-Path $qtDir)))
+          $toolsDir = Join-Path $qtRoot "Tools"
+          Write-Host "Looking for MinGW in: $toolsDir"
+
+          if (Test-Path $toolsDir) {
+            $mingwPath = Get-ChildItem -Path $toolsDir -Directory -Filter "mingw*" | Select-Object -First 1
+            if ($mingwPath) {
+              $env:PATH = "$($mingwPath.FullName)\bin;$env:PATH"
+              Write-Host "Added MinGW to PATH: $($mingwPath.FullName)\bin"
+            } else {
+              Write-Host "No MinGW found in Tools directory"
+            }
+          } else {
+            Write-Host "Tools directory not found at: $toolsDir"
           }
+
           cmake -G "MinGW Makefiles" `
             -DCMAKE_PREFIX_PATH="${env:Qt6_DIR}" `
             -DCMAKE_BUILD_TYPE=Release `
@@ -176,17 +188,6 @@ jobs:
               echo 'exec "${DIR}/$(basename "$0").bin" "$@"' >> "$exe"
               chmod +x "$exe"
             fi
-          done
-
-          # Look for Print_template.html in various locations
-          find . -name "Print_template.html" -type f | head -n 1 | xargs -I {} cp {} build/Protokollitaja-Linux/Data/ 2>/dev/null || true
-
-          cp Release-Notes.md build/Protokollitaja-Linux/ 2>/dev/null || true
-
-          echo "Packaged files:"
-          ls -la build/Protokollitaja-Linux/
-          echo "Libraries:"
-          ls -la build/Protokollitaja-Linux/lib/ | head -20
           done
 
           # Look for Print_template.html in various locations

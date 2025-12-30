@@ -235,7 +235,6 @@ for:
         - image: macos
 
     install:
-    install:
       - sh: >-
           brew update
 
