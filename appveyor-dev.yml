@@ -149,186 +149,186 @@ for:
 
     artifacts:
       - path: "*.zip"
-        name: Protokollitaja-Windows
+        name: Protokollitaja
 
-  #---------------------------------#
-  #         Linux Build             #
-  #---------------------------------#
-  - matrix:
-      only:
-        - image: Ubuntu
+  # #---------------------------------#
+  # #         Linux Build             #
+  # #---------------------------------#
+  # - matrix:
+  #     only:
+  #       - image: Ubuntu
 
-    install:
-      - sh: >-
-          sudo apt-get update
+  #   install:
+  #     - sh: >-
+  #         sudo apt-get update
 
-          sudo apt-get install -y build-essential ninja-build qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libqt6serialport6-dev libqt6sql6-sqlite libgl1-mesa-dev libglu1-mesa-dev python3-pip
+  #         sudo apt-get install -y build-essential ninja-build qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libqt6serialport6-dev libqt6sql6-sqlite libgl1-mesa-dev libglu1-mesa-dev python3-pip
 
-          sudo pip3 install cmake --upgrade
+  #         sudo pip3 install cmake --upgrade
 
-          export PATH="$HOME/.local/bin:$PATH"
+  #         export PATH="$HOME/.local/bin:$PATH"
 
-          qmake6 -v || true
+  #         qmake6 -v || true
 
-          cmake --version
+  #         cmake --version
 
-          g++ --version
+  #         g++ --version
 
-    build_script:
-      - sh: >-
-          cd $APPVEYOR_BUILD_FOLDER
+  #   build_script:
+  #     - sh: >-
+  #         cd $APPVEYOR_BUILD_FOLDER
 
-          export PATH="$HOME/.local/bin:$PATH"
+  #         export PATH="$HOME/.local/bin:$PATH"
 
-          export QT_PREFIX=/usr
+  #         export QT_PREFIX=/usr
 
-          export CMAKE_PREFIX_PATH="$QT_PREFIX:$CMAKE_PREFIX_PATH"
+  #         export CMAKE_PREFIX_PATH="$QT_PREFIX:$CMAKE_PREFIX_PATH"
 
-          ls -la
+  #         ls -la
 
-          echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH"
+  #         echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH"
 
-          ls -la /usr/lib/x86_64-linux-gnu/cmake/Qt6 || true
+  #         ls -la /usr/lib/x86_64-linux-gnu/cmake/Qt6 || true
 
-          cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$QT_PREFIX -S $APPVEYOR_BUILD_FOLDER -B $APPVEYOR_BUILD_FOLDER/build
+  #         cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$QT_PREFIX -S $APPVEYOR_BUILD_FOLDER -B $APPVEYOR_BUILD_FOLDER/build
 
-          cmake --build $APPVEYOR_BUILD_FOLDER/build
+  #         cmake --build $APPVEYOR_BUILD_FOLDER/build
 
-    test_script:
-      - sh: >-
-          cd $APPVEYOR_BUILD_FOLDER
+  #   test_script:
+  #     - sh: >-
+  #         cd $APPVEYOR_BUILD_FOLDER
 
-          mkdir -p build/Protokollitaja-$APPVEYOR_BUILD_VERSION
+  #         mkdir -p build/Protokollitaja-$APPVEYOR_BUILD_VERSION
 
-          mkdir -p build/Protokollitaja-$APPVEYOR_BUILD_VERSION/Data
+  #         mkdir -p build/Protokollitaja-$APPVEYOR_BUILD_VERSION/Data
 
-          find build -type f -executable ! -name "*test*" -exec cp {} build/Protokollitaja-$APPVEYOR_BUILD_VERSION/ \; 2>/dev/null || true
+  #         find build -type f -executable ! -name "*test*" -exec cp {} build/Protokollitaja-$APPVEYOR_BUILD_VERSION/ \; 2>/dev/null || true
 
-          if [ -f "protokollitaja/build/release/Data/Print_template.html" ]; then
-            cp protokollitaja/build/release/Data/Print_template.html build/Protokollitaja-$APPVEYOR_BUILD_VERSION/Data/
-          fi
+  #         if [ -f "protokollitaja/build/release/Data/Print_template.html" ]; then
+  #           cp protokollitaja/build/release/Data/Print_template.html build/Protokollitaja-$APPVEYOR_BUILD_VERSION/Data/
+  #         fi
 
-          cp Release-Notes.md build/Protokollitaja-$APPVEYOR_BUILD_VERSION/ 2>/dev/null || true
+  #         cp Release-Notes.md build/Protokollitaja-$APPVEYOR_BUILD_VERSION/ 2>/dev/null || true
 
-          cd build
+  #         cd build
 
-          tar -czf Protokollitaja-$APPVEYOR_BUILD_VERSION.tar.gz Protokollitaja-$APPVEYOR_BUILD_VERSION
+  #         tar -czf Protokollitaja-$APPVEYOR_BUILD_VERSION.tar.gz Protokollitaja-$APPVEYOR_BUILD_VERSION
 
-          cd $APPVEYOR_BUILD_FOLDER
+  #         cd $APPVEYOR_BUILD_FOLDER
 
-          find build -type f -name "*test*" -executable | while read test; do
-            echo "Testing: $test"
-            if [[ "$test" != *"IntegrationTest"* ]]; then
-              $test -junitxml -tickcounter -o testresults.xml || true
-            fi
-          done
+  #         find build -type f -name "*test*" -executable | while read test; do
+  #           echo "Testing: $test"
+  #           if [[ "$test" != *"IntegrationTest"* ]]; then
+  #             $test -junitxml -tickcounter -o testresults.xml || true
+  #           fi
+  #         done
 
-    artifacts:
-      - path: "build/*.tar.gz"
-        name: Protokollitaja-Linux
+  #   artifacts:
+  #     - path: "build/*.tar.gz"
+  #       name: Protokollitaja-Linux
 
-  #---------------------------------#
-  #         macOS Build             #
-  #---------------------------------#
-  - matrix:
-      only:
-        - image: macos
+  # #---------------------------------#
+  # #         macOS Build             #
+  # #---------------------------------#
+  # - matrix:
+  #     only:
+  #       - image: macos
 
-    install:
-      - sh: >-
-          brew update
+  #   install:
+  #     - sh: >-
+  #         brew update
 
-          brew install qt@6.5 cmake
+  #         brew install qt@6.5 cmake
 
-          QT_PREFIX=$(brew --prefix qt@6.5)
+  #         QT_PREFIX=$(brew --prefix qt@6.5)
 
-          echo "Qt installed at: $QT_PREFIX"
+  #         echo "Qt installed at: $QT_PREFIX"
 
-          export Qt6_DIR="$QT_PREFIX/lib/cmake/Qt6"
+  #         export Qt6_DIR="$QT_PREFIX/lib/cmake/Qt6"
 
-          export PATH="$QT_PREFIX/bin:$PATH"
+  #         export PATH="$QT_PREFIX/bin:$PATH"
 
-          echo "Qt6_DIR=$Qt6_DIR"
+  #         echo "Qt6_DIR=$Qt6_DIR"
 
-          ls -la "$QT_PREFIX/lib/cmake/" || echo "CMake directory not found"
+  #         ls -la "$QT_PREFIX/lib/cmake/" || echo "CMake directory not found"
 
-          ls -la "$Qt6_DIR" || echo "Qt6 CMake config not found"
+  #         ls -la "$Qt6_DIR" || echo "Qt6 CMake config not found"
 
-          qmake -v || true
+  #         qmake -v || true
 
-          cmake --version
+  #         cmake --version
 
-          clang++ --version
+  #         clang++ --version
 
-    build_script:
-      - sh: >-
-          cd $APPVEYOR_BUILD_FOLDER
+  #   build_script:
+  #     - sh: >-
+  #         cd $APPVEYOR_BUILD_FOLDER
 
-          ls -la
+  #         ls -la
 
-          QT_PREFIX=$(brew --prefix qt@6.5)
+  #         QT_PREFIX=$(brew --prefix qt@6.5)
 
-          echo "Qt prefix: $QT_PREFIX"
+  #         echo "Qt prefix: $QT_PREFIX"
 
-          if [ ! -d "$QT_PREFIX" ]; then
-            echo "ERROR: Qt6 not found at $QT_PREFIX"
-            exit 1
-          fi
+  #         if [ ! -d "$QT_PREFIX" ]; then
+  #           echo "ERROR: Qt6 not found at $QT_PREFIX"
+  #           exit 1
+  #         fi
 
-          export PATH="$QT_PREFIX/bin:$PATH"
+  #         export PATH="$QT_PREFIX/bin:$PATH"
 
-          export CMAKE_PREFIX_PATH="$QT_PREFIX"
+  #         export CMAKE_PREFIX_PATH="$QT_PREFIX"
 
-          export Qt6_DIR="$QT_PREFIX/lib/cmake/Qt6"
+  #         export Qt6_DIR="$QT_PREFIX/lib/cmake/Qt6"
 
-          ls -la "$QT_PREFIX/lib/cmake/Qt6" || echo "Qt6 config not found"
+  #         ls -la "$QT_PREFIX/lib/cmake/Qt6" || echo "Qt6 config not found"
 
-          cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$QT_PREFIX" -DQt6_DIR="$Qt6_DIR" -S $APPVEYOR_BUILD_FOLDER -B $APPVEYOR_BUILD_FOLDER/build
+  #         cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$QT_PREFIX" -DQt6_DIR="$Qt6_DIR" -S $APPVEYOR_BUILD_FOLDER -B $APPVEYOR_BUILD_FOLDER/build
 
-          cmake --build $APPVEYOR_BUILD_FOLDER/build
+  #         cmake --build $APPVEYOR_BUILD_FOLDER/build
 
-    test_script:
-      - sh: >-
-          cd $APPVEYOR_BUILD_FOLDER
+  #   test_script:
+  #     - sh: >-
+  #         cd $APPVEYOR_BUILD_FOLDER
 
-          export PATH="$(brew --prefix qt@6)/bin:$PATH"
+  #         export PATH="$(brew --prefix qt@6)/bin:$PATH"
 
-          mkdir -p build/Protokollitaja-$APPVEYOR_BUILD_VERSION
+  #         mkdir -p build/Protokollitaja-$APPVEYOR_BUILD_VERSION
 
-          mkdir -p build/Protokollitaja-$APPVEYOR_BUILD_VERSION/Data
+  #         mkdir -p build/Protokollitaja-$APPVEYOR_BUILD_VERSION/Data
 
-          find build -type f -perm +111 ! -name "*test*" -exec cp {} build/Protokollitaja-$APPVEYOR_BUILD_VERSION/ \; 2>/dev/null || true
+  #         find build -type f -perm +111 ! -name "*test*" -exec cp {} build/Protokollitaja-$APPVEYOR_BUILD_VERSION/ \; 2>/dev/null || true
 
-          if [ -f "protokollitaja/build/release/Data/Print_template.html" ]; then
-            cp protokollitaja/build/release/Data/Print_template.html build/Protokollitaja-$APPVEYOR_BUILD_VERSION/Data/
-          fi
+  #         if [ -f "protokollitaja/build/release/Data/Print_template.html" ]; then
+  #           cp protokollitaja/build/release/Data/Print_template.html build/Protokollitaja-$APPVEYOR_BUILD_VERSION/Data/
+  #         fi
 
-          cp Release-Notes.md build/Protokollitaja-$APPVEYOR_BUILD_VERSION/ 2>/dev/null || true
+  #         cp Release-Notes.md build/Protokollitaja-$APPVEYOR_BUILD_VERSION/ 2>/dev/null || true
 
-          cd build/Protokollitaja-$APPVEYOR_BUILD_VERSION
+  #         cd build/Protokollitaja-$APPVEYOR_BUILD_VERSION
 
-          for app in protokollitaja protolehelugeja protofinaal rangecontrol; do
-            if [ -f "$app" ]; then
-              macdeployqt "$app" || true
-            fi
-          done
+  #         for app in protokollitaja protolehelugeja protofinaal rangecontrol; do
+  #           if [ -f "$app" ]; then
+  #             macdeployqt "$app" || true
+  #           fi
+  #         done
 
-          cd ..
+  #         cd ..
 
-          tar -czf Protokollitaja-$APPVEYOR_BUILD_VERSION.tar.gz Protokollitaja-$APPVEYOR_BUILD_VERSION
+  #         tar -czf Protokollitaja-$APPVEYOR_BUILD_VERSION.tar.gz Protokollitaja-$APPVEYOR_BUILD_VERSION
 
-          cd $APPVEYOR_BUILD_FOLDER
+  #         cd $APPVEYOR_BUILD_FOLDER
 
-          find build -type f -perm +111 -name "*test*" | while read test; do
-            echo "Testing: $test"
-            if [[ "$test" != *"IntegrationTest"* ]]; then
-              $test -junitxml -tickcounter -o testresults.xml || true
-            fi
-          done
+  #         find build -type f -perm +111 -name "*test*" | while read test; do
+  #           echo "Testing: $test"
+  #           if [[ "$test" != *"IntegrationTest"* ]]; then
+  #             $test -junitxml -tickcounter -o testresults.xml || true
+  #           fi
+  #         done
 
-    artifacts:
-      - path: "build/*.tar.gz"
-        name: Protokollitaja-macOS
+  #   artifacts:
+  #     - path: "build/*.tar.gz"
+  #       name: Protokollitaja-macOS
 notifications:
   - provider: Email
     to:

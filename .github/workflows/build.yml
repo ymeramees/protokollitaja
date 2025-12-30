@@ -29,9 +29,40 @@ jobs:
 
       - name: Configure CMake
         run: |
-          # Find MinGW path from Qt installation
-          $qtDir = Resolve-Path "$env:Qt6_DIR"
-          $qtRoot = Split-Path (Split-Path (Split-Path (Split-Path $qtDir)))
+          # Check Qt installation
+          Write-Host "Qt6_DIR environment variable: $env:Qt6_DIR"
+          Write-Host "Searching for Qt installation..."
+
+          # Try to find Qt directory
+          $qtPath = $null
+          if ($env:Qt6_DIR -and (Test-Path $env:Qt6_DIR)) {
+            $qtPath = $env:Qt6_DIR
+          } else {
+            # Search for Qt in common locations
+            $possiblePaths = @(
+              "D:\a\protokollitaja\protokollitaja\Qt\6.9*\mingw_64",
+              "D:\a\protokollitaja\Qt\6.9*\mingw_64",
+              "C:\Qt\6.9*\mingw_64"
+            )
+            foreach ($pattern in $possiblePaths) {
+              $found = Get-Item $pattern -ErrorAction SilentlyContinue | Select-Object -First 1
+              if ($found) {
+                $qtPath = $found.FullName
+                break
+              }
+            }
+          }
+
+          if (-not $qtPath) {
+            Write-Error "Qt installation not found"
+            exit 1
+          }
+
+          Write-Host "Found Qt at: $qtPath"
+          $env:CMAKE_PREFIX_PATH = $qtPath
+
+          # Find MinGW
+          $qtRoot = Split-Path (Split-Path $qtPath)
           $toolsDir = Join-Path $qtRoot "Tools"
           Write-Host "Looking for MinGW in: $toolsDir"
 
@@ -40,17 +71,11 @@ jobs:
             if ($mingwPath) {
               $env:PATH = "$($mingwPath.FullName)\bin;$env:PATH"
               Write-Host "Added MinGW to PATH: $($mingwPath.FullName)\bin"
-            } else {
-              Write-Host "No MinGW found in Tools directory"
             }
-          } else {
-            Write-Host "Tools directory not found at: $toolsDir"
           }
 
           cmake -G "MinGW Makefiles" `
-            -DCMAKE_PREFIX_PATH="${env:Qt6_DIR}" `
-            -DCMAKE_BUILD_TYPE=Release `
-            -S . `
+            -DCMAKE_PREFIX_PATH="$env:CMAKE_PREFIX_PATH" `
             -B build
 
       - name: Build
@@ -141,75 +166,84 @@ jobs:
         run: |
           cd build
           echo "Looking for test executables..."
-          find . -name "*test*" -type f -executable || true
+          find . -name "*est*" -type f -executable || true
           echo "Running CTest..."
           ctest --output-on-failure -C Release --verbose || echo "No tests found or tests failed"
         continue-on-error: true
 
       - name: Package application
         run: |
-          mkdir -p build/Protokollitaja-Linux
-          mkdir -p build/Protokollitaja-Linux/Data
-          mkdir -p build/Protokollitaja-Linux/lib
+          # mkdir -p build/Protokollitaja-Linux
+          # mkdir -p build/Protokollitaja-Linux/lib
 
-          # Find and copy executables from build directories
-          find build -type f -executable \( -name "Protokollitaja" -o -name "Protolehelugeja" -o -name "Protofinaal" -o -name "Rangecontrol" \) | \
-            grep -v test | grep -v CMakeFiles | while read file; do
-              echo "Copying: $file"
-              cp "$file" build/Protokollitaja-Linux/ 2>/dev/null || true
-            done
+          cmake --install build --prefix /tmp/Protokollitaja
 
-          # Copy Qt libraries
-          echo "Copying Qt libraries..."
-          QT_LIB_DIR="${Qt6_DIR}/../../lib"
+          # # Find and copy executables from build directories
+          # find build -type f -executable \( -name "Protokollitaja" -o -name "Protolehelugeja" -o -name "Protofinaal" -o -name "Rangecontrol" \) | \
+          #   grep -v test | grep -v CMakeFiles | while read file; do
+          #     echo "Copying: $file"
+          #     cp "$file" build/Protokollitaja-Linux/ 2>/dev/null || true
+          #   done
 
-          # Copy required Qt libraries
-          for lib in libQt6Core libQt6Gui libQt6Widgets libQt6Network libQt6PrintSupport libQt6SerialPort libQt6Sql libQt6DBus libicudata libicui18n libicuuc; do
-            find "$QT_LIB_DIR" -name "${lib}.so*" -type f -exec cp {} build/Protokollitaja-Linux/lib/ \; 2>/dev/null || true
-          done
+          # # Copy Qt libraries
+          # echo "Copying Qt libraries..."
+          # QT_LIB_DIR="${Qt6_DIR}/../../lib"
 
-          # Copy Qt plugins
-          mkdir -p build/Protokollitaja-Linux/plugins
-          if [ -d "${Qt6_DIR}/../../plugins" ]; then
-            cp -r "${Qt6_DIR}/../../plugins/platforms" build/Protokollitaja-Linux/plugins/ 2>/dev/null || true
-            cp -r "${Qt6_DIR}/../../plugins/imageformats" build/Protokollitaja-Linux/plugins/ 2>/dev/null || true
-            cp -r "${Qt6_DIR}/../../plugins/sqldrivers" build/Protokollitaja-Linux/plugins/ 2>/dev/null || true
-          fi
+          # # Copy required Qt libraries
+          # for lib in libQt6Core libQt6Gui libQt6Widgets libQt6Network libQt6PrintSupport libQt6SerialPort libQt6Sql libQt6DBus libicudata libicui18n libicuuc; do
+          #   find "$QT_LIB_DIR" -name "${lib}.so*" -type f -exec cp {} build/Protokollitaja-Linux/lib/ \; 2>/dev/null || true
+          # done
 
-          # Create wrapper scripts with LD_LIBRARY_PATH
-          for exe in build/Protokollitaja-Linux/Protokollitaja build/Protokollitaja-Linux/Protolehelugeja build/Protokollitaja-Linux/Protofinaal build/Protokollitaja-Linux/Rangecontrol; do
-            if [ -f "$exe" ]; then
-              exename=$(basename "$exe")
-              mv "$exe" "${exe}.bin"
-              echo '#!/bin/bash' > "$exe"
-              echo 'DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"' >> "$exe"
-              echo 'export LD_LIBRARY_PATH="${DIR}/lib:${LD_LIBRARY_PATH}"' >> "$exe"
-              echo 'export QT_PLUGIN_PATH="${DIR}/plugins"' >> "$exe"
-              echo 'exec "${DIR}/$(basename "$0").bin" "$@"' >> "$exe"
-              chmod +x "$exe"
-            fi
-          done
+          # # Copy Qt plugins
+          # mkdir -p build/Protokollitaja-Linux/plugins
+          # if [ -d "${Qt6_DIR}/../../plugins" ]; then
+          #   cp -r "${Qt6_DIR}/../../plugins/platforms" build/Protokollitaja-Linux/plugins/ 2>/dev/null || true
+          #   cp -r "${Qt6_DIR}/../../plugins/imageformats" build/Protokollitaja-Linux/plugins/ 2>/dev/null || true
+          #   cp -r "${Qt6_DIR}/../../plugins/sqldrivers" build/Protokollitaja-Linux/plugins/ 2>/dev/null || true
+          # fi
+
+          # # Create wrapper scripts with LD_LIBRARY_PATH
+          # for exe in build/Protokollitaja-Linux/Protokollitaja build/Protokollitaja-Linux/Protolehelugeja build/Protokollitaja-Linux/Protofinaal build/Protokollitaja-Linux/Rangecontrol; do
+          #   if [ -f "$exe" ]; then
+          #     exename=$(basename "$exe")
+          #     mv "$exe" "${exe}.bin"
+          #     echo '#!/bin/bash' > "$exe"
+          #     echo 'DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"' >> "$exe"
+          #     echo 'export LD_LIBRARY_PATH="${DIR}/lib:${LD_LIBRARY_PATH}"' >> "$exe"
+          #     echo 'export QT_PLUGIN_PATH="${DIR}/plugins"' >> "$exe"
+          #     echo 'exec "${DIR}/$(basename "$0").bin" "$@"' >> "$exe"
+          #     chmod +x "$exe"
+          #   fi
+          # done
+
+          mkdir -p /tmp/Protokollitaja/Data
 
           # Look for Print_template.html in various locations
-          find . -name "Print_template.html" -type f | head -n 1 | xargs -I {} cp {} build/Protokollitaja-Linux/Data/ 2>/dev/null || true
+          find . -name "Print_template.html" -type f | head -n 1 | xargs -I {} cp {} /tmp/Protokollitaja/Data/ 2>/dev/null || true
 
-          cp Release-Notes.md build/Protokollitaja-Linux/ 2>/dev/null || true
+          cp Release-Notes.md /tmp/Protokollitaja/ 2>/dev/null || true
+
+          mv /tmp/Protokollitaja/bin/Protokollitaja /tmp/Protokollitaja/
+          mv /tmp/Protokollitaja/bin/Protolehelugeja /tmp/Protokollitaja/
+          mv /tmp/Protokollitaja/bin/Protofinaal /tmp/Protokollitaja/
+          mv /tmp/Protokollitaja/bin/RangeControl /tmp/Protokollitaja/
+          rm -rf /tmp/Protokollitaja/bin
 
           echo "Packaged files:"
-          ls -la build/Protokollitaja-Linux/
+          ls -la /tmp/Protokollitaja/
           echo "Libraries:"
-          ls -la build/Protokollitaja-Linux/lib/ | head -20
+          ls -la /tmp/Protokollitaja/lib/ | head -20
 
-      - name: Create archive
-        run: |
-          cd build
-          tar -czf ../Protokollitaja-Linux.tar.gz Protokollitaja-Linux
+      # - name: Create archive
+      #   run: |
+      #     cd build
+      #     tar -czf ../Protokollitaja-Linux.tar.gz Protokollitaja-Linux
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: Protokollitaja-Linux
-          path: Protokollitaja-Linux.tar.gz
+          path: /tmp/Protokollitaja
           retention-days: 30
 
   build-macos:
