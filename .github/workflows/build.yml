@@ -130,14 +130,20 @@ jobs:
           mkdir -p build/Protokollitaja-Linux
           mkdir -p build/Protokollitaja-Linux/Data
 
-          find build -type f -executable -name "*.exe" -o -name "protokollitaja" -o -name "protolehelugeja" -o -name "protofinaal" -o -name "rangecontrol" | \
-            grep -v test | xargs -I {} cp {} build/Protokollitaja-Linux/ 2>/dev/null || true
+          # Find and copy executables from build directories
+          find build -type f -executable \( -name "Protokollitaja" -o -name "Protolehelugeja" -o -name "Protofinaal" -o -name "Rangecontrol" \) | \
+            grep -v test | grep -v CMakeFiles | while read file; do
+              echo "Copying: $file"
+              cp "$file" build/Protokollitaja-Linux/ 2>/dev/null || true
+            done
 
-          if [ -f "protokollitaja/build/release/Data/Print_template.html" ]; then
-            cp protokollitaja/build/release/Data/Print_template.html build/Protokollitaja-Linux/Data/
-          fi
+          # Look for Print_template.html in various locations
+          find . -name "Print_template.html" -type f | head -n 1 | xargs -I {} cp {} build/Protokollitaja-Linux/Data/ 2>/dev/null || true
 
           cp Release-Notes.md build/Protokollitaja-Linux/ 2>/dev/null || true
+
+          echo "Packaged files:"
+          ls -la build/Protokollitaja-Linux/
 
       - name: Create archive
         run: |
@@ -173,6 +179,8 @@ jobs:
           cmake -G "Unix Makefiles" \
             -DCMAKE_PREFIX_PATH="${Qt6_DIR}" \
             -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_EXE_LINKER_FLAGS="-liconv" \
+            -DCMAKE_SHARED_LINKER_FLAGS="-liconv" \
             -S . \
             -B build
 
@@ -190,18 +198,31 @@ jobs:
           mkdir -p build/Protokollitaja-macOS
           mkdir -p build/Protokollitaja-macOS/Data
 
-          find build -type f -perm +111 \( -name "protokollitaja" -o -name "protolehelugeja" -o -name "protofinaal" -o -name "rangecontrol" \) | \
-            grep -v test | xargs -I {} cp {} build/Protokollitaja-macOS/ 2>/dev/null || true
+          # Find and copy .app bundles or executables
+          find build -type f \( -name "Protokollitaja" -o -name "Protolehelugeja" -o -name "Protofinaal" -o -name "Rangecontrol" \) | \
+            grep -v test | grep -v CMakeFiles | while read file; do
+              echo "Copying: $file"
+              cp "$file" build/Protokollitaja-macOS/ 2>/dev/null || true
+            done
 
-          if [ -f "protokollitaja/build/release/Data/Print_template.html" ]; then
-            cp protokollitaja/build/release/Data/Print_template.html build/Protokollitaja-macOS/Data/
-          fi
+          # Also look for .app bundles
+          find build -type d -name "*.app" | grep -v test | while read app; do
+            echo "Copying app bundle: $app"
+            cp -R "$app" build/Protokollitaja-macOS/ 2>/dev/null || true
+          done
+
+          # Look for Print_template.html
+          find . -name "Print_template.html" -type f | head -n 1 | xargs -I {} cp {} build/Protokollitaja-macOS/Data/ 2>/dev/null || true
 
           cp Release-Notes.md build/Protokollitaja-macOS/ 2>/dev/null || true
 
+          echo "Packaged files:"
+          ls -la build/Protokollitaja-macOS/
+
           cd build/Protokollitaja-macOS
-          for app in protokollitaja protolehelugeja protofinaal rangecontrol; do
-            if [ -f "$app" ]; then
+          for app in *.app; do
+            if [ -d "$app" ]; then
+              echo "Running macdeployqt on: $app"
               macdeployqt "$app" || true
             fi
           done

@@ -162,7 +162,7 @@ for:
       - sh: >-
           sudo apt-get update
 
-          sudo apt-get install -y build-essential ninja-build qt6-base-dev qt6-base-dev-tools libqt6serialport6-dev libqt6sql6-sqlite libgl1-mesa-dev libglu1-mesa-dev python3-pip
+          sudo apt-get install -y build-essential ninja-build qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools libqt6serialport6-dev libqt6sql6-sqlite libgl1-mesa-dev libglu1-mesa-dev python3-pip
 
           sudo pip3 install cmake --upgrade
 
@@ -228,13 +228,9 @@ for:
 
     install:
       - sh: >-
-          brew install qt@6 cmake ninja
+          brew install qt@6 cmake
 
           export PATH="$(brew --prefix qt@6)/bin:$PATH"
-
-          export PATH="$(brew --prefix)/bin:$PATH"
-
-          which ninja
 
           qmake -v || true
 
@@ -250,9 +246,7 @@ for:
 
           export PATH="$(brew --prefix qt@6)/bin:$PATH"
 
-          export PATH="$(brew --prefix)/bin:$PATH"
-
-          cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$(brew --prefix qt@6) -S $APPVEYOR_BUILD_FOLDER -B $APPVEYOR_BUILD_FOLDER/build
+          cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$(brew --prefix qt@6) -S $APPVEYOR_BUILD_FOLDER -B $APPVEYOR_BUILD_FOLDER/build
 
           cmake --build $APPVEYOR_BUILD_FOLDER/build
 
@@ -261,8 +255,6 @@ for:
           cd $APPVEYOR_BUILD_FOLDER
 
           export PATH="$(brew --prefix qt@6)/bin:$PATH"
-
-          export PATH="$(brew --prefix)/bin:$PATH"
 
           mkdir -p build/Protokollitaja-$APPVEYOR_BUILD_VERSION
 
