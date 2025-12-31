@@ -29,7 +29,21 @@ jobs:
 
       - name: Configure CMake
         run: |
-          cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+          Write-Host "Qt6_DIR = $env:Qt6_DIR"
+
+          # Find Qt MinGW toolchain
+          $qtRoot = Split-Path (Split-Path $env:Qt6_DIR)
+          $mingw = Get-ChildItem "$qtRoot/Tools" -Directory -Filter "mingw*" | Select-Object -First 1
+          $mingwBin = Join-Path $mingw.FullName "bin"
+
+          Write-Host "Using MinGW from: $mingwBin"
+          $env:PATH = "$mingwBin;$env:PATH"
+
+          cmake -S . -B build `
+            -G "MinGW Makefiles" `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_C_COMPILER="$mingwBin/gcc.exe" `
+            -DCMAKE_CXX_COMPILER="$mingwBin/g++.exe"
 
       - name: Build
         run: cmake --build build --config Release
@@ -139,10 +153,10 @@ jobs:
           shopt -s extglob
           rm -v !("Protokollitaja"|"Protofinaal"|"Protolehelugeja"|"RangeControl")
           cd -
-          ln -s /tmp/Protokollitaja/bin/Protokollitaja /tmp/Protokollitaja/Protokollitaja
-          ln -s /tmp/Protokollitaja/bin/Protolehelugeja /tmp/Protokollitaja/Protolehelugeja
-          ln -s /tmp/Protokollitaja/bin/Protofinaal /tmp/Protokollitaja/Protofinaal
-          ln -s /tmp/Protokollitaja/bin/RangeControl /tmp/Protokollitaja/RangeControl
+          # ln -s /tmp/Protokollitaja/bin/Protokollitaja /tmp/Protokollitaja/Protokollitaja
+          # ln -s /tmp/Protokollitaja/bin/Protolehelugeja /tmp/Protokollitaja/Protolehelugeja
+          # ln -s /tmp/Protokollitaja/bin/Protofinaal /tmp/Protokollitaja/Protofinaal
+          # ln -s /tmp/Protokollitaja/bin/RangeControl /tmp/Protokollitaja/RangeControl
 
           echo "Packaged files:"
           ls -la /tmp/Protokollitaja/
