@@ -29,83 +29,7 @@ jobs:
 
       - name: Configure CMake
         run: |
-          # Check Qt installation
-          Write-Host "Qt6_DIR environment variable: $env:Qt6_DIR"
-          Write-Host "Searching for Qt installation..."
-
-          # Try to find Qt directory
-          $qtPath = $null
-          if ($env:Qt6_DIR -and (Test-Path $env:Qt6_DIR)) {
-            $qtPath = $env:Qt6_DIR
-          } else {
-            # Search for Qt in common locations
-            $possiblePaths = @(
-              "D:\a\protokollitaja\protokollitaja\Qt\6.9*\mingw_64",
-              "D:\a\protokollitaja\Qt\6.9*\mingw_64",
-              "C:\Qt\6.9*\mingw_64"
-            )
-            foreach ($pattern in $possiblePaths) {
-              $found = Get-Item $pattern -ErrorAction SilentlyContinue | Select-Object -First 1
-              if ($found) {
-                $qtPath = $found.FullName
-                break
-              }
-            }
-          }
-
-          if (-not $qtPath) {
-            Write-Error "Qt installation not found"
-            exit 1
-          }
-
-          Write-Host "Found Qt at: $qtPath"
-          $env:CMAKE_PREFIX_PATH = $qtPath
-
-          # Find MinGW
-          $qtRoot = Split-Path (Split-Path $qtPath)
-          $toolsDir = Join-Path $qtRoot "Tools"
-          Write-Host "Looking for MinGW in: $toolsDir"
-
-          $mingwBinPath = $null
-          $gccPath = $null
-          $gxxPath = $null
-
-          if (Test-Path $toolsDir) {
-            $mingwPath = Get-ChildItem -Path $toolsDir -Directory -Filter "mingw*" | Select-Object -First 1
-            if ($mingwPath) {
-              $mingwBinPath = Join-Path $mingwPath.FullName "bin"
-              $gccPath = Join-Path $mingwBinPath "gcc.exe"
-              $gxxPath = Join-Path $mingwBinPath "g++.exe"
-
-              if ((Test-Path $gccPath) -and (Test-Path $gxxPath)) {
-                $env:PATH = "$mingwBinPath;$env:PATH"
-                Write-Host "Added MinGW to PATH: $mingwBinPath"
-                Write-Host "Using GCC: $gccPath"
-                Write-Host "Using G++: $gxxPath"
-              } else {
-                Write-Host "WARNING: MinGW compilers not found at expected location"
-                $gccPath = $null
-                $gxxPath = $null
-              }
-            }
-          }
-
-          # Build cmake command
-          $cmakeArgs = @(
-            "-G", "MinGW Makefiles",
-            "-DCMAKE_PREFIX_PATH=$env:CMAKE_PREFIX_PATH",
-            "-DCMAKE_BUILD_TYPE=Release",
-            "-S", ".",
-            "-B", "build"
-          )
-
-          if ($gccPath -and $gxxPath) {
-            $cmakeArgs += "-DCMAKE_C_COMPILER=$gccPath"
-            $cmakeArgs += "-DCMAKE_CXX_COMPILER=$gxxPath"
-          }
-
-          Write-Host "Running CMake with args: $($cmakeArgs -join ' ')"
-          & cmake @cmakeArgs
+          cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
 
       - name: Build
         run: cmake --build build --config Release
@@ -141,15 +65,15 @@ jobs:
             windeployqt $app
           }
 
-      - name: Create archive
-        run: |
-          Compress-Archive -Path ".\build\Protokollitaja-Windows" -DestinationPath "Protokollitaja-Windows.zip"
+      # - name: Create archive
+      #   run: |
+      #     Compress-Archive -Path ".\build\Protokollitaja-Windows" -DestinationPath "Protokollitaja-Windows.zip"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: Protokollitaja-Windows
-          path: Protokollitaja-Windows.zip
+          path: build/Protokollitaja-Windows
           retention-days: 30
 
   build-linux:
@@ -212,6 +136,7 @@ jobs:
           cp Release-Notes.md /tmp/Protokollitaja/ 2>/dev/null || true
 
           cd /tmp/Protokollitaja/bin/
+          shopt -s extglob
           rm -v !("Protokollitaja"|"Protofinaal"|"Protolehelugeja"|"RangeControl")
           cd -
           ln -s /tmp/Protokollitaja/bin/Protokollitaja /tmp/Protokollitaja/Protokollitaja
@@ -306,31 +231,9 @@ jobs:
             fi
           done
 
-
-          cmake --install build --prefix /tmp/Protokollitaja
-
-          mkdir -p /tmp/Protokollitaja/Data
-
-          # Look for Print_template.html in various locations
-          find . -name "Print_template.html" -type f | head -n 1 | xargs -I {} cp {} /tmp/Protokollitaja/Data/ 2>/dev/null || true
-
-          cp Release-Notes.md /tmp/Protokollitaja/ 2>/dev/null || true
-
-          echo "Packaged files:"
-          ls -la /tmp/Protokollitaja/
-          echo "Libraries:"
-          ls -la /tmp/Protokollitaja/lib/ | head -20
-
-      - name: Create archive
-        run: |
-          cd build
-          tar -czf ../Protokollitaja-macOS.tar.gz Protokollitaja-macOS
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: Protokollitaja-macOS
-          path: |
-            Protokollitaja-macOS.tar.gz
-            /tmp/Protokollitaja
+          path: build/Protokollitaja-macOS
           retention-days: 30
