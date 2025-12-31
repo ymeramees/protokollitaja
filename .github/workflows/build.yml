@@ -23,27 +23,37 @@ jobs:
           version: "6.9.*"
           host: "windows"
           target: "desktop"
-          arch: "win64_mingw"
+          arch: "win64_msvc2019_64"
           modules: "qtserialport qt5compat"
           cache: true
 
       - name: Configure CMake
-        run: |
-          Write-Host "Qt6_DIR = $env:Qt6_DIR"
+        run: cmake -S . -B build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
+        # shell: pwsh
+        # run: |
+        #   Write-Host "Qt root: $env:Qt6_DIR"
 
-          # Find Qt MinGW toolchain
-          $qtRoot = Split-Path (Split-Path $env:Qt6_DIR)
-          $mingw = Get-ChildItem "$qtRoot/Tools" -Directory -Filter "mingw*" | Select-Object -First 1
-          $mingwBin = Join-Path $mingw.FullName "bin"
+        #   # Find Qt version directory
+        #   $qtVersion = Get-ChildItem "$env:Qt6_DIR" -Directory -Filter "6.*" | Select-Object -First 1
+        #   if (-not $qtVersion) { throw "Qt version directory not found" }
 
-          Write-Host "Using MinGW from: $mingwBin"
-          $env:PATH = "$mingwBin;$env:PATH"
+        #   $qtPath = Join-Path $qtVersion.FullName "mingw_64"
+        #   Write-Host "Qt path: $qtPath"
 
-          cmake -S . -B build `
-            -G "MinGW Makefiles" `
-            -DCMAKE_BUILD_TYPE=Release `
-            -DCMAKE_C_COMPILER="$mingwBin/gcc.exe" `
-            -DCMAKE_CXX_COMPILER="$mingwBin/g++.exe"
+        #   # Find MinGW
+        #   $mingw = Get-ChildItem "$env:Qt6_DIR/Tools" -Directory -Filter "mingw*" | Select-Object -First 1
+        #   if (-not $mingw) { throw "MinGW not found" }
+        #   $mingwBin = Join-Path $mingw.FullName "bin"
+        #   Write-Host "Using MinGW: $mingwBin"
+
+        #   $env:PATH = "$mingwBin;$env:PATH"
+
+        #   cmake -S . -B build `
+        #     -G "MinGW Makefiles" `
+        #     -DCMAKE_BUILD_TYPE=Release `
+        #     -DCMAKE_PREFIX_PATH="$qtPath" `
+        #     -DCMAKE_C_COMPILER="$mingwBin/gcc.exe" `
+        #     -DCMAKE_CXX_COMPILER="$mingwBin/g++.exe"
 
       - name: Build
         run: cmake --build build --config Release
