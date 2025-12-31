@@ -9,96 +9,96 @@ on:
       - devel
 
 jobs:
-  build-windows:
-    name: Build on Windows
-    runs-on: windows-latest
+  # build-windows:
+  #   name: Build on Windows
+  #   runs-on: windows-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v4
-        with:
-          version: "6.9.*"
-          host: "windows"
-          target: "desktop"
-          arch: "win64_msvc2022_64"
-          modules: "qtserialport qt5compat"
-          cache: true
+  #     - name: Install Qt
+  #       uses: jurplel/install-qt-action@v4
+  #       with:
+  #         version: "6.9.*"
+  #         host: "windows"
+  #         target: "desktop"
+  #         arch: "win64_msvc2022_64"
+  #         modules: "qtserialport qt5compat"
+  #         cache: true
 
-      - name: Configure CMake
-        run: cmake -S . -B build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
-        # shell: pwsh
-        # run: |
-        #   Write-Host "Qt root: $env:Qt6_DIR"
+  #     - name: Configure CMake
+  #       run: cmake -S . -B build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
+  #       # shell: pwsh
+  #       # run: |
+  #       #   Write-Host "Qt root: $env:Qt6_DIR"
 
-        #   # Find Qt version directory
-        #   $qtVersion = Get-ChildItem "$env:Qt6_DIR" -Directory -Filter "6.*" | Select-Object -First 1
-        #   if (-not $qtVersion) { throw "Qt version directory not found" }
+  #       #   # Find Qt version directory
+  #       #   $qtVersion = Get-ChildItem "$env:Qt6_DIR" -Directory -Filter "6.*" | Select-Object -First 1
+  #       #   if (-not $qtVersion) { throw "Qt version directory not found" }
 
-        #   $qtPath = Join-Path $qtVersion.FullName "mingw_64"
-        #   Write-Host "Qt path: $qtPath"
+  #       #   $qtPath = Join-Path $qtVersion.FullName "mingw_64"
+  #       #   Write-Host "Qt path: $qtPath"
 
-        #   # Find MinGW
-        #   $mingw = Get-ChildItem "$env:Qt6_DIR/Tools" -Directory -Filter "mingw*" | Select-Object -First 1
-        #   if (-not $mingw) { throw "MinGW not found" }
-        #   $mingwBin = Join-Path $mingw.FullName "bin"
-        #   Write-Host "Using MinGW: $mingwBin"
+  #       #   # Find MinGW
+  #       #   $mingw = Get-ChildItem "$env:Qt6_DIR/Tools" -Directory -Filter "mingw*" | Select-Object -First 1
+  #       #   if (-not $mingw) { throw "MinGW not found" }
+  #       #   $mingwBin = Join-Path $mingw.FullName "bin"
+  #       #   Write-Host "Using MinGW: $mingwBin"
 
-        #   $env:PATH = "$mingwBin;$env:PATH"
+  #       #   $env:PATH = "$mingwBin;$env:PATH"
 
-        #   cmake -S . -B build `
-        #     -G "MinGW Makefiles" `
-        #     -DCMAKE_BUILD_TYPE=Release `
-        #     -DCMAKE_PREFIX_PATH="$qtPath" `
-        #     -DCMAKE_C_COMPILER="$mingwBin/gcc.exe" `
-        #     -DCMAKE_CXX_COMPILER="$mingwBin/g++.exe"
+  #       #   cmake -S . -B build `
+  #       #     -G "MinGW Makefiles" `
+  #       #     -DCMAKE_BUILD_TYPE=Release `
+  #       #     -DCMAKE_PREFIX_PATH="$qtPath" `
+  #       #     -DCMAKE_C_COMPILER="$mingwBin/gcc.exe" `
+  #       #     -DCMAKE_CXX_COMPILER="$mingwBin/g++.exe"
 
-      - name: Build
-        run: cmake --build build --config Release
+  #     - name: Build
+  #       run: cmake --build build --config Release
 
-      - name: Run tests
-        run: |
-          cd build
-          ctest --output-on-failure -C Release
-        continue-on-error: true
+  #     - name: Run tests
+  #       run: |
+  #         cd build
+  #         ctest --output-on-failure -C Release
+  #       continue-on-error: true
 
-      - name: Package application
-        run: |
-          New-Item -Path .\build -Name "Protokollitaja-Windows" -ItemType "directory" -Force
-          New-Item -Path ".\build\Protokollitaja-Windows" -Name "Data" -ItemType "directory" -Force
-          New-Item -Path ".\build\Protokollitaja-Windows" -Name "tools" -ItemType "directory" -Force
+  #     - name: Package application
+  #       run: |
+  #         New-Item -Path .\build -Name "Protokollitaja-Windows" -ItemType "directory" -Force
+  #         New-Item -Path ".\build\Protokollitaja-Windows" -Name "Data" -ItemType "directory" -Force
+  #         New-Item -Path ".\build\Protokollitaja-Windows" -Name "tools" -ItemType "directory" -Force
 
-          $apps = Get-ChildItem -Path ".\build" -Recurse -Name -Include *.exe -Exclude *test.exe
-          foreach($app in $apps) {
-            if (Test-Path ".\build\$app") {
-              Copy-Item ".\build\$app" -Destination ".\build\Protokollitaja-Windows"
-            }
-          }
+  #         $apps = Get-ChildItem -Path ".\build" -Recurse -Name -Include *.exe -Exclude *test.exe
+  #         foreach($app in $apps) {
+  #           if (Test-Path ".\build\$app") {
+  #             Copy-Item ".\build\$app" -Destination ".\build\Protokollitaja-Windows"
+  #           }
+  #         }
 
-          if (Test-Path ".\protokollitaja\build\release\Data\Print_template.html") {
-            Copy-Item ".\protokollitaja\build\release\Data\Print_template.html" -Destination ".\build\Protokollitaja-Windows\Data"
-          }
+  #         if (Test-Path ".\protokollitaja\build\release\Data\Print_template.html") {
+  #           Copy-Item ".\protokollitaja\build\release\Data\Print_template.html" -Destination ".\build\Protokollitaja-Windows\Data"
+  #         }
 
-          Copy-Item ".\Release-Notes.md" -Destination ".\build\Protokollitaja-Windows" -ErrorAction SilentlyContinue
+  #         Copy-Item ".\Release-Notes.md" -Destination ".\build\Protokollitaja-Windows" -ErrorAction SilentlyContinue
 
-          cd .\build\Protokollitaja-Windows
-          $copiedApps = Get-ChildItem -Path . -Name -Include *.exe
-          foreach($app in $copiedApps) {
-            windeployqt $app
-          }
+  #         cd .\build\Protokollitaja-Windows
+  #         $copiedApps = Get-ChildItem -Path . -Name -Include *.exe
+  #         foreach($app in $copiedApps) {
+  #           windeployqt $app
+  #         }
 
-      # - name: Create archive
-      #   run: |
-      #     Compress-Archive -Path ".\build\Protokollitaja-Windows" -DestinationPath "Protokollitaja-Windows.zip"
+  #     # - name: Create archive
+  #     #   run: |
+  #     #     Compress-Archive -Path ".\build\Protokollitaja-Windows" -DestinationPath "Protokollitaja-Windows.zip"
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Protokollitaja-Windows
-          path: build/Protokollitaja-Windows
-          retention-days: 30
+  #     - name: Upload artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: Protokollitaja-Windows
+  #         path: build/Protokollitaja-Windows
+  #         retention-days: 30
 
   build-linux:
     name: Build on Linux
