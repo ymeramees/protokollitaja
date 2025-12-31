@@ -66,17 +66,46 @@ jobs:
           $toolsDir = Join-Path $qtRoot "Tools"
           Write-Host "Looking for MinGW in: $toolsDir"
 
+          $mingwBinPath = $null
+          $gccPath = $null
+          $gxxPath = $null
+
           if (Test-Path $toolsDir) {
             $mingwPath = Get-ChildItem -Path $toolsDir -Directory -Filter "mingw*" | Select-Object -First 1
             if ($mingwPath) {
-              $env:PATH = "$($mingwPath.FullName)\bin;$env:PATH"
-              Write-Host "Added MinGW to PATH: $($mingwPath.FullName)\bin"
+              $mingwBinPath = Join-Path $mingwPath.FullName "bin"
+              $gccPath = Join-Path $mingwBinPath "gcc.exe"
+              $gxxPath = Join-Path $mingwBinPath "g++.exe"
+
+              if ((Test-Path $gccPath) -and (Test-Path $gxxPath)) {
+                $env:PATH = "$mingwBinPath;$env:PATH"
+                Write-Host "Added MinGW to PATH: $mingwBinPath"
+                Write-Host "Using GCC: $gccPath"
+                Write-Host "Using G++: $gxxPath"
+              } else {
+                Write-Host "WARNING: MinGW compilers not found at expected location"
+                $gccPath = $null
+                $gxxPath = $null
+              }
             }
           }
 
-          cmake -G "MinGW Makefiles" `
-            -DCMAKE_PREFIX_PATH="$env:CMAKE_PREFIX_PATH" `
-            -B build
+          # Build cmake command
+          $cmakeArgs = @(
+            "-G", "MinGW Makefiles",
+            "-DCMAKE_PREFIX_PATH=$env:CMAKE_PREFIX_PATH",
+            "-DCMAKE_BUILD_TYPE=Release",
+            "-S", ".",
+            "-B", "build"
+          )
+
+          if ($gccPath -and $gxxPath) {
+            $cmakeArgs += "-DCMAKE_C_COMPILER=$gccPath"
+            $cmakeArgs += "-DCMAKE_CXX_COMPILER=$gxxPath"
+          }
+
+          Write-Host "Running CMake with args: $($cmakeArgs -join ' ')"
+          & cmake @cmakeArgs
 
       - name: Build
         run: cmake --build build --config Release
@@ -173,48 +202,7 @@ jobs:
 
       - name: Package application
         run: |
-          # mkdir -p build/Protokollitaja-Linux
-          # mkdir -p build/Protokollitaja-Linux/lib
-
           cmake --install build --prefix /tmp/Protokollitaja
-
-          # # Find and copy executables from build directories
-          # find build -type f -executable \( -name "Protokollitaja" -o -name "Protolehelugeja" -o -name "Protofinaal" -o -name "Rangecontrol" \) | \
-          #   grep -v test | grep -v CMakeFiles | while read file; do
-          #     echo "Copying: $file"
-          #     cp "$file" build/Protokollitaja-Linux/ 2>/dev/null || true
-          #   done
-
-          # # Copy Qt libraries
-          # echo "Copying Qt libraries..."
-          # QT_LIB_DIR="${Qt6_DIR}/../../lib"
-
-          # # Copy required Qt libraries
-          # for lib in libQt6Core libQt6Gui libQt6Widgets libQt6Network libQt6PrintSupport libQt6SerialPort libQt6Sql libQt6DBus libicudata libicui18n libicuuc; do
-          #   find "$QT_LIB_DIR" -name "${lib}.so*" -type f -exec cp {} build/Protokollitaja-Linux/lib/ \; 2>/dev/null || true
-          # done
-
-          # # Copy Qt plugins
-          # mkdir -p build/Protokollitaja-Linux/plugins
-          # if [ -d "${Qt6_DIR}/../../plugins" ]; then
-          #   cp -r "${Qt6_DIR}/../../plugins/platforms" build/Protokollitaja-Linux/plugins/ 2>/dev/null || true
-          #   cp -r "${Qt6_DIR}/../../plugins/imageformats" build/Protokollitaja-Linux/plugins/ 2>/dev/null || true
-          #   cp -r "${Qt6_DIR}/../../plugins/sqldrivers" build/Protokollitaja-Linux/plugins/ 2>/dev/null || true
-          # fi
-
-          # # Create wrapper scripts with LD_LIBRARY_PATH
-          # for exe in build/Protokollitaja-Linux/Protokollitaja build/Protokollitaja-Linux/Protolehelugeja build/Protokollitaja-Linux/Protofinaal build/Protokollitaja-Linux/Rangecontrol; do
-          #   if [ -f "$exe" ]; then
-          #     exename=$(basename "$exe")
-          #     mv "$exe" "${exe}.bin"
-          #     echo '#!/bin/bash' > "$exe"
-          #     echo 'DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"' >> "$exe"
-          #     echo 'export LD_LIBRARY_PATH="${DIR}/lib:${LD_LIBRARY_PATH}"' >> "$exe"
-          #     echo 'export QT_PLUGIN_PATH="${DIR}/plugins"' >> "$exe"
-          #     echo 'exec "${DIR}/$(basename "$0").bin" "$@"' >> "$exe"
-          #     chmod +x "$exe"
-          #   fi
-          # done
 
           mkdir -p /tmp/Protokollitaja/Data
 
@@ -223,21 +211,18 @@ jobs:
 
           cp Release-Notes.md /tmp/Protokollitaja/ 2>/dev/null || true
 
-          mv /tmp/Protokollitaja/bin/Protokollitaja /tmp/Protokollitaja/
-          mv /tmp/Protokollitaja/bin/Protolehelugeja /tmp/Protokollitaja/
-          mv /tmp/Protokollitaja/bin/Protofinaal /tmp/Protokollitaja/
-          mv /tmp/Protokollitaja/bin/RangeControl /tmp/Protokollitaja/
-          rm -rf /tmp/Protokollitaja/bin
+          cd /tmp/Protokollitaja/bin/
+          rm -v !("Protokollitaja"|"Protofinaal"|"Protolehelugeja"|"RangeControl")
+          cd -
+          ln -s /tmp/Protokollitaja/bin/Protokollitaja /tmp/Protokollitaja/Protokollitaja
+          ln -s /tmp/Protokollitaja/bin/Protolehelugeja /tmp/Protokollitaja/Protolehelugeja
+          ln -s /tmp/Protokollitaja/bin/Protofinaal /tmp/Protokollitaja/Protofinaal
+          ln -s /tmp/Protokollitaja/bin/RangeControl /tmp/Protokollitaja/RangeControl
 
           echo "Packaged files:"
           ls -la /tmp/Protokollitaja/
           echo "Libraries:"
           ls -la /tmp/Protokollitaja/lib/ | head -20
-
-      # - name: Create archive
-      #   run: |
-      #     cd build
-      #     tar -czf ../Protokollitaja-Linux.tar.gz Protokollitaja-Linux
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -292,12 +277,12 @@ jobs:
           mkdir -p build/Protokollitaja-macOS
           mkdir -p build/Protokollitaja-macOS/Data
 
-          # Find and copy .app bundles or executables
-          find build -type f \( -name "Protokollitaja" -o -name "Protolehelugeja" -o -name "Protofinaal" -o -name "Rangecontrol" \) | \
-            grep -v test | grep -v CMakeFiles | while read file; do
-              echo "Copying: $file"
-              cp "$file" build/Protokollitaja-macOS/ 2>/dev/null || true
-            done
+          # # Find and copy .app bundles or executables
+          # find build -type f \( -name "Protokollitaja" -o -name "Protolehelugeja" -o -name "Protofinaal" -o -name "Rangecontrol" \) | \
+          #   grep -v test | grep -v CMakeFiles | while read file; do
+          #     echo "Copying: $file"
+          #     cp "$file" build/Protokollitaja-macOS/ 2>/dev/null || true
+          #   done
 
           # Also look for .app bundles
           find build -type d -name "*.app" | grep -v test | while read app; do
@@ -321,6 +306,21 @@ jobs:
             fi
           done
 
+
+          cmake --install build --prefix /tmp/Protokollitaja
+
+          mkdir -p /tmp/Protokollitaja/Data
+
+          # Look for Print_template.html in various locations
+          find . -name "Print_template.html" -type f | head -n 1 | xargs -I {} cp {} /tmp/Protokollitaja/Data/ 2>/dev/null || true
+
+          cp Release-Notes.md /tmp/Protokollitaja/ 2>/dev/null || true
+
+          echo "Packaged files:"
+          ls -la /tmp/Protokollitaja/
+          echo "Libraries:"
+          ls -la /tmp/Protokollitaja/lib/ | head -20
+
       - name: Create archive
         run: |
           cd build
@@ -330,5 +330,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Protokollitaja-macOS
-          path: Protokollitaja-macOS.tar.gz
+          path: |
+            Protokollitaja-macOS.tar.gz
+            /tmp/Protokollitaja
           retention-days: 30
