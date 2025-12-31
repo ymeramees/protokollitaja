@@ -3,10 +3,10 @@ name: Build
 on:
   push:
     branches:
-      - feature/macos-and-linux-builds
+      - devel
   pull_request:
     branches:
-      - feature/macos-and-linux-builds
+      - devel
 
 jobs:
   build-windows:
@@ -23,7 +23,7 @@ jobs:
           version: "6.9.*"
           host: "windows"
           target: "desktop"
-          arch: "win64_msvc2019_64"
+          arch: "win64_msvc2022_64"
           modules: "qtserialport qt5compat"
           cache: true
 
