@@ -566,128 +566,128 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
 <context>
     <name>Laskur</name>
     <message>
-        <location filename="../laskur.cpp" line="1436"/>
+        <location filename="../laskur.cpp" line="1438"/>
         <source>Seeriad</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1454"/>
+        <location filename="../laskur.cpp" line="1456"/>
         <source>Vahesumma</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1412"/>
+        <location filename="../laskur.cpp" line="1414"/>
         <source>Märkused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1327"/>
+        <location filename="../laskur.cpp" line="1329"/>
         <source>Raja number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="123"/>
+        <location filename="../laskur.cpp" line="125"/>
         <source>Viga!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="123"/>
+        <location filename="../laskur.cpp" line="125"/>
         <source>Ei ole nii palju vahesummasid!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="205"/>
+        <location filename="../laskur.cpp" line="207"/>
         <source>Teade</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="683"/>
+        <location filename="../laskur.cpp" line="685"/>
         <source>Sisestage uus laskuri ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1328"/>
+        <location filename="../laskur.cpp" line="1330"/>
         <source></source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1334"/>
-        <location filename="../laskur.cpp" line="1343"/>
+        <location filename="../laskur.cpp" line="1336"/>
+        <location filename="../laskur.cpp" line="1345"/>
         <source>Siffer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1335"/>
+        <location filename="../laskur.cpp" line="1337"/>
         <source>Algus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1344"/>
+        <location filename="../laskur.cpp" line="1346"/>
         <source>Lõpp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1354"/>
-        <location filename="../laskur.cpp" line="1355"/>
+        <location filename="../laskur.cpp" line="1356"/>
+        <location filename="../laskur.cpp" line="1357"/>
         <source>Eesnimi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1361"/>
-        <location filename="../laskur.cpp" line="1362"/>
+        <location filename="../laskur.cpp" line="1363"/>
+        <location filename="../laskur.cpp" line="1364"/>
         <source>Perekonnanimi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1369"/>
-        <location filename="../laskur.cpp" line="1370"/>
+        <location filename="../laskur.cpp" line="1371"/>
+        <location filename="../laskur.cpp" line="1372"/>
         <source>Sünniaasta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1376"/>
-        <location filename="../laskur.cpp" line="1377"/>
+        <location filename="../laskur.cpp" line="1378"/>
+        <location filename="../laskur.cpp" line="1379"/>
         <source>Klubi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1385"/>
-        <location filename="../laskur.cpp" line="1400"/>
+        <location filename="../laskur.cpp" line="1387"/>
+        <location filename="../laskur.cpp" line="1402"/>
         <source>Summa</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1394"/>
+        <location filename="../laskur.cpp" line="1396"/>
         <source>Finaali seeria</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1405"/>
+        <location filename="../laskur.cpp" line="1407"/>
         <source>Sisekümnete arv</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1418"/>
+        <location filename="../laskur.cpp" line="1420"/>
         <source>Lisalasud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1421"/>
+        <location filename="../laskur.cpp" line="1423"/>
         <source>Lasud...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1422"/>
+        <location filename="../laskur.cpp" line="1424"/>
         <source>Ava laskuri laskude aken</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1424"/>
+        <location filename="../laskur.cpp" line="1426"/>
         <source>ID...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1425"/>
+        <location filename="../laskur.cpp" line="1427"/>
         <source>Vaata/muuda laskuri ID&apos;d</source>
         <translation type="unfinished"></translation>
     </message>

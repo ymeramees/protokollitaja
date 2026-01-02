@@ -656,7 +656,7 @@ void Protokollitaja::checkForUpdates(bool autoCheck)
     UpdateChecker *checker = new UpdateChecker(versioon, &logiValja);
     connect(checker, &UpdateChecker::versionInfoResponse, this, &Protokollitaja::receivedVersionInfo);
 
-    checker->getLatestVersionInfo("ymeramees", "protokollitaja");
+    checker->getLatestVersionInfo("ermlauri", "protokollitaja");
 }
 
 void Protokollitaja::closeEvent(QCloseEvent *event)

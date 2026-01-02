@@ -76,6 +76,8 @@ Laskur::Laskur(
 
     for (int i = 0; i < seriesArray.size() && i < seeriad.size(); i++) {
         QJsonObject seriesJson = seriesArray[i].toObject();
+        if (seriesJson.contains("seriesSum") && seriesJson["seriesSum"].isString() && !seriesJson["seriesSum"].toString().isEmpty())
+            seeriad[i]->setText(seriesJson["seriesSum"].toString());
         QList<Lask*> seeriaLasud;
         QJsonArray shotsArray = seriesJson["shots"].toArray();
         for(int j = 0; j < shotsArray.size(); j++){

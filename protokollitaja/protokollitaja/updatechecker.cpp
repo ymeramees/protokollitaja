@@ -1,5 +1,7 @@
 #include "updatechecker.h"
 
+extern bool verbose;
+
 UpdateChecker::UpdateChecker(QString currentVersion, QTextStream *log, QObject *parent) : QObject(parent)
 {
     m_currentVersion = currentVersion;
@@ -15,6 +17,8 @@ UpdateChecker::~UpdateChecker()
 void UpdateChecker::checkVersionFromWeb(QString url)
 {
     QUrl webPage(url);
+    if (verbose)
+        QTextStream(stdout) << "Checking for updates from: " << url << Qt::endl;
     if(m_downloader != nullptr)    //Kui on korra juba tõmmatud, siis tuleb vana kustutada
         m_downloader->deleteLater();
 
@@ -30,7 +34,8 @@ void UpdateChecker::getLatestVersionInfo(QString user, QString repo)
     QNetworkRequest request;
     request.setUrl(url);
 
-    QTextStream(stdout) << "Url: " << request.url().toString() << Qt::endl;
+    if (verbose)
+        QTextStream(stdout) << "Url: " << request.url().toString() << Qt::endl;
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     if(m_restClient == nullptr)
@@ -72,8 +77,8 @@ void UpdateChecker::readWebVersionInfo()
     QString info(m_downloader->downloadedData());
     if(!info.startsWith("<!--proto")){
         if(allAddressesChecked){
-            QTextStream(stdout) << "#ERROR: Unable to get version info from Webzone!" << Qt::endl;
-            *m_log << "#ERROR: Unable to get version info from Webzone!" << Qt::endl;
+            QTextStream(stdout) << "#ERROR: Unable to get version info from web!" << Qt::endl;
+            *m_log << "#ERROR: Unable to get version info from web!" << Qt::endl;
             emit versionInfoResponse(false, "#ERROR: Unable to find version info! Program needs to be updated manually!");
         }else{
             checkVersionFromWeb("http://downloads.protokollitaja.eu/protokollitaja/inf20150118");  // Fallback address
@@ -81,6 +86,7 @@ void UpdateChecker::readWebVersionInfo()
         }
     } else {
         QStringList versionsList = info.left(info.indexOf("\n")).split(";");    // Version no, together with list of files to be updated
+        QTextStream(stdout) << "Latest available version from web: " << versionsList.join(";") << Qt::endl;
         bool updateExists = isCurrentVersionOld(m_currentVersion, versionsList[1]);
         emit versionInfoResponse(updateExists, versionsList[1]);
     }
@@ -92,9 +98,10 @@ void UpdateChecker::restClientFinished(QNetworkReply *reply)
     if(reply->error()){
         QTextStream(stdout) << "#ERROR: Unable to get version info from GitHub: " << reply << ", " << reply->errorString() << Qt::endl;
         *m_log << "#ERROR: Unable to get version info from GitHub: " << reply << ", " << reply->errorString() << Qt::endl;
-        checkVersionFromWeb("https://webzone.ee/protokollitaja/inf20150118");   // Check version info from a webpage
+        checkVersionFromWeb("https://protokollitaja.eu/api/v1/protokollitaja/latestVersion");
     } else {
         QJsonDocument json = QJsonDocument::fromJson(answer);
+        QTextStream(stdout) << "Latest available version: " << json[0]["name"].toString() << Qt::endl;
         bool updateExists = isCurrentVersionOld(m_currentVersion, json[0]["name"].toString());
         emit versionInfoResponse(updateExists, json[0]["name"].toString());
     }

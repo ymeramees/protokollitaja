@@ -2,6 +2,8 @@
 
 #include "updatechecker.h"
 
+bool verbose = true;
+
 class UpdateCheckerTest : public QObject
 {
     Q_OBJECT
@@ -12,8 +14,11 @@ public:
 
 private slots:
     void test_getLatestVersionInfoNewer();
+    void test_getLatestVersionInfoNewRepo();
     void test_getLatestVersionInfoOlder();
+    void test_getLatestVersionInfoNonExistentRepoFallbackToWeb();
     void test_getLatestVersionInfoWeb();
+    void test_getLatestVersionInfoWeb2();
     void test_isCurrentVersionOld();
 
 private:
@@ -44,6 +49,19 @@ void UpdateCheckerTest::test_getLatestVersionInfoNewer()
     QCOMPARE(updateExists, false);
 }
 
+void UpdateCheckerTest::test_getLatestVersionInfoNewRepo()
+{
+    UpdateChecker checker("0.8.15", &log);
+    QSignalSpy spy(&checker, SIGNAL(versionInfoResponse(bool, QString)));
+    checker.getLatestVersionInfo("ermlauri", "protokollitaja");
+
+    QVERIFY(spy.wait());
+    QCOMPARE(spy.count(), 1);
+    QList<QVariant> arguments = spy.takeFirst();
+    bool updateExists = arguments.at(0).toBool();
+    QCOMPARE(updateExists, true);
+}
+
 void UpdateCheckerTest::test_getLatestVersionInfoOlder()
 {
     UpdateChecker checker("0.8.1", &log);
@@ -59,20 +77,47 @@ void UpdateCheckerTest::test_getLatestVersionInfoOlder()
     QCOMPARE(points, 2);
 }
 
+void UpdateCheckerTest::test_getLatestVersionInfoNonExistentRepoFallbackToWeb()
+{
+    UpdateChecker checker("0.7.15", &log);
+    QSignalSpy spy(&checker, SIGNAL(versionInfoResponse(bool, QString)));
+    checker.getLatestVersionInfo("ymm", "protokollitaja");
+
+    QVERIFY(spy.wait());
+    QCOMPARE(spy.count(), 1);
+    QList<QVariant> arguments = spy.takeFirst();
+    bool updateExists = arguments.at(0).toBool();
+    QCOMPARE(updateExists, true);
+}
+
 void UpdateCheckerTest::test_getLatestVersionInfoWeb()
 {
-    // TODO To be implemented and restored
-//     UpdateChecker checker("0.8.1", &log);
-//     QSignalSpy spy(&checker, SIGNAL(versionInfoResponse(bool, QString)));
-//     checker.getLatestVersionInfo("ymm", "protokollitaja");
+    UpdateChecker checker("0.8.1", &log);
+    QSignalSpy spy(&checker, SIGNAL(versionInfoResponse(bool, QString)));
+    checker.checkVersionFromWeb("https://protokollitaja.eu/api/v1/protokollitaja/latestVersion");
 
-//     QVERIFY(spy.wait());
-//     QCOMPARE(spy.count(), 1);
-//     QList<QVariant> arguments = spy.takeFirst();
-//     bool updateExists = arguments.at(0).toBool();
-//     int points = arguments.at(1).toString().count('.');
-//     QCOMPARE(updateExists, true);
-//     QCOMPARE(points, 2);
+    QVERIFY(spy.wait());
+    QCOMPARE(spy.count(), 1);
+    QList<QVariant> arguments = spy.takeFirst();
+    bool updateExists = arguments.at(0).toBool();
+    int points = arguments.at(1).toString().count('.');
+    QCOMPARE(updateExists, true);
+    QCOMPARE(points, 2);
+}
+
+void UpdateCheckerTest::test_getLatestVersionInfoWeb2()
+{
+    UpdateChecker checker("0.8.1", &log);
+    QSignalSpy spy(&checker, SIGNAL(versionInfoResponse(bool, QString)));
+    checker.checkVersionFromWeb("https://protokollitaja.eu/protokollitaja/inf20150118");
+
+    QVERIFY(spy.wait());
+    QCOMPARE(spy.count(), 1);
+    QList<QVariant> arguments = spy.takeFirst();
+    bool updateExists = arguments.at(0).toBool();
+    int points = arguments.at(1).toString().count('.');
+    QCOMPARE(updateExists, true);
+    QCOMPARE(points, 2);
 }
 
 void UpdateCheckerTest::test_isCurrentVersionOld()

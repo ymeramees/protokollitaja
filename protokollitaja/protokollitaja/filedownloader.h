@@ -23,6 +23,7 @@ signals:
 private slots:
 
     void fileDownloaded(QNetworkReply* pReply);
+    void printErrors(QNetworkReply *pReply, const QList<QSslError> &errors);
 
 private:
 
