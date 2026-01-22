@@ -283,7 +283,7 @@ void CompetitorTest::test_lastResultAndSumWithPoints()
     Competitor competitor(1, conf, true);
     QCOMPARE(competitor.lastResult(), "0,0");
     QCOMPARE(competitor.total(), "0");
-    QCOMPARE(competitor.shotAt(0)->get10Lask(), -999);
+    QCOMPARE(competitor.shotAt(0).has_value(), false);
     QCOMPARE(competitor.resultAt(0), "");
     QCOMPARE(competitor.lastValidShotIndex(), -1);
 
@@ -291,6 +291,7 @@ void CompetitorTest::test_lastResultAndSumWithPoints()
     competitor.setPoints(0, 40);
     QCOMPARE(competitor.lastResult(), "10,4");
     QCOMPARE(competitor.total(), "4");
+    QCOMPARE(competitor.shotAt(0).has_value(), true);
     QCOMPARE(competitor.shotAt(0)->get10Lask(), 104);
     QCOMPARE(competitor.resultAt(0), "4");
     QCOMPARE(competitor.lastValidShotIndex(), 0);
@@ -299,6 +300,7 @@ void CompetitorTest::test_lastResultAndSumWithPoints()
     competitor.setPoints(1, 20);
     QCOMPARE(competitor.lastResult(), "8,3");
     QCOMPARE(competitor.total(), "6");
+    QCOMPARE(competitor.shotAt(1).has_value(), true);
     QCOMPARE(competitor.shotAt(1)->get10Lask(), 83);
     QCOMPARE(competitor.resultAt(1), "2");
     QCOMPARE(competitor.lastValidShotIndex(), 1);
@@ -307,6 +309,7 @@ void CompetitorTest::test_lastResultAndSumWithPoints()
     competitor.setPoints(5, 30);
     QCOMPARE(competitor.lastResult(), "10,0");
     QCOMPARE(competitor.total(), "9");
+    QCOMPARE(competitor.shotAt(5).has_value(), true);
     QCOMPARE(competitor.shotAt(5)->get10Lask(), 100);
     QCOMPARE(competitor.resultAt(5), "3");
     QCOMPARE(competitor.lastValidShotIndex(), 5);
@@ -315,6 +318,7 @@ void CompetitorTest::test_lastResultAndSumWithPoints()
     competitor.setPoints(6, 10);
     QCOMPARE(competitor.lastResult(), "5,8");
     QCOMPARE(competitor.total(), "10");
+    QCOMPARE(competitor.shotAt(6).has_value(), true);
     QCOMPARE(competitor.shotAt(6)->get10Lask(), 58);
     QCOMPARE(competitor.lastValidShotIndex(), 6);
 
@@ -322,6 +326,7 @@ void CompetitorTest::test_lastResultAndSumWithPoints()
     competitor.setPoints(10, 40);
     QCOMPARE(competitor.lastResult(), "10,9");
     QCOMPARE(competitor.total(), "14");
+    QCOMPARE(competitor.shotAt(10).has_value(), true);
     QCOMPARE(competitor.shotAt(10)->get10Lask(), 109);
     QCOMPARE(competitor.resultAt(10), "4");
     QCOMPARE(competitor.resultAt(13), "");
@@ -331,6 +336,7 @@ void CompetitorTest::test_lastResultAndSumWithPoints()
     competitor.setPoints(13, 30);
     QCOMPARE(competitor.lastResult(), "10,0");
     QCOMPARE(competitor.total(), "17");
+    QCOMPARE(competitor.shotAt(13).has_value(), true);
     QCOMPARE(competitor.shotAt(13)->get10Lask(), 100);
     QCOMPARE(competitor.resultAt(13), "3");
     QCOMPARE(competitor.lastValidShotIndex(), 13);
@@ -342,12 +348,13 @@ void CompetitorTest::test_lastResultAndSumWithShots()
     Competitor competitor(1, conf, false);
     QCOMPARE(competitor.lastResult(), "0,0");
     QCOMPARE(competitor.total(), "0,0");
-    QCOMPARE(competitor.shotAt(0)->get10Lask(), -999);
+    QCOMPARE(competitor.shotAt(0).has_value(), false);
     QCOMPARE(competitor.resultAt(0), "0,0");
     QCOMPARE(competitor.lastValidShotIndex(), -1);
 
     competitor.setShot(0, Lask(104, 354, -983, true, QTime::currentTime()));
     QCOMPARE(competitor.lastResult(), "10,4");
+    QCOMPARE(competitor.shotAt(0).has_value(), true);
     QCOMPARE(competitor.shotAt(0)->get10Lask(), 104);
     QCOMPARE(competitor.resultAt(0), "10,4");
     QCOMPARE(competitor.total(), "10,4");
@@ -381,14 +388,17 @@ void CompetitorTest::test_readSiusShotAdditionalShot()
 
     SiusShotData shot1(13, 0, 1, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;101;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0"));
     QCOMPARE(competitor.readSiusShot(shot1), true);
+    QCOMPARE(competitor.shotAt(0).has_value(), true);
     QCOMPARE(competitor.shotAt(0)->getSLask(), "10,1");
 
     SiusShotData shot2(13, 0, 16, Lask("_SHOT;17;18;13;60;31;10:05:39.28;3;1;512;10;106;0;16;0.00128;-0.00261;900;0;0;655.35;387153707;64;559;0"));
     QCOMPARE(competitor.readSiusShot(shot2), true);
+    QCOMPARE(competitor.shotAt(15).has_value(), true);
     QCOMPARE(competitor.shotAt(15)->getSLask(), "10,6");
 
     SiusShotData shot3(13, 0, 16, Lask("_SHOT;17;18;13;60;24;10:07:20.01;3;1;0;10;103;0;16;0.00256;0.00482;900;0;0;655.35;387121839;64;559;0"));
     QCOMPARE(competitor.readSiusShot(shot3), false);
+    QCOMPARE(competitor.shotAt(15).has_value(), true);
     QCOMPARE(competitor.shotAt(15)->getSLask(), "10,6");
 }
 
@@ -408,10 +418,12 @@ void CompetitorTest::test_readSiusShotReadCompetitionShotsWithoutSighters()
 
     SiusShotData shot1(13, 0, 1, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;101;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0"));
     QCOMPARE(competitor.readSiusShot(shot1), true);
+    QCOMPARE(competitor.shotAt(0).has_value(), true);
     QCOMPARE(competitor.shotAt(0)->getSLask(), "10,1");
 
     SiusShotData shot2(13, 0, 2, Lask("_SHOT;17;18;13;60;31;10:05:39.28;3;1;512;10;106;0;2;0.00128;-0.00261;900;0;0;655.35;387153707;64;559;0"));
     QCOMPARE(competitor.readSiusShot(shot2), true);
+    QCOMPARE(competitor.shotAt(1).has_value(), true);
     QCOMPARE(competitor.shotAt(1)->getSLask(), "10,6");
 }
 
@@ -434,8 +446,8 @@ void CompetitorTest::test_readSiusShotRepeatedShotDataInFirstStage()
 
     QCOMPARE(competitor.shotAt(0)->getSLask(), "10,1");
     QCOMPARE(competitor.shotAt(23)->getSLask(), "10,3");
-    QCOMPARE(competitor.shotAt(1)->getSLask(), "");
-    QCOMPARE(competitor.shotAt(22)->getSLask(), "");
+    QCOMPARE(competitor.shotAt(1).has_value(), false);
+    QCOMPARE(competitor.shotAt(22).has_value(), false);
 
     SiusShotData shot3(13, 0, 2, Lask("_SHOT;17;18;13;60;79;10:47:34.90;3;1;512;10;106;0;2;-0.00148;-0.00207;900;0;0;655.35;387405285;64;559;0"));
     QCOMPARE(competitor.readSiusShot(shot3), true);
@@ -448,7 +460,7 @@ void CompetitorTest::test_readSiusShotWithOffset()
     Competitor competitor(1, conf, true);
     QCOMPARE(competitor.lastResult(), "0,0");
     QCOMPARE(competitor.total(), "0");
-    QCOMPARE(competitor.shotAt(0)->get10Lask(), -999);
+    QCOMPARE(competitor.shotAt(0).has_value(), false);
     QCOMPARE(competitor.resultAt(0), "");
     QCOMPARE(competitor.lastValidShotIndex(), -1);
 
@@ -456,6 +468,7 @@ void CompetitorTest::test_readSiusShotWithOffset()
     competitor.setPoints(0, 40);
     QCOMPARE(competitor.lastResult(), "10,4");
     QCOMPARE(competitor.total(), "4");
+    QCOMPARE(competitor.shotAt(0).has_value(), true);
     QCOMPARE(competitor.shotAt(0)->get10Lask(), 104);
     QCOMPARE(competitor.resultAt(0), "4");
     QCOMPARE(competitor.lastValidShotIndex(), 0);
@@ -514,7 +527,7 @@ void CompetitorTest::test_readSiusShotWithOffsetClean()
     Competitor competitor(1, conf, true);
     QCOMPARE(competitor.lastResult(), "0,0");
     QCOMPARE(competitor.total(), "0");
-    QCOMPARE(competitor.shotAt(0)->get10Lask(), -999);
+    QCOMPARE(competitor.shotAt(0).has_value(), false);
     QCOMPARE(competitor.resultAt(0), "");
     QCOMPARE(competitor.lastValidShotIndex(), -1);
 

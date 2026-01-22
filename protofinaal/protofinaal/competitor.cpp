@@ -352,7 +352,7 @@ bool Competitor::readSiusShot(SiusShotData shotData)
 
 std::optional<Lask> Competitor::shotAt(int index)
 {
-    if(index >= 0 && m_shots.length() > index)
+    if(index >= 0 && m_shots.length() > index && !m_shots.at(index)->shot().isEmpty())
         return std::optional<Lask>{m_shots.at(index)->shot()};
     else
         return std::nullopt;

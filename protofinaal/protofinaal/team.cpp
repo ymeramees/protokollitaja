@@ -106,17 +106,29 @@ bool Team::isActive() const
 
 int Team::team10Total()
 {
-    if (m_teamCompetitors.size() > 0)
-        return m_teamCompetitors.at(0)->current10Sum();
-    else
+    if (m_teamCompetitors.size() > 0) {
+        sumAll();
+        int teamSum = 0;
+        foreach(Competitor *competitor, m_teamCompetitors) {
+            teamSum += competitor->current10Sum();
+        }
+        return teamSum;
+    } else
         return 0;
 }
 
 QString Team::teamTotal()
 {
-    if (m_teamCompetitors.size() > 0)
-        return m_teamCompetitors.at(0)->total();
-    else
+    if (m_teamCompetitors.size() > 0) {
+        // TODO make a better solution for this
+        sumAll();
+        int teamSum = 0;
+        foreach(Competitor *competitor, m_teamCompetitors) {
+            teamSum += competitor->total().replace(',', '.').toDouble() * 10;
+        }
+        double dTeamSum = teamSum;
+        return QString("%1").arg(dTeamSum / 10).replace('.', ',');
+    } else
         return "";
 }
 
@@ -170,6 +182,7 @@ void Team::setFirstCompetitiorData(int id, QString displayName, QString result)
 bool Team::setPoints(int shotNo, int points)
 {
     if (m_teamCompetitors.size() > 0) {
+        // TODO to be implemented properly for teams
         m_teamCompetitors.first()->setPoints(shotNo, points);   // Points are added and shown only on the first competitor
         return true;
     } else
@@ -178,16 +191,26 @@ bool Team::setPoints(int shotNo, int points)
 
 QString Team::resultAt(int index)
 {
-    if (m_teamCompetitors.size() > 0)
+    if (m_teamCompetitors.size() == 1)
         return m_teamCompetitors.first()->resultAt(index);
-    else return 0;
+    else if (m_teamCompetitors.size() > 0) {
+        sumAll();
+        // TODO make a better solution for this
+        int teamSum = 0;
+        foreach(Competitor *competitor, m_teamCompetitors) {
+            teamSum += competitor->resultAt(index).replace(',', '.').toDouble() * 10;
+        }
+        double dTeamSum = teamSum;
+        return QString("%1").arg(dTeamSum / 10).replace('.', ',');
+    } else return 0;
 }
 
 void Team::calculatePointsTotal()
 {
     if(verbose)
         QTextStream(stdout) << m_indexLabel.text() << " Team::pointsTotal()" << Qt::endl;
-    if(m_teamCompetitors.size() > 0){
+    sumAll();
+    if(m_teamCompetitors.size() > 1){
 //        int teamSum = 0;
 //        for(int i = 0; i < m_teamCompetitors.size(); i++){
 //            teamSum += m_teamCompetitors.at(i)->current10Sum();
@@ -203,7 +226,14 @@ void Team::calculatePointsTotal()
 //        m_sumLabel.setText(m_sumLabel.text().replace('.', ','));
 //        QTextStream(stdout) << "Team::sum()3" << Qt::endl;
 //    }else
-        m_teamCompetitors.at(0)->sum();
+        // TODO make a better solution for this
+        int teamSum = 0;
+        foreach(Competitor *competitor, m_teamCompetitors) {
+            teamSum += competitor->total().replace(',', '.').toDouble() * 10;
+        }
+        double dTeamSum = teamSum;
+        m_sumLabel.setText(QString("%1").arg(dTeamSum / 10).replace('.', ','));
+    } else if (m_teamCompetitors.size() == 1) {
         m_sumLabel.setText(m_teamCompetitors.at(0)->total());
     }
     emit teamUpdated();

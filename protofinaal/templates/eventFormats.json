@@ -1,5 +1,23 @@
 [
     {
+        "id": "AP 2026 mixed",
+        "event": "Õhupüstol mixed võistkonnad",
+        "relaysTogether": 1,
+        "teams": 4,
+        "membersInTeam": 2,
+        "shots": [5, 5, 5, 9],
+        "scoringWithPoints": false
+    },
+    {
+        "id": "AR 2026 mixed",
+        "event": "Õhupüss mixed võistkonnad",
+        "relaysTogether": 1,
+        "teams": 4,
+        "membersInTeam": 2,
+        "shots": [5, 5, 5, 9],
+        "scoringWithPoints": false
+    },
+    {
         "id": "AP 2024",
         "event": "60l Õhupüstol",
         "relaysTogether": 1,

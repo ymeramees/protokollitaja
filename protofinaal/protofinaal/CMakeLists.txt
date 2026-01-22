@@ -32,7 +32,7 @@ target_link_libraries(Protofinaal PRIVATE
 )
 
 qt_add_translations(${CMAKE_PROJECT_NAME}
-    TS_FILES languages/Eesti.ts languages/English.ts
+    TS_FILES languages/Eesti.ts languages/English.ts languages/Hungarian.ts
     TS_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/languages"
     QM_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/languages"
     TS_FILES_OUTPUT_VARIABLE UPDATED_TS_FILES
@@ -64,6 +64,7 @@ qt_add_resources(Protofinaal "protofinaal"
 set(resources_resource_files
     "languages/Eesti.qm"
     "languages/English.qm"
+    "languages/Hungarian.qm"
 )
 
 qt_add_resources(Protofinaal "resources"

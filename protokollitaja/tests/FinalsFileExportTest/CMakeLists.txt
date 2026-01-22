@@ -51,6 +51,7 @@ set(protokollitaja_resource_files
     "../../images/uusTab.png"
     "../../protokollitaja/languages/Eesti.qm"
     "../../protokollitaja/languages/English.qm"
+    "../../protokollitaja/languages/Hungarian.qm"
 )
 
 qt_add_resources(FinalsFileExportTest "protokollitaja"

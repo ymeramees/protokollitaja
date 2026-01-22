@@ -88,7 +88,7 @@ QMultiMap<int, TeamsTable::Result> TeamsTable::getSortedResults() const
             result = "";
 
 //        if (result != "0,0" && result != "-999")
-        results.insert(team->teamTotal().replace(',', '.').toDouble() * 10, Result {
+        results.insert(team->team10Total(), Result {
                 team->teamName(),
                 result,
                 team->resultAt(currentShotNo),

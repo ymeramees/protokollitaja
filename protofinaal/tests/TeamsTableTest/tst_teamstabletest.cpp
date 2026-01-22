@@ -19,6 +19,7 @@ private slots:
     void test_pointsGivenWithEqualResults();
     void test_readSiusShotWithOffset();
     void test_returnSortedResults();
+    void test_returnSortedResultsForTeams();
 
 };
 
@@ -36,7 +37,7 @@ void TeamsTableTest::test_pointsGivenWithNoEqualResults()
 {
     QJsonObject json = QJsonDocument::fromJson(QString("{\"event\": \"60l Õhupüss\",\"teams\": 4,\"membersInTeam\": 1,\"relaysTogether\": 1,\"shots\": [10, 5],\"scoringWithPoints\": true}").toUtf8()).object();
 
-                                                                                                                                                                                                           TeamsTable teamsTable;
+    TeamsTable teamsTable;
     teamsTable.createLayout(json, true);
 
     QCOMPARE(teamsTable.lastValidShotIndex(), -1);
@@ -110,7 +111,7 @@ void TeamsTableTest::test_pointsGivenWithEqualResults()
 {
     QJsonObject json = QJsonDocument::fromJson(QString("{\"event\": \"60l Õhupüss\",\"teams\": 4,\"membersInTeam\": 1,\"relaysTogether\": 1,\"shots\": [10, 5],\"scoringWithPoints\": true}").toUtf8()).object();
 
-                                                                                                                                                                                                           TeamsTable teamsTable;
+    TeamsTable teamsTable;
     teamsTable.createLayout(json, true);
 
     QCOMPARE(teamsTable.lastValidShotIndex(), -1);
@@ -191,7 +192,7 @@ void TeamsTableTest::test_readSiusShotWithOffset()
 {
     QJsonObject json = QJsonDocument::fromJson(QString("{\"event\": \"60l Õhupüss\",\"teams\": 2,\"membersInTeam\": 1,\"relaysTogether\": 1,\"shots\": [17],\"scoringWithPoints\": true}").toUtf8()).object();
 
-                                                                                                                                                                                                        TeamsTable teamsTable;
+    TeamsTable teamsTable;
     teamsTable.createLayout(json, true);
 
     QCOMPARE(teamsTable.lastValidShotIndex(), -1);
@@ -227,7 +228,7 @@ void TeamsTableTest::test_returnSortedResults()
 {
     QJsonObject json = QJsonDocument::fromJson(QString("{\"event\": \"60l Õhupüss\",\"teams\": 4,\"membersInTeam\": 1,\"relaysTogether\": 1,\"shots\": [10, 5],\"scoringWithPoints\": true}").toUtf8()).object();
 
-                                                                                                                                                                                                           TeamsTable teamsTable;
+    TeamsTable teamsTable;
     teamsTable.createLayout(json, true);
 
     QCOMPARE(teamsTable.lastValidShotIndex(), -1);
@@ -295,6 +296,89 @@ void TeamsTableTest::test_returnSortedResults()
     teamsTable.readSiusInfo(shot3);
     QCOMPARE(teamsTable.lastValidShotIndex(), 12);
     TeamsTable::Result expected4 = { "", "10,6", "", "8", 106 };
+    auto actual4 = teamsTable.getSortedResults();
+    QCOMPARE(actual4.last().shotValue, expected4.shotValue);
+    QCOMPARE(actual4.last().seriesOrPoints, expected4.seriesOrPoints);
+    QCOMPARE(actual4.last().totalScore, expected4.totalScore);
+}
+
+void TeamsTableTest::test_returnSortedResultsForTeams()
+{
+    QJsonObject json = QJsonDocument::fromJson(QString("{\"event\": \"60l Õhupüss\",\"teams\": 4,\"membersInTeam\": 2,\"relaysTogether\": 1,\"shots\": [10, 5],\"scoringWithPoints\": false}").toUtf8()).object();
+
+    TeamsTable teamsTable;
+    teamsTable.createLayout(json, false);
+
+    QCOMPARE(teamsTable.lastValidShotIndex(), -1);
+
+    QVector<SiusShotData> shot1;
+    shot1.append(SiusShotData(11, 0, 1, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;101;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0")));
+    shot1.append(SiusShotData(12, 0, 1, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;106;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0")));
+    shot1.append(SiusShotData(21, 0, 1, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;107;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0")));
+    shot1.append(SiusShotData(31, 0, 1, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;105;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0")));
+    shot1.append(SiusShotData(41, 0, 1, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;98;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0")));
+
+    teamsTable.readSiusInfo(shot1.first());
+    QCOMPARE(teamsTable.lastValidShotIndex(), 0);
+    TeamsTable::Result expected1 = { "", "10,1", "10,1", "10,1", 101 };
+    TeamsTable::Result actual1 = teamsTable.getSortedResults().last();
+    QCOMPARE(actual1.shotValue, expected1.shotValue);
+    QCOMPARE(actual1.seriesOrPoints, expected1.seriesOrPoints);
+    QCOMPARE(actual1.totalScore, expected1.totalScore);
+    QCOMPARE(actual1.total10Score, expected1.total10Score);
+
+    foreach(SiusShotData shotData, shot1) {
+        teamsTable.readSiusInfo(shotData);
+    }
+    QVector<TeamsTable::Result> expected2;
+    expected2.append(TeamsTable::Result { "", "9,8", "9,8", "9,8", 98 });
+    // expected2.append(TeamsTable::Result { "", "10,1", "2", "2", 101 });
+    expected2.append(TeamsTable::Result { "", "10,5", "10,5", "10,5", 105 });
+    expected2.append(TeamsTable::Result { "", "10,7", "10,7", "10,7", 107 });
+    expected2.append(TeamsTable::Result { "", "20,7", "20,7", "20,7", 207 });
+
+    auto actual2 = teamsTable.getSortedResults();
+    int i = 0;
+    foreach(auto currentResult, actual2) {
+        QCOMPARE(currentResult.shotValue, expected2.at(i).shotValue);
+        QCOMPARE(currentResult.seriesOrPoints, expected2.at(i).seriesOrPoints);
+        QCOMPARE(currentResult.totalScore, expected2.at(i).totalScore);
+        QCOMPARE(currentResult.total10Score, expected2.at(i).total10Score);
+        i++;
+    }
+
+    QList<Competitor*> competitors = teamsTable.findChildren<Competitor*>();
+    competitors.last()->setActive(false);
+
+    QVector<SiusShotData> shot2;
+    shot2.append(SiusShotData(11, 0, 12, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;103;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0")));
+    shot2.append(SiusShotData(21, 0, 12, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;106;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0")));
+    shot2.append(SiusShotData(31, 0, 12, Lask("_SHOT;17;18;13;60;28;10:02:56.30;3;1;0;10;100;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0")));
+
+    foreach(SiusShotData shotData, shot2) {
+        teamsTable.readSiusInfo(shotData);
+    }
+    QCOMPARE(teamsTable.lastValidShotIndex(), 11);
+    QVector<TeamsTable::Result> expected3;
+    expected3.append(TeamsTable::Result { "", "", "9,8", "9,8", 98 });
+    expected3.append(TeamsTable::Result { "", "10,0", "20,5", "20,5", 205 });
+    expected3.append(TeamsTable::Result { "", "10,6", "21,3", "21,3", 213 });
+    expected3.append(TeamsTable::Result { "", "10,3", "31", "31", 310 });
+
+    auto actual3 = teamsTable.getSortedResults();
+    i = 0;
+    foreach(auto currentResult, actual3) {
+        QCOMPARE(currentResult.shotValue, expected3.at(i).shotValue);
+        QCOMPARE(currentResult.seriesOrPoints, expected3.at(i).seriesOrPoints);
+        QCOMPARE(currentResult.totalScore, expected3.at(i).totalScore);
+        QCOMPARE(currentResult.total10Score, expected3.at(i).total10Score);
+        i++;
+    }
+
+    SiusShotData shot3(21, 0, 13, Lask("_SHOT;17;18;13;60;31;10:05:39.28;3;1;512;10;106;0;16;0.00128;-0.00261;900;0;0;655.35;387153707;64;559;0"));
+    teamsTable.readSiusInfo(shot3);
+    QCOMPARE(teamsTable.lastValidShotIndex(), 12);
+    TeamsTable::Result expected4 = { "", "10,6", "31,9", "31,9", 319 };
     auto actual4 = teamsTable.getSortedResults();
     QCOMPARE(actual4.last().shotValue, expected4.shotValue);
     QCOMPARE(actual4.last().seriesOrPoints, expected4.seriesOrPoints);
