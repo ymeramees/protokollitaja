@@ -5,6 +5,7 @@
 #include <QLibraryInfo>
 
 bool verbose = false;
+bool veryVerbose = false;
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +17,7 @@ int main(int argc, char *argv[])
             }else if(QString("%1").arg(argv[i]) == "-vv"){
                 QTextStream(stdout) << "-vv => kuvatakse rohke debug info" << Qt::endl;
                 verbose = true;
+                veryVerbose = true;
             }
         }
 

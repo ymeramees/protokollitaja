@@ -43,7 +43,7 @@ void TeamsTable::createLayout(QJsonObject jsonObj, const bool scoringWithPoints)
         m_teams.append(team);
         vBox->addWidget(team);
     }
-    sumAllTeams();
+    // sumAllTeams();
 }
 
 QMap<int, TeamsTable::Result> TeamsTable::getCurrentResults() const
@@ -192,7 +192,7 @@ void TeamsTable::readSiusInfo(SiusShotData shotData)
     if(thisCompetitor == nullptr)
         statusInfoChanged(tr("Sellise ID'ga võistlejat ei leitud: %1").arg(shotData.id));
 //    }
-    sumAllTeams();
+    // sumAllTeams();
 }
 
 void TeamsTable::setTableName(QString newName)

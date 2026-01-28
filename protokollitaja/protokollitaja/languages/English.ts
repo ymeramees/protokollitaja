@@ -2694,7 +2694,7 @@ It is possible that some connection has been lost.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../main.cpp" line="67"/>
+        <location filename="../main.cpp" line="68"/>
         <source>%1 Crashed</source>
         <translation></translation>
     </message>
@@ -3215,22 +3215,22 @@ It could be a newer version&apos;s file.
         <translation>Connecting...</translation>
     </message>
     <message>
-        <location filename="../../../common/src/siusdataconnection.cpp" line="184"/>
+        <location filename="../../../common/src/siusdataconnection.cpp" line="187"/>
         <source>SiusDatast andmete vastuvõtt...</source>
         <translation>Receiving data...</translation>
     </message>
     <message>
-        <location filename="../../../common/src/siusdataconnection.cpp" line="188"/>
+        <location filename="../../../common/src/siusdataconnection.cpp" line="191"/>
         <source>Saabus info, buffer.length(): %1</source>
         <translation>Received, buffer.length(): %1</translation>
     </message>
     <message>
-        <location filename="../../../common/src/siusdataconnection.cpp" line="210"/>
+        <location filename="../../../common/src/siusdataconnection.cpp" line="217"/>
         <source>Viimane rida, buffer.length(): %1</source>
         <translation>Last row, buffer.length(): %1</translation>
     </message>
     <message>
-        <location filename="../../../common/src/siusdataconnection.cpp" line="274"/>
+        <location filename="../../../common/src/siusdataconnection.cpp" line="284"/>
         <source>Nimekiri saadetud</source>
         <translation>Start list sent</translation>
     </message>

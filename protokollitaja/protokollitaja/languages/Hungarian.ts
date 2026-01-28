@@ -2703,7 +2703,7 @@ Lehetséges, hogy a kapcsolat időközben megszakadt.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../main.cpp" line="67"/>
+        <location filename="../main.cpp" line="68"/>
         <source>%1 Crashed</source>
         <translation>%1 Összeomlott</translation>
     </message>
@@ -3224,22 +3224,22 @@ Lehet, hogy ez egy újabb programverzióval készült fájl.
         <translation>Csatlakozás...</translation>
     </message>
     <message>
-        <location filename="../../../common/src/siusdataconnection.cpp" line="184"/>
+        <location filename="../../../common/src/siusdataconnection.cpp" line="187"/>
         <source>SiusDatast andmete vastuvõtt...</source>
         <translation>Adatok fogadása...</translation>
     </message>
     <message>
-        <location filename="../../../common/src/siusdataconnection.cpp" line="188"/>
+        <location filename="../../../common/src/siusdataconnection.cpp" line="191"/>
         <source>Saabus info, buffer.length(): %1</source>
         <translation>Adat érkezett, buffer.length(): %1</translation>
     </message>
     <message>
-        <location filename="../../../common/src/siusdataconnection.cpp" line="210"/>
+        <location filename="../../../common/src/siusdataconnection.cpp" line="217"/>
         <source>Viimane rida, buffer.length(): %1</source>
         <translation>Utolsó sor, buffer.length(): %1</translation>
     </message>
     <message>
-        <location filename="../../../common/src/siusdataconnection.cpp" line="274"/>
+        <location filename="../../../common/src/siusdataconnection.cpp" line="284"/>
         <source>Nimekiri saadetud</source>
         <translation>Lista elküldve</translation>
     </message>

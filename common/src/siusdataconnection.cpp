@@ -52,7 +52,7 @@ SiusDataConnection::SiusDataConnection(
 
     progressTimer = new QTimer(this);
     progressTimer->setSingleShot(true);
-    progressTimer->setInterval(3000);
+    progressTimer->setInterval(1000);
     connect(progressTimer, &QTimer::timeout, this, &SiusDataConnection::stopProgress);
     progressTimer->start();
 }
@@ -70,6 +70,9 @@ SiusDataConnection::~SiusDataConnection()
     row->deleteLater();
     siusDataSocket->abort();
     siusDataSocket->deleteLater();
+    progressTimer->stop();
+    progressTimer->deleteLater();
+    progressTimer = nullptr;
 }
 
 QString SiusDataConnection::address() const
@@ -189,8 +192,9 @@ void SiusDataConnection::readFromSius()
 
         }
 
-        while(siusBuffer.contains('_')){
+        static int loopWatchdog = 0;
 
+        while(siusBuffer.contains('_')){
             progressTimer->start();   //To postpone closing of the progress dialog
 
             if(siusLog->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){ //Log of incoming data
@@ -203,14 +207,19 @@ void SiusDataConnection::readFromSius()
 
             QString row = "";
             if(siusBuffer.indexOf('_', 1) == -1){
-                if(siusBuffer.contains(CR) || siusBuffer.contains(LF)){ // Make sure complete last row has arrived
+                 // Make sure complete last row has arrived, but don't wait indefinitely when line ending is missing
+                if (siusBuffer.contains(CR) || siusBuffer.contains(LF) || loopWatchdog > 10) {
                     *log << QTime::currentTime().toString("hh:mm:ss") << " #clear()\n";
                     row = QString("%1").arg(siusBuffer);
                     siusBuffer.clear();
                     emit statusInfo(tr("Viimane rida, buffer.length(): %1").arg(siusBuffer.length()));
-                } else
+                    loopWatchdog = 0;
+                } else {
+                    loopWatchdog++;
                     break;
+                }
             }else{
+                loopWatchdog = 0;
                 row = siusBuffer.left(siusBuffer.indexOf('_', 1));
                 siusBuffer.remove(0, siusBuffer.indexOf('_', 1));
             }
@@ -244,9 +253,8 @@ void SiusDataConnection::readFromSius()
             *log << QTime::currentTime().toString("hh:mm:ss") << " #buffer.length(): " << siusBuffer.length() << ", uuele ringile minek" << "\n";
             QTimer::singleShot(170, this, SLOT(readFromSius()));
         }
-
-//        if(lines.size() > 0)
-//            emit linesRead(lines, m_index);
+    } else if(verbose) {
+        QTextStream(stdout) << "SiusDataConnection::readFromSius() " << m_index << ": " << row << Qt::endl;
     }
 }
 

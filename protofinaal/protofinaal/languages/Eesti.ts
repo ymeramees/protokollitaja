@@ -468,22 +468,22 @@ Kontrollige, kas teil on sinna kausta kirjutamise õigused.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../common/src/siusdataconnection.cpp" line="184"/>
+        <location filename="../../../common/src/siusdataconnection.cpp" line="187"/>
         <source>SiusDatast andmete vastuvõtt...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../common/src/siusdataconnection.cpp" line="188"/>
+        <location filename="../../../common/src/siusdataconnection.cpp" line="191"/>
         <source>Saabus info, buffer.length(): %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../common/src/siusdataconnection.cpp" line="210"/>
+        <location filename="../../../common/src/siusdataconnection.cpp" line="217"/>
         <source>Viimane rida, buffer.length(): %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../common/src/siusdataconnection.cpp" line="274"/>
+        <location filename="../../../common/src/siusdataconnection.cpp" line="284"/>
         <source>Nimekiri saadetud</source>
         <translation type="unfinished"></translation>
     </message>
