@@ -3234,12 +3234,12 @@ Lehet, hogy ez egy újabb programverzióval készült fájl.
         <translation>Adat érkezett, buffer.length(): %1</translation>
     </message>
     <message>
-        <location filename="../../../common/src/siusdataconnection.cpp" line="217"/>
+        <location filename="../../../common/src/siusdataconnection.cpp" line="215"/>
         <source>Viimane rida, buffer.length(): %1</source>
         <translation>Utolsó sor, buffer.length(): %1</translation>
     </message>
     <message>
-        <location filename="../../../common/src/siusdataconnection.cpp" line="284"/>
+        <location filename="../../../common/src/siusdataconnection.cpp" line="282"/>
         <source>Nimekiri saadetud</source>
         <translation>Lista elküldve</translation>
     </message>

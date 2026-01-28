@@ -46,6 +46,15 @@ void TeamsTable::createLayout(QJsonObject jsonObj, const bool scoringWithPoints)
     // sumAllTeams();
 }
 
+void TeamsTable::deleteAllShots()
+{
+    foreach (Team *team, m_teams) {
+        foreach (Competitor *competitor, team->teamCompetitors()) {
+            competitor->deleteAllShots();
+        }
+    }
+}
+
 QMap<int, TeamsTable::Result> TeamsTable::getCurrentResults() const
 {
     QMap<int, Result> results;

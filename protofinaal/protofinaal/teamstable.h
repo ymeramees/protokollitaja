@@ -21,6 +21,7 @@ public:
     explicit TeamsTable(QWidget *parent = nullptr);
     void clear();
     void createLayout(QJsonObject jsonObj, const bool scoringWithPoints);
+    void deleteAllShots();
     QMap<int, Result> getCurrentResults() const;
     QMultiMap<int, Result> getSortedResults() const;
     int lastValidShotIndex() const;

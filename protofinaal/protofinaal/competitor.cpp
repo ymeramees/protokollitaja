@@ -164,6 +164,13 @@ int Competitor::current10Sum() const
     return m_total10Sum;
 }
 
+void Competitor::deleteAllShots()
+{
+    foreach (ShotEdit *shotEdit, m_shots) {
+        shotEdit->clearShot();
+    }
+}
+
 void Competitor::handleIgnoredShot()
 {
     ShotEdit *ignoredShotEdit = qobject_cast<ShotEdit*>(sender());

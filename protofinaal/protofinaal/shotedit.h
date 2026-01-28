@@ -12,6 +12,7 @@ class ShotEdit : public QLineEdit
 public:
     ShotEdit();
     ShotEdit(QJsonObject);
+    void clearShot();
     bool ignored() const;
     void init();
     void setShot(Lask shot);

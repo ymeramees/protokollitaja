@@ -51,6 +51,7 @@ public slots:
 
 private slots:
     void connectionToSiusLost(int connectionIndex);
+    void deleteAllShots();
     void importSiusStartList();
     void initialize();
     void loadFile(QString fileName);

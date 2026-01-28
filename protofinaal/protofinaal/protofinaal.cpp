@@ -172,6 +172,12 @@ void Protofinaal::createMenus()
     connectToSiusDataAct->setStatusTip(tr("Ühendu SiusData'ga"));
     connect(connectToSiusDataAct, &QAction::triggered, this, &Protofinaal::connectToSiusData);
 
+#ifdef QT_DEBUG
+    QAction *deleteAllShotsAct = new QAction(tr("Kustuta lasud"), this);
+    deleteAllShotsAct->setStatusTip(tr("Kustutab märgitud laskurite kõik lasud"));
+    connect(deleteAllShotsAct, SIGNAL(triggered()), this, SLOT(deleteAllShots()));
+#endif
+
     fileMenu->addAction(openAct);
     fileMenu->addAction(saveAct);
     fileMenu->addSeparator();
@@ -189,6 +195,11 @@ void Protofinaal::createMenus()
     });
 
     languageMenu->addAction(changeLanguageAct);
+
+#ifdef QT_DEBUG
+    QMenu *testMenu = this->menuBar()->addMenu(tr("&Testimine"));
+    testMenu->addAction(deleteAllShotsAct);
+#endif
 }
 
 void Protofinaal::connectToSiusData()
@@ -217,6 +228,15 @@ void Protofinaal::connectionToSiusLost(int connectionIndex)
 {
     Q_UNUSED(connectionIndex);
     // TODO To be implemented
+}
+
+void Protofinaal::deleteAllShots()
+{
+    foreach (TeamsTable *teamsTable, m_teamsTables) {
+        teamsTable->deleteAllShots();
+    }
+    updateSpectatorWindow();
+    m_modifiedAfterSave = true;
 }
 
 void Protofinaal::importSiusStartList()

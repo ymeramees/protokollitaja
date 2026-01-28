@@ -3015,12 +3015,12 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../common/src/siusdataconnection.cpp" line="217"/>
+        <location filename="../../../common/src/siusdataconnection.cpp" line="215"/>
         <source>Viimane rida, buffer.length(): %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../common/src/siusdataconnection.cpp" line="284"/>
+        <location filename="../../../common/src/siusdataconnection.cpp" line="282"/>
         <source>Nimekiri saadetud</source>
         <translation type="unfinished"></translation>
     </message>

@@ -27,6 +27,7 @@ public:
     ~Competitor();
     bool readSiusShot(SiusShotData shotData);
     int current10Sum() const;  //Current result x10 to avoid floating point arithmetic errors
+    void deleteAllShots();
     int id();
     bool isActive() const;
     std::optional<Lask> shotAt(int index);

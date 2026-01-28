@@ -29,6 +29,13 @@ ShotEdit::ShotEdit(QJsonObject json)
 //    delete menu;
 //}
 
+void ShotEdit::clearShot()
+{
+    m_shot.clear();
+    m_originalShotValue = "";
+    updateGui();
+}
+
 bool ShotEdit::ignored() const
 {
     return m_ignored;
