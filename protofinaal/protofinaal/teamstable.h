@@ -4,6 +4,7 @@
 #include <QVBoxLayout>
 #include <set>
 #include "team.h"
+#include "xlsexportservice.h"
 
 //class Protofinaal;
 
@@ -12,7 +13,7 @@ class TeamsTable : public QWidget
     Q_OBJECT
 public:
     struct Result {
-        QString name;   ///< First competitor name.
+        QString name;   ///< First/second competitor name or team name.
         QString shotValue;   ///< Shot value.
         QString seriesOrPoints; ///< Series result or points for this shot.
         QString totalScore;   ///< Result/Points in total.
@@ -24,14 +25,16 @@ public:
     void deleteAllShots();
     QMap<int, Result> getCurrentResults() const;
     QMultiMap<int, Result> getSortedResults() const;
+    QVector<Team*> getTeams() const;
     int lastValidShotIndex() const;
     void setCompetitiorsData(QStringList rows);
     void setCompetitiorsData(int index, QJsonArray data);
     void setTableName(QString newName);
     QString tableName() const;
-    int teamsCount();
-    int totalCompetitorsCount();
+    int teamsCount() const;
+    int totalCompetitorsCount() const;
     QJsonObject toJson() const;
+    QVector<XlsTeamBlock> toXlsData(int maxShots) const;
 
 signals:
     void modified();

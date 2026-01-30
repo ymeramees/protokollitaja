@@ -29,6 +29,8 @@
 #include "lask.h"
 #include "siusdataconnections.h"
 #include "finalsformats.h"
+#include "xlsexportdata.h"
+#include "xlsexportservice.h"
 
 extern bool verbose;
 
@@ -52,6 +54,7 @@ public slots:
 private slots:
     void connectionToSiusLost(int connectionIndex);
     void deleteAllShots();
+    void eksportXLS();
     void importSiusStartList();
     void initialize();
     void loadFile(QString fileName);

@@ -104,10 +104,10 @@ bool Team::isActive() const
     return m_teamCompetitors.at(0)->isActive();
 }
 
-int Team::team10Total()
+int Team::team10Total() const
 {
     if (m_teamCompetitors.size() > 0) {
-        sumAll();
+        // sumAll();
         int teamSum = 0;
         foreach(Competitor *competitor, m_teamCompetitors) {
             teamSum += competitor->current10Sum();
@@ -117,11 +117,11 @@ int Team::team10Total()
         return 0;
 }
 
-QString Team::teamTotal()
+QString Team::teamTotal() const
 {
     if (m_teamCompetitors.size() > 0) {
         // TODO make a better solution for this
-        sumAll();
+        // sumAll();
         int teamSum = 0;
         foreach(Competitor *competitor, m_teamCompetitors) {
             teamSum += competitor->total().replace(',', '.').toDouble() * 10;
@@ -144,7 +144,7 @@ int Team::lastValidShotIndex() const
     return largestIndex;
 }
 
-int Team::result10At(int index)
+int Team::result10At(int index) const
 {
     int teamSum = -999;
     foreach(Competitor *competitor, m_teamCompetitors) {
@@ -189,12 +189,12 @@ bool Team::setPoints(int shotNo, int points)
         return false;
 }
 
-QString Team::resultAt(int index)
+QString Team::resultAt(int index) const
 {
     if (m_teamCompetitors.size() == 1)
         return m_teamCompetitors.first()->resultAt(index);
     else if (m_teamCompetitors.size() > 0) {
-        sumAll();
+        // sumAll();
         // TODO make a better solution for this
         int teamSum = 0;
         foreach(Competitor *competitor, m_teamCompetitors) {
@@ -251,7 +251,7 @@ QVector<Competitor *> Team::teamCompetitors()
     return m_teamCompetitors;
 }
 
-QString Team::teamName()
+QString Team::teamName() const
 {
     QString name = m_teamCompetitors.first()->name();
     if (m_teamCompetitors.size() == 2)
@@ -273,4 +273,72 @@ QJsonObject Team::toJson() const
     json["membersInTeam"] = competitorsArray;
     json["teamName"] = m_teamName.text();
     return json;
+}
+
+XlsTeamBlock Team::toXlsData(int maxShots, int lastShotIdx, const QString &rank) const
+{
+    XlsTeamBlock block;
+    
+    // Individual competitor rows
+    foreach (Competitor *competitor, m_teamCompetitors) {
+        block.competitorRows.append(competitor->toXlsData(maxShots, lastShotIdx));
+    }
+
+    // Team total row - sum all competitors' series
+    XlsShotRow teamRow;
+    teamRow.rank = rank;
+    teamRow.name = teamName();
+
+    // Determine number of series from first competitor
+    if (!block.competitorRows.isEmpty()) {
+        int seriesCount = block.competitorRows.first().series.size();
+        
+        for (int seriesIdx = 0; seriesIdx < seriesCount; seriesIdx++) {
+            XlsSeries teamSeries;
+            double teamSeriesSum = 0.0;
+            
+            // Determine series size from first competitor
+            int seriesSize = 0;
+            if (seriesIdx < block.competitorRows.first().series.size()) {
+                seriesSize = block.competitorRows.first().series[seriesIdx].shots.size();
+            }
+            
+            // Sum shots at each position in this series
+            for (int shotInSeries = 0; shotInSeries < seriesSize; shotInSeries++) {
+                int teamShot10 = 0;
+                bool hasValidShot = false;
+                
+                foreach (const XlsShotRow &compRow, block.competitorRows) {
+                    if (seriesIdx < compRow.series.size() && 
+                        shotInSeries < compRow.series[seriesIdx].shots.size()) {
+                        int shot = compRow.series[seriesIdx].shots[shotInSeries];
+                        if (shot >= 0) {
+                            teamShot10 += shot;
+                            hasValidShot = true;
+                        }
+                    }
+                }
+                
+                teamSeries.shots.append(hasValidShot ? teamShot10 : -1);
+                if (hasValidShot) {
+                    teamSeriesSum += teamShot10 / 10.0;
+                }
+            }
+            
+            teamSeries.total = QString::number(teamSeriesSum, 'f', 1);
+            teamRow.series.append(teamSeries);
+        }
+    }
+    
+    // Calculate team total as sum of competitor totals
+    double teamTotalValue = 0.0;
+    foreach (const XlsShotRow &compRow, block.competitorRows) {
+        if (!compRow.total.isEmpty()) {
+            teamTotalValue += compRow.total.toDouble();
+        }
+    }
+    teamRow.total = QString::number(teamTotalValue, 'f', 1);
+    block.teamTotalRow = teamRow;
+
+    return block;
 }

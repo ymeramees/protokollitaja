@@ -1,4 +1,5 @@
 #include "teamstable.h"
+#include <algorithm>
 
 TeamsTable::TeamsTable(QWidget *parent) : QWidget(parent)
 {
@@ -107,6 +108,11 @@ QMultiMap<int, TeamsTable::Result> TeamsTable::getSortedResults() const
     }
 
     return results;
+}
+
+QVector<Team*> TeamsTable::getTeams() const
+{
+    return m_teams;
 }
 
 int TeamsTable::lastValidShotIndex() const
@@ -300,7 +306,7 @@ QString TeamsTable::tableName() const
     return m_tableName;
 }
 
-int TeamsTable::teamsCount()
+int TeamsTable::teamsCount() const
 {
     return m_teams.size();
 }
@@ -318,7 +324,42 @@ QJsonObject TeamsTable::toJson() const
     return json;
 }
 
-int TeamsTable::totalCompetitorsCount()
+QVector<XlsTeamBlock> TeamsTable::toXlsData(int maxShots) const
+{
+    QVector<XlsTeamBlock> blocks;
+    
+    auto sortedResults = getSortedResults();
+    QList<int> keys = sortedResults.keys();
+    std::sort(keys.begin(), keys.end(), std::greater<int>());
+
+    const int lastShotIdx = lastValidShotIndex();
+    int rank = 1;
+    
+    foreach (int key, keys) {
+        QList<Result> results = sortedResults.values(key);
+        foreach (Result result, results) {
+            Team *team = nullptr;
+            foreach (Team *t, m_teams) {
+                if (t->teamName() == result.name) {
+                    team = t;
+                    break;
+                }
+            }
+
+            if (!team) {
+                continue;
+            }
+
+            QString rankStr = QString::number(rank).append(".");
+            blocks.append(team->toXlsData(maxShots, lastShotIdx, rankStr));
+            rank++;
+        }
+    }
+    
+    return blocks;
+}
+
+int TeamsTable::totalCompetitorsCount() const
 {
     int count = 0;
     foreach(Team *team, m_teams)

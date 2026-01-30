@@ -15,6 +15,7 @@
 #include <QInputDialog>
 #include "shotedit.h"
 #include "siusshotdata.h"
+#include "xlsexportservice.h"
 
 extern bool verbose;
 
@@ -30,17 +31,18 @@ public:
     void deleteAllShots();
     int id();
     bool isActive() const;
-    std::optional<Lask> shotAt(int index);
+    std::optional<Lask> shotAt(int index) const;
     QString name();
     QString lastResult();
     int lastValidShotIndex() const;
     QString qualificationResult() const;
     QString resultAt(int index) const;
-    QString total();
+    QString total() const;
     void setActive(bool active);
     void setData(QJsonObject data);
     void setId(int id);
     QJsonObject toJson() const;
+    XlsShotRow toXlsData(int maxShots, int lastShotIdx) const;
 
 signals:
     void modified() const;

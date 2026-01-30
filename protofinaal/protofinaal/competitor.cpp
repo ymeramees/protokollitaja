@@ -301,7 +301,7 @@ QString Competitor::resultAt(int index) const
         return "";
 }
 
-QString Competitor::total()
+QString Competitor::total() const
 {
     if(m_totalLabels.size() >= 1)
         return m_totalLabels.at(m_totalLabels.size() - 1)->text();
@@ -357,7 +357,7 @@ bool Competitor::readSiusShot(SiusShotData shotData)
     return result;
 }
 
-std::optional<Lask> Competitor::shotAt(int index)
+std::optional<Lask> Competitor::shotAt(int index) const
 {
     if(index >= 0 && m_shots.length() > index && !m_shots.at(index)->shot().isEmpty())
         return std::optional<Lask>{m_shots.at(index)->shot()};
@@ -553,4 +553,48 @@ QJsonObject Competitor::toJson() const
     }
     json["series"] = seriesArray;
     return json;
+}
+
+XlsShotRow Competitor::toXlsData(int maxShots, int lastShotIdx) const
+{
+    XlsShotRow row;
+    row.rank = "";  // Competitor rows don't have rank
+    row.name = m_nameEdit.text();
+
+    int shotIdx = 0;
+    for (int seriesIdx = 0; seriesIdx < m_series.size(); seriesIdx++) {
+        XlsSeries xlsSeries;
+        int seriesSum10 = 0;
+        const QVector<ShotEdit*> *series = m_series.at(seriesIdx);
+        
+        for (int shotInSeries = 0; shotInSeries < series->size(); shotInSeries++) {
+            int shot10Value = -1;  // Sentinel value for no shot
+            if (shotIdx <= lastShotIdx) {
+                auto shot = shotAt(shotIdx);
+                if (shot.has_value() && !shot->isEmpty()) {
+                    shot10Value = shot->get10Lask();
+                    seriesSum10 += shot10Value;
+                }
+            }
+            xlsSeries.shots.append(shot10Value);
+            shotIdx++;
+            
+            if (shotIdx >= maxShots) {
+                break;
+            }
+        }
+        
+        // Set series total
+        xlsSeries.total = QString::number(seriesSum10 / 10.0, 'f', 1);
+        row.series.append(xlsSeries);
+        
+        if (shotIdx >= maxShots) {
+            break;
+        }
+    }
+    
+    // Set competitor total - convert from locale format (with comma) to numeric format (with dot)
+    QString totalStr = total().replace(',', '.');
+    row.total = totalStr;
+    return row;
 }

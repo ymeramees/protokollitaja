@@ -11,6 +11,7 @@
 #include <QVBoxLayout>
 
 #include "competitor.h"
+#include "xlsexportservice.h"
 
 class Team : public QWidget
 {
@@ -20,14 +21,15 @@ public:
     ~Team();
     int index();
     bool isActive() const;
-    int team10Total();
-    QString teamTotal();
+    int team10Total() const;
+    QString teamTotal() const;
     int lastValidShotIndex() const;
-    QString teamName();
+    QString teamName() const;
     QVector<Competitor*> teamCompetitors();
     QJsonObject toJson() const;
-    QString resultAt(int index);
-    int result10At(int index);
+    XlsTeamBlock toXlsData(int maxShots, int lastShotIdx, const QString &rank) const;
+    QString resultAt(int index) const;
+    int result10At(int index) const;
     void setCompetitorsData(QJsonArray data);
     void setFirstCompetitiorData(int id, QString displayName, QString result);
     bool setPoints(int shotNo, int points);

@@ -3,6 +3,7 @@
 
 #include "protofinaal.h"
 #include "siusshotdata.h"
+#include "xlsexportdata.h"
 
 bool verbose = false;
 
@@ -17,6 +18,7 @@ public:
 private slots:
     void sanityCheckWithPoints();
     void sanityCheckWithShots();
+    void test_xlsExportDataAssembly();
     void test_readProtokollitajaGeneratedFile();
     void test_readSiusShotWithOffsetWithPoints();
     void test_readSiusShotWithOffsetWithShots();
@@ -358,6 +360,81 @@ void ProtofinaalTest::sanityCheckWithShots()
     }
 
     QTest::qWait(500);
+}
+
+void ProtofinaalTest::test_xlsExportDataAssembly()
+{
+    setupCompetitionFile("testWithShots");
+
+    QTimer::singleShot(210, this, SLOT(closeInitialDialog()));
+
+    Protofinaal finaal("test.fin");
+    QTest::qWait(200);
+
+    TeamsTable *teamsTable = finaal.findChild<TeamsTable*>();
+    QVERIFY(teamsTable);
+
+    QVector<TeamsTable*> tables;
+    tables.append(teamsTable);
+
+    XlsExportData data = buildXlsExportData(tables);
+    QVERIFY(data.maxShots >= 0);
+    QVERIFY(!data.blocks.isEmpty());
+
+    bool foundMultiTeam = false;
+    for (Team *team : teamsTable->getTeams()) {
+        QVector<Competitor*> competitors = team->teamCompetitors();
+        if (competitors.size() < 2) {
+            continue;
+        }
+
+        foundMultiTeam = true;
+        XlsTeamBlock *block = nullptr;
+        for (XlsTeamBlock &candidate : data.blocks) {
+            if (candidate.teamTotalRow.name == team->teamName()) {
+                block = &candidate;
+                break;
+            }
+        }
+
+        QVERIFY(block);
+        QVERIFY(!block->teamTotalRow.rank.isEmpty());
+        QCOMPARE(block->competitorRows.size(), competitors.size());
+        
+        // Verify team total row has correct series structure
+        QVERIFY(!block->teamTotalRow.series.isEmpty());
+        int totalShots = 0;
+        for (const XlsSeries &series : block->teamTotalRow.series) {
+            totalShots += series.shots.size();
+        }
+        QCOMPARE(totalShots, data.maxShots);
+
+        for (Competitor *competitor : competitors) {
+            bool foundRow = false;
+            for (const XlsShotRow &row : block->competitorRows) {
+                if (row.name == competitor->name()) {
+                    foundRow = true;
+                    QCOMPARE(row.rank, QString(""));
+                    
+                    // Verify competitor row has correct series structure
+                    QVERIFY(!row.series.isEmpty());
+                    int compTotalShots = 0;
+                    for (const XlsSeries &series : row.series) {
+                        compTotalShots += series.shots.size();
+                    }
+                    QCOMPARE(compTotalShots, data.maxShots);
+                    break;
+                }
+            }
+            QVERIFY(foundRow);
+        }
+
+        break;
+    }
+
+    if (!foundMultiTeam) {
+        QSKIP("No multi-competitor team found in test data to verify block assembly.");
+    }
 }
 
 QTEST_MAIN(ProtofinaalTest)

@@ -154,6 +154,10 @@ void Protofinaal::createMenus()
     saveAct->setStatusTip(tr("Salvesta fail"));
     connect(saveAct, &QAction::triggered, this, &Protofinaal::save);
 
+    QAction *eksportXLSAct = new QAction(tr("Eksport xls..."), this);
+    eksportXLSAct->setStatusTip(tr("Ekspordi tulemused xls faili"));
+    connect(eksportXLSAct, &QAction::triggered, this, &Protofinaal::eksportXLS);
+
     QAction *importSiusStartListAct = new QAction(tr("&Impordi Sius startlist..."), this);
     importSiusStartListAct->setShortcuts(QKeySequence::Open);
     importSiusStartListAct->setStatusTip(tr("Impordi Sius startlist"));
@@ -185,6 +189,8 @@ void Protofinaal::createMenus()
     fileMenu->addSeparator();
     fileMenu->addAction(exitAct);
 
+    editMenu->addAction(eksportXLSAct);
+    editMenu->addSeparator();
     editMenu->addAction(showSpectatorWindowAct);
     editMenu->addAction(connectToSiusDataAct);
 
@@ -237,6 +243,29 @@ void Protofinaal::deleteAllShots()
     }
     updateSpectatorWindow();
     m_modifiedAfterSave = true;
+}
+
+void Protofinaal::eksportXLS()
+{
+    QString fileLocation = m_currentFile.left(m_currentFile.length() - 4);
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Ekspordi"), fileLocation + ".xls",
+                    tr("Excel workbook file (*.xls)"));
+    if (fileName.isEmpty()) {
+        return;
+    }
+    if (!fileName.endsWith(".xls")) {
+        fileName.append(".xls");
+    }
+
+    XlsExportData exportData = buildXlsExportData(m_teamsTables);
+
+    XLSExportService exporter;
+    QString errorMessage;
+    if (exporter.exportResults(fileName, m_competitionName, m_timePlace, m_eventName, exportData.maxShots, exportData.blocks, &errorMessage)) {
+        statusBarInfoChanged(tr("Fail eksporditud: ") + fileName);
+    } else {
+        QMessageBox::critical(this, tr("Viga!"), errorMessage.isEmpty() ? tr("Faili kirjutamine ei õnnestunud!") : errorMessage, QMessageBox::Ok);
+    }
 }
 
 void Protofinaal::importSiusStartList()

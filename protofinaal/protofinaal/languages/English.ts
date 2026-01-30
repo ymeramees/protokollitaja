@@ -256,8 +256,8 @@ To create a new competition click on &quot;New&quot; button</translation>
     <name>Protofinaal</name>
     <message>
         <location filename="../protofinaal.cpp" line="72"/>
-        <location filename="../protofinaal.cpp" line="280"/>
-        <location filename="../protofinaal.cpp" line="574"/>
+        <location filename="../protofinaal.cpp" line="309"/>
+        <location filename="../protofinaal.cpp" line="603"/>
         <source>Viga</source>
         <translation>Error</translation>
     </message>
@@ -268,7 +268,7 @@ To create a new competition click on &quot;New&quot; button</translation>
     </message>
     <message>
         <location filename="../protofinaal.cpp" line="99"/>
-        <location filename="../protofinaal.cpp" line="582"/>
+        <location filename="../protofinaal.cpp" line="611"/>
         <source>Teade</source>
         <translation>Info</translation>
     </message>
@@ -304,7 +304,7 @@ To create a new competition click on &quot;New&quot; button</translation>
     </message>
     <message>
         <location filename="../protofinaal.cpp" line="149"/>
-        <location filename="../protofinaal.cpp" line="400"/>
+        <location filename="../protofinaal.cpp" line="429"/>
         <source>Ava fail</source>
         <translation>Open File</translation>
     </message>
@@ -320,112 +320,143 @@ To create a new competition click on &quot;New&quot; button</translation>
     </message>
     <message>
         <location filename="../protofinaal.cpp" line="157"/>
+        <source>Eksport xls...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../protofinaal.cpp" line="158"/>
+        <source>Ekspordi tulemused xls faili</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../protofinaal.cpp" line="161"/>
         <source>&amp;Impordi Sius startlist...</source>
         <translation>&amp;Import Sius startlist...</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="159"/>
+        <location filename="../protofinaal.cpp" line="163"/>
         <source>Impordi Sius startlist</source>
         <translation>Import a startlist in Sius format</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="162"/>
+        <location filename="../protofinaal.cpp" line="166"/>
         <source>&amp;Välju</source>
         <translation>E&amp;xit</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="164"/>
+        <location filename="../protofinaal.cpp" line="168"/>
         <source>Välju programmist</source>
         <translation>Exit the application</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="167"/>
+        <location filename="../protofinaal.cpp" line="171"/>
         <source>&amp;Tulemuste aken</source>
         <translation>Spectator Screen</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="168"/>
+        <location filename="../protofinaal.cpp" line="172"/>
         <source>Ava tulemuste aken</source>
         <translation>Open the spectator screen</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="171"/>
+        <location filename="../protofinaal.cpp" line="175"/>
         <source>&amp;SiusData</source>
         <translation>Range Control/SiusData</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="172"/>
+        <location filename="../protofinaal.cpp" line="176"/>
         <source>Ühendu SiusData&apos;ga</source>
         <translation>Connect to Range Control or SiusData</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="176"/>
+        <location filename="../protofinaal.cpp" line="180"/>
         <source>Kustuta lasud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="177"/>
+        <location filename="../protofinaal.cpp" line="181"/>
         <source>Kustutab märgitud laskurite kõik lasud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="191"/>
+        <location filename="../protofinaal.cpp" line="197"/>
         <source>Programmi keel</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="192"/>
+        <location filename="../protofinaal.cpp" line="198"/>
         <source>Programmi keele valik</source>
         <translation>Change application language</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="200"/>
+        <location filename="../protofinaal.cpp" line="206"/>
         <source>&amp;Testimine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="207"/>
+        <location filename="../protofinaal.cpp" line="213"/>
         <source>/Protofinaal sisse logi %1.log</source>
         <translation>/Protofinaal in log %1.log</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="245"/>
+        <location filename="../protofinaal.cpp" line="251"/>
+        <source>Ekspordi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../protofinaal.cpp" line="252"/>
+        <source>Excel workbook file (*.xls)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../protofinaal.cpp" line="265"/>
+        <source>Fail eksporditud: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../protofinaal.cpp" line="267"/>
+        <source>Faili kirjutamine ei õnnestunud!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../protofinaal.cpp" line="274"/>
         <source>Ava startlist</source>
         <translation>Open a Start List</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="245"/>
+        <location filename="../protofinaal.cpp" line="274"/>
         <source>Comma separated file (*.csv)</source>
         <translation>Comma separated file (*.csv)</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="280"/>
+        <location filename="../protofinaal.cpp" line="309"/>
         <source>Ei õnnestunud faili avada!</source>
         <translation>Unable to open the file!</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="343"/>
-        <location filename="../protofinaal.cpp" line="386"/>
-        <location filename="../protofinaal.cpp" line="420"/>
-        <location filename="../protofinaal.cpp" line="430"/>
-        <location filename="../protofinaal.cpp" line="514"/>
-        <location filename="../protofinaal.cpp" line="738"/>
+        <location filename="../protofinaal.cpp" line="267"/>
+        <location filename="../protofinaal.cpp" line="372"/>
+        <location filename="../protofinaal.cpp" line="415"/>
+        <location filename="../protofinaal.cpp" line="449"/>
+        <location filename="../protofinaal.cpp" line="459"/>
+        <location filename="../protofinaal.cpp" line="543"/>
+        <location filename="../protofinaal.cpp" line="767"/>
         <source>Viga!</source>
         <translation>Error!</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="574"/>
+        <location filename="../protofinaal.cpp" line="603"/>
         <source>Teist ekraani ei leitud. Programmi korralikuks funktsioneerimiseks on vajalik kahe ekraani olemasolu.</source>
         <translation>Cannot find extended desktop. For the proper use of the program, two screens in extended desktop setting are needed.</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="582"/>
+        <location filename="../protofinaal.cpp" line="611"/>
         <source>Tulemuse aken näidatud teisel ekraanil</source>
         <translation>Spectator screen shown on the other sceen</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="650"/>
-        <location filename="../protofinaal.cpp" line="652"/>
+        <location filename="../protofinaal.cpp" line="679"/>
+        <location filename="../protofinaal.cpp" line="681"/>
         <source>Vahe</source>
         <translation>Diff</translation>
     </message>
@@ -434,38 +465,38 @@ To create a new competition click on &quot;New&quot; button</translation>
         <translation type="vanished">Didn&apos;t find the event configuration file!</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="514"/>
+        <location filename="../protofinaal.cpp" line="543"/>
         <source>Harjutuse fail vigane!</source>
         <translation>Event configuration file is broken!</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="322"/>
+        <location filename="../protofinaal.cpp" line="351"/>
         <source>Avatud fail: </source>
         <translation>Opened File: </translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="343"/>
-        <location filename="../protofinaal.cpp" line="386"/>
+        <location filename="../protofinaal.cpp" line="372"/>
+        <location filename="../protofinaal.cpp" line="415"/>
         <source>Finaali fail vigane!</source>
         <translation>Finals file is broken!</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="392"/>
+        <location filename="../protofinaal.cpp" line="421"/>
         <source>Kas soovid muudatused salvestada?</source>
         <translation>Do you want to save the changes?</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="400"/>
+        <location filename="../protofinaal.cpp" line="429"/>
         <source>Protofinaali fail (*.fin)</source>
         <translation>Protofinaal file (*.fin)</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="420"/>
+        <location filename="../protofinaal.cpp" line="449"/>
         <source>Faili versioon on uuem, kui see versioon programmist. Faili avamisel võib tekkida vigu!</source>
         <translation>File version is newer that this version of the application. There might be errors when opening the file!</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="430"/>
+        <location filename="../protofinaal.cpp" line="459"/>
         <source>Faili avamine ei ole võimalik!
 
 Asukoht: </source>
@@ -484,24 +515,24 @@ Default settings are used.
 Location: </translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="646"/>
+        <location filename="../protofinaal.cpp" line="675"/>
         <source>Lask</source>
         <translation>Shot</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="650"/>
-        <location filename="../protofinaal.cpp" line="652"/>
+        <location filename="../protofinaal.cpp" line="679"/>
+        <location filename="../protofinaal.cpp" line="681"/>
         <source>Koht</source>
         <translation>Rank</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="650"/>
-        <location filename="../protofinaal.cpp" line="652"/>
+        <location filename="../protofinaal.cpp" line="679"/>
+        <location filename="../protofinaal.cpp" line="681"/>
         <source>Nimi</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="650"/>
+        <location filename="../protofinaal.cpp" line="679"/>
         <source>Punktid</source>
         <translation>Score</translation>
     </message>
@@ -510,17 +541,17 @@ Location: </translation>
         <translation type="vanished">Total</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="652"/>
+        <location filename="../protofinaal.cpp" line="681"/>
         <source>Seeria</source>
         <translation>Series</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="735"/>
+        <location filename="../protofinaal.cpp" line="764"/>
         <source>Fail salvestatud</source>
         <translation>File saved</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="738"/>
+        <location filename="../protofinaal.cpp" line="767"/>
         <source>Faili kirjutamine ei ole võimalik!
 Kontrollige, kas teil on sinna kausta kirjutamise õigused.</source>
         <translation>Unable to write the file!
@@ -750,23 +781,23 @@ MembersInTeam != isDouble &amp;&amp; != isArray</translation>
 <context>
     <name>TeamsTable</name>
     <message>
-        <location filename="../teamstable.cpp" line="161"/>
-        <location filename="../teamstable.cpp" line="163"/>
+        <location filename="../teamstable.cpp" line="167"/>
+        <location filename="../teamstable.cpp" line="169"/>
         <source> lask </source>
         <translation> shot </translation>
     </message>
     <message>
-        <location filename="../teamstable.cpp" line="161"/>
+        <location filename="../teamstable.cpp" line="167"/>
         <source>Lisatud: %1%2%3 = %4</source>
         <translation>Added: %1%2%3 = %4</translation>
     </message>
     <message>
-        <location filename="../teamstable.cpp" line="163"/>
+        <location filename="../teamstable.cpp" line="169"/>
         <source>Viga, ei õnnestunud lisada: %1%2%3 = %4</source>
         <translation>Error, couldn&apos;t add: %1%2%3 = %4</translation>
     </message>
     <message>
-        <location filename="../teamstable.cpp" line="202"/>
+        <location filename="../teamstable.cpp" line="208"/>
         <source>Sellise ID&apos;ga võistlejat ei leitud: %1</source>
         <translation>Unable to find a competitor with this ID: %1</translation>
     </message>
