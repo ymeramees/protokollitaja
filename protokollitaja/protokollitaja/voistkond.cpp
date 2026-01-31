@@ -271,5 +271,9 @@ void Voistkond::liida()
 
 Voistkond::~Voistkond()
 {
-        // TODO Auto-generated destructor stub
+    // FIXME Lauri: add and test this (currently, there seems to be a memory leak):
+    // foreach (Liige *member, voistlejad) {
+    //     delete member;
+    //     member = nullptr;
+    // }
 }

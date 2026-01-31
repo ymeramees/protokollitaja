@@ -1531,7 +1531,7 @@ void Protokollitaja::exportFinalsFile()
         }
 
         // if(rajaNrOlemas)    //Kui raja nr on olemas, siis saab selle järgi sorteerida
-        seeLeht->sorteeri(0);   //Sorteerida raja nr'i järgi
+        // TODO Lauri: Sorteerida raja nr'i järgi?
 // #ifdef QT_DEBUG
 //         qDebug() << "Protokollitaja::exportFinalsFile(), Rajanr: " << seeLeht->reasLaskurid[0]->rajaNr->text();
 // #endif
@@ -1550,20 +1550,23 @@ void Protokollitaja::exportFinalsFile()
 //#endif
         QVector<QStringList> finalsTable; //Each "row": target, ID, screen name, result, first name, name, club
         if (selected) {
-            for(int i = 0; i < seeLeht->laskurid.count() && i < competitorsInFinal; i++){
-                if (seeLeht->reasLaskurid[i]->linnuke->isChecked()) {
+            int selectedCompetitors = 0;
+            for(int i = 0; i < seeLeht->laskurid.count() && selectedCompetitors < competitorsInFinal; i++){
+                if (seeLeht->laskurid[i]->linnuke->isChecked()) {
                     QStringList finalsRow;
-                    finalsRow << seeLeht->reasLaskurid[i]->rajaNr->text();
-                    finalsRow << QString("%1%2").arg(seeLeht->leheIndeks, 2, 10, QChar('0')).arg(seeLeht->reasLaskurid[i]->id, 4, 10, QChar('0'));
-                    finalsRow << QString("%1 %2.").arg(seeLeht->reasLaskurid[i]->perekNimi->text()).arg(seeLeht->reasLaskurid[i]->eesNimi->text().left(1));
-                    finalsRow << seeLeht->reasLaskurid[i]->getSumma();
-                    finalsRow << seeLeht->reasLaskurid[i]->eesNimi->text();
-                    finalsRow << seeLeht->reasLaskurid[i]->perekNimi->text();
-                    finalsRow << seeLeht->reasLaskurid[i]->klubi->text();
+                    finalsRow << seeLeht->laskurid[i]->rajaNr->text();
+                    finalsRow << QString("%1%2").arg(seeLeht->leheIndeks, 2, 10, QChar('0')).arg(seeLeht->laskurid[i]->id, 4, 10, QChar('0'));
+                    finalsRow << QString("%1 %2.").arg(seeLeht->laskurid[i]->perekNimi->text()).arg(seeLeht->laskurid[i]->eesNimi->text().left(1));
+                    finalsRow << seeLeht->laskurid[i]->getSumma();
+                    finalsRow << seeLeht->laskurid[i]->eesNimi->text();
+                    finalsRow << seeLeht->laskurid[i]->perekNimi->text();
+                    finalsRow << seeLeht->laskurid[i]->klubi->text();
                     finalsTable << finalsRow;
+                    selectedCompetitors++;
                 }
             }
         } else {
+            seeLeht->sorteeri(0);
             for(int i = 0; i < seeLeht->laskurid.count() && i < competitorsInFinal; i++){
                 QStringList finalsRow;
                 finalsRow << seeLeht->reasLaskurid[i]->rajaNr->text();

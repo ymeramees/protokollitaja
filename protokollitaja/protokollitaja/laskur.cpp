@@ -1326,7 +1326,7 @@ void Laskur::setupFields()
     linnuke = new QCheckBox(this);
     rajaNr = new QLineEdit(this);
     rajaNr->setMinimumHeight(28);
-    rajaNr->setMaximumWidth(20);
+    rajaNr->setMaximumWidth(30);
     rajaNr->setToolTip(tr("Raja number"));
     rajaNr->setPlaceholderText(tr(""));
     connect(rajaNr, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
