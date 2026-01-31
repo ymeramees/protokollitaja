@@ -18,8 +18,9 @@ public:
     Lask();
     Lask(int shot10Times, int x = -999, int y = -999, bool innerTen = false, QTime shotTime = QTime(), bool competitionShot = true, OriginType shotOrigin = Manual);
     Lask(QString siusRow);
-    Lask(QJsonObject);
+    Lask(const QJsonObject);
     void set(const Lask *l);
+    void set(const QJsonObject shotJson);
     bool isEmpty();
 
 public:

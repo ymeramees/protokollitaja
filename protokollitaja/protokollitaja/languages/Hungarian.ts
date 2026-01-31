@@ -600,12 +600,12 @@ Lehet, hogy ez egy újabb programverzióval készült fájl.
 <context>
     <name>Laskur</name>
     <message>
-        <location filename="../laskur.cpp" line="1438"/>
+        <location filename="../laskur.cpp" line="1455"/>
         <source>Seeriad</source>
         <translation>Sorozatok</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1456"/>
+        <location filename="../laskur.cpp" line="1473"/>
         <source>Vahesumma</source>
         <translation>Részösszeg</translation>
     </message>
@@ -618,118 +618,118 @@ Lehet, hogy ez egy újabb programverzióval készült fájl.
         <translation type="vanished">Sorszámozás vége</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1414"/>
+        <location filename="../laskur.cpp" line="1431"/>
         <source>Märkused</source>
         <translation>Megjegyzések</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1329"/>
+        <location filename="../laskur.cpp" line="1346"/>
         <source>Raja number</source>
         <translation>Lőállás</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="125"/>
+        <location filename="../laskur.cpp" line="135"/>
         <source>Viga!</source>
         <translation>Hiba!</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="125"/>
+        <location filename="../laskur.cpp" line="135"/>
         <source>Ei ole nii palju vahesummasid!</source>
         <translation>Nincs ennyi részösszeg!</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="207"/>
+        <location filename="../laskur.cpp" line="217"/>
         <source>Teade</source>
         <translation>Infó</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="685"/>
+        <location filename="../laskur.cpp" line="702"/>
         <source>Sisestage uus laskuri ID</source>
         <translation>Adja meg az új versenyző ID-t</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1330"/>
+        <location filename="../laskur.cpp" line="1347"/>
         <source></source>
         <translation>LÁ</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1336"/>
-        <location filename="../laskur.cpp" line="1345"/>
+        <location filename="../laskur.cpp" line="1353"/>
+        <location filename="../laskur.cpp" line="1362"/>
         <source>Siffer</source>
         <translation>Lőlap sorszám</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1337"/>
+        <location filename="../laskur.cpp" line="1354"/>
         <source>Algus</source>
         <translation>Kezdet</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1346"/>
+        <location filename="../laskur.cpp" line="1363"/>
         <source>Lõpp</source>
         <translation>Vége</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1356"/>
-        <location filename="../laskur.cpp" line="1357"/>
+        <location filename="../laskur.cpp" line="1373"/>
+        <location filename="../laskur.cpp" line="1374"/>
         <source>Eesnimi</source>
         <translation>Keresztnév</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1363"/>
-        <location filename="../laskur.cpp" line="1364"/>
+        <location filename="../laskur.cpp" line="1380"/>
+        <location filename="../laskur.cpp" line="1381"/>
         <source>Perekonnanimi</source>
         <translation>Vezetéknév</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1371"/>
-        <location filename="../laskur.cpp" line="1372"/>
+        <location filename="../laskur.cpp" line="1388"/>
+        <location filename="../laskur.cpp" line="1389"/>
         <source>Sünniaasta</source>
         <translation>Születési év</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1378"/>
-        <location filename="../laskur.cpp" line="1379"/>
+        <location filename="../laskur.cpp" line="1395"/>
+        <location filename="../laskur.cpp" line="1396"/>
         <source>Klubi</source>
         <translation>Klub</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1387"/>
-        <location filename="../laskur.cpp" line="1402"/>
+        <location filename="../laskur.cpp" line="1404"/>
+        <location filename="../laskur.cpp" line="1419"/>
         <source>Summa</source>
         <translation>Összesen</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1396"/>
+        <location filename="../laskur.cpp" line="1413"/>
         <source>Finaali seeria</source>
         <translation>Döntő</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1407"/>
+        <location filename="../laskur.cpp" line="1424"/>
         <source>Sisekümnete arv</source>
         <translation>Belső tízesek száma</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1420"/>
+        <location filename="../laskur.cpp" line="1437"/>
         <source>Lisalasud</source>
         <translation>Szétlövés</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1423"/>
+        <location filename="../laskur.cpp" line="1440"/>
         <source>Lasud...</source>
         <translation>Lövések...</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1424"/>
+        <location filename="../laskur.cpp" line="1441"/>
         <source>Ava laskuri laskude aken</source>
         <translation>Versenyző lövéseinek megnyitása</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1426"/>
+        <location filename="../laskur.cpp" line="1443"/>
         <source>ID...</source>
         <translation>ID...</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1427"/>
+        <location filename="../laskur.cpp" line="1444"/>
         <source>Vaata/muuda laskuri ID&apos;d</source>
         <translation>Versenyző ID megtekintése/módosítása</translation>
     </message>

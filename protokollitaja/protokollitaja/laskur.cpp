@@ -78,17 +78,16 @@ Laskur::Laskur(
         QJsonObject seriesJson = seriesArray[i].toObject();
         if (seriesJson.contains("seriesSum") && seriesJson["seriesSum"].isString() && !seriesJson["seriesSum"].toString().isEmpty())
             seeriad[i]->setText(seriesJson["seriesSum"].toString());
-        QList<Lask*> seeriaLasud;
+
         QJsonArray shotsArray = seriesJson["shots"].toArray();
-        for(int j = 0; j < shotsArray.size(); j++){
-            seeriaLasud << new Lask(shotsArray[j].toObject());  // Series shots, including one for adding penalties
+        for(int j = 0; j < shotsArray.size() && j < lasud[i].size(); j++){
+            lasud[i][j]->set(shotsArray[j].toObject());  // Series shots, including one for adding penalties
         }
-        lasud << seeriaLasud;   //Seeria lasud laskuri laskude hulka
     }
 
     QJsonArray shootOffShotsArray = jsonObj["shootOffShots"].toArray();
-    for (int i = 0; i < shootOffShotsArray.size(); i++) {
-        lisaLasud.append(shootOffShotsArray[i].toInt());
+    for (int i = 0; i < shootOffShotsArray.size() && i < lisaLasud.size(); i++) {
+        lisaLasud[i] = shootOffShotsArray[i].toInt();
     }
     createLayout();
     liida();
@@ -513,6 +512,8 @@ void Laskur::liida() //Laskude summeerimine
 //                kumned->setEnabled(false);
 //                connect(seeriad[i], SIGNAL(doubleClicked()), this, SLOT(naitaLaskudeAkent()));
             }else{
+                if(verbose)
+                    QTextStream(stdout) << "Laskur::liida(): onLasud = false" << Qt::endl;
                 seeriad[i]->setReadOnly(false);
                 seeriad[i]->setPalette(standardBackground);
                 kumned->setReadOnly(false);

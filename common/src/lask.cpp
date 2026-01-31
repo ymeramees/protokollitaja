@@ -21,25 +21,9 @@ Lask::Lask(QString siusRow)
     setSiusShot(siusRow);
 }
 
-Lask::Lask(QJsonObject shotJson)
+Lask::Lask(const QJsonObject shotJson)
 {
-    clear();
-
-    setLask(shotJson["shotValue"].toString());
-    if (shotJson["shotX"].isNull())
-        m_x = -999;
-    else
-        m_x = shotJson["shotX"].toInt();
-    if (shotJson["shotY"].isNull())
-        m_y = -999;
-    else
-        m_y = shotJson["shotY"].toInt();
-    m_shotTime = QTime::fromString(shotJson["shotTime"].toString());
-    m_innerTen = shotJson["innerTen"].toBool();
-    if (shotJson["competitionShot"].isNull())
-        m_competitionShot = true;   // default is true for backwards compatibility
-    else m_competitionShot = shotJson["competitionShot"].toBool();
-    m_shotOrigin = OriginType(shotJson["shotOrigin"].toInt());
+    set(shotJson);
 }
 
 void Lask::clear()
@@ -319,6 +303,27 @@ void Lask::set(const Lask *l)
     this->m_y = l->m_y;
     this->m_competitionShot = l->isCompetitionShot();
     this->m_shotOrigin = l->shotOrigin();
+}
+
+void Lask::set(const QJsonObject shotJson)
+{
+    clear();
+
+    setLask(shotJson["shotValue"].toString());
+    if (shotJson["shotX"].isNull())
+        m_x = -999;
+    else
+        m_x = shotJson["shotX"].toInt();
+    if (shotJson["shotY"].isNull())
+        m_y = -999;
+    else
+        m_y = shotJson["shotY"].toInt();
+    m_shotTime = QTime::fromString(shotJson["shotTime"].toString());
+    m_innerTen = shotJson["innerTen"].toBool();
+    if (shotJson["competitionShot"].isNull())
+        m_competitionShot = true;   // default is true for backwards compatibility
+    else m_competitionShot = shotJson["competitionShot"].toBool();
+    m_shotOrigin = OriginType(shotJson["shotOrigin"].toInt());
 }
 
 Lask::OriginType Lask::shotOrigin() const
