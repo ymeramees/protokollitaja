@@ -1,12 +1,12 @@
-name: Release-Build
+name: Dev-Build
 
 on:
   push:
     branches:
-      - master
+      - devel
   pull_request:
     branches:
-      - master
+      - devel
 
 jobs:
   # build-windows:
@@ -108,6 +108,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Extract version from version.h
+        id: version
+        run: |
+          VERSION=$(grep 'VER_FILEVERSION_STR' common/src/version.h | grep -oP '"\K[^"]*' | head -1)
+          echo "version=${VERSION%\\0}" >> $GITHUB_OUTPUT
+
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -176,7 +182,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Protokollitaja-0.9.${{ github.run_number }}-Linux
+          name: Protokollitaja-${{ steps.version.outputs.version }}-Linux-dev-${{ github.run_number }}
           path: /tmp/Protokollitaja
           retention-days: 30
 
@@ -187,6 +193,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Extract version from version.h
+        id: version
+        run: |
+          VERSION=$(grep 'VER_FILEVERSION_STR' common/src/version.h | grep -oP '"\K[^"]*' | head -1)
+          echo "version=${VERSION%\\0}" >> $GITHUB_OUTPUT
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
@@ -258,6 +270,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Protokollitaja-0.9.${{ github.run_number }}-macOS
+          name: Protokollitaja-macOS-${{ steps.version.outputs.version }}-dev-${{ github.run_number }}
           path: build/Protokollitaja-macOS
           retention-days: 30

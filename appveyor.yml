@@ -32,9 +32,11 @@ install:
 
     ls C:\Qt
 
-    ls C:\Qt\Tools
+    ls C:\Qt\6.9
 
-    ls C:\Qt\Tools\mingw1120_64\bin
+    ls C:\Qt\mingw_64\Tools
+
+    ls C:\Qt\mingw_64\Tools\mingw1310_64\bin
 
     ls C:\Qt\6.9
 
@@ -46,7 +48,7 @@ install:
 
     %QTDIR%\bin\qtenv2.bat
 
-    set PATH=%PATH%;C:\Qt\Tools\mingw1120_64\bin
+    set PATH=%PATH%;C:\Qt\mingw_64\Tools\mingw1310_64\bin
 
     qmake -v
 
@@ -61,14 +63,16 @@ build_script:
 
     dir
 
-    qmake.exe Protokollitaja.pro -spec win32-g++ "CONFIG+=qtquickcompiler" DEFINES+=ASM_CRASH_REPORT && mingw32-make.exe qmake_all
+    cmake -DCMAKE_PREFIX_PATH:PATH=C:\Qt\6.9\mingw_64 -DCMAKE_C_COMPILER=C:\Qt\mingw_64\Tools\mingw1310_64\bin\gcc.exe -DCMAKE_CXX_COMPILER=C:\Qt\mingw_64\Tools\mingw1310_64\bin\g++.exe -G "MinGW Makefiles" -S %APPVEYOR_BUILD_FOLDER% -B %APPVEYOR_BUILD_FOLDER%\build
 
-    mingw32-make.exe -j4
+    cmake --build %APPVEYOR_BUILD_FOLDER%\build
 test_script:
 - ps: >-
     echo $env:APPVEYOR_BUILD_FOLDER
 
     cd $env:APPVEYOR_BUILD_FOLDER
+
+    dir
 
     New-Item -Path .\build -Name "Protokollitaja-$env:APPVEYOR_BUILD_VERSION" -ItemType "directory"
 
@@ -88,7 +92,7 @@ test_script:
 
     Copy-Item "$env:APPVEYOR_BUILD_FOLDER\protokollitaja\build\release\Data\Print_template.html" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\Data"
 
-    Copy-Item "C:\Qt\Tools\mingw1120_64\bin\addr2line.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\tools"
+    Copy-Item "C:\Qt\mingw_64\Tools\mingw1310_64\bin\addr2line.exe" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION\tools"
 
     Copy-Item "$env:APPVEYOR_BUILD_FOLDER\Release-Notes.md" -Destination "$env:APPVEYOR_BUILD_FOLDER\build\Protokollitaja-$env:APPVEYOR_BUILD_VERSION"
 
@@ -118,7 +122,7 @@ test_script:
 
         if ($test.IndexOf("IntegrationTest") -lt 0) {
 
-            & $test -xunitxml -tickcounter -o testresults.xml
+            & $test -junitxml -tickcounter -o testresults.xml
 
             $wc = New-Object 'System.Net.WebClient'
 
