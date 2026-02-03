@@ -28,7 +28,8 @@ DataUploaderTest::~DataUploaderTest()
 
 void DataUploaderTest::test_getUnauthorizedResponseWithTestUser()
 {
-    DataUploader dataUploader(true, this);
+    QTextStream log(stdout);
+    DataUploader dataUploader(true, &log, this);
     QSignalSpy spy(&dataUploader, SIGNAL(uploadFinished(bool, QString, QString)));
 
     QUrl url;

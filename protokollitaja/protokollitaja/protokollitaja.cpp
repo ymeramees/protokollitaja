@@ -3888,7 +3888,7 @@ void Protokollitaja::receivedVersionInfo(bool updateExists, QString versionStrin
 void Protokollitaja::dataUploaderFinished(bool success, QString reply, QString errorString)
 {
     if(!success){
-        logiValja << "#ERROR: Web upload failed, errorString: " << errorString << "\n#reply: " << reply << "\n";
+        logiValja << "#ERROR: Web upload failed, errorString: " << errorString << "\n#reply: " << reply << Qt::endl;
         statusBarInfoChanged("Error with upload: " + errorString + " " + reply);
         if(errorString.contains("Authentication", Qt::CaseInsensitive) || errorString.contains("Connection closed", Qt::CaseInsensitive)){
             m_restHeaderData = ""; // In case of login error, clear login data
@@ -3908,7 +3908,7 @@ void Protokollitaja::dataUploaderFinished(bool success, QString reply, QString e
                 webCompetitionId = "";
             }
             voibSulgeda = false;
-            logiValja << "#Web upload success: " << reply << "\n#webCompetitionId: " << webCompetitionId << "\n";
+            logiValja << "#Web upload success: " << reply << "\n#webCompetitionId: " << webCompetitionId << Qt::endl;
         }
     }
 }
@@ -4248,6 +4248,8 @@ void Protokollitaja::uploadResults()
 #endif
 
     if(m_restHeaderData.isEmpty()) {
+        logiValja << QTime::currentTime().toString("hh:mm:ss") << " #SSL version: " << QSslSocket::sslLibraryBuildVersionString() << ", "
+            << QSslSocket::sslLibraryVersionString() << ", supports SSL = " << QSslSocket::supportsSsl() << Qt::endl;
         bool isOk = false;
         QString userName = QInputDialog::getText(this, tr("Kasutajanimi andmebaasis"), tr("Kasutajanimi:"), QLineEdit::Normal, "", &isOk).toLower();
         if(isOk) {
@@ -4276,7 +4278,7 @@ void Protokollitaja::uploadResults()
 #endif
 
     if(dataUploader == nullptr)
-        dataUploader = new DataUploader(verbose, this);
+        dataUploader = new DataUploader(verbose, &logiValja, this);
 
     connect(dataUploader, &DataUploader::uploadFinished, this, &Protokollitaja::dataUploaderFinished);
 

@@ -8,7 +8,7 @@ class DataUploader : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataUploader(bool verbose, QObject *parent = nullptr);
+    explicit DataUploader(bool verbose, QTextStream *log, QObject *parent = nullptr);
     ~DataUploader();
     void uploadResults(const QUrl url, const QString headerData, const QString webCompetitionId, const QJsonDocument data);
 
@@ -20,6 +20,7 @@ private slots:
 
 private:
     bool m_verbose = false;
+    QTextStream *m_log = nullptr;
     QNetworkAccessManager *m_restClient = nullptr;
 
 };
