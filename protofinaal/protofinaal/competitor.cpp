@@ -241,6 +241,11 @@ int Competitor::id()
     return m_id;
 }
 
+char Competitor::targetLetter() const
+{
+    return m_targetLetter;
+}
+
 bool Competitor::isActive() const
 {
     return m_active.isChecked();
@@ -386,6 +391,11 @@ void Competitor::setId(int newId)
 {
     m_id = newId;
     m_idLabel.setText(QString("%1").arg(newId));
+}
+
+void Competitor::setTargetLetter(char letter)
+{
+    m_targetLetter = letter;
 }
 
 bool Competitor::setPoints(int shotNo, int points)

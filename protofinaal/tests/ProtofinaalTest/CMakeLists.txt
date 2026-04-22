@@ -4,6 +4,7 @@ qt_add_executable(ProtofinaalTest WIN32 MACOSX_BUNDLE
     ../../protofinaal/../../common/src/lask.cpp ../../protofinaal/../../common/src/lask.h
     ../../protofinaal/../../common/src/siusdataconnection.cpp ../../protofinaal/../../common/src/siusdataconnection.h
     ../../protofinaal/../../common/src/siusdataconnections.cpp ../../protofinaal/../../common/src/siusdataconnections.h ../../protofinaal/../../common/src/siusdataconnections.ui
+    ../../protofinaal/../../common/src/target.cpp ../../protofinaal/../../common/src/target.h
     ../../protofinaal/competitor.cpp ../../protofinaal/competitor.h
     ../../protofinaal/initialdialog.cpp ../../protofinaal/initialdialog.h ../../protofinaal/initialdialog.ui
     ../../protofinaal/protofinaal.cpp ../../protofinaal/protofinaal.h

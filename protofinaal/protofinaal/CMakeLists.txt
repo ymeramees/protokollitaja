@@ -4,6 +4,7 @@ qt_add_executable(Protofinaal WIN32 MACOSX_BUNDLE
     ../../common/src/lask.cpp ../../common/src/lask.h
     ../../common/src/siusdataconnection.cpp ../../common/src/siusdataconnection.h
     ../../common/src/siusdataconnections.cpp ../../common/src/siusdataconnections.h ../../common/src/siusdataconnections.ui
+    ../../common/src/target.cpp ../../common/src/target.h
     competitor.cpp competitor.h
     initialdialog.cpp initialdialog.h initialdialog.ui
     main.cpp

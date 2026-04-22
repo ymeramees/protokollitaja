@@ -4,12 +4,12 @@
 <context>
     <name>Competitor</name>
     <message>
-        <location filename="../competitor.cpp" line="443"/>
+        <location filename="../competitor.cpp" line="453"/>
         <source>Võistleja ID</source>
         <translation>Versenyző ID</translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="450"/>
+        <location filename="../competitor.cpp" line="460"/>
         <source>Võistleja nimi</source>
         <translation>Versenyző neve</translation>
     </message>
@@ -38,47 +38,47 @@
         <translation>Hibás fájl!</translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="314"/>
+        <location filename="../competitor.cpp" line="319"/>
         <source>Võistleja ID muutmine</source>
         <translation>Versenyző ID módosítása</translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="314"/>
+        <location filename="../competitor.cpp" line="319"/>
         <source>Sisestage uus ID:</source>
         <translation>Adja meg az új ID-t:</translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="316"/>
+        <location filename="../competitor.cpp" line="321"/>
         <source>Võistleja ID muudetud, vana: %1 =&gt; uus: %2</source>
         <translation>Versenyző ID megváltoztatva, régi: %1 =&gt; új: %2</translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="420"/>
-        <location filename="../competitor.cpp" line="431"/>
+        <location filename="../competitor.cpp" line="430"/>
+        <location filename="../competitor.cpp" line="441"/>
         <source>Viga</source>
         <translation>Hiba</translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="420"/>
-        <location filename="../competitor.cpp" line="421"/>
+        <location filename="../competitor.cpp" line="430"/>
         <location filename="../competitor.cpp" line="431"/>
-        <location filename="../competitor.cpp" line="432"/>
+        <location filename="../competitor.cpp" line="441"/>
+        <location filename="../competitor.cpp" line="442"/>
         <source>Laskude arv suurem, kui võimalik! Lask ei läinud kirja!</source>
         <translation>A lövések száma több a lehetségesnél! A lövés figyelmen kívül hagyva!</translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="451"/>
+        <location filename="../competitor.cpp" line="461"/>
         <source>Nimi</source>
         <translation>Név</translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="459"/>
-        <location filename="../competitor.cpp" line="460"/>
+        <location filename="../competitor.cpp" line="469"/>
+        <location filename="../competitor.cpp" line="470"/>
         <source>Tulemus</source>
         <translation>Eredmény</translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="467"/>
+        <location filename="../competitor.cpp" line="477"/>
         <source>Arv, mille võrra Siusist tulnud lasud on nihkes</source>
         <translation>Eltolás mértéke a Siusból érkező lövéseknél</translation>
     </message>
@@ -255,20 +255,20 @@ Uue võistluse tegemiseks vajutage &quot;Uus&quot; nupule</source>
 <context>
     <name>Protofinaal</name>
     <message>
-        <location filename="../protofinaal.cpp" line="72"/>
-        <location filename="../protofinaal.cpp" line="309"/>
-        <location filename="../protofinaal.cpp" line="603"/>
+        <location filename="../protofinaal.cpp" line="73"/>
+        <location filename="../protofinaal.cpp" line="307"/>
+        <location filename="../protofinaal.cpp" line="593"/>
         <source>Viga</source>
         <translation>Hiba</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="72"/>
+        <location filename="../protofinaal.cpp" line="73"/>
         <source>Logi faili kirjutamine ei õnnestunud! Kontrollige, et teil oleks kirjutamisõigus sinna kausta, kus asub võistluste fail.</source>
         <translation>Nem sikerült írni a log fájlt! Ellenőrizze, hogy van-e írási jogosultsága abba a mappába, ahol a versenyfájl található.</translation>
     </message>
     <message>
         <location filename="../protofinaal.cpp" line="99"/>
-        <location filename="../protofinaal.cpp" line="611"/>
+        <location filename="../protofinaal.cpp" line="602"/>
         <source>Teade</source>
         <translation>Információ</translation>
     </message>
@@ -278,185 +278,185 @@ Uue võistluse tegemiseks vajutage &quot;Uus&quot; nupule</source>
         <translation>A nyelvi változtatások a program újraindítása után lépnek érvénybe</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="122"/>
+        <location filename="../protofinaal.cpp" line="123"/>
         <source>Kas soovid muudatused salvestada ja programmist väljuda?</source>
         <translation>Szeretné menteni a változtatásokat és kilépni a programból?</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="143"/>
+        <location filename="../protofinaal.cpp" line="144"/>
         <source>&amp;Fail</source>
         <translation>&amp;Fájl</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="144"/>
+        <location filename="../protofinaal.cpp" line="145"/>
         <source>&amp;Tulemused</source>
         <translation>&amp;Eredmények</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="145"/>
+        <location filename="../protofinaal.cpp" line="146"/>
         <source>Keel</source>
         <translation>Nyelv</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="147"/>
+        <location filename="../protofinaal.cpp" line="148"/>
         <source>&amp;Ava...</source>
         <translation>&amp;Megnyitás...</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="149"/>
-        <location filename="../protofinaal.cpp" line="429"/>
+        <location filename="../protofinaal.cpp" line="150"/>
+        <location filename="../protofinaal.cpp" line="425"/>
         <source>Ava fail</source>
         <translation>Fájl megnyitása</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="152"/>
+        <location filename="../protofinaal.cpp" line="153"/>
         <source>&amp;Salvesta</source>
         <translation>&amp;Mentés</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="154"/>
+        <location filename="../protofinaal.cpp" line="155"/>
         <source>Salvesta fail</source>
         <translation>Fájl mentése</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="157"/>
+        <location filename="../protofinaal.cpp" line="158"/>
         <source>Eksport xls...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="158"/>
+        <location filename="../protofinaal.cpp" line="159"/>
         <source>Ekspordi tulemused xls faili</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="161"/>
+        <location filename="../protofinaal.cpp" line="162"/>
         <source>&amp;Impordi Sius startlist...</source>
         <translation>Sius rajtlista &amp;importálása...</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="163"/>
+        <location filename="../protofinaal.cpp" line="164"/>
         <source>Impordi Sius startlist</source>
         <translation>Sius rajtlista importálása</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="166"/>
+        <location filename="../protofinaal.cpp" line="167"/>
         <source>&amp;Välju</source>
         <translation>&amp;Kilépés</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="168"/>
+        <location filename="../protofinaal.cpp" line="169"/>
         <source>Välju programmist</source>
         <translation>Kilépés a programból</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="171"/>
+        <location filename="../protofinaal.cpp" line="172"/>
         <source>&amp;Tulemuste aken</source>
         <translation>&amp;Eredményjelző ablak</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="172"/>
+        <location filename="../protofinaal.cpp" line="173"/>
         <source>Ava tulemuste aken</source>
         <translation>Eredményjelző ablak megnyitása</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="175"/>
+        <location filename="../protofinaal.cpp" line="176"/>
         <source>&amp;SiusData</source>
         <translation>&amp;SiusData</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="176"/>
+        <location filename="../protofinaal.cpp" line="177"/>
         <source>Ühendu SiusData&apos;ga</source>
         <translation>Csatlakozás SiusData-hoz</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="180"/>
+        <location filename="../protofinaal.cpp" line="181"/>
         <source>Kustuta lasud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="181"/>
+        <location filename="../protofinaal.cpp" line="182"/>
         <source>Kustutab märgitud laskurite kõik lasud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="197"/>
+        <location filename="../protofinaal.cpp" line="198"/>
         <source>Programmi keel</source>
         <translation>Program nyelve</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="198"/>
+        <location filename="../protofinaal.cpp" line="199"/>
         <source>Programmi keele valik</source>
         <translation>Program nyelvének módosítása</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="206"/>
+        <location filename="../protofinaal.cpp" line="205"/>
         <source>&amp;Testimine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="213"/>
+        <location filename="../protofinaal.cpp" line="212"/>
         <source>/Protofinaal sisse logi %1.log</source>
         <translation>/Protofinaal logba %1.log</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="251"/>
+        <location filename="../protofinaal.cpp" line="250"/>
         <source>Ekspordi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="252"/>
+        <location filename="../protofinaal.cpp" line="251"/>
         <source>Excel workbook file (*.xls)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="265"/>
+        <location filename="../protofinaal.cpp" line="264"/>
         <source>Fail eksporditud: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="267"/>
+        <location filename="../protofinaal.cpp" line="266"/>
         <source>Faili kirjutamine ei õnnestunud!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="274"/>
+        <location filename="../protofinaal.cpp" line="273"/>
         <source>Ava startlist</source>
         <translation>Rajtlista megnyitása</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="274"/>
+        <location filename="../protofinaal.cpp" line="273"/>
         <source>Comma separated file (*.csv)</source>
         <translation>Vesszővel elválasztott fájl (*.csv)</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="309"/>
+        <location filename="../protofinaal.cpp" line="307"/>
         <source>Ei õnnestunud faili avada!</source>
         <translation>Nem sikerült megnyitni a fájlt!</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="267"/>
-        <location filename="../protofinaal.cpp" line="372"/>
-        <location filename="../protofinaal.cpp" line="415"/>
-        <location filename="../protofinaal.cpp" line="449"/>
-        <location filename="../protofinaal.cpp" line="459"/>
-        <location filename="../protofinaal.cpp" line="543"/>
-        <location filename="../protofinaal.cpp" line="767"/>
+        <location filename="../protofinaal.cpp" line="266"/>
+        <location filename="../protofinaal.cpp" line="365"/>
+        <location filename="../protofinaal.cpp" line="411"/>
+        <location filename="../protofinaal.cpp" line="445"/>
+        <location filename="../protofinaal.cpp" line="455"/>
+        <location filename="../protofinaal.cpp" line="534"/>
+        <location filename="../protofinaal.cpp" line="792"/>
         <source>Viga!</source>
         <translation>Hiba!</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="603"/>
+        <location filename="../protofinaal.cpp" line="593"/>
         <source>Teist ekraani ei leitud. Programmi korralikuks funktsioneerimiseks on vajalik kahe ekraani olemasolu.</source>
         <translation>Nem található második képernyő. A program megfelelő működéséhez kiterjesztett asztal módban két képernyő szükséges.</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="611"/>
+        <location filename="../protofinaal.cpp" line="602"/>
         <source>Tulemuse aken näidatud teisel ekraanil</source>
         <translation>Eredményjelző ablak megjelenítve a második képernyőn</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="679"/>
-        <location filename="../protofinaal.cpp" line="681"/>
+        <location filename="../protofinaal.cpp" line="698"/>
+        <location filename="../protofinaal.cpp" line="700"/>
         <source>Vahe</source>
         <translation>Kül.</translation>
     </message>
@@ -465,38 +465,38 @@ Uue võistluse tegemiseks vajutage &quot;Uus&quot; nupule</source>
         <translation type="vanished">A versenyszám konfigurációs fájlja nem található!</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="543"/>
+        <location filename="../protofinaal.cpp" line="534"/>
         <source>Harjutuse fail vigane!</source>
         <translation>A versenyszám fájl hibás!</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="351"/>
+        <location filename="../protofinaal.cpp" line="349"/>
         <source>Avatud fail: </source>
         <translation>Megnyitott fájl: </translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="372"/>
-        <location filename="../protofinaal.cpp" line="415"/>
+        <location filename="../protofinaal.cpp" line="365"/>
+        <location filename="../protofinaal.cpp" line="411"/>
         <source>Finaali fail vigane!</source>
         <translation>A döntő fájl hibás!</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="421"/>
+        <location filename="../protofinaal.cpp" line="417"/>
         <source>Kas soovid muudatused salvestada?</source>
         <translation>Szeretné menteni a változtatásokat?</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="429"/>
+        <location filename="../protofinaal.cpp" line="425"/>
         <source>Protofinaali fail (*.fin)</source>
         <translation>Protofinaal fájl (*.fin)</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="449"/>
+        <location filename="../protofinaal.cpp" line="445"/>
         <source>Faili versioon on uuem, kui see versioon programmist. Faili avamisel võib tekkida vigu!</source>
         <translation>A fájl verziója újabb, mint a program verziója. Hiba léphet fel a megnyitáskor!</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="459"/>
+        <location filename="../protofinaal.cpp" line="455"/>
         <source>Faili avamine ei ole võimalik!
 
 Asukoht: </source>
@@ -515,24 +515,24 @@ Alapértelmezett beállítások használata.
 Hely: </translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="675"/>
+        <location filename="../protofinaal.cpp" line="694"/>
         <source>Lask</source>
         <translation>Lövés</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="679"/>
-        <location filename="../protofinaal.cpp" line="681"/>
+        <location filename="../protofinaal.cpp" line="698"/>
+        <location filename="../protofinaal.cpp" line="700"/>
         <source>Koht</source>
         <translation>Helyezés</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="679"/>
-        <location filename="../protofinaal.cpp" line="681"/>
+        <location filename="../protofinaal.cpp" line="698"/>
+        <location filename="../protofinaal.cpp" line="700"/>
         <source>Nimi</source>
         <translation>Név</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="679"/>
+        <location filename="../protofinaal.cpp" line="698"/>
         <source>Punktid</source>
         <translation>Pontszám</translation>
     </message>
@@ -541,17 +541,17 @@ Hely: </translation>
         <translation type="vanished">Összesen</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="681"/>
+        <location filename="../protofinaal.cpp" line="700"/>
         <source>Seeria</source>
         <translation>Sorozat</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="764"/>
+        <location filename="../protofinaal.cpp" line="789"/>
         <source>Fail salvestatud</source>
         <translation>Fájl elmentve</translation>
     </message>
     <message>
-        <location filename="../protofinaal.cpp" line="767"/>
+        <location filename="../protofinaal.cpp" line="792"/>
         <source>Faili kirjutamine ei ole võimalik!
 Kontrollige, kas teil on sinna kausta kirjutamise õigused.</source>
         <translation>Nem lehet írni a fájlt!
@@ -666,12 +666,12 @@ Ellenőrizze, hogy van-e írási jogosultsága a mappához.</translation>
         <translation>Döntő eredmények</translation>
     </message>
     <message>
-        <location filename="../spectatorwindow.cpp" line="97"/>
+        <location filename="../spectatorwindow.cpp" line="158"/>
         <source>Teade</source>
         <translation>Információ</translation>
     </message>
     <message>
-        <location filename="../spectatorwindow.cpp" line="97"/>
+        <location filename="../spectatorwindow.cpp" line="158"/>
         <source>Tulemuste akna template faili ei leitud!
 Programm lõi uue, vaikimisi seadistustega.</source>
         <translation>Az eredményjelző sablon fájl nem található!
@@ -781,23 +781,23 @@ MembersInTeam != isDouble &amp;&amp; != isArray</translation>
 <context>
     <name>TeamsTable</name>
     <message>
-        <location filename="../teamstable.cpp" line="167"/>
-        <location filename="../teamstable.cpp" line="169"/>
+        <location filename="../teamstable.cpp" line="163"/>
+        <location filename="../teamstable.cpp" line="165"/>
         <source> lask </source>
         <translation> lövés </translation>
     </message>
     <message>
-        <location filename="../teamstable.cpp" line="167"/>
+        <location filename="../teamstable.cpp" line="163"/>
         <source>Lisatud: %1%2%3 = %4</source>
         <translation>Hozzáadva: %1%2%3 = %4</translation>
     </message>
     <message>
-        <location filename="../teamstable.cpp" line="169"/>
+        <location filename="../teamstable.cpp" line="165"/>
         <source>Viga, ei õnnestunud lisada: %1%2%3 = %4</source>
         <translation>Hiba, nem sikerült hozzáadni: %1%2%3 = %4</translation>
     </message>
     <message>
-        <location filename="../teamstable.cpp" line="208"/>
+        <location filename="../teamstable.cpp" line="204"/>
         <source>Sellise ID&apos;ga võistlejat ei leitud: %1</source>
         <translation>Nem található versenyző ezzel az ID-vel: %1</translation>
     </message>

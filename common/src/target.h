@@ -24,9 +24,9 @@ private:
 //    int m_zoomLevel;
     bool m_active;  // Shows if the competitor is dropped out in finals or not
     bool m_zoomEnabled;    // Will the target automatically zoom or not
-    QImage *m_targetImage;
+    QImage *m_targetImage = nullptr;
     Lask m_previousShot;
-    QPainter *m_targetPainter;
+    QPainter *m_targetPainter = nullptr;
     QString m_name;
     QString m_targetNo;
     QString m_result;

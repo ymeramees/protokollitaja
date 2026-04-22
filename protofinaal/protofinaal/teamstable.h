@@ -6,18 +6,19 @@
 #include "team.h"
 #include "xlsexportservice.h"
 
-//class Protofinaal;
+// class Protofinaal;
 
 class TeamsTable : public QWidget
 {
     Q_OBJECT
 public:
-    struct Result {
-        QString name;   ///< First/second competitor name or team name.
-        QString shotValue;   ///< Shot value.
+    struct Result
+    {
+        QString name;           ///< First competitor name.
+        QString shotValue;      ///< Shot value.
         QString seriesOrPoints; ///< Series result or points for this shot.
-        QString totalScore;   ///< Result/Points in total.
-        int total10Score;    ///< Total score multiplied by 10
+        QString totalScore;     ///< Result/Points in total.
+        int total10Score;       ///< Total score multiplied by 10
     };
     explicit TeamsTable(QWidget *parent = nullptr);
     void clear();
@@ -39,6 +40,7 @@ public:
 signals:
     void modified();
     void statusInfoChanged(QString newStatusInfo);
+    void shotReadForTarget(char targetLetter, SiusShotData shotData);
     void updateSpectatorWindow();
 
 public slots:
@@ -46,12 +48,11 @@ public slots:
     void sumAllTeams();
 
 private:
-//    Protofinaal *m_parent = nullptr;
+    //    Protofinaal *m_parent = nullptr;
     QString m_tableName;
-    QVector<Team*> m_teams;
+    QVector<Team *> m_teams;
     QVBoxLayout *vBox = nullptr;
     void sortTeams();
-
 };
 
 #endif // TEAMSTABLE_H

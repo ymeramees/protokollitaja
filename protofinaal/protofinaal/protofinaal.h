@@ -59,6 +59,7 @@ private slots:
     void initialize();
     void loadFile(QString fileName);
     void updateInitialDialog();
+    void updateTargetWithShot(char targetLetter, SiusShotData shotData);
 
 private:
     bool m_competitionStarted = false;
@@ -84,8 +85,10 @@ private:
     QJsonObject readFinalsFile(QString fileName, bool showErrors = true);
     void readSettings();
     QVBoxLayout m_vBox;
-    QVector<TeamsTable*> m_teamsTables;
+    QVector<TeamsTable *> m_teamsTables;
     void createLayoutFromConf(QJsonObject conf);
+    int getGunTypeFromEventType() const;
+    void initializeSpectatorTargets();
     void setupTranslator();
     void writeFinalsFile(QString fileName);
     void writeSettings();

@@ -3,14 +3,25 @@
 SpectatorWindow::SpectatorWindow(QWidget *parent) : QWidget(parent)
 {
     resultsView.setText(tr("Finaali tulemused"));
-    vBox.addWidget(&resultsView);
+    resultsView.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    
+    vBox.addWidget(&resultsView, 1);   // stretch factor 1 - take half
+    vBox.addLayout(&targetsBox, 1);    // stretch factor 1 - take half
     setLayout(&vBox);
 
     resultsView.installEventFilter(this);
     resultsView.viewport()->installEventFilter(this);
     resultsView.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    resultsView.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     vBox.setContentsMargins(0, 0, 0, 0);
+    
+    // Set white background for the main widget (which includes targets area)
+    setAutoFillBackground(true);
+    QPalette pal = palette();
+    pal.setColor(QPalette::Window, Qt::white);
+    setPalette(pal);
+    
 //    setContentsMargins(0, 0, 0, 0);
     initializeTemplates();
 }
@@ -19,6 +30,7 @@ SpectatorWindow::~SpectatorWindow()
 {
     if(verbose)
         QTextStream(stdout) << "SpectatorWindow::~SpectatorWindow()" << Qt::endl;
+    clearTargets();
 }
 
 void SpectatorWindow::addRow(QString rank, QString teamName, QString competitorName, QString shot, QString series, QString sum, QString diff)
@@ -49,6 +61,38 @@ void SpectatorWindow::addRow(QString rank, QString teamName, QString competitorN
 //    resultsHTML = resultsTemplate;
 }
 
+void SpectatorWindow::addTarget(QString name, QString targetNo, int gunType)
+{
+    if (verbose)
+        QTextStream(stdout) << "SpectatorWindow::addTarget(), name = " << name << ", targetNo = " << targetNo << ", gunType = " << gunType << Qt::endl;
+
+    // Check if target already exists
+    if (m_targets.contains(targetNo))
+    {
+        if (verbose)
+            QTextStream(stdout) << "SpectatorWindow::addTarget(), target already exists: " << targetNo << Qt::endl;
+        return;
+    }
+
+    Target *target = new Target(gunType, name, targetNo, this);
+    target->setZoomEnabled(true);
+    target->init(gunType);
+
+    m_targets[targetNo] = target;
+
+    int index = m_targets.size() - 1;
+    int rows = 2;
+    int columns = 4;
+    int row = index / columns;
+    int col = index % columns;
+
+    targetsBox.addWidget(target, row, col);
+    target->show();
+
+    if (verbose)
+        QTextStream(stdout) << "SpectatorWindow::addTarget(), added target at row=" << row << ", col=" << col << Qt::endl;
+}
+
 bool SpectatorWindow::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonDblClick) {
@@ -64,11 +108,28 @@ void SpectatorWindow::clearResults()
     m_resultRows.clear();
 }
 
+void SpectatorWindow::clearTargets()
+{
+    if (verbose)
+        QTextStream(stdout) << "SpectatorWindow::clearTargets()" << Qt::endl;
+
+    for (auto it = m_targets.begin(); it != m_targets.end(); ++it)
+    {
+        it.value()->deleteLater();
+    }
+    m_targets.clear();
+}
+
 void SpectatorWindow::fullscreen()
 {
     if(windowState() == Qt::WindowFullScreen)
         setWindowState(Qt::WindowNoState);
     else setWindowState(Qt::WindowFullScreen);
+}
+
+bool SpectatorWindow::hasTarget(QString targetNo) const
+{
+    return m_targets.contains(targetNo);
 }
 
 void SpectatorWindow::initializeTemplates()
@@ -111,8 +172,8 @@ void SpectatorWindow::resizeEvent(QResizeEvent *event)
     bool success = false;
     int fontSize = originalResultsFontSize.mid(11, originalResultsFontSize.indexOf("pt") - 11).toInt(&success);
     if(success){
-//        newResultsFontSize = originalResultsFontSize;
         int newFontSize = fontSize * (resultsView.height() - 100) / 800;
+        if (newFontSize <= 0) newFontSize = 0;
         if(verbose)
             QTextStream(stdout) << "SpectatorWindow::resizeEvent(), newFontSize = " << newFontSize << ", resultsView.height() = " << resultsView.height() << Qt::endl;
         newResultsFontSize = QString("font-size: %1pt").arg(newFontSize);
@@ -139,4 +200,40 @@ void SpectatorWindow::setHeading(QString competitionName, QString timePlace, QSt
 void SpectatorWindow::setResults(QString resultsHTML)
 {
     resultsView.setHtml(resultsHTML);
+}
+
+void SpectatorWindow::resetTarget(QString targetNo)
+{
+    if (verbose)
+        QTextStream(stdout) << "SpectatorWindow::resetTarget(), targetNo = " << targetNo << Qt::endl;
+
+    if (!m_targets.contains(targetNo))
+    {
+        if (verbose)
+            QTextStream(stdout) << "SpectatorWindow::resetTarget(), target not found: " << targetNo << Qt::endl;
+        return;
+    }
+
+    m_targets[targetNo]->reset();
+
+    if (verbose)
+        QTextStream(stdout) << "SpectatorWindow::resetTarget(), target reset" << Qt::endl;
+}
+
+void SpectatorWindow::updateTarget(QString targetNo, Lask shot)
+{
+    if (verbose)
+        QTextStream(stdout) << "SpectatorWindow::updateTarget(), targetNo = " << targetNo << Qt::endl;
+
+    if (!m_targets.contains(targetNo))
+    {
+        if (verbose)
+            QTextStream(stdout) << "SpectatorWindow::updateTarget(), target not found: " << targetNo << Qt::endl;
+        return;
+    }
+
+    m_targets[targetNo]->drawAShot(shot);
+
+    if (verbose)
+        QTextStream(stdout) << "SpectatorWindow::updateTarget(), shot drawn" << Qt::endl;
 }

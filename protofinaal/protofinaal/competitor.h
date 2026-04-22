@@ -31,6 +31,7 @@ public:
     void deleteAllShots();
     int id();
     bool isActive() const;
+    char targetLetter() const;
     std::optional<Lask> shotAt(int index) const;
     QString name();
     QString lastResult();
@@ -41,6 +42,7 @@ public:
     void setActive(bool active);
     void setData(QJsonObject data);
     void setId(int id);
+    void setTargetLetter(char letter);
     QJsonObject toJson() const;
     XlsShotRow toXlsData(int maxShots, int lastShotIdx) const;
 
@@ -65,6 +67,7 @@ public slots:
 private:
     QCheckBox m_active;
     int m_id = 0;
+    char m_targetLetter = 'A';
     QLabel m_idLabel;
     QLineEdit m_nameEdit;
     QLineEdit m_resultEdit;
