@@ -1705,7 +1705,7 @@ address: %1</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="609"/>
-        <location filename="../protokollitaja.cpp" line="4740"/>
+        <location filename="../protokollitaja.cpp" line="4741"/>
         <source>Kas soovid muudatused salvestada?</source>
         <translation>Do you want to save the changes?</translation>
     </message>
@@ -2040,9 +2040,9 @@ Finaal.exe file not found!</translation>
         <location filename="../protokollitaja.cpp" line="3454"/>
         <location filename="../protokollitaja.cpp" line="3461"/>
         <location filename="../protokollitaja.cpp" line="3561"/>
-        <location filename="../protokollitaja.cpp" line="4307"/>
-        <location filename="../protokollitaja.cpp" line="4376"/>
-        <location filename="../protokollitaja.cpp" line="4408"/>
+        <location filename="../protokollitaja.cpp" line="4308"/>
+        <location filename="../protokollitaja.cpp" line="4377"/>
+        <location filename="../protokollitaja.cpp" line="4409"/>
         <source>Viga</source>
         <translation>Error</translation>
     </message>
@@ -2084,14 +2084,14 @@ address: %1</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2085"/>
-        <location filename="../protokollitaja.cpp" line="4307"/>
-        <location filename="../protokollitaja.cpp" line="4376"/>
+        <location filename="../protokollitaja.cpp" line="4308"/>
+        <location filename="../protokollitaja.cpp" line="4377"/>
         <source>Kahjuks see versioon Protokollitajast ei toeta lehelugemist 3x40 lasku standardi harjutustes!</source>
         <translation>Unfortunately this version of Protokollitaja doesn&apos;t support paper target scoring for 3x40 events!</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2125"/>
-        <location filename="../protokollitaja.cpp" line="4408"/>
+        <location filename="../protokollitaja.cpp" line="4409"/>
         <source>Liiga palju seeriaid, lugemine ei ole võimalik!</source>
         <translation>Too many series, scoring not possible!</translation>
     </message>
@@ -2264,7 +2264,7 @@ Unable to find Protofinaal.exe!</translation>
     <message>
         <location filename="../protokollitaja.cpp" line="1927"/>
         <location filename="../protokollitaja.cpp" line="2184"/>
-        <location filename="../protokollitaja.cpp" line="4447"/>
+        <location filename="../protokollitaja.cpp" line="4448"/>
         <source>Hoiatus!</source>
         <translation>Warning!</translation>
     </message>
@@ -2571,49 +2571,49 @@ Do you want to delete it? It doesn&apos;t affect anything else than uploading to
         <translation>No new shooters were found</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4254"/>
+        <location filename="../protokollitaja.cpp" line="4255"/>
         <source>Kasutajanimi andmebaasis</source>
         <translation>Username in the database</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4254"/>
+        <location filename="../protokollitaja.cpp" line="4255"/>
         <source>Kasutajanimi:</source>
         <translation>Username:</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4256"/>
+        <location filename="../protokollitaja.cpp" line="4257"/>
         <source>Kasutaja parool andmebaasis</source>
         <translation>Password in the database</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4256"/>
+        <location filename="../protokollitaja.cpp" line="4257"/>
         <source>Parool:</source>
         <translation>Password:</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4594"/>
+        <location filename="../protokollitaja.cpp" line="4595"/>
         <source>Sellele laskurile juba loetakse lehti Protokollitajas!</source>
         <translation>Paper targets for this shooter are already being read in Protokollitaja!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4632"/>
+        <location filename="../protokollitaja.cpp" line="4633"/>
         <source>Sellist harjutust ei toetata!
 Seeriate arv liiga suur.</source>
         <translation>This event is not supported!
 Number of series is too big.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4690"/>
+        <location filename="../protokollitaja.cpp" line="4691"/>
         <source>Sellist sifrit ei leitud!</source>
         <translation>This cipher was not found!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4805"/>
+        <location filename="../protokollitaja.cpp" line="4806"/>
         <source>Töölehe nime lahter on tühi. Ei saa luua uut töölehte ilma nimeta.</source>
         <translation>Tab name field empty. Cannot create tab without name.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4809"/>
+        <location filename="../protokollitaja.cpp" line="4810"/>
         <source>Tulemuse aknas näidatava tabeli pealkirja lahter on tühi. Paluks see ka ikka täita</source>
         <translation>Tab screen name empty. Please fill that also</translation>
     </message>

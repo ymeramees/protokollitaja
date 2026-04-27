@@ -4236,12 +4236,13 @@ QJsonObject Protokollitaja::toExportJson()
 void Protokollitaja::uploadResults()
 {
     QUrl url;
-    url.setScheme("https");
 #ifdef QT_DEBUG
+    url.setScheme("http");
     url.setHost("localhost");
     url.setPath("/api/v1/competitions");
-    url.setPort(3005);
+    url.setPort(3004);
 #else
+    url.setScheme("https");
     url.setHost("protokollitaja.eu");
     url.setPath("/api/v1/competitions");
     url.setPort(3005);

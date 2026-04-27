@@ -1,12 +1,12 @@
 #include "spectatorwindow.h"
 
-SpectatorWindow::SpectatorWindow(QWidget *parent) : QWidget(parent)
+SpectatorWindow::SpectatorWindow(QWidget *parent) : QWidget(parent), targetsBox(new QGridLayout)
 {
     resultsView.setText(tr("Finaali tulemused"));
     resultsView.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     
     vBox.addWidget(&resultsView, 1);   // stretch factor 1 - take half
-    vBox.addLayout(&targetsBox, 1);    // stretch factor 1 - take half
+    vBox.addLayout(targetsBox, 1);     // stretch factor 1 - take half
     setLayout(&vBox);
 
     resultsView.installEventFilter(this);
@@ -86,7 +86,7 @@ void SpectatorWindow::addTarget(QString name, QString targetNo, int gunType)
     int row = index / columns;
     int col = index % columns;
 
-    targetsBox.addWidget(target, row, col);
+    targetsBox->addWidget(target, row, col);
     target->show();
 
     if (verbose)

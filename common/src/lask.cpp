@@ -310,17 +310,17 @@ void Lask::set(const QJsonObject shotJson)
     clear();
 
     setLask(shotJson["shotValue"].toString());
-    if (shotJson["shotX"].isNull())
+    if (!shotJson.contains("shotX"))
         m_x = -999;
     else
         m_x = shotJson["shotX"].toInt();
-    if (shotJson["shotY"].isNull())
+    if (!shotJson.contains("shotY"))
         m_y = -999;
     else
         m_y = shotJson["shotY"].toInt();
     m_shotTime = QTime::fromString(shotJson["shotTime"].toString());
     m_innerTen = shotJson["innerTen"].toBool();
-    if (shotJson["competitionShot"].isNull())
+    if (!shotJson.contains("competitionShot"))
         m_competitionShot = true;   // default is true for backwards compatibility
     else m_competitionShot = shotJson["competitionShot"].toBool();
     m_shotOrigin = OriginType(shotJson["shotOrigin"].toInt());

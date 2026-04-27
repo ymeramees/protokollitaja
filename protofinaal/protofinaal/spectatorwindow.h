@@ -45,7 +45,7 @@ private:
     QString newResultsFontSize;
     QString originalResultsFontSize;
     QString m_resultRows;
-    QGridLayout targetsBox;
+    QGridLayout *targetsBox;
     QMap<QString, Target *> m_targets; // Map of targetNo -> Target widget
     QTextBrowser resultsView;
     QVBoxLayout vBox;
