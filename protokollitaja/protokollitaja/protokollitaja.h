@@ -181,9 +181,11 @@ public:
 
 #ifdef QT_DEBUG    // Functionality for testing purposes
     QAction *deleteAllShotsAct;
+    QAction *editWebCompetitionIdAct;
 
 private slots:
     void deleteAllShots();
+    void editWebCompetitionId();
 #endif
 
 private slots:

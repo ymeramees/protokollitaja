@@ -218,6 +218,9 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         deleteAllShotsAct = new QAction(tr("Kustuta lasud"), this);
         deleteAllShotsAct->setStatusTip(tr("Kustutab märgitud laskurite kõik lasud"));
         connect(deleteAllShotsAct, SIGNAL(triggered()), this, SLOT(deleteAllShots()));
+        editWebCompetitionIdAct = new QAction(tr("Muuda webCompetitionId"), this);
+        editWebCompetitionIdAct->setStatusTip(tr("Muudab käesoleva faili veebi võistluse ID'd"));
+        connect(editWebCompetitionIdAct, SIGNAL(triggered()), this, SLOT(editWebCompetitionId()));
 #endif
 
         failMenu = menuBar()->addMenu(tr("&Fail"));
@@ -292,6 +295,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
 #ifdef QT_DEBUG
         QMenu *testMenu = menuBar()->addMenu(tr("&Testimine"));
         testMenu->addAction(deleteAllShotsAct);
+        testMenu->addAction(editWebCompetitionIdAct);
 #endif
 
         (void) new QShortcut(Qt::Key_Escape, this, SLOT(close()));
@@ -708,6 +712,17 @@ void Protokollitaja::deleteAllShots()
     Leht* seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->
                     widget());
     seeLeht->deleteAllShotsFromSelectedCompetitors();
+}
+
+void Protokollitaja::editWebCompetitionId()
+{
+    bool ok = false;
+    QString newId = QInputDialog::getText(this, tr("Muuda webCompetitionId"), tr("webCompetitionId:"),
+                                          QLineEdit::Normal, webCompetitionId, &ok);
+    if (ok && newId != webCompetitionId) {
+        webCompetitionId = newId;
+        voibSulgeda = false;
+    }
 }
 #endif
 
