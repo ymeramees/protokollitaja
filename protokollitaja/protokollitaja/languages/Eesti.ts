@@ -485,13 +485,13 @@ Do you want to delete it? It doesn&apos;t affect anything else than uploading to
 Kas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.</translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="511"/>
-        <location filename="../kllfilerw.cpp" line="517"/>
+        <location filename="../kllfilerw.cpp" line="515"/>
+        <location filename="../kllfilerw.cpp" line="521"/>
         <source>Protokollitaja</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="512"/>
+        <location filename="../kllfilerw.cpp" line="516"/>
         <source>Wrong file version!
 
 It could be a newer version&apos;s file.
@@ -504,7 +504,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
 (Protokollitaja::loefail())</translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="517"/>
+        <location filename="../kllfilerw.cpp" line="521"/>
         <source>Cannot find the file!</source>
         <translation>Ei leia faili!</translation>
     </message>
@@ -578,128 +578,128 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
 <context>
     <name>Laskur</name>
     <message>
-        <location filename="../laskur.cpp" line="1439"/>
+        <location filename="../laskur.cpp" line="1441"/>
         <source>Series</source>
         <translation>Seeriad</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1457"/>
+        <location filename="../laskur.cpp" line="1459"/>
         <source>Subtotal</source>
         <translation>Vahesumma</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1415"/>
+        <location filename="../laskur.cpp" line="1417"/>
         <source>Remarks</source>
         <translation>Märkused</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1330"/>
+        <location filename="../laskur.cpp" line="1332"/>
         <source>Firing Point</source>
         <translation>Raja number</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="124"/>
+        <location filename="../laskur.cpp" line="126"/>
         <source>Error!</source>
         <translation>Viga!</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="124"/>
+        <location filename="../laskur.cpp" line="126"/>
         <source>There are not so many subtotals!</source>
         <translation>Ei ole nii palju vahesummasid!</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="206"/>
+        <location filename="../laskur.cpp" line="208"/>
         <source>Info</source>
         <translation>Teade</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="686"/>
+        <location filename="../laskur.cpp" line="688"/>
         <source>Enter new shooter ID</source>
         <translation>Sisestage uus laskuri ID</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1331"/>
+        <location filename="../laskur.cpp" line="1333"/>
         <source></source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1337"/>
-        <location filename="../laskur.cpp" line="1346"/>
+        <location filename="../laskur.cpp" line="1339"/>
+        <location filename="../laskur.cpp" line="1348"/>
         <source>Paper target numbers range</source>
         <translation>Siffer</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1338"/>
+        <location filename="../laskur.cpp" line="1340"/>
         <source>Start</source>
         <translation>Algus</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1347"/>
+        <location filename="../laskur.cpp" line="1349"/>
         <source>End</source>
         <translation>Lõpp</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1357"/>
-        <location filename="../laskur.cpp" line="1358"/>
+        <location filename="../laskur.cpp" line="1359"/>
+        <location filename="../laskur.cpp" line="1360"/>
         <source>First Name</source>
         <translation>Eesnimi</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1364"/>
-        <location filename="../laskur.cpp" line="1365"/>
+        <location filename="../laskur.cpp" line="1366"/>
+        <location filename="../laskur.cpp" line="1367"/>
         <source>Last Name</source>
         <translation>Perekonnanimi</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1372"/>
-        <location filename="../laskur.cpp" line="1373"/>
+        <location filename="../laskur.cpp" line="1374"/>
+        <location filename="../laskur.cpp" line="1375"/>
         <source>Year of Birth</source>
         <translation>Sünniaasta</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1379"/>
-        <location filename="../laskur.cpp" line="1380"/>
+        <location filename="../laskur.cpp" line="1381"/>
+        <location filename="../laskur.cpp" line="1382"/>
         <source>Club</source>
         <translation>Klubi</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1388"/>
-        <location filename="../laskur.cpp" line="1403"/>
+        <location filename="../laskur.cpp" line="1390"/>
+        <location filename="../laskur.cpp" line="1405"/>
         <source>Total</source>
         <translation>Summa</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1397"/>
+        <location filename="../laskur.cpp" line="1399"/>
         <source>Finals</source>
         <translation>Finaali seeria</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1408"/>
+        <location filename="../laskur.cpp" line="1410"/>
         <source>Number of Inner Tens</source>
         <translation>Sisekümnete arv</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1421"/>
+        <location filename="../laskur.cpp" line="1423"/>
         <source>Shoot-off Shots</source>
         <translation>Lisalasud</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1424"/>
+        <location filename="../laskur.cpp" line="1426"/>
         <source>Shots...</source>
         <translation>Lasud...</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1425"/>
+        <location filename="../laskur.cpp" line="1427"/>
         <source>Open competitor&apos;s shots window</source>
         <translation>Ava laskuri laskude aken</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1427"/>
+        <location filename="../laskur.cpp" line="1429"/>
         <source>ID...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1428"/>
+        <location filename="../laskur.cpp" line="1430"/>
         <source>View/change competitor&apos;s ID</source>
         <translation>Vaata/muuda laskuri ID&apos;d</translation>
     </message>

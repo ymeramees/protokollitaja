@@ -320,7 +320,9 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                         in >> sum >> notes;
                         sheet->voistkonnad[j]->summa->setText(sum);
 
-                        if (notes == "Remarks")
+                        // "Remarks" is the current placeholder text; "Märkused" is the old (Estonian)
+                        // placeholder text that may still be present in older saved files.
+                        if (notes == "Remarks" || notes == "Märkused")
                             sheet->voistkonnad[j]->markus->setText("");
                         else
                             sheet->voistkonnad[j]->markus->setText(notes);
@@ -394,7 +396,9 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
 
                         sheet->laskurid[j]->kumned->setText(innerTens);
 
-                        if (notes == "Remarks")
+                        // "Remarks" is the current placeholder text; "Märkused" is the old (Estonian)
+                        // placeholder text that may still be present in older saved files.
+                        if (notes == "Remarks" || notes == "Märkused")
                             sheet->laskurid[j]->markus->setText("");
                         else
                             sheet->laskurid[j]->markus->setText(notes);

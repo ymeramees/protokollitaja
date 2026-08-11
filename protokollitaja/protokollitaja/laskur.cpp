@@ -67,7 +67,9 @@ Laskur::Laskur(
     kumned->setText(jsonObj["innerTens"].toString());
 
     QString remarksString = jsonObj["remarks"].toString();
-    if (remarksString == "Remarks")
+    // "Remarks" is the current placeholder text; "Märkused" is the old (Estonian) placeholder
+    // text that may still be present in files saved by older versions of the application.
+    if (remarksString == "Remarks" || remarksString == "Märkused")
         markus->setText("");
     else
         markus->setText(remarksString);
