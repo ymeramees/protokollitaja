@@ -17,7 +17,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Valige fail. Uue loomiseks valige uus. Mõne teise avamiseks valige &quot;Lehitse...&quot;</string>
+      <string>Choose a file. To create a new file click on New. To open an existing file click on "Browse..."</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -29,14 +29,14 @@
      <item row="0" column="0">
       <widget class="QLabel" name="competitionNameLabel">
        <property name="text">
-        <string>Võistluse nimi:</string>
+        <string>Competition name:</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1" colspan="3">
       <widget class="QLineEdit" name="competitionNameEdit">
        <property name="toolTip">
-        <string>Praegu valitava võistluse nimi</string>
+        <string>Currently active competition name</string>
        </property>
        <property name="readOnly">
         <bool>true</bool>
@@ -46,7 +46,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="fromLabel">
        <property name="text">
-        <string>Alates:</string>
+        <string>From:</string>
        </property>
       </widget>
      </item>
@@ -80,7 +80,7 @@
      <item row="1" column="2">
       <widget class="QLabel" name="toLabel">
        <property name="text">
-        <string comment="10">kuni:</string>
+        <string comment="10">to:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -110,21 +110,21 @@
      <item row="2" column="0">
       <widget class="QLabel" name="placeLabel">
        <property name="text">
-        <string>Koht:</string>
+        <string>Place:</string>
        </property>
       </widget>
      </item>
      <item row="2" column="1">
       <widget class="QLineEdit" name="placeEdit">
        <property name="toolTip">
-        <string>Toimumise aeg ja koht</string>
+        <string>Location</string>
        </property>
       </widget>
      </item>
      <item row="2" column="2">
       <widget class="QLabel" name="countryLabel">
        <property name="text">
-        <string>Riik:</string>
+        <string>Country:</string>
        </property>
       </widget>
      </item>
@@ -140,24 +140,24 @@
      <item row="3" column="0">
       <widget class="QLabel" name="fileNameLabel">
        <property name="text">
-        <string>Faili nimi:</string>
+        <string>File name:</string>
        </property>
       </widget>
      </item>
      <item row="3" column="1" colspan="2">
       <widget class="QLineEdit" name="fileNameEdit">
        <property name="toolTip">
-        <string>Võistluse faili nimi</string>
+        <string>Competition file name</string>
        </property>
       </widget>
      </item>
      <item row="3" column="3">
       <widget class="QPushButton" name="browseButton">
        <property name="toolTip">
-        <string>Siia vajutades saate otsida teise faili, mida avada</string>
+        <string>Click here to open another file</string>
        </property>
        <property name="text">
-        <string>Lehitse...</string>
+        <string>Browse...</string>
        </property>
       </widget>
      </item>
@@ -194,20 +194,20 @@
      <item>
       <widget class="QPushButton" name="newButton">
        <property name="toolTip">
-        <string>Siia vajutades saate luua uue võistluse ja faili</string>
+        <string>Click here to create a new competition and file</string>
        </property>
        <property name="text">
-        <string>Uus</string>
+        <string>New</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="forwardButton">
        <property name="toolTip">
-        <string>Selle võistluse ja faili avamiseks vajutage siia</string>
+        <string>Click here to open currently selected competition</string>
        </property>
        <property name="text">
-        <string>Edasi</string>
+        <string>Forward</string>
        </property>
        <property name="default">
         <bool>true</bool>
@@ -217,7 +217,7 @@
      <item>
       <widget class="QPushButton" name="exitButton">
        <property name="text">
-        <string>Välju</string>
+        <string>Exit</string>
        </property>
       </widget>
      </item>

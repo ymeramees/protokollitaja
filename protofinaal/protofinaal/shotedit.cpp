@@ -47,7 +47,7 @@ void ShotEdit::init()
 
     m_standardBackground.setColor(QPalette::Base, palette().base().color());
 
-    setToolTip(tr("Lask"));
+    setToolTip(tr("Shot"));
     setMinimumWidth(30);
     setMaximumWidth(40);
     setMinimumHeight(22);

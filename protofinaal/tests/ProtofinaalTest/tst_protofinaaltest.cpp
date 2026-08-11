@@ -272,7 +272,7 @@ void ProtofinaalTest::sanityCheckWithPoints()
     for (int i = 0; i < competitors.size(); i++) {
         QList<QLineEdit*> lineEdits = competitors.at(i)->findChildren<QLineEdit*>();
         QCOMPARE(competitors.at(i)->id(), 11);
-        QCOMPARE(lineEdits.first()->placeholderText(), "Nimi");
+        QCOMPARE(lineEdits.first()->placeholderText(), "Name");
         lineEdits.first()->setText(QString("Competitor%1").arg(i));
         QCOMPARE(competitors.at(i)->name(), QString("Competitor%1").arg(i));
     }
@@ -329,7 +329,7 @@ void ProtofinaalTest::sanityCheckWithShots()
     for (int i = 0; i < competitors.size(); i++) {
         QList<QLineEdit*> lineEdits = competitors.at(i)->findChildren<QLineEdit*>();
         QCOMPARE(competitors.at(i)->id(), 11);
-        QCOMPARE(lineEdits.first()->placeholderText(), "Nimi");
+        QCOMPARE(lineEdits.first()->placeholderText(), "Name");
         lineEdits.first()->setText(QString("Competitor%1").arg(i));
         QCOMPARE(competitors.at(i)->name(), QString("Competitor%1").arg(i));
     }

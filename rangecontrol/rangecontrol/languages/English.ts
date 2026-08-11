@@ -9,9 +9,13 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../connectionserver.cpp" line="136"/>
         <source>Kadunud InBandi IP küsimus saadetud</source>
-        <translation>Searching for lost InBands...</translation>
+        <translation type="vanished">Searching for lost InBands...</translation>
+    </message>
+    <message>
+        <location filename="../connectionserver.cpp" line="136"/>
+        <source>Lost InBand IP query sent</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../connectionserver.cpp" line="176"/>
@@ -33,154 +37,194 @@
 <context>
     <name>DataConnection</name>
     <message>
-        <location filename="../dataconnection.cpp" line="47"/>
         <source>Tundmatu sissetuleva ühenduse versioon: %1
 Kontrollige, kas Protokollitaja ja Range Control&apos;i versioonid ühtivad!</source>
-        <translation>Unknown version of incoming connection: %1
+        <translation type="vanished">Unknown version of incoming connection: %1
 Check that Protokollitaja and Range Control versions are the same!</translation>
+    </message>
+    <message>
+        <location filename="../dataconnection.cpp" line="47"/>
+        <source>Unknown incoming connection version: %1
+Check whether Protokollitaja and Range Control versions match!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Header</name>
     <message>
-        <location filename="../header.cpp" line="20"/>
         <source>IP aadress(id): %1</source>
-        <translation>IP address(es): %1</translation>
+        <translation type="vanished">IP address(es): %1</translation>
+    </message>
+    <message>
+        <location filename="../header.cpp" line="20"/>
+        <source>IP address(es): %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Lane</name>
     <message>
-        <location filename="../lane.cpp" line="88"/>
-        <location filename="../lane.cpp" line="89"/>
         <source>Rada</source>
-        <translation>Target</translation>
+        <translation type="vanished">Target</translation>
     </message>
     <message>
-        <location filename="../lane.cpp" line="96"/>
-        <location filename="../lane.cpp" line="97"/>
         <source>Eesnimi</source>
-        <translation>First name</translation>
+        <translation type="vanished">First name</translation>
     </message>
     <message>
-        <location filename="../lane.cpp" line="99"/>
-        <location filename="../lane.cpp" line="100"/>
         <source>Perekonnanimi</source>
-        <translation>Family name</translation>
+        <translation type="vanished">Family name</translation>
     </message>
     <message>
-        <location filename="../lane.cpp" line="102"/>
-        <location filename="../lane.cpp" line="103"/>
         <source>Klubi</source>
-        <translation>Club</translation>
+        <translation type="vanished">Club</translation>
     </message>
     <message>
-        <location filename="../lane.cpp" line="105"/>
         <source>Harjutus</source>
-        <translation>Dicipline</translation>
+        <translation type="vanished">Dicipline</translation>
     </message>
     <message>
-        <location filename="../lane.cpp" line="112"/>
         <source>Komadega</source>
-        <translation>Decimals</translation>
+        <translation type="vanished">Decimals</translation>
     </message>
     <message>
         <source>Klass</source>
         <translation type="vanished">Class</translation>
     </message>
     <message>
-        <location filename="../lane.cpp" line="114"/>
         <source>Laskude arv</source>
-        <translation>Number of shots</translation>
+        <translation type="vanished">Number of shots</translation>
+    </message>
+    <message>
+        <source>Viimane lask</source>
+        <translation type="vanished">Last shot</translation>
+    </message>
+    <message>
+        <source>Summa</source>
+        <translation type="vanished">Total</translation>
+    </message>
+    <message>
+        <source>Märgi IP</source>
+        <translation type="vanished">Target IP</translation>
+    </message>
+    <message>
+        <source>Staatus</source>
+        <translation type="vanished">State</translation>
+    </message>
+    <message>
+        <location filename="../lane.cpp" line="88"/>
+        <location filename="../lane.cpp" line="89"/>
+        <source>Lane</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lane.cpp" line="96"/>
+        <location filename="../lane.cpp" line="97"/>
+        <source>First Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lane.cpp" line="99"/>
+        <location filename="../lane.cpp" line="100"/>
+        <source>Last Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lane.cpp" line="102"/>
+        <location filename="../lane.cpp" line="103"/>
+        <source>Club</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lane.cpp" line="105"/>
+        <source>Event</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lane.cpp" line="112"/>
+        <source>With decimals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lane.cpp" line="114"/>
+        <source>Number of shots</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../lane.cpp" line="118"/>
-        <source>Viimane lask</source>
-        <translation>Last shot</translation>
+        <source>Last shot</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../lane.cpp" line="120"/>
-        <source>Summa</source>
-        <translation>Total</translation>
+        <source>Total</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../lane.cpp" line="127"/>
         <location filename="../lane.cpp" line="128"/>
-        <source>Märgi IP</source>
-        <translation>Target IP</translation>
+        <source>Target IP</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../lane.cpp" line="130"/>
-        <source>Staatus</source>
-        <translation>State</translation>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QualificationEvents</name>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="6"/>
         <source>60l Õhupüss</source>
-        <translation>10m Air Rifle 60 Shots</translation>
+        <translation type="vanished">10m Air Rifle 60 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="7"/>
         <source>40l Õhupüss</source>
-        <translation>10m Air Rifle 40 Shots</translation>
+        <translation type="vanished">10m Air Rifle 40 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="8"/>
         <source>20l Õhupüss</source>
-        <translation>10m Air Rifle 20 Shots</translation>
+        <translation type="vanished">10m Air Rifle 20 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="9"/>
         <source>60l Õhupüstol</source>
-        <translation>10m Air Pistol 60 Shots</translation>
+        <translation type="vanished">10m Air Pistol 60 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="10"/>
         <source>40l Õhupüstol</source>
-        <translation>10m Air Pistol 40 Shots</translation>
+        <translation type="vanished">10m Air Pistol 40 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="11"/>
         <source>20l Õhupüstol</source>
-        <translation>10m Air Pistol 20 Shots</translation>
+        <translation type="vanished">10m Air Pistol 20 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="12"/>
         <source>3x40l Standard</source>
-        <translation>50m Rifle 3x40 3 Positions</translation>
+        <translation type="vanished">50m Rifle 3x40 3 Positions</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="13"/>
         <source>3x20l Standard</source>
-        <translation>50m Rifle 3x20 3 Positions</translation>
+        <translation type="vanished">50m Rifle 3x20 3 Positions</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="14"/>
         <source>3x10l Standard</source>
-        <translation>50m Rifle 3x10 3 Positions</translation>
+        <translation type="vanished">50m Rifle 3x10 3 Positions</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="15"/>
         <source>60l Lamades</source>
-        <translation>50m 60 Shots Prone</translation>
+        <translation type="vanished">50m 60 Shots Prone</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="16"/>
         <source>30l Lamades</source>
-        <translation>50m 30 Shots Prone</translation>
+        <translation type="vanished">50m 30 Shots Prone</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="17"/>
         <source>Olümpiakiirlaskmine</source>
-        <translation>25m Rapid Fire Pistol</translation>
+        <translation type="vanished">25m Rapid Fire Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="18"/>
         <source>30+30l Spordipüstol</source>
-        <translation>25m Pistol</translation>
+        <translation type="vanished">25m Pistol</translation>
     </message>
     <message>
         <source>30l Ringmärk</source>
@@ -195,167 +239,372 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation type="vanished">25m Standard Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="19"/>
         <source>30+30l Täiskaliiber</source>
-        <translation>30+30 Center Fire Pistol</translation>
+        <translation type="vanished">30+30 Center Fire Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="20"/>
         <source>30l SP Ringmärk</source>
-        <translation>25m 30 shots Precision Pistol</translation>
+        <translation type="vanished">25m 30 shots Precision Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="21"/>
         <source>30l TK Ringmärk</source>
-        <translation>25m 30 shots CFP Precision</translation>
+        <translation type="vanished">25m 30 shots CFP Precision</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="22"/>
         <source>30l SP Siluett</source>
-        <translation>25m 30 shots Rapid</translation>
+        <translation type="vanished">25m 30 shots Rapid</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="23"/>
         <source>30l TK Siluett</source>
-        <translation>25m 30 shots CFP Rapid</translation>
+        <translation type="vanished">25m 30 shots CFP Rapid</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="24"/>
         <source>20+20+20l Standardpüstol</source>
-        <translation>25m Standard Pistol</translation>
+        <translation type="vanished">25m Standard Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="25"/>
         <source>60l Vabapüstol</source>
-        <translation>50m Free Pistol 60 Shots</translation>
+        <translation type="vanished">50m Free Pistol 60 Shots</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="26"/>
         <source>30l Vabapüstol</source>
-        <translation>50m Free Pistol 30 Shots</translation>
+        <translation type="vanished">50m Free Pistol 30 Shots</translation>
     </message>
     <message>
         <source>CISM püstol</source>
         <translation type="vanished">25m CISM Pistol</translation>
     </message>
     <message>
-        <location filename="../../../common/src/qualificationevents.cpp" line="27"/>
         <source>CISM TK püstol</source>
-        <translation>CISM Center Fire Pistol</translation>
+        <translation type="vanished">CISM Center Fire Pistol</translation>
+    </message>
+    <message>
+        <source>300m 3x40l Standard</source>
+        <translation type="vanished">300m Rifle 3x40 3 Positions</translation>
+    </message>
+    <message>
+        <source>300m 3x20l Standard</source>
+        <translation type="vanished">300m Rifle 3x20 3 Positions</translation>
+    </message>
+    <message>
+        <source>300m 3x10l Standard</source>
+        <translation type="vanished">300m Rifle 3x10 3 Positions</translation>
+    </message>
+    <message>
+        <source>300m 60l Lamades</source>
+        <translation type="vanished">300m 60 Shots Prone</translation>
+    </message>
+    <message>
+        <source>300m 30l Lamades</source>
+        <translation type="vanished">300m 30 Shots Prone</translation>
+    </message>
+    <message>
+        <source>30+30l Metssiga</source>
+        <translation type="vanished">50m 30+30 Running Target</translation>
+    </message>
+    <message>
+        <source>20+20l Metssiga</source>
+        <translation type="vanished">50m 20+20 Running Target Mixed</translation>
+    </message>
+    <message>
+        <source>30+30l Liikuv Märk</source>
+        <translation type="vanished">10m 30+30 Running Target</translation>
+    </message>
+    <message>
+        <source>20+20l Liikuv Märk</source>
+        <translation type="vanished">10m 20+20 Running Target Mixed</translation>
+    </message>
+    <message>
+        <source>Muu Õhupüss</source>
+        <translation type="vanished">Other Air Rifle</translation>
+    </message>
+    <message>
+        <source>Muu Õhupüstol</source>
+        <translation type="vanished">Other Air Pistol</translation>
+    </message>
+    <message>
+        <source>Muu sportpüss</source>
+        <translation type="vanished">Other Smallbore rifle</translation>
+    </message>
+    <message>
+        <source>Muu 300m</source>
+        <translation type="vanished">Other 300m Rifle</translation>
+    </message>
+    <message>
+        <source>Muu püstol</source>
+        <translation type="vanished">Other Pistol</translation>
+    </message>
+    <message>
+        <source>Muu</source>
+        <translation type="vanished">Other</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="6"/>
+        <source>10m Air Rifle 60 Shots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="7"/>
+        <source>10m Air Rifle 40 Shots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="8"/>
+        <source>10m Air Rifle 20 Shots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="9"/>
+        <source>10m Air Pistol 60 Shots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="10"/>
+        <source>10m Air Pistol 40 Shots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="11"/>
+        <source>10m Air Pistol 20 Shots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="12"/>
+        <source>50m Rifle 3x40 3 Positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="13"/>
+        <source>50m Rifle 3x20 3 Positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="14"/>
+        <source>50m Rifle 3x10 3 Positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="15"/>
+        <source>50m 60 Shots Prone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="16"/>
+        <source>50m 30 Shots Prone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="17"/>
+        <source>25m Rapid Fire Pistol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="18"/>
+        <source>25m Pistol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="19"/>
+        <source>30+30 Center Fire Pistol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="20"/>
+        <source>25m 30 shots Precision Pistol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="21"/>
+        <source>25m 30 shots CFP Precision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="22"/>
+        <source>25m 30 shots Rapid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="23"/>
+        <source>25m 30 shots CFP Rapid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="24"/>
+        <source>25m Standard Pistol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="25"/>
+        <source>50m Free Pistol 60 Shots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="26"/>
+        <source>50m Free Pistol 30 Shots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/qualificationevents.cpp" line="27"/>
+        <source>CISM Center Fire Pistol</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="28"/>
-        <source>300m 3x40l Standard</source>
-        <translation>300m Rifle 3x40 3 Positions</translation>
+        <source>300m Rifle 3x40 3 Positions</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="29"/>
-        <source>300m 3x20l Standard</source>
-        <translation>300m Rifle 3x20 3 Positions</translation>
+        <source>300m Rifle 3x20 3 Positions</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="30"/>
-        <source>300m 3x10l Standard</source>
-        <translation>300m Rifle 3x10 3 Positions</translation>
+        <source>300m Rifle 3x10 3 Positions</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="31"/>
-        <source>300m 60l Lamades</source>
-        <translation>300m 60 Shots Prone</translation>
+        <source>300m 60 Shots Prone</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="32"/>
-        <source>300m 30l Lamades</source>
-        <translation>300m 30 Shots Prone</translation>
+        <source>300m 30 Shots Prone</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="33"/>
-        <source>30+30l Metssiga</source>
-        <translation>50m 30+30 Running Target</translation>
+        <source>50m 30+30 Running Target</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="34"/>
-        <source>20+20l Metssiga</source>
-        <translation>50m 20+20 Running Target Mixed</translation>
+        <source>50m 20+20 Running Target Mixed</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="35"/>
-        <source>30+30l Liikuv Märk</source>
-        <translation>10m 30+30 Running Target</translation>
+        <source>10m 30+30 Running Target</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="36"/>
-        <source>20+20l Liikuv Märk</source>
-        <translation>10m 20+20 Running Target Mixed</translation>
+        <source>10m 20+20 Running Target Mixed</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="37"/>
-        <source>Muu Õhupüss</source>
-        <translation>Other Air Rifle</translation>
+        <source>Other Air Rifle</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="38"/>
-        <source>Muu Õhupüstol</source>
-        <translation>Other Air Pistol</translation>
+        <source>Other Air Pistol</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="39"/>
-        <source>Muu sportpüss</source>
-        <translation>Other Smallbore rifle</translation>
+        <source>Other Smallbore rifle</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="40"/>
-        <source>Muu 300m</source>
-        <translation>Other 300m Rifle</translation>
+        <source>Other 300m Rifle</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="41"/>
-        <source>Muu püstol</source>
-        <translation>Other Pistol</translation>
+        <source>Other Pistol</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/qualificationevents.cpp" line="42"/>
-        <source>Muu</source>
-        <translation>Other</translation>
+        <source>Other</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>RangeControl</name>
     <message>
+        <source>Võistlus käimas!</source>
+        <translation type="vanished">Competition ongoing!</translation>
+    </message>
+    <message>
+        <source>&amp;Fail</source>
+        <translation type="vanished">&amp;File</translation>
+    </message>
+    <message>
+        <source>&amp;Tööriistad</source>
+        <translation type="vanished">&amp;Tools</translation>
+    </message>
+    <message>
+        <source>&amp;Käsklused</source>
+        <translation type="vanished">&amp;Commands</translation>
+    </message>
+    <message>
+        <source>Keel</source>
+        <translation type="vanished">Language</translation>
+    </message>
+    <message>
+        <source>&amp;Lisa rada</source>
+        <translation type="vanished">&amp;Add Lane</translation>
+    </message>
+    <message>
+        <source>Lisab ühe raja rea</source>
+        <translation type="vanished">Adds one lane</translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="170"/>
+        <source>Info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="170"/>
+        <source>Language change will be applied after restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rangecontrol.cpp" line="189"/>
         <location filename="../rangecontrol.cpp" line="715"/>
-        <source>Võistlus käimas!</source>
-        <translation>Competition ongoing!</translation>
+        <source>Match in progress!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="190"/>
+        <source>Match is still in progress at lane %1, are you sure you want to reset it?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rangecontrol.cpp" line="258"/>
-        <source>&amp;Fail</source>
-        <translation>&amp;File</translation>
+        <source>&amp;File</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rangecontrol.cpp" line="259"/>
-        <source>&amp;Tööriistad</source>
-        <translation>&amp;Tools</translation>
+        <source>&amp;Tools</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rangecontrol.cpp" line="260"/>
-        <source>&amp;Käsklused</source>
-        <translation>&amp;Commands</translation>
+        <source>&amp;Commands</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rangecontrol.cpp" line="261"/>
-        <source>Keel</source>
-        <translation>Language</translation>
+        <location filename="../rangecontrol.cpp" line="402"/>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rangecontrol.cpp" line="263"/>
-        <source>&amp;Lisa rada</source>
-        <translation>&amp;Add Lane</translation>
+        <source>&amp;Add lane</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rangecontrol.cpp" line="264"/>
-        <source>Lisab ühe raja rea</source>
-        <translation>Adds one lane</translation>
+        <source>Adds a single lane row</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rangecontrol.cpp" line="269"/>
@@ -363,58 +612,318 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation></translation>
     </message>
     <message>
+        <location filename="../rangecontrol.cpp" line="270"/>
+        <source>Import startlist file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="278"/>
+        <source>E&amp;xit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="280"/>
+        <source>Exit from the program</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="289"/>
+        <source>Select All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="290"/>
+        <source>Selects all lanes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="293"/>
+        <source>Deselect All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="294"/>
+        <source>Deselects all lanes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="297"/>
+        <source>Event</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="298"/>
+        <source>Changes the event type on all selected lanes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="301"/>
+        <source>Number of Shots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="302"/>
+        <source>Changes the number of competition shots on all selected lanes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="305"/>
+        <source>Clear lanes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="306"/>
+        <source>Removes competitors from all selected lanes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="309"/>
+        <source>Save Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="310"/>
+        <source>Saves current settings and lanes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="322"/>
+        <source>Send names (init)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="323"/>
+        <source>Sends competitor data to selected lanes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="326"/>
+        <source>Start sighters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="327"/>
+        <source>Commands selected lanes to start sighters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="332"/>
+        <source>Stop sighters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="333"/>
+        <source>Commands selected lanes to stop sighters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="338"/>
+        <source>Start match</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="339"/>
+        <source>Commands selected lanes to start match</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="344"/>
+        <source>Continue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="345"/>
+        <source>Commands selected lanes to continue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="350"/>
+        <source>Stop match</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="351"/>
+        <source>Commands selected lanes to stop match</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="356"/>
+        <source>Blink</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="357"/>
+        <source>Commands selected lanes to blink the backlight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="362"/>
+        <source>Ask all shots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="363"/>
+        <source>Asks all shots from selected lanes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="369"/>
+        <source>Resets selected lanes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="374"/>
+        <source>Send shots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="375"/>
+        <source>Sends existing shots of selected competitors to Protokollitaja</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="380"/>
+        <source>Search InBands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="381"/>
+        <source>Searches network for working InBand Scorings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="403"/>
+        <source>Change application language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="428"/>
+        <source>Open startlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="439"/>
+        <location filename="../rangecontrol.cpp" line="459"/>
+        <location filename="../rangecontrol.cpp" line="508"/>
+        <location filename="../rangecontrol.cpp" line="520"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="439"/>
+        <source>Use Sius startlist format, because Inband&apos;s does not contain IDs!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="447"/>
+        <location filename="../rangecontrol.cpp" line="513"/>
+        <source>Enter target number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="459"/>
+        <source>Failed to open the file!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="508"/>
+        <source>Broken startlist row!
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="520"/>
+        <source>Match is on at lane %1, new competitor was not imported!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="707"/>
+        <source>InBand IP query sent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="716"/>
+        <source>Match is still in progress at lane %1, are you sure you want to restart it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="728"/>
+        <source>Error!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="728"/>
+        <source>This version of Range Control does not know how to send the selected event (%1) to InBand!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="778"/>
+        <source>Error: cannot convert lane %s to a number!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="798"/>
+        <source>Enter number of shots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="798"/>
+        <source>Number of shots:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="810"/>
+        <source>Choose event</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rangecontrol.cpp" line="810"/>
+        <source>Event:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Impordi Sius&apos;i startlisti fail</source>
         <translation type="vanished">Import Sius Startlist File</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="170"/>
         <source>Teade</source>
-        <translation>Information</translation>
+        <translation type="vanished">Information</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="170"/>
         <source>Keele vahetus rakendub programmi uuesti käivitamisel</source>
-        <translation>Langugage changes take effect after restarting the program</translation>
+        <translation type="vanished">Langugage changes take effect after restarting the program</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="190"/>
         <source>Rajal %1 on võistlus veel käimas, oled kindel, et tahad seda nullida?</source>
-        <translation>Target %1 has competition in progress, are you sure you want to reset it?</translation>
+        <translation type="vanished">Target %1 has competition in progress, are you sure you want to reset it?</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="270"/>
         <source>Impordi startlisti fail</source>
-        <translation>Import Startlist File</translation>
+        <translation type="vanished">Import Startlist File</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="278"/>
         <source>&amp;Välju</source>
-        <translation>E&amp;xit</translation>
+        <translation type="vanished">E&amp;xit</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="280"/>
         <source>Välju programmist</source>
-        <translation>Close the program</translation>
+        <translation type="vanished">Close the program</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="289"/>
         <source>Märgi kõik</source>
-        <translation>Select All</translation>
+        <translation type="vanished">Select All</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="290"/>
         <source>Lisab linnukesed kõigile radadele</source>
-        <translation>Selects all lanes</translation>
+        <translation type="vanished">Selects all lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="293"/>
         <source>Eemalda märgistused</source>
-        <translation>Deselect All</translation>
+        <translation type="vanished">Deselect All</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="294"/>
         <source>Eemaldab linnukesed kõigilt radadelt</source>
-        <translation>Deselects all lanes</translation>
+        <translation type="vanished">Deselects all lanes</translation>
     </message>
     <message>
         <source>Märklehe tüüp</source>
@@ -433,124 +942,100 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation type="vanished">Changes class on all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="297"/>
         <source>Harjutus</source>
-        <translation>Event</translation>
+        <translation type="vanished">Event</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="298"/>
         <source>Muudab kõigil märgitud radadel harjutuse tüüpi</source>
-        <translation>Changes event type for all selected lanes</translation>
+        <translation type="vanished">Changes event type for all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="301"/>
         <source>Laskude arv</source>
-        <translation>Number of Shots</translation>
+        <translation type="vanished">Number of Shots</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="302"/>
         <source>Muudab kõigil märgitud radadel võistluslaskude arvu</source>
-        <translation>Changes number of shots for all selected lanes</translation>
+        <translation type="vanished">Changes number of shots for all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="305"/>
         <source>Tühjenda rajad</source>
-        <translation>Clear Lanes</translation>
+        <translation type="vanished">Clear Lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="306"/>
         <source>Eemaldab kõigilt märgitud radadelt laskurid</source>
-        <translation>Removes all data from all selected lanes</translation>
+        <translation type="vanished">Removes all data from all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="309"/>
         <source>Salvesta seaded</source>
-        <translation>Save Settings</translation>
+        <translation type="vanished">Save Settings</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="310"/>
         <source>Salvestab praegused seaded ja rajad</source>
-        <translation>Saves current settings and lanes</translation>
+        <translation type="vanished">Saves current settings and lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="322"/>
         <source>Saada nimed (init)</source>
-        <translation>Send Names (init)</translation>
+        <translation type="vanished">Send Names (init)</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="323"/>
         <source>Saadab võistlejate andmed märgitud radadele</source>
-        <translation>Sends competitiors&apos; data to all selected lanes</translation>
+        <translation type="vanished">Sends competitiors&apos; data to all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="326"/>
         <source>Alusta proovidega</source>
-        <translation>Sighting Start</translation>
+        <translation type="vanished">Sighting Start</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="327"/>
         <source>Annab käsu märgitud radadele alustada proovilaskudega</source>
-        <translation>Sends a command to start with sighting shots for all selected lanes</translation>
+        <translation type="vanished">Sends a command to start with sighting shots for all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="332"/>
         <source>Lõpeta proovid</source>
-        <translation>End Sighting</translation>
+        <translation type="vanished">End Sighting</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="333"/>
         <source>Annab käsu märgitud radadele lõpetada proovilasud</source>
-        <translation>Sends a command to stop sighting shots for all selected lanes</translation>
+        <translation type="vanished">Sends a command to stop sighting shots for all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="338"/>
         <source>Alusta võistlust</source>
-        <translation>Competition Start</translation>
+        <translation type="vanished">Competition Start</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="339"/>
         <source>Annab käsu märgitud radadele alustada võistlust</source>
-        <translation>Sends a command to start with competition shots for all selected lanes</translation>
+        <translation type="vanished">Sends a command to start with competition shots for all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="344"/>
         <source>Jätka</source>
-        <translation>Continue Competition</translation>
+        <translation type="vanished">Continue Competition</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="345"/>
         <source>Annab käsu märgitud radadele jätkata</source>
-        <translation>Sends a command to continue with the competition for all selected lanes</translation>
+        <translation type="vanished">Sends a command to continue with the competition for all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="350"/>
         <source>Lõpeta võistlus</source>
-        <translation>End Competition</translation>
+        <translation type="vanished">End Competition</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="351"/>
         <source>Annab käsu märgitud radadele lõpetada võistlus</source>
-        <translation>Sends a command to stop competition shots for all selected lanes</translation>
+        <translation type="vanished">Sends a command to stop competition shots for all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="356"/>
         <source>Vilguta</source>
-        <translation>Blink</translation>
+        <translation type="vanished">Blink</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="357"/>
         <source>Annab käsu märgitud radadele vilgutada taustavalgusega</source>
-        <translation>Sends a command to blink the target light to all selected lanes</translation>
+        <translation type="vanished">Sends a command to blink the target light to all selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="362"/>
         <source>Küsi kõik lasud</source>
-        <translation>Ask All Shots</translation>
+        <translation type="vanished">Ask All Shots</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="363"/>
         <source>Küsib märgitud radadelt kõik lasud</source>
-        <translation>Asks existing shot data from all selected lanes</translation>
+        <translation type="vanished">Asks existing shot data from all selected lanes</translation>
     </message>
     <message>
         <location filename="../rangecontrol.cpp" line="368"/>
@@ -558,44 +1043,36 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="369"/>
         <source>Reset&apos;ib märgitud rajad</source>
-        <translation>Resets selected lanes</translation>
+        <translation type="vanished">Resets selected lanes</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="374"/>
         <source>Saada lasud</source>
-        <translation>Publish Shots</translation>
+        <translation type="vanished">Publish Shots</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="375"/>
         <source>Saadab märgitud laskurite olemasolevad lasud Protokollitajasse</source>
-        <translation>Publishes existing shots for all selected lanes to connected programs (Protokollitaja)</translation>
+        <translation type="vanished">Publishes existing shots for all selected lanes to connected programs (Protokollitaja)</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="380"/>
         <source>Otsi InBande</source>
-        <translation>Find InBands</translation>
+        <translation type="vanished">Find InBands</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="381"/>
         <source>Otsib võrgust töötavaid InBand Scoringuid</source>
-        <translation>Tries to look for InBand Scorings from the network</translation>
+        <translation type="vanished">Tries to look for InBand Scorings from the network</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="402"/>
         <source>Programmi keel</source>
-        <translation>Program Language</translation>
+        <translation type="vanished">Program Language</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="403"/>
         <source>Programmi keele valik</source>
-        <translation>Change program language</translation>
+        <translation type="vanished">Change program language</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="428"/>
         <source>Ava startlist</source>
-        <translation>Open Startlist</translation>
+        <translation type="vanished">Open Startlist</translation>
     </message>
     <message>
         <location filename="../rangecontrol.cpp" line="428"/>
@@ -603,84 +1080,66 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="439"/>
-        <location filename="../rangecontrol.cpp" line="459"/>
-        <location filename="../rangecontrol.cpp" line="508"/>
-        <location filename="../rangecontrol.cpp" line="520"/>
         <source>Viga</source>
-        <translation>Error</translation>
+        <translation type="vanished">Error</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="439"/>
         <source>Kasutage Siusi startlisti formaati, kuna Inbandi omas ei ole ID&apos;sid!</source>
-        <translation>Use Sius startlist format, because Inband startlist doesn&apos;t contain IDs!</translation>
+        <translation type="vanished">Use Sius startlist format, because Inband startlist doesn&apos;t contain IDs!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="447"/>
-        <location filename="../rangecontrol.cpp" line="513"/>
         <source>Sisesta raja number</source>
-        <translation>Enter target number</translation>
+        <translation type="vanished">Enter target number</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="459"/>
         <source>Ei õnnestunud faili avada!</source>
-        <translation>Unable to open the file!</translation>
+        <translation type="vanished">Unable to open the file!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="508"/>
         <source>Vigane stardinimekirja rida!
 %1</source>
-        <translation>Faulty row in start list!
+        <translation type="vanished">Faulty row in start list!
 %1</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="520"/>
         <source>Rajal %1 on võistlus käimas, uut laskurit ei imporditud!</source>
-        <translation>Target %1 has competition in progress, new competitor was not imported!</translation>
+        <translation type="vanished">Target %1 has competition in progress, new competitor was not imported!</translation>
     </message>
     <message>
         <source>Märgi IP: </source>
         <translation type="vanished">Target IP: </translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="707"/>
         <source>InBandi IP küsimus saadetud</source>
-        <translation>InBand IP request sent</translation>
+        <translation type="vanished">InBand IP request sent</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="716"/>
         <source>Rajal %1 on võistlus veel käimas, oled kindel, et tahad seda uuesti alustada?</source>
-        <translation>Target %1 has competition in progress, are you sure you want to reset it?</translation>
+        <translation type="vanished">Target %1 has competition in progress, are you sure you want to reset it?</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="728"/>
         <source>Viga!</source>
-        <translation>Error!</translation>
+        <translation type="vanished">Error!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="728"/>
         <source>See versioon Range Control&apos;ist ei tea, kuidas valitud harjutust (%1) InBandile saata!</source>
-        <translation>This version of Range Control doesn&apos;t know how to send chosen event (%1) to InBand!</translation>
+        <translation type="vanished">This version of Range Control doesn&apos;t know how to send chosen event (%1) to InBand!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="778"/>
         <source>Viga: rada %s ei saa teisendada arvuks!</source>
-        <translation>Error: lane %s cannot be converted to a number!</translation>
+        <translation type="vanished">Error: lane %s cannot be converted to a number!</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="798"/>
         <source>Laskude arv:</source>
-        <translation>Number of Shots:</translation>
+        <translation type="vanished">Number of Shots:</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="810"/>
         <source>Vali harjutus</source>
-        <translation>Choose event type</translation>
+        <translation type="vanished">Choose event type</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="810"/>
         <source>Harjutus:</source>
-        <translation>Event:</translation>
+        <translation type="vanished">Event:</translation>
     </message>
     <message>
         <source>Harjutus: </source>
@@ -695,9 +1154,8 @@ Check that Protokollitaja and Range Control versions are the same!</translation>
         <translation type="vanished">Class:</translation>
     </message>
     <message>
-        <location filename="../rangecontrol.cpp" line="798"/>
         <source>Sisesta laskude arv</source>
-        <translation>Enter number of shots</translation>
+        <translation type="vanished">Enter number of shots</translation>
     </message>
     <message>
         <source>Laskude arv: </source>

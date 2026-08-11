@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>SeadedKast</string>
+   <string>Settings</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -19,7 +19,7 @@
      <item>
       <widget class="QGroupBox" name="voistluseGrupp">
        <property name="title">
-        <string>Võistluse seaded</string>
+        <string>Competition settings</string>
        </property>
        <layout class="QGridLayout" name="gridLayout">
         <item row="3" column="2">
@@ -38,7 +38,7 @@
         <item row="3" column="0">
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>Kirjutusabi:</string>
+           <string>Autocomplete:</string>
           </property>
          </widget>
         </item>
@@ -51,12 +51,12 @@
           </item>
           <item>
            <property name="text">
-            <string>Sisekümned-&gt;seeriad-&gt;täisarvudega lasud-&gt;komadega lasud</string>
+            <string>Inner tens-&gt;series-&gt;full-ring shots-&gt;decimal shots</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Seeriad-&gt;komakohtadega lasud</string>
+            <string>Series-&gt;decimal shots</string>
            </property>
           </item>
          </widget>
@@ -64,7 +64,7 @@
         <item row="1" column="2">
          <widget class="QLabel" name="label_13">
           <property name="text">
-           <string>kuni:</string>
+           <string>to:</string>
           </property>
          </widget>
         </item>
@@ -77,28 +77,28 @@
         <item row="1" column="0">
          <widget class="QLabel" name="label_12">
           <property name="text">
-           <string>Toimumisaeg:</string>
+           <string>Time of the event:</string>
           </property>
          </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_7">
           <property name="text">
-           <string>Koht:</string>
+           <string>Place:</string>
           </property>
          </widget>
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>Võistluse nimi:</string>
+           <string>Competition name:</string>
           </property>
          </widget>
         </item>
         <item row="3" column="3">
          <widget class="QLabel" name="label_8">
           <property name="text">
-           <string>Järjestamine</string>
+           <string>Tie breaking by</string>
           </property>
          </widget>
         </item>
@@ -109,12 +109,12 @@
           </property>
           <item>
            <property name="text">
-            <string>Väljas</string>
+            <string>Off</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Sees</string>
+            <string>On</string>
            </property>
           </item>
          </widget>
@@ -166,21 +166,21 @@
         <item row="1" column="0">
          <widget class="QLabel" name="label_4">
           <property name="text">
-           <string>Varukoopia salvestamine iga</string>
+           <string>Backup autosave after every</string>
           </property>
          </widget>
         </item>
         <item row="1" column="2">
          <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>minuti järel</string>
+           <string>minute</string>
           </property>
          </widget>
         </item>
         <item row="0" column="0" colspan="2">
          <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>Automaatne varukoopia tegemine:</string>
+           <string>Backup autosave:</string>
           </property>
          </widget>
         </item>
@@ -191,12 +191,12 @@
           </property>
           <item>
            <property name="text">
-            <string>Väljas</string>
+            <string>Off</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Sees</string>
+            <string>On</string>
            </property>
           </item>
          </widget>
@@ -211,7 +211,7 @@
      <item>
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>Sakkide asukoht:</string>
+        <string>Tabs location:</string>
        </property>
       </widget>
      </item>
@@ -222,22 +222,22 @@
        </property>
        <item>
         <property name="text">
-         <string>Üleval</string>
+         <string>Up</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>All</string>
+         <string>Down</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Vasakul</string>
+         <string>Left</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Paremal</string>
+         <string>Right</string>
         </property>
        </item>
       </widget>
@@ -245,7 +245,7 @@
      <item>
       <widget class="QLabel" name="label_9">
        <property name="text">
-        <string>Printimine:</string>
+        <string>Printing:</string>
        </property>
       </widget>
      </item>
@@ -253,12 +253,12 @@
       <widget class="QComboBox" name="prindiBox">
        <item>
         <property name="text">
-         <string>Uus</string>
+         <string>New</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Vana</string>
+         <string>Old</string>
         </property>
        </item>
       </widget>
@@ -279,7 +279,7 @@
      <item>
       <widget class="QLabel" name="label_10">
        <property name="text">
-        <string>Veebi laadimine iga</string>
+        <string>Upload to web after every</string>
        </property>
       </widget>
      </item>
@@ -299,7 +299,7 @@
      <item>
       <widget class="QLabel" name="label_11">
        <property name="text">
-        <string>sekundi järel</string>
+        <string>second</string>
        </property>
       </widget>
      </item>
@@ -309,47 +309,47 @@
     <widget class="QTreeWidget" name="sakid">
      <column>
       <property name="text">
-       <string>Saki nimi</string>
+       <string>Tab Name</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Ekraaninimi</string>
+       <string>Screen Name</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Min näitamise aeg</string>
+       <string>Min Showing Time</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Max näitamise aeg</string>
+       <string>Max Showing Time</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Näidata?</string>
+       <string>To be Shown?</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Märkleht</string>
+       <string>Target Type</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Harjutus</string>
+       <string>Event</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Kümnendikega</string>
+       <string>Decimals</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Laadida veebi</string>
+       <string>Upload to Web</string>
       </property>
      </column>
     </widget>
@@ -357,13 +357,13 @@
    <item>
     <widget class="QGroupBox" name="siusGroup">
      <property name="title">
-      <string>SiusData (muuta ainult, kui tead, mida teed)</string>
+      <string>SiusData (change only if you know what you are doing)</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0" rowspan="2">
        <widget class="QLabel" name="sighterTypesLabel">
         <property name="text">
-         <string>Proovilaskude tüübid:</string>
+         <string>Sighter Types:</string>
         </property>
        </widget>
       </item>
@@ -384,7 +384,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="competitionTypesLabel">
         <property name="text">
-         <string>Võistluslaskude tüübid:</string>
+         <string>Competition Shot Types:</string>
         </property>
        </widget>
       </item>
@@ -409,14 +409,14 @@
      <item>
       <widget class="QPushButton" name="okNupp">
        <property name="text">
-        <string>Olgu</string>
+        <string>OK</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="loobuNupp">
        <property name="text">
-        <string>Loobu</string>
+        <string>Cancel</string>
        </property>
       </widget>
      </item>

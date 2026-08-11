@@ -90,9 +90,8 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
             if (kllData.webCompetitionId.contains(QRegularExpression(QStringLiteral("[^\\x{0000}-\\x{007F}]")))) {
                 if (QMessageBox::warning(
                         m_parentWindow,
-                        tr("Viga!"),
-                        tr("Võistluse veebi ID (%1) sisaldab kummalisi tähemärke ja on ilmselt vigane!"
-                           "\n\nKas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.")
+                        tr("Error!"),
+                        tr("Competition web ID (%1) contains weird symbols and is probably broken!\n\nDo you want to delete it? It doesn't affect anything else than uploading to web.")
                             .arg(kllData.webCompetitionId),
                         QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
                     kllData.webCompetitionId = "";
@@ -321,7 +320,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                         in >> sum >> notes;
                         sheet->voistkonnad[j]->summa->setText(sum);
 
-                        if (notes == "Märkused")
+                        if (notes == "Remarks")
                             sheet->voistkonnad[j]->markus->setText("");
                         else
                             sheet->voistkonnad[j]->markus->setText(notes);
@@ -395,7 +394,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
 
                         sheet->laskurid[j]->kumned->setText(innerTens);
 
-                        if (notes == "Märkused")
+                        if (notes == "Remarks")
                             sheet->laskurid[j]->markus->setText("");
                         else
                             sheet->laskurid[j]->markus->setText(notes);
@@ -416,7 +415,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                 bool teamEvent = false;
                 bool withDecimals = false;
                 bool toBeShown = true;
-                QString tabName, displayName, eventTypeString = "Muu";
+                QString tabName, displayName, eventTypeString = "Other";
 
                 tabName = tabObject["name"].toString();
                 seriesCount = tabObject["seriesCount"].toInt();
@@ -510,12 +509,12 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
         } else QMessageBox::critical(
                     m_parentWindow,
                     tr("Protokollitaja"),
-                    tr("Vale versiooni fail!\n\nVõimalik, et tegu on uuema programmi versiooni failiga.\n\n(Protokollitaja::loefail())"),
+                    tr("Wrong file version!\n\nIt could be a newer version's file.\n\n(Protokollitaja::loefail())"),
                     QMessageBox::Ok
                     );
         fail.close();
     } else if (!fileName.isEmpty())
-        QMessageBox::critical(m_parentWindow, tr("Protokollitaja"), tr("Ei leia faili!"), QMessageBox::Ok);
+        QMessageBox::critical(m_parentWindow, tr("Protokollitaja"), tr("Cannot find the file!"), QMessageBox::Ok);
 
     QApplication::restoreOverrideCursor();
 #ifdef QT_DEBUG

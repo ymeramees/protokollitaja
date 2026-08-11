@@ -167,7 +167,7 @@ void RangeControl::changeLanguage()
         qApp->installTranslator(&m_translator);
 
         saveSettings();
-        QMessageBox::information(this, tr("Teade"), tr("Keele vahetus rakendub programmi uuesti käivitamisel"));
+        QMessageBox::information(this, tr("Info"), tr("Language change will be applied after restart"));
     }
 }
 
@@ -186,8 +186,8 @@ void RangeControl::continueSendingMessage()
             if (m_message == "reset" && lane->inCompetition()) {
                 if (QMessageBox::warning(
                             this,
-                            tr("Võistlus käimas!"),
-                            tr("Rajal %1 on võistlus veel käimas, oled kindel, et tahad seda nullida?").arg(lane->target()),
+                            tr("Match in progress!"),
+                            tr("Match is still in progress at lane %1, are you sure you want to reset it?").arg(lane->target()),
                             QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
                     canSend = false;
             }
@@ -255,29 +255,29 @@ void RangeControl::clearLanes()
 
 void RangeControl::createMenus()
 {
-    QMenu *fileMenu = this->menuBar()->addMenu(tr("&Fail"));
-    QMenu *toolsMenu = this->menuBar()->addMenu(tr("&Tööriistad"));
-    QMenu *controlMenu = this->menuBar()->addMenu(tr("&Käsklused"));
-    QMenu *languageMenu = this->menuBar()->addMenu(tr("Keel"));
+    QMenu *fileMenu = this->menuBar()->addMenu(tr("&File"));
+    QMenu *toolsMenu = this->menuBar()->addMenu(tr("&Tools"));
+    QMenu *controlMenu = this->menuBar()->addMenu(tr("&Commands"));
+    QMenu *languageMenu = this->menuBar()->addMenu(tr("Language"));
 
-    QAction *addLaneAct = new QAction(tr("&Lisa rada"), this);
-    addLaneAct->setStatusTip(tr("Lisab ühe raja rea"));
+    QAction *addLaneAct = new QAction(tr("&Add lane"), this);
+    addLaneAct->setStatusTip(tr("Adds a single lane row"));
     connect(addLaneAct, &QAction::triggered, [this]() {
         addLane(0, "");
     });
 
     QAction *importStartListAct = new QAction(tr("Import startlist..."), this);
-    importStartListAct->setStatusTip(tr("Impordi startlisti fail"));
+    importStartListAct->setStatusTip(tr("Import startlist file"));
     connect(importStartListAct, &QAction::triggered, this, &RangeControl::importStartList);
 
-//    QAction *openAct = new QAction(tr("&Ava..."), this);
+//    QAction *openAct = new QAction(tr("&Open..."), this);
 //    openAct->setShortcuts(QKeySequence::Open);
-//    openAct->setStatusTip(tr("Ava fail"));
+//    openAct->setStatusTip(tr("Open file"));
 //    connect(openAct, &QAction::triggered, this, &Protofinaal::open);
 
-    QAction *exitAct = new QAction(tr("&Välju"), this);
+    QAction *exitAct = new QAction(tr("E&xit"), this);
     exitAct->setShortcuts(QKeySequence::Quit);
-    exitAct->setStatusTip(tr("Välju programmist"));
+    exitAct->setStatusTip(tr("Exit from the program"));
     connect(exitAct, &QAction::triggered, this, &QWidget::close);
 
 //    fileMenu->addAction(openAct);
@@ -286,28 +286,28 @@ void RangeControl::createMenus()
     fileMenu->addSeparator();
     fileMenu->addAction(exitAct);
 
-    QAction *setCheckedAllAct = new QAction(tr("Märgi kõik"), this);
-    setCheckedAllAct->setStatusTip(tr("Lisab linnukesed kõigile radadele"));
+    QAction *setCheckedAllAct = new QAction(tr("Select All"), this);
+    setCheckedAllAct->setStatusTip(tr("Selects all lanes"));
     connect(setCheckedAllAct, &QAction::triggered, this, &RangeControl::setCheckedAll);
 
-    QAction *unsetCheckedAllAct = new QAction(tr("Eemalda märgistused"), this);
-    unsetCheckedAllAct->setStatusTip(tr("Eemaldab linnukesed kõigilt radadelt"));
+    QAction *unsetCheckedAllAct = new QAction(tr("Deselect All"), this);
+    unsetCheckedAllAct->setStatusTip(tr("Deselects all lanes"));
     connect(unsetCheckedAllAct, &QAction::triggered, this, &RangeControl::unsetCheckedAll);
 
-    QAction *setCheckedTargetTypeAct = new QAction(tr("Harjutus"), this);
-    setCheckedTargetTypeAct->setStatusTip(tr("Muudab kõigil märgitud radadel harjutuse tüüpi"));
+    QAction *setCheckedTargetTypeAct = new QAction(tr("Event"), this);
+    setCheckedTargetTypeAct->setStatusTip(tr("Changes the event type on all selected lanes"));
     connect(setCheckedTargetTypeAct, &QAction::triggered, this, &RangeControl::setTargetTypes);
 
-    QAction *setCheckedShotsAct = new QAction(tr("Laskude arv"), this);
-    setCheckedShotsAct->setStatusTip(tr("Muudab kõigil märgitud radadel võistluslaskude arvu"));
+    QAction *setCheckedShotsAct = new QAction(tr("Number of Shots"), this);
+    setCheckedShotsAct->setStatusTip(tr("Changes the number of competition shots on all selected lanes"));
     connect(setCheckedShotsAct, &QAction::triggered, this, &RangeControl::setNumberOfShots);
 
-    QAction *clearLanesAct = new QAction(tr("Tühjenda rajad"), this);
-    clearLanesAct->setStatusTip(tr("Eemaldab kõigilt märgitud radadelt laskurid"));
+    QAction *clearLanesAct = new QAction(tr("Clear lanes"), this);
+    clearLanesAct->setStatusTip(tr("Removes competitors from all selected lanes"));
     connect(clearLanesAct, &QAction::triggered, this, &RangeControl::clearLanes);
 
-    QAction *saveSettingsAct = new QAction(tr("Salvesta seaded"), this);
-    saveSettingsAct->setStatusTip(tr("Salvestab praegused seaded ja rajad"));
+    QAction *saveSettingsAct = new QAction(tr("Save Settings"), this);
+    saveSettingsAct->setStatusTip(tr("Saves current settings and lanes"));
     connect(saveSettingsAct, &QAction::triggered, this, &RangeControl::saveSettings);
 
     toolsMenu->addAction(setCheckedAllAct);
@@ -319,66 +319,66 @@ void RangeControl::createMenus()
     toolsMenu->addAction(clearLanesAct);
     toolsMenu->addAction(saveSettingsAct);
 
-    QAction *initSelectedAct = new QAction(tr("Saada nimed (init)"), this);
-    initSelectedAct->setStatusTip(tr("Saadab võistlejate andmed märgitud radadele"));
+    QAction *initSelectedAct = new QAction(tr("Send names (init)"), this);
+    initSelectedAct->setStatusTip(tr("Sends competitor data to selected lanes"));
     connect(initSelectedAct, &QAction::triggered, this, &RangeControl::sendInitToAllSelected);
 
-    QAction *startSelectedSightersAct = new QAction(tr("Alusta proovidega"), this);
-    startSelectedSightersAct->setStatusTip(tr("Annab käsu märgitud radadele alustada proovilaskudega"));
+    QAction *startSelectedSightersAct = new QAction(tr("Start sighters"), this);
+    startSelectedSightersAct->setStatusTip(tr("Commands selected lanes to start sighters"));
     connect(startSelectedSightersAct, &QAction::triggered, [this](){
         sendMessageToAllSelected("start sighters");
     });
 
-    QAction *stopSelectedSightersAct = new QAction(tr("Lõpeta proovid"), this);
-    stopSelectedSightersAct->setStatusTip(tr("Annab käsu märgitud radadele lõpetada proovilasud"));
+    QAction *stopSelectedSightersAct = new QAction(tr("Stop sighters"), this);
+    stopSelectedSightersAct->setStatusTip(tr("Commands selected lanes to stop sighters"));
     connect(stopSelectedSightersAct, &QAction::triggered, [this](){
         sendMessageToAllSelected("stop sighters");
     });
 
-    QAction *startSelectedMatchAct = new QAction(tr("Alusta võistlust"), this);
-    startSelectedMatchAct->setStatusTip(tr("Annab käsu märgitud radadele alustada võistlust"));
+    QAction *startSelectedMatchAct = new QAction(tr("Start match"), this);
+    startSelectedMatchAct->setStatusTip(tr("Commands selected lanes to start match"));
     connect(startSelectedMatchAct, &QAction::triggered, [this](){
         sendMessageToAllSelected("start match");
     });
 
-    QAction *continueSelectedAct = new QAction(tr("Jätka"), this);
-    continueSelectedAct->setStatusTip(tr("Annab käsu märgitud radadele jätkata"));
+    QAction *continueSelectedAct = new QAction(tr("Continue"), this);
+    continueSelectedAct->setStatusTip(tr("Commands selected lanes to continue"));
     connect(continueSelectedAct, &QAction::triggered, [this](){
         sendMessageToAllSelected("continue");
     });
 
-    QAction *stopSelectedMatchAct = new QAction(tr("Lõpeta võistlus"), this);
-    stopSelectedMatchAct->setStatusTip(tr("Annab käsu märgitud radadele lõpetada võistlus"));
+    QAction *stopSelectedMatchAct = new QAction(tr("Stop match"), this);
+    stopSelectedMatchAct->setStatusTip(tr("Commands selected lanes to stop match"));
     connect(stopSelectedMatchAct, &QAction::triggered, [this](){
         sendMessageToAllSelected("stop match");
     });
 
-    QAction *blinkSelectedAct = new QAction(tr("Vilguta"), this);
-    blinkSelectedAct->setStatusTip(tr("Annab käsu märgitud radadele vilgutada taustavalgusega"));
+    QAction *blinkSelectedAct = new QAction(tr("Blink"), this);
+    blinkSelectedAct->setStatusTip(tr("Commands selected lanes to blink the backlight"));
     connect(blinkSelectedAct, &QAction::triggered, [this](){
         sendMessageToAllSelected("blink");
     });
 
-    QAction *askAllShotsAct = new QAction(tr("Küsi kõik lasud"), this);
-    askAllShotsAct->setStatusTip(tr("Küsib märgitud radadelt kõik lasud"));
+    QAction *askAllShotsAct = new QAction(tr("Ask all shots"), this);
+    askAllShotsAct->setStatusTip(tr("Asks all shots from selected lanes"));
     connect(askAllShotsAct, &QAction::triggered, [this](){
         sendMessageToAllSelected("send all shots");
     });
 
     QAction *resetSelectedAct = new QAction(tr("Reset"), this);
-    resetSelectedAct->setStatusTip(tr("Reset'ib märgitud rajad"));
+    resetSelectedAct->setStatusTip(tr("Resets selected lanes"));
     connect(resetSelectedAct, &QAction::triggered, [this](){
         sendMessageToAllSelected("reset");
     });
 
-    QAction *sendShotsAct = new QAction(tr("Saada lasud"), this);
-    resetSelectedAct->setStatusTip(tr("Saadab märgitud laskurite olemasolevad lasud Protokollitajasse"));
+    QAction *sendShotsAct = new QAction(tr("Send shots"), this);
+    resetSelectedAct->setStatusTip(tr("Sends existing shots of selected competitors to Protokollitaja"));
     connect(sendShotsAct, &QAction::triggered, [this](){
         publishSelectedCompetitorShots();
     });
 
-    QAction *searchInbandsAct = new QAction(tr("Otsi InBande"), this);
-    resetSelectedAct->setStatusTip(tr("Otsib võrgust töötavaid InBand Scoringuid"));
+    QAction *searchInbandsAct = new QAction(tr("Search InBands"), this);
+    resetSelectedAct->setStatusTip(tr("Searches network for working InBand Scorings"));
     connect(searchInbandsAct, &QAction::triggered, [this](){
         sendInbandBroadcast();
     });
@@ -399,8 +399,8 @@ void RangeControl::createMenus()
     controlMenu->addAction(searchInbandsAct);
 
 
-    QAction *changeLanguageAct = new QAction(tr("Programmi keel"), this);
-    changeLanguageAct->setStatusTip(tr("Programmi keele valik"));
+    QAction *changeLanguageAct = new QAction(tr("Language"), this);
+    changeLanguageAct->setStatusTip(tr("Change application language"));
     connect(changeLanguageAct, &QAction::triggered, [this](){
         changeLanguage();
     });
@@ -425,7 +425,7 @@ std::optional<Lane*> RangeControl::findLane(QString laneNo)
 
 void RangeControl::importStartList()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Ava startlist"), "", tr("Comma separated file (*.csv)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open startlist"), "", tr("Comma separated file (*.csv)"));
     if(fileName.isEmpty())
         return;
 
@@ -436,7 +436,7 @@ void RangeControl::importStartList()
         while (!in.atEnd()) {
             QString row = in.readLine();
             if (row.startsWith("Erä", Qt::CaseInsensitive)) {
-                QMessageBox::critical(this, tr("Viga"), tr("Kasutage Siusi startlisti formaati, kuna Inbandi omas ei ole ID'sid!"), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Error"), tr("Use Sius startlist format, because Inband's does not contain IDs!"), QMessageBox::Ok);
                 return;
             } else {
                 QTextStream(stdout) << "RangeControl::importStartList: Competitor row: " << row << Qt::endl;
@@ -444,7 +444,7 @@ void RangeControl::importStartList()
                 if (rowParts.length() >= 15){
                     int targetNo = rowParts.at(10).toInt();
                     if (targetNo == 0)
-                        targetNo = QInputDialog::getInt(this, tr("Sisesta raja number"), QString("%1 %2: ").arg(rowParts.at(3), rowParts.at(2)));
+                        targetNo = QInputDialog::getInt(this, tr("Enter target number"), QString("%1 %2: ").arg(rowParts.at(3), rowParts.at(2)));
                     auto laneOpt = findLane(targetNo);
                     if (laneOpt) {
                         laneOpt.value()->setSiusCompetitorRow(row);
@@ -456,7 +456,7 @@ void RangeControl::importStartList()
             }
         }
     } else
-        QMessageBox::critical(this, tr("Viga"), tr("Ei õnnestunud faili avada!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error"), tr("Failed to open the file!"), QMessageBox::Ok);
 }
 
 void RangeControl::initialize()
@@ -505,19 +505,19 @@ void RangeControl::loadStartList(QStringList startList)
         QStringList rowParts = row.split(";");
         if (row.size() > 0) {
             if (rowParts.size() < 8) {
-                QMessageBox::critical(this, tr("Viga"), tr("Vigane stardinimekirja rida!\n%1").arg(row), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Error"), tr("Broken startlist row!\n%1").arg(row), QMessageBox::Ok);
             } else {
                 QString targetNo = rowParts.at(0);
                 QTextStream(stdout) << "RangeControl::loadStartList: targetNo = " << targetNo << Qt::endl;
                 if (targetNo == "0" || targetNo.isEmpty())
-                    targetNo = QString("%1").arg(QInputDialog::getInt(this, tr("Sisesta raja number"), QString("%1 %2: ").arg(rowParts.at(2), rowParts.at(3))));
+                    targetNo = QString("%1").arg(QInputDialog::getInt(this, tr("Enter target number"), QString("%1 %2: ").arg(rowParts.at(2), rowParts.at(3))));
                 auto laneOpt = findLane(targetNo);
                 if (laneOpt) {
                     QTextStream(stdout) << "RangeControl::loadStartList: laneOpt defined" << Qt::endl;
                     if (!laneOpt.value()->inCompetition())
                         laneOpt.value()->setStartListCompetitorRow(row);
                     else
-                        QMessageBox::critical(this, tr("Viga"), tr("Rajal %1 on võistlus käimas, uut laskurit ei imporditud!").arg(targetNo), QMessageBox::Ok);
+                        QMessageBox::critical(this, tr("Error"), tr("Match is on at lane %1, new competitor was not imported!").arg(targetNo), QMessageBox::Ok);
                 } else {   // That means that existing lane was not found
                     QTextStream(stdout) << "RangeControl::loadStartList: Lane with target " << rowParts.at(0) << " not found, ignoring!" << Qt::endl;
                 }
@@ -578,7 +578,7 @@ void RangeControl::publishShot(SiusShotData shotData)
 
 void RangeControl::newShot(int target, SiusShotData shotData)
 {
-    showMessage(QString("Lasu info: %1;%2,%3,%4,%5")
+    showMessage(QString("Shot info: %1;%2,%3,%4,%5")
                 .arg(target)
                 .arg(shotData.siusShotNo)
                 .arg(shotData.shot.getSLask())
@@ -704,7 +704,7 @@ void RangeControl::saveSettings()
 void RangeControl::sendInbandBroadcast()
 {
     Utils::sendInbandBroadcast("?");
-    statusBar()->showMessage(tr("InBandi IP küsimus saadetud"), 2000);
+    statusBar()->showMessage(tr("InBand IP query sent"), 2000);
 }
 
 void RangeControl::sendInit(Lane *lane)
@@ -712,8 +712,8 @@ void RangeControl::sendInit(Lane *lane)
     if (lane->inCompetition()) {
         if (QMessageBox::warning(
                     this,
-                    tr("Võistlus käimas!"),
-                    tr("Rajal %1 on võistlus veel käimas, oled kindel, et tahad seda uuesti alustada?").arg(lane->target()),
+                    tr("Match in progress!"),
+                    tr("Match is still in progress at lane %1, are you sure you want to restart it?").arg(lane->target()),
                     QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
             return;
     }
@@ -725,7 +725,7 @@ void RangeControl::sendInit(Lane *lane)
     QualificationEvents::QualificationEvent event = lane->event();
 
     if (event.targetType == TargetTypes::Other){
-        QMessageBox::critical(this, tr("Viga!"), tr("See versioon Range Control'ist ei tea, kuidas valitud harjutust (%1) InBandile saata!").arg(event.name));
+        QMessageBox::critical(this, tr("Error!"), tr("This version of Range Control does not know how to send the selected event (%1) to InBand!").arg(event.name));
         return;
     }
 
@@ -736,7 +736,7 @@ void RangeControl::sendInit(Lane *lane)
 
     lane->setCurrentShotIndex(0);
 
-    showMessage(QString("Saadan: %1, %2").arg(lane->target(), message));
+    showMessage(QString("Sending: %1, %2").arg(lane->target(), message));
     sendMessage(lane, message);
 }
 
@@ -775,7 +775,7 @@ void RangeControl::sendMessage(Lane *lane, QString message)
         if (ok) {
             m_server.sendMessage(target, lane->ip(), message);
         } else
-            showMessage(tr("Viga: rada %s ei saa teisendada arvuks!").arg(lane->target()));
+            showMessage(tr("Error: cannot convert lane %s to a number!").arg(lane->target()));
     }
 }
 
@@ -795,7 +795,7 @@ void RangeControl::setCheckedAll()
 void RangeControl::setNumberOfShots()
 {
     bool wasAccepted = false;
-    int newNumber =  QInputDialog::getInt(this, tr("Sisesta laskude arv"), tr("Laskude arv:"), 60, 0, 120, 1, &wasAccepted);
+    int newNumber =  QInputDialog::getInt(this, tr("Enter number of shots"), tr("Number of shots:"), 60, 0, 120, 1, &wasAccepted);
     if (wasAccepted) {
         for (Lane *lane: std::as_const(m_lanes)) {
             if (lane->selected())
@@ -807,7 +807,7 @@ void RangeControl::setNumberOfShots()
 void RangeControl::setTargetTypes()
 {
     bool wasAccepted = false;
-    QString eventName = QInputDialog::getItem(this, tr("Vali harjutus"), tr("Harjutus:"), QualificationEvents::eventNames(), 0, false, &wasAccepted);
+    QString eventName = QInputDialog::getItem(this, tr("Choose event"), tr("Event:"), QualificationEvents::eventNames(), 0, false, &wasAccepted);
     if (wasAccepted) {
         for (Lane *lane: std::as_const(m_lanes)) {
             if (lane->selected())
@@ -847,7 +847,7 @@ void RangeControl::unsetCheckedAll()
 
 void RangeControl::updateStatus(int target, QString ip, QString newStatus)
 {
-    showMessage(QString("Uuendus: %1 (%2), ").arg(target).arg(ip) + newStatus);
+    showMessage(QString("Update: %1 (%2), ").arg(target).arg(ip) + newStatus);
 
     Lane *currentLane = nullptr;
     bool exists = false;

@@ -67,7 +67,7 @@ Laskur::Laskur(
     kumned->setText(jsonObj["innerTens"].toString());
 
     QString remarksString = jsonObj["remarks"].toString();
-    if (remarksString == "Märkused")
+    if (remarksString == "Remarks")
         markus->setText("");
     else
         markus->setText(remarksString);
@@ -121,7 +121,7 @@ void Laskur::createLayout()
         if(vSummadeSamm != 0){
             if(/*i != 0 &&*/ (i+1) % vSummadeSamm == 0){
                 if(j >= vSummad.size()){
-                    QMessageBox::critical(this, tr("Viga!"), tr("Ei ole nii palju vahesummasid!"), QMessageBox::Ok);
+                    QMessageBox::critical(this, tr("Error!"), tr("There are not so many subtotals!"), QMessageBox::Ok);
                     return;
                 }
                 hKast->addWidget(vSummad[j]);
@@ -203,7 +203,7 @@ void Laskur::lisaLAken()
                 }
         }
         if(lisaLasud.count() == 0)
-                QMessageBox::critical(this, tr("Teade"), "lisalasud.count() = 0", QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Info"), "lisalasud.count() = 0", QMessageBox::Ok);
         if(lisaAken->exec() == QDialog::Accepted){
                 emit muudatus();
                 lisaLasud.clear();
@@ -683,7 +683,7 @@ void Laskur::muutus5()
 void Laskur::naitaIdAken()
 {
     bool ok = false;
-        int uusId = QInputDialog::getInt(this, tr("Sisestage uus laskuri ID"), "ID:", this->id, 0, 9999, 1, &ok);
+        int uusId = QInputDialog::getInt(this, tr("Enter new shooter ID"), "ID:", this->id, 0, 9999, 1, &ok);
     if(ok)
         emit idMuutus(uusId, this);
 //        this->id = uusId;
@@ -1157,7 +1157,7 @@ bool Laskur::readSiusShot(SiusShotData shotData)
 ////                result = parseSiusCompetitionShot(previousSiusRow(), previousSiusRow().split(';'), shotFieldNoInSiusRow);
 ////            }
 ////            if(previousSiusRow().startsWith("_PRCH")){
-////                if(isCompetitionStarted() && (!m_eventType->contains("Lamades") || !m_eventType->contains("Õhupüss") || !m_eventType->contains("Õhupüstol") || !m_eventType->contains("Vabapüstol"))){
+////                if(isCompetitionStarted() && (!m_eventType->contains("Prone") || !m_eventType->contains("Air Rifle") || !m_eventType->contains("Air Pistol") || !m_eventType->contains("Vabapüstol"))){
 ////                    nextCompetitionStage();  //If there are sighting shots or only one competition, no point to risk with increasing competition stage
 ////                }
 ////                setCompetitionStarted(false);    //These are sighting shots
@@ -1327,15 +1327,15 @@ void Laskur::setupFields()
     rajaNr = new QLineEdit(this);
     rajaNr->setMinimumHeight(28);
     rajaNr->setMaximumWidth(30);
-    rajaNr->setToolTip(tr("Raja number"));
+    rajaNr->setToolTip(tr("Firing Point"));
     rajaNr->setPlaceholderText(tr(""));
     connect(rajaNr, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(rajaNr, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     sifriAlgus = new QLineEdit(this);
     sifriAlgus->setMinimumHeight(28);
     sifriAlgus->setMaximumWidth(50);
-    sifriAlgus->setToolTip(tr("Siffer"));
-    sifriAlgus->setPlaceholderText(tr("Algus"));
+    sifriAlgus->setToolTip(tr("Paper target numbers range"));
+    sifriAlgus->setPlaceholderText(tr("Start"));
     connect(sifriAlgus, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(sifriAlgus, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     sidekriips = new QLabel(this);
@@ -1343,8 +1343,8 @@ void Laskur::setupFields()
     sifriLopp = new QLineEdit(this);
     sifriLopp->setMinimumHeight(28);
     sifriLopp->setMaximumWidth(50);
-    sifriLopp->setToolTip(tr("Siffer"));
-    sifriLopp->setPlaceholderText(tr("Lõpp"));
+    sifriLopp->setToolTip(tr("Paper target numbers range"));
+    sifriLopp->setPlaceholderText(tr("End"));
     connect(sifriLopp, SIGNAL(returnPressed()), this, SLOT(enterVajutatud()));
     connect(sifriLopp, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     sifriNupp = new QPushButton(this);
@@ -1354,30 +1354,30 @@ void Laskur::setupFields()
     connect(sifriNupp, SIGNAL(clicked()), this, SLOT(naitaSifrit()));
     eesNimi = new QLineEdit(this);
     eesNimi->setMinimumHeight(28);
-    eesNimi->setToolTip(tr("Eesnimi"));
-    eesNimi->setPlaceholderText(tr("Eesnimi"));
+    eesNimi->setToolTip(tr("First Name"));
+    eesNimi->setPlaceholderText(tr("First Name"));
     connect(eesNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus(QString)));
     connect(eesNimi, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(eesNimi, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     perekNimi = new QLineEdit(this);
     perekNimi->setMinimumHeight(28);
-    perekNimi->setToolTip(tr("Perekonnanimi"));
-    perekNimi->setPlaceholderText(tr("Perekonnanimi"));
+    perekNimi->setToolTip(tr("Last Name"));
+    perekNimi->setPlaceholderText(tr("Last Name"));
     connect(perekNimi, SIGNAL(textEdited(QString)), this, SLOT(muutus2(QString)));
     connect(perekNimi, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(perekNimi, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     sunniAasta = new QLineEdit(this);
     sunniAasta->setMinimumHeight(28);
     sunniAasta->setMaximumWidth(45);
-    sunniAasta->setToolTip(tr("Sünniaasta"));
-    sunniAasta->setPlaceholderText(tr("Sünniaasta"));
+    sunniAasta->setToolTip(tr("Year of Birth"));
+    sunniAasta->setPlaceholderText(tr("Year of Birth"));
     connect(sunniAasta, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(sunniAasta, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     klubi = new QLineEdit(this);
     klubi->setMinimumHeight(28);
     klubi->setMaxLength(12);
-    klubi->setToolTip(tr("Klubi"));
-    klubi->setPlaceholderText(tr("Klubi"));
+    klubi->setToolTip(tr("Club"));
+    klubi->setPlaceholderText(tr("Club"));
     connect(klubi, SIGNAL(textEdited(QString)), this, SLOT(muutus4(QString)));
     connect(klubi, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(klubi, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
@@ -1385,7 +1385,7 @@ void Laskur::setupFields()
     summa->setText("0");
     summa->setMinimumHeight(28);
     summa->setMaximumWidth(50);
-    summa->setToolTip(tr("Summa"));
+    summa->setToolTip(tr("Total"));
     summa->setStyleSheet("border: 1px solid grey");
     summa->setReadOnly(true);
     connect(summa, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
@@ -1394,38 +1394,38 @@ void Laskur::setupFields()
     finaal->setPlaceholderText("Fin");
     finaal->setMinimumHeight(28);
     finaal->setMaximumWidth(45);
-    finaal->setToolTip(tr("Finaali seeria"));
+    finaal->setToolTip(tr("Finals"));
     connect(finaal, SIGNAL(editingFinished()), this, SLOT(liida()));
     connect(finaal, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(finaal, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     koguSumma = new QLabel(this);
     koguSumma->setText("0,0");
-    koguSumma->setToolTip(tr("Summa"));
+    koguSumma->setToolTip(tr("Total"));
     kumned = new QLineEdit(this);
     kumned->setText("0");
     kumned->setMinimumHeight(28);
     kumned->setMaximumWidth(25);
-    kumned->setToolTip(tr("Sisekümnete arv"));
+    kumned->setToolTip(tr("Number of Inner Tens"));
     connect(kumned, SIGNAL(editingFinished()), this, SLOT(muutus5()));
     connect(kumned, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(kumned, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     markus = new QLineEdit(this);
     markus->setMinimumHeight(28);
     markus->setMaximumWidth(85);
-    markus->setPlaceholderText(tr("Märkused"));
+    markus->setPlaceholderText(tr("Remarks"));
     connect(markus, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(markus, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     lisaLNupp = new QPushButton("Lis.", this);
     lisaLNupp->setMaximumWidth(25);
     lisaLNupp->setMinimumWidth(25);
-    lisaLNupp->setToolTip(tr("Lisalasud"));
+    lisaLNupp->setToolTip(tr("Shoot-off Shots"));
     connect(lisaLNupp, SIGNAL(clicked()), this, SLOT(lisaLAken()));
 
-    laskudeAkenAct = new QAction(tr("Lasud..."), this);
-    laskudeAkenAct->setStatusTip(tr("Ava laskuri laskude aken"));
+    laskudeAkenAct = new QAction(tr("Shots..."), this);
+    laskudeAkenAct->setStatusTip(tr("Open competitor's shots window"));
     connect(laskudeAkenAct, SIGNAL(triggered()), this, SLOT(naitaLaskudeAkent()));
     idAct = new QAction(tr("ID..."), this);
-    idAct->setStatusTip(tr("Vaata/muuda laskuri ID'd"));
+    idAct->setStatusTip(tr("View/change competitor's ID"));
     connect(idAct, SIGNAL(triggered()), this, SLOT(naitaIdAken()));
 
     popup = new QMenu(this);
@@ -1436,7 +1436,7 @@ void Laskur::setupFields()
         seeriad << new QLineEdit(this);
         seeriad[i]->setMinimumHeight(28);
         seeriad[i]->setMaximumWidth(40);
-        seeriad[i]->setToolTip(tr("Seeriad"));
+        seeriad[i]->setToolTip(tr("Series"));
         seeriad[i]->setPlaceholderText(QString("S%1").arg(i + 1));
         connect(seeriad[i], SIGNAL(editingFinished()), this, SLOT(liida()));
         connect(seeriad[i], SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
@@ -1454,7 +1454,7 @@ void Laskur::setupFields()
             vSummad[i]->setMinimumHeight(28);
             vSummad[i]->setMaximumWidth(50);
             vSummad[i]->setText("0");
-            vSummad[i]->setToolTip(tr("Vahesumma"));
+            vSummad[i]->setToolTip(tr("Subtotal"));
             vSummad[i]->setStyleSheet("border: 1px solid grey");
             vSummad[i]->setReadOnly(true);
         }
@@ -1663,7 +1663,7 @@ QJsonObject Laskur::toExportJson()
     json["totalResult"] = summa->text();
     json["innerTens"] = kumned->text();
     json["finals"] = finaal->text();
-    if(markus->text() == "Märkused")
+    if(markus->text() == "Remarks")
         json["remarks"] = "";
     else
         json["remarks"] = markus->text();
@@ -1705,7 +1705,7 @@ QJsonObject Laskur::toJson()
     competitorJson["shootOffShots"] = shootOffArray;
     competitorJson["innerTens"] = kumned->text()/*.toUtf8()*/;
 
-    if(markus->text() == "Märkused")
+    if(markus->text() == "Remarks")
         competitorJson["remarks"] = "";
     else
         competitorJson["remarks"] = markus->text();

@@ -1,7 +1,7 @@
 #include "target.h"
 
 // old
-const QStringList Target::m_targetTypes = QStringList() << QString::fromLatin1("Õhupüss") << QString::fromLatin1("Õhupüstol") << QString::fromLatin1("Sportpüss");
+const QStringList Target::m_targetTypes = QStringList() << QString::fromLatin1("Air Rifle") << QString::fromLatin1("Air Pistol") << QString::fromLatin1("50m Rifle");
 
 Target::Target(QWidget* parent)
     : QLabel(parent)
@@ -10,7 +10,7 @@ Target::Target(QWidget* parent)
     m_targetPainter = nullptr;
     m_active = true;
     m_zoomEnabled = true;
-    //    lehetuubid << QString::fromLatin1("Õhupüss") << QString::fromLatin1("Õhupüstol") << QString::fromLatin1("Sportpüss");
+    //    lehetuubid << QString::fromLatin1("Air Rifle") << QString::fromLatin1("Air Pistol") << QString::fromLatin1("50m Rifle");
 }
 
 Target::Target(int relv, QString n, QString r, QWidget* parent)

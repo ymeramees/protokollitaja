@@ -2,7 +2,7 @@
 
 SpectatorWindow::SpectatorWindow(QWidget *parent) : QWidget(parent), targetsBox(new QGridLayout)
 {
-    resultsView.setText(tr("Finaali tulemused"));
+    resultsView.setText(tr("Finals results"));
     resultsView.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     
     vBox.addWidget(&resultsView, 1);   // stretch factor 1 - take half
@@ -155,7 +155,7 @@ void SpectatorWindow::initializeTemplates()
         }
     }else {
         QFile::copy(":/spectatorView_template.html", "spectatorView_template.html");
-        QMessageBox::warning(this, tr("Teade"), tr("Tulemuste akna template faili ei leitud!\nProgramm lõi uue, vaikimisi seadistustega."), QMessageBox::Ok);
+        QMessageBox::warning(this, tr("Info"), tr("Spectator view template file not found!\nThe program created a new one with default settings."), QMessageBox::Ok);
     }
 }
 

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>RangeControl/SiusData ühendused</string>
+   <string>Connections</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -26,7 +26,7 @@
      <item row="0" column="2">
       <widget class="QPushButton" name="connectButton">
        <property name="text">
-        <string>Ühendu</string>
+        <string>Connect</string>
        </property>
       </widget>
      </item>
@@ -40,7 +40,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="aadressSilt">
        <property name="text">
-        <string>Aadress:</string>
+        <string>Address:</string>
        </property>
       </widget>
      </item>
@@ -54,7 +54,7 @@
      <item row="1" column="2">
       <widget class="QPushButton" name="cancelButton">
        <property name="text">
-        <string>Loobu</string>
+        <string>Cancel</string>
        </property>
       </widget>
      </item>
@@ -69,7 +69,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Olemasolevad ühendused</string>
+      <string>Existing Connections</string>
      </property>
     </widget>
    </item>

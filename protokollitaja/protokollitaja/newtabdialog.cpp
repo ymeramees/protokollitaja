@@ -42,7 +42,7 @@ void NewTabDialog::changeScreenName(int)
         QString laskjad = AgeClasses::ageClassName((AgeClasses::AgeClass)ui.laskjad->currentIndex()).name;
 
         if (ui.indBox->currentIndex() == 0) {
-            ui.seeriateSilt->setText(tr("Seeriate arv:"));
+            ui.seeriateSilt->setText(tr("Series Count:"));
             ui.seeriateArv->setMaximum(12);
             ui.kumnendikegaBox->setVisible(true);
             ui.kumnendikegaBox->setCheckable(true);
@@ -68,7 +68,7 @@ void NewTabDialog::changeScreenName(int)
             // Overcomplicated, but meant to be future proof in case we allow manual edits to event names
             ui.nimiTulAknas->setText(QualificationEvents::eventData(QualificationEvents::fromEventName(ui.harjutus->currentText())).name + " " + laskjad);
         } else {
-            ui.seeriateSilt->setText(tr("Liikmete arv:"));
+            ui.seeriateSilt->setText(tr("Members count:"));
             ui.seeriateArv->setMaximum(18);
             ui.seeriateSilt->setVisible(true);
             ui.seeriateArv->setVisible(true);
@@ -85,8 +85,8 @@ void NewTabDialog::changeScreenName(int)
 
 void NewTabDialog::close()
 {
-    if (ui.sakiNimi->text() == tr("uus tööleht")) {
-        if(QMessageBox::warning(this, "Protokollitaja", tr("Oled kindel, et soovid töölehe nimeks jätta uus tööleht?"),
+    if (ui.sakiNimi->text() == tr("New Tab")) {
+        if(QMessageBox::warning(this, "Protokollitaja", tr("Are you sure you want to name new tab \"New Tab\"?"),
             QMessageBox::Yes | QMessageBox::No, QMessageBox::No)==QMessageBox::Yes)
         accept();
     } else accept();

@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Lisalasud</string>
+   <string>Shoot-off Shots</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" rowspan="5" colspan="2">
@@ -23,28 +23,28 @@
    <item row="0" column="2">
     <widget class="QPushButton" name="lisaNupp">
      <property name="text">
-      <string>Lisa</string>
+      <string>Add</string>
      </property>
     </widget>
    </item>
    <item row="1" column="2">
     <widget class="QPushButton" name="eemaldaNupp">
      <property name="text">
-      <string>Eemalda</string>
+      <string>Remove</string>
      </property>
     </widget>
    </item>
    <item row="2" column="2">
     <widget class="QPushButton" name="ulesNupp">
      <property name="text">
-      <string>Üles</string>
+      <string>Up</string>
      </property>
     </widget>
    </item>
    <item row="3" column="2">
     <widget class="QPushButton" name="allaNupp">
      <property name="text">
-      <string>Alla</string>
+      <string>Down</string>
      </property>
     </widget>
    </item>
@@ -77,14 +77,14 @@
    <item row="5" column="1">
     <widget class="QPushButton" name="olguNupp">
      <property name="text">
-      <string>Olgu</string>
+      <string>OK</string>
      </property>
     </widget>
    </item>
    <item row="5" column="2">
     <widget class="QPushButton" name="loobuNupp">
      <property name="text">
-      <string>Loobu</string>
+      <string>Cancel</string>
      </property>
     </widget>
    </item>

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Võistkonna liikmed</string>
+   <string>Team Members</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -21,7 +21,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Laskurid lehel:</string>
+          <string>Competitors from tab:</string>
          </property>
         </widget>
        </item>
@@ -102,7 +102,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Laskurid võistkonnas:</string>
+          <string>Competitors in the team:</string>
          </property>
         </widget>
        </item>
@@ -151,7 +151,7 @@
      <item>
       <widget class="QPushButton" name="olguNupp">
        <property name="text">
-        <string>Olgu</string>
+        <string>OK</string>
        </property>
       </widget>
      </item>

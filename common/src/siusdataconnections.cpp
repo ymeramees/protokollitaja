@@ -80,5 +80,5 @@ void SiusDataConnections::sendDataToRangeControl(QString data)
         }
 
     if (!sent)
-        emit errorInfo(tr("Aktiivseid ühendusi ei leitud! Ei saanud infot saata!"));
+        emit errorInfo(tr("No active connections! Could not send data!"));
 }

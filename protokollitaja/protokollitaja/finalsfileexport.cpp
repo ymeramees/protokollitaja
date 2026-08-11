@@ -25,7 +25,7 @@ FinalsFileExport::FinalsFileExport(QVector<QStringList> inputTable, QString comp
     ui->finalsCompetitorsTable->setColumnWidth(0, 70);
     ui->finalsCompetitorsTable->setColumnWidth(1, 70);
     QStringList headers;
-    headers << tr("Raja nr") << tr("ID") << tr("Nimi") << tr("Tulemus");
+    headers << tr("Target No") << tr("ID") << tr("Name") << tr("Result");
     ui->finalsCompetitorsTable->setHorizontalHeaderLabels(headers);
 
     //Each "row" in inputTable: target, ID, screen name, result, first name, name, club
@@ -110,7 +110,7 @@ bool FinalsFileExport::sortCompetitors()
             targetNumbersExist = false;
     }
     if(!targetNumbersExist){
-        QMessageBox::warning(this, "Protokollitaja", tr("Kõigil laskuritel ei ole rada märgitud! Lisage numbrid (tähed) käsitsi või kasutage loosimise funktsiooni."), QMessageBox::Ok);
+        QMessageBox::warning(this, "Protokollitaja", tr("All competitors don't have target number assigned! Add target numbers (or letters) manually or use random allocation function."), QMessageBox::Ok);
         return false;
     }
 
@@ -150,13 +150,12 @@ bool FinalsFileExport::writeFinalsFile()
     finalsObj["timePlace"] = m_timeAndPlace;
 
     QString fileLocation = m_competitionFileLocation.left(m_competitionFileLocation.lastIndexOf('/') + 1);
-    finalsFileName = QFileDialog::getSaveFileName(this, tr("Salvesta finaal"), fileLocation + m_eventName + ".fin", tr("Protofinaali fail (*.fin)"));
+    finalsFileName = QFileDialog::getSaveFileName(this, tr("Save final"), fileLocation + m_eventName + ".fin", tr("Protofinaal file (*.fin)"));
     if(finalsFileName.isEmpty()) return false;
 
     QFile file(finalsFileName);
     if(file.open(QIODevice::ReadOnly))
-        if(QMessageBox::critical(this, "Protokollitaja", tr("Sellise nimega fail on juba olemas. Kas "
-                "soovite selle üle kirjutada?"), QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel){
+        if(QMessageBox::critical(this, "Protokollitaja", tr("A file with this name already exists. Do you want to overwrite it?"), QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel){
             finalsFileName.clear();
             return false;
         }
@@ -183,8 +182,7 @@ bool FinalsFileExport::writeFinalsFile()
         file.write(jsonDoc.toJson());
         file.close();
     } else {
-        QMessageBox::critical(this, "Protokollitaja", tr("Ei õnnestu finaali faili luua! Kontrollige, "
-                              "kas teil on sinna kausta kirjutamise õigused"), QMessageBox::Ok);
+        QMessageBox::critical(this, "Protokollitaja", tr("Unable to create Finaal file! Check that you have permissions to write to the folder"), QMessageBox::Ok);
         finalsFileName.clear();
         return false;
     }

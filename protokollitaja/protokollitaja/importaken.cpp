@@ -35,7 +35,7 @@ void ImportAken::fromFile()
 {
     QString fileName = QFileDialog::getOpenFileName(
                 this,
-                tr("Impordi..."),
+                tr("Import..."),
                 "",
                 tr("Protokollitaja files (*.kll);;Text files (*.txt);;Comma separated files (*.csv"));
     if(fileName.isEmpty()) return;
@@ -44,7 +44,7 @@ void ImportAken::fromFile()
         if(fail.open(QIODevice::ReadOnly | QIODevice::Text)){
             QTextStream sisse(&fail);
             if(leht == nullptr){
-                leht = new Leht(0, 6, 0, 0, &kirjutusabi, tr("Ekraaninimi"), TargetTypes::Other, QualificationEvents::OtherAirRifle, 0, 0, this);
+                leht = new Leht(0, 6, 0, 0, &kirjutusabi, tr("Screen Name"), TargetTypes::Other, QualificationEvents::OtherAirRifle, 0, 0, this);
                 ui.scrollArea->setWidget(leht);
             }
             int vSummadeSamm = 0;
@@ -165,16 +165,15 @@ void ImportAken::fromFile()
     } else if (fileName.endsWith(".kll")) {
         fromKllFile(fileName);
     } else {
-        QMessageBox::critical(this, "Protokollitaja", tr("Tundmatu laiendiga fail. Importimine pole kahjuks "
-                                                         "võimalik."), QMessageBox::Ok);
+        QMessageBox::critical(this, "Protokollitaja", tr("Unknown file extension. Importing is not possible."), QMessageBox::Ok);
     }
 }
 
 void ImportAken::fromClipboard()
 {
-    QMessageBox::warning(this, "Protokollitaja", tr("Kas teil .kll faili ei ole? Sealt importimisel (Failist... nupp) tuleb rohkem infot üle, kui vahemälust importimisel."), QMessageBox::Ok);
+    QMessageBox::warning(this, "Protokollitaja", tr("Don't you have a kll file? Importing from kll file brings more data than from clipboard."), QMessageBox::Ok);
     if(leht == nullptr){
-        leht = new Leht(0, 6, 0, 0, &kirjutusabi, tr("Ekraaninimi"), TargetTypes::Other, QualificationEvents::OtherAirRifle, 0, 0, this);
+        leht = new Leht(0, 6, 0, 0, &kirjutusabi, tr("Screen Name"), TargetTypes::Other, QualificationEvents::OtherAirRifle, 0, 0, this);
         ui.scrollArea->setWidget(leht);
     }
 
@@ -316,7 +315,7 @@ void ImportAken::fromKllFile(QString fileName)
             }
         }
         bool ok;
-        QString chosenTab = QInputDialog::getItem(this, tr("Vali leht"), tr("Leht millelt importida:"), tabNames, 0, false, &ok);
+        QString chosenTab = QInputDialog::getItem(this, tr("Choose tab"), tr("Tab to import from:"), tabNames, 0, false, &ok);
 
         if (ok && !chosenTab.isEmpty()){
             int selectedIndex = tabNames.indexOf(chosenTab);
@@ -325,7 +324,7 @@ void ImportAken::fromKllFile(QString fileName)
 
             if (sheet != 0) {
                 if(leht == nullptr){
-                            leht = new Leht(0, sheet->seeriateArv, sheet->vSummadeSamm, 0, &kirjutusabi, tr("Ekraaninimi"), sheet->m_targetType, sheet->eventType(), 0, 0, this);
+                            leht = new Leht(0, sheet->seeriateArv, sheet->vSummadeSamm, 0, &kirjutusabi, tr("Screen Name"), sheet->m_targetType, sheet->eventType(), 0, 0, this);
                     ui.scrollArea->setWidget(leht);
                 }
 

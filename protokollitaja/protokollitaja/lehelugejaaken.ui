@@ -46,7 +46,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Siia tuleb märkleht :)</string>
+          <string>Target sheet goes here :)</string>
          </property>
         </widget>
        </item>
@@ -279,7 +279,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="sifriLabel">
          <property name="text">
-          <string>Siffer</string>
+          <string>Paper target numbers range</string>
          </property>
         </widget>
        </item>
@@ -329,7 +329,7 @@
        <item row="2" column="2">
         <widget class="QPushButton" name="sulgeUhendusNupp">
          <property name="text">
-          <string>Sulge ühendus</string>
+          <string>Close Connection</string>
          </property>
         </widget>
        </item>
@@ -356,14 +356,14 @@
        <item row="2" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>Laskude arv lehes:</string>
+          <string>Shots per Target:</string>
          </property>
         </widget>
        </item>
        <item row="2" column="4">
         <widget class="QToolButton" name="peida2Nupp">
          <property name="toolTip">
-          <string>Näitab rohkem nuppe</string>
+          <string>Shows more buttons</string>
          </property>
          <property name="text">
           <string>&gt;&gt;</string>
@@ -441,17 +441,17 @@
         <widget class="QComboBox" name="leheCombo">
          <item>
           <property name="text">
-           <string>Õhupüss</string>
+           <string>Air Rifle</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Õhupüstol</string>
+           <string>Air Pistol</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Sportpüss</string>
+           <string>50m Rifle</string>
           </property>
          </item>
         </widget>
@@ -459,7 +459,7 @@
        <item row="3" column="1">
         <widget class="QCheckBox" name="kumnendikegaBox">
          <property name="text">
-          <string>Loe kümnendikega</string>
+          <string>Read with decimals</string>
          </property>
         </widget>
        </item>
@@ -476,7 +476,7 @@
        <item row="0" column="4">
         <widget class="QPushButton" name="otsiCOMNupp">
          <property name="text">
-          <string>Otsi ja ühenda</string>
+          <string>Find and connect</string>
          </property>
         </widget>
        </item>

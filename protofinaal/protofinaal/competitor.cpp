@@ -68,7 +68,7 @@ Competitor::Competitor(const QJsonObject &json, const bool scoringWithPoints, QW
         QTextStream(stdout) << "Competitor::Competitor(QJsonObject), json[Series].size = " << json["series"].toArray().size() << Qt::endl;
     if(!(json.contains("nameEdit") && json["nameEdit"].isString()) ||
             !(json.contains("series") && json["series"].isArray())){
-        QMessageBox::critical(this, tr("Viga!"), tr("Vigane fail!"));
+        QMessageBox::critical(this, tr("Error!"), tr("Broken file!"));
         return;
     }
 
@@ -316,9 +316,9 @@ QString Competitor::total() const
 
 void Competitor::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    int newID = QInputDialog::getInt(this, tr("Võistleja ID muutmine"), tr("Sisestage uus ID:"), m_id, 0);
+    int newID = QInputDialog::getInt(this, tr("Edit competitor ID"), tr("Enter new ID:"), m_id, 0);
     if(m_id != newID){
-        emit statusInfo(QString(tr("Võistleja ID muudetud, vana: %1 => uus: %2")).arg(m_id).arg(newID));
+        emit statusInfo(QString(tr("Competitor ID changed, old: %1 => new: %2")).arg(m_id).arg(newID));
         setId(newID);
         emit modified();
     }
@@ -427,8 +427,8 @@ bool Competitor::setShot(int shotNo, Lask newShot)
         sum();
         return true;
     } else {
-        QMessageBox::critical(this, tr("Viga"), tr("Laskude arv suurem, kui võimalik! Lask ei läinud kirja!"), QMessageBox::Ok);
-        emit statusInfo(m_nameEdit.text() + tr("Laskude arv suurem, kui võimalik! Lask ei läinud kirja!"));
+        QMessageBox::critical(this, tr("Error"), tr("More shots than possible! Shot was not recorded!"), QMessageBox::Ok);
+        emit statusInfo(m_nameEdit.text() + tr("More shots than possible! Shot was not recorded!"));
         return false;
     }
 }
@@ -438,8 +438,8 @@ void Competitor::setShot(int shotNo, QString siusRow)
     if(shotNo < m_shots.size())
         m_shots.at(shotNo)->setSiusShot(siusRow);
     else{
-        QMessageBox::critical(this, tr("Viga"), tr("Laskude arv suurem, kui võimalik! Lask ei läinud kirja!"), QMessageBox::Ok);
-        emit statusInfo(m_nameEdit.text() + tr("Laskude arv suurem, kui võimalik! Lask ei läinud kirja!"));
+        QMessageBox::critical(this, tr("Error"), tr("More shots than possible! Shot was not recorded!"), QMessageBox::Ok);
+        emit statusInfo(m_nameEdit.text() + tr("More shots than possible! Shot was not recorded!"));
     }
 }
 
@@ -450,15 +450,15 @@ void Competitor::setupCompetitor(QHBoxLayout *layout, bool active, int id, QStri
     layout->addWidget(&m_active);
 
     m_id = id;
-    m_idLabel.setToolTip(tr("Võistleja ID"));
+    m_idLabel.setToolTip(tr("Competitor ID"));
     m_idLabel.setText(QString("%1").arg(m_id));
     m_idLabel.installEventFilter(this);
     layout->addWidget(&m_idLabel);
 
     m_nameEdit.setMinimumWidth(100);
     m_nameEdit.setMinimumHeight(22);
-    m_nameEdit.setToolTip(tr("Võistleja nimi"));
-    m_nameEdit.setPlaceholderText(tr("Nimi"));
+    m_nameEdit.setToolTip(tr("Competitor name"));
+    m_nameEdit.setPlaceholderText(tr("Name"));
     m_nameEdit.setText(name);
     connect(&m_nameEdit, &QLineEdit::editingFinished, this, &Competitor::modified);
     layout->addWidget(&m_nameEdit);
@@ -466,15 +466,15 @@ void Competitor::setupCompetitor(QHBoxLayout *layout, bool active, int id, QStri
     m_resultEdit.setMinimumWidth(35);
     m_resultEdit.setMaximumWidth(55);
     m_resultEdit.setMinimumHeight(22);
-    m_resultEdit.setToolTip(tr("Tulemus"));
-    m_resultEdit.setPlaceholderText(tr("Tulemus"));
+    m_resultEdit.setToolTip(tr("Result"));
+    m_resultEdit.setPlaceholderText(tr("Result"));
     m_resultEdit.setText(result);
     connect(&m_resultEdit, &QLineEdit::editingFinished, this, &Competitor::modified);
     layout->addWidget(&m_resultEdit);
 
     m_siusOffset.setMaximumWidth(45);
     m_siusOffset.setMinimum(-99);
-    m_siusOffset.setToolTip(tr("Arv, mille võrra Siusist tulnud lasud on nihkes"));
+    m_siusOffset.setToolTip(tr("Number by which Sius shots are offset"));
     layout->addWidget(&m_siusOffset);
 
     m_scoringWithPoints = scoringWithPoints;

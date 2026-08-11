@@ -14,7 +14,7 @@ ProtolehelugejaConnection::ProtolehelugejaConnection(QTcpSocket *parent) : QObje
 
     while(passwd < 1000)
         passwd = QRandomGenerator::global()->generate() % 9999;    //Password is needed to make sure it is not too easy to connect and start inserting results
-    messageBox.setText(tr("Serverisse on loodud uus ühendus.\n\nParool: %1").arg(passwd));
+    messageBox.setText(tr("New incoming connection.\n\nPin: %1").arg(passwd));
     messageBox.show();
 }
 
@@ -92,25 +92,25 @@ void ProtolehelugejaConnection::readData()
             passwd = 0;
             send("OK");
         }
-        else{ QMessageBox::information(dynamic_cast<QWidget*>(this->parent()), tr("Teade"), tr("Keegi proovis ühenduda vale parooliga! Ühendust ei loodud!"), QMessageBox::Ok);
+        else{ QMessageBox::information(dynamic_cast<QWidget*>(this->parent()), tr("Info"), tr("Someone tried to connect with incorrect pin! Connection not established!"), QMessageBox::Ok);
             socket->disconnect();
         }
         return;
     }
 
     if(lineIn == "Tere"){    //Confirmation of establishing the connection
-        messageBox.setText(tr("Ühendus loodud"));
+        messageBox.setText(tr("Connection established"));
         messageBox.show();
         return;
     }else if(lineIn.startsWith("Versioon:")){    //Version of the connection protocol between Protokollitaja and Protolehelugeja
         lineIn.remove(0, 9);
         if(lineIn.toInt() > 4){
-            send(tr("Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!\nProtokollitaja on uuem, seega on vaja uuendada Protolehelugejat või mõlemaid."));
+            send(tr("Error:Protokollitaja ja Protolehelugeja versions are different!\nProtokollitaja is newer, therefore need to update Protolehelugeja or both."));
             authorized = false;
             socket->disconnect();
         }
         else if(lineIn.toInt() < 4){
-            send(tr("Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!\nProtolehelugeja on uuem, seega on vaja uuendada Protokollitajat"));
+            send(tr("Error:Protokollitaja ja Protolehelugeja versions are different!\nProtolehelugeja is newer, therefore need to update Protokollitaja or both"));
             authorized = false;
             socket->disconnect();
         }else send("Versioon OK");

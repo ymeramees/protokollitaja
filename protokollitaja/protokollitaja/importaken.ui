@@ -24,7 +24,7 @@
         </size>
        </property>
        <property name="title" >
-        <string>Eraldajad</string>
+        <string>Separators</string>
        </property>
        <layout class="QGridLayout" name="gridLayout" >
         <item row="0" column="0" >
@@ -40,21 +40,21 @@
         <item rowspan="2" row="0" column="1" >
          <widget class="QCheckBox" name="checkBoxKoma" >
           <property name="text" >
-           <string>koma (,)</string>
+           <string>comma (,)</string>
           </property>
          </widget>
         </item>
         <item rowspan="2" row="1" column="0" >
          <widget class="QCheckBox" name="checkBoxTuhik" >
           <property name="text" >
-           <string>tühik</string>
+           <string>space</string>
           </property>
          </widget>
         </item>
         <item row="2" column="1" >
          <widget class="QCheckBox" name="checkBoxSemik" >
           <property name="text" >
-           <string>semikoolon (;)</string>
+           <string>semicolon (;)</string>
           </property>
           <property name="checked" >
            <bool>true</bool>
@@ -64,7 +64,7 @@
         <item row="3" column="0" >
          <widget class="QCheckBox" name="checkBoxPunkt" >
           <property name="text" >
-           <string>punkt (.)</string>
+           <string>dot (.)</string>
           </property>
          </widget>
         </item>
@@ -73,7 +73,7 @@
           <item>
            <widget class="QLabel" name="label" >
             <property name="text" >
-             <string>muu:</string>
+             <string>other:</string>
             </property>
            </widget>
           </item>
@@ -92,7 +92,7 @@
          <item>
           <widget class="QLabel" name="label_2" >
            <property name="text" >
-            <string>Vali leht millele importida:</string>
+            <string>Choose a tab to import to:</string>
            </property>
           </widget>
          </item>
@@ -104,28 +104,28 @@
        <item row="0" column="2" >
         <widget class="QPushButton" name="okNupp" >
          <property name="text" >
-          <string>Impordi</string>
+          <string>Import</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0" >
         <widget class="QPushButton" name="failistNupp" >
          <property name="text" >
-          <string>Failist...</string>
+          <string>From file...</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1" >
         <widget class="QPushButton" name="maluNupp" >
          <property name="text" >
-          <string>Vahemälust</string>
+          <string>From clipboard</string>
          </property>
         </widget>
        </item>
        <item row="1" column="2" >
         <widget class="QPushButton" name="loobuNupp" >
          <property name="text" >
-          <string>Loobu</string>
+          <string>Cancel</string>
          </property>
         </widget>
        </item>

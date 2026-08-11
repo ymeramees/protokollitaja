@@ -29,7 +29,7 @@ LaskudeAken::LaskudeAken(bool kum, int s, int ls, QWidget *parent) :
     connect(ui->paremaleNupp, SIGNAL(clicked()), this, SLOT(paremale()));
     connect(ui->vasakuleNupp, SIGNAL(clicked()), this, SLOT(vasakule()));
     QStringList pais;
-    pais << tr("Lask") << "X" << "Y" << tr("Sisekümme");
+    pais << tr("Shot") << "X" << "Y" << tr("Inner Ten");
     ui->laskudeTabel->setColumnCount(4);
     ui->laskudeTabel->setHorizontalHeaderLabels(pais);
     ui->laskudeTabel->setColumnWidth(0, 40);
@@ -49,7 +49,7 @@ LaskudeAken::LaskudeAken(bool kum, int s, int ls, QWidget *parent) :
             ui->laskudeTabel->item(i, 3)->setCheckState(Qt::Unchecked);
     }
     ui->karistusEdit->setText(lasud[0][lasud[aktiivneSeeria].count() - 1]->getSLask());
-    ui->seeriaSilt->setText(tr("1. seeria"));
+    ui->seeriaSilt->setText(tr("1. series"));
     ui->vasakuleNupp->setEnabled(false);
 }
 
@@ -77,7 +77,7 @@ void LaskudeAken::kirjutaLasud()    //Kirjutab tabelis olevad lasud seeriasse
             else if(!onnestus && ui->laskudeTabel->item(i, 0)->text().contains('.'))
                 lask = ui->laskudeTabel->item(i, 0)->text().replace('.', ',').toFloat(&onnestus);
             if(!onnestus){
-                QMessageBox::critical(this, tr("Viga"), tr("Vigane lasu väärtus tabelis!"), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Error"), tr("Faulty shot value in the table!"), QMessageBox::Ok);
                 return;
             }
             lasud[aktiivneSeeria][i]->setLask(lask);
@@ -114,7 +114,7 @@ void LaskudeAken::loeLasud()    //Loeb seeriast tabelisse uued lasud
     if(karistus.isEmpty() || karistus == "-999")
         karistus.clear();
     ui->karistusEdit->setText(karistus);
-    ui->seeriaSilt->setText(tr("%1. seeria").arg(aktiivneSeeria + 1));
+    ui->seeriaSilt->setText(tr("%1. series").arg(aktiivneSeeria + 1));
 }
 
 void LaskudeAken::muudaPealkirja(QString uus)

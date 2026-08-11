@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Shots</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QLabel" name="seeriaSilt">
      <property name="text">
-      <string>seeria</string>
+      <string>Series</string>
      </property>
     </widget>
    </item>
@@ -27,7 +27,7 @@
    <item row="2" column="0">
     <widget class="QLabel" name="karistusSilt">
      <property name="text">
-      <string>Karistus:</string>
+      <string>Deduction:</string>
      </property>
     </widget>
    </item>

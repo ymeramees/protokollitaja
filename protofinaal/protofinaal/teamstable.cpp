@@ -160,9 +160,9 @@ void TeamsTable::readSiusInfo(SiusShotData shotData)
                 emit shotReadForTarget(thisCompetitor->targetLetter(), shotData);
             if (success) {
                 emit modified();
-                emit statusInfoChanged(tr("Lisatud: %1%2%3 = %4").arg(thisCompetitor->name()).arg(tr(" lask ")).arg(shotData.siusShotNo).arg(shotData.shot.getSLask()));
+                emit statusInfoChanged(tr("Added: %1%2%3 = %4").arg(thisCompetitor->name()).arg(tr(" shot ")).arg(shotData.siusShotNo).arg(shotData.shot.getSLask()));
             } else
-                emit statusInfoChanged(tr("Viga, ei õnnestunud lisada: %1%2%3 = %4").arg(thisCompetitor->name()).arg(tr(" lask ")).arg(shotData.siusShotNo).arg(shotData.shot.getSLask()));
+                emit statusInfoChanged(tr("Error, failed to add: %1%2%3 = %4").arg(thisCompetitor->name()).arg(tr(" shot ")).arg(shotData.siusShotNo).arg(shotData.shot.getSLask()));
         }
     }
     //            if(row.startsWith("_SHOT") && !competitionStarted){   //Shot data, sighting shots
@@ -201,7 +201,7 @@ void TeamsTable::readSiusInfo(SiusShotData shotData)
     //            }
     //        }
     if (thisCompetitor == nullptr)
-        statusInfoChanged(tr("Sellise ID'ga võistlejat ei leitud: %1").arg(shotData.id));
+        statusInfoChanged(tr("No competitor found with such ID: %1").arg(shotData.id));
 //    }
     // sumAllTeams();
 }

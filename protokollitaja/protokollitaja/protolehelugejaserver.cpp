@@ -18,7 +18,7 @@ ProtolehelugejaServer::~ProtolehelugejaServer()
 
 void ProtolehelugejaServer::closeConnection(int socketIndex)
 {
-    QMessageBox::warning(dynamic_cast<QWidget*>(this->parent()), tr("Teade"), tr("Protolehelugeja %1 ühendus katkes!").arg(socketIndex), QMessageBox::Ok);
+    QMessageBox::warning(dynamic_cast<QWidget*>(this->parent()), tr("Info"), tr("Protolehelugeja connection %1 lost!").arg(socketIndex), QMessageBox::Ok);
     sockets.at(socketIndex)->deleteLater();
     sockets.removeAt(socketIndex);
 
@@ -80,5 +80,5 @@ void ProtolehelugejaServer::send(QString data, int socketIndex)
     if(sockets.length() > socketIndex)
         sockets.at(socketIndex)->send(data);
     else
-        QMessageBox::warning(dynamic_cast<QWidget*>(this->parent()), tr("Viga"), tr("Protolehelugeja aadress vale! Ei saa vastust saata!\n\nVõimalik, et mõni ühendus on vahepeal katkenud."), QMessageBox::Ok);
+        QMessageBox::warning(dynamic_cast<QWidget*>(this->parent()), tr("Error"), tr("Protolehelugeja address is incorrect! Cannot send the reply!\n\nIt is possible that some connection has been lost."), QMessageBox::Ok);
 }

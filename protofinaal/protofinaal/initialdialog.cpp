@@ -50,7 +50,7 @@ void InitialDialog::forward()
             QMessageBox(
                         QMessageBox::Icon::Critical,
                         "Protofinaal",
-                        tr("Mõlemad lahtrid peavad olema täidetud!\n\nUue võistluse tegemiseks vajutage \"Uus\" nupule"),
+                        tr("Both fields must be filled in!\n\nTo create a new competition press the \"New\" button"),
                         QMessageBox::Ok,
                         this
                         ).exec();
@@ -61,7 +61,7 @@ void InitialDialog::forward()
 
 void InitialDialog::newFile()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Salvesta uus fail"), ui->fileNameEdit->text(), tr("Protofinaali fail (*.fin)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save new file"), ui->fileNameEdit->text(), tr("Protofinaal file (*.fin)"));
     if(!fileName.isEmpty()){
         ui->fileNameEdit->setText(fileName);
         ui->competitionNameEdit->setReadOnly(false);
@@ -72,7 +72,7 @@ void InitialDialog::newFile()
 
 void InitialDialog::openFile()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Ava fail"), ui->fileNameEdit->text(), tr("Protofinaali fail (*.fin)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open file"), ui->fileNameEdit->text(), tr("Protofinaal file (*.fin)"));
     if(!fileName.isEmpty()){
         ui->fileNameEdit->setText(fileName);
         ui->competitionNameEdit->setReadOnly(true);

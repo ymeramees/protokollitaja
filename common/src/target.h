@@ -30,7 +30,7 @@ private:
     QString m_name;
     QString m_targetNo;
     QString m_result;
-    static const QStringList m_targetTypes;// = QStringList() << QString::fromLatin1("Õhupüss") << QString::fromLatin1("Õhupüstol") << QString::fromLatin1("Sportpüss");
+    static const QStringList m_targetTypes;// = QStringList() << QString::fromLatin1("Air Rifle") << QString::fromLatin1("Air Pistol") << QString::fromLatin1("50m Rifle");
 
 private slots:
 //    void mouseReleaseEvent(QMouseEvent * event);

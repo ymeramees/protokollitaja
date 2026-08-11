@@ -265,7 +265,7 @@ void LehelugejaAken::loe()
             buffer.remove(0, buffer.indexOf(CR) + 1);
         }else return;
 
-        m_ui.logi->append(tr("vastuvõtt:"));
+        m_ui.logi->append(tr("received:"));
 
         if(!tekst.contains("START") && !tekst.contains("SCHEIBE") && !tekst.contains("Keine") && tekst.contains(';'))
             m_ui.logi->append(tr("     %1. lask").arg(lask + 1));
@@ -277,7 +277,7 @@ void LehelugejaAken::loe()
         if(!tekst.contains("TART") && !tekst.contains("SCHEIBE") && !tekst.contains("Keine") && tekst.contains(';')){
                 QStringList list = tekst.split(';', Qt::KeepEmptyParts);
                 if(list.size() < 5){
-                    m_ui.logi->append(tr("See rida oli liiga lühike!"));
+                    m_ui.logi->append(tr("This line was too short!"));
                     return;
                 }
                 int x = 0, y = 0, il = 0;
@@ -439,7 +439,7 @@ void LehelugejaAken::loe()
                             lasud[aktiivseSeeriaNr][i]->set(seeriaLasud[i]);
                         m_ui.logi->append(m_ui.nimeBox->currentText() + QString(" %1. seeria: %2").arg(aktiivneSeeria->objectName().at(6)).arg(fl / 10));
                     }else{
-                        QMessageBox::critical(this, tr("Viga"), tr("Puudus aktiivne seeria kast!"), QMessageBox::Ok);
+                        QMessageBox::critical(this, tr("Error"), tr("Puudus aktiivne seeria kast!"), QMessageBox::Ok);
                         m_ui.logi->append(tr("Viga!:") + m_ui.nimeBox->currentText() + tr(" tundmatu seeria: %1").arg(fl / 10));
                     }
                     /*for(int k = 0; k < seeriad.count(); k++)
@@ -463,7 +463,7 @@ void LehelugejaAken::loe()
                     seadistaja->start();
                 }
                 if(oliKahtlane){ //Kui on vaja kontrollida, viskab teate
-                    QMessageBox::warning(this, tr("Teade"), tr("Lehes olid kahtlased lasud, vaja kontrollida ning "
+                    QMessageBox::warning(this, tr("Info"), tr("Lehes olid kahtlased lasud, vaja kontrollida ning "
                             "seejärel kaks korda Neustart vajutada. Alles siis vajutage siin \"OK\""), QMessageBox::Ok);
                     oliKahtlane = false;
                 }

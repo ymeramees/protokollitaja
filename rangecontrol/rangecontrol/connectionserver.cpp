@@ -133,7 +133,7 @@ void ConnectionServer::sendFromQueue(const int target, const QString ip)
 void ConnectionServer::sendInbandBroadcast(int target)
 {
     Utils::sendInbandBroadcast(QString("%1").arg(target));
-    emit info(tr("Kadunud InBandi IP küsimus saadetud"));
+    emit info(tr("Lost InBand IP query sent"));
 }
 
 void ConnectionServer::sendMessage(const int target, const QString ip, QString message)

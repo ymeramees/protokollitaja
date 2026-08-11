@@ -12,7 +12,7 @@ CompetitionSettings SimpleKllFileRW::readCompetitionSettings(QDataStream *inStre
     *inStream >> checkPattern >> version;
     competitionSettings.fileVersion = version;
     if(checkPattern != 0x00FA3848) {
-        QMessageBox::critical(parent, tr("Protokollitaja"), tr("Vigane või vale fail!"), QMessageBox::Ok);
+        QMessageBox::critical(parent, tr("Protokollitaja"), tr("Wrong or broken file!"), QMessageBox::Ok);
     } else if(version >= 100 && version <= 112) {
         *inStream >> competitionSettings.competitionName;
         competitionSettings.startDate = QDate(2000, 1, 1);
@@ -29,7 +29,7 @@ CompetitionSettings SimpleKllFileRW::readCompetitionSettings(QDataStream *inStre
     } else QMessageBox::critical(
                 parent,
                 tr("Protokollitaja"),
-                tr("Vale versiooni fail!\n\nVõimalik, et tegu on uuema programmi versiooni failiga.\n\n(KllFileRW::readCompetitionSettingsFromKll())"),
+                tr("Wrong file version!\n\nIt could be a newer version's file.\n\n(KllFileRW::readCompetitionSettingsFromKll())"),
                 QMessageBox::Ok
                 );
     return competitionSettings;
@@ -44,7 +44,7 @@ CompetitionSettings SimpleKllFileRW::readCompetitionSettingsFromKll(QString file
         QDataStream in(&file);
         competitionSettings = readCompetitionSettings(&in, parent);
     } else if (!fileName.isEmpty())
-        QMessageBox::critical(parent, tr("Protokollitaja"), tr("Ei leia faili!"), QMessageBox::Ok);
+        QMessageBox::critical(parent, tr("Protokollitaja"), tr("Cannot find the file!"), QMessageBox::Ok);
     QApplication::restoreOverrideCursor();
 
     competitionSettings.fileName = fileName;
@@ -72,7 +72,7 @@ bool SimpleKllFileRW::writeInitialKll(QString fileName, CompetitionSettings data
         QMessageBox::critical(
                 parent,
                 "Protokollitaja",
-                tr("Ei õnnestu faili luua. Kontrollige kas teil on sinna kausta kirjutamise õigus."),
+                tr("Unable to create the file. Make sure you have write permissions to that folder."),
                 QMessageBox::Ok
                 );
         return false;

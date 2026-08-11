@@ -107,9 +107,9 @@ void XLSExportService::writeHeader(
     sheet->colwidth(0, 32*38);  // Rank
     sheet->colwidth(1, 32*180); // Name
 
-    sheet->label(row, 0, "Koht")->font(underlineFont);
+    sheet->label(row, 0, "Place")->font(underlineFont);
     sheet->FindCell(row, 0)->halign(xlslib_core::HALIGN_CENTER);
-    sheet->label(row, 1, "Nimi")->font(underlineFont);
+    sheet->label(row, 1, "Name")->font(underlineFont);
 
     int col = 2;
     int shotNumber = 1;

@@ -50,180 +50,180 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         udpSocket->bind(45743, QUdpSocket::ShareAddress);
         connect(udpSocket, SIGNAL(readyRead()), this, SLOT(loeBroadcast()));
 
-        uusAct = new QAction(QIcon(":/images/new.png"), tr("&Uus"), this);
+        uusAct = new QAction(QIcon(":/images/new.png"), tr("&New"), this);
         uusAct->setShortcut(tr("Ctrl+N"));
-        uusAct->setStatusTip(tr("Loob uue faili või avab vastava faili kui sellenimeline on juba olemas"));
+        uusAct->setStatusTip(tr("Creates new file or opens an existing one with this name"));
         connect(uusAct, SIGNAL(triggered()), this, SLOT(uus()));
-        avaAct = new QAction(QIcon(":/images/open.png"), tr("&Ava..."), this);
+        avaAct = new QAction(QIcon(":/images/open.png"), tr("&Open..."), this);
         avaAct->setShortcut(tr("Ctrl+o"));
-        avaAct->setStatusTip(tr("Ava fail"));
+        avaAct->setStatusTip(tr("Open file"));
         connect(avaAct, SIGNAL(triggered()), this, SLOT(ava()));
-        salvestaAct = new QAction(QIcon(":/images/save.png"), tr("&Salvesta"), this);
+        salvestaAct = new QAction(QIcon(":/images/save.png"), tr("&Save"), this);
         salvestaAct->setShortcut(tr("Ctrl+s"));
-        salvestaAct->setStatusTip(tr("Salvesta fail"));
+        salvestaAct->setStatusTip(tr("Save file"));
         connect(salvestaAct, SIGNAL(triggered()), this, SLOT(salvesta()));
-        salvestaKuiAct = new QAction(QIcon(":/images/save.png"), tr("&Salvesta nimega..."), this);
+        salvestaKuiAct = new QAction(QIcon(":/images/save.png"), tr("Save As..."), this);
         salvestaKuiAct->setShortcut(tr("Ctrl+a"));
-        salvestaKuiAct->setStatusTip(tr("Salvesta fail määratud nimega"));
+        salvestaKuiAct->setStatusTip(tr("Save file with different name"));
         connect(salvestaKuiAct, SIGNAL(triggered()), this, SLOT(salvestaKui()));
-        prindiAct = new QAction(QIcon(":/images/print.png"), tr("Print..."), this);
+        prindiAct = new QAction(QIcon(":/images/print.png"), tr("&Print..."), this);
         prindiAct->setShortcut(tr("Ctrl+p"));
-        prindiAct->setStatusTip(tr("Prindib selle lehe sisu"));
+        prindiAct->setStatusTip(tr("Prints data on this tab"));
 //#ifdef QT_DEBUG
 //        connect(prindiAct, SIGNAL(triggered()), this, SLOT(prindi2()));
 //#else
         connect(prindiAct, SIGNAL(triggered()), this, SLOT(prindi()));
 //#endif
-        eelvaadeAct = new QAction(QIcon(":/images/print.png"), tr("Lehekülje eelvaade"), this);
-        eelvaadeAct->setStatusTip(tr("Näitab selle lehekülje eelvaate"));
+        eelvaadeAct = new QAction(QIcon(":/images/print.png"), tr("Print Preview"), this);
+        eelvaadeAct->setStatusTip(tr("Shows this tab's print preview"));
         connect(eelvaadeAct, SIGNAL(triggered()), this, SLOT(eelvaade()));
-        valjuAct = new QAction(QIcon(":/images/exit.png"), tr("&Välju"), this);
+        valjuAct = new QAction(QIcon(":/images/exit.png"), tr("E&xit"), this);
         valjuAct->setShortcut(tr("Ctrl+q"));
-        valjuAct->setStatusTip(tr("Välju programmist"));
+        valjuAct->setStatusTip(tr("Exit from the program"));
         connect(valjuAct, SIGNAL(triggered()), this, SLOT(close()));
-        uusLaskurAct = new QAction(QIcon(":/images/uusLaskur.png"), tr("Uus &laskur"), this);
+        uusLaskurAct = new QAction(QIcon(":/images/uusLaskur.png"), tr("&New competitor"), this);
         uusLaskurAct->setShortcut(tr("Ctrl+u"));
-        uusLaskurAct->setStatusTip(tr("Loob uue laskuri rea"));
+        uusLaskurAct->setStatusTip(tr("Adds new competitor"));
         connect(uusLaskurAct, SIGNAL(triggered()), this, SLOT(uusLaskur()));
-        liigutaAct = new QAction(QIcon(":/images/teisaldaLaskur.png"), tr("&Teisalda valitud laskurid"), this);
-        liigutaAct->setStatusTip(tr("Viib valitud laskurite read teisele töölehele"));
+        liigutaAct = new QAction(QIcon(":/images/teisaldaLaskur.png"), tr("&Move selected competitors"), this);
+        liigutaAct->setStatusTip(tr("Moves selected competitors to another tab"));
         connect(liigutaAct, SIGNAL(triggered()), this, SLOT(liiguta()));
-        eemaldaLaskurAct = new QAction(QIcon(":/images/eemaldaLaskur.png"), tr("&Eemalda valitud laskurid"), this);
-        eemaldaLaskurAct->setStatusTip(tr("Eemaldab valitud laskurite read"));
+        eemaldaLaskurAct = new QAction(QIcon(":/images/eemaldaLaskur.png"), tr("&Remove selected competitors"), this);
+        eemaldaLaskurAct->setStatusTip(tr("Removes selected competitors"));
         connect(eemaldaLaskurAct, SIGNAL(triggered()), this, SLOT(eemaldaLaskur()));
-        uusTabAct = new QAction(QIcon(":/images/uusTab.png"), tr("Uus &tööleht"), this);
-        uusTabAct->setStatusTip(tr("Loob uue lehe"));
+        uusTabAct = new QAction(QIcon(":/images/uusTab.png"), tr("New Tab"), this);
+        uusTabAct->setStatusTip(tr("Creates new tab"));
         connect(uusTabAct, SIGNAL(triggered()), this, SLOT(uusTab()));
-        eemaldaTabAct = new QAction(QIcon(":/images/eemaldaTab.png"), tr("Eemalda see tööleht"), this);
-        eemaldaTabAct->setStatusTip(tr("Eemaldab aktiivse töölehe"));
+        eemaldaTabAct = new QAction(QIcon(":/images/eemaldaTab.png"), tr("Remove current tab"), this);
+        eemaldaTabAct->setStatusTip(tr("Removes current tab"));
         connect(eemaldaTabAct, SIGNAL(triggered()), this, SLOT(eemaldaTab()));
-        naitaTulAkenAct = new QAction(QIcon(":/images/tulemuse_aken.png"), tr("Tulemuste aken"), this);
-        naitaTulAkenAct->setStatusTip(tr("Avab tulemuste akna"));
+        naitaTulAkenAct = new QAction(QIcon(":/images/tulemuse_aken.png"), tr("Spectator View"), this);
+        naitaTulAkenAct->setStatusTip(tr("Opens the spectator view"));
         connect(naitaTulAkenAct, SIGNAL(triggered()), this, SLOT(naitaTulAken()));
         importAct = new QAction(QIcon(":/images/import.png"), tr("Import..."), this);
-        importAct->setStatusTip(tr("Impordib sellele lehele tulemused .txt või .csv failist"));
+        importAct->setStatusTip(tr("Imports results to this tab from .kll, .txt or .csv file"));
         connect(importAct, SIGNAL(triggered()), this, SLOT(import()));
-        eksportTXTAct = new QAction(QIcon(":/images/eksport.png"), tr("Eksport txt..."), this);
-        eksportTXTAct->setStatusTip(tr("Ekspordib selle lehe tulemused .txt faili"));
+        eksportTXTAct = new QAction(QIcon(":/images/eksport.png"), tr("Export txt..."), this);
+        eksportTXTAct->setStatusTip(tr("Exports results on this page to a .txt file"));
         connect(eksportTXTAct, SIGNAL(triggered()), this, SLOT(eksportTXT()));
-        eksportCSVAct = new QAction(QIcon(":/images/eksport.png"), tr("Eksport csv..."), this);
-        eksportCSVAct->setStatusTip(tr("Ekspordib selle lehe tulemused .csv faili"));
+        eksportCSVAct = new QAction(QIcon(":/images/eksport.png"), tr("Export csv..."), this);
+        eksportCSVAct->setStatusTip(tr("Exports results on this page to a .csv file"));
         connect(eksportCSVAct, SIGNAL(triggered()), this, SLOT(eksportCSV()));
 //        eksportInbandStartListAct = new QAction(tr("Eksport Inband startlist..."), this); // There is no reason to use this anymore
 //        eksportInbandStartListAct->setStatusTip(tr("Ekspordib valitud laskurid Inband'i startlisti faili"));
 //        connect(eksportInbandStartListAct, &QAction::triggered, [this]{exportStartList(StartListWriter::INBAND);});
-        eksportSiusStartListAct = new QAction(tr("Eksport Sius startlist..."), this);
-        eksportSiusStartListAct->setStatusTip(tr("Ekspordib valitud laskurid Sius'i startlisti faili"));
+        eksportSiusStartListAct = new QAction(tr("Export Sius startlist..."), this);
+        eksportSiusStartListAct->setStatusTip(tr("Exports selected competitors to Sius startlist file"));
         connect(eksportSiusStartListAct, &QAction::triggered, [this]{exportStartList(StartListWriter::SIUS);});
-        eksportFSiusStartListAct = new QAction(tr("Eksport finaali Sius startlist..."), this);
-        eksportFSiusStartListAct->setStatusTip(tr("Ekspordib esimesed 8 laskurit Sius'i startlisti faili"));
+        eksportFSiusStartListAct = new QAction(tr("Export finals Sius startlist..."), this);
+        eksportFSiusStartListAct->setStatusTip(tr("Exports first 8 competitors to Sius startlist file"));
         connect(eksportFSiusStartListAct, SIGNAL(triggered()), this, SLOT(exportFinalsSiusStartList()));
-        eksportXLSAct = new QAction(QIcon(":/images/eksport.png"), tr("Eksport xls..."), this);
-        eksportXLSAct->setStatusTip(tr("Ekspordib selle lehe tulemused Excel'i .xls faili"));
+        eksportXLSAct = new QAction(QIcon(":/images/eksport.png"), tr("Export xls..."), this);
+        eksportXLSAct->setStatusTip(tr("Exports all results to a .xls file"));
         connect(eksportXLSAct, SIGNAL(triggered()), this, SLOT(eksportXLS()));
-        kaivitaServerAct = new QAction(tr("Käivita server lehtede lugemiseks"), this);
-        kaivitaServerAct->setStatusTip(tr("Käivitab serveri, et saaks teises arvutis lehti lugeda"));
+        kaivitaServerAct = new QAction(tr("Start server for paper target scoring"), this);
+        kaivitaServerAct->setStatusTip(tr("Starts a server to accept paper target scoring results from another computer"));
         connect(kaivitaServerAct, SIGNAL(triggered()), this, SLOT(kaivitaServer()));
-        kontrolliUuendusiAct = new QAction(tr("Kontrolli uuendusi"), this);
-        kontrolliUuendusiAct->setStatusTip(tr("Kontrollib Protokollitaja programmi uuenduste olemasolu internetist"));
+        kontrolliUuendusiAct = new QAction(tr("Check for Updates"), this);
+        kontrolliUuendusiAct->setStatusTip(tr("Checks for newer versions of Protokollitaja"));
         connect(kontrolliUuendusiAct, SIGNAL(triggered()), this, SLOT(checkForUpdates()));
-        kopeeriLaskuridAct = new QAction(QIcon(":/images/kopeeriLaskur.png"), tr("Kopeeri valitud laskurid..."), this);
-        kopeeriLaskuridAct->setStatusTip(tr("Kopeerib valitud laskurid teisele lehele"));
+        kopeeriLaskuridAct = new QAction(QIcon(":/images/kopeeriLaskur.png"), tr("Copy selected competitors..."), this);
+        kopeeriLaskuridAct->setStatusTip(tr("Copies selected competitors to another tab"));
         connect(kopeeriLaskuridAct, SIGNAL(triggered()), this, SLOT(kopeeriLaskurid()));
-        kopeeriVahAct = new QAction(tr("Kõik vahemällu"), this);
-        kopeeriVahAct->setStatusTip(tr("Kopeerib selle lehe laskurid vahemällu"));
+        kopeeriVahAct = new QAction(tr("All to clipboard"), this);
+        kopeeriVahAct->setStatusTip(tr("Copies all competitors on this tab to clipboard"));
         connect(kopeeriVahAct, SIGNAL(triggered()), this, SLOT(kopeeriVah()));
-        kopeeriValitudVahAct = new QAction(tr("Valitud vahemällu"), this);
-        kopeeriValitudVahAct->setStatusTip(tr("Kopeerib selle lehe valitud laskurid vahemällu"));
+        kopeeriValitudVahAct = new QAction(tr("Selected to clipboard"), this);
+        kopeeriValitudVahAct->setStatusTip(tr("Copies selected competitors on this tab to clipboard"));
         connect(kopeeriValitudVahAct, SIGNAL(triggered()), this, SLOT(kopeeriValitudVah()));
-        naitaSeadedAct = new QAction(tr("Seaded"), this);
-        naitaSeadedAct->setStatusTip(tr("Avab seadete akna"));
+        naitaSeadedAct = new QAction(tr("Settings"), this);
+        naitaSeadedAct->setStatusTip(tr("Opens settings window"));
         connect(naitaSeadedAct, SIGNAL(triggered()), this, SLOT(naitaSeaded()));
-        reastaAct = new QAction(QIcon(":/images/reasta.png"), tr("Sorteeri laskurid"), this);
-        reastaAct->setStatusTip(tr("Sorteerib laskurid sellel lehel"));
+        reastaAct = new QAction(QIcon(":/images/reasta.png"), tr("Sort competitors"), this);
+        reastaAct->setStatusTip(tr("Sorts competitors on this tab"));
         connect(reastaAct, SIGNAL(triggered()), this, SLOT(reasta()));
-        reastaPAct = new QAction(tr("Sorteeri perekonnanimede järgi"), this);
-        reastaPAct->setStatusTip(tr("Sorteerib laskurid sellel lehel perekonnanimede järgi"));
+        reastaPAct = new QAction(tr("Sort by Last Name"), this);
+        reastaPAct->setStatusTip(tr("Sorts competitors on this tab by last names"));
         connect(reastaPAct, SIGNAL(triggered()), this, SLOT(reastaP()));
-        reastaSAct = new QAction(tr("Sorteeri sünniaasta järgi"), this);
-        reastaSAct->setStatusTip(tr("Sorteerib laskurid sellel lehel sünniaasta järgi"));
+        reastaSAct = new QAction(tr("Sort by Birth Year"), this);
+        reastaSAct->setStatusTip(tr("Sorts competitors on this tab by birth years"));
         connect(reastaSAct, SIGNAL(triggered()), this, SLOT(reastaS()));
-        reastaRAct = new QAction(tr("Sorteeri rajanumbri järgi"), this);
-        reastaRAct->setStatusTip(tr("Sorteerib laskurid sellel lehel rajanumbri järgi"));
+        reastaRAct = new QAction(tr("Sort by Target Number"), this);
+        reastaRAct->setStatusTip(tr("Sorts competitors on this tab by firing points"));
         connect(reastaRAct, SIGNAL(triggered()), this, SLOT(reastaR()));
-        reastaSiAct = new QAction(tr("Sorteeri sifri järgi"), this);
-        reastaSiAct->setStatusTip(tr("Sorteerib laskurid sellel lehel sifri järgi"));
+        reastaSiAct = new QAction(tr("Sort by Cipher"), this);
+        reastaSiAct->setStatusTip(tr("Sorts competitors on this tab by paper target ciphers"));
         connect(reastaSiAct, SIGNAL(triggered()), this, SLOT(reastaSi()));
-        margiKoikAct = new QAction(QIcon(":/images/margista.png"), tr("Märgi kõik"), this);
-        margiKoikAct->setStatusTip(tr("Paneb linnukese kõigile laskuritele"));
+        margiKoikAct = new QAction(QIcon(":/images/margista.png"), tr("Select All"), this);
+        margiKoikAct->setStatusTip(tr("Selects all competitors"));
         connect(margiKoikAct, SIGNAL(triggered()), this, SLOT(margi()));
-        eemaldaMargidAct = new QAction(QIcon(":/images/eemaldaMargid.png"), tr("Eemalda märgistused"), this);
-        eemaldaMargidAct->setStatusTip(tr("Eemaldab kõigilt laskuritelt linnukesed"));
+        eemaldaMargidAct = new QAction(QIcon(":/images/eemaldaMargid.png"), tr("Deselect All"), this);
+        eemaldaMargidAct->setStatusTip(tr("Deselects all competitors"));
         connect(eemaldaMargidAct, SIGNAL(triggered()), this, SLOT(eemaldaMargid()));
-        taiendaBaasAct = new QAction(tr("Täienda andmebaasi"), this);
-        taiendaBaasAct->setStatusTip(tr("Lisab uued laskurid andmebaasi"));
+        taiendaBaasAct = new QAction(tr("Update Database"), this);
+        taiendaBaasAct->setStatusTip(tr("Adds new competitors to database"));
         connect(taiendaBaasAct, SIGNAL(triggered()), this, SLOT(taiendaAndmebaas()));
 
-        finaalAct = new QAction(QIcon(":/images/finaal.png"), tr("Finaal"), this);
-        finaalAct->setStatusTip(tr("Käivitab selle lehe andmetega Finaali programmi"));
+        finaalAct = new QAction(QIcon(":/images/finaal.png"), tr("Final"), this);
+        finaalAct->setStatusTip(tr("Starts Finaal application with this tab's data"));
         connect(finaalAct, SIGNAL(triggered()), this, SLOT(runFinals()));
 
-        programmistAct = new QAction(tr("Programmist"), this);
-        programmistAct->setStatusTip(tr("Kuvab infot programmi kohta"));
+        programmistAct = new QAction(tr("About"), this);
+        programmistAct->setStatusTip(tr("Shows information about the application"));
         connect(programmistAct, SIGNAL(triggered()), this, SLOT(naitaInfot()));
 
-        naitaWAbiAct = new QAction(tr("Abi"), this);
-        naitaWAbiAct->setStatusTip(tr("Näitab abi, kuidas kahe ekraani jaoks seadistada"));
+        naitaWAbiAct = new QAction(tr("Help"), this);
+        naitaWAbiAct->setStatusTip(tr("Shows help for setting up two screens"));
         connect(naitaWAbiAct, SIGNAL(triggered()), this, SLOT(naitaWAbi()));
 
-        QAction *changeLanguageAct = new QAction(tr("Programmi keel"), this);
-        changeLanguageAct->setStatusTip(tr("Programmi keele valik"));
+        QAction *changeLanguageAct = new QAction(tr("Language"), this);
+        changeLanguageAct->setStatusTip(tr("Change application language"));
         connect(changeLanguageAct, &QAction::triggered, [this](){
             changeLanguage(false);
         });
 
-        impordiFinaalAct = new QAction(tr("Impordi finaal..."), this);
-        impordiFinaalAct->setStatusTip(tr("Lisab finaali tulemused vastavast failist"));
+        impordiFinaalAct = new QAction(tr("Import finals..."), this);
+        impordiFinaalAct->setStatusTip(tr("Adds finals results from a file"));
         connect(impordiFinaalAct, SIGNAL(triggered()), this, SLOT(impordiFinaal()));
 
-        finaaliFailAct = new QAction(tr("Finaali fail..."), this);
-        finaaliFailAct->setStatusTip(tr("Loob selle lehe kohta finaali faili"));
+        finaaliFailAct = new QAction(tr("Finaal file..."), this);
+        finaaliFailAct->setStatusTip(tr("Creates a Finaal file from this tab"));
         connect(finaaliFailAct, SIGNAL(triggered()), this, SLOT(exportFinalsFile()));
 
-        lehelugejaAct = new QAction(tr("Loe lehti..."), this);
-        lehelugejaAct->setStatusTip(tr("Lehtede lugemine otse masinast"));
+        lehelugejaAct = new QAction(tr("Scoring machine..."), this);
+        lehelugejaAct->setStatusTip(tr("Scoring from paper target scoring machine"));
         connect(lehelugejaAct, SIGNAL(triggered()), this, SLOT(lehelugeja()));
 
         uhenduSiusDatagaAct = new QAction(("SiusData/Range Control"), this);
-        uhenduSiusDatagaAct->setStatusTip(tr("Ühendub SiusDataga"));
+        uhenduSiusDatagaAct->setStatusTip(tr("Connects to SiusData or Range Control"));
         connect(uhenduSiusDatagaAct, SIGNAL(triggered()), this, SLOT(uhenduSiusDataga()));
 
-        sendCompetitorsToRangeAct = new QAction(tr("Saada valitud Range Control'i"), this);
-        sendCompetitorsToRangeAct->setStatusTip(tr("Saadab valitud laskurid Range Control'i"));
+        sendCompetitorsToRangeAct = new QAction(tr("Send selected to Range Control"), this);
+        sendCompetitorsToRangeAct->setStatusTip(tr("Sends selected competitors to Range Control"));
         connect(sendCompetitorsToRangeAct, SIGNAL(triggered()), this, SLOT(sendCompetitorsToRange()));
 
-        uploadAct = new QAction(tr("Lae veebi"), this);
-        uploadAct->setStatusTip(tr("Laeb tulemused veebi"));
+        uploadAct = new QAction(tr("Upload to Web"), this);
+        uploadAct->setStatusTip(tr("Sends results to web"));
         connect(uploadAct, SIGNAL(triggered()), this, SLOT(uploadResults()));
 
-        sifriLisaAct = new QAction(tr("Lisa sifrid..."), this);
-        sifriLisaAct->setStatusTip(tr("Sifrite lisamine valitud laskuritele"));
+        sifriLisaAct = new QAction(tr("Add Ciphers..."), this);
+        sifriLisaAct->setStatusTip(tr("To add ciphers to selected competitors"));
         connect(sifriLisaAct, SIGNAL(triggered()), this, SLOT(sifriLisa()));
 
-        seiskaServerAct = new QAction(tr("Seiska server"), this);
-        seiskaServerAct->setStatusTip(tr("Seiskab lehtede lugemise serveri"));
+        seiskaServerAct = new QAction(tr("Stop Server"), this);
+        seiskaServerAct->setStatusTip(tr("Stops the paper target scoring results server"));
         connect(seiskaServerAct, SIGNAL(triggered()), this, SLOT(seiskaServer()));
 
 #ifdef QT_DEBUG
-        deleteAllShotsAct = new QAction(tr("Kustuta lasud"), this);
-        deleteAllShotsAct->setStatusTip(tr("Kustutab märgitud laskurite kõik lasud"));
+        deleteAllShotsAct = new QAction(tr("Delete Shots"), this);
+        deleteAllShotsAct->setStatusTip(tr("Deletes all shots from selected competitors"));
         connect(deleteAllShotsAct, SIGNAL(triggered()), this, SLOT(deleteAllShots()));
-        editWebCompetitionIdAct = new QAction(tr("Muuda webCompetitionId"), this);
-        editWebCompetitionIdAct->setStatusTip(tr("Muudab käesoleva faili veebi võistluse ID'd"));
+        editWebCompetitionIdAct = new QAction(tr("Edit webCompetitionId"), this);
+        editWebCompetitionIdAct->setStatusTip(tr("Edits the web competition ID of the current file"));
         connect(editWebCompetitionIdAct, SIGNAL(triggered()), this, SLOT(editWebCompetitionId()));
 #endif
 
-        failMenu = menuBar()->addMenu(tr("&Fail"));
+        failMenu = menuBar()->addMenu(tr("&File"));
         failMenu->addAction(uusAct);
         failMenu->addAction(avaAct);
         failMenu->addAction(salvestaAct);
@@ -234,7 +234,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         failMenu->addSeparator();
         failMenu->addAction(valjuAct);
 
-        tooriistadMenu = menuBar()->addMenu(tr("&Tööriistad"));
+        tooriistadMenu = menuBar()->addMenu(tr("&Tools"));
         tooriistadMenu->addAction(uusLaskurAct);
         tooriistadMenu->addAction(kopeeriLaskuridAct);
         tooriistadMenu->addAction(liigutaAct);
@@ -264,7 +264,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         tooriistadMenu->addAction(uhenduSiusDatagaAct);
         tooriistadMenu->addAction(sendCompetitorsToRangeAct);
 
-        tulemusedMenu = menuBar()->addMenu(tr("T&ulemused"));
+        tulemusedMenu = menuBar()->addMenu(tr("&Results"));
         tulemusedMenu->addAction(importAct);
         tulemusedMenu->addSeparator();
         tulemusedMenu->addAction(uploadAct);
@@ -286,14 +286,14 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         tulemusedMenu->addAction(finaaliFailAct);
         tulemusedMenu->addAction(impordiFinaalAct);
 
-        abiMenu = menuBar()->addMenu(tr("&Abi"));
+        abiMenu = menuBar()->addMenu(tr("&Help"));
         abiMenu->addAction(naitaWAbiAct);
         abiMenu->addAction(changeLanguageAct);
         abiMenu->addAction(programmistAct);
         abiMenu->addAction(kontrolliUuendusiAct);
 
 #ifdef QT_DEBUG
-        QMenu *testMenu = menuBar()->addMenu(tr("&Testimine"));
+        QMenu *testMenu = menuBar()->addMenu(tr("T&esting"));
         testMenu->addAction(deleteAllShotsAct);
         testMenu->addAction(editWebCompetitionIdAct);
 #endif
@@ -399,23 +399,23 @@ Protokollitaja::Protokollitaja(QWidget *parent)
                         str = sisse.readLine();
                         list = str.split(";");
                         if(list.count() < 2){
-                            QMessageBox::warning(this, "Protokollitaja", tr("Püssilaskurite nimekirjas on tühi rida!"), QMessageBox::Ok);
+                            QMessageBox::warning(this, "Protokollitaja", tr("There is an empty row in the rifle shooters autocomplete list!"), QMessageBox::Ok);
                             continue;
                         }
                         andmebaas.nimekiriPuss << new Andmebaas::LaskuriNimi;
                         andmebaas.nimekiriPuss[andmebaas.nimekiriPuss.count()-1]->eesnimi = list.takeFirst().trimmed();
                         if(andmebaas.nimekiriPuss.isEmpty()){
-                                QMessageBox::critical(this, "Protokollitaja", tr("Püssilaskurite failis on %1. rida vigane!").arg(andmebaas.nimekiriPuss.count()), QMessageBox::Ok);
+                                QMessageBox::critical(this, "Protokollitaja", tr("Row %1 in the rifle shooters autocomplete list is broken!").arg(andmebaas.nimekiriPuss.count()), QMessageBox::Ok);
                                 return;
                         }
                         andmebaas.nimekiriPuss[andmebaas.nimekiriPuss.count()-1]->perekonnanimi = list.takeFirst().trimmed();
                         if(andmebaas.nimekiriPuss.isEmpty()){
-                                QMessageBox::critical(this, "Protokollitaja", tr("Püssilaskurite failis on %1. rida vigane!").arg(andmebaas.nimekiriPuss.count()), QMessageBox::Ok);
+                                QMessageBox::critical(this, "Protokollitaja", tr("Row %1 in the rifle shooters autocomplete list is broken!").arg(andmebaas.nimekiriPuss.count()), QMessageBox::Ok);
                                 return;
                         }
                         andmebaas.nimekiriPuss[andmebaas.nimekiriPuss.count()-1]->sunniaasta = list.takeFirst().trimmed();
                         if(andmebaas.nimekiriPuss.isEmpty()){
-                                QMessageBox::critical(this, "Protokollitaja", tr("Püssilaskurite failis on %1. rida vigane!").arg(andmebaas.nimekiriPuss.count()), QMessageBox::Ok);
+                                QMessageBox::critical(this, "Protokollitaja", tr("Row %1 in the rifle shooters autocomplete list is broken!").arg(andmebaas.nimekiriPuss.count()), QMessageBox::Ok);
                                 return;
                         }
                         andmebaas.nimekiriPuss[andmebaas.nimekiriPuss.count()-1]->klubi = list.takeFirst().trimmed();
@@ -425,7 +425,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
                 if(verbose)
                     QTextStream(stdout) << "Püssilaskurite nimekiri loetud, leitud " << andmebaas.nimekiriPuss.size() << " rida" << Qt::endl;
         }else{
-                QMessageBox::warning(this, tr("Hoiatus"), tr("Püssilaskurite faili ei leitud! Püssilaskurite kirjutusabi pole võimaldatud"), QMessageBox::Ok);
+                QMessageBox::warning(this, tr("Warning"), tr("Cannot open rifle shooters' file! Rifle shooters` autocomplete is disabled"), QMessageBox::Ok);
                 andmebaas.kirjutusabiPuss = false;
         }
 
@@ -439,23 +439,23 @@ Protokollitaja::Protokollitaja(QWidget *parent)
                         str = sisse.readLine();
                         list = str.split(";");
                         if(list.count() < 2){
-                            QMessageBox::warning(this, "Protokollitaja", tr("Püstolilaskurite nimekirjas on tühi rida!"), QMessageBox::Ok);
+                            QMessageBox::warning(this, "Protokollitaja", tr("There is an empty row in the pistol shooters autocomplete list!"), QMessageBox::Ok);
                             continue;
                         }
                         andmebaas.nimekiriPustol << new Andmebaas::LaskuriNimi;
                         andmebaas.nimekiriPustol[andmebaas.nimekiriPustol.count()-1]->eesnimi = list.takeFirst().trimmed();
                         if(andmebaas.nimekiriPustol.isEmpty()){
-                                QMessageBox::critical(this, "Protokollitaja", tr("Püstolilaskurite failis on %1. rida vigane!").arg(andmebaas.nimekiriPustol.count()), QMessageBox::Ok);
+                                QMessageBox::critical(this, "Protokollitaja", tr("Row %1 in the pistol shooters autocomplete list is broken!").arg(andmebaas.nimekiriPustol.count()), QMessageBox::Ok);
                                 return; // FIXME kas on õige siin ja järgmises kahes if'is return'ida?
                         }
                         andmebaas.nimekiriPustol[andmebaas.nimekiriPustol.count()-1]->perekonnanimi = list.takeFirst().trimmed();
                         if(andmebaas.nimekiriPustol.isEmpty()){
-                                QMessageBox::critical(this, "Protokollitaja", tr("Püstolilaskurite failis on %1. rida vigane!").arg(andmebaas.nimekiriPustol.count()), QMessageBox::Ok);
+                                QMessageBox::critical(this, "Protokollitaja", tr("Row %1 in the pistol shooters autocomplete list is broken!").arg(andmebaas.nimekiriPustol.count()), QMessageBox::Ok);
                                 return;
                         }
                         andmebaas.nimekiriPustol[andmebaas.nimekiriPustol.count()-1]->sunniaasta = list.takeFirst().trimmed();
                         if(andmebaas.nimekiriPustol.isEmpty()){
-                                QMessageBox::critical(this, "Protokollitaja", tr("Püstolilaskurite failis on %1. rida vigane!").arg(andmebaas.nimekiriPustol.count()), QMessageBox::Ok);
+                                QMessageBox::critical(this, "Protokollitaja", tr("Row %1 in the pistol shooters autocomplete list is broken!").arg(andmebaas.nimekiriPustol.count()), QMessageBox::Ok);
                                 return;
                         }
                         andmebaas.nimekiriPustol[andmebaas.nimekiriPustol.count()-1]->klubi = list.takeFirst().trimmed();
@@ -465,7 +465,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
                 if(verbose)
                         QTextStream(stdout) << "Püstolilaskurite nimekiri loetud, leitud " << andmebaas.nimekiriPustol.size() << " rida" << Qt::endl;
         }else{
-                QMessageBox::warning(this, tr("Hoiatus"), tr("Püstolilaskurite faili ei leitud! Püstolilaskurite kirjutusabi pole võimaldatud"), QMessageBox::Ok);
+                QMessageBox::warning(this, tr("Warning"), tr("Cannot open pistol shooters' file! Pistol shooters` autocomplete is disabled"), QMessageBox::Ok);
                 andmebaas.kirjutusabiPustol = false;
         }
 
@@ -482,7 +482,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
 
 #ifdef QT_DEBUG
     qDebug() << "Vahepunkt1" << " Salvestaja aeg: " << salvestaja->interval();
-        QMessageBox::information(this, tr("Teade"), tr("Debug versioon!"), QMessageBox::Ok);
+        QMessageBox::information(this, tr("Info"), tr("Debug version!"), QMessageBox::Ok);
 #endif
 
         argument = qApp->arguments().last();
@@ -510,7 +510,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
                     logiValja.setDevice(logi);
                     logiValja << "/////////////////////" << m_competitionName << ", " << QDateTime::currentDateTime().toString() << ", " << programmiNimi << " (" << versioon <<  ")/////////////////////\n";
                 }else{
-                    QMessageBox::warning(this, tr("Hoiatus"), tr("Logi faili kirjutamine ei õnnestunud! Kontrollige, et teil oleks kirjutamisõigus sinna kausta, kus asub võistluste fail."), QMessageBox::Ok);
+                    QMessageBox::warning(this, tr("Warning"), tr("Unable to write to the log file! Check that you have write permission to the folder where competition file is saved."), QMessageBox::Ok);
                 }
             }else{
 #ifdef QT_DEBUG
@@ -610,12 +610,12 @@ void Protokollitaja::autosave()
 void Protokollitaja::ava()
 {
         if(!voibSulgeda){
-        int vastus = QMessageBox::question(this, "Protokollitaja", tr("Kas soovid muudatused salvestada?"),
+        int vastus = QMessageBox::question(this, "Protokollitaja", tr("Do you want to save the changes?"),
                         QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
                 if(vastus == QMessageBox::Save)	salvesta();
                 else if(vastus == QMessageBox::Cancel) return;
         }
-        QString failiNimi = QFileDialog::getOpenFileName(this, tr("Ava fail"), seeFail, tr("Protokollitaja fail (*.kll)"));
+        QString failiNimi = QFileDialog::getOpenFileName(this, tr("Open file"), seeFail, tr("Protokollitaja file (*.kll)"));
         if(failiNimi.isEmpty()) return;
         for(int i = 0; i < tabWidget->count(); i++)
                 tabWidget->widget(i)->deleteLater();
@@ -645,7 +645,7 @@ void Protokollitaja::changeLanguage(bool atStartup)
         setupTranslator();
 
         if (!atStartup)
-            QMessageBox::information(this, tr("Teade"), tr("Keele vahetus rakendub programmi uuesti käivitamisel"));
+            QMessageBox::information(this, tr("Info"), tr("Language changes are applied when the program is started again"));
     }
 }
 
@@ -670,10 +670,10 @@ void Protokollitaja::closeEvent(QCloseEvent *event)
 #endif
     if(voibSulgeda){
         if(protoUuendaja == 0)  //Kui on uuendamise kaudu sulgemine, siis ei ole vaja küsida, kui salvestama ei pea
-            if(QMessageBox::warning(this, tr("Protokollitaja"), tr("Oled kindel, et soovid programmist väljuda?"), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok)==QMessageBox::Cancel)
+            if(QMessageBox::warning(this, tr("Protokollitaja"), tr("Are you sure you want to exit from the application?"), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok)==QMessageBox::Cancel)
                 event->ignore();
     }else{
-        int vastus = QMessageBox::question(this, "Protokollitaja", tr("Kas soovid muudatused salvestada ja programmist väljuda?"),	QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        int vastus = QMessageBox::question(this, "Protokollitaja", tr("Do you want to save changes and exit the application?"),	QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         if(vastus == QMessageBox::Save){
             salvesta();
             //tulemus->close();
@@ -752,9 +752,9 @@ void Protokollitaja::eelvaade()
                 painter.setFont(pealkirjaFont);
                 painter.drawText(60, 50, m_competitionName);
                 painter.setFont(paiseFont);
-                painter.drawText(1345, 130, "Summa");
+                painter.drawText(1345, 130, "Total");
                 if(!seeLeht->voistk)
-                        painter.drawText(1100, 130, "Seeriad");
+                        painter.drawText(1100, 130, "Series");
                 painter.setFont(kirjaFont);
                 painter.drawText(800, 50, 700, 50, Qt::AlignRight, timeAndPlaceString());
                 kirjaFont.setBold(true);
@@ -855,13 +855,11 @@ void Protokollitaja::eemaldaTab()
                         }
                 }
                 if(jalgitakse){
-                        QMessageBox::warning(this, "Protokollitaja", tr("Seda lehte ei ole võimalik kustutada, kuna "
-                                        "selle järgi on tehtud võistkondlik arvestus. Kustutage enne võistkondlik leht.")
+                        QMessageBox::warning(this, "Protokollitaja", tr("This tab cannot be deleted as it is referenced by a team event. Delete first the team event's tab.")
                                         , QMessageBox::Ok);
                         return;
                 }
-                if(QMessageBox::warning(this, tr("Küsimus"), tr("Oled sa kindel, et tahad selle töölehe kustutada? Kui sa "
-                                "seda teed, siis kaotad kõik andmed, mis sellel on!"), QMessageBox::Yes | QMessageBox::No)
+                if(QMessageBox::warning(this, tr("Question"), tr("Are you sure you want to delete this tab? If it is deleted, all data on the tab will be lost!"), QMessageBox::Yes | QMessageBox::No)
                                 == QMessageBox::Yes){
                         tabWidget->removeTab(tabWidget->currentIndex());
                         leht->deleteLater();
@@ -877,10 +875,10 @@ void Protokollitaja::eksportCSV()
         if(tabWidget->count() > 0)
             leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
         else{
-            QMessageBox::critical(this, tr("Viga"), tr("Töölehed puuduvad, ei ole midagi eksportida!"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error"), tr("No tabs, nothing to export!"), QMessageBox::Ok);
             return;
         }
-        QString failiNimi = QFileDialog::getSaveFileName(this, tr("Ekspordi"), seeFail.left(seeFail.length() - 3),
+        QString failiNimi = QFileDialog::getSaveFileName(this, tr("Export"), seeFail.left(seeFail.length() - 3),
                         tr("Comma separated file (*.csv)"));
         if(failiNimi.isEmpty()) return;
         if(!failiNimi.endsWith(".csv"))
@@ -934,8 +932,8 @@ void Protokollitaja::eksportCSV()
                         }
                 }
                 fail.close();
-                QMessageBox::information(this, "Protokollitaja", tr("Tulemused eksporditud"), QMessageBox::Ok);
-        }else QMessageBox::critical(this, tr("Viga"), tr("Ei õnnestu faili kirjutada."), QMessageBox::Ok);
+                QMessageBox::information(this, "Protokollitaja", tr("Results exported"), QMessageBox::Ok);
+        }else QMessageBox::critical(this, tr("Error"), tr("Unable to write to the file."), QMessageBox::Ok);
 }
 
 void Protokollitaja::exportStartList(StartListWriter::StartListType type)
@@ -944,16 +942,16 @@ void Protokollitaja::exportStartList(StartListWriter::StartListType type)
     if(tabWidget->count() > 0)
         leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
     else{
-        QMessageBox::critical(this, tr("Viga"), tr("Töölehed puuduvad, ei ole midagi eksportida!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error"), tr("No tabs, nothing to export!"), QMessageBox::Ok);
         return;
     }
 
     if(leht->voistk){
-        QMessageBox::critical(this, tr("Viga"), tr("Võistkondade lehest ei saa teha Sius'i stardinimekirja!!"),
+        QMessageBox::critical(this, tr("Error"), tr("Sius startlist cannot be created from team events!"),
                 QMessageBox::Ok);
         return;
     }else if(leht->laskurid.count() <= 0){
-        QMessageBox::critical(this, tr("Viga"), tr("Laskurid puuduvad, ei ole midagi eksportida!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error"), tr("No competitors, nothing to export!"), QMessageBox::Ok);
         return;
     }
 
@@ -963,7 +961,7 @@ void Protokollitaja::exportStartList(StartListWriter::StartListType type)
         if(leht->laskurid[i]->linnuke->isChecked()){
             QStringList row;    //target, ID, first name, name, club, result
             if(leht->laskurid[i]->rajaNr->text().contains("A") || leht->laskurid[i]->rajaNr->text().contains("B") || leht->laskurid[i]->rajaNr->text().contains("C") || leht->laskurid[i]->rajaNr->text().contains("D") || leht->laskurid[i]->rajaNr->text().contains("E") || leht->laskurid[i]->rajaNr->text().contains("F") || leht->laskurid[i]->rajaNr->text().contains("G") || leht->laskurid[i]->rajaNr->text().contains("H"))
-                QMessageBox::critical(this, tr("Viga"), tr("Raja numbrites on tähti. Kui soovite finaali start listi eksportida, kasutage teist funktsiooni!"), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Error"), tr("There are letters in the target numbers. If you want to export finals startlist, use the other function!"), QMessageBox::Ok);
 
             competitorsList.append(StartListWriter::StartListCompetitor{
                 leht->laskurid[i]->rajaNr->text(),
@@ -979,7 +977,7 @@ void Protokollitaja::exportStartList(StartListWriter::StartListType type)
     }
 
     if(competitorsList.size() <= 0){
-        QMessageBox::critical(this, tr("Viga"), tr("Märgitud laskurid puuduvad, ei ole midagi eksportida!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error"), tr("No selected competitors, nothing to export!"), QMessageBox::Ok);
         return;
     } else {
         StartListWriter *startListWriter = new StartListWriter(competitorsList, seeFail, type, this);
@@ -993,16 +991,16 @@ void Protokollitaja::exportFinalsSiusStartList()
     if(tabWidget->count() > 0)
         leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
     else{
-        QMessageBox::critical(this, tr("Viga"), tr("Töölehed puuduvad, ei ole midagi eksportida!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error"), tr("No tabs, nothing to export!"), QMessageBox::Ok);
         return;
     }
 
     if(leht->voistk){
-        QMessageBox::critical(this, tr("Viga"), tr("Võistkondade lehest ei saa teha Sius'i stardinimekirja!!"),
+        QMessageBox::critical(this, tr("Error"), tr("Sius startlist cannot be created from team events!"),
                 QMessageBox::Ok);
         return;
     }else if(leht->laskurid.count() <= 0){
-        QMessageBox::critical(this, tr("Viga"), tr("Laskurid puuduvad, ei ole midagi eksportida!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error"), tr("No competitors, nothing to export!"), QMessageBox::Ok);
         return;
     }
 
@@ -1020,7 +1018,7 @@ void Protokollitaja::exportFinalsSiusStartList()
     if(rajaNrOlemas)    //Kui raja nr on olemas, siis saab selle järgi sorteerida
         leht->sorteeri(3);   //Sorteerida raja nr'i järgi
 
-    QString failiNimi = QFileDialog::getSaveFileName(this, tr("Ekspordi"), seeFail.left(seeFail.lastIndexOf("\\")),
+    QString failiNimi = QFileDialog::getSaveFileName(this, tr("Export"), seeFail.left(seeFail.lastIndexOf("\\")),
             tr("Comma separated file (*.csv)"));
 
     if(failiNimi.isEmpty() || leht == 0) return;
@@ -1044,8 +1042,8 @@ void Protokollitaja::exportFinalsSiusStartList()
                 eksporditud++;
         }
         fail.close();
-        QMessageBox::information(this, "Protokollitaja", tr("Startlist loodud. Eksporditi %1 laskurit").arg(eksporditud), QMessageBox::Ok);
-    }else QMessageBox::critical(this, tr("Viga"), tr("Ei õnnestu faili kirjutada."), QMessageBox::Ok);
+        QMessageBox::information(this, "Protokollitaja", tr("Startlist created. %1 competitor(s) exported").arg(eksporditud), QMessageBox::Ok);
+    }else QMessageBox::critical(this, tr("Error"), tr("Unable to write to the file."), QMessageBox::Ok);
 }
 
 void Protokollitaja::eksportTXT()
@@ -1054,10 +1052,10 @@ void Protokollitaja::eksportTXT()
         if(tabWidget->count() > 0)
             leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
         else{
-            QMessageBox::critical(this, tr("Viga"), tr("Töölehed puuduvad, ei ole midagi eksportida!"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error"), tr("No tabs, nothing to export!"), QMessageBox::Ok);
             return;
         }
-        QString failiNimi = QFileDialog::getSaveFileName(this, tr("Ekspordi"), seeFail.left(seeFail.length() - 3), tr("Teksti fail (*.txt)"));
+        QString failiNimi = QFileDialog::getSaveFileName(this, tr("Export"), seeFail.left(seeFail.length() - 3), tr("Text file (*.txt)"));
         if(failiNimi.isEmpty()) return;
         if(!failiNimi.endsWith(".txt"))
                 failiNimi.append(".txt");
@@ -1110,15 +1108,15 @@ void Protokollitaja::eksportTXT()
                         }
                 }
                 fail.close();
-                QMessageBox::information(this, "Protokollitaja", tr("Tulemused eksporditud"), QMessageBox::Ok);
-        }else QMessageBox::critical(this, tr("Viga"), tr("Ei õnnestu faili kirjutada."), QMessageBox::Ok);
+                QMessageBox::information(this, "Protokollitaja", tr("Results exported"), QMessageBox::Ok);
+        }else QMessageBox::critical(this, tr("Error"), tr("Unable to write to the file."), QMessageBox::Ok);
 }
 
 void Protokollitaja::eksportXLS()
 {
     if(tabWidget->count() > 0){
         QString failiAsukoht = seeFail.left(seeFail.length() - 3);
-        QString failiNimi = QFileDialog::getSaveFileName(this, tr("Ekspordi"), failiAsukoht + "xls",
+        QString failiNimi = QFileDialog::getSaveFileName(this, tr("Export"), failiAsukoht + "xls",
                         tr("Excel workbook file (*.xls)"));
         if(failiNimi.isEmpty()) return;
         if(!failiNimi.endsWith(".xls"))
@@ -1129,7 +1127,7 @@ void Protokollitaja::eksportXLS()
         tiitelFont->SetBoldStyle(xlslib_core::BOLDNESS_BOLD);
         tiitelFont->SetHeight(20*16); //teksti kõrgus 16
 
-        xlslib_core::font_t *pealkiriFont = book.font("Times New Roman"); //font, millega kirjutatakse "Finaal"
+        xlslib_core::font_t *pealkiriFont = book.font("Times New Roman"); //font, millega kirjutatakse "Final"
         pealkiriFont->SetBoldStyle(xlslib_core::BOLDNESS_BOLD);
         pealkiriFont->SetHeight(20*14); //teksti kõrgus 14
 
@@ -1208,16 +1206,16 @@ void Protokollitaja::eksportXLS()
                 sheet->FindCell(0, 0)->halign(xlslib_core::HALIGN_CENTER);
 
                 sheet->label(4, 1, QString(leht->ekraaniNimi.toUtf8()).toStdString())->font(paiseFont);
-                sheet->label(5, 0, tr("Koht").toStdString())->font(underlineFont);
+                sheet->label(5, 0, tr("Place").toStdString())->font(underlineFont);
                 sheet->FindCell(5, 0)->halign(xlslib_core::HALIGN_CENTER);
                 std::string sigma = "\u03A3";    //Summa märk
                 if(leht->voistk){
                     sheet->label(1, 6, QString(timeAndPlaceString().toUtf8()).toStdString())->font(paiseFont);
                     sheet->FindCell(1, 6)->halign(xlslib_core::HALIGN_RIGHT);
-                    sheet->label(5, 1, tr("Võistkond").toStdString())->font(underlineFont);
-                    sheet->label(5, 2, tr("Eesnimi").toStdString())->font(underlineFont);
-                    sheet->label(5, 3, tr("Perenimi").toStdString())->font(underlineFont);
-                    sheet->label(5, 4, tr("Tulemus").toStdString())->font(underlineFont);
+                    sheet->label(5, 1, tr("Team").toStdString())->font(underlineFont);
+                    sheet->label(5, 2, tr("First Name").toStdString())->font(underlineFont);
+                    sheet->label(5, 3, tr("Last Name").toStdString())->font(underlineFont);
+                    sheet->label(5, 4, tr("Result").toStdString())->font(underlineFont);
                     sheet->label(5, 5, sigma)->font(underlineFont);
                     sheet->FindCell(5, 5)->halign(xlslib_core::HALIGN_CENTER);
                 }else{
@@ -1228,43 +1226,43 @@ void Protokollitaja::eksportXLS()
                         sheet->label(1, 6 + leht->seeriateArv, QString(timeAndPlaceString().toUtf8()).toStdString())->font(paiseFont);
                         sheet->FindCell(1, 6 + leht->seeriateArv)->halign(xlslib_core::HALIGN_RIGHT);
                     }
-                    sheet->label(5, 1, tr("Eesnimi").toStdString())->font(underlineFont);
-                    sheet->label(5, 2, tr("Perenimi").toStdString())->font(underlineFont);
-                    sheet->label(5, 3, tr("S.a.").toStdString())->font(underlineFont);
-                    sheet->label(5, 4, tr("Klubi").toStdString())->font(underlineFont);
+                    sheet->label(5, 1, tr("First Name").toStdString())->font(underlineFont);
+                    sheet->label(5, 2, tr("Last Name").toStdString())->font(underlineFont);
+                    sheet->label(5, 3, tr("B.Y.").toStdString())->font(underlineFont);
+                    sheet->label(5, 4, tr("Club").toStdString())->font(underlineFont);
 
                     if(leht->eventType() == QualificationEvents::EventType::AirRifle40 || leht->eventType() == QualificationEvents::EventType::AirPistol40){
                         sheet->merge(5, 5, 5, 8);
-                        sheet->label(5, 5, tr("Seeriad").toStdString())->font(underlineFont);
+                        sheet->label(5, 5, tr("Series").toStdString())->font(underlineFont);
                     }else if(leht->eventType() == QualificationEvents::EventType::AirRifle60 || leht->eventType() == QualificationEvents::EventType::AirPistol60
                              || leht->eventType() == QualificationEvents::EventType::RifleProne60_50m || leht->eventType() == QualificationEvents::EventType::FreePistol60_50m
                              || leht->eventType() == QualificationEvents::EventType::RifleProne60_300m){
                         sheet->merge(5, 5, 5, 10);
-                        sheet->label(5, 5, tr("Seeriad").toStdString())->font(underlineFont);
+                        sheet->label(5, 5, tr("Series").toStdString())->font(underlineFont);
                     }else if(leht->eventType() == QualificationEvents::EventType::Rifle3x20_50m || leht->eventType() == QualificationEvents::EventType::Rifle3x20_300m){
                         sheet->merge(5, 5, 5, 7);
-                        sheet->label(5, 5, tr("Põlvelt").toStdString())->font(underlineFont);
+                        sheet->label(5, 5, tr("Kneeling").toStdString())->font(underlineFont);
                         sheet->merge(5, 8, 5, 10);
-                        sheet->label(5, 8, tr("Lamades").toStdString())->font(underlineFont);
+                        sheet->label(5, 8, tr("Prone").toStdString())->font(underlineFont);
                         sheet->merge(5, 11, 5, 13);
-                        sheet->label(5, 11, tr("Püsti").toStdString())->font(underlineFont);
+                        sheet->label(5, 11, tr("Standing").toStdString())->font(underlineFont);
                     }else if(leht->eventType() == QualificationEvents::EventType::Rifle3x40_50m || leht->eventType() == QualificationEvents::EventType::Rifle3x40_300m){
                         sheet->merge(5, 5, 5, 9);
-                        sheet->label(5, 5, tr("Põlvelt").toStdString())->font(underlineFont);
+                        sheet->label(5, 5, tr("Kneeling").toStdString())->font(underlineFont);
                         sheet->merge(5, 10, 5, 14);
-                        sheet->label(5, 10, tr("Lamades").toStdString())->font(underlineFont);
+                        sheet->label(5, 10, tr("Prone").toStdString())->font(underlineFont);
                         sheet->merge(5, 15, 5, 19);
-                        sheet->label(5, 15, tr("Püsti").toStdString())->font(underlineFont);
+                        sheet->label(5, 15, tr("Standing").toStdString())->font(underlineFont);
                     }else if(leht->eventType() == QualificationEvents::EventType::Pistol_25m){
                         sheet->merge(5, 5, 5, 8);
-                        sheet->label(5, 5, tr("Ringmärk").toStdString())->font(underlineFont);
+                        sheet->label(5, 5, tr("Precision").toStdString())->font(underlineFont);
                         sheet->merge(5, 9, 5, 12);
-                        sheet->label(5, 9, tr("Ilmuv märk").toStdString())->font(underlineFont);
+                        sheet->label(5, 9, tr("Rapid").toStdString())->font(underlineFont);
                     }else if(leht->eventType() == QualificationEvents::EventType::RapidFirePistol){
                         sheet->merge(5, 5, 5, 8);
-                        sheet->label(5, 5, tr("I pool").toStdString())->font(underlineFont);
+                        sheet->label(5, 5, tr("I Stage").toStdString())->font(underlineFont);
                         sheet->merge(5, 9, 5, 12);
-                        sheet->label(5, 9, tr("II pool").toStdString())->font(underlineFont);
+                        sheet->label(5, 9, tr("II Stage").toStdString())->font(underlineFont);
                     }else if(leht->eventType() == QualificationEvents::EventType::StandardPistol){
                         sheet->merge(5, 5, 5, 7);
                         sheet->label(5, 5, "150\"")->font(underlineFont);
@@ -1274,9 +1272,9 @@ void Protokollitaja::eksportXLS()
                         sheet->label(5, 11, "10\"")->font(underlineFont);
                     }else if(leht->eventType() == QualificationEvents::EventType::RunningTarget_50m || leht->eventType() == QualificationEvents::EventType::RunningTarget_10m){
                         sheet->merge(5, 5, 5, 8);
-                        sheet->label(5, 5, tr("Aeglane jooks").toStdString())->font(underlineFont);
+                        sheet->label(5, 5, tr("Slow Run").toStdString())->font(underlineFont);
                         sheet->merge(5, 9, 5, 12);
-                        sheet->label(5, 9, tr("Kiire jooks").toStdString())->font(underlineFont);
+                        sheet->label(5, 9, tr("Fast Run").toStdString())->font(underlineFont);
                     }
                 }
                 for(int i = 0; i < 15; i++)
@@ -1490,7 +1488,7 @@ void Protokollitaja::eksportXLS()
         }
 
         if(book.Dump(/*QString(*/failiNimi.toLatin1().toStdString()) == 0){
-            QMessageBox::information(this, tr("Teade"), tr("Võistlus eksporditud .xls faili\n%1").arg(failiNimi), QMessageBox::Ok);
+            QMessageBox::information(this, tr("Info"), tr("Competition exported to .xls file\n%1").arg(failiNimi), QMessageBox::Ok);
         }
     }
 }
@@ -1498,21 +1496,20 @@ void Protokollitaja::eksportXLS()
 void Protokollitaja::exportFinalsFile()
 {
         if(tabWidget->count() < 1){
-                QMessageBox::critical(this, "Protokollitaja", tr("Ei ole ühtegi lehte, mille põhjal finaali teha!"),
+                QMessageBox::critical(this, "Protokollitaja", tr("No tabs from which to create a finals file!"),
                                 QMessageBox::Ok);
                 return;
         }
         Leht* seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
         if(seeLeht->voistk){
-                QMessageBox::critical(this, "Protokollitaja", tr("Tahate võistkondliku arvestuse kohta finaali teha? "
-                                "Mida te endast küll mõtlete? Ühesõnaga selline asi unustage kohe ära."), QMessageBox::Ok);
+                QMessageBox::critical(this, "Protokollitaja", tr("Finals for teams are currently not supported."), QMessageBox::Ok);
                 return;
         }
 
         if (seeLeht->finalsData().has_value()) {
             QJsonObject finalsObj = seeLeht->finalsData().value();
             QString fileLocation = seeFail.left(seeFail.lastIndexOf('/') + 1);
-            QString finalsFileName = QFileDialog::getSaveFileName(this, tr("Salvesta finaal"), fileLocation + finalsObj["eventName"].toString("") + ".fin", tr("Protofinaali fail (*.fin)"));
+            QString finalsFileName = QFileDialog::getSaveFileName(this, tr("Save final"), fileLocation + finalsObj["eventName"].toString("") + ".fin", tr("Protofinaal file (*.fin)"));
             if(finalsFileName.isEmpty()) return;
 
             QFile file(finalsFileName);
@@ -1523,8 +1520,7 @@ void Protokollitaja::exportFinalsFile()
                 m_finalsFileName = finalsFileName;
                 return;
             } else {
-                QMessageBox::critical(this, "Protokollitaja", tr("Ei õnnestu finaali faili luua! Kontrollige, "
-                                    "kas teil on sinna kausta kirjutamise õigused"), QMessageBox::Ok);
+                QMessageBox::critical(this, "Protokollitaja", tr("Unable to create Finaal file! Check that you have permissions to write to the folder"), QMessageBox::Ok);
                 finalsFileName.clear();
                 return;
             }
@@ -1607,7 +1603,7 @@ void Protokollitaja::exportFinalsFile()
         finalsFileExport->setRelay(10 + seeLeht->leheIndeks);
         if(finalsFileExport->exec() == QDialog::Accepted){
             m_finalsFileName = finalsFileExport->getFinalsFileName();
-            QMessageBox::information(this, "Protokollitaja", tr("Finaali fail kirjutatud!\n%1").arg(m_finalsFileName), QMessageBox::Ok);
+            QMessageBox::information(this, "Protokollitaja", tr("Finaal file written!\n%1").arg(m_finalsFileName), QMessageBox::Ok);
         }
         finalsFileExport->deleteLater();
 }
@@ -1623,7 +1619,7 @@ void Protokollitaja::finalsFinished(const int exitCode, const QProcess::ExitStat
 
 void Protokollitaja::impordiFinaal()
 {
-    QString failiNimi = QFileDialog::getOpenFileName(this, tr("Ava"), seeFail.left(seeFail.length() - 3), tr("Finaali fail (*.fin)"));
+    QString failiNimi = QFileDialog::getOpenFileName(this, tr("Open"), seeFail.left(seeFail.length() - 3), tr("Protofinaal file (*.fin)"));
     if(failiNimi.isEmpty() || failiNimi == ".fin")
             return;
     readFinalsFile(failiNimi);
@@ -1641,7 +1637,7 @@ void Protokollitaja::import()
                 Leht* leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(importAken->
                                 ui.sakiBox->currentIndex()))->widget());
                 if(leht->voistk){
-                QMessageBox::critical(this, tr("Viga!"), tr("Võistkondade lehele ei saa laskureid importida!"), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Error!"), tr("Competitors cannot be imported to a team event`s tab!"), QMessageBox::Ok);
                     return;
                 }
                 for(int i = 0; i < importAken->leht->laskurid.count(); i++){
@@ -1691,20 +1687,20 @@ void Protokollitaja::runFinals()
         switch(m_protoFinaalProcess->error()){
         case QProcess::FailedToStart : {
             if(m_protoFinaalProcess->errorString() == "No such file or directory")
-                QMessageBox::critical(this, tr("Viga"), tr("Finaali käivitamine ei õnnestunud!\nProtofinaal.exe faili ei leitud!"), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Error"), tr("Unable to start the finals application!\nUnable to find Protofinaal.exe!"), QMessageBox::Ok);
             else
-                QMessageBox::critical(this, tr("Viga"), tr("Finaali käivitamine ei õnnestunud!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Error"), tr("Unable to start Finaal!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
             break;
         }
         case QProcess::Crashed : {
-            QMessageBox::critical(this, tr("Viga"), tr("Finaali programm jooksis käivitamisel kokku!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error"), tr("Finaal crashed on startup!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
             break;
         }
         case QProcess::Timedout : {
-            QMessageBox::critical(this, tr("Viga"), tr("Finaali käivitamine ei õnnestunud! Võttis liiga palju aega!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error"), tr("Unable to start Finaal! Took too much time!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
             break;
         }
-        default : QMessageBox::critical(this, tr("Viga"), tr("Finaali käivitamine ei õnnestunud! Põhjus teadmata!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
+        default : QMessageBox::critical(this, tr("Error"), tr("Unable to start Finaal! Reason unknown!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
         }
     }
 }
@@ -1715,7 +1711,7 @@ void Protokollitaja::kaivitaServer()
 //        server = new QTcpServer(this);
         server = new ProtolehelugejaServer(this);
         if (!server->listen(QHostAddress::Any, 50005)) {
-            QMessageBox::critical(this, tr("Viga"), tr("Unable to start the server: %1.").arg(server->errorString()));
+            QMessageBox::critical(this, tr("Error"), tr("Unable to start the server: %1.").arg(server->errorString()));
             return;
         }
         ipAadress.clear();
@@ -1745,11 +1741,11 @@ void Protokollitaja::kaivitaServer()
         // kui ei leia uhtegi sellist, kasutame IPv4 localhost'i
         if (ipAadress.isEmpty())
             ipAadress = QHostAddress(QHostAddress::LocalHost).toString();
-        statusBar()->showMessage(tr("Server käivitatud, ip: %1").arg(ipAadress), 10000);
+        statusBar()->showMessage(tr("Server started, ip: %1").arg(ipAadress), 10000);
         connect(server, &ProtolehelugejaServer::save, this, &Protokollitaja::salvesta);
         connect(server, &ProtolehelugejaServer::renewWithTargetNumber, this, &Protokollitaja::uuendaVorkuSifriga);
         connect(server, &ProtolehelugejaServer::shotInfoRead, this, &Protokollitaja::readShotInfo);
-    }else QMessageBox::information(this, tr("Teade"), tr("Server töötab, \naadress: %1").arg(ipAadress), QMessageBox::Ok);
+    }else QMessageBox::information(this, tr("Info"), tr("Server up and running, \naddress: %1").arg(ipAadress), QMessageBox::Ok);
 }
 
 void Protokollitaja::kasNaitaTul(bool naitamine)
@@ -1849,8 +1845,7 @@ void Protokollitaja::kirjutaFail(QString failiNimi)
         valja << jsonObj;
         voibSulgeda = true;
         statusBar()->showMessage("Fail salvestatud", 3000);
-    } else QMessageBox::critical(this, "Protokollitaja", tr("Ei õnnestu faili luua. Kontrollige kas "
-                    "teil on sinna kausta kirjutamise õigus."), QMessageBox::Ok);
+    } else QMessageBox::critical(this, "Protokollitaja", tr("Unable to create the file. Make sure you have write permissions to that folder."), QMessageBox::Ok);
 }
 
 void Protokollitaja::kontrolliIdKordusi()   //Kuna see funktsioon peaks muutma midagi ainult siis, kui avatakse vana faili, siis lisab see uued ID'd automaatselt
@@ -1900,7 +1895,7 @@ void Protokollitaja::kontrolliIdKordust(int uusId, Laskur* las)   //Kontrollib l
         las->id = uusId;
         voibSulgeda = false;
     }else{
-        QMessageBox::critical(this, tr("Viga"), "Selline ID on juba olemas!\nID'd ei muudetud!", QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error"), "Selline ID on juba olemas!\nID'd ei muudetud!", QMessageBox::Ok);
     }
 }
 
@@ -1912,7 +1907,7 @@ void Protokollitaja::kopeeriLaskurid()
     int currentIndex = tabWidget->currentIndex();
 
     if(leht->voistk){
-        QMessageBox::critical(this, tr("Viga"), tr("Võistkondade kopeerimine lehtede vahel pole võimalik")
+        QMessageBox::critical(this, tr("Error"), tr("Copying teams between tabs is not supported")
                 , QMessageBox::Ok);
         return;
     }
@@ -1926,21 +1921,20 @@ void Protokollitaja::kopeeriLaskurid()
             sakid << tabWidget->tabText(i);
 
     bool Ok;
-    QString valik = QInputDialog::getItem(this, tr("Vali leht, millele laskurid kopeerida"), tr("Töölehe nimi:"), sakid, 0, false, &Ok);
+    QString valik = QInputDialog::getItem(this, tr("Choose a sheet to which to copy the shooters"), tr("Tab name:"), sakid, 0, false, &Ok);
 
     if(Ok && !valik.isEmpty()){
         for(int i = 0; i < tabWidget->count(); i++)
             if(i != currentIndex && tabWidget->tabText(i) == valik){
                 Leht* leht2 = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
                 if(leht2->voistk){
-                    QMessageBox::critical(this, tr("Viga"), tr("Laskureid ei saa kopeerida võistkonna lehele"), QMessageBox::Ok);
+                    QMessageBox::critical(this, tr("Error"), tr("Shooters cannot be copied to team event's sheet"), QMessageBox::Ok);
                     return;
                 } else if (leht->leheIndeks == leht2->leheIndeks) {
-                    QMessageBox::critical(this, "Protokollitaja", tr("Laskureid ei saa kopeerida samale lehele"), QMessageBox::Ok);
+                    QMessageBox::critical(this, "Protokollitaja", tr("Shooters cannot be copied to the same sheet"), QMessageBox::Ok);
                     return;
                 } else if(leht->seeriateArv > leht2->seeriateArv){
-                    if(QMessageBox::warning(this, tr("Hoiatus!"), tr("Lehel, kuhu laskureid kopeerida tahetakse, on seeriate arv väiksem! See"
-                                                                  "tähendab, et osad seeriad lähevad kaduma.\n\nKas soovite jätkata"), QMessageBox::Yes | QMessageBox::No)
+                    if(QMessageBox::warning(this, tr("Warning!"), tr("Chosen sheet has smaller number of series! This means that some series will be lost.\n\nDo you want to proceed"), QMessageBox::Yes | QMessageBox::No)
                             == QMessageBox::No)
                         return;
                 }
@@ -2070,7 +2064,7 @@ void Protokollitaja::lehedLoetud()
         }
         if(!lehelugejaLaskur->onLehelugejaLaskur){    //Kui ei õnnestunud leida õige laskur
             logiValja << "#Viga: Lehelugemise laskur kadunud!\n";
-            QMessageBox::critical(this, tr("Viga"), tr("Ei leitud laskurid, kellele need tulemused minema oleks pidanud!"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error"), tr("Unable to find the competitor who should have gotten these results!"), QMessageBox::Ok);
             return;
         }
         for(int i = 0; i < lehelugejaLaskur->seeriateArv; i++){  //Selle laskuri uuendamine, kelle lehti loeti
@@ -2097,11 +2091,11 @@ void Protokollitaja::lehelugeja()
             lehelugejaLeht = leht;
         }
         if(lehelugejaLeht->seeriateArv > 6){
-            QMessageBox::critical(this, tr("Viga"), tr("Kahjuks see versioon Protokollitajast ei toeta lehelugemist 3x40 lasku standardi harjutustes!"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error"), tr("Unfortunately this version of Protokollitaja doesn't support paper target scoring for 3x40 events!"), QMessageBox::Ok);
             return;
         }
 //        if(!leht->harjutus.contains(tr("õhu"), Qt::CaseInsensitive) && !leht->harjutus.contains(tr("standard"), Qt::CaseInsensitive) && !leht->harjutus.contains(tr("lamades"), Qt::CaseInsensitive)){
-//            QMessageBox::critical(this, tr("Viga"), tr("Kahjuks see versioon Protokollitajast toetab lehelugemist ainult sportpüssi, õhupüssi ja õhupüstoli harjutustes!"), QMessageBox::Ok);
+//            QMessageBox::critical(this, tr("Error"), tr("Kahjuks see versioon Protokollitajast toetab lehelugemist ainult sportpüssi, õhupüssi ja õhupüstoli harjutustes!"), QMessageBox::Ok);
 //            return;
 //        }
         if(!lehelugejaAken){
@@ -2137,11 +2131,11 @@ void Protokollitaja::lehelugeja()
                 for(int j = leht->seeriateArv; j < lehelugejaAken->seeriad.count(); j++)
                     lehelugejaAken->seeriad[j]->hide();
             }else{
-                QMessageBox::critical(this, tr("Viga"), tr("Liiga palju seeriaid, lugemine ei ole võimalik!"), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Error"), tr("Too many series, scoring not possible!"), QMessageBox::Ok);
                 return;
             }
         }else{
-            QMessageBox::critical(this, tr("Viga"), tr("Ei ole ühtegi laskurit, kelle lehti lugeda!"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error"), tr("No competitors to add results to!"), QMessageBox::Ok);
             return;
         }
         /*QFile logifail(asukoht.absolutePath() + QString("/Data/Logi %1.log").arg(QDate::currentDate()
@@ -2170,7 +2164,7 @@ void Protokollitaja::liiguta()
     int currentIndex = tabWidget->currentIndex();
 
     if(leht->voistk){
-        QMessageBox::critical(this, "Protokollitaja", tr("Võistkondade liigutamine lehtede vahel pole võimalik"),
+        QMessageBox::critical(this, "Protokollitaja", tr("Moving teams between tabs is not possible"),
                 QMessageBox::Ok);
         return;
     }
@@ -2183,21 +2177,20 @@ void Protokollitaja::liiguta()
         if (i != currentIndex)  // Exclude current tab
             sakid << tabWidget->tabText(i);
     bool Ok;
-    QString valik = QInputDialog::getItem(this, tr("Vali leht, millele laskurid teisaldada"), tr("Töölehe nimi:"), sakid, 0, false, &Ok);
+    QString valik = QInputDialog::getItem(this, tr("Choose a sheet to which to move the shooters"), tr("Tab name:"), sakid, 0, false, &Ok);
     if(Ok && !valik.isEmpty()){
         for(int i = 0; i < tabWidget->count(); i++)
             if(i != currentIndex && tabWidget->tabText(i) == valik){
                 Leht* leht2 = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
 
                 if(leht2->voistk){
-                    QMessageBox::critical(this, "Protokollitaja", tr("Laskureid ei saa teisaldada võistkonna lehele"), QMessageBox::Ok);
+                    QMessageBox::critical(this, "Protokollitaja", tr("Shooters cannot be moved to team event's sheet"), QMessageBox::Ok);
                     return;
                 } else if (leht->leheIndeks == leht2->leheIndeks) {
-                    QMessageBox::critical(this, "Protokollitaja", tr("Laskureid ei saa teisaldada samale lehele"), QMessageBox::Ok);
+                    QMessageBox::critical(this, "Protokollitaja", tr("Shooters cannot be moved to the same sheet"), QMessageBox::Ok);
                     return;
                 } else if(leht->seeriateArv > leht2->seeriateArv){
-                    if(QMessageBox::warning(this, tr("Hoiatus!"), tr("Lehel, kuhu laskureid teisaldada tahetakse, on seeriate arv väiksem! See"
-                                                                  "tähendab, et osad seeriad lähevad kaduma.\n\nKas soovite jätkata"), QMessageBox::Yes | QMessageBox::No)
+                    if(QMessageBox::warning(this, tr("Warning!"), tr("Chosen sheet has smaller number of series! This means that some series will be lost.\n\nDo you want to proceed"), QMessageBox::Yes | QMessageBox::No)
                             == QMessageBox::No)
                     return;
                 }
@@ -2211,7 +2204,7 @@ void Protokollitaja::liiguta()
                             QMessageBox teade;
                             teade.setIcon(QMessageBox::Warning);
                             teade.setWindowTitle("Protokollitaja");
-                            teade.setText(tr("Ühele valitud laskurile loetakse parasjagu tulemusi, seega ei saa teda teisaldada"));
+                            teade.setText(tr("One selected shooter is currently receiving results and therefore cannot be moved"));
                             teade.show();
                         }
                     }
@@ -2228,10 +2221,10 @@ void Protokollitaja::loeBroadcast()
         datagram.resize(udpSocket->pendingDatagramSize());
         udpSocket->readDatagram(datagram.data(), datagram.size());
 //        statusLabel->setText(tr("Received datagram: \"%1\"").arg(datagram.data()));
-//        QMessageBox::information(this, tr("Teade"), tr("Saabus broadcastitud datagram: \"%1\"").arg(datagram.data()), QMessageBox::Ok);
+//        QMessageBox::information(this, tr("Info"), tr("Saabus broadcastitud datagram: \"%1\"").arg(datagram.data()), QMessageBox::Ok);
         QString rida(datagram);
         if(rida == "Protok?"){
-            statusBar()->showMessage(tr("Küsiti IP aadressi"), 3000);
+            statusBar()->showMessage(tr("IP address was asked"), 3000);
             datagram = "Protok:";
             QList<QHostAddress> ipAadressid = QNetworkInterface::allAddresses();
             //Mõnes arvutis on mitu IPv4 aadressi, saata tuleb kõik, mis ei alga 255 või 127'ga
@@ -2317,10 +2310,10 @@ void Protokollitaja::readFinalsFile(QString fileName)
         jsonObj = fileJson.object();
 
         if(jsonObj["fileVersion"].toInt() > 301)
-            QMessageBox::warning(this, tr("Viga!"), tr("Faili versioon on uuem, kui see versioon programmist. Faili avamisel võib tekkida vigu!"), QMessageBox::Ok);
+            QMessageBox::warning(this, tr("Error!"), tr("File version is newer that this version of the application. There might be errors when opening the file!"), QMessageBox::Ok);
 
         if(!(jsonObj.contains("relays") && jsonObj["relays"].isArray())) {
-            QMessageBox::critical(this, tr("Viga!"), tr("Finaali fail vigane või ilma tulemusteta!"));
+            QMessageBox::critical(this, tr("Error!"), tr("Finals file is without results (start list only) or is broken!"));
         } else {
             Leht* currentSheet = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
             int addedCount = 0;
@@ -2363,30 +2356,30 @@ void Protokollitaja::readFinalsFile(QString fileName)
                                             }
                                         }
                                     } else {
-                                        QMessageBox::critical(this, tr("Viga!"), tr("No Sum in series!"));
+                                        QMessageBox::critical(this, tr("Error!"), tr("No Sum in series!"));
                                     }
                                 } else {
-                                    QMessageBox::critical(this, tr("Viga!"), tr("Faulty competitorObj!"));
+                                    QMessageBox::critical(this, tr("Error!"), tr("Faulty competitorObj!"));
                                 }
                             }
                         } else {
-                            QMessageBox::critical(this, tr("Viga!"), tr("membersInTeam not an array!"));
+                            QMessageBox::critical(this, tr("Error!"), tr("membersInTeam not an array!"));
                         }
                     }
                 } else {
-                    QMessageBox::critical(this, tr("Viga!"), tr("Teams not an array!"));
+                    QMessageBox::critical(this, tr("Error!"), tr("Teams not an array!"));
                 }
             }
             if(addedCount < 1)
-                QMessageBox::warning(this, tr("Protokollitaja"), tr("Ei leidnud ühelegi laskurile finaali tulemust. Kontrollige faili õigsust."), QMessageBox::Ok);
+                QMessageBox::warning(this, tr("Protokollitaja"), tr("Couldn't find finals results to any of the competitors. Check that you have the correct file."), QMessageBox::Ok);
             else {
                 voibSulgeda = false;
                 currentSheet->setFinalsData(jsonObj);
-                QMessageBox::information(this, tr("Protokollitaja"), tr("Lisatud %1'le laskurile finaali tulemus.").arg(addedCount), QMessageBox::Ok);
+                QMessageBox::information(this, tr("Protokollitaja"), tr("Finals results added to %1 competitors.").arg(addedCount), QMessageBox::Ok);
             }
         }
     } else {
-        QMessageBox::critical(this, tr("Viga!"), tr("Faili avamine ei ole võimalik!\n\nAsukoht: ") + file.fileName(), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error!"), tr("Unable to open the file!\n\nLocation: ") + file.fileName(), QMessageBox::Ok);
     }
 }
 
@@ -2416,24 +2409,24 @@ void Protokollitaja::muudaTab(const QModelIndex &indeks)
         bool ok = false;
         switch(indeks.column()){
         case 0: {
-                uusNimi = QInputDialog::getText(this, tr("Sisestage uus lehe nimi"), tr("Töölehe nimi:"),
+                uusNimi = QInputDialog::getText(this, tr("Enter new sheet name"), tr("Tab name:"),
                         QLineEdit::Normal, seaded->ui.sakid->currentItem()->text(0), &ok);
                 break;
         }
         case 1: {
-                uusNimi = QInputDialog::getText(this, tr("Sisestage uus ekraaninimi"), tr("Ekraaninimi:"),
+                uusNimi = QInputDialog::getText(this, tr("Enter new screen name"), tr("Screen Name:"),
                                         QLineEdit::Normal, seaded->ui.sakid->currentItem()->text(1), &ok);
                 break;
         }
         case 2: {
-                uusNimi = QString("%1").arg(QInputDialog::getInt(this, tr("Sisestage uus min näitamise aeg"),
-                                tr("Aeg sekundites:"), seaded->ui.sakid->currentItem()->text(2).toInt(),
+                uusNimi = QString("%1").arg(QInputDialog::getInt(this, tr("Enter new minimum showing time"),
+                                tr("Time in seconds:"), seaded->ui.sakid->currentItem()->text(2).toInt(),
                                 1, seaded->ui.sakid->currentItem()->text(3).toInt(), 1, &ok));
                 break;
         }
         case 3: {
-                uusNimi = QString("%1").arg(QInputDialog::getInt(this, tr("Sisestage uus max näitamise aeg"),
-                                tr("Aeg sekundites:"), seaded->ui.sakid->currentItem()->text(3).toInt(),
+                uusNimi = QString("%1").arg(QInputDialog::getInt(this, tr("Enter new maximum showing time"),
+                                tr("Time in seconds:"), seaded->ui.sakid->currentItem()->text(3).toInt(),
                                 seaded->ui.sakid->currentItem()->text(2).toInt(), 99, 1, &ok));
                 break;
         }
@@ -2442,7 +2435,7 @@ void Protokollitaja::muudaTab(const QModelIndex &indeks)
                 for(int i = 0; i < TargetTypes::targetNames().size(); i++)
                     if(TargetTypes::targetNames().at(i) == seaded->ui.sakid->currentItem()->text(5))
                         indeks = i;
-                uusNimi = QInputDialog::getItem(this, tr("Valige uus märkleht"), tr("Märkleht:"), TargetTypes::targetNames(), indeks, false, &ok);
+                uusNimi = QInputDialog::getItem(this, tr("Pick new target"), tr("Target:"), TargetTypes::targetNames(), indeks, false, &ok);
                 break;
         }
         case 6: {
@@ -2450,7 +2443,7 @@ void Protokollitaja::muudaTab(const QModelIndex &indeks)
                 for(int i = 0; i < QualificationEvents::eventNames().count(); i++)
                     if(QualificationEvents::eventNames().at(i) == seaded->ui.sakid->currentItem()->text(6))
                         indeks = i;
-                uusNimi = QInputDialog::getItem(this, tr("Sisestage uus harjutus"), tr("Harjutus:"), QualificationEvents::eventNames(), indeks, false, &ok);
+                uusNimi = QInputDialog::getItem(this, tr("Enter new event"), tr("Event:"), QualificationEvents::eventNames(), indeks, false, &ok);
                 break;
         }
         }
@@ -2775,7 +2768,7 @@ void Protokollitaja::naitaTul()
                 }
             }else{	//kui on tegu vahesummadega, mis muidu ekraanile ära ei mahu
                 if(seeLeht->vSummadeSamm == 0){
-                    QMessageBox::critical(this, tr("Viga!"), tr("Mis harjutus see nii suure seeriate arvuga on ja seejuures ilma vahesummadeta? Selle näitamine ei ole võimalik."), QMessageBox::Ok);
+                    QMessageBox::critical(this, tr("Error!"), tr("It is not possible to show an event with so big number of series, but without subtotals."), QMessageBox::Ok);
                     return;
                 }
                 tulemus->mitmeJarel = seeLeht->vSummadeSamm;
@@ -2820,7 +2813,7 @@ void Protokollitaja::naitaTul()
                             /*for(int v = 0; v < seeLeht->vSummadeSamm; v++)
                                 tulemus->read[i-areaNr][6 + v] = seeLeht->reasLaskurid[i]->seeriad[v]->text();
                             tulemus->read[i-areaNr][5 + seeLeht->vSummadeSamm] = seeLeht->reasLaskurid[i]->vSummad[0]->text();
-                            QMessageBox::information(this, "Viga!", seeLeht->reasLaskurid[i]->vSummad[0]->text(), QMessageBox::Ok);
+                            QMessageBox::information(this, "Error!", seeLeht->reasLaskurid[i]->vSummad[0]->text(), QMessageBox::Ok);
                             for(int v = 1; v < seeLeht->laskurid[i-areaNr]->vSummad.count(); v++)
                                 if(seeLeht->reasLaskurid[i]->vSummad[v]->text().toInt() == 0){
                                     tulemus->read[i-areaNr][5 + v] = seeLeht->reasLaskurid[i]->vSummad[v - 1]->text();
@@ -2932,14 +2925,14 @@ void Protokollitaja::naitaTulAken()
     QList<QScreen *> screens = QGuiApplication::screens();
 
     if (screens.size() >= 2) {
-        if (QMessageBox::question(this, "Protokollitaja", tr("Kas tahate tulemused näidata teisel ekraanil?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+        if (QMessageBox::question(this, "Protokollitaja", tr("Do you want to show the spectator view on the other screen?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
             QScreen *currentScreen = QGuiApplication::screenAt(this->geometry().center());
             int currentIndex = screens.indexOf(currentScreen);
             QScreen *otherScreen = screens.at((currentIndex + 1) % screens.size());
             tulemus->setScreen(otherScreen);
             tulemus->move(otherScreen->geometry().center() - tulemus->rect().center());
             tulemus->showFullScreen();
-            QMessageBox::information(this, tr("Teade"), tr("Tulemuse aken näidatud teisel ekraanil"), QMessageBox::Ok);
+            QMessageBox::information(this, tr("Info"), tr("Spectator view shown on the other screen"), QMessageBox::Ok);
         } else {
             tulemus->show();
         }
@@ -3117,8 +3110,8 @@ void Protokollitaja::prindi()
                     painter.setFont(pealkirjaFont);
                     painter.drawText(60, 50, m_competitionName);
                     painter.setFont(paiseFont);
-                    painter.drawText(1345, 130, tr("Summa"));
-                    //painter.drawText(1100, 130, "Seeriad");
+                    painter.drawText(1345, 130, tr("Total"));
+                    //painter.drawText(1100, 130, "Series");
                     painter.setFont(kirjaFont);
                     painter.drawText(800, 50, 700, 50, Qt::AlignRight, timeAndPlaceString());
                     kirjaFont.setBold(true);
@@ -3182,12 +3175,12 @@ void Protokollitaja::prindi()
                     painter.setFont(pealkirjaFont);
                     painter.drawText(60, 50, m_competitionName);
                     painter.setFont(paiseFont);
-                    painter.drawText(2015, 130, tr("Summa"));
-                    painter.drawText(1050, 130, tr("Põlvelt"));
-                        painter.drawText(1400, 130, tr("Lamades"));
-                    painter.drawText(1750, 130, tr("Püsti"));
-                    painter.drawText(2120, 130, tr("Finaal"));
-                    painter.drawText(2220, 130, tr("Kokku"));
+                    painter.drawText(2015, 130, tr("Total"));
+                    painter.drawText(1050, 130, tr("Kneeling"));
+                        painter.drawText(1400, 130, tr("Prone"));
+                    painter.drawText(1750, 130, tr("Standing"));
+                    painter.drawText(2120, 130, tr("Final"));
+                    painter.drawText(2220, 130, tr("Total"));
                     painter.setFont(kirjaFont);
                     painter.drawText(1500, 50, 700, 50, Qt::AlignRight, timeAndPlaceString());
                     kirjaFont.setBold(true);
@@ -3272,8 +3265,8 @@ void Protokollitaja::prindi()
                     painter.setFont(pealkirjaFont);
                     painter.drawText(60, 50, m_competitionName);
                     painter.setFont(paiseFont);
-                    painter.drawText(1345, 130, tr("Summa"));
-                    //painter.drawText(1010, 130, "Seeriad");
+                    painter.drawText(1345, 130, tr("Total"));
+                    //painter.drawText(1010, 130, "Series");
                     painter.setFont(kirjaFont);
                     painter.drawText(800, 50, 700, 50, Qt::AlignRight, timeAndPlaceString());
                     kirjaFont.setBold(true);
@@ -3358,8 +3351,8 @@ void Protokollitaja::prindi()
                     painter.setFont(pealkirjaFont);
                     painter.drawText(60, 50, m_competitionName);
                     painter.setFont(paiseFont);
-                    painter.drawText(1345, 130, tr("Summa"));
-                    painter.drawText(1100, 130, tr("Seeriad"));
+                    painter.drawText(1345, 130, tr("Total"));
+                    painter.drawText(1100, 130, tr("Series"));
                     painter.setFont(kirjaFont);
                     painter.drawText(800, 50, 700, 50, Qt::AlignRight, timeAndPlaceString());
                     kirjaFont.setBold(true);
@@ -3429,7 +3422,7 @@ void Protokollitaja::prindi2()
 //                sisse.setCodec(QTextCodec::codecForName("UTF-8"));
                 pohi = sisse.readAll();
         }else{
-            QMessageBox::warning(this, "Hoiatus", tr("Print_template.html faili ei leitud! Printimine ei toimi!"), QMessageBox::Ok);
+            QMessageBox::warning(this, "Warning", tr("Print_template.html file not found! Printing not possible!"), QMessageBox::Ok);
             return;
         }
 
@@ -3451,7 +3444,7 @@ void Protokollitaja::prindi2()
         algus = pTekst.indexOf("<tr>", pTekst.indexOf("<tbody>"));
         pikkus = pTekst.lastIndexOf("</tr>", pTekst.indexOf("</tbody>")) + 5 - algus;
         if(algus == -1 || pTekst.lastIndexOf("</tr>", pTekst.indexOf("</tbody>")) == -1)
-                QMessageBox::critical(this, tr("Viga"), tr("Ei leidnud Print_template.html failist <tr>, <tbody>, </tr> või </tbody> tag'e. Tabeli printimine ei ole võimalik"), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Error"), tr("Could not find <tr>, <tbody>, </tr> or </tbody> tags from Print_template.html file. Printing of the table is not possible"), QMessageBox::Ok);
 
         QString origRida = pTekst.mid(algus, pikkus);   //Tabeli rea template
         QString rida;    //Tabeli rida, mis korduma hakkab
@@ -3460,20 +3453,20 @@ void Protokollitaja::prindi2()
         algus = origRida.lastIndexOf("<td", origRida.indexOf("#S2#"));
         pikkus = origRida.indexOf("</td>", origRida.indexOf("#S6#")) + 5 - algus;
         if(algus == -1 || origRida.indexOf("</td>", origRida.indexOf("#S6#")) == -1)
-            QMessageBox::critical(this, tr("Viga"), tr("Ei leidnud Print_template.html failist <td>, #S2#, </td> või #S6# tag'e. Tabeli printimine ei ole võimalik"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error"), tr("Could not find <td>, #S2#, </td> or #S6# tags from Print_template.html file. Printing of the table is not possible"), QMessageBox::Ok);
         origRida.remove(algus, pikkus); //Seeriate 2-6 eemaldamine template'ist
 
         algus = origRida.lastIndexOf("<td", origRida.indexOf("#S1#"));
         pikkus = origRida.indexOf("</td>", origRida.indexOf("#S1#")) + 5 - algus;
         if(algus == -1 || origRida.indexOf("</td>", origRida.indexOf("#S1#")) == -1)
-            QMessageBox::critical(this, tr("Viga"), tr("Ei leidnud Print_template.html failist <td>, #S1# või </td> tag'e. Tabeli printimine ei ole võimalik"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error"), tr("Could not find <td>, #S1# or </td> tags from Print_template.html file. Printing of the table is not possible"), QMessageBox::Ok);
         QString origSeeriaRida = origRida.mid(algus, pikkus); //Tabeli rea seeriate osa (alates 2. seeriast), mis korduma hakkab
         QString seeriaRida = origSeeriaRida;
 
         algus = origRida.lastIndexOf("<td", origRida.indexOf("#summa#"));
         pikkus = origRida.indexOf("</td>", origRida.indexOf("#summa#")) + 5 - algus;
         if(algus == -1 || origRida.indexOf("</td>", origRida.indexOf("#summa#")) == -1)
-            QMessageBox::critical(this, tr("Viga"), tr("Ei leidnud Print_template.html failist <td>, #summa# või </td> tag'e. Tabeli printimine ei ole võimalik"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error"), tr("Could not find <td>, #summa# or </td> tags from Print_template.html file. Printing of the table is not possible"), QMessageBox::Ok);
         QString origVSummaRida = origRida.mid(algus, pikkus);   //Tabeli vahesumma rea template
         QString vSummaRida = origVSummaRida;
 //        QMessageBox::information(this, "Protokollitaja", "pTekst: " + pTekst, QMessageBox::Ok);
@@ -3521,7 +3514,7 @@ void Protokollitaja::prindi2()
             rida = origRida;
 
             if(seeLeht->laskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive)){
-                rida.replace("#nr#", tr("V.A."));
+                rida.replace("#nr#", tr("Quest"));
             }else if(seeLeht->laskurid[i]->markus->text().contains("DNF", Qt::CaseInsensitive)){
                 rida.replace("#nr#", "DNF");
             }else if(seeLeht->laskurid[i]->markus->text().contains("DSQ", Qt::CaseInsensitive)){
@@ -3573,7 +3566,7 @@ void Protokollitaja::prindi2()
             algus = pTekst.indexOf("<tr>", pTekst.indexOf("<tbody>"));
             pikkus = pTekst.lastIndexOf("</tr>", pTekst.indexOf("</tbody>")) + 5 - algus;
             if(algus == -1 || pTekst.lastIndexOf("</tr>", pTekst.indexOf("</tbody>")) == -1)
-            QMessageBox::critical(this, tr("Viga"), tr("Ei leidnud Print_template.html failist <tr>, <tbody>, </tr> või </tbody> tag'e. Tabeli printimine on vigane!"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error"), tr("Could not find <tr>, <tbody>, </tr> or </tbody> tags from Print_template.html file. Printing of the table is faulty!"), QMessageBox::Ok);
 
             QString origRida = pTekst.mid(algus, pikkus);   //Tabeli võistkonna rea template
             QString rida;    //Tabeli võistkonna rida, mis korduma hakkab
@@ -3598,7 +3591,7 @@ void Protokollitaja::prindi2()
                 algus += rida.length();
 
                 for(int j = 1; j < seeLeht->voistkonnad[i]->voistlejad.count(); j++){   //Teiste liikmete lisamine
-                    if(!seeLeht->voistkonnad[i]->voistlejad[j]->eesNimi.contains(tr("Võistleja 1"))){
+                    if(!seeLeht->voistkonnad[i]->voistlejad[j]->eesNimi.contains(tr("Competitor 1"))){
                         rida = origRida;
                         rida.replace("#nr#", "");
                         rida.replace("#voistkond#", "");
@@ -3746,10 +3739,10 @@ void Protokollitaja::readShotInfo(QString data, int socketIndex)
     }
 
     if(!found){
-        saadaVorku("Viga:" + tr("Ei leitud sellist sifrit!\n\nTulemusi ei uuendatud!"), socketIndex);
+        saadaVorku("Viga:" + tr("Cannot find this cipher!\n\nResults were not updated!"), socketIndex);
         return;
     }else if(sheet->seeriateArv != dataList.takeFirst().toInt()){   //Check number of series
-        saadaVorku("Viga:" + tr("Seeriate arv ei ühti Protokollitajaga!\n\nTulemusi ei uuendatud!"), socketIndex);
+        saadaVorku("Viga:" + tr("Number of series is different from Protokollitaja!\n\nResults were not updated!"), socketIndex);
         return;
     }
 
@@ -3768,7 +3761,7 @@ void Protokollitaja::readShotInfo(QString data, int socketIndex)
 #endif
 
     if(!thisCompetitor->seeriad[seriesNo]->text().isEmpty() && thisCompetitor->seeriad[seriesNo]->text() != series){   //Add error message and ask what to do?
-        saadaVorku("Viga:" + tr("Sellel seerial on juba tulemus olemas!\n\nTulemusi ei uuendatud, kui tahate üle kirjutada, kustutage Protokollitajast eelmine seeria ära!"), socketIndex);
+        saadaVorku("Viga:" + tr("This series already has a result!\n\nResults were not updated. If you want to overwrite the existing results, delete the existing serie first!"), socketIndex);
         logiValja << "#lehelugemisel seeria muutus: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " "
                   << thisCompetitor->perekNimi->text() << ", vana: " << thisCompetitor->seeriad[seriesNo]->text() << " uus: " << series << "\n";
     }else if(!series.isEmpty()){    //Only new results will be sent and read
@@ -3880,11 +3873,8 @@ void Protokollitaja::receivedVersionInfo(bool updateExists, QString versionStrin
     if(updateExists){  //Saadaval on uuem versioon
         if(QMessageBox::information(
                     this,
-                    tr("Teade"),
-                    tr("Programmist on saadaval uuem versioon. Praegune: %1\nUus versioon: %2\n\n"
-                            "Uus versioon on saadaval Drive'is: "
-                            "https://drive.google.com/drive/folders/1SpWxxP-E12XytEFT0VmYz_QpLLFzq1nd\n\n"
-                            "Kas soovite selle kausta avada?"
+                    tr("Info"),
+                    tr("There is a newer version of the application available. Current: %1\nNew version: %2\n\nThe new version is available in Google Drive: https://drive.google.com/drive/folders/1SpWxxP-E12XytEFT0VmYz_QpLLFzq1nd\n\nWould you like to open that?"
                             ).arg(versioon).arg(versionString),
                     QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok
                 ){
@@ -3893,8 +3883,8 @@ void Protokollitaja::receivedVersionInfo(bool updateExists, QString versionStrin
     } else if(!autoUuendus){
         QMessageBox::information(
                     this,
-                    tr("Teade"),
-                    tr("Teil on kõige uuem versioon programmist.\n\nLeitud uusim versioon: %1").arg(versionString),
+                    tr("Info"),
+                    tr("You have the newest version of the application.\n\nNewest version found: %1").arg(versionString),
                     QMessageBox::Ok
                     );
     }
@@ -3916,9 +3906,8 @@ void Protokollitaja::dataUploaderFinished(bool success, QString reply, QString e
             if(webCompetitionId.contains(QRegularExpression(QStringLiteral("[^\\x{0000}-\\x{007F}]")))){
                 if(QMessageBox::warning(
                             this,
-                            tr("Viga!"),
-                            tr("Võistluse veebi ID (%1) sisaldab kummalisi tähemärke ja on ilmselt vigane!"
-                               "\n\nKas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.").arg(webCompetitionId),
+                            tr("Error!"),
+                            tr("Competition web ID (%1) contains weird symbols and is probably broken!\n\nDo you want to delete it? It doesn't affect anything else than uploading to web.").arg(webCompetitionId),
                             QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
                 webCompetitionId = "";
             }
@@ -3942,11 +3931,11 @@ void Protokollitaja::salvesta()
 #endif
         if(seeFail.isEmpty())
 #if QT_VERSION >= 0x050000
-                seeFail = QFileDialog::getSaveFileName(this, tr("Salvesta nimega"),
-                        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("Protokollitaja fail (*.kll)"));
+                seeFail = QFileDialog::getSaveFileName(this, tr("Save As"),
+                        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("Protokollitaja file (*.kll)"));
 #else
-            seeFail = QFileDialog::getSaveFileName(this, tr("Salvesta nimega"),
-                    QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation), tr("Protokollitaja fail (*.kll)"));
+            seeFail = QFileDialog::getSaveFileName(this, tr("Save As"),
+                    QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation), tr("Protokollitaja file (*.kll)"));
 #endif
         if(seeFail.isEmpty())
                 return;
@@ -3959,8 +3948,8 @@ void Protokollitaja::salvesta()
 
 void Protokollitaja::salvestaKui()
 {
-        QString uusSeeFail = QFileDialog::getSaveFileName(this, tr("Salvesta nimega"), seeFail,
-                tr("Protokollitaja fail (*.kll)"));
+        QString uusSeeFail = QFileDialog::getSaveFileName(this, tr("Save As"), seeFail,
+                tr("Protokollitaja file (*.kll)"));
         if(uusSeeFail.isEmpty())
             return;
         else seeFail = uusSeeFail;
@@ -3976,7 +3965,7 @@ void Protokollitaja::seiskaServer()
     if(server != 0){
         server->closeConnections();
         server->close();
-        statusBar()->showMessage(tr("Server seisatud"), 5000);
+        statusBar()->showMessage(tr("Server stopped"), 5000);
         server->deleteLater();
         server = 0;
     }
@@ -3989,7 +3978,7 @@ void Protokollitaja::sendCompetitorsToRange()
     Leht* sheet = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
 
     if(sheet->voistk){
-        QMessageBox::critical(this, "Protokollitaja", tr("Võistkondade saatmine Range Control'i ei ole võimalik"),
+        QMessageBox::critical(this, "Protokollitaja", tr("It is not possible to send teams to Range Control"),
                 QMessageBox::Ok);
         return;
     }
@@ -4045,7 +4034,7 @@ void Protokollitaja::sifriLisa()
             for(int j = 0; j < seeLeht->laskurid.count(); j++)
                 if(seeLeht->laskurid[j]->linnuke->isChecked())
                     if(seeLeht->laskurid[j]->sifriAlgus->text().isEmpty() || (!seeLeht->laskurid[j]->sifriAlgus->text().isEmpty() &&
-                            QMessageBox::warning(this, "Protokollitaja", tr("Siffer on juba olemas, kas soovite üle kirjutada?"), QMessageBox::Ok,
+                            QMessageBox::warning(this, "Protokollitaja", tr("Cipher already present, would you like to overwrite it?"), QMessageBox::Ok,
                             QMessageBox::Cancel) == QMessageBox::Ok)){
                         seeLeht->laskurid[j]->sifriAlgus->setText(QString("%1").arg(siffer));
                         siffer += seeLeht->seeriateArv * 10 / sifriLisaAken->ui.laskudeArv->value();
@@ -4184,15 +4173,13 @@ void Protokollitaja::taiendaAndmebaas()
                 fail.close();
         }
         if(lisatud != 0 && plisatud == 0)
-                QMessageBox::information(this, "Protokollitaja", tr("%1 uut püssilaskurit lisatud andmebaasi")
+                QMessageBox::information(this, "Protokollitaja", tr("%1 new rifle shooter(s) added to the database")
                                 .arg(lisatud), QMessageBox::Ok);
         else if(lisatud == 0 && plisatud !=0)
-                QMessageBox::information(this, "Protokollitaja", tr("%1 uut püstolilaskurit lisatud "
-                                "andmebaasi").arg(plisatud), QMessageBox::Ok);
+                QMessageBox::information(this, "Protokollitaja", tr("%1 new pistol shooter(s) added to the database").arg(plisatud), QMessageBox::Ok);
         else if(lisatud != 0 && plisatud !=0)
-                QMessageBox::information(this, "Protokollitaja", tr("%1 uut püssilaskurid ja %2 uut "
-                                "püstolilaskurit lisatud andmebaasi").arg(lisatud).arg(plisatud), QMessageBox::Ok);
-                    else QMessageBox::information(this, "Protokollitaja", tr("Uusi laskureid ei leitud"), QMessageBox::Ok);
+                QMessageBox::information(this, "Protokollitaja", tr("%1 new rifle and %2 pistol shooters added to the database").arg(lisatud).arg(plisatud), QMessageBox::Ok);
+                    else QMessageBox::information(this, "Protokollitaja", tr("No new shooters were found"), QMessageBox::Ok);
 }
 
 QString Protokollitaja::timeAndPlaceString()
@@ -4251,25 +4238,26 @@ QJsonObject Protokollitaja::toExportJson()
 void Protokollitaja::uploadResults()
 {
     QUrl url;
-#ifdef QT_DEBUG
-    url.setScheme("http");
-    url.setHost("localhost");
-    url.setPath("/api/v1/competitions");
-    url.setPort(3004);
-#else
     url.setScheme("https");
+
+#ifdef QT_DEBUG
+    // url.setHost("localhost");
+    url.setHost("test.protokollitaja.eu");
+    // url.setPort(3004);
+#else
     url.setHost("protokollitaja.eu");
-    url.setPath("/api/v1/competitions");
-    url.setPort(3005);
 #endif
+
+    url.setPath("/api/v1/competitions");
+    url.setPort(443);
 
     if(m_restHeaderData.isEmpty()) {
         logiValja << QTime::currentTime().toString("hh:mm:ss") << " #SSL version: " << QSslSocket::sslLibraryBuildVersionString() << ", "
             << QSslSocket::sslLibraryVersionString() << ", supports SSL = " << QSslSocket::supportsSsl() << Qt::endl;
         bool isOk = false;
-        QString userName = QInputDialog::getText(this, tr("Kasutajanimi andmebaasis"), tr("Kasutajanimi:"), QLineEdit::Normal, "", &isOk).toLower();
+        QString userName = QInputDialog::getText(this, tr("Username in the database"), tr("Username:"), QLineEdit::Normal, "", &isOk).toLower();
         if(isOk) {
-            QString passWord = QInputDialog::getText(this, tr("Kasutaja parool andmebaasis"), tr("Parool:"), QLineEdit::Password, "", &isOk);
+            QString passWord = QInputDialog::getText(this, tr("Password in the database"), tr("Password:"), QLineEdit::Password, "", &isOk);
             QString concatenated = userName + ":" + passWord;
             QByteArray data = concatenated.toLocal8Bit().toBase64();
             m_restHeaderData = "Basic " + data;
@@ -4320,10 +4308,10 @@ void Protokollitaja::uuendaLehelugejat(QString nimi)
         for(int i = 0; i < lehelugejaLeht->laskurid.count(); i++)
             if(nimi == (lehelugejaLeht->laskurid[i]->eesNimi->text() + " " + lehelugejaLeht->laskurid[i]->perekNimi->text())){
                 if(lehelugejaLeht->seeriateArv > 6){
-                    QMessageBox::critical(this, tr("Viga"), tr("Kahjuks see versioon Protokollitajast ei toeta lehelugemist 3x40 lasku standardi harjutustes!"), QMessageBox::Ok);
+                    QMessageBox::critical(this, tr("Error"), tr("Unfortunately this version of Protokollitaja doesn't support paper target scoring for 3x40 events!"), QMessageBox::Ok);
                     return;
                 }/*else if(lehelugejaLeht->laskurid[i]->onVorguLaskur){
-                    QMessageBox::critical(this, tr("Viga"), tr("Sellele laskurile juba loetakse lehti Lehelugejas!"), QMessageBox::Ok);
+                    QMessageBox::critical(this, tr("Error"), tr("Sellele laskurile juba loetakse lehti Lehelugejas!"), QMessageBox::Ok);
                     return;
                 }*/
                 for(int k = 0; k < lehelugejaAken->seeriad.count(); k++){
@@ -4389,10 +4377,10 @@ void Protokollitaja::uuendaLehelugejatSifriga(int siffer)
                     if(!leht->laskurid[j]->sifriAlgus->text().isEmpty())
                         if(siffer >= leht->laskurid[j]->sifriAlgus->text().toInt() && siffer < leht->laskurid[j]->sifriLopp->text().toInt()){
                             if(leht->seeriateArv > 6){
-                                QMessageBox::critical(this, tr("Viga"), tr("Kahjuks see versioon Protokollitajast ei toeta lehelugemist 3x40 lasku standardi harjutustes!"), QMessageBox::Ok);
+                                QMessageBox::critical(this, tr("Error"), tr("Unfortunately this version of Protokollitaja doesn't support paper target scoring for 3x40 events!"), QMessageBox::Ok);
                                 return;
                             }/*else if(leht->laskurid[j]->onVorguLaskur){
-                                QMessageBox::critical(this, tr("Viga"), tr("Sellele laskurile juba loetakse lehti Lehelugejas!"), QMessageBox::Ok);
+                                QMessageBox::critical(this, tr("Error"), tr("Sellele laskurile juba loetakse lehti Lehelugejas!"), QMessageBox::Ok);
                                 return;
                             }*/
     //                        int siffer = lehelugejaAken->m_ui.sifriEdit->text().toInt();
@@ -4421,7 +4409,7 @@ void Protokollitaja::uuendaLehelugejatSifriga(int siffer)
                                     }
                                 }
                             }else{
-                                QMessageBox::critical(this, tr("Viga"), tr("Liiga palju seeriaid, lugemine ei ole võimalik!"), QMessageBox::Ok);
+                                QMessageBox::critical(this, tr("Error"), tr("Too many series, scoring not possible!"), QMessageBox::Ok);
                                 return;
                             }
                             lehelugejaAken->m_ui.summaEdit->setText(leht->laskurid[j]->getSumma());
@@ -4460,7 +4448,7 @@ void Protokollitaja::uuendaLehelugejatSifriga(int siffer)
                         }
             }
         }
-        QMessageBox::warning(this, tr("Hoiatus!"), "Sellist sifrit ei leitud!", QMessageBox::Ok);
+        QMessageBox::warning(this, tr("Warning!"), "This cipher was not found!", QMessageBox::Ok);
     }
 }
 
@@ -4568,7 +4556,18 @@ void Protokollitaja::uuendaVoistkondi() //Uuendadakse võistkondade tulemusi enn
             Leht *seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
                 if(seeLeht->voistk){
 #ifdef QT_DEBUG
+    QString jalgitavadStr = "";
+    for(int m = 0; m < seeLeht->jalgitavad.count(); m++)
+        jalgitavadStr.append(QString("%1, ").arg(seeLeht->jalgitavad[m]));
+
+    QString leheindeksid = "";
+    for(int i = 0; i < tabWidget->count(); i++)
+        leheindeksid.append(QString("%1, ").arg((dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget())->leheIndeks)));
+
     qDebug() << "uuendaVoistkondi(): leheIndeks = " << seeLeht->leheIndeks;
+    qDebug() << "uuendaVoistkondi(): seeLeht->voistkonnad.count() = " << seeLeht->voistkonnad.count();
+    qDebug() << "uuendaVoistkondi(): seeLeht->jalgitavad.count() = " << seeLeht->jalgitavad.count() << " jalgitavad: " << jalgitavadStr;
+    qDebug() << "uuendaVoistkondi(): tabWidget->count() = " << tabWidget->count() << " leheindeksid: " << leheindeksid;
 #endif
                     for(int i = 0; i < seeLeht->voistkonnad.count(); i++)
                         for(int j = 0; j < seeLeht->voistkonnad[i]->voistlejad.count(); j++)
@@ -4607,12 +4606,12 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
                 if(!leht->laskurid[j]->sifriAlgus->text().isEmpty())
                     if(siffer >= leht->laskurid[j]->sifriAlgus->text().toInt() && siffer < leht->laskurid[j]->sifriLopp->text().toInt()){
                         if(leht->laskurid[j]->onLehelugejaLaskur){
-                                        saadaVorku("Viga:" + tr("Sellele laskurile juba loetakse lehti Protokollitajas!"), socketIndex);
+                                        saadaVorku("Viga:" + tr("Paper targets for this shooter are already being read in Protokollitaja!"), socketIndex);
                             return;
                         }
                         Laskur *seeLaskur = leht->laskurid[j];
 //                        if(leht->seeriateArv > 6){
-//                            QMessageBox::critical(this, tr("Viga"), tr("Kahjuks see versioon Protokollitajast toetab "
+//                            QMessageBox::critical(this, tr("Error"), tr("Kahjuks see versioon Protokollitajast toetab "
 //                                    "lehelugemist ainult õhupüssi ja õhupüstoli harjutustes!"), QMessageBox::Ok);
 //                            return;
 //                        }
@@ -4645,7 +4644,7 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
                                 }
                             }
                         }else{
-                            saadaVorku("Viga:" + tr("Sellist harjutust ei toetata!\nSeeriate arv liiga suur."), socketIndex);
+                            saadaVorku("Viga:" + tr("This event is not supported!\nNumber of series is too big."), socketIndex);
 //                            vorguLaskur->onVorguLaskur = false;
 //                            vorguLaskur = 0;
 //                            vorguLeht = 0;
@@ -4703,7 +4702,7 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
         }
     }
 //    QMessageBox::warning(this, tr("Hoiatus!"), "Sellist sifrit ei leitud!", QMessageBox::Ok);
-    saadaVorku("Hoiatus:" + tr("Sellist sifrit ei leitud!"), socketIndex);
+    saadaVorku("Hoiatus:" + tr("This cipher was not found!"), socketIndex);
 //    vorguLaskur = 0;
 //    vorguLeht = 0;
     }
@@ -4753,7 +4752,7 @@ void Protokollitaja::uhendusSiusigaKatkes(int connectionIndex)
 void Protokollitaja::uus()
 {
         if(!voibSulgeda){
-        int vastus = QMessageBox::question(this, "Protokollitaja", tr("Kas soovid muudatused salvestada?"),
+        int vastus = QMessageBox::question(this, "Protokollitaja", tr("Do you want to save the changes?"),
                         QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
                 if(vastus == QMessageBox::Save)	salvesta();
                 else if(vastus == QMessageBox::Cancel) return;
@@ -4818,11 +4817,11 @@ void Protokollitaja::uusTab()
         }
         if(valik->exec() == QDialog::Accepted){
                 if(valik->ui.sakiNimi->text().isEmpty()){
-                        QMessageBox::warning(this, "Protokollitaja", tr("Töölehe nime lahter on tühi. Ei saa luua uut töölehte ilma nimeta."), QMessageBox::Ok);
+                        QMessageBox::warning(this, "Protokollitaja", tr("Tab name field empty. Cannot create tab without name."), QMessageBox::Ok);
                         return;
                 }
                 if(valik->ui.nimiTulAknas->text().isEmpty()){
-                        QMessageBox::warning(this, "Protokollitaja", tr("Tulemuse aknas näidatava tabeli pealkirja lahter on tühi. Paluks see ka ikka täita"), QMessageBox::Ok);
+                        QMessageBox::warning(this, "Protokollitaja", tr("Tab screen name empty. Please fill that also"), QMessageBox::Ok);
                         return;
                 }
                 leheIndeks++;

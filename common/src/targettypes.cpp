@@ -3,17 +3,17 @@
 QMap<TargetTypes::TargetType, TargetTypes::Target>& TargetTypes::targetDefinitions()
 {
     static QMap<TargetTypes::TargetType, TargetTypes::Target> *types = new QMap<TargetType, Target>({
-        {Other, {"Other", tr("Muu"), false}},
-        {AirRifle, {"AirRifle", tr("Õhupüss"), true}},
-        {AirPistol, {"AirPistol", tr("Õhupüstol"), false}},
-        {SmallboreRifle, {"SmallboreRifle", tr("Sportpüss"), true}},
-        {FreePistol, {"FreePistol", tr("Spordipüstol"), false}},
-        {RapidPistol, {"RapidPistol", tr("Siluett"), false}},
-        {Rifle300m, {"Rifle300m", tr("300m püss"), true}},
-        {RunningTarget50m, {"RunningTarget50m", tr("50m liikuv märk"), true}},
-        {RunningTarget10m, {"RunningTarget10m", tr("10m liikuv märk"), true}},
-        {OtherRifle, {"OtherRifle", tr("Muu püss"), true}},
-        {OtherPistol, {"OtherPistol", tr("Muu püstol"), false}}
+        {Other, {"Other", tr("Other"), false}},
+        {AirRifle, {"AirRifle", tr("Air Rifle"), true}},
+        {AirPistol, {"AirPistol", tr("Air Pistol"), false}},
+        {SmallboreRifle, {"SmallboreRifle", tr("50m Rifle"), true}},
+        {FreePistol, {"FreePistol", tr("Precision Pistol"), false}},
+        {RapidPistol, {"RapidPistol", tr("Rapid Pistol"), false}},
+        {Rifle300m, {"Rifle300m", tr("300m Rifle"), true}},
+        {RunningTarget50m, {"RunningTarget50m", tr("50m Running Target"), true}},
+        {RunningTarget10m, {"RunningTarget10m", tr("10m Running Target"), true}},
+        {OtherRifle, {"OtherRifle", tr("Other Rifle"), true}},
+        {OtherPistol, {"OtherPistol", tr("Other Pistol"), false}}
     });
     return *types;
 }

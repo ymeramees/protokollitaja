@@ -26,10 +26,10 @@ SiusDataConnection::SiusDataConnection(
 
     if(verbose)
         QTextStream(stdout) << "connectToSiusData()2" << Qt::endl;
-    disconnectButton = new QPushButton(tr("Sulge ühendus"));
+    disconnectButton = new QPushButton(tr("Close Connection"));
     connect(disconnectButton, &QPushButton::clicked, this, &SiusDataConnection::disconnectFromSius);
 
-    reconnectButton = new QPushButton(tr("Ühendu uuesti"));
+    reconnectButton = new QPushButton(tr("Reconnect"));
     connect(reconnectButton, &QPushButton::clicked, this, &SiusDataConnection::reconnectToSius);
 
     row = new QHBoxLayout;
@@ -45,7 +45,7 @@ SiusDataConnection::SiusDataConnection(
 
     siusDataSocket->connectToHost(address, port);
 
-    progress = new QProgressDialog(tr("SiusData'ga ühendumine..."), "Loobu", 0, 0);
+    progress = new QProgressDialog(tr("Connecting..."), "Cancel", 0, 0);
     progress->setWindowModality(Qt::WindowModal);
     connect(progress, SIGNAL(canceled()), this, SLOT(stopProgress())); //To enable to cancel connection process
     progress->show();
@@ -184,11 +184,11 @@ void SiusDataConnection::readFromSius()
 {
     if(siusDataSocket->bytesAvailable() > 0 || siusBuffer.length() > 0){
 //        QStringList lines;
-        progress->setLabelText(tr("SiusDatast andmete vastuvõtt..."));
+        progress->setLabelText(tr("Receiving data..."));
 
         while(siusDataSocket->bytesAvailable() > 0){
           siusBuffer.append(siusDataSocket->readAll());  //Start of line 5f, end 0d 0a
-          emit statusInfo(tr("Saabus info, buffer.length(): %1").arg(siusBuffer.length()));
+          emit statusInfo(tr("Received, buffer.length(): %1").arg(siusBuffer.length()));
 
         }
 
@@ -212,7 +212,7 @@ void SiusDataConnection::readFromSius()
                     *log << QTime::currentTime().toString("hh:mm:ss") << " #clear()\n";
                     row = QString("%1").arg(siusBuffer);
                     siusBuffer.clear();
-                    emit statusInfo(tr("Viimane rida, buffer.length(): %1").arg(siusBuffer.length()));
+                    emit statusInfo(tr("Last row, buffer.length(): %1").arg(siusBuffer.length()));
                     loopWatchdog = 0;
                 } else {
                     loopWatchdog++;
@@ -279,7 +279,7 @@ void SiusDataConnection::sendData(QString data)
     siusDataSocket->write(block);
     block.clear();
 
-    emit statusInfo(tr("Nimekiri saadetud"));
+    emit statusInfo(tr("Start list sent"));
 }
 
 void SiusDataConnection::setSocketIndex(int newIndex)

@@ -44,7 +44,7 @@ void DataConnection::readData()
     if (protocolVersion == 1)
         emit startListReceived(message.split('\n'));
     else
-        emit error(tr("Tundmatu sissetuleva ühenduse versioon: %1\nKontrollige, kas Protokollitaja ja Range Control'i versioonid ühtivad!")
+        emit error(tr("Unknown incoming connection version: %1\nCheck whether Protokollitaja and Range Control versions match!")
                        .arg(protocolVersion));
 }
 

@@ -85,49 +85,49 @@ void Lane::init(QStringList disciplines)
     QHBoxLayout *hBox = new QHBoxLayout;
 
     hBox->addWidget(&m_selected);
-    m_targetEdit.setToolTip(tr("Rada"));
-    m_targetEdit.setPlaceholderText(tr("Rada"));
+    m_targetEdit.setToolTip(tr("Lane"));
+    m_targetEdit.setPlaceholderText(tr("Lane"));
     m_targetEdit.setMaximumWidth(30);
     hBox->addWidget(&m_targetEdit);
     m_idEdit.setToolTip("ID");
     m_idEdit.setPlaceholderText("ID");
     m_idEdit.setMaximumWidth(50);
     hBox->addWidget(&m_idEdit);
-    m_firstNameEdit.setToolTip(tr("Eesnimi"));
-    m_firstNameEdit.setPlaceholderText(tr("Eesnimi"));
+    m_firstNameEdit.setToolTip(tr("First Name"));
+    m_firstNameEdit.setPlaceholderText(tr("First Name"));
     hBox->addWidget(&m_firstNameEdit);
-    m_lastNameEdit.setToolTip(tr("Perekonnanimi"));
-    m_lastNameEdit.setPlaceholderText(tr("Perekonnanimi"));
+    m_lastNameEdit.setToolTip(tr("Last Name"));
+    m_lastNameEdit.setPlaceholderText(tr("Last Name"));
     hBox->addWidget(&m_lastNameEdit);
-    m_clubEdit.setToolTip(tr("Klubi"));
-    m_clubEdit.setPlaceholderText(tr("Klubi"));
+    m_clubEdit.setToolTip(tr("Club"));
+    m_clubEdit.setPlaceholderText(tr("Club"));
     hBox->addWidget(&m_clubEdit);
-    m_diciplineBox.setToolTip(tr("Harjutus"));
+    m_diciplineBox.setToolTip(tr("Event"));
     m_diciplineBox.addItems(disciplines);
     m_diciplineBox.setFocusPolicy(Qt::StrongFocus);
     connect(&m_diciplineBox, &QComboBox::currentIndexChanged, this, &Lane::updateDecimals);
     connect(&m_diciplineBox, &QComboBox::currentIndexChanged, this, &Lane::updateShots);
     hBox->addWidget(&m_diciplineBox);
     m_decimals.setChecked(true);
-    m_decimals.setToolTip(tr("Komadega"));
+    m_decimals.setToolTip(tr("With decimals"));
     hBox->addWidget(&m_decimals);
-    m_shotsEdit.setToolTip(tr("Laskude arv"));
+    m_shotsEdit.setToolTip(tr("Number of shots"));
     m_shotsEdit.setMaximum(120);
     m_shotsEdit.setFocusPolicy(Qt::StrongFocus);
     hBox->addWidget(&m_shotsEdit);
-    m_lastShotLabel.setToolTip(tr("Viimane lask"));
+    m_lastShotLabel.setToolTip(tr("Last shot"));
     hBox->addWidget(&m_lastShotLabel);
-    m_totalLabel.setToolTip(tr("Summa"));
+    m_totalLabel.setToolTip(tr("Total"));
     hBox->addWidget(&m_totalLabel);
     m_commandButton.setText("Init");
     connect(&m_commandButton, &QPushButton::clicked, [this]() {
         emit commandIssued(this);
     });
     hBox->addWidget(&m_commandButton);
-    m_ipEdit.setToolTip(tr("Märgi IP"));
-    m_ipEdit.setPlaceholderText(tr("Märgi IP"));
+    m_ipEdit.setToolTip(tr("Target IP"));
+    m_ipEdit.setPlaceholderText(tr("Target IP"));
     hBox->addWidget(&m_ipEdit);
-    m_statusLabel.setToolTip(tr("Staatus"));
+    m_statusLabel.setToolTip(tr("Status"));
     m_inCompetition = false;
     hBox->addWidget(&m_statusLabel);
     setLayout(hBox);
@@ -229,13 +229,13 @@ void Lane::setStatus(QString newStatus)
     m_statusLabel.setText(newStatus);
 //    switch (TargetStatusTexts.indexOf(newStatus)) {
 //    case TargetStatuses::MAIN:
-//        m_commandButton.setText(tr("Alusta proovidega"));
+//        m_commandButton.setText(tr("Start sighters"));
 //        break;
 //    case TargetStatuses::IP_MATCH_WAIT_SIGHTERS:
-//        m_commandButton.setText(tr("Alusta proovidega"));
+//        m_commandButton.setText(tr("Start sighters"));
 //        break;
 //    case TargetStatuses::IP_MATCH_SIGHTERS:
-//        m_commandButton.setText(tr("Lõpeta proovid"));
+//        m_commandButton.setText(tr("Stop sighters"));
 //        break;
 //    }
 }

@@ -3,14 +3,14 @@
 QMap<AgeClasses::AgeClass, AgeClasses::AgeClassDefinition>& AgeClasses::classDefinitions()
 {
     static QMap<AgeClasses::AgeClass, AgeClasses::AgeClassDefinition> *definitions = new QMap<AgeClasses::AgeClass, AgeClasses::AgeClassDefinition>({
-        {M, {tr("Mehed"), tr("M")}},
-        {W, {tr("Naised"), tr("N")}},
-        {MJ, {tr("Meesjuuniorid"), tr("MJ")}},
-        {WJ, {tr("Naisjuuniorid"), tr("NJ")}},
-        {YM, {tr("Poisid"), tr("P")}},
-        {YW, {tr("Tüdrukud"), tr("T")}},
-        {MS, {tr("Meesveteranid"), tr("MV")}},
-        {WS, {tr("Naisveteranid"), tr("NV")}},
+        {M, {tr("Men"), tr("M")}},
+        {W, {tr("Women"), tr("W")}},
+        {MJ, {tr("Men Junior"), tr("MJ")}},
+        {WJ, {tr("Women Junior"), tr("WJ")}},
+        {YM, {tr("Youth Men"), tr("YM")}},
+        {YW, {tr("Youth Women"), tr("YW")}},
+        {MS, {tr("Men Senior"), tr("MS")}},
+        {WS, {tr("Women Senior"), tr("WS")}},
     });
     return *definitions;
 }

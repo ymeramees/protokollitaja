@@ -423,7 +423,7 @@ void Leht::kontrolliKordusi()
 		if(laskurid[jrk]->eesNimi->text() == laskurid[j]->eesNimi->text() && laskurid[jrk]->
 				perekNimi->text() == laskurid[j]->perekNimi->text() && laskurid[jrk]->
                 klubi->text() == laskurid[j]->klubi->text())
-            QMessageBox::warning(this, "Protokollitaja", tr("Selline laskur on juba olemas!"), QMessageBox::Ok);
+            QMessageBox::warning(this, "Protokollitaja", tr("This shooter already exists!"), QMessageBox::Ok);
 	}
 }
 

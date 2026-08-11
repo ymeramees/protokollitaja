@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Finaali faili eksport</string>
+   <string>Export finals file</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../protokollitaja.qrc">
@@ -52,7 +52,7 @@
      <item>
       <widget class="QPushButton" name="drawButton">
        <property name="text">
-        <string>Loosi rajanr'id</string>
+        <string>Allocate random targets</string>
        </property>
       </widget>
      </item>
@@ -76,7 +76,7 @@
      <item>
       <widget class="QLabel" name="finalsFormatLabel">
        <property name="text">
-        <string>Finaali formaat:</string>
+        <string>Finals format:</string>
        </property>
       </widget>
      </item>
@@ -103,7 +103,7 @@
      <item>
       <widget class="QCheckBox" name="exportStartListBox">
        <property name="text">
-        <string>Ekspordi Sius startlist</string>
+        <string>Export Sius start list</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -126,7 +126,7 @@
      <item>
       <widget class="QLabel" name="targetNumberLabel">
        <property name="text">
-        <string>Rajanumbrid alates:</string>
+        <string>Lane no starting from:</string>
        </property>
       </widget>
      </item>
@@ -143,7 +143,7 @@
      <item>
       <widget class="QLabel" name="relayLabel">
        <property name="text">
-        <string>Vahetus:</string>
+        <string>Relay:</string>
        </property>
       </widget>
      </item>

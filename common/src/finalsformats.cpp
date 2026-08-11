@@ -6,7 +6,7 @@ FinalsFormats::FinalsFormats()
     if (jsonFile.open(QIODevice::ReadOnly)) {
         m_finalsFormats = QJsonDocument::fromJson(jsonFile.readAll()).array();
     } else {
-        QMessageBox::critical(nullptr, tr("Viga"), tr("Ei leia finaali formaatide faili!"), QMessageBox::Ok);
+        QMessageBox::critical(nullptr, tr("Error"), tr("Cannot find a file with finals formats!"), QMessageBox::Ok);
     }
     jsonFile.close();
 }

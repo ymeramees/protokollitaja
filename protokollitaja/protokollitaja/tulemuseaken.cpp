@@ -8,7 +8,7 @@ TulemuseAken::TulemuseAken(QWidget *parent) : QWidget(parent)
         if(this->objectName().isEmpty()){
                 this->setObjectName("TulemuseAken");
         }
-        setWindowTitle("Protokollitaja - " + tr("tulemused"));
+        setWindowTitle("Protokollitaja - " + tr("results"));
         //setWindowIcon(QIcon(":/images/Finaal.ico"));
         ind = true;
         loplik = false;
@@ -26,7 +26,7 @@ TulemuseAken::TulemuseAken(QWidget *parent) : QWidget(parent)
         pisike.setPointSize(12);
         setBackgroundRole(QPalette::Base);
         setAutoFillBackground(true);
-        pealKiri = tr("Pealkiri");
+        pealKiri = tr("Title");
         ridadeArv = 25;
         for(int i = 0; i < ridadeArv; i++){
                 QStringList rida;
@@ -34,18 +34,18 @@ TulemuseAken::TulemuseAken(QWidget *parent) : QWidget(parent)
                         rida << " ";
                 read << rida;
         }
-        fontAct = new QAction(tr("Muuda kirja font..."), this);
-        fontAct->setStatusTip(tr("Muuda selle akna kirja"));
+        fontAct = new QAction(tr("Font..."), this);
+        fontAct->setStatusTip(tr("Change this window's font"));
         connect(fontAct, SIGNAL(triggered()), this, SLOT(muudaKirjaFont()));
-        pealkirjaFontAct = new QAction(tr("Muuda pealkirja font..."), this);
-        pealkirjaFontAct->setStatusTip(tr("Muuda selle akna pealkirja"));
+        pealkirjaFontAct = new QAction(tr("Title Font..."), this);
+        pealkirjaFontAct->setStatusTip(tr("Change this window's title's font"));
         connect(pealkirjaFontAct, SIGNAL(triggered()), this, SLOT(muudaPealkirjaFont()));
-        paiseFontAct = new QAction(tr("Muuda päise font..."), this);
-        paiseFontAct->setStatusTip(tr("Muuda selle akna päise kirja"));
+        paiseFontAct = new QAction(tr("Heading Font..."), this);
+        paiseFontAct->setStatusTip(tr("Change this window's heading's font"));
         connect(paiseFontAct, SIGNAL(triggered()), this, SLOT(muudaPaiseFont()));
-        fullScreenAct = new QAction(tr("Täisekraan vaade"), this);
+        fullScreenAct = new QAction(tr("Fullscreen"), this);
         fullScreenAct->setShortcut(tr("F"));
-        fullScreenAct->setStatusTip(tr("Näita seda akent täisekraan vaates"));
+        fullScreenAct->setStatusTip(tr("Show this window in fullscreen mode"));
         connect(fullScreenAct, SIGNAL(triggered()), this, SLOT(fullScreen()));
 
 //        connect(this, SIGNAL(QGuiApplication::screenAdded(QScreen*)), this, SLOT(TulemuseAken::fullScreen(QScreen*)));    // FIXME To be implemented so, that it is shown on the other screen
@@ -142,24 +142,24 @@ void TulemuseAken::joonista()
         //painter->setPen(QColor(Qt::red));
         painter->setFont(pisike);
         painter->drawText(1460, 1190, "Protokollitaja " + versioon);
-        painter->drawText(1, 1190, tr("Autor: Ümeramees"));
+        painter->drawText(1, 1190, tr("Author: Ymeramees"));
         painter->setFont(kirjaFont);
-        painter->drawText(450, 1190, tr("Vaata tulemusi internetis: https://protokollitaja.eu"));
+        painter->drawText(450, 1190, tr("View results online: https://results.inband.fi"));
         painter->setFont(pealkirjaFont);
         painter->drawText(60, 50, voistluseNimi);
         painter->setFont(paiseFont);
-        painter->drawText(1345, 130, tr("Summa"));
+        painter->drawText(1345, 130, tr("Total"));
         if(ind){
                 if(loplik){
-                        painter->drawText(1450, 130, tr("Finaal"));
-                }else painter->drawText(1450, 130, tr("Keskm. l."));
+                        painter->drawText(1450, 130, tr("Final"));
+                }else painter->drawText(1450, 130, tr("Avg. shot"));
                 if(mitmeJarel == 4){
-                        painter->drawText(1100, 130, tr("Seeriad"));
-                        painter->drawText(850, 130, tr("Põlv"));
-                            painter->drawText(910, 130, tr("Lam."));
-                }else painter->drawText(1000, 130, tr("Seeriad"));
+                        painter->drawText(1100, 130, tr("Series"));
+                        painter->drawText(850, 130, tr("Kneeling"));
+                            painter->drawText(910, 130, tr("Prone"));
+                }else painter->drawText(1000, 130, tr("Series"));
         }else{
-                painter->drawText(1450, 130, tr("Keskm."));
+                painter->drawText(1450, 130, tr("Avg."));
         }
         painter->setFont(kirjaFont);
         painter->drawText(800, 50, 700, 50, Qt::AlignRight, aegKoht);

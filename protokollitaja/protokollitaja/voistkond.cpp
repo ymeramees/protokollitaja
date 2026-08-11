@@ -13,8 +13,8 @@ Voistkond::Voistkond(LiikmeteValikKast *lV, int vA, QList<int> *j, int *vI, QWid
 
     for(int i = 0; i < vArv; i++){
         voistlejad << new Liige;
-        voistlejad[voistlejad.count() - 1]->eesNimi = tr("Võistleja 1");
-        voistlejad[voistlejad.count() - 1]->harjutus = tr("Harjutus");
+        voistlejad[voistlejad.count() - 1]->eesNimi = tr("Competitor 1");
+        voistlejad[voistlejad.count() - 1]->harjutus = tr("Event");
         voistlejad[i]->silt = new QLineEdit(this);
         voistlejad[i]->silt->setText("0");
         voistlejad[i]->silt->setReadOnly(true);
@@ -55,7 +55,7 @@ Voistkond::Voistkond(QJsonObject json, LiikmeteValikKast *lV, int vA, QList<int>
     summa->setText(json["total"].toString());
     hKast->addWidget(markus);
     QString remarksString = json["remarks"].toString();
-    if (remarksString == "Märkused")
+    if (remarksString == "Remarks")
         markus->setText("");
     else
         markus->setText(remarksString);
@@ -77,11 +77,11 @@ void Voistkond::setupFields()
     nimi = new QLineEdit(this);
     nimi->setMinimumHeight(28);
     nimi->setMaximumWidth(100 + this->width() / 5);
-    nimi->setToolTip(tr("Võistkonna nimi"));
-    nimi->setPlaceholderText(tr("Võistkonna nimi"));
+    nimi->setToolTip(tr("Team Name"));
+    nimi->setPlaceholderText(tr("Team Name"));
     hKast->addWidget(nimi);
     muudaNupp = new QPushButton(this);
-    muudaNupp->setText(tr("Liikmed"));
+    muudaNupp->setText(tr("Members"));
     hKast->addWidget(muudaNupp);
     summa = new QLineEdit(this);
     summa->setText("0");
@@ -92,7 +92,7 @@ void Voistkond::setupFields()
     markus = new QLineEdit(this);
     markus->setMinimumHeight(28);
     markus->setMaximumWidth(85);
-    markus->setPlaceholderText(tr("Märkused"));
+    markus->setPlaceholderText(tr("Remarks"));
 }
 
 QJsonObject Voistkond::toExportJson()
@@ -113,7 +113,7 @@ QJsonObject Voistkond::toExportJson()
     }
     teamJson["teamMembers"] = teamMembers;
     teamJson["totalResult"] = summa->text();
-    if(markus->text() == "Märkused")
+    if(markus->text() == "Remarks")
         teamJson["remarks"] = "";
     else
         teamJson["remarks"] = markus->text();
@@ -138,7 +138,7 @@ QJsonObject Voistkond::toJson()
     }
     teamJson["members"] = membersArray;
     teamJson["total"] = summa->text();
-    if(markus->text() == "Märkused")
+    if(markus->text() == "Remarks")
         teamJson["remarks"] = "";
     else
         teamJson["remarks"] = markus->text();
@@ -174,14 +174,14 @@ void Voistkond::naitaLiikmeteValikKast()
         for(int i = 0; i < vArv; i++){
             QString rida = voistlejad[i]->perekNimi + ", " + voistlejad[i]->eesNimi + ", " + voistlejad[i]->klubi
                     + ", " + voistlejad[i]->harjutus;
-            if(voistlejad[i]->eesNimi != tr("Võistleja 1"))
+            if(voistlejad[i]->eesNimi != tr("Competitor 1"))
                 lValik->ui.liikmed->addItem(rida);
         }
         lValik->ui.leheBox->setCurrentIndex(*viimaneIndex);
         lValik->ui.liikmed->setCurrentRow(0);
         if(lValik->exec() == QDialog::Accepted){
                 for(int i = 0; i < voistlejad.count(); i++){
-                        voistlejad[i]->eesNimi = tr("Võistleja 1");
+                        voistlejad[i]->eesNimi = tr("Competitor 1");
                         voistlejad[i]->perekNimi.clear();
                         voistlejad[i]->klubi.clear();
                         voistlejad[i]->summa.clear();

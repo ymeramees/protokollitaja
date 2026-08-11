@@ -84,7 +84,7 @@ void StartListWriter::writeStartListFile(StartListType type)
     if(!m_filePath.endsWith(".csv"))
         m_filePath = QFileDialog::getSaveFileName(
                     dynamic_cast<QWidget*>(this->parent()),
-                    tr("Salvesta startlist"),
+                    tr("Save Startlist"),
                     m_filePath + ".csv",
                     tr("Comma separated file (*.csv)")
                     );
@@ -109,7 +109,7 @@ void StartListWriter::writeStartListFile(StartListType type)
             QMessageBox::information(
                         dynamic_cast<QWidget*>(this->parent()),
                         "Protokollitaja",
-                        tr("Tundmatu start list'i tüüp, ei ekspordi midagi!")
+                        tr("Unknown start list type, nothing is exported!")
                         );
         }
         file.close();
@@ -117,8 +117,8 @@ void StartListWriter::writeStartListFile(StartListType type)
             QMessageBox::information(
                 dynamic_cast<QWidget*>(this->parent()),
                 "Protokollitaja",
-                tr("Startlist loodud. Eksporditi %1 laskurit\n%2").arg(exported).arg(m_filePath),
+                tr("Startlist created. %1 competitors exported\n%2").arg(exported).arg(m_filePath),
                 QMessageBox::Ok
                 );
-    } else QMessageBox::critical(dynamic_cast<QWidget*>(this->parent()), tr("Viga"), tr("Ei õnnestu faili kirjutada."), QMessageBox::Ok);
+    } else QMessageBox::critical(dynamic_cast<QWidget*>(this->parent()), tr("Error"), tr("Unable to write to the file."), QMessageBox::Ok);
 }

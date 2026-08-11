@@ -3,6 +3,7 @@
 ### 0.9.4
 
 - Show targets and shots in Protofinaal
+- Use English as a base language instead of Estonian
 
 ### 0.9.3
 

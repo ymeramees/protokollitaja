@@ -6,8 +6,8 @@ Team::Team(QJsonObject &configJson, int index, const bool scoringWithPoints, QWi
 
     QGridLayout *layout = new QGridLayout;
 
-    m_teamName.setToolTip(tr("Võistkonna nimi"));
-    m_teamName.setPlaceholderText(tr("Võistkond"));
+    m_teamName.setToolTip(tr("Team name"));
+    m_teamName.setPlaceholderText(tr("Team"));
     m_teamName.setText("");
     m_indexLabel.setText(QString("%1.").arg(index));
     layout->addWidget(&m_indexLabel);
@@ -58,7 +58,7 @@ Team::Team(QJsonObject &configJson, int index, const bool scoringWithPoints, QWi
         }
         m_teamName.setText(configJson["teamName"].toString());
     }else
-        QMessageBox::critical(this, tr("Viga!"), tr("Vigane fail!\nMembersInTeam != isDouble && != isArray"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error!"), tr("Broken file!\nMembersInTeam != isDouble && != isArray"), QMessageBox::Ok);
 
     layout->addWidget(&m_sumLabel, 0, layout->columnCount());
 

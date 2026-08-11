@@ -65,12 +65,12 @@ Protofinaal::Protofinaal(QString fileName, QWidget* parent)
     if (verbose)
         QTextStream(stdout) << "currentFile = " << m_currentFile << Qt::endl;
 
-    m_logFile = new QFile(QFileInfo(m_currentFile).dir().absolutePath() + QString("/Protofinaal logi %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
+    m_logFile = new QFile(QFileInfo(m_currentFile).dir().absolutePath() + QString("/Protofinaal log %1.log").arg(QDate::currentDate().toString(Qt::ISODate)));
 
     if (m_logFile->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)) { // Log file
         m_logOut.setDevice(m_logFile);
     } else {
-        QMessageBox::critical(this, tr("Viga"), tr("Logi faili kirjutamine ei õnnestunud! Kontrollige, et teil oleks kirjutamisõigus sinna kausta, kus asub võistluste fail."), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error"), tr("Failed to write log file! Make sure you have write permission to the folder where the competition file is located."), QMessageBox::Ok);
     }
 }
 
@@ -96,7 +96,7 @@ void Protofinaal::changeLanguage(bool atStartup)
         setupTranslator();
 
         if (!atStartup)
-            QMessageBox::information(this, tr("Teade"), tr("Keele vahetus rakendub programmi uuesti käivitamisel"));
+            QMessageBox::information(this, tr("Info"), tr("Language change will be applied after restart"));
     }
 }
 
@@ -120,7 +120,7 @@ void Protofinaal::closeEvent(QCloseEvent* event)
     if (verbose)
         QTextStream(stdout) << "Protofinaal::closeEvent()" << Qt::endl;
     if (m_modifiedAfterSave) {
-        int reply = QMessageBox::question(this, "Protofinaal", tr("Kas soovid muudatused salvestada ja programmist väljuda?"), QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        int reply = QMessageBox::question(this, "Protofinaal", tr("Do you want to save changes and exit?"), QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         if (reply == QMessageBox::Save) {
             save();
             event->accept();
@@ -141,45 +141,45 @@ void Protofinaal::closeEvent(QCloseEvent* event)
 
 void Protofinaal::createMenus()
 {
-    QMenu* fileMenu = this->menuBar()->addMenu(tr("&Fail"));
-    QMenu* editMenu = this->menuBar()->addMenu(tr("&Tulemused"));
-    QMenu* languageMenu = this->menuBar()->addMenu(tr("Keel"));
+    QMenu* fileMenu = this->menuBar()->addMenu(tr("&File"));
+    QMenu* editMenu = this->menuBar()->addMenu(tr("&Results"));
+    QMenu* languageMenu = this->menuBar()->addMenu(tr("Language"));
 
-    QAction* openAct = new QAction(tr("&Ava..."), this);
+    QAction* openAct = new QAction(tr("&Open..."), this);
     openAct->setShortcuts(QKeySequence::Open);
-    openAct->setStatusTip(tr("Ava fail"));
+    openAct->setStatusTip(tr("Open file"));
     connect(openAct, &QAction::triggered, this, &Protofinaal::open);
 
-    QAction* saveAct = new QAction(tr("&Salvesta"), this);
+    QAction* saveAct = new QAction(tr("&Save"), this);
     saveAct->setShortcuts(QKeySequence::Save);
-    saveAct->setStatusTip(tr("Salvesta fail"));
+    saveAct->setStatusTip(tr("Save file"));
     connect(saveAct, &QAction::triggered, this, &Protofinaal::save);
 
-    QAction *eksportXLSAct = new QAction(tr("Eksport xls..."), this);
-    eksportXLSAct->setStatusTip(tr("Ekspordi tulemused xls faili"));
+    QAction *eksportXLSAct = new QAction(tr("Export xls..."), this);
+    eksportXLSAct->setStatusTip(tr("Export results to .xls file"));
     connect(eksportXLSAct, &QAction::triggered, this, &Protofinaal::eksportXLS);
 
-    QAction* importSiusStartListAct = new QAction(tr("&Impordi Sius startlist..."), this);
+    QAction* importSiusStartListAct = new QAction(tr("&Import Sius startlist..."), this);
     importSiusStartListAct->setShortcuts(QKeySequence::Open);
-    importSiusStartListAct->setStatusTip(tr("Impordi Sius startlist"));
+    importSiusStartListAct->setStatusTip(tr("Import Sius startlist"));
     connect(importSiusStartListAct, &QAction::triggered, this, &Protofinaal::importSiusStartList);
 
-    QAction* exitAct = new QAction(tr("&Välju"), this);
+    QAction* exitAct = new QAction(tr("E&xit"), this);
     exitAct->setShortcuts(QKeySequence::Quit);
-    exitAct->setStatusTip(tr("Välju programmist"));
+    exitAct->setStatusTip(tr("Exit from the program"));
     connect(exitAct, &QAction::triggered, this, &QWidget::close);
 
-    QAction* showSpectatorWindowAct = new QAction(tr("&Tulemuste aken"), this);
-    showSpectatorWindowAct->setStatusTip(tr("Ava tulemuste aken"));
+    QAction* showSpectatorWindowAct = new QAction(tr("&Spectator View"), this);
+    showSpectatorWindowAct->setStatusTip(tr("Open the spectator view"));
     connect(showSpectatorWindowAct, &QAction::triggered, this, &Protofinaal::showSpecatorWindowOnSecondScreen);
 
     QAction* connectToSiusDataAct = new QAction(tr("&SiusData"), this);
-    connectToSiusDataAct->setStatusTip(tr("Ühendu SiusData'ga"));
+    connectToSiusDataAct->setStatusTip(tr("Connect to SiusData"));
     connect(connectToSiusDataAct, &QAction::triggered, this, &Protofinaal::connectToSiusData);
 
 #ifdef QT_DEBUG
-    QAction *deleteAllShotsAct = new QAction(tr("Kustuta lasud"), this);
-    deleteAllShotsAct->setStatusTip(tr("Kustutab märgitud laskurite kõik lasud"));
+    QAction *deleteAllShotsAct = new QAction(tr("Delete Shots"), this);
+    deleteAllShotsAct->setStatusTip(tr("Deletes all shots from selected competitors"));
     connect(deleteAllShotsAct, SIGNAL(triggered()), this, SLOT(deleteAllShots()));
 #endif
 
@@ -195,21 +195,21 @@ void Protofinaal::createMenus()
     editMenu->addAction(showSpectatorWindowAct);
     editMenu->addAction(connectToSiusDataAct);
 
-    QAction* changeLanguageAct = new QAction(tr("Programmi keel"), this);
-    changeLanguageAct->setStatusTip(tr("Programmi keele valik"));
+    QAction* changeLanguageAct = new QAction(tr("Language"), this);
+    changeLanguageAct->setStatusTip(tr("Change application language"));
     connect(changeLanguageAct, &QAction::triggered, [this]() { changeLanguage(false); });
 
     languageMenu->addAction(changeLanguageAct);
 
 #ifdef QT_DEBUG
-    QMenu *testMenu = this->menuBar()->addMenu(tr("&Testimine"));
+    QMenu *testMenu = this->menuBar()->addMenu(tr("T&esting"));
     testMenu->addAction(deleteAllShotsAct);
 #endif
 }
 
 void Protofinaal::connectToSiusData()
 {
-    m_siusLog = new QFile(QFileInfo(m_currentFile).dir().absolutePath() + QString(tr("/Protofinaal sisse logi %1.log")).arg(QDate::currentDate().toString(Qt::ISODate)));
+    m_siusLog = new QFile(QFileInfo(m_currentFile).dir().absolutePath() + QString(tr("/Protofinaal incoming log %1.log")).arg(QDate::currentDate().toString(Qt::ISODate)));
 
     if (m_siusDataConnections == nullptr) {
         m_siusDataConnections = new SiusDataConnections(m_siusLog, &m_logOut, &m_settings, this);
@@ -247,7 +247,7 @@ void Protofinaal::deleteAllShots()
 void Protofinaal::eksportXLS()
 {
     QString fileLocation = m_currentFile.left(m_currentFile.length() - 4);
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Ekspordi"), fileLocation + ".xls",
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Export"), fileLocation + ".xls",
                     tr("Excel workbook file (*.xls)"));
     if (fileName.isEmpty()) {
         return;
@@ -261,16 +261,16 @@ void Protofinaal::eksportXLS()
     XLSExportService exporter;
     QString errorMessage;
     if (exporter.exportResults(fileName, m_competitionName, m_timePlace, m_eventName, exportData.maxShots, exportData.blocks, &errorMessage)) {
-        statusBarInfoChanged(tr("Fail eksporditud: ") + fileName);
+        statusBarInfoChanged(tr("File exported: ") + fileName);
     } else {
-        QMessageBox::critical(this, tr("Viga!"), errorMessage.isEmpty() ? tr("Faili kirjutamine ei õnnestunud!") : errorMessage, QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error!"), errorMessage.isEmpty() ? tr("Failed to write file!") : errorMessage, QMessageBox::Ok);
     }
 }
 
 void Protofinaal::importSiusStartList()
 {
     QString fileName = m_initialDialog->fileName().left(QDir::fromNativeSeparators(m_initialDialog->fileName()).lastIndexOf("/"));
-    QString filePath = QFileDialog::getOpenFileName(this, tr("Ava startlist"), fileName, tr("Comma separated file (*.csv)"));
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Open startlist"), fileName, tr("Comma separated file (*.csv)"));
     if (filePath.isEmpty())
         return;
 
@@ -304,7 +304,7 @@ void Protofinaal::importSiusStartList()
             teamsTable->setCompetitiorsData(forCurrentTable);
         }
     } else
-        QMessageBox::critical(this, tr("Viga"), tr("Ei õnnestunud faili avada!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error"), tr("Failed to open the file!"), QMessageBox::Ok);
 }
 
 void Protofinaal::initialize()
@@ -346,7 +346,7 @@ void Protofinaal::initialize()
         }
 
         m_logOut << "///////////////////////////////" << m_competitionName << ", " << QDateTime::currentDateTime().toString() << "///////////////////////////////\n";
-        statusBarInfoChanged(tr("Avatud fail: ") + m_currentFile);
+        statusBarInfoChanged(tr("Opened file: ") + m_currentFile);
         showSpecatorWindowOnSecondScreen();
     } else if (m_initialDialog->result() == QDialog::Rejected)
         QCoreApplication::quit();
@@ -362,7 +362,7 @@ void Protofinaal::loadFile(QString fileName)
     QJsonObject jsonObj = readFinalsFile(fileName);
 
     if (!(jsonObj.contains("competitionName") && jsonObj["competitionName"].isString()) || !(jsonObj.contains("eventName") && jsonObj["eventName"].isString()) || !(jsonObj.contains("eventType") && jsonObj["eventType"].isString()) || !(jsonObj.contains("timePlace") && jsonObj["timePlace"].isString()) || !(jsonObj.contains("fileVersion") && jsonObj["fileVersion"].isDouble()))
-        QMessageBox::critical(this, tr("Viga!"), tr("Finaali fail vigane!"));
+        QMessageBox::critical(this, tr("Error!"), tr("Finals file is broken!"));
 
     m_eventType = jsonObj["eventType"].toString();
 
@@ -395,7 +395,7 @@ void Protofinaal::loadFile(QString fileName)
             TeamsTable* m_teamsTable = new TeamsTable();
             m_vBox.addWidget(m_teamsTable);
             if (noOfRelays > 1)
-                m_teamsTable->setTableName(QString("Grupp %1").arg(relayNo++));
+                m_teamsTable->setTableName(QString("Group %1").arg(relayNo++));
 
             connect(m_teamsTable, &TeamsTable::updateSpectatorWindow, this, &Protofinaal::updateSpectatorWindow);
             connect(m_teamsTable, &TeamsTable::modified, [this]() { m_modifiedAfterSave = true; });
@@ -408,13 +408,13 @@ void Protofinaal::loadFile(QString fileName)
 
         initializeSpectatorTargets();
     } else
-        QMessageBox::critical(this, tr("Viga!"), tr("Finaali fail vigane!"));
+        QMessageBox::critical(this, tr("Error!"), tr("Finals file is broken!"));
 }
 
 void Protofinaal::open()
 {
     if (m_modifiedAfterSave) {
-        int reply = QMessageBox::question(this, "Protofinaal", tr("Kas soovid muudatused salvestada?"), QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        int reply = QMessageBox::question(this, "Protofinaal", tr("Do you want to save changes?"), QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         if (reply == QMessageBox::Save) {
             save();
         } else if (reply == QMessageBox::Cancel) {
@@ -422,7 +422,7 @@ void Protofinaal::open()
         }
     }
 
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Ava fail"), m_currentFile, tr("Protofinaali fail (*.fin)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open file"), m_currentFile, tr("Protofinaal file (*.fin)"));
     if (!fileName.isEmpty()) {
         m_currentFile = fileName;
         loadFile(fileName);
@@ -442,7 +442,7 @@ QJsonObject Protofinaal::readFinalsFile(QString fileName, bool showErrors)
         jsonObj = fileJson.object();
 
         if (jsonObj["fileVersion"].toInt() > 301)
-            QMessageBox::warning(this, tr("Viga!"), tr("Faili versioon on uuem, kui see versioon programmist. Faili avamisel võib tekkida vigu!"), QMessageBox::Ok);
+            QMessageBox::warning(this, tr("Error!"), tr("File version is newer than this version of the program. Errors may occur when opening the file!"), QMessageBox::Ok);
 
         m_competitionName = jsonObj["competitionName"].toString();
         m_eventName = jsonObj["eventName"].toString();
@@ -452,7 +452,7 @@ QJsonObject Protofinaal::readFinalsFile(QString fileName, bool showErrors)
         if (jsonObj.contains("scoringWithPoints"))
             m_scoringWithPoints = jsonObj["scoringWithPoints"].toBool();
     } else if (showErrors)
-        QMessageBox::critical(this, tr("Viga!"), tr("Faili avamine ei ole võimalik!\n\nAsukoht: ") + file.fileName(), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error!"), tr("Cannot open the file!\n\nLocation: ") + file.fileName(), QMessageBox::Ok);
     return jsonObj;
 }
 
@@ -531,7 +531,7 @@ void Protofinaal::save()
 void Protofinaal::createLayoutFromConf(QJsonObject conf)
 {
     if (!(conf.contains("event") && conf["event"].isString()) || !(conf.contains("relaysTogether") && conf["relaysTogether"].isDouble()) || !(conf.contains("teams") && conf["teams"].isDouble()) || !(conf.contains("membersInTeam") && conf["membersInTeam"].isDouble()) || !(conf.contains("shots") && conf["shots"].isArray()) || !(conf.contains("scoringWithPoints") && conf["scoringWithPoints"].isBool()))
-        QMessageBox::critical(this, tr("Viga!"), tr("Harjutuse fail vigane!"));
+        QMessageBox::critical(this, tr("Error!"), tr("Event file is broken!"));
 
     m_scoringWithPoints = false;
     if (conf.contains("scoringWithPoints") && conf["scoringWithPoints"].isBool()) {
@@ -543,7 +543,7 @@ void Protofinaal::createLayoutFromConf(QJsonObject conf)
         TeamsTable* m_teamsTable = new TeamsTable();
         m_vBox.addWidget(m_teamsTable);
         if (numberOfRelaysTogether > 1)
-            m_teamsTable->setTableName(QString("Grupp %1").arg(relay));
+            m_teamsTable->setTableName(QString("Group %1").arg(relay));
 
         connect(m_teamsTable, &TeamsTable::updateSpectatorWindow, this, &Protofinaal::updateSpectatorWindow);
         connect(m_teamsTable, &TeamsTable::modified, [this]() { m_modifiedAfterSave = true; });
@@ -590,8 +590,8 @@ void Protofinaal::showSpecatorWindowOnSecondScreen() // FIXME To be reimplemente
         m_spectatorWindow.move(otherScreen->geometry().center() - m_spectatorWindow.rect().center());
         m_spectatorWindow.showFullScreen();
     } else {
-        QMessageBox::critical(this, tr("Viga"), tr("Teist ekraani ei leitud. Programmi korralikuks"
-                                                   " funktsioneerimiseks on vajalik kahe ekraani olemasolu."),
+        QMessageBox::critical(this, tr("Error"), tr("Second screen not found. For the program to work properly,"
+                                                    " two screens are required."),
             QMessageBox::Ok);
         m_spectatorWindow.show();
     }
@@ -599,7 +599,7 @@ void Protofinaal::showSpecatorWindowOnSecondScreen() // FIXME To be reimplemente
     updateSpectatorWindow();
 
     if (m_spectatorWindow.isFullScreen())
-        QMessageBox::information(this, tr("Teade"), tr("Tulemuse aken näidatud teisel ekraanil"), QMessageBox::Ok);
+        QMessageBox::information(this, tr("Info"), tr("Spectator view shown on the second screen"), QMessageBox::Ok);
 }
 
 void Protofinaal::statusBarInfoChanged(QString newStatusInfo)
@@ -691,13 +691,13 @@ void Protofinaal::updateSpectatorWindow()
     }
 
     int shotNo = m_teamsTables.first()->lastValidShotIndex() + 1;
-    QString shotHeader = tr("Lask");
+    QString shotHeader = tr("Shot");
     if (shotNo > 0)
         shotHeader.prepend(QString("%1. ").arg(shotNo));
     if (m_scoringWithPoints)
-        m_spectatorWindow.setHeading(m_competitionName, m_timePlace, m_eventName, tr("Koht"), tr("Nimi"), shotHeader, tr("Punktid"), tr("Vahe"));
+        m_spectatorWindow.setHeading(m_competitionName, m_timePlace, m_eventName, tr("Place"), tr("Name"), shotHeader, tr("Points"), tr("Diff"));
     else
-        m_spectatorWindow.setHeading(m_competitionName, m_timePlace, m_eventName, tr("Koht"), tr("Nimi"), shotHeader, tr("Seeria"), tr("Vahe"));
+        m_spectatorWindow.setHeading(m_competitionName, m_timePlace, m_eventName, tr("Place"), tr("Name"), shotHeader, tr("Series"), tr("Diff"));
 
     for (int i = m_teamsTables.size() - 1; i >= 0; i--) {
         m_spectatorWindow.addRow("", "", "", "", "", "", ""); // To add some spacing between different groups
@@ -786,10 +786,10 @@ void Protofinaal::writeFinalsFile(QString fileName)
     if (file.open(QIODevice::WriteOnly)) {
         QJsonDocument jsonDoc(toJson());
         file.write(jsonDoc.toJson());
-        statusBar()->showMessage(tr("Fail salvestatud"), 5000);
+        statusBar()->showMessage(tr("File saved"), 5000);
         m_modifiedAfterSave = false;
     } else
-        QMessageBox::critical(this, tr("Viga!"), tr("Faili kirjutamine ei ole võimalik!\nKontrollige, kas teil on sinna kausta kirjutamise õigused."), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error!"), tr("Cannot write to file!\nMake sure you have write permission to that folder."), QMessageBox::Ok);
 }
 
 void Protofinaal::writeSettings()
