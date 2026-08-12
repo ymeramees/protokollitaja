@@ -175,7 +175,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                             false,
                             m_sorting,
                             kllData.tabWidget,
-                            team,
+                            team ? Leht::Team : Leht::Individual,
                             m_competitorsPickingBox,
                             tabIndex
                             );
@@ -273,7 +273,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                     withDecimals,
                     m_sorting,
                     kllData.tabWidget,
-                    team,
+                    team ? Leht::Team : Leht::Individual,
                     m_competitorsPickingBox,
                     tabIndex,
                     noOfShots
@@ -456,6 +456,12 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                 tabIndex = tabObject["tabIndex"].toInt();
                 competitorCount = tabObject["competitorCount"].toInt();
 
+                // "pageType" was added together with duel matches; older files only have "teamEvent"
+                // and can only contain individual or team pages.
+                Leht::PageType pageType = teamEvent ? Leht::Team : Leht::Individual;
+                if (tabObject.contains("pageType"))
+                    pageType = static_cast<Leht::PageType>(tabObject["pageType"].toInt());
+
 #ifdef QT_DEBUG
                 qDebug() << "readKllFile(): << leheIndeks << tabName << seriesCount << shotsCount << seriesInSubTotal << autocomplete << << displayName << weaponType << event << competitorCount";
                 qDebug() << "readKllFile(): << " << tabIndex << " << " << tabName << " << " << seriesCount << " << " << noOfShots << " << " << seriesInSubTotal << " << " << autocomplete << " << " << displayName << " << " << weaponType << " << " << eventType << " << " << competitorCount;
@@ -475,7 +481,7 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                             withDecimals,
                             m_sorting,
                             kllData.tabWidget,
-                            teamEvent,
+                            pageType,
                             m_competitorsPickingBox,
                             tabIndex,
                             noOfShots
@@ -491,7 +497,17 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
 
                 sheet->setMinTimeMs(tabObject["minTime"].toInt());
                 sheet->setMaxTimeMs(tabObject["maxTime"].toInt());
-                if (sheet->voistk) {
+                if (sheet->pageType() == Leht::Duel) {
+                    if (sheet->leftTeamName != nullptr)
+                        sheet->leftTeamName->setText(tabObject["leftTeamName"].toString());
+                    if (sheet->rightTeamName != nullptr)
+                        sheet->rightTeamName->setText(tabObject["rightTeamName"].toString());
+
+                    QJsonArray pairsArray = tabObject["pairs"].toArray();
+                    for (QJsonValue pairJson : pairsArray){
+                        sheet->addDuelPair(pairJson.toObject());
+                    }
+                } else if (sheet->voistk) {
                     QJsonArray followeesArray = tabObject["followees"].toArray();
                     for (QJsonValue followeeIndex : followeesArray) {
                         sheet->jalgitavad.append(followeeIndex.toInt());

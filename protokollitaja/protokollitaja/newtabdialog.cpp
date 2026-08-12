@@ -9,6 +9,8 @@ NewTabDialog::NewTabDialog(QWidget *parent)
     connect(ui.harjutus, SIGNAL(currentIndexChanged(int)), this, SLOT(changeEventType(int)));
     connect(ui.laskjad, SIGNAL(currentIndexChanged(int)), this, SLOT(changeScreenName(int)));
     connect(ui.indBox, SIGNAL(currentIndexChanged(int)), this, SLOT(changeToTeam(int)));
+    connect(ui.esimeneVoistkond, SIGNAL(textEdited(QString)), this, SLOT(changeTeamName(QString)));
+    connect(ui.teineVoistkond, SIGNAL(textEdited(QString)), this, SLOT(changeTeamName(QString)));
     connect(ui.okNupp, SIGNAL(clicked()), this, SLOT(close()));
 
     ui.seeriateSilt->setVisible(false);
@@ -18,6 +20,7 @@ NewTabDialog::NewTabDialog(QWidget *parent)
     ui.vSummadeSilt->setVisible(false);
     ui.vSummadeArv->setVisible(false);
     ui.vSummadeSilt2->setVisible(false);
+    updateDuelFields();
 }
 
 void NewTabDialog::changeEvent(QEvent *event)
@@ -41,7 +44,7 @@ void NewTabDialog::changeScreenName(int)
     if (ui.laskjad->currentIndex() >= 0 && ui.harjutus->currentIndex() >= 0) {  // To avoid errors due to empty combobox'es
         QString laskjad = AgeClasses::ageClassName((AgeClasses::AgeClass)ui.laskjad->currentIndex()).name;
 
-        if (ui.indBox->currentIndex() == 0) {
+        if (!isTeamEvent()) {   // Individual event or duel match
             ui.seeriateSilt->setText(tr("Series Count:"));
             ui.seeriateArv->setMaximum(12);
             ui.kumnendikegaBox->setVisible(true);
@@ -65,6 +68,8 @@ void NewTabDialog::changeScreenName(int)
                 ui.vSummadeArv->setVisible(false);
                 ui.vSummadeSilt2->setVisible(false);
             }
+            if (isDuelMatch() && !(leftTeamName().isEmpty() && rightTeamName().isEmpty()))
+                laskjad.append(QString(" %1 - %2").arg(leftTeamName(), rightTeamName()));
             // Overcomplicated, but meant to be future proof in case we allow manual edits to event names
             ui.nimiTulAknas->setText(QualificationEvents::eventData(QualificationEvents::fromEventName(ui.harjutus->currentText())).name + " " + laskjad);
         } else {
@@ -80,6 +85,7 @@ void NewTabDialog::changeScreenName(int)
             ui.nimiTulAknas->setText(QualificationEvents::eventData(QualificationEvents::fromEventName(ui.harjutus->currentText())).name + " " + laskjad);
             m_targetType = TargetTypes::TargetType::Other;
         }
+        updateDuelFields();
     }
 }
 
@@ -95,7 +101,7 @@ void NewTabDialog::close()
 void NewTabDialog::changeEventType(int)
 {
     if (ui.laskjad->currentIndex() >= 0 && ui.harjutus->currentIndex() >= 0) {
-        if (ui.indBox->currentIndex() == 0) {
+        if (!isTeamEvent()) {   // In duel match the competitors shoot a normal event
             ui.seeriateArv->setValue(QualificationEvents::eventData(ui.harjutus->currentIndex()).numberOfSeries);
             ui.vSummadeArv->setValue(QualificationEvents::eventData(ui.harjutus->currentIndex()).seriesInSubtotal);
             m_targetType = QualificationEvents::eventData(ui.harjutus->currentIndex()).targetType;
@@ -106,15 +112,56 @@ void NewTabDialog::changeEventType(int)
     }
 }
 
+void NewTabDialog::changeTeamName(QString)
+{
+    changeScreenName(0);
+}
+
 void NewTabDialog::changeToTeam(int)
 {
     if (ui.laskjad->currentIndex() >= 0 && ui.harjutus->currentIndex() >= 0) {
-        if (ui.indBox->currentIndex() == 1) {
+        if (isTeamEvent()) {
             ui.seeriateArv->setValue(3);
+            changeScreenName(0);
+        } else {    // Series count etc. have to be taken from the event again
+            changeEventType(0);
         }
-
-        changeScreenName(0);
     }
+    updateDuelFields();
+}
+
+bool NewTabDialog::isDuelMatch() const
+{
+    return ui.indBox->currentIndex() == 2;
+}
+
+bool NewTabDialog::isTeamEvent() const
+{
+    return ui.indBox->currentIndex() == 1;
+}
+
+QString NewTabDialog::leftTeamName() const
+{
+    return ui.esimeneVoistkond->text().trimmed();
+}
+
+int NewTabDialog::pairsCount() const
+{
+    return ui.paarideArv->value();
+}
+
+QString NewTabDialog::rightTeamName() const
+{
+    return ui.teineVoistkond->text().trimmed();
+}
+
+void NewTabDialog::updateDuelFields()
+{
+    const bool duel = isDuelMatch();
+    ui.paarideSilt->setVisible(duel);
+    ui.paarideArv->setVisible(duel);
+    ui.esimeneVoistkond->setVisible(duel);
+    ui.teineVoistkond->setVisible(duel);
 }
 
 void NewTabDialog::updateUi()

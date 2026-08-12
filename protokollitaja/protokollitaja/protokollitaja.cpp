@@ -1640,6 +1640,10 @@ void Protokollitaja::import()
                 QMessageBox::critical(this, tr("Error!"), tr("Competitors cannot be imported to a team event`s tab!"), QMessageBox::Ok);
                     return;
                 }
+                if(leht->pageType() == Leht::Duel){
+                    QMessageBox::critical(this, tr("Error!"), tr("Competitors cannot be imported to a duel match's tab!"), QMessageBox::Ok);
+                    return;
+                }
                 for(int i = 0; i < importAken->leht->laskurid.count(); i++){
                         if(importAken->leht->laskurid[i]->linnuke->isChecked()){
                                 leht->uusLaskur(++laskuriId);
@@ -1803,9 +1807,20 @@ void Protokollitaja::kirjutaFail(QString failiNimi)
             tabJson["minTime"] = leht->minTime();
             tabJson["maxTime"] = leht->maxTime();
             tabJson["teamEvent"] = leht->voistk;
+            tabJson["pageType"] = leht->pageType();
             tabJson["tabIndex"] = leht->leheIndeks;
 
-            if(leht->voistk){
+            if(leht->pageType() == Leht::Duel){
+                tabJson["leftTeamName"] = leht->leftTeamName != nullptr ? leht->leftTeamName->text() : QString();
+                tabJson["rightTeamName"] = leht->rightTeamName != nullptr ? leht->rightTeamName->text() : QString();
+                tabJson["pairsCount"] = leht->duelPairs.count();
+
+                QJsonArray pairsArray;
+                for (DuelPair *pair : leht->duelPairs) {
+                    pairsArray.append(pair->toFileJson());
+                }
+                tabJson["pairs"] = pairsArray;
+            } else if(leht->voistk){
                 tabJson["teamsCount"] = leht->voistkonnad.count();
                 tabJson["followeesCount"] = leht->jalgitavad.count();
 
@@ -1929,6 +1944,9 @@ void Protokollitaja::kopeeriLaskurid()
                 Leht* leht2 = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
                 if(leht2->voistk){
                     QMessageBox::critical(this, tr("Error"), tr("Shooters cannot be copied to team event's sheet"), QMessageBox::Ok);
+                    return;
+                } else if(leht2->pageType() == Leht::Duel){
+                    QMessageBox::critical(this, tr("Error"), tr("Shooters cannot be copied to duel match's sheet"), QMessageBox::Ok);
                     return;
                 } else if (leht->leheIndeks == leht2->leheIndeks) {
                     QMessageBox::critical(this, "Protokollitaja", tr("Shooters cannot be copied to the same sheet"), QMessageBox::Ok);
@@ -2169,6 +2187,12 @@ void Protokollitaja::liiguta()
         return;
     }
 
+    if(leht->pageType() == Leht::Duel){
+        QMessageBox::critical(this, "Protokollitaja", tr("Moving competitors from a duel match is not possible"),
+                QMessageBox::Ok);
+        return;
+    }
+
     if(leht->laskurid.count() < 1) return;  //Kui Laskureid ei ole, ei saa teisaldada
 
     voibSulgeda = false;
@@ -2185,6 +2209,9 @@ void Protokollitaja::liiguta()
 
                 if(leht2->voistk){
                     QMessageBox::critical(this, "Protokollitaja", tr("Shooters cannot be moved to team event's sheet"), QMessageBox::Ok);
+                    return;
+                } else if(leht2->pageType() == Leht::Duel){
+                    QMessageBox::critical(this, "Protokollitaja", tr("Shooters cannot be moved to duel match's sheet"), QMessageBox::Ok);
                     return;
                 } else if (leht->leheIndeks == leht2->leheIndeks) {
                     QMessageBox::critical(this, "Protokollitaja", tr("Shooters cannot be moved to the same sheet"), QMessageBox::Ok);
@@ -4239,17 +4266,21 @@ void Protokollitaja::uploadResults()
 {
     QUrl url;
     url.setScheme("https");
+    url.setPort(443);
 
+// #ifdef USE_LOCALHOST
+//     url.setScheme("http");
+//     url.setHost("localhost");
+//     url.setPort(3004);
+// #else
 #ifdef QT_DEBUG
-    // url.setHost("localhost");
     url.setHost("test.protokollitaja.eu");
-    // url.setPort(3004);
 #else
     url.setHost("protokollitaja.eu");
 #endif
+// #endif
 
     url.setPath("/api/v1/competitions");
-    url.setPort(443);
 
     if(m_restHeaderData.isEmpty()) {
         logiValja << QTime::currentTime().toString("hh:mm:ss") << " #SSL version: " << QSslSocket::sslLibraryBuildVersionString() << ", "
@@ -4784,6 +4815,14 @@ void Protokollitaja::uusLaskur()    //Uue laskuri loomine,  koos uue ID'ga
     if(tabWidget->count() > 0){
         kontrolliIdKordusi();
         Leht* seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
+        if(seeLeht->pageType() == Leht::Duel){  //Duellis lisatakse laskurid alati paarikaupa
+            int leftId = ++laskuriId;
+            seeLeht->addDuelPair(leftId, ++laskuriId);
+            if(!seeLeht->duelPairs.isEmpty())
+                seeLeht->duelPairs[seeLeht->duelPairs.count() - 1]->left()->eesNimi->setFocus();
+            viiLopuni->start();
+            return;
+        }
         seeLeht->uusLaskur(++laskuriId);
         if(seeLeht->voistk)
             seeLeht->voistkonnad[seeLeht->voistkonnad.count() - 1]->nimi->setFocus();
@@ -4796,6 +4835,8 @@ void Protokollitaja::uusLaskur(int i)   //Uue laskuri loomine, koos olemasoleva 
 {
         if(tabWidget->count() > 0){
                 Leht* seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
+                if(seeLeht->pageType() == Leht::Duel)   //Duelli lehele ei saa üksikut laskurit lisada
+                        return;
                 seeLeht->uusLaskur(i);
                 if(seeLeht->voistk)
                         seeLeht->voistkonnad[seeLeht->voistkonnad.count() - 1]->nimi->setFocus();
@@ -4836,10 +4877,11 @@ void Protokollitaja::uusTab()
                     valik->m_targetType == TargetTypes::OtherPistol) &&
                     abi != (int)TargetTypes::Other)
                         a = (int)TargetTypes::AirPistol;
-                bool voistk = false;
-                if(valik->ui.indBox->currentIndex() == 0)
-                        voistk = false;
-                else voistk = true;
+                Leht::PageType pageType = Leht::Individual;
+                if(valik->isTeamEvent())
+                        pageType = Leht::Team;
+                else if(valik->isDuelMatch())
+                        pageType = Leht::Duel;
                 bool kumnendikega = false;
                 if(valik->ui.kumnendikegaBox->isChecked())
                     kumnendikega = true;
@@ -4850,17 +4892,25 @@ void Protokollitaja::uusTab()
                 individualistid->jalgijad++;*/
                 QScrollArea *area = new QScrollArea(tabWidget);
                 area->setWidgetResizable(true);
-                area->setWidget(new Leht(&andmebaas, valik->ui.seeriateArv->value(), valik->ui.vSummadeArv->value(), a, &kirjutusAbi, valik->ui.nimiTulAknas->text(), valik->m_targetType, valik->eventType(), kumnendikega, &m_ranking, tabWidget, voistk, lValik, leheIndeks, valik->ui.laskudeArv->value()));
+                Leht *uusLeht = new Leht(&andmebaas, valik->ui.seeriateArv->value(), valik->ui.vSummadeArv->value(), a, &kirjutusAbi, valik->ui.nimiTulAknas->text(), valik->m_targetType, valik->eventType(), kumnendikega, &m_ranking, tabWidget, pageType, lValik, leheIndeks, valik->ui.laskudeArv->value());
+                area->setWidget(uusLeht);
                 int newTabIndex = tabWidget->addTab(area, valik->ui.sakiNimi->text());
                 tabWidget->setCurrentIndex(newTabIndex);
-                connect(dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget())
-                                , SIGNAL(uuendaLiikmeid()), this, SLOT(uuendaLiikmeteKast()));
-                connect(dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget())
-                                , SIGNAL(uuendaVoistkondi()), this, SLOT(uuendaVoistkondi()));
-                connect(dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget())
-                                , SIGNAL(muudatus()), this, SLOT(muudaSalvestamist()));
-                connect(dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget())
-                                , SIGNAL(idMuutus(int,Laskur*)), this, SLOT(kontrolliIdKordust(int,Laskur*)));
+                connect(uusLeht, SIGNAL(uuendaLiikmeid()), this, SLOT(uuendaLiikmeteKast()));
+                connect(uusLeht, SIGNAL(uuendaVoistkondi()), this, SLOT(uuendaVoistkondi()));
+                connect(uusLeht, SIGNAL(muudatus()), this, SLOT(muudaSalvestamist()));
+                connect(uusLeht, SIGNAL(idMuutus(int,Laskur*)), this, SLOT(kontrolliIdKordust(int,Laskur*)));
+
+                if(pageType == Leht::Duel){
+                        uusLeht->leftTeamName->setText(valik->leftTeamName());
+                        uusLeht->rightTeamName->setText(valik->rightTeamName());
+                        for(int i = 0; i < valik->pairsCount(); i++){
+                                int leftId = ++laskuriId;
+                                uusLeht->addDuelPair(leftId, ++laskuriId);
+                        }
+                        if(!uusLeht->duelPairs.isEmpty())
+                                uusLeht->duelPairs[0]->left()->eesNimi->setFocus();
+                }
         }
 }
 

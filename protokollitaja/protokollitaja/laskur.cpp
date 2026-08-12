@@ -1506,6 +1506,8 @@ QJsonObject Laskur::toExportJson()
 {
     QJsonObject json;
     json["id"] = QString("%1").arg(id);
+    // The server needs localId to be able to connect duel pairs with competitors
+    json["localId"] = QString("%1").arg(id);
     json["firstName"] = eesNimi->text();
     json["lastName"] = perekNimi->text();
     json["birthYear"] = sunniAasta->text();

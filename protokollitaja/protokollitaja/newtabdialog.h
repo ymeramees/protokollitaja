@@ -24,17 +24,24 @@ public:
     QualificationEvents::EventType eventType() const;
     NewTabDialog(QWidget *parent = 0);
     ~NewTabDialog();
+    bool isDuelMatch() const;
+    bool isTeamEvent() const;
+    QString leftTeamName() const;
+    int pairsCount() const;
+    QString rightTeamName() const;
     Ui::ValikKastClass ui;
 
 protected:
 
 private:
     void changeEvent(QEvent *event);
+    void updateDuelFields();
     void updateUi();
 
 private slots:
     void changeScreenName(int);
     void changeEventType(int);
+    void changeTeamName(QString);
     void changeToTeam(int);
     void close();
 };

@@ -14,6 +14,7 @@ qt_add_executable(Protokollitaja WIN32 MACOSX_BUNDLE
     andmebaas.h
     competitionsettings.h
     datauploader.cpp datauploader.h
+    duelpair.cpp duelpair.h
     filedownloader.cpp filedownloader.h
     finalsfileexport.cpp finalsfileexport.h finalsfileexport.ui
     importaken.cpp importaken.h importaken.ui

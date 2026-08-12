@@ -2,12 +2,13 @@
 
 extern bool verbose;
 
-Leht::Leht(Andmebaas* baas, int s, int vs, int a, bool *k, QString eNimi, TargetTypes::TargetType targetType, QualificationEvents::EventType eventType, bool kum, int *jar, QWidget *parent, bool v, LiikmeteValikKast *lV, int lI, int ls)
+Leht::Leht(Andmebaas* baas, int s, int vs, int a, bool *k, QString eNimi, TargetTypes::TargetType targetType, QualificationEvents::EventType eventType, bool kum, int *jar, QWidget *parent, PageType pageType, LiikmeteValikKast *lV, int lI, int ls)
     : QWidget(parent)
 {
     m_targetType = targetType;
     m_eventType = eventType;
-	voistk = v;
+    m_pageType = pageType;
+    voistk = (pageType == Team);
 	viimaneIndex = 0;
 	naidata = true;
 	voibKontrollida = true;
@@ -35,6 +36,120 @@ Leht::Leht(Andmebaas* baas, int s, int vs, int a, bool *k, QString eNimi, Target
     }else if(vSummadeSamm > 0)
 		setMinimumWidth(1000);
 	//setGeometry(1, 1, 1000, 100);
+    if(m_pageType == Duel)
+        createDuelHeader();
+}
+
+void Leht::addDuelPair(int leftId, int rightId)
+{
+    if(m_pageType != Duel)
+        return;
+
+    Laskur *leftCompetitor = createCompetitor(leftId);
+    Laskur *rightCompetitor = createCompetitor(rightId);
+    connect(leftCompetitor, SIGNAL(muudatus()), this, SLOT(updateDuelPoints()));
+    connect(rightCompetitor, SIGNAL(muudatus()), this, SLOT(updateDuelPoints()));
+
+    DuelPair *pair = new DuelPair(leftCompetitor, rightCompetitor, duelPairs.count() + 1, this);
+    vKast->addWidget(pair);
+    duelPairs << pair;
+    laskurid << leftCompetitor << rightCompetitor;
+    leftCompetitor->jrkArv = laskurid.count() - 2;
+    rightCompetitor->jrkArv = laskurid.count() - 1;
+    pair->show();
+
+    updateDuelPoints();
+    updateMaximumHeight();
+}
+
+/**
+ * Recreates a duel pair when reading a .kll file: both competitors are restored with all their
+ * saved data (results, shots, ...) and the pair's points are then recalculated from that data,
+ * same as when the pair was originally scored.
+ */
+void Leht::addDuelPair(QJsonObject pairJson)
+{
+    if(m_pageType != Duel)
+        return;
+
+    Laskur *leftCompetitor = createCompetitor(pairJson["left"].toObject());
+    Laskur *rightCompetitor = createCompetitor(pairJson["right"].toObject());
+    connect(leftCompetitor, SIGNAL(muudatus()), this, SLOT(updateDuelPoints()));
+    connect(rightCompetitor, SIGNAL(muudatus()), this, SLOT(updateDuelPoints()));
+
+    DuelPair *pair = new DuelPair(leftCompetitor, rightCompetitor, duelPairs.count() + 1, this);
+    vKast->addWidget(pair);
+    duelPairs << pair;
+    laskurid << leftCompetitor << rightCompetitor;
+    leftCompetitor->jrkArv = laskurid.count() - 2;
+    rightCompetitor->jrkArv = laskurid.count() - 1;
+    pair->show();
+
+    updateDuelPoints();
+    updateMaximumHeight();
+}
+
+void Leht::connectCompetitorSignals(Laskur *las)
+{
+    connect(las, SIGNAL(sifrimuutus()), this, SLOT(naitaSifrit()));
+    connect(las, SIGNAL(idMuutus(int,Laskur*)), this, SLOT(idMuudatus(int,Laskur*)));
+    connect(las->eesNimi, SIGNAL(editingFinished()), this, SLOT(kontrolliKordusi()));
+    connect(las->perekNimi, SIGNAL(editingFinished()), this, SLOT(kontrolliKordusi()));
+    connect(las->klubi, SIGNAL(editingFinished()), this, SLOT(kontrolliKordusi()));
+    connect(las->eesNimi, SIGNAL(textChanged(QString)), this, SLOT(lubaKontrollimist(QString)));
+    connect(las->perekNimi, SIGNAL(textChanged(QString)), this, SLOT(lubaKontrollimist(QString)));
+    connect(las->klubi, SIGNAL(textChanged(QString)), this, SLOT(lubaKontrollimist(QString)));
+    connect(las, SIGNAL(muudatus()), this, SLOT(teataMuudatusest()));
+    connect(las, SIGNAL(enter(int)), this, SLOT(vajutaTab2(int)));
+}
+
+Laskur* Leht::createCompetitor(int id)
+{
+    Laskur *las = new Laskur(andmebaas, seeriateArv, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, id, jarjestamine, &m_eventType, laskudeArv, this);
+    connectCompetitorSignals(las);
+    return las;
+}
+
+Laskur* Leht::createCompetitor(QJsonObject json)
+{
+    Laskur *las = new Laskur(json, andmebaas, seeriateArv, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, jarjestamine, &m_eventType, laskudeArv, this);
+    connectCompetitorSignals(las);
+    return las;
+}
+
+void Leht::createDuelHeader()
+{
+    QWidget *header = new QWidget(this);
+    QHBoxLayout *headerLayout = new QHBoxLayout(header);
+    headerLayout->setContentsMargins(2, 2, 2, 2);
+
+    leftTeamName = new QLineEdit(header);
+    leftTeamName->setMinimumHeight(28);
+    leftTeamName->setMaximumWidth(200);
+    leftTeamName->setToolTip(tr("Name of the first team"));
+    leftTeamName->setPlaceholderText(tr("Team 1"));
+    connect(leftTeamName, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+
+    QLabel *versus = new QLabel(tr("vs"), header);
+
+    rightTeamName = new QLineEdit(header);
+    rightTeamName->setMinimumHeight(28);
+    rightTeamName->setMaximumWidth(200);
+    rightTeamName->setToolTip(tr("Name of the second team"));
+    rightTeamName->setPlaceholderText(tr("Team 2"));
+    connect(rightTeamName, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
+
+    m_matchScore = new QLabel(header);
+    m_matchScore->setToolTip(tr("Points of the match"));
+
+    headerLayout->addWidget(leftTeamName);
+    headerLayout->addWidget(versus);
+    headerLayout->addWidget(rightTeamName);
+    headerLayout->addStretch();
+    headerLayout->addWidget(m_matchScore);
+
+    vKast->addWidget(header);
+    updateDuelPoints();
 }
 
 void Leht::deleteAllShotsFromSelectedCompetitors()
@@ -54,6 +169,9 @@ void Leht::idMuudatus(int uusId, Laskur* las)
 
 void Leht::uusLaskur(int id)
 {
+    if(m_pageType == Duel)  // Competitors are added in pairs, see addDuelPair()
+        return;
+
     if(voistk){
         Voistkond *voistKond = new Voistkond(lValik, seeriateArv, &jalgitavad, &viimaneIndex, this);
         connect(voistKond->muudaNupp, SIGNAL(clicked()), voistKond, SLOT(naitaLiikmeteValikKast()));
@@ -64,17 +182,7 @@ void Leht::uusLaskur(int id)
         voistkonnad << voistKond;
         voistKond->show();
     }else{
-        Laskur *las = new Laskur(andmebaas, seeriateArv, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, id, jarjestamine, &m_eventType, laskudeArv, this);
-        connect(las, SIGNAL(sifrimuutus()), this, SLOT(naitaSifrit()));
-        connect(las, SIGNAL(idMuutus(int,Laskur*)), this, SLOT(idMuudatus(int,Laskur*)));
-        connect(las->eesNimi, SIGNAL(editingFinished()), this, SLOT(kontrolliKordusi()));
-        connect(las->perekNimi, SIGNAL(editingFinished()), this, SLOT(kontrolliKordusi()));
-        connect(las->klubi, SIGNAL(editingFinished()), this, SLOT(kontrolliKordusi()));
-        connect(las->eesNimi, SIGNAL(textChanged(QString)), this, SLOT(lubaKontrollimist(QString)));
-        connect(las->perekNimi, SIGNAL(textChanged(QString)), this, SLOT(lubaKontrollimist(QString)));
-        connect(las->klubi, SIGNAL(textChanged(QString)), this, SLOT(lubaKontrollimist(QString)));
-        connect(las, SIGNAL(muudatus()), this, SLOT(teataMuudatusest()));
-        connect(las, SIGNAL(enter(int)), this, SLOT(vajutaTab2(int)));
+        Laskur *las = createCompetitor(id);
         vKast->addWidget(las);
         laskurid << las;
         las->jrkArv = laskurid.count() - 1;
@@ -88,11 +196,14 @@ void Leht::uusLaskur(int id)
             }
         las->show();
     }
-    setMaximumHeight(vKast->count()*50+10);
+    updateMaximumHeight();
 }
 
 void Leht::uusLaskur(QJsonObject json)
 {
+    if(m_pageType == Duel)  // Competitors are added in pairs, see addDuelPair()
+        return;
+
     if (voistk) {
         Voistkond *voistKond = new Voistkond(json, lValik, seeriateArv, &jalgitavad, &viimaneIndex, this);
         connect(voistKond->muudaNupp, SIGNAL(clicked()), voistKond, SLOT(naitaLiikmeteValikKast()));
@@ -103,17 +214,7 @@ void Leht::uusLaskur(QJsonObject json)
         voistkonnad << voistKond;
         voistKond->show();
     } else {
-        Laskur *las = new Laskur(json, andmebaas, seeriateArv, vSummadeSamm, abi, kirjutusAbi, &kumnendikega, jarjestamine, &m_eventType, laskudeArv, this);
-        connect(las, SIGNAL(sifrimuutus()), this, SLOT(naitaSifrit()));
-        connect(las, SIGNAL(idMuutus(int,Laskur*)), this, SLOT(idMuudatus(int,Laskur*)));
-        connect(las->eesNimi, SIGNAL(editingFinished()), this, SLOT(kontrolliKordusi()));
-        connect(las->perekNimi, SIGNAL(editingFinished()), this, SLOT(kontrolliKordusi()));
-        connect(las->klubi, SIGNAL(editingFinished()), this, SLOT(kontrolliKordusi()));
-        connect(las->eesNimi, SIGNAL(textChanged(QString)), this, SLOT(lubaKontrollimist(QString)));
-        connect(las->perekNimi, SIGNAL(textChanged(QString)), this, SLOT(lubaKontrollimist(QString)));
-        connect(las->klubi, SIGNAL(textChanged(QString)), this, SLOT(lubaKontrollimist(QString)));
-        connect(las, SIGNAL(muudatus()), this, SLOT(teataMuudatusest()));
-        connect(las, SIGNAL(enter(int)), this, SLOT(vajutaTab2(int)));
+        Laskur *las = createCompetitor(json);
         vKast->addWidget(las);
         laskurid << las;
         las->jrkArv = laskurid.count() - 1;
@@ -127,11 +228,30 @@ void Leht::uusLaskur(QJsonObject json)
             }
         las->show();
     }
-    setMaximumHeight(vKast->count()*50+10);
+    updateMaximumHeight();
 }
 
 void Leht::eemaldaLaskur()
 {
+    if(m_pageType == Duel){ //Duellis eemaldatakse alati terve paar
+        for(int i = 0; i < duelPairs.count(); i++){
+            if(duelPairs[i]->left()->linnuke->isChecked() || duelPairs[i]->right()->linnuke->isChecked()){
+                laskurid.removeAll(duelPairs[i]->left());
+                laskurid.removeAll(duelPairs[i]->right());
+                vKast->removeWidget(duelPairs[i]);
+                duelPairs[i]->deleteLater();
+                duelPairs.removeAt(i);
+                i--;
+            }
+        }
+        for(int i = 0; i < duelPairs.count(); i++)
+            duelPairs[i]->setPairNumber(i + 1);
+        for(int i = 0; i < laskurid.count(); i++)
+            laskurid[i]->jrkArv = i;
+        updateDuelPoints();
+        updateMaximumHeight();
+        return;
+    }
 	if(voistk){
 		for(int i = 0; i < voistkonnad.count(); i++){
 			if(voistkonnad[i]->linnuke->isChecked() == true){
@@ -156,6 +276,20 @@ void Leht::eemaldaLaskur()
                     laskurid[i]->jrkArv = i;
                 }
 	}
+}
+
+QString Leht::duelName() const
+{
+    if(leftTeamName == nullptr || rightTeamName == nullptr)
+        return ekraaniNimi;
+
+    const QString left = leftTeamName->text().trimmed();
+    const QString right = rightTeamName->text().trimmed();
+
+    if(left.isEmpty() && right.isEmpty())
+        return ekraaniNimi;
+
+    return QString("%1 vs %2").arg(left, right);
 }
 
 QualificationEvents::EventType Leht::eventType() const
@@ -195,6 +329,14 @@ std::optional<QJsonObject> Leht::finalsData()
     return m_finals;
 }
 
+int Leht::leftMatchPoints() const
+{
+    int points = 0;
+    for(DuelPair *pair : duelPairs)
+        points += pair->leftPoints().value_or(0);
+    return points;
+}
+
 int Leht::maxTime() const
 {
     return m_maxTime;
@@ -203,6 +345,19 @@ int Leht::maxTime() const
 int Leht::minTime() const
 {
     return m_minTime;
+}
+
+Leht::PageType Leht::pageType() const
+{
+    return m_pageType;
+}
+
+int Leht::rightMatchPoints() const
+{
+    int points = 0;
+    for(DuelPair *pair : duelPairs)
+        points += pair->rightPoints().value_or(0);
+    return points;
 }
 
 void Leht::setEventType(const QualificationEvents::EventType newEventType)
@@ -248,6 +403,11 @@ void Leht::sorteeri(int t)
         QTextStream(stdout) << "Leht::sorteeri(): t = " << t << Qt::endl;
 
     if(laskurid.isEmpty() && voistkonnad.isEmpty()) return;
+    if(m_pageType == Duel){ //Duellis on paaride järjekord kindel, seda ei sorteerita
+        updateDuelPoints();
+        reasLaskurid = laskurid;
+        return;
+    }
     if(voistk){ //Võistkondlik arvestus
         emit uuendaVoistkondi();
         reasVoistkonnad.clear();
@@ -291,6 +451,8 @@ void Leht::sorteeri(int t)
 void Leht::reasta(int t)
 {
 	sorteeri(t);
+    if(m_pageType == Duel)  //Duellis ei tohi paaride järjekorda muuta
+        return;
 	/*for(int i = 0; i < this->laskurid.count(); i++)
 		this->vKast->removeWidget(laskurid[laskurid.count() - 1]);
 	for(int i = 0; i < reasLaskurid.count(); i++)
@@ -471,8 +633,12 @@ QJsonObject Leht::toExportJson()
     sorteeri(0);
     QJsonArray competitorsArray;
 
-    foreach (Laskur *competitor, reasLaskurid){
-        competitorsArray.append(competitor->toExportJson());
+    // For duel matches, the competitors are embedded in the pairs of the "duels" array instead, so
+    // "competitors" is left empty.
+    if(m_pageType != Duel){
+        foreach (Laskur *competitor, reasLaskurid){
+            competitorsArray.append(competitor->toExportJson());
+        }
     }
     sheetJson["competitors"] = competitorsArray;
 
@@ -482,7 +648,45 @@ QJsonObject Leht::toExportJson()
     }
     sheetJson["teams"] = teamsArray;
 
+    if(m_pageType == Duel){
+        QJsonArray pairsArray;
+        for(int i = 0; i < duelPairs.count(); i++){
+            pairsArray.append(duelPairs[i]->toExportJson(i + 1));
+        }
+
+        QJsonObject duelJson;
+        duelJson["id"] = 1;
+        duelJson["name"] = duelName();
+        duelJson["leftPoints"] = leftMatchPoints();
+        duelJson["rightPoints"] = rightMatchPoints();
+        duelJson["pairs"] = pairsArray;
+
+        QJsonArray duelsArray;
+        duelsArray.append(duelJson);
+        sheetJson["duels"] = duelsArray;
+    }
+
     return sheetJson;
+}
+
+void Leht::updateDuelPoints()
+{
+    if(m_pageType != Duel)
+        return;
+
+    for(DuelPair *pair : duelPairs)
+        pair->updatePoints();
+
+    if(m_matchScore != nullptr)
+        m_matchScore->setText(QString("<b>%1 : %2</b>").arg(leftMatchPoints()).arg(rightMatchPoints()));
+}
+
+void Leht::updateMaximumHeight()
+{
+    if(m_pageType == Duel)  // Every pair takes two rows
+        setMaximumHeight(vKast->count()*105+10);
+    else
+        setMaximumHeight(vKast->count()*50+10);
 }
 
 void Leht::naitaSifrit()

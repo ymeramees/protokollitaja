@@ -1,5 +1,6 @@
 qt_add_executable(SheetTest
     ../../../common/src/lask.cpp ../../../common/src/lask.h
+    ../../protokollitaja/duelpair.cpp ../../protokollitaja/duelpair.h
     ../../protokollitaja/laskudeaken.cpp ../../protokollitaja/laskudeaken.h ../../protokollitaja/laskudeaken.ui
     ../../protokollitaja/laskur.cpp ../../protokollitaja/laskur.h
     ../../protokollitaja/leht.cpp ../../protokollitaja/leht.h
