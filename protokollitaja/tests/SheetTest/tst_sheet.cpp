@@ -183,7 +183,7 @@ void SheetTest::test_duelExportJson()
     setSeries(sheet.duelPairs[1]->left(), {"90", "91", "92", "93"});
     setSeries(sheet.duelPairs[1]->right(), {"94", "91", "92", "93"});
 
-    QCOMPARE(sheet.duelName(), QString("Estonia - Latvia"));
+    QCOMPARE(sheet.duelName(), QString("Estonia : Latvia"));
 
     QJsonObject json = sheet.toExportJson();
 
@@ -192,7 +192,7 @@ void SheetTest::test_duelExportJson()
     QCOMPARE(duels.count(), 1);
 
     QJsonObject duel = duels[0].toObject();
-    QCOMPARE(duel["name"].toString(), QString("Estonia - Latvia"));
+    QCOMPARE(duel["name"].toString(), QString("Estonia : Latvia"));
     QCOMPARE(duel["leftPoints"].toInt(), 1);
     QCOMPARE(duel["rightPoints"].toInt(), 1);
 
@@ -281,7 +281,7 @@ void SheetTest::test_duelFileRoundTrip()
     for (const QJsonValue &pairJson : savedPairs)
         loaded.addDuelPair(pairJson.toObject());
 
-    QCOMPARE(loaded.duelName(), QString("Estonia - Latvia"));
+    QCOMPARE(loaded.duelName(), QString("Estonia : Latvia"));
     QCOMPARE(loaded.duelPairs.count(), 2);
 
     // Competitor data (id, names, results) must survive the round trip

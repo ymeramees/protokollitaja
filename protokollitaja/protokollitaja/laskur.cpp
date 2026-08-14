@@ -138,7 +138,6 @@ void Laskur::createLayout()
     hKast->addWidget(markus);
     hKast->addWidget(lisaLNupp);
     hKast->addStretch();
-    rajaNr->hide();
     sifriAlgus->hide();
     sidekriips->hide();
     sifriLopp->hide();
@@ -1124,9 +1123,9 @@ bool Laskur::readSiusShot(SiusShotData shotData)
             if(shotIndex >= 0 && lasud.count() > seriesIndex && lasud[0].count() > shotIndex){
                 // allow overwriting shots in standard pistol due to allowed malfunctions and re-shoots
                 if (lasud[seriesIndex][shotIndex]->isEmpty()){
+                    teataMuudatusest();
                     lasud[seriesIndex][shotIndex]->set(&shotData.shot);
                     liida();
-                    teataMuudatusest();
                     result = true;
                 } else if (lasud[seriesIndex][shotIndex]->getSLask().compare(shotData.shot.getSLask()) == 0 &&
                             lasud[seriesIndex][shotIndex]->shotTime() == shotData.shot.shotTime()) {
@@ -1330,7 +1329,7 @@ void Laskur::setupFields()
     rajaNr->setMinimumHeight(28);
     rajaNr->setMaximumWidth(30);
     rajaNr->setToolTip(tr("Firing Point"));
-    rajaNr->setPlaceholderText(tr(""));
+    rajaNr->setPlaceholderText(tr("FP"));
     connect(rajaNr, SIGNAL(returnPressed()), this, SLOT(vajutaTab()));
     connect(rajaNr, SIGNAL(textEdited(QString)), this, SLOT(teataMuudatusest(QString)));
     sifriAlgus = new QLineEdit(this);

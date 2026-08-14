@@ -9,8 +9,8 @@ NewTabDialog::NewTabDialog(QWidget *parent)
     connect(ui.harjutus, SIGNAL(currentIndexChanged(int)), this, SLOT(changeEventType(int)));
     connect(ui.laskjad, SIGNAL(currentIndexChanged(int)), this, SLOT(changeScreenName(int)));
     connect(ui.indBox, SIGNAL(currentIndexChanged(int)), this, SLOT(changeToTeam(int)));
-    connect(ui.esimeneVoistkond, SIGNAL(textEdited(QString)), this, SLOT(changeTeamName(QString)));
-    connect(ui.teineVoistkond, SIGNAL(textEdited(QString)), this, SLOT(changeTeamName(QString)));
+    connect(ui.duelFirstTeam, SIGNAL(textEdited(QString)), this, SLOT(changeTeamName(QString)));
+    connect(ui.duelSecondTeam, SIGNAL(textEdited(QString)), this, SLOT(changeTeamName(QString)));
     connect(ui.okNupp, SIGNAL(clicked()), this, SLOT(close()));
 
     ui.seeriateSilt->setVisible(false);
@@ -142,7 +142,7 @@ bool NewTabDialog::isTeamEvent() const
 
 QString NewTabDialog::leftTeamName() const
 {
-    return ui.esimeneVoistkond->text().trimmed();
+    return ui.duelFirstTeam->text().trimmed();
 }
 
 int NewTabDialog::pairsCount() const
@@ -152,7 +152,7 @@ int NewTabDialog::pairsCount() const
 
 QString NewTabDialog::rightTeamName() const
 {
-    return ui.teineVoistkond->text().trimmed();
+    return ui.duelSecondTeam->text().trimmed();
 }
 
 void NewTabDialog::updateDuelFields()
@@ -160,8 +160,9 @@ void NewTabDialog::updateDuelFields()
     const bool duel = isDuelMatch();
     ui.paarideSilt->setVisible(duel);
     ui.paarideArv->setVisible(duel);
-    ui.esimeneVoistkond->setVisible(duel);
-    ui.teineVoistkond->setVisible(duel);
+    ui.duelFirstTeam->setVisible(duel);
+    ui.duelSecondTeam->setVisible(duel);
+    ui.duelVs->setVisible(duel);
 }
 
 void NewTabDialog::updateUi()

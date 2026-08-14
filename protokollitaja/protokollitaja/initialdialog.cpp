@@ -41,18 +41,14 @@ void InitialDialog::avamine()
 #endif
     else
         uusNimi = QFileDialog::getOpenFileName(this, tr("Open file"), ui.fileNameEdit->text(), tr("Protokollitaja file (*.kll)"));
-    if(!uusNimi.isEmpty()){
+    if (!uusNimi.isEmpty()) {
         ui.fileNameEdit->setText(uusNimi);
-        //failiNimi.chop(4);
-        QFile fail(ui.fileNameEdit->text());
+        QFile fail(uusNimi);
         if(fail.open(QIODevice::ReadOnly)) {
             QDataStream sisse(&fail);
             CompetitionSettings competitionSettings = SimpleKllFileRW::readCompetitionSettings(&sisse, this);
-            ui.competitionNameEdit->setText(competitionSettings.competitionName);
-            ui.startDateEdit->setDate(competitionSettings.startDate);
-            ui.endDateEdit->setDate(competitionSettings.endDate);
-            ui.placeEdit->setText(competitionSettings.place);
-            ui.countryCombo->setCurrentText(competitionSettings.country);
+            competitionSettings.fileName = uusNimi;
+            setData(competitionSettings);
         } else QMessageBox::critical(this, tr("Protokollitaja"), tr("Wrong file version!\n\nIt could be a newer version's file.\n\n(AlguseValik::avamine())"),QMessageBox::Ok);
         fail.close();
     }
@@ -96,11 +92,12 @@ void InitialDialog::edasi()
         return;
     }
     CompetitionSettings data;
-    data.competitionName = competitionName();
+    data.competitionName = competitionName().trimmed();
     data.startDate = startDate();
     data.endDate = endDate();
-    data.place = place();
-    data.fileName = fileName();
+    data.place = place().trimmed();
+    data.country = country();
+    data.fileName = fileName().trimmed();
     QFile fail(fileName());
     if(!fail.open(QIODevice::ReadOnly)){
         if(QMessageBox::question(
@@ -157,11 +154,12 @@ void InitialDialog::setCountry(QString newCountry)
 
 void InitialDialog::setData(CompetitionSettings data)
 {
-    ui.competitionNameEdit->setText(data.competitionName);
+    ui.competitionNameEdit->setText(data.competitionName.trimmed());
     setStartDate(data.startDate);
     setEndDate(data.endDate);
-    ui.placeEdit->setText(data.place);
-    ui.fileNameEdit->setText(data.fileName);
+    ui.placeEdit->setText(data.place.trimmed());
+    ui.fileNameEdit->setText(data.fileName.trimmed());
+    ui.countryCombo->setCurrentText(data.country);
 }
 
 void InitialDialog::setEndDate(const QDate endDate)

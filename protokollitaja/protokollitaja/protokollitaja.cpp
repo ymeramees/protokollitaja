@@ -4022,11 +4022,11 @@ void Protokollitaja::sendCompetitorsToRange()
 
 void Protokollitaja::setDataFromInitialDialog()
 {
-    m_competitionName = aValik->competitionName();
+    m_competitionName = aValik->competitionName().trimmed();
     seeFail = aValik->fileName();
     m_startDate = aValik->startDate();
     m_endDate = aValik->endDate();
-    m_place = aValik->place();
+    m_place = aValik->place().trimmed();
     m_country = aValik->country();
     setWindowTitle(programmiNimi + " - " + seeFail);
     writeSettings();
@@ -4247,6 +4247,7 @@ QJsonObject Protokollitaja::toExportJson()
     json["startDate"] = m_startDate.toString(Qt::ISODate);
     json["endDate"] = m_endDate.toString(Qt::ISODate);
     json["place"] = m_place;
+    json["country"] = m_country;
 
     json["timeAndPlace"] = timeAndPlaceString();
 
@@ -4268,6 +4269,7 @@ void Protokollitaja::uploadResults()
     url.setScheme("https");
     url.setPort(443);
 
+    // FIXME Have not yet found a way to get this variable working
 // #ifdef USE_LOCALHOST
 //     url.setScheme("http");
 //     url.setHost("localhost");
@@ -4521,7 +4523,7 @@ void Protokollitaja::uuendaSeaded()
         m_competitionName = seaded->ui.voistluseNimi->text();
         m_startDate = seaded->ui.startDateEdit->date();
         m_endDate = seaded->ui.endDateEdit->date();
-        m_place = seaded->ui.kohtEdit->text();
+        m_place = seaded->ui.kohtEdit->text().trimmed();
         salvestaja->setInterval(seaded->ui.aegEdit->value() * 60000);
         switch(seaded->ui.sakiBox->currentIndex()){
         case 0: {
@@ -4848,14 +4850,6 @@ void Protokollitaja::uusLaskur(int i)   //Uue laskuri loomine, koos olemasoleva 
 void Protokollitaja::uusTab()
 {
         int a = abi;
-        /*for(int i = 0; i < tabWidget->count(); i++)
-                valik->ui.leheValikBox->addItem(tabWidget->tabText(i));*/
-        if(tabWidget->count() < 1){
-                //valik->ui.leheValikBox->setEnabled(false);
-                valik->ui.indBox->setEnabled(false);
-        }else{
-                valik->ui.indBox->setEnabled(true);
-        }
         if(valik->exec() == QDialog::Accepted){
                 if(valik->ui.sakiNimi->text().isEmpty()){
                         QMessageBox::warning(this, "Protokollitaja", tr("Tab name field empty. Cannot create tab without name."), QMessageBox::Ok);

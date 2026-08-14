@@ -310,17 +310,17 @@
         <location filename="../initialdialog.cpp" line="37"/>
         <location filename="../initialdialog.cpp" line="40"/>
         <location filename="../initialdialog.cpp" line="43"/>
-        <location filename="../initialdialog.cpp" line="204"/>
+        <location filename="../initialdialog.cpp" line="200"/>
         <source>Protokollitaja file (*.kll)</source>
         <translation>Protokollitaja fail (*.kll)</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="56"/>
+        <location filename="../initialdialog.cpp" line="51"/>
         <source>Protokollitaja</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="56"/>
+        <location filename="../initialdialog.cpp" line="51"/>
         <source>Wrong file version!
 
 It could be a newer version&apos;s file.
@@ -333,7 +333,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
 (AlguseValik::avamine())</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="82"/>
+        <location filename="../initialdialog.cpp" line="77"/>
         <source>All fields must be filled!
 
 To create a new competition click on &quot;New&quot;</source>
@@ -342,37 +342,37 @@ To create a new competition click on &quot;New&quot;</source>
 Uue võistluse loomiseks vajutage &quot;Uus&quot; nupule</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="86"/>
+        <location filename="../initialdialog.cpp" line="81"/>
         <source>End date cannot be before start date!</source>
         <translation>Lõpukuupäev ei saa olla enne alguskuupäeva!</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="93"/>
+        <location filename="../initialdialog.cpp" line="88"/>
         <source>Difference between start and end dates is suspiciously long! Do you want to continue?</source>
         <translation>Alguse ja lõpukuupäevade vahe on kahtlaselt pikk! Kas soovite jätkata?</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="108"/>
+        <location filename="../initialdialog.cpp" line="103"/>
         <source>Question</source>
         <translation>Küsimus</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="109"/>
+        <location filename="../initialdialog.cpp" line="104"/>
         <source>File does not exist, do you want to create it?</source>
         <translation>Sellise nimega faili ei ole. Kas soovite selle luua?</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="192"/>
+        <location filename="../initialdialog.cpp" line="188"/>
         <source>Enter new competition name</source>
         <translation>Sisestage uue võistluse nimi</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="193"/>
+        <location filename="../initialdialog.cpp" line="189"/>
         <source>Competition name:</source>
         <translation>Võistluse nimi:</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="202"/>
+        <location filename="../initialdialog.cpp" line="198"/>
         <source>Save</source>
         <translation>Salvesta</translation>
     </message>
@@ -592,22 +592,22 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
 <context>
     <name>Laskur</name>
     <message>
-        <location filename="../laskur.cpp" line="1441"/>
+        <location filename="../laskur.cpp" line="1440"/>
         <source>Series</source>
         <translation>Seeriad</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1459"/>
+        <location filename="../laskur.cpp" line="1458"/>
         <source>Subtotal</source>
         <translation>Vahesumma</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1417"/>
+        <location filename="../laskur.cpp" line="1416"/>
         <source>Remarks</source>
         <translation>Märkused</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1332"/>
+        <location filename="../laskur.cpp" line="1331"/>
         <source>Firing Point</source>
         <translation>Raja number</translation>
     </message>
@@ -622,98 +622,98 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <translation>Ei ole nii palju vahesummasid!</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="208"/>
+        <location filename="../laskur.cpp" line="207"/>
         <source>Info</source>
         <translation>Teade</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="688"/>
+        <location filename="../laskur.cpp" line="687"/>
         <source>Enter new shooter ID</source>
         <translation>Sisestage uus laskuri ID</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1333"/>
-        <source></source>
+        <location filename="../laskur.cpp" line="1332"/>
+        <source>FP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1339"/>
-        <location filename="../laskur.cpp" line="1348"/>
+        <location filename="../laskur.cpp" line="1338"/>
+        <location filename="../laskur.cpp" line="1347"/>
         <source>Paper target numbers range</source>
         <translation>Siffer</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1340"/>
+        <location filename="../laskur.cpp" line="1339"/>
         <source>Start</source>
         <translation>Algus</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1349"/>
+        <location filename="../laskur.cpp" line="1348"/>
         <source>End</source>
         <translation>Lõpp</translation>
     </message>
     <message>
+        <location filename="../laskur.cpp" line="1358"/>
         <location filename="../laskur.cpp" line="1359"/>
-        <location filename="../laskur.cpp" line="1360"/>
         <source>First Name</source>
         <translation>Eesnimi</translation>
     </message>
     <message>
+        <location filename="../laskur.cpp" line="1365"/>
         <location filename="../laskur.cpp" line="1366"/>
-        <location filename="../laskur.cpp" line="1367"/>
         <source>Last Name</source>
         <translation>Perekonnanimi</translation>
     </message>
     <message>
+        <location filename="../laskur.cpp" line="1373"/>
         <location filename="../laskur.cpp" line="1374"/>
-        <location filename="../laskur.cpp" line="1375"/>
         <source>Year of Birth</source>
         <translation>Sünniaasta</translation>
     </message>
     <message>
+        <location filename="../laskur.cpp" line="1380"/>
         <location filename="../laskur.cpp" line="1381"/>
-        <location filename="../laskur.cpp" line="1382"/>
         <source>Club</source>
         <translation>Klubi</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1390"/>
-        <location filename="../laskur.cpp" line="1405"/>
+        <location filename="../laskur.cpp" line="1389"/>
+        <location filename="../laskur.cpp" line="1404"/>
         <source>Total</source>
         <translation>Summa</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1399"/>
+        <location filename="../laskur.cpp" line="1398"/>
         <source>Finals</source>
         <translation>Finaali seeria</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1410"/>
+        <location filename="../laskur.cpp" line="1409"/>
         <source>Number of Inner Tens</source>
         <translation>Sisekümnete arv</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1423"/>
+        <location filename="../laskur.cpp" line="1422"/>
         <source>Shoot-off Shots</source>
         <translation>Lisalasud</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1426"/>
+        <location filename="../laskur.cpp" line="1425"/>
         <source>Shots...</source>
         <translation>Lasud...</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1427"/>
+        <location filename="../laskur.cpp" line="1426"/>
         <source>Open competitor&apos;s shots window</source>
         <translation>Ava laskuri laskude aken</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1429"/>
+        <location filename="../laskur.cpp" line="1428"/>
         <source>ID...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1430"/>
+        <location filename="../laskur.cpp" line="1429"/>
         <source>View/change competitor&apos;s ID</source>
         <translation>Vaata/muuda laskuri ID&apos;d</translation>
     </message>
@@ -1005,7 +1005,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../leht.cpp" line="588"/>
+        <location filename="../leht.cpp" line="586"/>
         <source>This shooter already exists!</source>
         <translation>Selline laskur on juba olemas!</translation>
     </message>
@@ -1697,7 +1697,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="613"/>
-        <location filename="../protokollitaja.cpp" line="4786"/>
+        <location filename="../protokollitaja.cpp" line="4788"/>
         <source>Do you want to save the changes?</source>
         <translation>Kas soovid muudatused salvestada?</translation>
     </message>
@@ -2000,9 +2000,9 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <location filename="../protokollitaja.cpp" line="3489"/>
         <location filename="../protokollitaja.cpp" line="3496"/>
         <location filename="../protokollitaja.cpp" line="3596"/>
-        <location filename="../protokollitaja.cpp" line="4342"/>
-        <location filename="../protokollitaja.cpp" line="4411"/>
-        <location filename="../protokollitaja.cpp" line="4443"/>
+        <location filename="../protokollitaja.cpp" line="4344"/>
+        <location filename="../protokollitaja.cpp" line="4413"/>
+        <location filename="../protokollitaja.cpp" line="4445"/>
         <source>Error</source>
         <translation>Viga</translation>
     </message>
@@ -2083,7 +2083,7 @@ aadress: %1</translation>
     <message>
         <location filename="../protokollitaja.cpp" line="1955"/>
         <location filename="../protokollitaja.cpp" line="2220"/>
-        <location filename="../protokollitaja.cpp" line="4482"/>
+        <location filename="../protokollitaja.cpp" line="4484"/>
         <source>Warning!</source>
         <translation>Hoiatus!</translation>
     </message>
@@ -2104,14 +2104,14 @@ Kas soovite jätkata</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2112"/>
-        <location filename="../protokollitaja.cpp" line="4342"/>
-        <location filename="../protokollitaja.cpp" line="4411"/>
+        <location filename="../protokollitaja.cpp" line="4344"/>
+        <location filename="../protokollitaja.cpp" line="4413"/>
         <source>Unfortunately this version of Protokollitaja doesn&apos;t support paper target scoring for 3x40 events!</source>
         <translation>Kahjuks see versioon Protokollitajast ei toeta lehelugemist 3x40 lasku standardi harjutustes!</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2152"/>
-        <location filename="../protokollitaja.cpp" line="4443"/>
+        <location filename="../protokollitaja.cpp" line="4445"/>
         <source>Too many series, scoring not possible!</source>
         <translation>Liiga palju seeriaid, lugemine ei ole võimalik!</translation>
     </message>
@@ -2523,49 +2523,49 @@ Kas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.</t
         <translation>%1 uut püssilaskurid ja %2 uut püstolilaskurit lisatud andmebaasi</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4289"/>
+        <location filename="../protokollitaja.cpp" line="4291"/>
         <source>Username in the database</source>
         <translation>Kasutajanimi andmebaasis</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4289"/>
+        <location filename="../protokollitaja.cpp" line="4291"/>
         <source>Username:</source>
         <translation>Kasutajanimi:</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4291"/>
+        <location filename="../protokollitaja.cpp" line="4293"/>
         <source>Password in the database</source>
         <translation>Kasutaja parool andmebaasis</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4291"/>
+        <location filename="../protokollitaja.cpp" line="4293"/>
         <source>Password:</source>
         <translation>Parool:</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4640"/>
+        <location filename="../protokollitaja.cpp" line="4642"/>
         <source>Paper targets for this shooter are already being read in Protokollitaja!</source>
         <translation>Sellele laskurile juba loetakse lehti Protokollitajas!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4678"/>
+        <location filename="../protokollitaja.cpp" line="4680"/>
         <source>This event is not supported!
 Number of series is too big.</source>
         <translation>Sellist harjutust ei toetata!
 Seeriate arv liiga suur.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4736"/>
+        <location filename="../protokollitaja.cpp" line="4738"/>
         <source>This cipher was not found!</source>
         <translation>Sellist sifrit ei leitud!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4861"/>
+        <location filename="../protokollitaja.cpp" line="4863"/>
         <source>Tab name field empty. Cannot create tab without name.</source>
         <translation>Töölehe nime lahter on tühi. Ei saa luua uut töölehte ilma nimeta.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4865"/>
+        <location filename="../protokollitaja.cpp" line="4867"/>
         <source>Tab screen name empty. Please fill that also</source>
         <translation>Tulemuse aknas näidatava tabeli pealkirja lahter on tühi. Paluks see ka ikka täita</translation>
     </message>
@@ -3515,57 +3515,62 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <translation>Tulemused kümnendikega</translation>
     </message>
     <message>
-        <location filename="../newtabdialog.ui" line="209"/>
+        <location filename="../newtabdialog.ui" line="221"/>
+        <source>vs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../newtabdialog.ui" line="240"/>
         <source>Competitors per team:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../newtabdialog.ui" line="216"/>
+        <location filename="../newtabdialog.ui" line="247"/>
         <source>Number of competitors in each team of the duel match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../newtabdialog.ui" line="232"/>
+        <location filename="../newtabdialog.ui" line="211"/>
         <source>Name of the first team of the duel match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../newtabdialog.ui" line="235"/>
+        <location filename="../newtabdialog.ui" line="214"/>
         <source>Team 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../newtabdialog.ui" line="242"/>
+        <location filename="../newtabdialog.ui" line="228"/>
         <source>Name of the second team of the duel match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../newtabdialog.ui" line="245"/>
+        <location filename="../newtabdialog.ui" line="231"/>
         <source>Team 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../newtabdialog.ui" line="252"/>
+        <location filename="../newtabdialog.ui" line="263"/>
         <source>Screen Name:</source>
         <translation>Ala nimi tulemuste aknas:</translation>
     </message>
     <message>
-        <location filename="../newtabdialog.ui" line="259"/>
+        <location filename="../newtabdialog.ui" line="270"/>
         <source>Title that is shown on spectator&apos;s screen</source>
         <translation>Ala nimi, mida kuvatakse tulemustega koos ekraanil</translation>
     </message>
     <message>
-        <location filename="../newtabdialog.ui" line="262"/>
+        <location filename="../newtabdialog.ui" line="273"/>
         <source>10m Air Rifle 40 Shots Men</source>
         <translation>40l Õhupüss Mehed</translation>
     </message>
     <message>
-        <location filename="../newtabdialog.ui" line="284"/>
+        <location filename="../newtabdialog.ui" line="295"/>
         <source>Cancel</source>
         <translation>Loobu</translation>
     </message>
     <message>
-        <location filename="../newtabdialog.ui" line="291"/>
+        <location filename="../newtabdialog.ui" line="302"/>
         <source>OK</source>
         <translation type="unfinished">Olgu</translation>
     </message>

@@ -187,8 +187,7 @@ void Leht::uusLaskur(int id)
         laskurid << las;
         las->jrkArv = laskurid.count() - 1;
         if(laskurid.count() > 1)
-            if(laskurid[0]->sifriAlgus->isVisible()){
-                las->rajaNr->show();
+            if (laskurid[0]->sifriAlgus->isVisible()) {
                 las->sifriAlgus->show();
                 las->sidekriips->show();
                 las->sifriLopp->show();
@@ -219,8 +218,7 @@ void Leht::uusLaskur(QJsonObject json)
         laskurid << las;
         las->jrkArv = laskurid.count() - 1;
         if(laskurid.count() > 1)
-            if(laskurid[0]->sifriAlgus->isVisible()){
-                las->rajaNr->show();
+            if (laskurid[0]->sifriAlgus->isVisible()) {
                 las->sifriAlgus->show();
                 las->sidekriips->show();
                 las->sifriLopp->show();
@@ -289,7 +287,7 @@ QString Leht::duelName() const
     if(left.isEmpty() && right.isEmpty())
         return ekraaniNimi;
 
-    return QString("%1 vs %2").arg(left, right);
+    return QString("%1 : %2").arg(left, right);
 }
 
 QualificationEvents::EventType Leht::eventType() const
@@ -693,16 +691,14 @@ void Leht::naitaSifrit()
 {
     if(laskurid.count() < 1) return;
     if(!laskurid[0]->sifriAlgus->isVisible()){
-        for(int i = 0; i < laskurid.count(); i++){
-            laskurid[i]->rajaNr->show();
+        for (int i = 0; i < laskurid.count(); i++) {
             laskurid[i]->sifriAlgus->show();
             laskurid[i]->sidekriips->show();
             laskurid[i]->sifriLopp->show();
             laskurid[i]->sifriNupp->setText("<<");
         }
     }else{
-        for(int i = 0; i < laskurid.count(); i++){
-            laskurid[i]->rajaNr->hide();
+        for (int i = 0; i < laskurid.count(); i++) {
             laskurid[i]->sifriAlgus->hide();
             laskurid[i]->sidekriips->hide();
             laskurid[i]->sifriLopp->hide();
