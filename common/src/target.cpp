@@ -9,6 +9,7 @@ Target::Target(QWidget* parent)
     m_targetImage = nullptr;
     m_targetPainter = nullptr;
     m_active = true;
+    m_infoBoxesVisible = true;
     m_zoomEnabled = true;
     //    lehetuubid << QString::fromLatin1("Air Rifle") << QString::fromLatin1("Air Pistol") << QString::fromLatin1("50m Rifle");
 }
@@ -19,10 +20,22 @@ Target::Target(int relv, QString n, QString r, QWidget* parent)
     m_targetImage = nullptr;
     m_targetPainter = nullptr;
     m_active = true;
+    m_infoBoxesVisible = true;
     m_zoomEnabled = true;
     setName(n);
     setTargetNo(r);
     init(relv);
+}
+
+Target::~Target()
+{
+    delete m_targetPainter;  // The painter has to be deleted before the image it is painting on
+    delete m_targetImage;
+}
+
+bool Target::infoBoxesVisible()
+{
+    return m_infoBoxesVisible;
 }
 
 bool Target::zoomEnabled()
@@ -355,6 +368,18 @@ void Target::setActive(bool a)
     m_active = a;
 }
 
+/**
+ * Tells if the competitor's name, target number, last shot's value and result are drawn onto
+ * the target's picture or not. Should be turned off, if that information is shown around
+ * the target instead, like in a duel match's view.
+ */
+void Target::setInfoBoxesVisible(bool newInfoBoxesVisible)
+{
+    m_infoBoxesVisible = newInfoBoxesVisible;
+    if (m_targetImage != nullptr)  // If the target has not been initialized yet, it is drawn later anyway
+        zoomAndUpdate();
+}
+
 void Target::setName(QString n)
 {
     m_name = n;
@@ -397,6 +422,12 @@ void Target::zoomAndUpdate()
     if (h > m_targetImage->height()) h = m_targetImage->height();
 
     QImage copy = m_targetImage->copy(x, y, w, h);
+
+    if (!m_infoBoxesVisible) {  // The information is shown around the target instead, for example in a duel match's view
+        this->setPixmap(QPixmap::fromImage(copy.scaled(this->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+        return;
+    }
+
     QPainter painter2(&copy);
     painter2.setBrush(Qt::white);
     QFont font;

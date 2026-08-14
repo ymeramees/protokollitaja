@@ -10,6 +10,7 @@ qt_standard_project_setup()
 
 add_subdirectory(CompetitorTest)
 add_subdirectory(DataUploaderTest)
+add_subdirectory(DuelViewTest)
 add_subdirectory(FinalsFileExportTest)
 add_subdirectory(InitialDialogTest)
 add_subdirectory(KllFileRWTest)

@@ -2560,6 +2560,7 @@ void Protokollitaja::naitaTul()
     static int areaNr = 0;
     static bool naidatud = false;
     tulemus->ind = true;
+    tulemus->showResults();   //Duel matches switch to their own view below
     if(tulemus->windowState() == Qt::WindowMaximized)
         tulemus->fullScreen();
         //tulemus->loplik = false;
@@ -2585,6 +2586,32 @@ void Protokollitaja::naitaTul()
                     naidatud = false;
                     seeLeht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(leheNr))->widget());
                 } while(start != leheNr && !seeLeht->naidata);
+            }
+            if(seeLeht->pageType() == Leht::Duel){   //Duel matches are shown with target views instead of a results table
+                areaNr = 0;
+                reaNr = 0;
+                naidatud = false;
+                leheNr++;
+                if(seeLeht->duelPairs.count() < 1){
+                    naitaja->setInterval(100);  //Et kiiremini uut lehte näitaks, muidu jääb vahepeal paus väga pikaks
+                    if(leheNr >= tabWidget->count()) leheNr = 0;
+                    return;
+                }
+
+                seeLeht->updateDuelPoints();
+
+                tulemus->voistluseNimi = m_competitionName;
+                tulemus->aegKoht = timeAndPlaceString();
+                tulemus->pealKiri = seeLeht->duelName();
+                tulemus->showDuel(seeLeht->duelPairs, seeLeht->m_targetType);
+
+                int interval = seeLeht->minTime() + 2000 * seeLeht->duelPairs.count();
+                if(interval > seeLeht->maxTime()) interval = seeLeht->maxTime();
+                naitaja->setInterval(interval);
+
+                if(leheNr >= tabWidget->count()) leheNr = 0;
+
+                return;
             }
             if(seeLeht->voistk){
                 tulemus->ind = false;

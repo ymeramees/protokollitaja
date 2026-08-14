@@ -1,4 +1,5 @@
 ﻿#include <QtGui>
+#include "duelview.h"
 #include "tulemuseaken.h"
 
 extern QString versioon;
@@ -66,6 +67,9 @@ TulemuseAken::TulemuseAken(QWidget *parent) : QWidget(parent)
         silt->setGeometry(0, 0, this->width(), this->height());
         painter->setFont(kirjaFont);
         silt->setPixmap(/*QPixmap::fromImage(*/*pilt);
+        duel = new DuelView(this);
+        duel->setGeometry(0, 0, this->width(), this->height());
+        duel->hide();
 }
 
 TulemuseAken::~TulemuseAken()
@@ -76,6 +80,7 @@ void TulemuseAken::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
         silt->setGeometry(0, 0, this->width(), this->height());
+        duel->setGeometry(0, 0, this->width(), this->height());
 }
 
 void TulemuseAken::contextMenuEvent(QContextMenuEvent *event)
@@ -255,6 +260,26 @@ void TulemuseAken::joonista()
 int TulemuseAken::getRidadeArv()
 {
         return ridadeArv;
+}
+
+/**
+ * Shows the given duel match's pairs with their target views, instead of the ordinary
+ * results table.
+ */
+void TulemuseAken::showDuel(const QList<DuelPair*> &pairs, const TargetTypes::TargetType targetType)
+{
+        silt->hide();
+        duel->setHeading(voistluseNimi, pealKiri, aegKoht);
+        duel->setGeometry(0, 0, this->width(), this->height());
+        duel->show();
+        duel->raise();
+        duel->showMatch(pairs, targetType);
+}
+
+void TulemuseAken::showResults()
+{
+        duel->hide();
+        silt->show();
 }
 
 void TulemuseAken::muudaRidadeArv(int r)

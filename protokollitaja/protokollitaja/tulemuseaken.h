@@ -24,6 +24,11 @@
 #include <QtCore/QVariant>
 #include <QScreen>
 
+#include "targettypes.h"
+
+class DuelPair;
+class DuelView;
+
 class TulemuseAken : public QWidget
 {
 
@@ -44,6 +49,7 @@ public:
 	QPixmap *pilt;
 	QPainter *painter;
 	QLabel *silt;
+	DuelView *duel;   //Duel match's view, shown instead of silt, when a duel match is shown
 	QString voistluseNimi;
 	QString aegKoht;
 	QString pealKiri;
@@ -61,6 +67,8 @@ public:
 	void contextMenuEvent(QContextMenuEvent *event);
 	int getRidadeArv();
 	void  muudaRidadeArv(int);
+	void showDuel(const QList<DuelPair*> &pairs, const TargetTypes::TargetType targetType);   //Shows the duel match's view
+	void showResults();   //Shows the ordinary results view
 public slots:
 	void muudaKirjaFont();
 	void muudaPealkirjaFont();

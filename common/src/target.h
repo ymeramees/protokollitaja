@@ -23,6 +23,7 @@ private:
     int m_gunType;
 //    int m_zoomLevel;
     bool m_active;  // Shows if the competitor is dropped out in finals or not
+    bool m_infoBoxesVisible;    // Will the name, target no, shot and result boxes be drawn onto the target or not
     bool m_zoomEnabled;    // Will the target automatically zoom or not
     QImage *m_targetImage = nullptr;
     Lask m_previousShot;
@@ -38,10 +39,12 @@ private slots:
 public:
     explicit Target(QWidget *parent = nullptr);
     explicit Target(int m_gunType, QString n, QString r, QWidget *parent = nullptr);
+    ~Target();
 
 signals:
 
 public slots:
+    bool infoBoxesVisible();
     bool zoomEnabled();
     QString name();
     QString targetNo();
@@ -52,6 +55,7 @@ public slots:
     void drawTarget();
     void reset();
     void setActive(bool a);
+    void setInfoBoxesVisible(bool newInfoBoxesVisible);
     void setZoomEnabled(bool newZoomEnabled);
     void setName(QString n);
     void setTargetNo(QString r);

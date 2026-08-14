@@ -8,13 +8,16 @@ qt_add_executable(Protokollitaja WIN32 MACOSX_BUNDLE
     ../../common/src/siusdataconnection.cpp ../../common/src/siusdataconnection.h
     ../../common/src/siusdataconnections.cpp ../../common/src/siusdataconnections.h ../../common/src/siusdataconnections.ui
     ../../common/src/siusshotdata.h
+    ../../common/src/target.cpp ../../common/src/target.h
     ../../common/src/targettypes.cpp ../../common/src/targettypes.h
     ../../common/src/uhendumiseaken.cpp ../../common/src/uhendumiseaken.h ../../common/src/uhendumiseaken.ui
     ../../common/src/version.h
     andmebaas.h
     competitionsettings.h
     datauploader.cpp datauploader.h
+    duelcompetitorview.cpp duelcompetitorview.h
     duelpair.cpp duelpair.h
+    duelview.cpp duelview.h
     filedownloader.cpp filedownloader.h
     finalsfileexport.cpp finalsfileexport.h finalsfileexport.ui
     importaken.cpp importaken.h importaken.ui
