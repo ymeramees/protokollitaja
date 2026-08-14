@@ -10,6 +10,8 @@
     </message>
     <message>
         <location filename="../competitor.cpp" line="71"/>
+        <location filename="../competitor.cpp" line="430"/>
+        <location filename="../competitor.cpp" line="441"/>
         <source>Error!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -31,12 +33,6 @@
     <message>
         <location filename="../competitor.cpp" line="321"/>
         <source>Competitor ID changed, old: %1 =&gt; new: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../competitor.cpp" line="430"/>
-        <location filename="../competitor.cpp" line="441"/>
-        <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -83,12 +79,12 @@
     <name>FinalsFormats</name>
     <message>
         <location filename="../../../common/src/finalsformats.cpp" line="9"/>
-        <source>Error</source>
+        <source>Cannot find a file with finals formats!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../common/src/finalsformats.cpp" line="9"/>
-        <source>Cannot find a file with finals formats!</source>
+        <source>Error!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -205,13 +201,6 @@ To create a new competition press the &quot;New&quot; button</source>
 </context>
 <context>
     <name>Protofinaal</name>
-    <message>
-        <location filename="../protofinaal.cpp" line="73"/>
-        <location filename="../protofinaal.cpp" line="307"/>
-        <location filename="../protofinaal.cpp" line="593"/>
-        <source>Error</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../protofinaal.cpp" line="73"/>
         <source>Failed to write log file! Make sure you have write permission to the folder where the competition file is located.</source>
@@ -356,12 +345,15 @@ To create a new competition press the &quot;New&quot; button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../protofinaal.cpp" line="73"/>
         <location filename="../protofinaal.cpp" line="266"/>
+        <location filename="../protofinaal.cpp" line="307"/>
         <location filename="../protofinaal.cpp" line="365"/>
         <location filename="../protofinaal.cpp" line="411"/>
         <location filename="../protofinaal.cpp" line="445"/>
         <location filename="../protofinaal.cpp" line="455"/>
         <location filename="../protofinaal.cpp" line="534"/>
+        <location filename="../protofinaal.cpp" line="593"/>
         <location filename="../protofinaal.cpp" line="792"/>
         <source>Error!</source>
         <translation type="unfinished"></translation>

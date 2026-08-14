@@ -526,15 +526,18 @@ TabWidgetWithSettings KllFileRW::readKllFile(QString fileName, int startingId)
                 sheet->alustamine = false;
             }
             kllData.lastCompetitorId = checkDuplicateIds(kllData.tabWidget, 0);
-        } else QMessageBox::critical(
-                    m_parentWindow,
-                    tr("Protokollitaja"),
-                    tr("Wrong file version!\n\nIt could be a newer version's file.\n\n(Protokollitaja::loefail())"),
-                    QMessageBox::Ok
-                    );
+        } else
+            QMessageBox::critical(m_parentWindow,
+                                  tr("Error!"),
+                                  tr("Wrong file version!\n\nIt could be a newer version's "
+                                     "file.\n\n(Protokollitaja::loefail())"),
+                                  QMessageBox::Ok);
         fail.close();
     } else if (!fileName.isEmpty())
-        QMessageBox::critical(m_parentWindow, tr("Protokollitaja"), tr("Cannot find the file!"), QMessageBox::Ok);
+        QMessageBox::critical(m_parentWindow,
+                              tr("Error!"),
+                              tr("Cannot find the file!"),
+                              QMessageBox::Ok);
 
     QApplication::restoreOverrideCursor();
 #ifdef QT_DEBUG

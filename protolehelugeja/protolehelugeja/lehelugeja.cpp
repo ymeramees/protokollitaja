@@ -267,7 +267,7 @@ void Lehelugeja::changeVariable(QString variableAndValue)
 void Lehelugeja::closeEvent(QCloseEvent *event)
 {
     if(!voibSulgeda){
-        saadaVorku(tr("Käsk:Vabastada"));
+        saadaVorku("Käsk:Vabastada");
         sulgeja->start();
         voibSulgeda = true;
         event->ignore();
@@ -578,17 +578,22 @@ void Lehelugeja::naitaViga(QAbstractSocket::SocketError viga)
 {
     switch (viga) {
         case QAbstractSocket::RemoteHostClosedError:
-            QMessageBox::information(this, tr("Protolehelugeja"), tr("Ühendus katkestatud! Proovige uuesti ühenduda."));
+            QMessageBox::information(this,
+                                     tr("Info"),
+                                     tr("Ühendus katkestatud! Proovige uuesti ühenduda."));
             break;
         case QAbstractSocket::HostNotFoundError:
-            QMessageBox::information(this, tr("Protolehelugeja"), tr("Serverit ei leitud, palun kontrollige aardessi ja porti!"));
+            QMessageBox::information(
+                this, tr("Info"), tr("Serverit ei leitud, palun kontrollige aardessi ja porti!"));
             break;
         case QAbstractSocket::ConnectionRefusedError:
-            QMessageBox::information(this, tr("Protolehelugeja"), tr("Server keeldus ühendusest! Kontrollige, "
-                    "et server töötaks ja et aadress ja port õiged oleksid"));
+            QMessageBox::information(this,
+                                     tr("Info"),
+                                     tr("Server keeldus ühendusest! Kontrollige, "
+                                        "et server töötaks ja et aadress ja port õiged oleksid"));
             break;
         default:
-            QMessageBox::information(this, tr("Protolehelugeja"), tr("Viga: %1.").arg(socket->errorString()));
+            QMessageBox::information(this, tr("Info"), tr("Viga: %1.").arg(socket->errorString()));
         }
 }
 
@@ -611,7 +616,7 @@ void Lehelugeja::otsiPorti()
 
 void Lehelugeja::paluSalvestada()
 {
-    saadaVorku(tr("Käsk:Salvestada"));
+    saadaVorku("Käsk:Salvestada");
 }
 
 void Lehelugeja::peidaNimi()

@@ -439,7 +439,7 @@ void LehelugejaAken::loe()
                             lasud[aktiivseSeeriaNr][i]->set(seeriaLasud[i]);
                         m_ui.logi->append(m_ui.nimeBox->currentText() + QString(" %1. seeria: %2").arg(aktiivneSeeria->objectName().at(6)).arg(fl / 10));
                     }else{
-                        QMessageBox::critical(this, tr("Error"), tr("Puudus aktiivne seeria kast!"), QMessageBox::Ok);
+                        QMessageBox::critical(this, tr("Error!"), tr("Puudus aktiivne seeria kast!"), QMessageBox::Ok);
                         m_ui.logi->append(tr("Viga!:") + m_ui.nimeBox->currentText() + tr(" tundmatu seeria: %1").arg(fl / 10));
                     }
                     /*for(int k = 0; k < seeriad.count(); k++)

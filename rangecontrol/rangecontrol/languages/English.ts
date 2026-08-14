@@ -803,14 +803,6 @@ Check whether Protokollitaja and Range Control versions match!</source>
     </message>
     <message>
         <location filename="../rangecontrol.cpp" line="439"/>
-        <location filename="../rangecontrol.cpp" line="459"/>
-        <location filename="../rangecontrol.cpp" line="508"/>
-        <location filename="../rangecontrol.cpp" line="520"/>
-        <source>Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rangecontrol.cpp" line="439"/>
         <source>Use Sius startlist format, because Inband&apos;s does not contain IDs!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -847,6 +839,10 @@ Check whether Protokollitaja and Range Control versions match!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../rangecontrol.cpp" line="439"/>
+        <location filename="../rangecontrol.cpp" line="459"/>
+        <location filename="../rangecontrol.cpp" line="508"/>
+        <location filename="../rangecontrol.cpp" line="520"/>
         <location filename="../rangecontrol.cpp" line="728"/>
         <source>Error!</source>
         <translation type="unfinished"></translation>

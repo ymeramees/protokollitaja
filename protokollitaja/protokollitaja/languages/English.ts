@@ -180,13 +180,13 @@
     <name>FinalsFormats</name>
     <message>
         <location filename="../../../common/src/finalsformats.cpp" line="9"/>
-        <source>Error</source>
+        <source>Cannot find a file with finals formats!</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../../common/src/finalsformats.cpp" line="9"/>
-        <source>Cannot find a file with finals formats!</source>
-        <translation></translation>
+        <source>Error!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -310,17 +310,17 @@
         <location filename="../initialdialog.cpp" line="37"/>
         <location filename="../initialdialog.cpp" line="40"/>
         <location filename="../initialdialog.cpp" line="43"/>
-        <location filename="../initialdialog.cpp" line="200"/>
+        <location filename="../initialdialog.cpp" line="207"/>
         <source>Protokollitaja file (*.kll)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="51"/>
-        <source>Protokollitaja</source>
+        <location filename="../initialdialog.cpp" line="54"/>
+        <source>Error!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="51"/>
+        <location filename="../initialdialog.cpp" line="55"/>
         <source>Wrong file version!
 
 It could be a newer version&apos;s file.
@@ -329,44 +329,44 @@ It could be a newer version&apos;s file.
         <translation></translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="77"/>
+        <location filename="../initialdialog.cpp" line="83"/>
         <source>All fields must be filled!
 
 To create a new competition click on &quot;New&quot;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="81"/>
+        <location filename="../initialdialog.cpp" line="87"/>
         <source>End date cannot be before start date!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="88"/>
+        <location filename="../initialdialog.cpp" line="94"/>
         <source>Difference between start and end dates is suspiciously long! Do you want to continue?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="103"/>
+        <location filename="../initialdialog.cpp" line="110"/>
         <source>Question</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="104"/>
+        <location filename="../initialdialog.cpp" line="111"/>
         <source>File does not exist, do you want to create it?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="188"/>
+        <location filename="../initialdialog.cpp" line="195"/>
         <source>Enter new competition name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="189"/>
+        <location filename="../initialdialog.cpp" line="196"/>
         <source>Competition name:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="198"/>
+        <location filename="../initialdialog.cpp" line="205"/>
         <source>Save</source>
         <translation></translation>
     </message>
@@ -480,6 +480,8 @@ To create a new competition click on &quot;New&quot;</source>
     <name>KllFileRW</name>
     <message>
         <location filename="../kllfilerw.cpp" line="93"/>
+        <location filename="../kllfilerw.cpp" line="531"/>
+        <location filename="../kllfilerw.cpp" line="538"/>
         <source>Error!</source>
         <translation></translation>
     </message>
@@ -491,12 +493,6 @@ Do you want to delete it? It doesn&apos;t affect anything else than uploading to
         <translation></translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="531"/>
-        <location filename="../kllfilerw.cpp" line="537"/>
-        <source>Protokollitaja</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../kllfilerw.cpp" line="532"/>
         <source>Wrong file version!
 
@@ -506,7 +502,7 @@ It could be a newer version&apos;s file.
         <translation></translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="537"/>
+        <location filename="../kllfilerw.cpp" line="539"/>
         <source>Cannot find the file!</source>
         <translation></translation>
     </message>
@@ -549,30 +545,22 @@ It could be a newer version&apos;s file.
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskudeaken.cpp" line="43"/>
-        <location filename="../laskudeaken.cpp" line="44"/>
-        <location filename="../laskudeaken.cpp" line="106"/>
-        <location filename="../laskudeaken.cpp" line="107"/>
-        <source>%1</source>
+        <location filename="../laskudeaken.cpp" line="85"/>
+        <source>Error!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskudeaken.cpp" line="52"/>
+        <location filename="../laskudeaken.cpp" line="56"/>
         <source>1. series</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskudeaken.cpp" line="80"/>
-        <source>Error</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../laskudeaken.cpp" line="80"/>
+        <location filename="../laskudeaken.cpp" line="86"/>
         <source>Faulty shot value in the table!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskudeaken.cpp" line="117"/>
+        <location filename="../laskudeaken.cpp" line="126"/>
         <source>%1. series</source>
         <translation></translation>
     </message>
@@ -694,11 +682,6 @@ It could be a newer version&apos;s file.
         <location filename="../laskur.cpp" line="1426"/>
         <source>Open competitor&apos;s shots window</source>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../laskur.cpp" line="1428"/>
-        <source>ID...</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../laskur.cpp" line="1429"/>
@@ -896,12 +879,12 @@ It could be a newer version&apos;s file.
     </message>
     <message>
         <location filename="../lehelugejaaken.cpp" line="442"/>
-        <source>Error</source>
-        <translation></translation>
+        <source>Puudus aktiivne seeria kast!</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../lehelugejaaken.cpp" line="442"/>
-        <source>Puudus aktiivne seeria kast!</source>
+        <source>Error!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1590,11 +1573,6 @@ It could be a newer version&apos;s file.
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="720"/>
-        <source>Muuda webCompetitionId</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../protokollitaja.cpp" line="226"/>
         <source>&amp;File</source>
         <translation></translation>
@@ -1620,21 +1598,6 @@ It could be a newer version&apos;s file.
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="304"/>
-        <source>failMenu</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../protokollitaja.cpp" line="310"/>
-        <source>tooRiistad</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../protokollitaja.cpp" line="321"/>
-        <source>tooRiistad2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../protokollitaja.cpp" line="402"/>
         <source>There is an empty row in the rifle shooters autocomplete list!</source>
         <translation></translation>
@@ -1650,6 +1613,8 @@ It could be a newer version&apos;s file.
         <location filename="../protokollitaja.cpp" line="428"/>
         <location filename="../protokollitaja.cpp" line="468"/>
         <location filename="../protokollitaja.cpp" line="513"/>
+        <location filename="../protokollitaja.cpp" line="673"/>
+        <location filename="../protokollitaja.cpp" line="2401"/>
         <source>Warning</source>
         <translation></translation>
     </message>
@@ -1704,6 +1669,7 @@ It could be a newer version&apos;s file.
         <location filename="../protokollitaja.cpp" line="648"/>
         <location filename="../protokollitaja.cpp" line="1491"/>
         <location filename="../protokollitaja.cpp" line="1752"/>
+        <location filename="../protokollitaja.cpp" line="2405"/>
         <location filename="../protokollitaja.cpp" line="2962"/>
         <location filename="../protokollitaja.cpp" line="3903"/>
         <location filename="../protokollitaja.cpp" line="3913"/>
@@ -1714,13 +1680,6 @@ It could be a newer version&apos;s file.
         <location filename="../protokollitaja.cpp" line="648"/>
         <source>Language changes are applied when the program is started again</source>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../protokollitaja.cpp" line="673"/>
-        <location filename="../protokollitaja.cpp" line="2401"/>
-        <location filename="../protokollitaja.cpp" line="2405"/>
-        <source>Protokollitaja</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="673"/>
@@ -1945,45 +1904,6 @@ It could be a newer version&apos;s file.
         <source>Unable to start Finaal! Reason unknown!
 
 %1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../protokollitaja.cpp" line="878"/>
-        <location filename="../protokollitaja.cpp" line="936"/>
-        <location filename="../protokollitaja.cpp" line="945"/>
-        <location filename="../protokollitaja.cpp" line="950"/>
-        <location filename="../protokollitaja.cpp" line="954"/>
-        <location filename="../protokollitaja.cpp" line="964"/>
-        <location filename="../protokollitaja.cpp" line="980"/>
-        <location filename="../protokollitaja.cpp" line="994"/>
-        <location filename="../protokollitaja.cpp" line="999"/>
-        <location filename="../protokollitaja.cpp" line="1003"/>
-        <location filename="../protokollitaja.cpp" line="1046"/>
-        <location filename="../protokollitaja.cpp" line="1055"/>
-        <location filename="../protokollitaja.cpp" line="1112"/>
-        <location filename="../protokollitaja.cpp" line="1694"/>
-        <location filename="../protokollitaja.cpp" line="1696"/>
-        <location filename="../protokollitaja.cpp" line="1700"/>
-        <location filename="../protokollitaja.cpp" line="1704"/>
-        <location filename="../protokollitaja.cpp" line="1707"/>
-        <location filename="../protokollitaja.cpp" line="1718"/>
-        <location filename="../protokollitaja.cpp" line="1913"/>
-        <location filename="../protokollitaja.cpp" line="1925"/>
-        <location filename="../protokollitaja.cpp" line="1946"/>
-        <location filename="../protokollitaja.cpp" line="1949"/>
-        <location filename="../protokollitaja.cpp" line="2085"/>
-        <location filename="../protokollitaja.cpp" line="2112"/>
-        <location filename="../protokollitaja.cpp" line="2152"/>
-        <location filename="../protokollitaja.cpp" line="2156"/>
-        <location filename="../protokollitaja.cpp" line="3474"/>
-        <location filename="../protokollitaja.cpp" line="3483"/>
-        <location filename="../protokollitaja.cpp" line="3489"/>
-        <location filename="../protokollitaja.cpp" line="3496"/>
-        <location filename="../protokollitaja.cpp" line="3596"/>
-        <location filename="../protokollitaja.cpp" line="4344"/>
-        <location filename="../protokollitaja.cpp" line="4413"/>
-        <location filename="../protokollitaja.cpp" line="4445"/>
-        <source>Error</source>
         <translation></translation>
     </message>
     <message>
@@ -2382,8 +2302,35 @@ Newest version found: %1</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="../protokollitaja.cpp" line="878"/>
+        <location filename="../protokollitaja.cpp" line="936"/>
+        <location filename="../protokollitaja.cpp" line="945"/>
+        <location filename="../protokollitaja.cpp" line="950"/>
+        <location filename="../protokollitaja.cpp" line="954"/>
+        <location filename="../protokollitaja.cpp" line="964"/>
+        <location filename="../protokollitaja.cpp" line="980"/>
+        <location filename="../protokollitaja.cpp" line="994"/>
+        <location filename="../protokollitaja.cpp" line="999"/>
+        <location filename="../protokollitaja.cpp" line="1003"/>
+        <location filename="../protokollitaja.cpp" line="1046"/>
+        <location filename="../protokollitaja.cpp" line="1055"/>
+        <location filename="../protokollitaja.cpp" line="1112"/>
         <location filename="../protokollitaja.cpp" line="1640"/>
         <location filename="../protokollitaja.cpp" line="1644"/>
+        <location filename="../protokollitaja.cpp" line="1694"/>
+        <location filename="../protokollitaja.cpp" line="1696"/>
+        <location filename="../protokollitaja.cpp" line="1700"/>
+        <location filename="../protokollitaja.cpp" line="1704"/>
+        <location filename="../protokollitaja.cpp" line="1707"/>
+        <location filename="../protokollitaja.cpp" line="1718"/>
+        <location filename="../protokollitaja.cpp" line="1913"/>
+        <location filename="../protokollitaja.cpp" line="1925"/>
+        <location filename="../protokollitaja.cpp" line="1946"/>
+        <location filename="../protokollitaja.cpp" line="1949"/>
+        <location filename="../protokollitaja.cpp" line="2085"/>
+        <location filename="../protokollitaja.cpp" line="2112"/>
+        <location filename="../protokollitaja.cpp" line="2152"/>
+        <location filename="../protokollitaja.cpp" line="2156"/>
         <location filename="../protokollitaja.cpp" line="2340"/>
         <location filename="../protokollitaja.cpp" line="2343"/>
         <location filename="../protokollitaja.cpp" line="2386"/>
@@ -2392,7 +2339,15 @@ Newest version found: %1</source>
         <location filename="../protokollitaja.cpp" line="2397"/>
         <location filename="../protokollitaja.cpp" line="2409"/>
         <location filename="../protokollitaja.cpp" line="2798"/>
+        <location filename="../protokollitaja.cpp" line="3474"/>
+        <location filename="../protokollitaja.cpp" line="3483"/>
+        <location filename="../protokollitaja.cpp" line="3489"/>
+        <location filename="../protokollitaja.cpp" line="3496"/>
+        <location filename="../protokollitaja.cpp" line="3596"/>
         <location filename="../protokollitaja.cpp" line="3936"/>
+        <location filename="../protokollitaja.cpp" line="4344"/>
+        <location filename="../protokollitaja.cpp" line="4413"/>
+        <location filename="../protokollitaja.cpp" line="4445"/>
         <source>Error!</source>
         <translation></translation>
     </message>
@@ -2404,6 +2359,7 @@ Newest version found: %1</source>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="221"/>
+        <location filename="../protokollitaja.cpp" line="720"/>
         <source>Edit webCompetitionId</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2508,12 +2464,12 @@ Number of series is too big.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4863"/>
+        <location filename="../protokollitaja.cpp" line="4855"/>
         <source>Tab name field empty. Cannot create tab without name.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4867"/>
+        <location filename="../protokollitaja.cpp" line="4859"/>
         <source>Tab screen name empty. Please fill that also</source>
         <translation></translation>
     </message>
@@ -2554,11 +2510,6 @@ Protokollitaja is newer, therefore need to update Protolehelugeja or both.</sour
 Protolehelugeja is newer, therefore need to update Protokollitaja or both</source>
         <translation></translation>
     </message>
-    <message>
-        <location filename="../protolehelugejaconnection.cpp" line="129"/>
-        <source>Käsk:Salvestada</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>ProtolehelugejaServer</name>
@@ -2574,8 +2525,8 @@ Protolehelugeja is newer, therefore need to update Protokollitaja or both</sourc
     </message>
     <message>
         <location filename="../protolehelugejaserver.cpp" line="83"/>
-        <source>Error</source>
-        <translation></translation>
+        <source>Error!</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../protolehelugejaserver.cpp" line="83"/>
@@ -3029,15 +2980,15 @@ It is possible that some connection has been lost.</source>
     <name>SimpleKllFileRW</name>
     <message>
         <location filename="../simplekllfilerw.cpp" line="15"/>
-        <location filename="../simplekllfilerw.cpp" line="31"/>
-        <location filename="../simplekllfilerw.cpp" line="47"/>
-        <source>Protokollitaja</source>
-        <translation type="unfinished"></translation>
+        <source>Wrong or broken file!</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../simplekllfilerw.cpp" line="15"/>
-        <source>Wrong or broken file!</source>
-        <translation></translation>
+        <location filename="../simplekllfilerw.cpp" line="31"/>
+        <location filename="../simplekllfilerw.cpp" line="47"/>
+        <source>Error!</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../simplekllfilerw.cpp" line="32"/>
@@ -3175,8 +3126,8 @@ It could be a newer version&apos;s file.
     </message>
     <message>
         <location filename="../startlistwriter.cpp" line="123"/>
-        <source>Error</source>
-        <translation></translation>
+        <source>Error!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3283,11 +3234,6 @@ It could be a newer version&apos;s file.
         <location filename="../tulemuseaken.cpp" line="46"/>
         <source>Fullscreen</source>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../tulemuseaken.cpp" line="47"/>
-        <source>F</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tulemuseaken.cpp" line="48"/>

@@ -126,7 +126,7 @@ void ProtolehelugejaConnection::readData()
         lastRecvdLine = lineIn;
         emit shotInfoRead(myIndex);
 
-    }else if(lineIn.startsWith(tr("Käsk:Salvestada"))){  //Saving is requested
+    } else if (lineIn.startsWith("Käsk:Salvestada")) { //Saving is requested
         emit save();
     }
 }

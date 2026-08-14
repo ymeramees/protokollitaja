@@ -49,7 +49,12 @@ void InitialDialog::avamine()
             CompetitionSettings competitionSettings = SimpleKllFileRW::readCompetitionSettings(&sisse, this);
             competitionSettings.fileName = uusNimi;
             setData(competitionSettings);
-        } else QMessageBox::critical(this, tr("Protokollitaja"), tr("Wrong file version!\n\nIt could be a newer version's file.\n\n(AlguseValik::avamine())"),QMessageBox::Ok);
+        } else
+            QMessageBox::critical(this,
+                                  tr("Error!"),
+                                  tr("Wrong file version!\n\nIt could be a newer version's "
+                                     "file.\n\n(AlguseValik::avamine())"),
+                                  QMessageBox::Ok);
         fail.close();
     }
 }

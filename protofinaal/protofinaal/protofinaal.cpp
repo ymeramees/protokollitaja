@@ -70,7 +70,7 @@ Protofinaal::Protofinaal(QString fileName, QWidget* parent)
     if (m_logFile->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)) { // Log file
         m_logOut.setDevice(m_logFile);
     } else {
-        QMessageBox::critical(this, tr("Error"), tr("Failed to write log file! Make sure you have write permission to the folder where the competition file is located."), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error!"), tr("Failed to write log file! Make sure you have write permission to the folder where the competition file is located."), QMessageBox::Ok);
     }
 }
 
@@ -304,7 +304,7 @@ void Protofinaal::importSiusStartList()
             teamsTable->setCompetitiorsData(forCurrentTable);
         }
     } else
-        QMessageBox::critical(this, tr("Error"), tr("Failed to open the file!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error!"), tr("Failed to open the file!"), QMessageBox::Ok);
 }
 
 void Protofinaal::initialize()
@@ -590,7 +590,7 @@ void Protofinaal::showSpecatorWindowOnSecondScreen() // FIXME To be reimplemente
         m_spectatorWindow.move(otherScreen->geometry().center() - m_spectatorWindow.rect().center());
         m_spectatorWindow.showFullScreen();
     } else {
-        QMessageBox::critical(this, tr("Error"), tr("Second screen not found. For the program to work properly,"
+        QMessageBox::critical(this, tr("Error!"), tr("Second screen not found. For the program to work properly,"
                                                     " two screens are required."),
             QMessageBox::Ok);
         m_spectatorWindow.show();

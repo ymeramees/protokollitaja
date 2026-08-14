@@ -187,14 +187,18 @@
 <context>
     <name>FinalsFormats</name>
     <message>
-        <location filename="../../../common/src/finalsformats.cpp" line="9"/>
         <source>Error</source>
-        <translation>Hiba</translation>
+        <translation type="vanished">Hiba</translation>
     </message>
     <message>
         <location filename="../../../common/src/finalsformats.cpp" line="9"/>
         <source>Cannot find a file with finals formats!</source>
         <translation>Nem található a döntő formátum fájl!</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/finalsformats.cpp" line="9"/>
+        <source>Error!</source>
+        <translation type="unfinished">Hiba!</translation>
     </message>
 </context>
 <context>
@@ -322,17 +326,16 @@
         <location filename="../initialdialog.cpp" line="37"/>
         <location filename="../initialdialog.cpp" line="40"/>
         <location filename="../initialdialog.cpp" line="43"/>
-        <location filename="../initialdialog.cpp" line="200"/>
+        <location filename="../initialdialog.cpp" line="207"/>
         <source>Protokollitaja file (*.kll)</source>
         <translation>Protokollitaja fájl (*.kll)</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="51"/>
         <source>Protokollitaja</source>
-        <translation>Protokollitaja</translation>
+        <translation type="vanished">Protokollitaja</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="51"/>
+        <location filename="../initialdialog.cpp" line="55"/>
         <source>Wrong file version!
 
 It could be a newer version&apos;s file.
@@ -351,7 +354,12 @@ Lehet, hogy ez egy újabb programverzióval készült fájl.
 Új verseny létrehozásához kattintson az &quot;Új&quot; gombra</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="77"/>
+        <location filename="../initialdialog.cpp" line="54"/>
+        <source>Error!</source>
+        <translation type="unfinished">Hiba!</translation>
+    </message>
+    <message>
+        <location filename="../initialdialog.cpp" line="83"/>
         <source>All fields must be filled!
 
 To create a new competition click on &quot;New&quot;</source>
@@ -360,37 +368,37 @@ To create a new competition click on &quot;New&quot;</source>
 Új verseny létrehozásához kattintson az &quot;Új&quot; gombra</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="81"/>
+        <location filename="../initialdialog.cpp" line="87"/>
         <source>End date cannot be before start date!</source>
         <translation>A befejezés dátuma nem lehet korábban, mint a kezdés dátuma!</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="88"/>
+        <location filename="../initialdialog.cpp" line="94"/>
         <source>Difference between start and end dates is suspiciously long! Do you want to continue?</source>
         <translation>A kezdő és befejező dátumok közötti különbség gyanúsan nagy! Szeretné folytatni?</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="103"/>
+        <location filename="../initialdialog.cpp" line="110"/>
         <source>Question</source>
         <translation>Kérdés</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="104"/>
+        <location filename="../initialdialog.cpp" line="111"/>
         <source>File does not exist, do you want to create it?</source>
         <translation>Ilyen nevű fájl nem létezik. Szeretné létrehozni?</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="188"/>
+        <location filename="../initialdialog.cpp" line="195"/>
         <source>Enter new competition name</source>
         <translation>Adja meg az új verseny nevét</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="189"/>
+        <location filename="../initialdialog.cpp" line="196"/>
         <source>Competition name:</source>
         <translation>Verseny neve:</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="198"/>
+        <location filename="../initialdialog.cpp" line="205"/>
         <source>Save</source>
         <translation>Mentés</translation>
     </message>
@@ -508,6 +516,8 @@ To create a new competition click on &quot;New&quot;</source>
     <name>KllFileRW</name>
     <message>
         <location filename="../kllfilerw.cpp" line="93"/>
+        <location filename="../kllfilerw.cpp" line="531"/>
+        <location filename="../kllfilerw.cpp" line="538"/>
         <source>Error!</source>
         <translation>Hiba!</translation>
     </message>
@@ -521,10 +531,8 @@ Do you want to delete it? It doesn&apos;t affect anything else than uploading to
 Szeretné törölni? Ez semmi mást nem befolyásol, csak a webre való feltöltést.</translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="531"/>
-        <location filename="../kllfilerw.cpp" line="537"/>
         <source>Protokollitaja</source>
-        <translation>Protokollitaja</translation>
+        <translation type="vanished">Protokollitaja</translation>
     </message>
     <message>
         <location filename="../kllfilerw.cpp" line="532"/>
@@ -540,7 +548,7 @@ Lehet, hogy ez egy újabb programverzióval készült fájl.
 (Protokollitaja::loefail())</translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="537"/>
+        <location filename="../kllfilerw.cpp" line="539"/>
         <source>Cannot find the file!</source>
         <translation>A fájl nem található!</translation>
     </message>
@@ -583,30 +591,30 @@ Lehet, hogy ez egy újabb programverzióval készült fájl.
         <translation>Belső tíz</translation>
     </message>
     <message>
-        <location filename="../laskudeaken.cpp" line="43"/>
-        <location filename="../laskudeaken.cpp" line="44"/>
-        <location filename="../laskudeaken.cpp" line="106"/>
-        <location filename="../laskudeaken.cpp" line="107"/>
-        <source>%1</source>
-        <translation>%1</translation>
+        <location filename="../laskudeaken.cpp" line="85"/>
+        <source>Error!</source>
+        <translation type="unfinished">Hiba!</translation>
     </message>
     <message>
-        <location filename="../laskudeaken.cpp" line="52"/>
+        <source>%1</source>
+        <translation type="vanished">%1</translation>
+    </message>
+    <message>
+        <location filename="../laskudeaken.cpp" line="56"/>
         <source>1. series</source>
         <translation>1. sorozat</translation>
     </message>
     <message>
-        <location filename="../laskudeaken.cpp" line="80"/>
         <source>Error</source>
-        <translation>Hiba</translation>
+        <translation type="vanished">Hiba</translation>
     </message>
     <message>
-        <location filename="../laskudeaken.cpp" line="80"/>
+        <location filename="../laskudeaken.cpp" line="86"/>
         <source>Faulty shot value in the table!</source>
         <translation>Hibás lövésérték a táblázatban!</translation>
     </message>
     <message>
-        <location filename="../laskudeaken.cpp" line="117"/>
+        <location filename="../laskudeaken.cpp" line="126"/>
         <source>%1. series</source>
         <translation>%1. sorozat</translation>
     </message>
@@ -738,9 +746,8 @@ Lehet, hogy ez egy újabb programverzióval készült fájl.
         <translation>Versenyző lövéseinek megnyitása</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1428"/>
         <source>ID...</source>
-        <translation>ID...</translation>
+        <translation type="vanished">ID...</translation>
     </message>
     <message>
         <location filename="../laskur.cpp" line="1429"/>
@@ -969,14 +976,18 @@ Lehet, hogy ez egy újabb programverzióval készült fájl.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lehelugejaaken.cpp" line="442"/>
         <source>Error</source>
-        <translation>Hiba</translation>
+        <translation type="vanished">Hiba</translation>
     </message>
     <message>
         <location filename="../lehelugejaaken.cpp" line="442"/>
         <source>Puudus aktiivne seeria kast!</source>
         <translation>Nincs aktív sorozat mező!</translation>
+    </message>
+    <message>
+        <location filename="../lehelugejaaken.cpp" line="442"/>
+        <source>Error!</source>
+        <translation type="unfinished">Hiba!</translation>
     </message>
     <message>
         <location filename="../lehelugejaaken.cpp" line="443"/>
@@ -1690,11 +1701,6 @@ cím: %1</translation>
         <translation>Törli a kijelölt versenyzők összes lövését</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="720"/>
-        <source>Muuda webCompetitionId</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../protokollitaja.cpp" line="226"/>
         <source>&amp;File</source>
         <translation>&amp;Fájl</translation>
@@ -1720,19 +1726,16 @@ cím: %1</translation>
         <translation>&amp;Tesztelés</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="304"/>
         <source>failMenu</source>
-        <translation>failMenu</translation>
+        <translation type="vanished">failMenu</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="310"/>
         <source>tooRiistad</source>
-        <translation>tooRiistad</translation>
+        <translation type="vanished">tooRiistad</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="321"/>
         <source>tooRiistad2</source>
-        <translation>tooRiistad2</translation>
+        <translation type="vanished">tooRiistad2</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="402"/>
@@ -1750,6 +1753,8 @@ cím: %1</translation>
         <location filename="../protokollitaja.cpp" line="428"/>
         <location filename="../protokollitaja.cpp" line="468"/>
         <location filename="../protokollitaja.cpp" line="513"/>
+        <location filename="../protokollitaja.cpp" line="673"/>
+        <location filename="../protokollitaja.cpp" line="2401"/>
         <source>Warning</source>
         <translation>Figyelmeztetés</translation>
     </message>
@@ -1804,6 +1809,7 @@ cím: %1</translation>
         <location filename="../protokollitaja.cpp" line="648"/>
         <location filename="../protokollitaja.cpp" line="1491"/>
         <location filename="../protokollitaja.cpp" line="1752"/>
+        <location filename="../protokollitaja.cpp" line="2405"/>
         <location filename="../protokollitaja.cpp" line="2962"/>
         <location filename="../protokollitaja.cpp" line="3903"/>
         <location filename="../protokollitaja.cpp" line="3913"/>
@@ -1816,11 +1822,8 @@ cím: %1</translation>
         <translation>A nyelvi változtatások a program újraindítása után lépnek érvénybe</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="673"/>
-        <location filename="../protokollitaja.cpp" line="2401"/>
-        <location filename="../protokollitaja.cpp" line="2405"/>
         <source>Protokollitaja</source>
-        <translation>Protokollitaja</translation>
+        <translation type="vanished">Protokollitaja</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="673"/>
@@ -2091,43 +2094,8 @@ Finaal.exe fájl nem található!</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="878"/>
-        <location filename="../protokollitaja.cpp" line="936"/>
-        <location filename="../protokollitaja.cpp" line="945"/>
-        <location filename="../protokollitaja.cpp" line="950"/>
-        <location filename="../protokollitaja.cpp" line="954"/>
-        <location filename="../protokollitaja.cpp" line="964"/>
-        <location filename="../protokollitaja.cpp" line="980"/>
-        <location filename="../protokollitaja.cpp" line="994"/>
-        <location filename="../protokollitaja.cpp" line="999"/>
-        <location filename="../protokollitaja.cpp" line="1003"/>
-        <location filename="../protokollitaja.cpp" line="1046"/>
-        <location filename="../protokollitaja.cpp" line="1055"/>
-        <location filename="../protokollitaja.cpp" line="1112"/>
-        <location filename="../protokollitaja.cpp" line="1694"/>
-        <location filename="../protokollitaja.cpp" line="1696"/>
-        <location filename="../protokollitaja.cpp" line="1700"/>
-        <location filename="../protokollitaja.cpp" line="1704"/>
-        <location filename="../protokollitaja.cpp" line="1707"/>
-        <location filename="../protokollitaja.cpp" line="1718"/>
-        <location filename="../protokollitaja.cpp" line="1913"/>
-        <location filename="../protokollitaja.cpp" line="1925"/>
-        <location filename="../protokollitaja.cpp" line="1946"/>
-        <location filename="../protokollitaja.cpp" line="1949"/>
-        <location filename="../protokollitaja.cpp" line="2085"/>
-        <location filename="../protokollitaja.cpp" line="2112"/>
-        <location filename="../protokollitaja.cpp" line="2152"/>
-        <location filename="../protokollitaja.cpp" line="2156"/>
-        <location filename="../protokollitaja.cpp" line="3474"/>
-        <location filename="../protokollitaja.cpp" line="3483"/>
-        <location filename="../protokollitaja.cpp" line="3489"/>
-        <location filename="../protokollitaja.cpp" line="3496"/>
-        <location filename="../protokollitaja.cpp" line="3596"/>
-        <location filename="../protokollitaja.cpp" line="4344"/>
-        <location filename="../protokollitaja.cpp" line="4413"/>
-        <location filename="../protokollitaja.cpp" line="4445"/>
         <source>Error</source>
-        <translation>Hiba</translation>
+        <translation type="vanished">Hiba</translation>
     </message>
     <message>
         <source>Saadab valitud laskurid ProtoRangeControl&apos;i</source>
@@ -2602,8 +2570,35 @@ Newest version found: %1</source>
 Megtalált legújabb verzió: %1</translation>
     </message>
     <message>
+        <location filename="../protokollitaja.cpp" line="878"/>
+        <location filename="../protokollitaja.cpp" line="936"/>
+        <location filename="../protokollitaja.cpp" line="945"/>
+        <location filename="../protokollitaja.cpp" line="950"/>
+        <location filename="../protokollitaja.cpp" line="954"/>
+        <location filename="../protokollitaja.cpp" line="964"/>
+        <location filename="../protokollitaja.cpp" line="980"/>
+        <location filename="../protokollitaja.cpp" line="994"/>
+        <location filename="../protokollitaja.cpp" line="999"/>
+        <location filename="../protokollitaja.cpp" line="1003"/>
+        <location filename="../protokollitaja.cpp" line="1046"/>
+        <location filename="../protokollitaja.cpp" line="1055"/>
+        <location filename="../protokollitaja.cpp" line="1112"/>
         <location filename="../protokollitaja.cpp" line="1640"/>
         <location filename="../protokollitaja.cpp" line="1644"/>
+        <location filename="../protokollitaja.cpp" line="1694"/>
+        <location filename="../protokollitaja.cpp" line="1696"/>
+        <location filename="../protokollitaja.cpp" line="1700"/>
+        <location filename="../protokollitaja.cpp" line="1704"/>
+        <location filename="../protokollitaja.cpp" line="1707"/>
+        <location filename="../protokollitaja.cpp" line="1718"/>
+        <location filename="../protokollitaja.cpp" line="1913"/>
+        <location filename="../protokollitaja.cpp" line="1925"/>
+        <location filename="../protokollitaja.cpp" line="1946"/>
+        <location filename="../protokollitaja.cpp" line="1949"/>
+        <location filename="../protokollitaja.cpp" line="2085"/>
+        <location filename="../protokollitaja.cpp" line="2112"/>
+        <location filename="../protokollitaja.cpp" line="2152"/>
+        <location filename="../protokollitaja.cpp" line="2156"/>
         <location filename="../protokollitaja.cpp" line="2340"/>
         <location filename="../protokollitaja.cpp" line="2343"/>
         <location filename="../protokollitaja.cpp" line="2386"/>
@@ -2612,7 +2607,15 @@ Megtalált legújabb verzió: %1</translation>
         <location filename="../protokollitaja.cpp" line="2397"/>
         <location filename="../protokollitaja.cpp" line="2409"/>
         <location filename="../protokollitaja.cpp" line="2798"/>
+        <location filename="../protokollitaja.cpp" line="3474"/>
+        <location filename="../protokollitaja.cpp" line="3483"/>
+        <location filename="../protokollitaja.cpp" line="3489"/>
+        <location filename="../protokollitaja.cpp" line="3496"/>
+        <location filename="../protokollitaja.cpp" line="3596"/>
         <location filename="../protokollitaja.cpp" line="3936"/>
+        <location filename="../protokollitaja.cpp" line="4344"/>
+        <location filename="../protokollitaja.cpp" line="4413"/>
+        <location filename="../protokollitaja.cpp" line="4445"/>
         <source>Error!</source>
         <translation>Hiba!</translation>
     </message>
@@ -2624,6 +2627,7 @@ Megtalált legújabb verzió: %1</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="221"/>
+        <location filename="../protokollitaja.cpp" line="720"/>
         <source>Edit webCompetitionId</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2731,12 +2735,12 @@ A sorozatok száma túl nagy.</translation>
         <translation>Ilyen sorszám nem található!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4863"/>
+        <location filename="../protokollitaja.cpp" line="4855"/>
         <source>Tab name field empty. Cannot create tab without name.</source>
         <translation>A fül neve mező üres. Név nélkül nem lehet új fület létrehozni.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4867"/>
+        <location filename="../protokollitaja.cpp" line="4859"/>
         <source>Tab screen name empty. Please fill that also</source>
         <translation>Az eredményjelző ablakban megjelenő táblázat címe üres. Kérjük, töltse ki ezt is</translation>
     </message>
@@ -2782,9 +2786,8 @@ Protolehelugeja is newer, therefore need to update Protokollitaja or both</sourc
 A Protolehelugeja újabb, ezért frissíteni kell a Protokollitaját vagy mindkettőt.</translation>
     </message>
     <message>
-        <location filename="../protolehelugejaconnection.cpp" line="129"/>
         <source>Käsk:Salvestada</source>
-        <translation>Parancs: Mentés</translation>
+        <translation type="vanished">Parancs: Mentés</translation>
     </message>
 </context>
 <context>
@@ -2801,8 +2804,12 @@ A Protolehelugeja újabb, ezért frissíteni kell a Protokollitaját vagy mindke
     </message>
     <message>
         <location filename="../protolehelugejaserver.cpp" line="83"/>
+        <source>Error!</source>
+        <translation type="unfinished">Hiba!</translation>
+    </message>
+    <message>
         <source>Error</source>
-        <translation>Hiba</translation>
+        <translation type="vanished">Hiba</translation>
     </message>
     <message>
         <location filename="../protolehelugejaserver.cpp" line="83"/>
@@ -3289,16 +3296,20 @@ Lehetséges, hogy a kapcsolat időközben megszakadt.</translation>
 <context>
     <name>SimpleKllFileRW</name>
     <message>
-        <location filename="../simplekllfilerw.cpp" line="15"/>
-        <location filename="../simplekllfilerw.cpp" line="31"/>
-        <location filename="../simplekllfilerw.cpp" line="47"/>
         <source>Protokollitaja</source>
-        <translation>Protokollitaja</translation>
+        <translation type="vanished">Protokollitaja</translation>
     </message>
     <message>
         <location filename="../simplekllfilerw.cpp" line="15"/>
         <source>Wrong or broken file!</source>
         <translation>Hibás vagy rossz fájl!</translation>
+    </message>
+    <message>
+        <location filename="../simplekllfilerw.cpp" line="15"/>
+        <location filename="../simplekllfilerw.cpp" line="31"/>
+        <location filename="../simplekllfilerw.cpp" line="47"/>
+        <source>Error!</source>
+        <translation type="unfinished">Hiba!</translation>
     </message>
     <message>
         <location filename="../simplekllfilerw.cpp" line="32"/>
@@ -3445,8 +3456,12 @@ Lehet, hogy ez egy újabb programverzióval készült fájl.
     </message>
     <message>
         <location filename="../startlistwriter.cpp" line="123"/>
+        <source>Error!</source>
+        <translation type="unfinished">Hiba!</translation>
+    </message>
+    <message>
         <source>Error</source>
-        <translation>Hiba</translation>
+        <translation type="vanished">Hiba</translation>
     </message>
 </context>
 <context>
@@ -3555,9 +3570,8 @@ Lehet, hogy ez egy újabb programverzióval készült fájl.
         <translation>Teljes képernyő</translation>
     </message>
     <message>
-        <location filename="../tulemuseaken.cpp" line="47"/>
         <source>F</source>
-        <translation>F</translation>
+        <translation type="vanished">F</translation>
     </message>
     <message>
         <location filename="../tulemuseaken.cpp" line="48"/>

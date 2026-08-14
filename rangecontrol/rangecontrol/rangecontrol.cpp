@@ -436,7 +436,7 @@ void RangeControl::importStartList()
         while (!in.atEnd()) {
             QString row = in.readLine();
             if (row.startsWith("Erä", Qt::CaseInsensitive)) {
-                QMessageBox::critical(this, tr("Error"), tr("Use Sius startlist format, because Inband's does not contain IDs!"), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Error!"), tr("Use Sius startlist format, because Inband's does not contain IDs!"), QMessageBox::Ok);
                 return;
             } else {
                 QTextStream(stdout) << "RangeControl::importStartList: Competitor row: " << row << Qt::endl;
@@ -456,7 +456,7 @@ void RangeControl::importStartList()
             }
         }
     } else
-        QMessageBox::critical(this, tr("Error"), tr("Failed to open the file!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error!"), tr("Failed to open the file!"), QMessageBox::Ok);
 }
 
 void RangeControl::initialize()
@@ -505,7 +505,7 @@ void RangeControl::loadStartList(QStringList startList)
         QStringList rowParts = row.split(";");
         if (row.size() > 0) {
             if (rowParts.size() < 8) {
-                QMessageBox::critical(this, tr("Error"), tr("Broken startlist row!\n%1").arg(row), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Error!"), tr("Broken startlist row!\n%1").arg(row), QMessageBox::Ok);
             } else {
                 QString targetNo = rowParts.at(0);
                 QTextStream(stdout) << "RangeControl::loadStartList: targetNo = " << targetNo << Qt::endl;
@@ -517,7 +517,7 @@ void RangeControl::loadStartList(QStringList startList)
                     if (!laneOpt.value()->inCompetition())
                         laneOpt.value()->setStartListCompetitorRow(row);
                     else
-                        QMessageBox::critical(this, tr("Error"), tr("Match is on at lane %1, new competitor was not imported!").arg(targetNo), QMessageBox::Ok);
+                        QMessageBox::critical(this, tr("Error!"), tr("Match is on at lane %1, new competitor was not imported!").arg(targetNo), QMessageBox::Ok);
                 } else {   // That means that existing lane was not found
                     QTextStream(stdout) << "RangeControl::loadStartList: Lane with target " << rowParts.at(0) << " not found, ignoring!" << Qt::endl;
                 }

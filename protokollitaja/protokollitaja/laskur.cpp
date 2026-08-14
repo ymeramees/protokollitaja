@@ -1425,7 +1425,7 @@ void Laskur::setupFields()
     laskudeAkenAct = new QAction(tr("Shots..."), this);
     laskudeAkenAct->setStatusTip(tr("Open competitor's shots window"));
     connect(laskudeAkenAct, SIGNAL(triggered()), this, SLOT(naitaLaskudeAkent()));
-    idAct = new QAction(tr("ID..."), this);
+    idAct = new QAction("ID...", this);
     idAct->setStatusTip(tr("View/change competitor's ID"));
     connect(idAct, SIGNAL(triggered()), this, SLOT(naitaIdAken()));
 

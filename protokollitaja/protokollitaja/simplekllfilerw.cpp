@@ -12,7 +12,7 @@ CompetitionSettings SimpleKllFileRW::readCompetitionSettings(QDataStream *inStre
     *inStream >> checkPattern >> version;
     competitionSettings.fileVersion = version;
     if(checkPattern != 0x00FA3848) {
-        QMessageBox::critical(parent, tr("Protokollitaja"), tr("Wrong or broken file!"), QMessageBox::Ok);
+        QMessageBox::critical(parent, tr("Error!"), tr("Wrong or broken file!"), QMessageBox::Ok);
     } else if(version >= 100 && version <= 112) {
         *inStream >> competitionSettings.competitionName;
         competitionSettings.startDate = QDate(2000, 1, 1);
@@ -26,12 +26,12 @@ CompetitionSettings SimpleKllFileRW::readCompetitionSettings(QDataStream *inStre
         competitionSettings.endDate = QDate::fromString(competitionSettings.jsonData["endDate"].toString(""));
         competitionSettings.place = competitionSettings.jsonData["place"].toString("");
         competitionSettings.country = competitionSettings.jsonData["country"].toString("Estonia");
-    } else QMessageBox::critical(
-                parent,
-                tr("Protokollitaja"),
-                tr("Wrong file version!\n\nIt could be a newer version's file.\n\n(KllFileRW::readCompetitionSettingsFromKll())"),
-                QMessageBox::Ok
-                );
+    } else
+        QMessageBox::critical(parent,
+                              tr("Error!"),
+                              tr("Wrong file version!\n\nIt could be a newer version's "
+                                 "file.\n\n(KllFileRW::readCompetitionSettingsFromKll())"),
+                              QMessageBox::Ok);
     return competitionSettings;
 }
 
@@ -44,7 +44,7 @@ CompetitionSettings SimpleKllFileRW::readCompetitionSettingsFromKll(QString file
         QDataStream in(&file);
         competitionSettings = readCompetitionSettings(&in, parent);
     } else if (!fileName.isEmpty())
-        QMessageBox::critical(parent, tr("Protokollitaja"), tr("Cannot find the file!"), QMessageBox::Ok);
+        QMessageBox::critical(parent, tr("Error!"), tr("Cannot find the file!"), QMessageBox::Ok);
     QApplication::restoreOverrideCursor();
 
     competitionSettings.fileName = fileName;

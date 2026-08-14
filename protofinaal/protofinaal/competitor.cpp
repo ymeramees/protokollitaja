@@ -427,7 +427,7 @@ bool Competitor::setShot(int shotNo, Lask newShot)
         sum();
         return true;
     } else {
-        QMessageBox::critical(this, tr("Error"), tr("More shots than possible! Shot was not recorded!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error!"), tr("More shots than possible! Shot was not recorded!"), QMessageBox::Ok);
         emit statusInfo(m_nameEdit.text() + tr("More shots than possible! Shot was not recorded!"));
         return false;
     }
@@ -438,7 +438,7 @@ void Competitor::setShot(int shotNo, QString siusRow)
     if(shotNo < m_shots.size())
         m_shots.at(shotNo)->setSiusShot(siusRow);
     else{
-        QMessageBox::critical(this, tr("Error"), tr("More shots than possible! Shot was not recorded!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error!"), tr("More shots than possible! Shot was not recorded!"), QMessageBox::Ok);
         emit statusInfo(m_nameEdit.text() + tr("More shots than possible! Shot was not recorded!"));
     }
 }

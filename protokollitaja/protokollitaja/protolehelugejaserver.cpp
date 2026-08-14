@@ -80,5 +80,5 @@ void ProtolehelugejaServer::send(QString data, int socketIndex)
     if(sockets.length() > socketIndex)
         sockets.at(socketIndex)->send(data);
     else
-        QMessageBox::warning(dynamic_cast<QWidget*>(this->parent()), tr("Error"), tr("Protolehelugeja address is incorrect! Cannot send the reply!\n\nIt is possible that some connection has been lost."), QMessageBox::Ok);
+        QMessageBox::warning(dynamic_cast<QWidget*>(this->parent()), tr("Error!"), tr("Protolehelugeja address is incorrect! Cannot send the reply!\n\nIt is possible that some connection has been lost."), QMessageBox::Ok);
 }

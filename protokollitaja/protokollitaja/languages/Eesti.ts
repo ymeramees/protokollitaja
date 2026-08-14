@@ -89,13 +89,13 @@
     <message>
         <location filename="../duelpair.cpp" line="15"/>
         <source>Pair number</source>
-        <translation type="unfinished"></translation>
+        <translation>Paari number</translation>
     </message>
     <message>
         <location filename="../duelpair.cpp" line="21"/>
         <location filename="../duelpair.cpp" line="26"/>
         <source>Points of the pair</source>
-        <translation type="unfinished"></translation>
+        <translation>Paari punktid</translation>
     </message>
 </context>
 <context>
@@ -179,14 +179,18 @@
 <context>
     <name>FinalsFormats</name>
     <message>
-        <location filename="../../../common/src/finalsformats.cpp" line="9"/>
         <source>Error</source>
-        <translation>Viga</translation>
+        <translation type="vanished">Viga</translation>
     </message>
     <message>
         <location filename="../../../common/src/finalsformats.cpp" line="9"/>
         <source>Cannot find a file with finals formats!</source>
         <translation>Ei leia finaali formaatide faili!</translation>
+    </message>
+    <message>
+        <location filename="../../../common/src/finalsformats.cpp" line="9"/>
+        <source>Error!</source>
+        <translation>Viga!</translation>
     </message>
 </context>
 <context>
@@ -199,7 +203,7 @@
     <message>
         <location filename="../importaken.cpp" line="40"/>
         <source>Protokollitaja files (*.kll);;Text files (*.txt);;Comma separated files (*.csv</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokollitaja failid (*.kll);;Tekstifailid (*.txt);;CSV failid (*.csv&quot;)</translation>
     </message>
     <message>
         <location filename="../importaken.cpp" line="47"/>
@@ -234,7 +238,7 @@
     <message>
         <location filename="../importaken.ui" line="13"/>
         <source>Protokollitaja - Import</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../importaken.ui" line="27"/>
@@ -244,7 +248,7 @@
     <message>
         <location filename="../importaken.ui" line="33"/>
         <source>tab</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../importaken.ui" line="43"/>
@@ -310,17 +314,17 @@
         <location filename="../initialdialog.cpp" line="37"/>
         <location filename="../initialdialog.cpp" line="40"/>
         <location filename="../initialdialog.cpp" line="43"/>
-        <location filename="../initialdialog.cpp" line="200"/>
+        <location filename="../initialdialog.cpp" line="207"/>
         <source>Protokollitaja file (*.kll)</source>
         <translation>Protokollitaja fail (*.kll)</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="51"/>
-        <source>Protokollitaja</source>
-        <translation type="unfinished"></translation>
+        <location filename="../initialdialog.cpp" line="54"/>
+        <source>Error!</source>
+        <translation>Viga!</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="51"/>
+        <location filename="../initialdialog.cpp" line="55"/>
         <source>Wrong file version!
 
 It could be a newer version&apos;s file.
@@ -333,7 +337,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
 (AlguseValik::avamine())</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="77"/>
+        <location filename="../initialdialog.cpp" line="83"/>
         <source>All fields must be filled!
 
 To create a new competition click on &quot;New&quot;</source>
@@ -342,37 +346,37 @@ To create a new competition click on &quot;New&quot;</source>
 Uue võistluse loomiseks vajutage &quot;Uus&quot; nupule</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="81"/>
+        <location filename="../initialdialog.cpp" line="87"/>
         <source>End date cannot be before start date!</source>
         <translation>Lõpukuupäev ei saa olla enne alguskuupäeva!</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="88"/>
+        <location filename="../initialdialog.cpp" line="94"/>
         <source>Difference between start and end dates is suspiciously long! Do you want to continue?</source>
         <translation>Alguse ja lõpukuupäevade vahe on kahtlaselt pikk! Kas soovite jätkata?</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="103"/>
+        <location filename="../initialdialog.cpp" line="110"/>
         <source>Question</source>
         <translation>Küsimus</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="104"/>
+        <location filename="../initialdialog.cpp" line="111"/>
         <source>File does not exist, do you want to create it?</source>
         <translation>Sellise nimega faili ei ole. Kas soovite selle luua?</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="188"/>
+        <location filename="../initialdialog.cpp" line="195"/>
         <source>Enter new competition name</source>
         <translation>Sisestage uue võistluse nimi</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="189"/>
+        <location filename="../initialdialog.cpp" line="196"/>
         <source>Competition name:</source>
         <translation>Võistluse nimi:</translation>
     </message>
     <message>
-        <location filename="../initialdialog.cpp" line="198"/>
+        <location filename="../initialdialog.cpp" line="205"/>
         <source>Save</source>
         <translation>Salvesta</translation>
     </message>
@@ -382,7 +386,7 @@ Uue võistluse loomiseks vajutage &quot;Uus&quot; nupule</translation>
     <message>
         <location filename="../initialdialog.ui" line="14"/>
         <source>Protokollitaja</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../initialdialog.ui" line="20"/>
@@ -408,7 +412,7 @@ Uue võistluse loomiseks vajutage &quot;Uus&quot; nupule</translation>
         <location filename="../initialdialog.ui" line="73"/>
         <location filename="../initialdialog.ui" line="100"/>
         <source>dd.MM.yyyy</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../initialdialog.ui" line="83"/>
@@ -434,7 +438,7 @@ Uue võistluse loomiseks vajutage &quot;Uus&quot; nupule</translation>
     <message>
         <location filename="../initialdialog.ui" line="135"/>
         <source>Estonia</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../initialdialog.ui" line="143"/>
@@ -486,6 +490,8 @@ Uue võistluse loomiseks vajutage &quot;Uus&quot; nupule</translation>
     <name>KllFileRW</name>
     <message>
         <location filename="../kllfilerw.cpp" line="93"/>
+        <location filename="../kllfilerw.cpp" line="531"/>
+        <location filename="../kllfilerw.cpp" line="538"/>
         <source>Error!</source>
         <translation>Viga!</translation>
     </message>
@@ -497,12 +503,6 @@ Do you want to delete it? It doesn&apos;t affect anything else than uploading to
         <translation>Võistluse veebi ID (%1) sisaldab kummalisi tähemärke ja on ilmselt vigane!
 
 Kas soovite selle kustutada? See ei mõjuta muud, kui ainult veebi laadimist.</translation>
-    </message>
-    <message>
-        <location filename="../kllfilerw.cpp" line="531"/>
-        <location filename="../kllfilerw.cpp" line="537"/>
-        <source>Protokollitaja</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../kllfilerw.cpp" line="532"/>
@@ -518,7 +518,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
 (Protokollitaja::loefail())</translation>
     </message>
     <message>
-        <location filename="../kllfilerw.cpp" line="537"/>
+        <location filename="../kllfilerw.cpp" line="539"/>
         <source>Cannot find the file!</source>
         <translation>Ei leia faili!</translation>
     </message>
@@ -543,12 +543,12 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../laskudeaken.ui" line="40"/>
         <source>&gt;&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../laskudeaken.ui" line="57"/>
         <source>&lt;&lt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../laskudeaken.cpp" line="32"/>
@@ -561,30 +561,26 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <translation>Sisekümme</translation>
     </message>
     <message>
-        <location filename="../laskudeaken.cpp" line="43"/>
-        <location filename="../laskudeaken.cpp" line="44"/>
-        <location filename="../laskudeaken.cpp" line="106"/>
-        <location filename="../laskudeaken.cpp" line="107"/>
-        <source>%1</source>
-        <translation type="unfinished"></translation>
+        <location filename="../laskudeaken.cpp" line="85"/>
+        <source>Error!</source>
+        <translation>Viga!</translation>
     </message>
     <message>
-        <location filename="../laskudeaken.cpp" line="52"/>
+        <location filename="../laskudeaken.cpp" line="56"/>
         <source>1. series</source>
         <translation>1. seeria</translation>
     </message>
     <message>
-        <location filename="../laskudeaken.cpp" line="80"/>
         <source>Error</source>
-        <translation>Viga</translation>
+        <translation type="vanished">Viga</translation>
     </message>
     <message>
-        <location filename="../laskudeaken.cpp" line="80"/>
+        <location filename="../laskudeaken.cpp" line="86"/>
         <source>Faulty shot value in the table!</source>
         <translation>Vigane lasu väärtus tabelis!</translation>
     </message>
     <message>
-        <location filename="../laskudeaken.cpp" line="117"/>
+        <location filename="../laskudeaken.cpp" line="126"/>
         <source>%1. series</source>
         <translation>%1. seeria</translation>
     </message>
@@ -634,7 +630,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../laskur.cpp" line="1332"/>
         <source>FP</source>
-        <translation type="unfinished"></translation>
+        <translation>RN</translation>
     </message>
     <message>
         <location filename="../laskur.cpp" line="1338"/>
@@ -706,11 +702,6 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <location filename="../laskur.cpp" line="1426"/>
         <source>Open competitor&apos;s shots window</source>
         <translation>Ava laskuri laskude aken</translation>
-    </message>
-    <message>
-        <location filename="../laskur.cpp" line="1428"/>
-        <source>ID...</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../laskur.cpp" line="1429"/>
@@ -911,14 +902,18 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lehelugejaaken.cpp" line="442"/>
         <source>Error</source>
-        <translation>Viga</translation>
+        <translation type="vanished">Viga</translation>
     </message>
     <message>
         <location filename="../lehelugejaaken.cpp" line="442"/>
         <source>Puudus aktiivne seeria kast!</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lehelugejaaken.cpp" line="442"/>
+        <source>Error!</source>
+        <translation type="unfinished">Viga!</translation>
     </message>
     <message>
         <location filename="../lehelugejaaken.cpp" line="443"/>
@@ -977,32 +972,32 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../leht.cpp" line="129"/>
         <source>Name of the first team</source>
-        <translation type="unfinished"></translation>
+        <translation>Esimese võistkonna nimi</translation>
     </message>
     <message>
         <location filename="../leht.cpp" line="130"/>
         <source>Team 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Võistkond 1</translation>
     </message>
     <message>
         <location filename="../leht.cpp" line="133"/>
         <source>vs</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../leht.cpp" line="138"/>
         <source>Name of the second team</source>
-        <translation type="unfinished"></translation>
+        <translation>Teise võistkonna nimi</translation>
     </message>
     <message>
         <location filename="../leht.cpp" line="139"/>
         <source>Team 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Võistkond 2</translation>
     </message>
     <message>
         <location filename="../leht.cpp" line="143"/>
         <source>Points of the match</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktid</translation>
     </message>
     <message>
         <location filename="../leht.cpp" line="586"/>
@@ -1025,12 +1020,12 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../liikmetevalikkast.ui" line="61"/>
         <source>&gt;&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../liikmetevalikkast.ui" line="81"/>
         <source>&lt;&lt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../liikmetevalikkast.ui" line="105"/>
@@ -1065,7 +1060,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../lisalaskudeaken.ui" line="17"/>
         <source>Shoot-off Shots</source>
-        <translation type="unfinished">Lisalasud</translation>
+        <translation>Lisalasud</translation>
     </message>
     <message>
         <location filename="../lisalaskudeaken.ui" line="26"/>
@@ -1131,7 +1126,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../protokollitaja.cpp" line="54"/>
         <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="55"/>
@@ -1146,7 +1141,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../protokollitaja.cpp" line="58"/>
         <source>Ctrl+o</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="59"/>
@@ -1162,7 +1157,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../protokollitaja.cpp" line="62"/>
         <source>Ctrl+s</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="63"/>
@@ -1172,12 +1167,12 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../protokollitaja.cpp" line="65"/>
         <source>Save As...</source>
-        <translation>&amp;Salvesta nimega...</translation>
+        <translation>Salvesta nimega...</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="66"/>
         <source>Ctrl+a</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="67"/>
@@ -1187,12 +1182,12 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../protokollitaja.cpp" line="69"/>
         <source>&amp;Print...</source>
-        <translation>Print...</translation>
+        <translation>&amp;Print...</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="70"/>
         <source>Ctrl+p</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="71"/>
@@ -1217,7 +1212,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../protokollitaja.cpp" line="81"/>
         <source>Ctrl+q</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="82"/>
@@ -1232,7 +1227,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../protokollitaja.cpp" line="85"/>
         <source>Ctrl+u</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="86"/>
@@ -1292,7 +1287,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../protokollitaja.cpp" line="103"/>
         <source>Import...</source>
-        <translation type="unfinished">Impordi...</translation>
+        <translation>Impordi...</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="104"/>
@@ -1600,11 +1595,6 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <translation>Kustutab märgitud laskurite kõik lasud</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="720"/>
-        <source>Muuda webCompetitionId</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../protokollitaja.cpp" line="226"/>
         <source>&amp;File</source>
         <translation>&amp;Fail</translation>
@@ -1630,21 +1620,6 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <translation>&amp;Testimine</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="304"/>
-        <source>failMenu</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../protokollitaja.cpp" line="310"/>
-        <source>tooRiistad</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../protokollitaja.cpp" line="321"/>
-        <source>tooRiistad2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../protokollitaja.cpp" line="402"/>
         <source>There is an empty row in the rifle shooters autocomplete list!</source>
         <translation>Püssilaskurite nimekirjas on tühi rida!</translation>
@@ -1660,6 +1635,8 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <location filename="../protokollitaja.cpp" line="428"/>
         <location filename="../protokollitaja.cpp" line="468"/>
         <location filename="../protokollitaja.cpp" line="513"/>
+        <location filename="../protokollitaja.cpp" line="673"/>
+        <location filename="../protokollitaja.cpp" line="2401"/>
         <source>Warning</source>
         <translation>Hoiatus</translation>
     </message>
@@ -1714,6 +1691,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <location filename="../protokollitaja.cpp" line="648"/>
         <location filename="../protokollitaja.cpp" line="1491"/>
         <location filename="../protokollitaja.cpp" line="1752"/>
+        <location filename="../protokollitaja.cpp" line="2405"/>
         <location filename="../protokollitaja.cpp" line="2962"/>
         <location filename="../protokollitaja.cpp" line="3903"/>
         <location filename="../protokollitaja.cpp" line="3913"/>
@@ -1724,13 +1702,6 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <location filename="../protokollitaja.cpp" line="648"/>
         <source>Language changes are applied when the program is started again</source>
         <translation>Keele vahetus rakendub programmi uuesti käivitamisel</translation>
-    </message>
-    <message>
-        <location filename="../protokollitaja.cpp" line="673"/>
-        <location filename="../protokollitaja.cpp" line="2401"/>
-        <location filename="../protokollitaja.cpp" line="2405"/>
-        <source>Protokollitaja</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="673"/>
@@ -1777,7 +1748,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <location filename="../protokollitaja.cpp" line="882"/>
         <location filename="../protokollitaja.cpp" line="1022"/>
         <source>Comma separated file (*.csv)</source>
-        <translation type="unfinished"></translation>
+        <translation>CSV fail (*.csv)</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="935"/>
@@ -1827,7 +1798,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../protokollitaja.cpp" line="1120"/>
         <source>Excel workbook file (*.xls)</source>
-        <translation type="unfinished"></translation>
+        <translation>Exceli fail (*.xls)</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="1209"/>
@@ -1968,43 +1939,8 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
 %1</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="878"/>
-        <location filename="../protokollitaja.cpp" line="936"/>
-        <location filename="../protokollitaja.cpp" line="945"/>
-        <location filename="../protokollitaja.cpp" line="950"/>
-        <location filename="../protokollitaja.cpp" line="954"/>
-        <location filename="../protokollitaja.cpp" line="964"/>
-        <location filename="../protokollitaja.cpp" line="980"/>
-        <location filename="../protokollitaja.cpp" line="994"/>
-        <location filename="../protokollitaja.cpp" line="999"/>
-        <location filename="../protokollitaja.cpp" line="1003"/>
-        <location filename="../protokollitaja.cpp" line="1046"/>
-        <location filename="../protokollitaja.cpp" line="1055"/>
-        <location filename="../protokollitaja.cpp" line="1112"/>
-        <location filename="../protokollitaja.cpp" line="1694"/>
-        <location filename="../protokollitaja.cpp" line="1696"/>
-        <location filename="../protokollitaja.cpp" line="1700"/>
-        <location filename="../protokollitaja.cpp" line="1704"/>
-        <location filename="../protokollitaja.cpp" line="1707"/>
-        <location filename="../protokollitaja.cpp" line="1718"/>
-        <location filename="../protokollitaja.cpp" line="1913"/>
-        <location filename="../protokollitaja.cpp" line="1925"/>
-        <location filename="../protokollitaja.cpp" line="1946"/>
-        <location filename="../protokollitaja.cpp" line="1949"/>
-        <location filename="../protokollitaja.cpp" line="2085"/>
-        <location filename="../protokollitaja.cpp" line="2112"/>
-        <location filename="../protokollitaja.cpp" line="2152"/>
-        <location filename="../protokollitaja.cpp" line="2156"/>
-        <location filename="../protokollitaja.cpp" line="3474"/>
-        <location filename="../protokollitaja.cpp" line="3483"/>
-        <location filename="../protokollitaja.cpp" line="3489"/>
-        <location filename="../protokollitaja.cpp" line="3496"/>
-        <location filename="../protokollitaja.cpp" line="3596"/>
-        <location filename="../protokollitaja.cpp" line="4344"/>
-        <location filename="../protokollitaja.cpp" line="4413"/>
-        <location filename="../protokollitaja.cpp" line="4445"/>
         <source>Error</source>
-        <translation>Viga</translation>
+        <translation type="vanished">Viga</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="201"/>
@@ -2046,7 +1982,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../protokollitaja.cpp" line="1718"/>
         <source>Unable to start the server: %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ei saa serverit käivitada: %1.</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="1748"/>
@@ -2257,8 +2193,35 @@ Newest version found: %1</source>
 Leitud uusim versioon: %1</translation>
     </message>
     <message>
+        <location filename="../protokollitaja.cpp" line="878"/>
+        <location filename="../protokollitaja.cpp" line="936"/>
+        <location filename="../protokollitaja.cpp" line="945"/>
+        <location filename="../protokollitaja.cpp" line="950"/>
+        <location filename="../protokollitaja.cpp" line="954"/>
+        <location filename="../protokollitaja.cpp" line="964"/>
+        <location filename="../protokollitaja.cpp" line="980"/>
+        <location filename="../protokollitaja.cpp" line="994"/>
+        <location filename="../protokollitaja.cpp" line="999"/>
+        <location filename="../protokollitaja.cpp" line="1003"/>
+        <location filename="../protokollitaja.cpp" line="1046"/>
+        <location filename="../protokollitaja.cpp" line="1055"/>
+        <location filename="../protokollitaja.cpp" line="1112"/>
         <location filename="../protokollitaja.cpp" line="1640"/>
         <location filename="../protokollitaja.cpp" line="1644"/>
+        <location filename="../protokollitaja.cpp" line="1694"/>
+        <location filename="../protokollitaja.cpp" line="1696"/>
+        <location filename="../protokollitaja.cpp" line="1700"/>
+        <location filename="../protokollitaja.cpp" line="1704"/>
+        <location filename="../protokollitaja.cpp" line="1707"/>
+        <location filename="../protokollitaja.cpp" line="1718"/>
+        <location filename="../protokollitaja.cpp" line="1913"/>
+        <location filename="../protokollitaja.cpp" line="1925"/>
+        <location filename="../protokollitaja.cpp" line="1946"/>
+        <location filename="../protokollitaja.cpp" line="1949"/>
+        <location filename="../protokollitaja.cpp" line="2085"/>
+        <location filename="../protokollitaja.cpp" line="2112"/>
+        <location filename="../protokollitaja.cpp" line="2152"/>
+        <location filename="../protokollitaja.cpp" line="2156"/>
         <location filename="../protokollitaja.cpp" line="2340"/>
         <location filename="../protokollitaja.cpp" line="2343"/>
         <location filename="../protokollitaja.cpp" line="2386"/>
@@ -2267,7 +2230,15 @@ Leitud uusim versioon: %1</translation>
         <location filename="../protokollitaja.cpp" line="2397"/>
         <location filename="../protokollitaja.cpp" line="2409"/>
         <location filename="../protokollitaja.cpp" line="2798"/>
+        <location filename="../protokollitaja.cpp" line="3474"/>
+        <location filename="../protokollitaja.cpp" line="3483"/>
+        <location filename="../protokollitaja.cpp" line="3489"/>
+        <location filename="../protokollitaja.cpp" line="3496"/>
+        <location filename="../protokollitaja.cpp" line="3596"/>
         <location filename="../protokollitaja.cpp" line="3936"/>
+        <location filename="../protokollitaja.cpp" line="4344"/>
+        <location filename="../protokollitaja.cpp" line="4413"/>
+        <location filename="../protokollitaja.cpp" line="4445"/>
         <source>Error!</source>
         <translation>Viga!</translation>
     </message>
@@ -2275,22 +2246,23 @@ Leitud uusim versioon: %1</translation>
         <location filename="../protokollitaja.cpp" line="167"/>
         <location filename="../protokollitaja.cpp" line="3209"/>
         <source>Final</source>
-        <translation type="unfinished">Finaal</translation>
+        <translation>Finaal</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="221"/>
+        <location filename="../protokollitaja.cpp" line="720"/>
         <source>Edit webCompetitionId</source>
-        <translation type="unfinished"></translation>
+        <translation>Muuda webCompetitionId&apos;d</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="222"/>
         <source>Edits the web competition ID of the current file</source>
-        <translation type="unfinished"></translation>
+        <translation>Muudab selle faili webCompetitionId&apos;d</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="720"/>
         <source>webCompetitionId:</source>
-        <translation type="unfinished"></translation>
+        <translation>webCompetitionId:</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="1512"/>
@@ -2311,7 +2283,7 @@ Leitud uusim versioon: %1</translation>
     <message>
         <location filename="../protokollitaja.cpp" line="1644"/>
         <source>Competitors cannot be imported to a duel match&apos;s tab!</source>
-        <translation type="unfinished"></translation>
+        <translation>Laskureid ei saa importida duelli lehele!</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="1694"/>
@@ -2323,7 +2295,7 @@ Protofinaal.exe faili ei leitud!</translation>
     <message>
         <location filename="../protokollitaja.cpp" line="1949"/>
         <source>Shooters cannot be copied to duel match&apos;s sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Laskureid ei saa kopeerida duelli lehele</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="1952"/>
@@ -2333,12 +2305,12 @@ Protofinaal.exe faili ei leitud!</translation>
     <message>
         <location filename="../protokollitaja.cpp" line="2191"/>
         <source>Moving competitors from a duel match is not possible</source>
-        <translation type="unfinished"></translation>
+        <translation>Laskureid ei saa duelli lehelt ära liigutada</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2214"/>
         <source>Shooters cannot be moved to duel match&apos;s sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Laskureid ei saa liigutada duelli lehele</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2217"/>
@@ -2358,22 +2330,22 @@ Protofinaal.exe faili ei leitud!</translation>
     <message>
         <location filename="../protokollitaja.cpp" line="2386"/>
         <source>No Sum in series!</source>
-        <translation type="unfinished"></translation>
+        <translation>Vigane fail!</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2389"/>
         <source>Faulty competitorObj!</source>
-        <translation type="unfinished"></translation>
+        <translation>Vigane fail!</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2393"/>
         <source>membersInTeam not an array!</source>
-        <translation type="unfinished"></translation>
+        <translation>Vigane fail!</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2397"/>
         <source>Teams not an array!</source>
-        <translation type="unfinished"></translation>
+        <translation>Vigane fail!</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2409"/>
@@ -2447,7 +2419,7 @@ Asukoht: </translation>
     <message>
         <location filename="../protokollitaja.cpp" line="3621"/>
         <source>Competitor 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Võistleja 1</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="3769"/>
@@ -2560,12 +2532,12 @@ Seeriate arv liiga suur.</translation>
         <translation>Sellist sifrit ei leitud!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4863"/>
+        <location filename="../protokollitaja.cpp" line="4855"/>
         <source>Tab name field empty. Cannot create tab without name.</source>
         <translation>Töölehe nime lahter on tühi. Ei saa luua uut töölehte ilma nimeta.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4867"/>
+        <location filename="../protokollitaja.cpp" line="4859"/>
         <source>Tab screen name empty. Please fill that also</source>
         <translation>Tulemuse aknas näidatava tabeli pealkirja lahter on tühi. Paluks see ka ikka täita</translation>
     </message>
@@ -2610,11 +2582,6 @@ Protolehelugeja is newer, therefore need to update Protokollitaja or both</sourc
         <translation>Viga:Protokollitaja ja Protolehelugeja versioonid ei ühti!
 Protolehelugeja on uuem, seega on vaja uuendada Protokollitajat</translation>
     </message>
-    <message>
-        <location filename="../protolehelugejaconnection.cpp" line="129"/>
-        <source>Käsk:Salvestada</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>ProtolehelugejaServer</name>
@@ -2630,8 +2597,12 @@ Protolehelugeja on uuem, seega on vaja uuendada Protokollitajat</translation>
     </message>
     <message>
         <location filename="../protolehelugejaserver.cpp" line="83"/>
+        <source>Error!</source>
+        <translation>Viga!</translation>
+    </message>
+    <message>
         <source>Error</source>
-        <translation>Viga</translation>
+        <translation type="vanished">Viga</translation>
     </message>
     <message>
         <location filename="../protolehelugejaserver.cpp" line="83"/>
@@ -2648,7 +2619,7 @@ Võimalik, et mõni ühendus on vahepeal katkenud.</translation>
     <message>
         <location filename="../main.cpp" line="68"/>
         <source>%1 Crashed</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 jooksis kokku</translation>
     </message>
 </context>
 <context>
@@ -2912,12 +2883,12 @@ Võimalik, et mõni ühendus on vahepeal katkenud.</translation>
         <location filename="../seadedkast.ui" line="132"/>
         <location filename="../seadedkast.ui" line="146"/>
         <source>dd.MM.yyyy</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../seadedkast.ui" line="156"/>
         <source>Autosave</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../seadedkast.ui" line="169"/>
@@ -3042,12 +3013,12 @@ Võimalik, et mõni ühendus on vahepeal katkenud.</translation>
     <message>
         <location filename="../seadedkast.ui" line="373"/>
         <source>32,35,36,37,39,544,547,551,1060</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../seadedkast.ui" line="380"/>
         <source>0,3,4,5,7,512,515,519,1028,1029,1036,2304</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../seadedkast.ui" line="387"/>
@@ -3057,7 +3028,7 @@ Võimalik, et mõni ühendus on vahepeal katkenud.</translation>
     <message>
         <location filename="../seadedkast.ui" line="412"/>
         <source>OK</source>
-        <translation type="unfinished">Olgu</translation>
+        <translation>Olgu</translation>
     </message>
     <message>
         <source>Ok</source>
@@ -3091,15 +3062,15 @@ Võimalik, et mõni ühendus on vahepeal katkenud.</translation>
     <name>SimpleKllFileRW</name>
     <message>
         <location filename="../simplekllfilerw.cpp" line="15"/>
-        <location filename="../simplekllfilerw.cpp" line="31"/>
-        <location filename="../simplekllfilerw.cpp" line="47"/>
-        <source>Protokollitaja</source>
-        <translation type="unfinished"></translation>
+        <source>Wrong or broken file!</source>
+        <translation>Vigane või vale fail!</translation>
     </message>
     <message>
         <location filename="../simplekllfilerw.cpp" line="15"/>
-        <source>Wrong or broken file!</source>
-        <translation>Vigane või vale fail!</translation>
+        <location filename="../simplekllfilerw.cpp" line="31"/>
+        <location filename="../simplekllfilerw.cpp" line="47"/>
+        <source>Error!</source>
+        <translation>Viga!</translation>
     </message>
     <message>
         <location filename="../simplekllfilerw.cpp" line="32"/>
@@ -3173,7 +3144,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../../../common/src/siusdataconnections.ui" line="22"/>
         <source>4000</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../../common/src/siusdataconnections.ui" line="29"/>
@@ -3183,7 +3154,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../../../common/src/siusdataconnections.ui" line="36"/>
         <source>Port:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../../common/src/siusdataconnections.ui" line="43"/>
@@ -3193,7 +3164,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../../../common/src/siusdataconnections.ui" line="50"/>
         <source>127.0.0.1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../../common/src/siusdataconnections.ui" line="57"/>
@@ -3221,7 +3192,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../startlistwriter.cpp" line="89"/>
         <source>Comma separated file (*.csv)</source>
-        <translation type="unfinished"></translation>
+        <translation>CSV fail (*.csv)</translation>
     </message>
     <message>
         <location filename="../startlistwriter.cpp" line="112"/>
@@ -3242,8 +3213,12 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     </message>
     <message>
         <location filename="../startlistwriter.cpp" line="123"/>
+        <source>Error!</source>
+        <translation>Viga!</translation>
+    </message>
+    <message>
         <source>Error</source>
-        <translation>Viga</translation>
+        <translation type="vanished">Viga</translation>
     </message>
 </context>
 <context>
@@ -3352,11 +3327,6 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <translation>Täisekraan vaade</translation>
     </message>
     <message>
-        <location filename="../tulemuseaken.cpp" line="47"/>
-        <source>F</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../tulemuseaken.cpp" line="48"/>
         <source>Show this window in fullscreen mode</source>
         <translation>Näita seda akent täisekraan vaates</translation>
@@ -3423,7 +3393,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../../../common/src/uhendumiseaken.ui" line="32"/>
         <source>Port:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -3452,7 +3422,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../newtabdialog.ui" line="37"/>
         <source>Duel Match</source>
-        <translation type="unfinished"></translation>
+        <translation>Duell</translation>
     </message>
     <message>
         <location filename="../newtabdialog.ui" line="58"/>
@@ -3517,37 +3487,37 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../newtabdialog.ui" line="221"/>
         <source>vs</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../newtabdialog.ui" line="240"/>
         <source>Competitors per team:</source>
-        <translation type="unfinished"></translation>
+        <translation>Võistlejaid võistkonnas:</translation>
     </message>
     <message>
         <location filename="../newtabdialog.ui" line="247"/>
         <source>Number of competitors in each team of the duel match</source>
-        <translation type="unfinished"></translation>
+        <translation>Võistlejate arve kummaski duelli võistkonnas</translation>
     </message>
     <message>
         <location filename="../newtabdialog.ui" line="211"/>
         <source>Name of the first team of the duel match</source>
-        <translation type="unfinished"></translation>
+        <translation>Esimese võistkonna nimi</translation>
     </message>
     <message>
         <location filename="../newtabdialog.ui" line="214"/>
         <source>Team 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Võistkond 1</translation>
     </message>
     <message>
         <location filename="../newtabdialog.ui" line="228"/>
         <source>Name of the second team of the duel match</source>
-        <translation type="unfinished"></translation>
+        <translation>Teise võistkonna nimi</translation>
     </message>
     <message>
         <location filename="../newtabdialog.ui" line="231"/>
         <source>Team 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Võistkond 2</translation>
     </message>
     <message>
         <location filename="../newtabdialog.ui" line="263"/>
@@ -3572,7 +3542,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
     <message>
         <location filename="../newtabdialog.ui" line="302"/>
         <source>OK</source>
-        <translation type="unfinished">Olgu</translation>
+        <translation>Olgu</translation>
     </message>
     <message>
         <source>Ok</source>
@@ -3586,7 +3556,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <location filename="../voistkond.cpp" line="177"/>
         <location filename="../voistkond.cpp" line="184"/>
         <source>Competitor 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Võistleja 1</translation>
     </message>
     <message>
         <location filename="../voistkond.cpp" line="17"/>

@@ -120,5 +120,5 @@ void StartListWriter::writeStartListFile(StartListType type)
                 tr("Startlist created. %1 competitors exported\n%2").arg(exported).arg(m_filePath),
                 QMessageBox::Ok
                 );
-    } else QMessageBox::critical(dynamic_cast<QWidget*>(this->parent()), tr("Error"), tr("Unable to write to the file."), QMessageBox::Ok);
+    } else QMessageBox::critical(dynamic_cast<QWidget*>(this->parent()), tr("Error!"), tr("Unable to write to the file."), QMessageBox::Ok);
 }

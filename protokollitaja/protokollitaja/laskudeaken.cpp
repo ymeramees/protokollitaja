@@ -40,8 +40,12 @@ LaskudeAken::LaskudeAken(bool kum, int s, int ls, QWidget *parent) :
     for(int i = 0; i < laskudeArv; i++){
 //        ui->laskudeTabel->setItem(i, 0, new QTableWidgetItem(tr("%1.").arg(i + 1)));
         ui->laskudeTabel->setItem(i, 0, new QTableWidgetItem(lasud[0][i]->getSLask()));
-        ui->laskudeTabel->setItem(i, 1, new QTableWidgetItem(tr("%1").arg(lasud[0][i]->stringX())));
-        ui->laskudeTabel->setItem(i, 2, new QTableWidgetItem(tr("%1").arg(lasud[0][i]->stringY())));
+        ui->laskudeTabel->setItem(i,
+                                  1,
+                                  new QTableWidgetItem(QString("%1").arg(lasud[0][i]->stringX())));
+        ui->laskudeTabel->setItem(i,
+                                  2,
+                                  new QTableWidgetItem(QString("%1").arg(lasud[0][i]->stringY())));
         ui->laskudeTabel->setItem(i, 3, new QTableWidgetItem());
         if(lasud[0][i]->isInnerTen())
             ui->laskudeTabel->item(i, 3)->setCheckState(Qt::Checked);
@@ -77,7 +81,10 @@ void LaskudeAken::kirjutaLasud()    //Kirjutab tabelis olevad lasud seeriasse
             else if(!onnestus && ui->laskudeTabel->item(i, 0)->text().contains('.'))
                 lask = ui->laskudeTabel->item(i, 0)->text().replace('.', ',').toFloat(&onnestus);
             if(!onnestus){
-                QMessageBox::critical(this, tr("Error"), tr("Faulty shot value in the table!"), QMessageBox::Ok);
+                QMessageBox::critical(this,
+                                      tr("Error!"),
+                                      tr("Faulty shot value in the table!"),
+                                      QMessageBox::Ok);
                 return;
             }
             lasud[aktiivneSeeria][i]->setLask(lask);
@@ -103,8 +110,10 @@ void LaskudeAken::loeLasud()    //Loeb seeriast tabelisse uued lasud
 
     for(int i = 0; i < laskudeArv; i++){
         ui->laskudeTabel->item(i, 0)->setText(lasud[aktiivneSeeria][i]->getSLask());
-        ui->laskudeTabel->item(i, 1)->setText(tr("%1").arg(lasud[aktiivneSeeria][i]->stringX()));
-        ui->laskudeTabel->item(i, 2)->setText(tr("%1").arg(lasud[aktiivneSeeria][i]->stringY()));
+        ui->laskudeTabel->item(i, 1)->setText(
+            QString("%1").arg(lasud[aktiivneSeeria][i]->stringX()));
+        ui->laskudeTabel->item(i, 2)->setText(
+            QString("%1").arg(lasud[aktiivneSeeria][i]->stringY()));
         if(lasud[aktiivneSeeria][i]->isInnerTen())
             ui->laskudeTabel->item(i, 3)->setCheckState(Qt::Checked);
         else

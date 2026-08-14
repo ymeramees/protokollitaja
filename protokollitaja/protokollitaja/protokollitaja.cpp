@@ -301,13 +301,13 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         (void) new QShortcut(Qt::Key_Escape, this, SLOT(close()));
         setStatusBar(statusBar());
 
-        toolBar = addToolBar(tr("failMenu"));
+        toolBar = addToolBar("fileMenu");
         toolBar->addAction(uusAct);
         toolBar->addAction(avaAct);
         toolBar->addAction(salvestaAct);
         toolBar->addAction(prindiAct);
 
-        toolBar = addToolBar(tr("tooRiistad"));
+        toolBar = addToolBar("tools");
         toolBar->addAction(uusLaskurAct);
         toolBar->addAction(eemaldaLaskurAct);
         toolBar->addAction(liigutaAct);
@@ -318,7 +318,7 @@ Protokollitaja::Protokollitaja(QWidget *parent)
         toolBar->addAction(uusTabAct);
         toolBar->addAction(eemaldaTabAct);
 
-        toolBar = addToolBar(tr("tooRiistad2"));
+        toolBar = addToolBar("tools2");
         toolBar->addAction(lehelugejaAct);
         toolBar->addAction(uhenduSiusDatagaAct);
         toolBar->addAction(naitaTulAkenAct);
@@ -670,7 +670,7 @@ void Protokollitaja::closeEvent(QCloseEvent *event)
 #endif
     if(voibSulgeda){
         if(protoUuendaja == 0)  //Kui on uuendamise kaudu sulgemine, siis ei ole vaja küsida, kui salvestama ei pea
-            if(QMessageBox::warning(this, tr("Protokollitaja"), tr("Are you sure you want to exit from the application?"), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok)==QMessageBox::Cancel)
+            if(QMessageBox::warning(this, tr("Warning"), tr("Are you sure you want to exit from the application?"), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok)==QMessageBox::Cancel)
                 event->ignore();
     }else{
         int vastus = QMessageBox::question(this, "Protokollitaja", tr("Do you want to save changes and exit the application?"),	QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
@@ -717,7 +717,7 @@ void Protokollitaja::deleteAllShots()
 void Protokollitaja::editWebCompetitionId()
 {
     bool ok = false;
-    QString newId = QInputDialog::getText(this, tr("Muuda webCompetitionId"), tr("webCompetitionId:"),
+    QString newId = QInputDialog::getText(this, tr("Edit webCompetitionId"), tr("webCompetitionId:"),
                                           QLineEdit::Normal, webCompetitionId, &ok);
     if (ok && newId != webCompetitionId) {
         webCompetitionId = newId;
@@ -875,7 +875,7 @@ void Protokollitaja::eksportCSV()
         if(tabWidget->count() > 0)
             leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
         else{
-            QMessageBox::critical(this, tr("Error"), tr("No tabs, nothing to export!"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error!"), tr("No tabs, nothing to export!"), QMessageBox::Ok);
             return;
         }
         QString failiNimi = QFileDialog::getSaveFileName(this, tr("Export"), seeFail.left(seeFail.length() - 3),
@@ -933,7 +933,7 @@ void Protokollitaja::eksportCSV()
                 }
                 fail.close();
                 QMessageBox::information(this, "Protokollitaja", tr("Results exported"), QMessageBox::Ok);
-        }else QMessageBox::critical(this, tr("Error"), tr("Unable to write to the file."), QMessageBox::Ok);
+        }else QMessageBox::critical(this, tr("Error!"), tr("Unable to write to the file."), QMessageBox::Ok);
 }
 
 void Protokollitaja::exportStartList(StartListWriter::StartListType type)
@@ -942,16 +942,16 @@ void Protokollitaja::exportStartList(StartListWriter::StartListType type)
     if(tabWidget->count() > 0)
         leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
     else{
-        QMessageBox::critical(this, tr("Error"), tr("No tabs, nothing to export!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error!"), tr("No tabs, nothing to export!"), QMessageBox::Ok);
         return;
     }
 
     if(leht->voistk){
-        QMessageBox::critical(this, tr("Error"), tr("Sius startlist cannot be created from team events!"),
+        QMessageBox::critical(this, tr("Error!"), tr("Sius startlist cannot be created from team events!"),
                 QMessageBox::Ok);
         return;
     }else if(leht->laskurid.count() <= 0){
-        QMessageBox::critical(this, tr("Error"), tr("No competitors, nothing to export!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error!"), tr("No competitors, nothing to export!"), QMessageBox::Ok);
         return;
     }
 
@@ -961,7 +961,7 @@ void Protokollitaja::exportStartList(StartListWriter::StartListType type)
         if(leht->laskurid[i]->linnuke->isChecked()){
             QStringList row;    //target, ID, first name, name, club, result
             if(leht->laskurid[i]->rajaNr->text().contains("A") || leht->laskurid[i]->rajaNr->text().contains("B") || leht->laskurid[i]->rajaNr->text().contains("C") || leht->laskurid[i]->rajaNr->text().contains("D") || leht->laskurid[i]->rajaNr->text().contains("E") || leht->laskurid[i]->rajaNr->text().contains("F") || leht->laskurid[i]->rajaNr->text().contains("G") || leht->laskurid[i]->rajaNr->text().contains("H"))
-                QMessageBox::critical(this, tr("Error"), tr("There are letters in the target numbers. If you want to export finals startlist, use the other function!"), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Error!"), tr("There are letters in the target numbers. If you want to export finals startlist, use the other function!"), QMessageBox::Ok);
 
             competitorsList.append(StartListWriter::StartListCompetitor{
                 leht->laskurid[i]->rajaNr->text(),
@@ -977,7 +977,7 @@ void Protokollitaja::exportStartList(StartListWriter::StartListType type)
     }
 
     if(competitorsList.size() <= 0){
-        QMessageBox::critical(this, tr("Error"), tr("No selected competitors, nothing to export!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error!"), tr("No selected competitors, nothing to export!"), QMessageBox::Ok);
         return;
     } else {
         StartListWriter *startListWriter = new StartListWriter(competitorsList, seeFail, type, this);
@@ -991,16 +991,16 @@ void Protokollitaja::exportFinalsSiusStartList()
     if(tabWidget->count() > 0)
         leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
     else{
-        QMessageBox::critical(this, tr("Error"), tr("No tabs, nothing to export!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error!"), tr("No tabs, nothing to export!"), QMessageBox::Ok);
         return;
     }
 
     if(leht->voistk){
-        QMessageBox::critical(this, tr("Error"), tr("Sius startlist cannot be created from team events!"),
+        QMessageBox::critical(this, tr("Error!"), tr("Sius startlist cannot be created from team events!"),
                 QMessageBox::Ok);
         return;
     }else if(leht->laskurid.count() <= 0){
-        QMessageBox::critical(this, tr("Error"), tr("No competitors, nothing to export!"), QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error!"), tr("No competitors, nothing to export!"), QMessageBox::Ok);
         return;
     }
 
@@ -1043,7 +1043,7 @@ void Protokollitaja::exportFinalsSiusStartList()
         }
         fail.close();
         QMessageBox::information(this, "Protokollitaja", tr("Startlist created. %1 competitor(s) exported").arg(eksporditud), QMessageBox::Ok);
-    }else QMessageBox::critical(this, tr("Error"), tr("Unable to write to the file."), QMessageBox::Ok);
+    }else QMessageBox::critical(this, tr("Error!"), tr("Unable to write to the file."), QMessageBox::Ok);
 }
 
 void Protokollitaja::eksportTXT()
@@ -1052,7 +1052,7 @@ void Protokollitaja::eksportTXT()
         if(tabWidget->count() > 0)
             leht = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->currentWidget())->widget());
         else{
-            QMessageBox::critical(this, tr("Error"), tr("No tabs, nothing to export!"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error!"), tr("No tabs, nothing to export!"), QMessageBox::Ok);
             return;
         }
         QString failiNimi = QFileDialog::getSaveFileName(this, tr("Export"), seeFail.left(seeFail.length() - 3), tr("Text file (*.txt)"));
@@ -1109,7 +1109,7 @@ void Protokollitaja::eksportTXT()
                 }
                 fail.close();
                 QMessageBox::information(this, "Protokollitaja", tr("Results exported"), QMessageBox::Ok);
-        }else QMessageBox::critical(this, tr("Error"), tr("Unable to write to the file."), QMessageBox::Ok);
+        }else QMessageBox::critical(this, tr("Error!"), tr("Unable to write to the file."), QMessageBox::Ok);
 }
 
 void Protokollitaja::eksportXLS()
@@ -1691,20 +1691,20 @@ void Protokollitaja::runFinals()
         switch(m_protoFinaalProcess->error()){
         case QProcess::FailedToStart : {
             if(m_protoFinaalProcess->errorString() == "No such file or directory")
-                QMessageBox::critical(this, tr("Error"), tr("Unable to start the finals application!\nUnable to find Protofinaal.exe!"), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Error!"), tr("Unable to start the finals application!\nUnable to find Protofinaal.exe!"), QMessageBox::Ok);
             else
-                QMessageBox::critical(this, tr("Error"), tr("Unable to start Finaal!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Error!"), tr("Unable to start Finaal!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
             break;
         }
         case QProcess::Crashed : {
-            QMessageBox::critical(this, tr("Error"), tr("Finaal crashed on startup!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error!"), tr("Finaal crashed on startup!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
             break;
         }
         case QProcess::Timedout : {
-            QMessageBox::critical(this, tr("Error"), tr("Unable to start Finaal! Took too much time!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error!"), tr("Unable to start Finaal! Took too much time!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
             break;
         }
-        default : QMessageBox::critical(this, tr("Error"), tr("Unable to start Finaal! Reason unknown!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
+        default : QMessageBox::critical(this, tr("Error!"), tr("Unable to start Finaal! Reason unknown!\n\n%1").arg(m_protoFinaalProcess->errorString()), QMessageBox::Ok);
         }
     }
 }
@@ -1715,7 +1715,7 @@ void Protokollitaja::kaivitaServer()
 //        server = new QTcpServer(this);
         server = new ProtolehelugejaServer(this);
         if (!server->listen(QHostAddress::Any, 50005)) {
-            QMessageBox::critical(this, tr("Error"), tr("Unable to start the server: %1.").arg(server->errorString()));
+            QMessageBox::critical(this, tr("Error!"), tr("Unable to start the server: %1.").arg(server->errorString()));
             return;
         }
         ipAadress.clear();
@@ -1910,7 +1910,7 @@ void Protokollitaja::kontrolliIdKordust(int uusId, Laskur* las)   //Kontrollib l
         las->id = uusId;
         voibSulgeda = false;
     }else{
-        QMessageBox::critical(this, tr("Error"), "Selline ID on juba olemas!\nID'd ei muudetud!", QMessageBox::Ok);
+        QMessageBox::critical(this, tr("Error!"), "Selline ID on juba olemas!\nID'd ei muudetud!", QMessageBox::Ok);
     }
 }
 
@@ -1922,7 +1922,7 @@ void Protokollitaja::kopeeriLaskurid()
     int currentIndex = tabWidget->currentIndex();
 
     if(leht->voistk){
-        QMessageBox::critical(this, tr("Error"), tr("Copying teams between tabs is not supported")
+        QMessageBox::critical(this, tr("Error!"), tr("Copying teams between tabs is not supported")
                 , QMessageBox::Ok);
         return;
     }
@@ -1943,10 +1943,10 @@ void Protokollitaja::kopeeriLaskurid()
             if(i != currentIndex && tabWidget->tabText(i) == valik){
                 Leht* leht2 = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
                 if(leht2->voistk){
-                    QMessageBox::critical(this, tr("Error"), tr("Shooters cannot be copied to team event's sheet"), QMessageBox::Ok);
+                    QMessageBox::critical(this, tr("Error!"), tr("Shooters cannot be copied to team event's sheet"), QMessageBox::Ok);
                     return;
                 } else if(leht2->pageType() == Leht::Duel){
-                    QMessageBox::critical(this, tr("Error"), tr("Shooters cannot be copied to duel match's sheet"), QMessageBox::Ok);
+                    QMessageBox::critical(this, tr("Error!"), tr("Shooters cannot be copied to duel match's sheet"), QMessageBox::Ok);
                     return;
                 } else if (leht->leheIndeks == leht2->leheIndeks) {
                     QMessageBox::critical(this, "Protokollitaja", tr("Shooters cannot be copied to the same sheet"), QMessageBox::Ok);
@@ -2082,7 +2082,7 @@ void Protokollitaja::lehedLoetud()
         }
         if(!lehelugejaLaskur->onLehelugejaLaskur){    //Kui ei õnnestunud leida õige laskur
             logiValja << "#Viga: Lehelugemise laskur kadunud!\n";
-            QMessageBox::critical(this, tr("Error"), tr("Unable to find the competitor who should have gotten these results!"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error!"), tr("Unable to find the competitor who should have gotten these results!"), QMessageBox::Ok);
             return;
         }
         for(int i = 0; i < lehelugejaLaskur->seeriateArv; i++){  //Selle laskuri uuendamine, kelle lehti loeti
@@ -2109,11 +2109,11 @@ void Protokollitaja::lehelugeja()
             lehelugejaLeht = leht;
         }
         if(lehelugejaLeht->seeriateArv > 6){
-            QMessageBox::critical(this, tr("Error"), tr("Unfortunately this version of Protokollitaja doesn't support paper target scoring for 3x40 events!"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error!"), tr("Unfortunately this version of Protokollitaja doesn't support paper target scoring for 3x40 events!"), QMessageBox::Ok);
             return;
         }
 //        if(!leht->harjutus.contains(tr("õhu"), Qt::CaseInsensitive) && !leht->harjutus.contains(tr("standard"), Qt::CaseInsensitive) && !leht->harjutus.contains(tr("lamades"), Qt::CaseInsensitive)){
-//            QMessageBox::critical(this, tr("Error"), tr("Kahjuks see versioon Protokollitajast toetab lehelugemist ainult sportpüssi, õhupüssi ja õhupüstoli harjutustes!"), QMessageBox::Ok);
+//            QMessageBox::critical(this, tr("Error!"), tr("Kahjuks see versioon Protokollitajast toetab lehelugemist ainult sportpüssi, õhupüssi ja õhupüstoli harjutustes!"), QMessageBox::Ok);
 //            return;
 //        }
         if(!lehelugejaAken){
@@ -2149,11 +2149,11 @@ void Protokollitaja::lehelugeja()
                 for(int j = leht->seeriateArv; j < lehelugejaAken->seeriad.count(); j++)
                     lehelugejaAken->seeriad[j]->hide();
             }else{
-                QMessageBox::critical(this, tr("Error"), tr("Too many series, scoring not possible!"), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Error!"), tr("Too many series, scoring not possible!"), QMessageBox::Ok);
                 return;
             }
         }else{
-            QMessageBox::critical(this, tr("Error"), tr("No competitors to add results to!"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error!"), tr("No competitors to add results to!"), QMessageBox::Ok);
             return;
         }
         /*QFile logifail(asukoht.absolutePath() + QString("/Data/Logi %1.log").arg(QDate::currentDate()
@@ -2398,11 +2398,11 @@ void Protokollitaja::readFinalsFile(QString fileName)
                 }
             }
             if(addedCount < 1)
-                QMessageBox::warning(this, tr("Protokollitaja"), tr("Couldn't find finals results to any of the competitors. Check that you have the correct file."), QMessageBox::Ok);
+                QMessageBox::warning(this, tr("Warning"), tr("Couldn't find finals results to any of the competitors. Check that you have the correct file."), QMessageBox::Ok);
             else {
                 voibSulgeda = false;
                 currentSheet->setFinalsData(jsonObj);
-                QMessageBox::information(this, tr("Protokollitaja"), tr("Finals results added to %1 competitors.").arg(addedCount), QMessageBox::Ok);
+                QMessageBox::information(this, tr("Info"), tr("Finals results added to %1 competitors.").arg(addedCount), QMessageBox::Ok);
             }
         }
     } else {
@@ -3471,7 +3471,7 @@ void Protokollitaja::prindi2()
         algus = pTekst.indexOf("<tr>", pTekst.indexOf("<tbody>"));
         pikkus = pTekst.lastIndexOf("</tr>", pTekst.indexOf("</tbody>")) + 5 - algus;
         if(algus == -1 || pTekst.lastIndexOf("</tr>", pTekst.indexOf("</tbody>")) == -1)
-                QMessageBox::critical(this, tr("Error"), tr("Could not find <tr>, <tbody>, </tr> or </tbody> tags from Print_template.html file. Printing of the table is not possible"), QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Error!"), tr("Could not find <tr>, <tbody>, </tr> or </tbody> tags from Print_template.html file. Printing of the table is not possible"), QMessageBox::Ok);
 
         QString origRida = pTekst.mid(algus, pikkus);   //Tabeli rea template
         QString rida;    //Tabeli rida, mis korduma hakkab
@@ -3480,20 +3480,20 @@ void Protokollitaja::prindi2()
         algus = origRida.lastIndexOf("<td", origRida.indexOf("#S2#"));
         pikkus = origRida.indexOf("</td>", origRida.indexOf("#S6#")) + 5 - algus;
         if(algus == -1 || origRida.indexOf("</td>", origRida.indexOf("#S6#")) == -1)
-            QMessageBox::critical(this, tr("Error"), tr("Could not find <td>, #S2#, </td> or #S6# tags from Print_template.html file. Printing of the table is not possible"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error!"), tr("Could not find <td>, #S2#, </td> or #S6# tags from Print_template.html file. Printing of the table is not possible"), QMessageBox::Ok);
         origRida.remove(algus, pikkus); //Seeriate 2-6 eemaldamine template'ist
 
         algus = origRida.lastIndexOf("<td", origRida.indexOf("#S1#"));
         pikkus = origRida.indexOf("</td>", origRida.indexOf("#S1#")) + 5 - algus;
         if(algus == -1 || origRida.indexOf("</td>", origRida.indexOf("#S1#")) == -1)
-            QMessageBox::critical(this, tr("Error"), tr("Could not find <td>, #S1# or </td> tags from Print_template.html file. Printing of the table is not possible"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error!"), tr("Could not find <td>, #S1# or </td> tags from Print_template.html file. Printing of the table is not possible"), QMessageBox::Ok);
         QString origSeeriaRida = origRida.mid(algus, pikkus); //Tabeli rea seeriate osa (alates 2. seeriast), mis korduma hakkab
         QString seeriaRida = origSeeriaRida;
 
         algus = origRida.lastIndexOf("<td", origRida.indexOf("#summa#"));
         pikkus = origRida.indexOf("</td>", origRida.indexOf("#summa#")) + 5 - algus;
         if(algus == -1 || origRida.indexOf("</td>", origRida.indexOf("#summa#")) == -1)
-            QMessageBox::critical(this, tr("Error"), tr("Could not find <td>, #summa# or </td> tags from Print_template.html file. Printing of the table is not possible"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error!"), tr("Could not find <td>, #summa# or </td> tags from Print_template.html file. Printing of the table is not possible"), QMessageBox::Ok);
         QString origVSummaRida = origRida.mid(algus, pikkus);   //Tabeli vahesumma rea template
         QString vSummaRida = origVSummaRida;
 //        QMessageBox::information(this, "Protokollitaja", "pTekst: " + pTekst, QMessageBox::Ok);
@@ -3593,7 +3593,7 @@ void Protokollitaja::prindi2()
             algus = pTekst.indexOf("<tr>", pTekst.indexOf("<tbody>"));
             pikkus = pTekst.lastIndexOf("</tr>", pTekst.indexOf("</tbody>")) + 5 - algus;
             if(algus == -1 || pTekst.lastIndexOf("</tr>", pTekst.indexOf("</tbody>")) == -1)
-            QMessageBox::critical(this, tr("Error"), tr("Could not find <tr>, <tbody>, </tr> or </tbody> tags from Print_template.html file. Printing of the table is faulty!"), QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error!"), tr("Could not find <tr>, <tbody>, </tr> or </tbody> tags from Print_template.html file. Printing of the table is faulty!"), QMessageBox::Ok);
 
             QString origRida = pTekst.mid(algus, pikkus);   //Tabeli võistkonna rea template
             QString rida;    //Tabeli võistkonna rida, mis korduma hakkab
@@ -4341,10 +4341,10 @@ void Protokollitaja::uuendaLehelugejat(QString nimi)
         for(int i = 0; i < lehelugejaLeht->laskurid.count(); i++)
             if(nimi == (lehelugejaLeht->laskurid[i]->eesNimi->text() + " " + lehelugejaLeht->laskurid[i]->perekNimi->text())){
                 if(lehelugejaLeht->seeriateArv > 6){
-                    QMessageBox::critical(this, tr("Error"), tr("Unfortunately this version of Protokollitaja doesn't support paper target scoring for 3x40 events!"), QMessageBox::Ok);
+                    QMessageBox::critical(this, tr("Error!"), tr("Unfortunately this version of Protokollitaja doesn't support paper target scoring for 3x40 events!"), QMessageBox::Ok);
                     return;
                 }/*else if(lehelugejaLeht->laskurid[i]->onVorguLaskur){
-                    QMessageBox::critical(this, tr("Error"), tr("Sellele laskurile juba loetakse lehti Lehelugejas!"), QMessageBox::Ok);
+                    QMessageBox::critical(this, tr("Error!"), tr("Sellele laskurile juba loetakse lehti Lehelugejas!"), QMessageBox::Ok);
                     return;
                 }*/
                 for(int k = 0; k < lehelugejaAken->seeriad.count(); k++){
@@ -4410,10 +4410,10 @@ void Protokollitaja::uuendaLehelugejatSifriga(int siffer)
                     if(!leht->laskurid[j]->sifriAlgus->text().isEmpty())
                         if(siffer >= leht->laskurid[j]->sifriAlgus->text().toInt() && siffer < leht->laskurid[j]->sifriLopp->text().toInt()){
                             if(leht->seeriateArv > 6){
-                                QMessageBox::critical(this, tr("Error"), tr("Unfortunately this version of Protokollitaja doesn't support paper target scoring for 3x40 events!"), QMessageBox::Ok);
+                                QMessageBox::critical(this, tr("Error!"), tr("Unfortunately this version of Protokollitaja doesn't support paper target scoring for 3x40 events!"), QMessageBox::Ok);
                                 return;
                             }/*else if(leht->laskurid[j]->onVorguLaskur){
-                                QMessageBox::critical(this, tr("Error"), tr("Sellele laskurile juba loetakse lehti Lehelugejas!"), QMessageBox::Ok);
+                                QMessageBox::critical(this, tr("Error!"), tr("Sellele laskurile juba loetakse lehti Lehelugejas!"), QMessageBox::Ok);
                                 return;
                             }*/
     //                        int siffer = lehelugejaAken->m_ui.sifriEdit->text().toInt();
@@ -4442,7 +4442,7 @@ void Protokollitaja::uuendaLehelugejatSifriga(int siffer)
                                     }
                                 }
                             }else{
-                                QMessageBox::critical(this, tr("Error"), tr("Too many series, scoring not possible!"), QMessageBox::Ok);
+                                QMessageBox::critical(this, tr("Error!"), tr("Too many series, scoring not possible!"), QMessageBox::Ok);
                                 return;
                             }
                             lehelugejaAken->m_ui.summaEdit->setText(leht->laskurid[j]->getSumma());
@@ -4644,7 +4644,7 @@ void Protokollitaja::uuendaVorkuSifriga(int siffer, int socketIndex)
                         }
                         Laskur *seeLaskur = leht->laskurid[j];
 //                        if(leht->seeriateArv > 6){
-//                            QMessageBox::critical(this, tr("Error"), tr("Kahjuks see versioon Protokollitajast toetab "
+//                            QMessageBox::critical(this, tr("Error!"), tr("Kahjuks see versioon Protokollitajast toetab "
 //                                    "lehelugemist ainult õhupüssi ja õhupüstoli harjutustes!"), QMessageBox::Ok);
 //                            return;
 //                        }

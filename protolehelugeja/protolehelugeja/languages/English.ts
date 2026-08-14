@@ -277,8 +277,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lehelugeja.cpp" line="270"/>
-        <source>Käsk:Vabastada</source>
+        <location filename="../lehelugeja.cpp" line="582"/>
+        <location filename="../lehelugeja.cpp" line="587"/>
+        <location filename="../lehelugeja.cpp" line="591"/>
+        <location filename="../lehelugeja.cpp" line="596"/>
+        <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -317,66 +320,53 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lehelugeja.cpp" line="581"/>
-        <location filename="../lehelugeja.cpp" line="584"/>
-        <location filename="../lehelugeja.cpp" line="587"/>
-        <location filename="../lehelugeja.cpp" line="591"/>
-        <source>Protolehelugeja</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lehelugeja.cpp" line="581"/>
+        <location filename="../lehelugeja.cpp" line="583"/>
         <source>Ühendus katkestatud! Proovige uuesti ühenduda.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lehelugeja.cpp" line="584"/>
+        <location filename="../lehelugeja.cpp" line="587"/>
         <source>Serverit ei leitud, palun kontrollige aardessi ja porti!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lehelugeja.cpp" line="587"/>
+        <location filename="../lehelugeja.cpp" line="592"/>
         <source>Server keeldus ühendusest! Kontrollige, et server töötaks ja et aadress ja port õiged oleksid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lehelugeja.cpp" line="591"/>
+        <location filename="../lehelugeja.cpp" line="596"/>
         <source>Viga: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lehelugeja.cpp" line="601"/>
+        <location filename="../lehelugeja.cpp" line="606"/>
         <source>Ühendus juba loodud! Kui on mingi jama ja tahate uuesti ühendada, tuleb enne vajutada &quot;Sulge ühendus&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lehelugeja.cpp" line="614"/>
-        <source>Käsk:Salvestada</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lehelugeja.cpp" line="650"/>
+        <location filename="../lehelugeja.cpp" line="655"/>
         <source>Uuenda porte:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lehelugeja.cpp" line="703"/>
+        <location filename="../lehelugeja.cpp" line="708"/>
         <source>IP küsimus saadetud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lehelugeja.cpp" line="714"/>
+        <location filename="../lehelugeja.cpp" line="719"/>
         <source>Protokollitaja serverit ei leitud!
 Kontrollige võrguühenduse olemasolu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lehelugeja.cpp" line="827"/>
+        <location filename="../lehelugeja.cpp" line="832"/>
         <source>Ühendamine: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lehelugeja.cpp" line="888"/>
+        <location filename="../lehelugeja.cpp" line="893"/>
         <source>Lugemismasina kaablit ei leitud!</source>
         <translation type="unfinished"></translation>
     </message>

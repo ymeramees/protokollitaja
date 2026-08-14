@@ -44,7 +44,7 @@ TulemuseAken::TulemuseAken(QWidget *parent) : QWidget(parent)
         paiseFontAct->setStatusTip(tr("Change this window's heading's font"));
         connect(paiseFontAct, SIGNAL(triggered()), this, SLOT(muudaPaiseFont()));
         fullScreenAct = new QAction(tr("Fullscreen"), this);
-        fullScreenAct->setShortcut(tr("F"));
+        fullScreenAct->setShortcut(QKeySequence::FullScreen);
         fullScreenAct->setStatusTip(tr("Show this window in fullscreen mode"));
         connect(fullScreenAct, SIGNAL(triggered()), this, SLOT(fullScreen()));
 
