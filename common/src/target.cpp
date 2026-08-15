@@ -9,6 +9,7 @@ Target::Target(QWidget* parent)
     m_targetImage = nullptr;
     m_targetPainter = nullptr;
     m_active = true;
+    m_farthestShot = 0;
     m_infoBoxesVisible = true;
     m_zoomEnabled = true;
     //    lehetuubid << QString::fromLatin1("Air Rifle") << QString::fromLatin1("Air Pistol") << QString::fromLatin1("50m Rifle");
@@ -20,6 +21,7 @@ Target::Target(int relv, QString n, QString r, QWidget* parent)
     m_targetImage = nullptr;
     m_targetPainter = nullptr;
     m_active = true;
+    m_farthestShot = 0;
     m_infoBoxesVisible = true;
     m_zoomEnabled = true;
     setName(n);
@@ -100,30 +102,17 @@ void Target::drawAShot(Lask& l)
     m_targetPainter->setBrush(Qt::green);
     m_targetPainter->drawEllipse(QPoint(int(m_multiplier * 2 * l.X() / 1000), int(m_multiplier * -2 * l.Y() / 1000)), d, d); // Draw the new shot (shot x, y coordinates in nanometers)
     // l.X() / l.Y() are in thousandths of a millimetre (see Lask::setMmX etc.),
-    // but m_farthestX is kept in pixels and scaled up by 100 below for integer
-    // comparison. That means x / y have to be in mm * 100. Dividing by 10
-    // converts thousandths-of-mm -> mm*100 exactly.
-    int x = abs(l.X()) / 10; // Make sure values are positive
-    int y = abs(l.Y()) / 10;
+    // the shots are drawn onto the target image with the scale of
+    // m_multiplier * 2 px per millimetre.
+    int x = abs(l.X()) * 2 * m_multiplier / 1000; // Distance from the centre in px, made sure it is positive
+    int y = abs(l.Y()) * 2 * m_multiplier / 1000;
 #ifdef QT_DEBUG
     qDebug() << "QPoint: " << QPoint(int(m_multiplier * 2 * l.X()), int(m_multiplier * -2 * l.Y())) << "/tx: " << x << ", y: " << y;
 #endif
     m_previousShot.set(&l);
 
-    if (m_zoomEnabled) {
-        m_farthestX *= 100; // To compare with integers
-        if (m_farthestX == m_targetRadius * 100) { // If it is a first shot, target needs to be zoomed
-            m_farthestX = 0; // Initially needs to be 0-ed, otherwise zooming does not work
-        }
-        if (x > y) { // Zooming according to bigger coordinate
-            if (m_multiplier * 2 * x + d * 200 > m_farthestX)
-                m_farthestX = m_multiplier * 2 * x + d * 200; // Make sure farthest shot is fully visible
-        } else {
-            if (m_multiplier * 2 * y + d * 200 > m_farthestX)
-                m_farthestX = m_multiplier * 2 * y + d * 200; // Make sure farthest shot is fully visible
-        }
-        m_farthestX /= 100; // Back to correct multiplier
-    }
+    if (qMax(x, y) > m_farthestShot) // The target is zoomed according to the furthest shot's bigger coordinate
+        m_farthestShot = qMax(x, y);
     zoomAndUpdate();
 }
 
@@ -133,7 +122,8 @@ void Target::drawTarget()
     if (m_gunType == 0) { // Air Rife
         m_multiplier = 8;
         m_caliber = 4.5;
-        m_farthestX = m_farthestY = m_targetRadius = 364;
+        m_targetRadius = 364;
+        m_farthestShot = 0; // The target is drawn without shots, so there is nothing to zoom to
         QFont font;
         font.setPointSize(24);
         m_targetPainter->setFont(font);
@@ -203,7 +193,8 @@ void Target::drawTarget()
         }
 
         m_caliber = 5.6;
-        m_farthestX = m_farthestY = m_targetRadius = blackRings[(sizeof(blackRings) / sizeof(*blackRings)) - 1];
+        m_targetRadius = blackRings[(sizeof(blackRings) / sizeof(*blackRings)) - 1];
+        m_farthestShot = 0; // The target is drawn without shots, so there is nothing to zoom to
 
         QFont font;
         font.setPointSize(30);
@@ -261,7 +252,8 @@ void Target::drawTarget()
     } else { // Air Pistol
         m_multiplier = 4;
         m_caliber = 4.5;
-        m_farthestX = m_farthestY = m_targetRadius = 622;
+        m_targetRadius = 622;
+        m_farthestShot = 0; // The target is drawn without shots, so there is nothing to zoom to
         QFont font;
         font.setPointSize(30);
         m_targetPainter->setFont(font);
@@ -344,7 +336,7 @@ void Target::drawTarget()
 
 void Target::reset()
 {
-    m_farthestX = m_farthestY = m_targetRadius = m_multiplier = 0;
+    m_farthestShot = m_targetRadius = m_multiplier = 0;
     //    m_zoomLevel = 0;
     m_previousShot.clear();
 
@@ -400,26 +392,43 @@ void Target::setResult(QString newResult)
     m_result = newResult;
 }
 
+/**
+ * The width of the target's area currently shown, in the target image's pixels. The area is a
+ * square around the centre of the target, zoomed according to the furthest shot, so that
+ * the furthest shot is always fully visible. If there are no shots yet or zooming is
+ * turned off, the whole target is shown.
+ */
+int Target::zoomedWidth()
+{
+    const int shotRadius = m_multiplier * m_caliber; // As the shots are drawn onto the target
+    int halfWidth = m_targetRadius; // Without shots there is nothing to zoom to
+
+    if (m_zoomEnabled && m_farthestShot > 0) {
+        halfWidth = m_farthestShot + 2 * shotRadius; // Make sure the furthest shot is fully visible
+        if (halfWidth < m_targetRadius / 5)
+            halfWidth = m_targetRadius / 5; // Avoid high zooming in case of inner tens
+        if (halfWidth > m_targetRadius)
+            halfWidth = m_targetRadius; // No point of showing more than the whole target
+    }
+
+    // Shot diameter is added to both sides, to make sure the shot is not behind the name box
+    int width = (halfWidth * 2) + (shotRadius * 4);
+    if (m_targetImage != nullptr && width > m_targetImage->width()) // The zoomed area has to fit into the target's image
+        width = m_targetImage->width();
+    if (width < 1)
+        width = 1;
+
+    return width;
+}
+
 void Target::zoomAndUpdate()
 {
-    if (m_farthestX < (m_targetRadius / 5))
-        m_farthestX = m_targetRadius / 5; // Avoid high zooming in case of inner tens
-    // Safety clamp: m_farthestX must not exceed the target image's half-width,
-    // otherwise the copy() below could be asked for a multi-GB QImage and the
-    // subsequent smooth scale would never finish.
-    int maxFarthest = m_targetImage->width() / 2 - (m_multiplier * m_caliber * 2);
-    if (maxFarthest < 1)
-        maxFarthest = 1;
-    if (m_farthestX > maxFarthest)
-        m_farthestX = maxFarthest;
-    int h = (m_farthestX * 2) + (m_multiplier * m_caliber * 4); // Area of target to be zoomed, according to biggest coordinate + shot diameter, to make sure shot is visible (shot diameter multiplied with 4 instead of previously 2, because otherwise the shot was still behind name box)
-    int w = (m_farthestX * 2) + (m_multiplier * m_caliber * 4);
+    int w = zoomedWidth(); // Area of the target to be zoomed, according to the furthest shot
+    int h = w;
     int x = m_targetImage->width() / 2 - w / 2;
     int y = m_targetImage->height() / 2 - h / 2;
     if (x < 0) x = 0;
     if (y < 0) y = 0;
-    if (w > m_targetImage->width()) w = m_targetImage->width();
-    if (h > m_targetImage->height()) h = m_targetImage->height();
 
     QImage copy = m_targetImage->copy(x, y, w, h);
 

@@ -2,6 +2,7 @@
 
 #include "duelview.h"
 #include "leht.h"
+#include "target.h"
 
 bool verbose = false;
 bool veryVerbose = false;
@@ -19,6 +20,7 @@ private slots:
     void test_shotValues();
     void test_targetViewsAreCreatedForEveryCompetitor();
     void test_targetViewsAreKeptForTheSameMatch();
+    void test_targetsAreZoomedAccordingToTheFurthestShot();
 };
 
 DuelViewTest::DuelViewTest()
@@ -40,6 +42,15 @@ Leht* createDuelSheet(Andmebaas *dataBase, LiikmeteValikKast *membersBox, bool *
     for(int i = 0; i < pairs; i++)
         sheet->addDuelPair(i * 2 + 1, i * 2 + 2);
     return sheet;
+}
+
+void shootFirstSeries(Laskur *competitor, const QList<QPointF> &shotsInMm)
+{
+    for(int i = 0; i < shotsInMm.count() && i < competitor->lasud[0].count(); i++){
+        competitor->lasud[0][i]->set10Lask(100);
+        competitor->lasud[0][i]->setMmX(float(shotsInMm[i].x()));
+        competitor->lasud[0][i]->setMmY(float(shotsInMm[i].y()));
+    }
 }
 
 }
@@ -128,6 +139,38 @@ void DuelViewTest::test_targetViewsAreKeptForTheSameMatch()
 
     delete sheet;
     delete anotherSheet;
+}
+
+/**
+ * Every competitor's target has to be zoomed automatically, according to that competitor's
+ * furthest shot, so that the spectators can see the shots as big as possible.
+ */
+void DuelViewTest::test_targetsAreZoomedAccordingToTheFurthestShot()
+{
+    const int wholeTarget = 856;   // Width of the whole air rifle target with its margins, in the target image's px
+    const int zoomedTo6mm = 448;   // (6 mm * 16 px + 2 * 32 px) * 2 + 32 px * 4
+
+    Andmebaas dataBase;
+    LiikmeteValikKast membersBox;
+    bool writeAssistant = false;
+    int sorting = 0;
+
+    Leht *sheet = createDuelSheet(&dataBase, &membersBox, &writeAssistant, &sorting, 1);
+
+    DuelView view;
+    view.showMatch(sheet->duelPairs, TargetTypes::AirRifle);
+    QList<Target*> targets = view.findChildren<Target*>();
+    QCOMPARE(targets.count(), 2);
+    QCOMPARE(targets[0]->zoomedWidth(), wholeTarget);   // Without shots the whole target is shown
+
+    shootFirstSeries(sheet->duelPairs[0]->left(), QList<QPointF>() << QPointF(1.5, -2.0) << QPointF(-6.0, 3.0)
+                                                                  << QPointF(0.5, 1.0));
+    view.showMatch(sheet->duelPairs, TargetTypes::AirRifle);
+
+    QCOMPARE(targets[0]->zoomedWidth(), zoomedTo6mm);   // Zoomed according to the furthest shot
+    QCOMPARE(targets[1]->zoomedWidth(), wholeTarget);   // The other competitor has not shot yet
+
+    delete sheet;
 }
 
 QTEST_MAIN(DuelViewTest)

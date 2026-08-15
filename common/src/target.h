@@ -16,8 +16,7 @@ class Target : public QLabel
 
 private:
     int m_caliber;   // Diameter of shot circle in mm
-    int m_farthestX;
-    int m_farthestY;
+    int m_farthestShot;    // Distance of the furthest shot from the centre in px, 0 if no shots have been drawn
     int m_multiplier;    // Ratio between mm and px'es, scale: 1px = m_multiplier * mm
     int m_targetRadius;
     int m_gunType;
@@ -61,6 +60,7 @@ public slots:
     void setTargetNo(QString r);
     void setGunType(int r);
     void setResult(QString newResult);
+    int zoomedWidth();    // Width of the target's area currently shown, in the target image's px
     void zoomAndUpdate();
 
 };
