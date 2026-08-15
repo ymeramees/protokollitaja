@@ -3,10 +3,10 @@
 
 // Changed 01.02.2026 - after which there has  been a release, so no need to update
 #define VER_FILEVERSION             0,9,4,0
-#define VER_FILEVERSION_STR         "0.9.4-test1\0"
+#define VER_FILEVERSION_STR         "0.9.4-DEMO\0"
 
 #define VER_PRODUCTVERSION          0,9,4,0
-#define VER_PRODUCTVERSION_STR      "0.9.4-test1\0"
+#define VER_PRODUCTVERSION_STR      "0.9.4-DEMO\0"
 
 #define VER_COMPANYNAME_STR         "Ymeramees"
 #define VER_LEGALCOPYRIGHT_STR      "Copyright © 2026 Ymeramees"

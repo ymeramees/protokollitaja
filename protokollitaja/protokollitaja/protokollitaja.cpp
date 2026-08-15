@@ -4302,11 +4302,11 @@ void Protokollitaja::uploadResults()
 //     url.setHost("localhost");
 //     url.setPort(3004);
 // #else
-#ifdef QT_DEBUG
+// #ifdef QT_DEBUG
     url.setHost("test.protokollitaja.eu");
-#else
-    url.setHost("protokollitaja.eu");
-#endif
+// #else
+//     url.setHost("protokollitaja.eu");
+// #endif
 // #endif
 
     url.setPath("/api/v1/competitions");
