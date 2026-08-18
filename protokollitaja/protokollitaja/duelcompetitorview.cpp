@@ -3,6 +3,19 @@
 
 #include "duelcompetitorview.h"
 
+namespace {
+
+/**
+ * The styles of the points label. The padding is the same in both of them, so that the number
+ * does not move when the background is added or removed. A won pair is highlighted with a green
+ * background, so that the spectators can see at a glance who has earned a point for their team,
+ * while a lost pair is left without any background.
+ */
+const QString pointsStyle = "padding: 0px 4px;";
+const QString wonPointsStyle = "padding: 0px 4px; background-color: #1a9c2e; color: white;";
+
+}
+
 DuelCompetitorView::DuelCompetitorView(Laskur *competitor, Side side, int gunType, QWidget *parent)
     : QFrame(parent)
 {
@@ -73,6 +86,7 @@ void DuelCompetitorView::createLayout(Side side, int gunType)
     m_pointsLabel->setFont(totalFont);
     m_pointsLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_pointsLabel->setMinimumWidth(30);
+    m_pointsLabel->setStyleSheet(pointsStyle);
     m_pointsLabel->setToolTip(tr("Points of the pair"));
 
     QHBoxLayout *nameRow = new QHBoxLayout;
@@ -200,6 +214,8 @@ void DuelCompetitorView::setPoints(const std::optional<int> points)
         m_pointsLabel->setText(QString("%1").arg(points.value()));
     else
         m_pointsLabel->setText("");
+
+    m_pointsLabel->setStyleSheet(points.value_or(0) > 0 ? wonPointsStyle : pointsStyle);
 }
 
 /**

@@ -1,7 +1,9 @@
 #ifndef TARGET_H
 #define TARGET_H
 
+#include <QColor>
 #include <QLabel>
+#include <QList>
 #include <QPainter>
 #include <QPainterPath>
 #ifdef QT_DEBUG
@@ -26,6 +28,8 @@ private:
     bool m_zoomEnabled;    // Will the target automatically zoom or not
     QImage *m_targetImage = nullptr;
     Lask m_previousShot;
+    int m_shotNumber = 0;   // Number of shots drawn since the last reset, shown as the marker's label
+    QList<Lask> m_seriesShots;   // Shots of the current series (at most 10), the only ones shown on the target
     QPainter *m_targetPainter = nullptr;
     QString m_name;
     QString m_targetNo;
@@ -63,6 +67,9 @@ public slots:
     int zoomedWidth();    // Width of the target's area currently shown, in the target image's px
     void zoomAndUpdate();
 
+private:
+    void drawShotMarker(const QPointF &center, double fillRadius, double edgeWidth, const QColor &fillColor, const QColor &borderColor, int shotNumber);
+    void redrawSeriesShots();
 };
 
 #endif // TARGET_H

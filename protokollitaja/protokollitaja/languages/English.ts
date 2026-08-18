@@ -87,7 +87,7 @@
 <context>
     <name>DuelCompetitorView</name>
     <message>
-        <location filename="../duelcompetitorview.cpp" line="76"/>
+        <location filename="../duelcompetitorview.cpp" line="90"/>
         <source>Points of the pair</source>
         <translation type="unfinished"></translation>
     </message>

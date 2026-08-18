@@ -1,5 +1,22 @@
 #include "target.h"
 
+namespace {
+
+// Style of the shot markers, matching the target view of ../Inband/Inband_scoring: a semi-transparent
+// fill colour with a darker, more opaque edge, and the shot number shown in white at the centre.
+// The latest shot is red, all the other shots turn green once a newer shot has been drawn.
+const double kShotEdgeWidthRatio = 0.15;   // Edge width as a fraction of the marker's outer radius
+const QColor kLatestShotFillColor(0xF4, 0x43, 0x36, 204);     // Material red, ~80% opacity
+const QColor kLatestShotBorderColor(0x8B, 0x00, 0x00, 200);   // Dark red, ~78% opacity
+const QColor kPreviousShotFillColor(0x4C, 0xAF, 0x50, 204);   // Material green, ~80% opacity
+const QColor kPreviousShotBorderColor(0x00, 0x64, 0x00, 200); // Dark green, ~78% opacity
+
+// Only one series' worth of shots is ever shown on the target at once; once it is full,
+// the target is cleared and the next series starts fresh, same as on a real target.
+const int kShotsPerSeries = 10;
+
+}
+
 // old
 const QStringList Target::m_targetTypes = QStringList() << QString::fromLatin1("Air Rifle") << QString::fromLatin1("Air Pistol") << QString::fromLatin1("50m Rifle");
 
@@ -89,31 +106,86 @@ void Target::init(int valik)
 
 void Target::drawAShot(Lask& l)
 {
-    m_targetPainter->setBrush(Qt::red);
-    int d = m_multiplier * m_caliber;
-    if (!m_previousShot.isEmpty()) {
-        m_targetPainter->drawEllipse(QPoint(int(m_multiplier * 2 * m_previousShot.X() / 1000),
-                                         int(m_multiplier * -2 * m_previousShot.Y() / 1000)),
-            d, d); // Draw previous shot with different colour (shot x, y coordinates in nanometers)
-#ifdef QT_DEBUG
-        qDebug() << "JoonistaLask(): eelminelask: " << m_multiplier * 2 * m_previousShot.X() << ", " << m_multiplier * -2 * m_previousShot.Y();
-#endif
+    if (m_seriesShots.size() >= kShotsPerSeries) {
+        // The current series is already full: clear the target for the next series of shots,
+        // so that only the current series' shots (at most 10, i.e. one series) are ever shown
+        m_seriesShots.clear();
+        drawTarget();
     }
-    m_targetPainter->setBrush(Qt::green);
-    m_targetPainter->drawEllipse(QPoint(int(m_multiplier * 2 * l.X() / 1000), int(m_multiplier * -2 * l.Y() / 1000)), d, d); // Draw the new shot (shot x, y coordinates in nanometers)
-    // l.X() / l.Y() are in thousandths of a millimetre (see Lask::setMmX etc.),
-    // the shots are drawn onto the target image with the scale of
-    // m_multiplier * 2 px per millimetre.
+
+    m_seriesShots.append(l);
+    m_shotNumber++;
+    redrawSeriesShots();
+
+    // l.X() / l.Y() are in thousandths of a millimetre (see Lask::setMmX etc.)
     int x = abs(l.X()) * 2 * m_multiplier / 1000; // Distance from the centre in px, made sure it is positive
     int y = abs(l.Y()) * 2 * m_multiplier / 1000;
 #ifdef QT_DEBUG
     qDebug() << "QPoint: " << QPoint(int(m_multiplier * 2 * l.X()), int(m_multiplier * -2 * l.Y())) << "/tx: " << x << ", y: " << y;
 #endif
-    m_previousShot.set(&l);
+    m_previousShot.set(&l);   // Kept for the last shot's value shown in the info box, regardless of the series
 
     if (qMax(x, y) > m_farthestShot) // The target is zoomed according to the furthest shot's bigger coordinate
         m_farthestShot = qMax(x, y);
     zoomAndUpdate();
+}
+
+/**
+ * Redraws every shot of the current series onto the (already cleared) target image, so that only
+ * the current series' shots are ever visible, up to a maximum of one series (10 shots). The most
+ * recently drawn shot is shown in its "latest" colour, all the others in their final colour.
+ */
+void Target::redrawSeriesShots()
+{
+    // Outer radius of the marker, matching one caliber in diameter (shot x, y coordinates are in nanometers,
+    // the shots are drawn onto the target image with the scale of m_multiplier * 2 px per millimetre).
+    const double outerRadius = m_multiplier * m_caliber;
+    const double edgeWidth = qMax(1.0, outerRadius * kShotEdgeWidthRatio);
+    // The coloured fill is one edge width smaller than the caliber, so that, together with the edge
+    // drawn around it, the marker's outer diameter still matches the caliber exactly.
+    const double fillRadius = outerRadius - edgeWidth;
+
+    m_targetPainter->save();
+
+    const int count = m_seriesShots.size();
+    for (int i = 0; i < count; i++) {
+        const Lask &shot = m_seriesShots.at(i);
+        const QPointF pos(m_multiplier * 2 * shot.X() / 1000.0, m_multiplier * -2 * shot.Y() / 1000.0);
+        const bool isLatest = (i == count - 1);
+        // The series' shots are numbered consecutively, ending with the overall shot number
+        const int shotNumber = m_shotNumber - (count - 1 - i);
+        drawShotMarker(pos, fillRadius, edgeWidth,
+                       isLatest ? kLatestShotFillColor : kPreviousShotFillColor,
+                       isLatest ? kLatestShotBorderColor : kPreviousShotBorderColor,
+                       shotNumber);
+    }
+
+    m_targetPainter->restore();
+}
+
+/**
+ * Draws one shot marker: a semi-transparent, filled circle with a darker, more opaque edge around it,
+ * and the shot's number in white at the centre. The edge is drawn just outside the fill, so that the
+ * outer diameter of the whole marker (fill and edge together) is exactly 2 * (fillRadius + edgeWidth).
+ */
+void Target::drawShotMarker(const QPointF &center, double fillRadius, double edgeWidth, const QColor &fillColor, const QColor &borderColor, int shotNumber)
+{
+    QPen borderPen(borderColor);
+    borderPen.setWidthF(edgeWidth);
+    m_targetPainter->setPen(borderPen);
+    m_targetPainter->setBrush(Qt::NoBrush);
+    m_targetPainter->drawEllipse(center, fillRadius + edgeWidth / 2.0, fillRadius + edgeWidth / 2.0);
+
+    m_targetPainter->setPen(Qt::NoPen);
+    m_targetPainter->setBrush(fillColor);
+    m_targetPainter->drawEllipse(center, fillRadius, fillRadius);
+
+    QFont numberFont = m_targetPainter->font();
+    numberFont.setPointSize(qMax(6, qRound(fillRadius)));
+    m_targetPainter->setFont(numberFont);
+    m_targetPainter->setPen(Qt::white);
+    const QRectF numberBox(center.x() - fillRadius, center.y() - fillRadius, fillRadius * 2, fillRadius * 2);
+    m_targetPainter->drawText(numberBox, Qt::AlignCenter, QString::number(shotNumber));
 }
 
 void Target::drawTarget()
@@ -339,6 +411,8 @@ void Target::reset()
     m_farthestShot = m_targetRadius = m_multiplier = 0;
     //    m_zoomLevel = 0;
     m_previousShot.clear();
+    m_seriesShots.clear();
+    m_shotNumber = 0;
 
     //    this->setGeometry(0, 0, this->width(), this->height());
     drawTarget();
