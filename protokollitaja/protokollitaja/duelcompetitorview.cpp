@@ -111,24 +111,50 @@ void DuelCompetitorView::createLayout(Side side, int gunType)
 }
 
 /**
+ * Clears the target of all the shots drawn onto it, so that the next round of shots can be
+ * drawn onto an empty target.
+ */
+void DuelCompetitorView::clearTarget()
+{
+    m_target->reset();
+    m_drawnShots = 0;
+    m_drawnSightingShots = 0;
+}
+
+/**
  * Draws the shots that have been added since the previous update, so that the target does not
  * have to be redrawn every time the view is updated. If shots have been removed or edited,
  * the target is reset and all the shots are drawn again.
+ *
+ * Until the competition begins, the sighting shots are shown, so that the spectators can already
+ * follow the competitors. The target is cleared once the first competition shot arrives, as well
+ * as when a new round of sighting shots begins, for example before the next stage of the event.
  */
 void DuelCompetitorView::drawNewShots()
 {
     const QList<Lask*> firedShots = shots();
+    const QList<Lask> sightingShots = m_competitor->sightingShots();
+    const bool shotsRemoved = firedShots.count() < m_drawnShots || sightingShots.count() < m_drawnSightingShots;
 
-    if(firedShots.count() < m_drawnShots){
-        m_target->reset();
-        m_drawnShots = 0;
+    if(sightingShots.count() > m_drawnSightingShots){   //The competition has not begun yet
+        if(shotsRemoved || m_drawnShots > 0)   //The competition shots of the previous stage are not shown with the new sighting shots
+            clearTarget();
+
+        for(int i = m_drawnSightingShots; i < sightingShots.count(); i++)
+            if(sightingShots[i].X() != -999 && sightingShots[i].Y() != -999)
+                m_target->drawAShot(sightingShots[i]);
+
+        m_drawnSightingShots = sightingShots.count();
+    }else if(shotsRemoved || firedShots.count() > m_drawnShots){
+        if(shotsRemoved || m_drawnSightingShots > 0)   //The sighting shots are wiped off the target once the competition begins
+            clearTarget();
+
+        for(int i = m_drawnShots; i < firedShots.count(); i++)
+            if(firedShots[i]->X() != -999 && firedShots[i]->Y() != -999)   //Manually entered shots have no coordinates
+                m_target->drawAShot(*firedShots[i]);
+
+        m_drawnShots = firedShots.count();
     }
-
-    for(int i = m_drawnShots; i < firedShots.count(); i++)
-        if(firedShots[i]->X() != -999 && firedShots[i]->Y() != -999)   //Manually entered shots have no coordinates
-            m_target->drawAShot(*firedShots[i]);
-
-    m_drawnShots = firedShots.count();
 }
 
 QString DuelCompetitorView::name() const

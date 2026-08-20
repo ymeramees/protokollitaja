@@ -33,7 +33,8 @@ public slots:
     void refresh();
 
 private:
-    int m_drawnShots = 0;   //Number of shots already drawn onto the target
+    int m_drawnShots = 0;   //Number of competition shots already drawn onto the target
+    int m_drawnSightingShots = 0;   //Number of sighting shots already drawn onto the target
     Laskur *m_competitor = nullptr;
     Target *m_target = nullptr;
     QLabel *m_nameLabel = nullptr;
@@ -42,6 +43,7 @@ private:
     QLabel *m_shotLabel = nullptr;
     QLabel *m_targetNoLabel = nullptr;
     QLabel *m_totalLabel = nullptr;
+    void clearTarget();
     void createLayout(Side side, int gunType);
     void drawNewShots();
     QString name() const;

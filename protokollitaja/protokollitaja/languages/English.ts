@@ -576,123 +576,123 @@ It could be a newer version&apos;s file.
 <context>
     <name>Laskur</name>
     <message>
-        <location filename="../laskur.cpp" line="1440"/>
+        <location filename="../laskur.cpp" line="1460"/>
         <source>Series</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1458"/>
+        <location filename="../laskur.cpp" line="1478"/>
         <source>Subtotal</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1416"/>
+        <location filename="../laskur.cpp" line="1436"/>
         <source>Remarks</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1331"/>
+        <location filename="../laskur.cpp" line="1351"/>
         <source>Firing Point</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="126"/>
+        <location filename="../laskur.cpp" line="139"/>
         <source>Error!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="126"/>
+        <location filename="../laskur.cpp" line="139"/>
         <source>There are not so many subtotals!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="207"/>
+        <location filename="../laskur.cpp" line="220"/>
         <source>Info</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="687"/>
+        <location filename="../laskur.cpp" line="700"/>
         <source>Enter new shooter ID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1332"/>
+        <location filename="../laskur.cpp" line="1352"/>
         <source>FP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1338"/>
-        <location filename="../laskur.cpp" line="1347"/>
+        <location filename="../laskur.cpp" line="1358"/>
+        <location filename="../laskur.cpp" line="1367"/>
         <source>Paper target numbers range</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1339"/>
+        <location filename="../laskur.cpp" line="1359"/>
         <source>Start</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1348"/>
+        <location filename="../laskur.cpp" line="1368"/>
         <source>End</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1358"/>
-        <location filename="../laskur.cpp" line="1359"/>
+        <location filename="../laskur.cpp" line="1378"/>
+        <location filename="../laskur.cpp" line="1379"/>
         <source>First Name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1365"/>
-        <location filename="../laskur.cpp" line="1366"/>
+        <location filename="../laskur.cpp" line="1385"/>
+        <location filename="../laskur.cpp" line="1386"/>
         <source>Last Name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1373"/>
-        <location filename="../laskur.cpp" line="1374"/>
+        <location filename="../laskur.cpp" line="1393"/>
+        <location filename="../laskur.cpp" line="1394"/>
         <source>Year of Birth</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1380"/>
-        <location filename="../laskur.cpp" line="1381"/>
+        <location filename="../laskur.cpp" line="1400"/>
+        <location filename="../laskur.cpp" line="1401"/>
         <source>Club</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1389"/>
-        <location filename="../laskur.cpp" line="1404"/>
+        <location filename="../laskur.cpp" line="1409"/>
+        <location filename="../laskur.cpp" line="1424"/>
         <source>Total</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1398"/>
+        <location filename="../laskur.cpp" line="1418"/>
         <source>Finals</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1409"/>
+        <location filename="../laskur.cpp" line="1429"/>
         <source>Number of Inner Tens</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1422"/>
+        <location filename="../laskur.cpp" line="1442"/>
         <source>Shoot-off Shots</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1425"/>
+        <location filename="../laskur.cpp" line="1445"/>
         <source>Shots...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1426"/>
+        <location filename="../laskur.cpp" line="1446"/>
         <source>Open competitor&apos;s shots window</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1429"/>
+        <location filename="../laskur.cpp" line="1449"/>
         <source>View/change competitor&apos;s ID</source>
         <translation></translation>
     </message>
@@ -1660,15 +1660,15 @@ It could be a newer version&apos;s file.
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="613"/>
-        <location filename="../protokollitaja.cpp" line="4815"/>
+        <location filename="../protokollitaja.cpp" line="4816"/>
         <source>Do you want to save the changes?</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="618"/>
-        <location filename="../protokollitaja.cpp" line="3989"/>
-        <location filename="../protokollitaja.cpp" line="3992"/>
-        <location filename="../protokollitaja.cpp" line="4006"/>
+        <location filename="../protokollitaja.cpp" line="3990"/>
+        <location filename="../protokollitaja.cpp" line="3993"/>
+        <location filename="../protokollitaja.cpp" line="4007"/>
         <source>Protokollitaja file (*.kll)</source>
         <translation></translation>
     </message>
@@ -1679,8 +1679,8 @@ It could be a newer version&apos;s file.
         <location filename="../protokollitaja.cpp" line="1752"/>
         <location filename="../protokollitaja.cpp" line="2405"/>
         <location filename="../protokollitaja.cpp" line="2989"/>
-        <location filename="../protokollitaja.cpp" line="3930"/>
-        <location filename="../protokollitaja.cpp" line="3940"/>
+        <location filename="../protokollitaja.cpp" line="3931"/>
+        <location filename="../protokollitaja.cpp" line="3941"/>
         <source>Info</source>
         <translation></translation>
     </message>
@@ -1947,14 +1947,14 @@ address: %1</source>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2112"/>
-        <location filename="../protokollitaja.cpp" line="4371"/>
-        <location filename="../protokollitaja.cpp" line="4440"/>
+        <location filename="../protokollitaja.cpp" line="4372"/>
+        <location filename="../protokollitaja.cpp" line="4441"/>
         <source>Unfortunately this version of Protokollitaja doesn&apos;t support paper target scoring for 3x40 events!</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2152"/>
-        <location filename="../protokollitaja.cpp" line="4472"/>
+        <location filename="../protokollitaja.cpp" line="4473"/>
         <source>Too many series, scoring not possible!</source>
         <translation></translation>
     </message>
@@ -2092,7 +2092,7 @@ Unable to find Protofinaal.exe!</source>
     <message>
         <location filename="../protokollitaja.cpp" line="1955"/>
         <location filename="../protokollitaja.cpp" line="2220"/>
-        <location filename="../protokollitaja.cpp" line="4511"/>
+        <location filename="../protokollitaja.cpp" line="4512"/>
         <source>Warning!</source>
         <translation></translation>
     </message>
@@ -2293,7 +2293,7 @@ Results were not updated. If you want to overwrite the existing results, delete 
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3931"/>
+        <location filename="../protokollitaja.cpp" line="3932"/>
         <source>There is a newer version of the application available. Current: %1
 New version: %2
 
@@ -2303,7 +2303,7 @@ Would you like to open that?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3941"/>
+        <location filename="../protokollitaja.cpp" line="3942"/>
         <source>You have the newest version of the application.
 
 Newest version found: %1</source>
@@ -2352,10 +2352,10 @@ Newest version found: %1</source>
         <location filename="../protokollitaja.cpp" line="3516"/>
         <location filename="../protokollitaja.cpp" line="3523"/>
         <location filename="../protokollitaja.cpp" line="3623"/>
-        <location filename="../protokollitaja.cpp" line="3963"/>
-        <location filename="../protokollitaja.cpp" line="4371"/>
-        <location filename="../protokollitaja.cpp" line="4440"/>
-        <location filename="../protokollitaja.cpp" line="4472"/>
+        <location filename="../protokollitaja.cpp" line="3964"/>
+        <location filename="../protokollitaja.cpp" line="4372"/>
+        <location filename="../protokollitaja.cpp" line="4441"/>
+        <location filename="../protokollitaja.cpp" line="4473"/>
         <source>Error!</source>
         <translation></translation>
     </message>
@@ -2387,97 +2387,97 @@ Newest version found: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3964"/>
+        <location filename="../protokollitaja.cpp" line="3965"/>
         <source>Competition web ID (%1) contains weird symbols and is probably broken!
 
 Do you want to delete it? It doesn&apos;t affect anything else than uploading to web.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3988"/>
-        <location filename="../protokollitaja.cpp" line="3991"/>
-        <location filename="../protokollitaja.cpp" line="4005"/>
+        <location filename="../protokollitaja.cpp" line="3989"/>
+        <location filename="../protokollitaja.cpp" line="3992"/>
+        <location filename="../protokollitaja.cpp" line="4006"/>
         <source>Save As</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4022"/>
+        <location filename="../protokollitaja.cpp" line="4023"/>
         <source>Server stopped</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4035"/>
+        <location filename="../protokollitaja.cpp" line="4036"/>
         <source>It is not possible to send teams to Range Control</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4091"/>
+        <location filename="../protokollitaja.cpp" line="4092"/>
         <source>Cipher already present, would you like to overwrite it?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4230"/>
+        <location filename="../protokollitaja.cpp" line="4231"/>
         <source>%1 new rifle shooter(s) added to the database</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4233"/>
+        <location filename="../protokollitaja.cpp" line="4234"/>
         <source>%1 new pistol shooter(s) added to the database</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4235"/>
+        <location filename="../protokollitaja.cpp" line="4236"/>
         <source>%1 new rifle and %2 pistol shooters added to the database</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4236"/>
+        <location filename="../protokollitaja.cpp" line="4237"/>
         <source>No new shooters were found</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4318"/>
+        <location filename="../protokollitaja.cpp" line="4319"/>
         <source>Username in the database</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4318"/>
+        <location filename="../protokollitaja.cpp" line="4319"/>
         <source>Username:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4320"/>
+        <location filename="../protokollitaja.cpp" line="4321"/>
         <source>Password in the database</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4320"/>
+        <location filename="../protokollitaja.cpp" line="4321"/>
         <source>Password:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4669"/>
+        <location filename="../protokollitaja.cpp" line="4670"/>
         <source>Paper targets for this shooter are already being read in Protokollitaja!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4707"/>
+        <location filename="../protokollitaja.cpp" line="4708"/>
         <source>This event is not supported!
 Number of series is too big.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4765"/>
+        <location filename="../protokollitaja.cpp" line="4766"/>
         <source>This cipher was not found!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4882"/>
+        <location filename="../protokollitaja.cpp" line="4883"/>
         <source>Tab name field empty. Cannot create tab without name.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4886"/>
+        <location filename="../protokollitaja.cpp" line="4887"/>
         <source>Tab screen name empty. Please fill that also</source>
         <translation></translation>
     </message>

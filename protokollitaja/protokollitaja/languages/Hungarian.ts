@@ -630,12 +630,12 @@ Lehet, hogy ez egy újabb programverzióval készült fájl.
 <context>
     <name>Laskur</name>
     <message>
-        <location filename="../laskur.cpp" line="1440"/>
+        <location filename="../laskur.cpp" line="1460"/>
         <source>Series</source>
         <translation>Sorozatok</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1458"/>
+        <location filename="../laskur.cpp" line="1478"/>
         <source>Subtotal</source>
         <translation>Részösszeg</translation>
     </message>
@@ -648,108 +648,108 @@ Lehet, hogy ez egy újabb programverzióval készült fájl.
         <translation type="vanished">Sorszámozás vége</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1416"/>
+        <location filename="../laskur.cpp" line="1436"/>
         <source>Remarks</source>
         <translation>Megjegyzések</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1331"/>
+        <location filename="../laskur.cpp" line="1351"/>
         <source>Firing Point</source>
         <translation>Lőállás</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="126"/>
+        <location filename="../laskur.cpp" line="139"/>
         <source>Error!</source>
         <translation>Hiba!</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="126"/>
+        <location filename="../laskur.cpp" line="139"/>
         <source>There are not so many subtotals!</source>
         <translation>Nincs ennyi részösszeg!</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="207"/>
+        <location filename="../laskur.cpp" line="220"/>
         <source>Info</source>
         <translation>Infó</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="687"/>
+        <location filename="../laskur.cpp" line="700"/>
         <source>Enter new shooter ID</source>
         <translation>Adja meg az új versenyző ID-t</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1332"/>
+        <location filename="../laskur.cpp" line="1352"/>
         <source>FP</source>
         <translation>LÁ</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1338"/>
-        <location filename="../laskur.cpp" line="1347"/>
+        <location filename="../laskur.cpp" line="1358"/>
+        <location filename="../laskur.cpp" line="1367"/>
         <source>Paper target numbers range</source>
         <translation>Lőlap sorszám</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1339"/>
+        <location filename="../laskur.cpp" line="1359"/>
         <source>Start</source>
         <translation>Kezdet</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1348"/>
+        <location filename="../laskur.cpp" line="1368"/>
         <source>End</source>
         <translation>Vége</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1358"/>
-        <location filename="../laskur.cpp" line="1359"/>
+        <location filename="../laskur.cpp" line="1378"/>
+        <location filename="../laskur.cpp" line="1379"/>
         <source>First Name</source>
         <translation>Keresztnév</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1365"/>
-        <location filename="../laskur.cpp" line="1366"/>
+        <location filename="../laskur.cpp" line="1385"/>
+        <location filename="../laskur.cpp" line="1386"/>
         <source>Last Name</source>
         <translation>Vezetéknév</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1373"/>
-        <location filename="../laskur.cpp" line="1374"/>
+        <location filename="../laskur.cpp" line="1393"/>
+        <location filename="../laskur.cpp" line="1394"/>
         <source>Year of Birth</source>
         <translation>Születési év</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1380"/>
-        <location filename="../laskur.cpp" line="1381"/>
+        <location filename="../laskur.cpp" line="1400"/>
+        <location filename="../laskur.cpp" line="1401"/>
         <source>Club</source>
         <translation>Klub</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1389"/>
-        <location filename="../laskur.cpp" line="1404"/>
+        <location filename="../laskur.cpp" line="1409"/>
+        <location filename="../laskur.cpp" line="1424"/>
         <source>Total</source>
         <translation>Összesen</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1398"/>
+        <location filename="../laskur.cpp" line="1418"/>
         <source>Finals</source>
         <translation>Döntő</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1409"/>
+        <location filename="../laskur.cpp" line="1429"/>
         <source>Number of Inner Tens</source>
         <translation>Belső tízesek száma</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1422"/>
+        <location filename="../laskur.cpp" line="1442"/>
         <source>Shoot-off Shots</source>
         <translation>Szétlövés</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1425"/>
+        <location filename="../laskur.cpp" line="1445"/>
         <source>Shots...</source>
         <translation>Lövések...</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1426"/>
+        <location filename="../laskur.cpp" line="1446"/>
         <source>Open competitor&apos;s shots window</source>
         <translation>Versenyző lövéseinek megnyitása</translation>
     </message>
@@ -758,7 +758,7 @@ Lehet, hogy ez egy újabb programverzióval készült fájl.
         <translation type="vanished">ID...</translation>
     </message>
     <message>
-        <location filename="../laskur.cpp" line="1429"/>
+        <location filename="../laskur.cpp" line="1449"/>
         <source>View/change competitor&apos;s ID</source>
         <translation>Versenyző ID megtekintése/módosítása</translation>
     </message>
@@ -1800,15 +1800,15 @@ cím: %1</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="613"/>
-        <location filename="../protokollitaja.cpp" line="4815"/>
+        <location filename="../protokollitaja.cpp" line="4816"/>
         <source>Do you want to save the changes?</source>
         <translation>Szeretné menteni a változtatásokat?</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="618"/>
-        <location filename="../protokollitaja.cpp" line="3989"/>
-        <location filename="../protokollitaja.cpp" line="3992"/>
-        <location filename="../protokollitaja.cpp" line="4006"/>
+        <location filename="../protokollitaja.cpp" line="3990"/>
+        <location filename="../protokollitaja.cpp" line="3993"/>
+        <location filename="../protokollitaja.cpp" line="4007"/>
         <source>Protokollitaja file (*.kll)</source>
         <translation>Protokollitaja fájl (*.kll)</translation>
     </message>
@@ -1819,8 +1819,8 @@ cím: %1</translation>
         <location filename="../protokollitaja.cpp" line="1752"/>
         <location filename="../protokollitaja.cpp" line="2405"/>
         <location filename="../protokollitaja.cpp" line="2989"/>
-        <location filename="../protokollitaja.cpp" line="3930"/>
-        <location filename="../protokollitaja.cpp" line="3940"/>
+        <location filename="../protokollitaja.cpp" line="3931"/>
+        <location filename="../protokollitaja.cpp" line="3941"/>
         <source>Info</source>
         <translation>Infó</translation>
     </message>
@@ -2143,14 +2143,14 @@ cím: %1</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2112"/>
-        <location filename="../protokollitaja.cpp" line="4371"/>
-        <location filename="../protokollitaja.cpp" line="4440"/>
+        <location filename="../protokollitaja.cpp" line="4372"/>
+        <location filename="../protokollitaja.cpp" line="4441"/>
         <source>Unfortunately this version of Protokollitaja doesn&apos;t support paper target scoring for 3x40 events!</source>
         <translation>Sajnos a Protokollitaja ezen verziója nem támogatja a 3x40 standard versenyszám papírlapos értékelését!</translation>
     </message>
     <message>
         <location filename="../protokollitaja.cpp" line="2152"/>
-        <location filename="../protokollitaja.cpp" line="4472"/>
+        <location filename="../protokollitaja.cpp" line="4473"/>
         <source>Too many series, scoring not possible!</source>
         <translation>Túl sok sorozat, az értékelés nem lehetséges!</translation>
     </message>
@@ -2339,7 +2339,7 @@ A Protofinaal.exe fájl nem található!</translation>
     <message>
         <location filename="../protokollitaja.cpp" line="1955"/>
         <location filename="../protokollitaja.cpp" line="2220"/>
-        <location filename="../protokollitaja.cpp" line="4511"/>
+        <location filename="../protokollitaja.cpp" line="4512"/>
         <source>Warning!</source>
         <translation>Figyelmeztetés!</translation>
     </message>
@@ -2554,7 +2554,7 @@ Results were not updated. If you want to overwrite the existing results, delete 
 Az eredmények nem frissültek. Ha felül akarja írni, először törölje az előző sorozatot a Protokollitajából!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3931"/>
+        <location filename="../protokollitaja.cpp" line="3932"/>
         <source>There is a newer version of the application available. Current: %1
 New version: %2
 
@@ -2569,7 +2569,7 @@ Az új verzió elérhető a Drive-on: https://drive.google.com/drive/folders/1Sp
 Szeretné megnyitni a mappát?</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3941"/>
+        <location filename="../protokollitaja.cpp" line="3942"/>
         <source>You have the newest version of the application.
 
 Newest version found: %1</source>
@@ -2620,10 +2620,10 @@ Megtalált legújabb verzió: %1</translation>
         <location filename="../protokollitaja.cpp" line="3516"/>
         <location filename="../protokollitaja.cpp" line="3523"/>
         <location filename="../protokollitaja.cpp" line="3623"/>
-        <location filename="../protokollitaja.cpp" line="3963"/>
-        <location filename="../protokollitaja.cpp" line="4371"/>
-        <location filename="../protokollitaja.cpp" line="4440"/>
-        <location filename="../protokollitaja.cpp" line="4472"/>
+        <location filename="../protokollitaja.cpp" line="3964"/>
+        <location filename="../protokollitaja.cpp" line="4372"/>
+        <location filename="../protokollitaja.cpp" line="4441"/>
+        <location filename="../protokollitaja.cpp" line="4473"/>
         <source>Error!</source>
         <translation>Hiba!</translation>
     </message>
@@ -2655,7 +2655,7 @@ Megtalált legújabb verzió: %1</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3964"/>
+        <location filename="../protokollitaja.cpp" line="3965"/>
         <source>Competition web ID (%1) contains weird symbols and is probably broken!
 
 Do you want to delete it? It doesn&apos;t affect anything else than uploading to web.</source>
@@ -2664,91 +2664,91 @@ Do you want to delete it? It doesn&apos;t affect anything else than uploading to
 Szeretné törölni? Ez semmi mást nem befolyásol, csak a webre való feltöltést.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="3988"/>
-        <location filename="../protokollitaja.cpp" line="3991"/>
-        <location filename="../protokollitaja.cpp" line="4005"/>
+        <location filename="../protokollitaja.cpp" line="3989"/>
+        <location filename="../protokollitaja.cpp" line="3992"/>
+        <location filename="../protokollitaja.cpp" line="4006"/>
         <source>Save As</source>
         <translation>Mentés másként</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4022"/>
+        <location filename="../protokollitaja.cpp" line="4023"/>
         <source>Server stopped</source>
         <translation>Szerver leállítva</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4035"/>
+        <location filename="../protokollitaja.cpp" line="4036"/>
         <source>It is not possible to send teams to Range Control</source>
         <translation>Csapatok küldése Range Controlba nem lehetséges</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4091"/>
+        <location filename="../protokollitaja.cpp" line="4092"/>
         <source>Cipher already present, would you like to overwrite it?</source>
         <translation>A sorszám már létezik, szeretné felülírni?</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4230"/>
+        <location filename="../protokollitaja.cpp" line="4231"/>
         <source>%1 new rifle shooter(s) added to the database</source>
         <translation>%1 új puskás versenyző hozzáadva az adatbázishoz</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4233"/>
+        <location filename="../protokollitaja.cpp" line="4234"/>
         <source>%1 new pistol shooter(s) added to the database</source>
         <translation>%1 új pisztolyos versenyző hozzáadva az adatbázishoz</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4235"/>
+        <location filename="../protokollitaja.cpp" line="4236"/>
         <source>%1 new rifle and %2 pistol shooters added to the database</source>
         <translation>%1 új puskás és %2 új pisztolyos versenyző hozzáadva az adatbázishoz</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4236"/>
+        <location filename="../protokollitaja.cpp" line="4237"/>
         <source>No new shooters were found</source>
         <translation>Nem található új versenyző</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4318"/>
+        <location filename="../protokollitaja.cpp" line="4319"/>
         <source>Username in the database</source>
         <translation>Felhasználónév az adatbázisban</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4318"/>
+        <location filename="../protokollitaja.cpp" line="4319"/>
         <source>Username:</source>
         <translation>Felhasználónév:</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4320"/>
+        <location filename="../protokollitaja.cpp" line="4321"/>
         <source>Password in the database</source>
         <translation>Jelszó az adatbázisban</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4320"/>
+        <location filename="../protokollitaja.cpp" line="4321"/>
         <source>Password:</source>
         <translation>Jelszó:</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4669"/>
+        <location filename="../protokollitaja.cpp" line="4670"/>
         <source>Paper targets for this shooter are already being read in Protokollitaja!</source>
         <translation>Ennek a versenyzőnek már folyamatban van a lőlapjainak értékelése a Protokollitajában!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4707"/>
+        <location filename="../protokollitaja.cpp" line="4708"/>
         <source>This event is not supported!
 Number of series is too big.</source>
         <translation>Ez a versenyszám nem támogatott!
 A sorozatok száma túl nagy.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4765"/>
+        <location filename="../protokollitaja.cpp" line="4766"/>
         <source>This cipher was not found!</source>
         <translation>Ilyen sorszám nem található!</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4882"/>
+        <location filename="../protokollitaja.cpp" line="4883"/>
         <source>Tab name field empty. Cannot create tab without name.</source>
         <translation>A fül neve mező üres. Név nélkül nem lehet új fület létrehozni.</translation>
     </message>
     <message>
-        <location filename="../protokollitaja.cpp" line="4886"/>
+        <location filename="../protokollitaja.cpp" line="4887"/>
         <source>Tab screen name empty. Please fill that also</source>
         <translation>Az eredményjelző ablakban megjelenő táblázat címe üres. Kérjük, töltse ki ezt is</translation>
     </message>

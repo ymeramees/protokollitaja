@@ -23,6 +23,7 @@ private slots:
     void test_readSiusShotRepeatedShotDataInFirstStage();
     void test_readSiusShotRepeatedShotDataInSecondStage();
     void test_readSiusShotSecondStageCompetitionShots();
+    void test_readSiusShotSightingShots();
     void test_seriesMissingShots();
     void test_tieBreakingFullRings();
     void test_tieBreakingFullRingsEqualShots();
@@ -274,6 +275,50 @@ void CompetitorTest::test_readSiusShotSecondStageCompetitionShots()
 
     QCOMPARE(competitor.lasud[0][1]->getSLask(), "");
     QCOMPARE(competitor.lasud[4][1]->getSLask(), "10,6");
+}
+
+/**
+ * The sighting shots are not saved with the results, but they are kept for the target views until
+ * the competition begins. Once the first competition shot arrives, the sighting shots of that
+ * round are forgotten.
+ */
+void CompetitorTest::test_readSiusShotSightingShots()
+{
+    QualificationEvents::EventType eventType = QualificationEvents::Rifle3x40_50m;
+    bool writeAssistant = false;
+    bool withDecimals = false;
+    int sorting = 0;
+
+    Laskur competitor(nullptr, 12, 4, 0, &writeAssistant, &withDecimals, 13, &sorting, &eventType, 10, nullptr);
+
+    Lask firstSighter("_SHOT;17;18;13;60;28;09:52:56.30;3;1;32;10;101;0;1;0.00396;-0.00583;900;0;0;655.35;387137447;64;559;0");
+    firstSighter.setCompetitionShot(false);
+    Lask secondSighter("_SHOT;17;18;13;60;29;09:53:26.30;3;1;32;9;98;0;2;0.00512;-0.00341;900;0;0;655.35;387137447;64;559;0");
+    secondSighter.setCompetitionShot(false);
+
+    QCOMPARE(competitor.sightingShots().count(), 0);
+
+    QCOMPARE(competitor.readSiusShot(SiusShotData(13, 0, 1, firstSighter)), true);
+    QCOMPARE(competitor.readSiusShot(SiusShotData(13, 0, 2, secondSighter)), true);
+
+    QCOMPARE(competitor.sightingShots().count(), 2);
+    QCOMPARE(competitor.sightingShots().first().getSLask(), "10,1");
+    QCOMPARE(competitor.lasud[0][0]->getSLask(), "");   // The sighting shots are not saved with the results
+
+    // The same shot may arrive again, for example after reconnecting to Sius
+    QCOMPARE(competitor.readSiusShot(SiusShotData(13, 0, 2, secondSighter)), true);
+    QCOMPARE(competitor.sightingShots().count(), 2);
+
+    // The first competition shot ends the sighting shots' round
+    SiusShotData competitionShot(13, 0, 1, Lask("_SHOT;17;18;13;60;31;10:02:56.30;3;1;0;10;106;0;1;0.00128;-0.00261;900;0;0;655.35;387153707;64;559;0"));
+    QCOMPARE(competitor.readSiusShot(competitionShot), true);
+
+    QCOMPARE(competitor.lasud[0][0]->getSLask(), "10,6");
+    QCOMPARE(competitor.sightingShots().count(), 0);
+
+    // The sighting shots of the next stage are kept again
+    QCOMPARE(competitor.readSiusShot(SiusShotData(13, 0, 1, firstSighter)), true);
+    QCOMPARE(competitor.sightingShots().count(), 1);
 }
 
 void CompetitorTest::test_seriesMissingShots()

@@ -54,7 +54,7 @@ public slots:
     QStringList targetTypes();
     int gunType();
     void init(int valik);
-    void drawAShot(Lask & l);    // Coordinates in millimeters
+    void drawAShot(const Lask & l);    // Coordinates in millimeters
     void drawTarget();
     void reset();
     void setActive(bool a);
@@ -68,6 +68,7 @@ public slots:
     void zoomAndUpdate();
 
 private:
+    void drawRingNumber(int distance, const QString &number);
     void drawShotMarker(const QPointF &center, double fillRadius, double edgeWidth, const QColor &fillColor, const QColor &borderColor, int shotNumber);
     void redrawSeriesShots();
 };

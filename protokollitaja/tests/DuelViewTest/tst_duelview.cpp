@@ -18,6 +18,7 @@ public:
 private slots:
     void test_gunTypes();
     void test_shotValues();
+    void test_sightingShotsAreShownUntilTheCompetitionBegins();
     void test_targetViewsAreCreatedForEveryCompetitor();
     void test_targetViewsAreKeptForTheSameMatch();
     void test_targetsAreZoomedAccordingToTheFurthestShot();
@@ -84,6 +85,41 @@ void DuelViewTest::test_shotValues()
 
     QCOMPARE(DuelCompetitorView::shotValue(&emptyShot, false), QString(""));
     QCOMPARE(DuelCompetitorView::shotValue(nullptr, true), QString(""));
+}
+
+/**
+ * The sighting shots are shown on the targets as well, so that the spectators can already follow
+ * the competitors. The target is cleared once the first competition shot arrives, which can be
+ * seen from the zoom level: only the competition shots are taken into account after that.
+ */
+void DuelViewTest::test_sightingShotsAreShownUntilTheCompetitionBegins()
+{
+    const int wholeTarget = 856;   // Width of the whole air rifle target with its margins, in the target image's px
+    const int zoomedTo10mm = 576;   // (10 mm * 16 px + 2 * 32 px) * 2 + 32 px * 4
+    const int zoomedTo2mm = 320;   // (2 mm * 16 px + 2 * 32 px) * 2 + 32 px * 4
+
+    Andmebaas dataBase;
+    LiikmeteValikKast membersBox;
+    bool writeAssistant = false;
+    int sorting = 0;
+
+    Leht *sheet = createDuelSheet(&dataBase, &membersBox, &writeAssistant, &sorting, 1);
+    Laskur *competitor = sheet->duelPairs[0]->left();
+
+    DuelView view;
+    view.showMatch(sheet->duelPairs, TargetTypes::AirRifle);
+    QList<Target*> targets = view.findChildren<Target*>();
+    QCOMPARE(targets[0]->zoomedWidth(), wholeTarget);   // Without shots the whole target is shown
+
+    competitor->addSightingShot(Lask(100, 10000, 0, false, QTime(10, 0, 0), false));   // 10,0 at 10 mm
+    view.showMatch(sheet->duelPairs, TargetTypes::AirRifle);
+    QCOMPARE(targets[0]->zoomedWidth(), zoomedTo10mm);   // The sighting shots are drawn onto the target
+
+    shootFirstSeries(competitor, QList<QPointF>() << QPointF(2.0, 0.0));
+    view.showMatch(sheet->duelPairs, TargetTypes::AirRifle);
+    QCOMPARE(targets[0]->zoomedWidth(), zoomedTo2mm);   // The sighting shots have been wiped off the target
+
+    delete sheet;
 }
 
 void DuelViewTest::test_targetViewsAreCreatedForEveryCompetitor()

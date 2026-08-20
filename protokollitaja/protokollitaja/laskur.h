@@ -109,6 +109,7 @@ public:
 
 
 public slots:
+    void addSightingShot(const Lask &shot);
     int competitionStage() const;
     void deleteAllShots(); // For testing purposes
     bool isFinished() const;
@@ -119,6 +120,7 @@ public slots:
     void resetCompetitionStage();
     void setPreviousSiusRow(QString row);
     void setSiusConnectionIndex(int newIndex);
+    QList<Lask> sightingShots() const;
     int siusConnectionIndex() const;
     void siusiReset(int siusConnectionIndex);   //Siusist lugemise progressi nullimine
 
@@ -153,6 +155,7 @@ private:
     QAction *laskudeAkenAct;
     QLineEdit *summa;
     QMenu *popup;
+    QList<Lask> m_sightingShots;    //Sighting shots received since the last competition shot, only shown on the target views
     QualificationEvents::EventType *m_eventType;
     QString m_previousSiusRow;
     LaskudeAken *laskudeAken = nullptr;

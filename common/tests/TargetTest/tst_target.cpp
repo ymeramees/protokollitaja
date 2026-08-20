@@ -3,8 +3,9 @@
 #include "target.h"
 
 /**
- * Tests of the target's automatic zooming: the shown area of the target has to be zoomed
- * according to the furthest shot, so that the furthest shot is still fully visible.
+ * Tests of the target's picture: the automatic zooming, where the shown area of the target has to
+ * be zoomed according to the furthest shot, so that the furthest shot is still fully visible,
+ * as well as the scoring rings' numbers drawn onto the target.
  */
 class TargetTest : public QObject
 {
@@ -15,6 +16,8 @@ public:
     ~TargetTest();
 
 private slots:
+    void test_ringNumbersAreDrawnInFourDirections();
+    void test_ringNumbersAreDrawnInFourDirections_data();
     void test_wholeTargetIsShownWithoutShots();
     void test_zoomingAccordingToTheFurthestShot();
     void test_zoomingAccordingToTheFurthestShot_data();
@@ -50,6 +53,70 @@ Lask shotAt(const float mmX, const float mmY, const int shotValue = 100)
     return shot;
 }
 
+/**
+ * Tells if there is any dark ink in a small box around the given point of the target's picture.
+ * Used for finding the scoring rings' numbers, which are drawn in black onto the white area
+ * of the target. The box is small enough to fit between the ring lines.
+ */
+bool hasDarkInk(const QImage &picture, const QPoint &center, const int halfBox = 12)
+{
+    for(int x = center.x() - halfBox; x <= center.x() + halfBox; x++)
+        for(int y = center.y() - halfBox; y <= center.y() + halfBox; y++)
+            if(picture.valid(x, y) && picture.pixelColor(x, y).lightness() < 100)
+                return true;
+
+    return false;
+}
+
+/**
+ * The target's picture as it is shown, in the target image's own scale: the widget is resized to
+ * the width of the shown area, so that the picture is not scaled at all and the distances can
+ * be checked in the target image's px. Returns the centre point of the target as well.
+ */
+QImage shownPicture(Target &target, QPoint &centerOfTarget)
+{
+    const int shownWidth = target.zoomedWidth();
+    target.resize(shownWidth, shownWidth);
+    target.setInfoBoxesVisible(false);   // Redraws the picture in the new size, without the info boxes
+
+    centerOfTarget = QPoint(shownWidth / 2, shownWidth / 2);
+
+    return target.pixmap().toImage();
+}
+
+}
+
+/**
+ * Every scoring ring's number has to be drawn at all the four cardinal positions of the ring, both
+ * horizontally and vertically, the same way as on a real target sheet.
+ */
+void TargetTest::test_ringNumbersAreDrawnInFourDirections_data()
+{
+    QTest::addColumn<int>("gunType");
+    QTest::addColumn<int>("distance");
+
+    // The distances are the middles of the rings' bands, in the target image's px
+    QTest::newRow("air rifle, 2") << 0 << 304;
+    QTest::newRow("air rifle, 1") << 0 << 344;
+    QTest::newRow("air pistol, 2") << 1 << 526;
+    QTest::newRow("air pistol, 1") << 1 << 590;
+    QTest::newRow("50 m rifle, 1") << 2 << 583;   // (blackRings[1] + blackRings[2]) / 2
+}
+
+void TargetTest::test_ringNumbersAreDrawnInFourDirections()
+{
+    QFETCH(int, gunType);
+    QFETCH(int, distance);
+
+    Target target(gunType, "", "", nullptr);
+    QPoint center;
+    const QImage picture = shownPicture(target, center);
+
+    QCOMPARE(picture.width(), target.zoomedWidth());   // The picture has to be in the target image's own scale
+    QVERIFY(hasDarkInk(picture, center + QPoint(distance, 0)));   // Right
+    QVERIFY(hasDarkInk(picture, center + QPoint(-distance, 0)));   // Left
+    QVERIFY(hasDarkInk(picture, center + QPoint(0, distance)));   // Below
+    QVERIFY(hasDarkInk(picture, center + QPoint(0, -distance)));   // Above
 }
 
 void TargetTest::test_wholeTargetIsShownWithoutShots()

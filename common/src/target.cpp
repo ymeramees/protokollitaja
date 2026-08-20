@@ -15,6 +15,10 @@ const QColor kPreviousShotBorderColor(0x00, 0x64, 0x00, 200); // Dark green, ~78
 // the target is cleared and the next series starts fresh, same as on a real target.
 const int kShotsPerSeries = 10;
 
+// Size of the box a scoring ring's number is centred in, in the target image's px. Big enough
+// for the biggest font used for the ring numbers.
+const int kRingNumberBoxSize = 40;
+
 }
 
 // old
@@ -104,7 +108,7 @@ void Target::init(int valik)
     reset();
 }
 
-void Target::drawAShot(Lask& l)
+void Target::drawAShot(const Lask& l)
 {
     if (m_seriesShots.size() >= kShotsPerSeries) {
         // The current series is already full: clear the target for the next series of shots,
@@ -161,6 +165,22 @@ void Target::redrawSeriesShots()
     }
 
     m_targetPainter->restore();
+}
+
+/**
+ * Draws one scoring ring's number at all the four cardinal positions of the ring: to the left and
+ * to the right of the centre, as well as above and below it, the same way as on a real target
+ * sheet. The distance is the number's distance from the centre, in the target image's px,
+ * and should be the middle of the ring's band, so that the number fits inside it.
+ */
+void Target::drawRingNumber(int distance, const QString &number)
+{
+    const int offset = kRingNumberBoxSize / 2;   // The number is centred in its box
+
+    m_targetPainter->drawText(distance - offset, -offset, kRingNumberBoxSize, kRingNumberBoxSize, Qt::AlignCenter, number);
+    m_targetPainter->drawText(-distance - offset, -offset, kRingNumberBoxSize, kRingNumberBoxSize, Qt::AlignCenter, number);
+    m_targetPainter->drawText(-offset, distance - offset, kRingNumberBoxSize, kRingNumberBoxSize, Qt::AlignCenter, number);
+    m_targetPainter->drawText(-offset, -distance - offset, kRingNumberBoxSize, kRingNumberBoxSize, Qt::AlignCenter, number);
 }
 
 /**
@@ -225,27 +245,19 @@ void Target::drawTarget()
         m_targetPainter->drawEllipse(QPoint(0, 0), 84, 84);
         m_targetPainter->drawEllipse(QPoint(0, 0), 44, 44);
         m_targetPainter->drawEllipse(QPoint(0, 0), 4, 4);
-        m_targetPainter->drawText(64 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "8");
-        m_targetPainter->drawText(-64 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "8");
-        m_targetPainter->drawText(104 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "7");
-        m_targetPainter->drawText(-104 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "7");
-        m_targetPainter->drawText(144 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "6");
-        m_targetPainter->drawText(-144 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "6");
-        m_targetPainter->drawText(184 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "5");
-        m_targetPainter->drawText(-184 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "5");
-        m_targetPainter->drawText(224 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "4");
-        m_targetPainter->drawText(-224 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "4");
+        drawRingNumber(64, "8");   // The numbers on the black area are drawn in white
+        drawRingNumber(104, "7");
+        drawRingNumber(144, "6");
+        drawRingNumber(184, "5");
+        drawRingNumber(224, "4");
 
         if (m_active)
             m_targetPainter->setPen(Qt::black);
         else
             m_targetPainter->setPen(Qt::gray);
-        m_targetPainter->drawText(264 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "3");
-        m_targetPainter->drawText(-264 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "3");
-        m_targetPainter->drawText(304 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "2");
-        m_targetPainter->drawText(-304 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "2");
-        m_targetPainter->drawText(344 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "1");
-        m_targetPainter->drawText(-344 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "1");
+        drawRingNumber(264, "3");   // The rest of the numbers are on the white background
+        drawRingNumber(304, "2");
+        drawRingNumber(344, "1");
     } else if (m_gunType == 2) { // 50m rifle target
         float fBlackRings[] = { 122.4f, 138.4f, 154.4f }; // black rings on white background, in mm's
         int blackRings[(sizeof(fBlackRings) / sizeof(*fBlackRings))];
@@ -300,27 +312,19 @@ void Target::drawTarget()
         m_targetPainter->drawEllipse(QPoint(0, 0), whiteRings[0], whiteRings[0]); // 10
         m_targetPainter->drawEllipse(QPoint(0, 0), innerTen, innerTen);
 
-        m_targetPainter->drawText((whiteRings[1] + whiteRings[2]) / 2 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "8");
-        m_targetPainter->drawText((whiteRings[1] + whiteRings[2]) / -2 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "8");
-        m_targetPainter->drawText((whiteRings[2] + whiteRings[3]) / 2 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "7");
-        m_targetPainter->drawText((whiteRings[2] + whiteRings[3]) / -2 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "7");
-        m_targetPainter->drawText((whiteRings[3] + whiteRings[4]) / 2 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "6");
-        m_targetPainter->drawText((whiteRings[3] + whiteRings[4]) / -2 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "6");
-        m_targetPainter->drawText((whiteRings[4] + whiteRings[5]) / 2 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "5");
-        m_targetPainter->drawText((whiteRings[4] + whiteRings[5]) / -2 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "5");
-        m_targetPainter->drawText((whiteRings[5] + whiteRings[6]) / 2 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "4");
-        m_targetPainter->drawText((whiteRings[5] + whiteRings[6]) / -2 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "4");
+        drawRingNumber((whiteRings[1] + whiteRings[2]) / 2, "8");   // The numbers on the black area are drawn in white
+        drawRingNumber((whiteRings[2] + whiteRings[3]) / 2, "7");
+        drawRingNumber((whiteRings[3] + whiteRings[4]) / 2, "6");
+        drawRingNumber((whiteRings[4] + whiteRings[5]) / 2, "5");
+        drawRingNumber((whiteRings[5] + whiteRings[6]) / 2, "4");
 
         if (m_active)
             m_targetPainter->setPen(Qt::black);
         else
             m_targetPainter->setPen(Qt::gray);
-        m_targetPainter->drawText((blackArea + blackRings[0]) / 2 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "3");
-        m_targetPainter->drawText((blackArea + blackRings[0]) / -2 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "3");
-        m_targetPainter->drawText((blackRings[0] + blackRings[1]) / 2 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "2");
-        m_targetPainter->drawText((blackRings[0] + blackRings[1]) / -2 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "2");
-        m_targetPainter->drawText((blackRings[1] + blackRings[2]) / 2 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "1");
-        m_targetPainter->drawText((blackRings[1] + blackRings[2]) / -2 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "1");
+        drawRingNumber((blackArea + blackRings[0]) / 2, "3");   // The rest of the numbers are on the white background
+        drawRingNumber((blackRings[0] + blackRings[1]) / 2, "2");
+        drawRingNumber((blackRings[1] + blackRings[2]) / 2, "1");
     } else { // Air Pistol
         m_multiplier = 4;
         m_caliber = 4.5;
@@ -356,42 +360,18 @@ void Target::drawTarget()
         m_targetPainter->drawEllipse(QPoint(0, 0), 110, 110);
         m_targetPainter->drawEllipse(QPoint(0, 0), 46, 46);
         m_targetPainter->drawEllipse(QPoint(0, 0), 20, 20);
-        //        painter->drawText(-146, 5, "8");
-        m_targetPainter->drawText(142 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "8");
-        m_targetPainter->drawText(-142 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "8");
-        //        painter->drawText(136, 5, "8");
-        m_targetPainter->drawText(206 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "7");
-        m_targetPainter->drawText(-206 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "7");
-        //        painter->drawText(-210, 5, "7");
-        //        painter->drawText(200, 5, "7");
+        drawRingNumber(142, "8");   // The numbers on the black area are drawn in white
+        drawRingNumber(206, "7");
         if (m_active)
             m_targetPainter->setPen(Qt::black);
         else
             m_targetPainter->setPen(Qt::gray);
-        m_targetPainter->drawText(270 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "6");
-        m_targetPainter->drawText(-270 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "6");
-        //        painter->drawText(-274, 5, "6");
-        //        painter->drawText(264, 5, "6");
-        m_targetPainter->drawText(334 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "5");
-        m_targetPainter->drawText(-334 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "5");
-        //        painter->drawText(-338, 5, "5");
-        //        painter->drawText(328, 5, "5");
-        m_targetPainter->drawText(398 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "4");
-        m_targetPainter->drawText(-398 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "4");
-        //        painter->drawText(-402, 5, "4");
-        //        painter->drawText(392, 5, "4");
-        m_targetPainter->drawText(462 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "3");
-        m_targetPainter->drawText(-462 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "3");
-        //        painter->drawText(-466, 5, "3");
-        //        painter->drawText(456, 5, "3");
-        m_targetPainter->drawText(526 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "2");
-        m_targetPainter->drawText(-526 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "2");
-        //        painter->drawText(-530, 5, "2");
-        //        painter->drawText(520, 5, "2");
-        m_targetPainter->drawText(590 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "1");
-        m_targetPainter->drawText(-590 - 20, -20, 40, 40, Qt::AlignCenter | Qt::AlignVCenter, "1");
-        //        painter->drawText(-594, 5, "1");
-        //        painter->drawText(584, 5, "1");
+        drawRingNumber(270, "6");   // The rest of the numbers are on the white background
+        drawRingNumber(334, "5");
+        drawRingNumber(398, "4");
+        drawRingNumber(462, "3");
+        drawRingNumber(526, "2");
+        drawRingNumber(590, "1");
     }
     zoomAndUpdate();
     //    this->setPixmap(QPixmap::fromImage(*pilt));

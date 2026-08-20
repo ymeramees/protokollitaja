@@ -3850,21 +3850,22 @@ void Protokollitaja::readSiusInfo(SiusShotData shotData)
 
     Laskur* thisCompetitor = nullptr;
     Leht* sheet = nullptr;
-        if(shotData.shot.isCompetitionShot()) // TODO: process and save also sighting shots
-            for(int i = 0; i < tabWidget->count(); i++){
-                sheet = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
-                for(int j = 0; j < sheet->laskurid.count(); j++){
-                    if(shotData.id == sheet->laskurid[j]->id && (shotData.socketIndex == sheet->laskurid[j]->siusConnectionIndex() || sheet->laskurid[j]->siusConnectionIndex() == -1)){ //To avoid different Sius connections reading into one competitor
-                        thisCompetitor = sheet->laskurid[j];
-                        thisCompetitor->readSiusShot(shotData);
-                        logiValja << "#thisCompetitor: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << "\n";
-                        j = sheet->laskurid.count(); //To break out from all loops
-                        i = tabWidget->count(); //To break out from all loops
+    // Both competition and sighting shots are read; the sighting shots are only shown on the
+    // target views, they are not saved with the results
+    for(int i = 0; i < tabWidget->count(); i++){
+        sheet = dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(i))->widget());
+        for(int j = 0; j < sheet->laskurid.count(); j++){
+            if(shotData.id == sheet->laskurid[j]->id && (shotData.socketIndex == sheet->laskurid[j]->siusConnectionIndex() || sheet->laskurid[j]->siusConnectionIndex() == -1)){ //To avoid different Sius connections reading into one competitor
+                thisCompetitor = sheet->laskurid[j];
+                thisCompetitor->readSiusShot(shotData);
+                logiValja << "#thisCompetitor: " << thisCompetitor->id << " " << thisCompetitor->eesNimi->text() << " " << thisCompetitor->perekNimi->text() << "\n";
+                j = sheet->laskurid.count(); //To break out from all loops
+                i = tabWidget->count(); //To break out from all loops
 
-                        break;
-                    }
-                }
+                break;
             }
+        }
+    }
 }
 
 void Protokollitaja::reasta()   //Tulemuste järgi reastamine

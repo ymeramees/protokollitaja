@@ -95,6 +95,19 @@ Laskur::Laskur(
     liida();
 }
 
+/**
+ * Adds a sighting shot, which is only shown on the target views and never saved with the results.
+ * The sighting shots of the previous round are cleared when the competition shots begin, so the
+ * list always contains only the sighting shots of the current round.
+ */
+void Laskur::addSightingShot(const Lask &shot)
+{
+    if(!m_sightingShots.isEmpty() && m_sightingShots.last().equals(shot))
+        return;   //The same shot has already been received, for example after reconnecting to Sius
+
+    m_sightingShots.append(shot);
+}
+
 int Laskur::competitionStage() const
 {
     return m_competitionStage;
@@ -1109,6 +1122,13 @@ bool Laskur::readSiusShot(SiusShotData shotData)
         if(siusConnectionIndex() == -1)
             setSiusConnectionIndex(shotData.socketIndex);
 
+        if(!shotData.shot.isCompetitionShot()){   // Sighting shots are only shown on the target views, they are not saved with the results
+            addSightingShot(shotData.shot);
+            return true;
+        }
+
+        m_sightingShots.clear();   // The competition has begun, so the sighting shots are not shown any more
+
         int vSummadeSamm = this->vSummadeSamm;    // shadow the original value due to Sius shots numbering in standard pistol
         if (*m_eventType == QualificationEvents::EventType::StandardPistol) {
             vSummadeSamm = 0;   // Override the value here for standard pistol due to Sius shots numbering
@@ -1475,6 +1495,15 @@ int Laskur::findShotFromPreviousStages(const SiusShotData shotData) const
         }
     }
     return -1;
+}
+
+/**
+ * The sighting shots received since the last competition shot. They are only shown on the target
+ * views, so they are not saved with the results.
+ */
+QList<Lask> Laskur::sightingShots() const
+{
+    return m_sightingShots;
 }
 
 int Laskur::siusConnectionIndex() const
