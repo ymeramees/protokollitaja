@@ -15,7 +15,8 @@
  *
  * The target picture itself is the same Target widget that Protofinaal's spectator view uses.
  * As all the information is shown around the target, the target's own information boxes
- * are turned off.
+ * are turned off. The target's sighter mark is used, however, so that the spectators can
+ * tell the sighting shots from the competition shots.
  */
 class DuelCompetitorView : public QFrame
 {
@@ -28,6 +29,7 @@ public:
     Laskur* competitor() const;
     void setPoints(const std::optional<int> points);
     static QString shotValue(const Lask *shot, const bool withDecimals);
+    bool showsSighterMark() const;
 
 public slots:
     void refresh();
@@ -48,6 +50,7 @@ private:
     void drawNewShots();
     QString name() const;
     QList<Lask*> shots() const;
+    void updateSighterMark();
     bool withDecimals() const;
 };
 

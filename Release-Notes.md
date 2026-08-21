@@ -2,7 +2,8 @@
 
 ### 0.9.4
 
-- Show targets and shots in Protofinaal
+- Add duel matches (for Bundesliga)
+- Show targets and shots in Protofinaal and in duel matches
 - Use English as a base language instead of Estonian
 
 ### 0.9.3

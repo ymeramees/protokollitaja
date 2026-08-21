@@ -197,6 +197,7 @@ void DuelCompetitorView::refresh()
     m_shotLabel->setText(shotInfo);
 
     drawNewShots();
+    updateSighterMark();
 }
 
 /**
@@ -242,6 +243,25 @@ void DuelCompetitorView::setPoints(const std::optional<int> points)
         m_pointsLabel->setText("");
 
     m_pointsLabel->setStyleSheet(points.value_or(0) > 0 ? wonPointsStyle : pointsStyle);
+}
+
+/**
+ * If the sighter mark is currently shown in the corner of the target, telling the spectators that
+ * the shots they see do not count yet.
+ */
+bool DuelCompetitorView::showsSighterMark() const
+{
+    return m_target->sighterMarkVisible();
+}
+
+/**
+ * Adds the sighter mark onto the target or removes it, according to the shots currently drawn onto
+ * it: the mark is shown as long as there are no competition shots on the target, so either
+ * the competitor has not shot at all yet or the shots drawn are sighting shots.
+ */
+void DuelCompetitorView::updateSighterMark()
+{
+    m_target->setSighterMarkVisible(m_drawnShots == 0);
 }
 
 /**

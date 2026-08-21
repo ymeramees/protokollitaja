@@ -18,6 +18,7 @@ public:
 private slots:
     void test_gunTypes();
     void test_shotValues();
+    void test_sighterMarkIsShownUntilTheCompetitionBegins();
     void test_sightingShotsAreShownUntilTheCompetitionBegins();
     void test_targetViewsAreCreatedForEveryCompetitor();
     void test_targetViewsAreKeptForTheSameMatch();
@@ -85,6 +86,39 @@ void DuelViewTest::test_shotValues()
 
     QCOMPARE(DuelCompetitorView::shotValue(&emptyShot, false), QString(""));
     QCOMPARE(DuelCompetitorView::shotValue(nullptr, true), QString(""));
+}
+
+/**
+ * As the sighting shots are shown on the targets as well, the sighter mark tells the spectators
+ * that the shots they see do not count yet. It is shown until the first competition shot of
+ * the competitor arrives, no matter if there are any sighting shots on the target or not.
+ */
+void DuelViewTest::test_sighterMarkIsShownUntilTheCompetitionBegins()
+{
+    Andmebaas dataBase;
+    LiikmeteValikKast membersBox;
+    bool writeAssistant = false;
+    int sorting = 0;
+
+    Leht *sheet = createDuelSheet(&dataBase, &membersBox, &writeAssistant, &sorting, 1);
+    Laskur *competitor = sheet->duelPairs[0]->left();
+
+    DuelView view;
+    view.showMatch(sheet->duelPairs, TargetTypes::AirRifle);
+    QList<DuelCompetitorView*> competitorViews = view.findChildren<DuelCompetitorView*>();
+    QCOMPARE(competitorViews.count(), 2);
+    QVERIFY(competitorViews[0]->showsSighterMark());   // Without any shots the sighting shots are still to come
+
+    competitor->addSightingShot(Lask(100, 10000, 0, false, QTime(10, 0, 0), false));
+    view.showMatch(sheet->duelPairs, TargetTypes::AirRifle);
+    QVERIFY(competitorViews[0]->showsSighterMark());   // The shots on the target are sighting shots
+
+    shootFirstSeries(competitor, QList<QPointF>() << QPointF(2.0, 0.0));
+    view.showMatch(sheet->duelPairs, TargetTypes::AirRifle);
+    QVERIFY(!competitorViews[0]->showsSighterMark());   // The competition shots count, so the mark is removed
+    QVERIFY(competitorViews[1]->showsSighterMark());   // The other competitor has not begun yet
+
+    delete sheet;
 }
 
 /**

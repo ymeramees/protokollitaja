@@ -25,6 +25,7 @@ private:
 //    int m_zoomLevel;
     bool m_active;  // Shows if the competitor is dropped out in finals or not
     bool m_infoBoxesVisible;    // Will the name, target no, shot and result boxes be drawn onto the target or not
+    bool m_sighterMarkVisible;    // Will the sighter mark be drawn into the upper left corner of the target or not
     bool m_zoomEnabled;    // Will the target automatically zoom or not
     QImage *m_targetImage = nullptr;
     Lask m_previousShot;
@@ -48,6 +49,7 @@ signals:
 
 public slots:
     bool infoBoxesVisible();
+    bool sighterMarkVisible();
     bool zoomEnabled();
     QString name();
     QString targetNo();
@@ -59,6 +61,7 @@ public slots:
     void reset();
     void setActive(bool a);
     void setInfoBoxesVisible(bool newInfoBoxesVisible);
+    void setSighterMarkVisible(bool newSighterMarkVisible);
     void setZoomEnabled(bool newZoomEnabled);
     void setName(QString n);
     void setTargetNo(QString r);
@@ -70,6 +73,8 @@ public slots:
 private:
     void drawRingNumber(int distance, const QString &number);
     void drawShotMarker(const QPointF &center, double fillRadius, double edgeWidth, const QColor &fillColor, const QColor &borderColor, int shotNumber);
+    void drawSighterMark(QImage &picture);
+    static bool isDarkCorner(const QImage &picture, const double markSize);
     void redrawSeriesShots();
 };
 

@@ -5,7 +5,7 @@
 /**
  * Tests of the target's picture: the automatic zooming, where the shown area of the target has to
  * be zoomed according to the furthest shot, so that the furthest shot is still fully visible,
- * as well as the scoring rings' numbers drawn onto the target.
+ * the scoring rings' numbers drawn onto the target, as well as the sighter mark.
  */
 class TargetTest : public QObject
 {
@@ -18,6 +18,8 @@ public:
 private slots:
     void test_ringNumbersAreDrawnInFourDirections();
     void test_ringNumbersAreDrawnInFourDirections_data();
+    void test_sighterMarkIsDrawnIntoTheUpperLeftCorner();
+    void test_sighterMarkIsWhiteOnTheBlackAreaOfTheTarget();
     void test_wholeTargetIsShownWithoutShots();
     void test_zoomingAccordingToTheFurthestShot();
     void test_zoomingAccordingToTheFurthestShot_data();
@@ -69,6 +71,31 @@ bool hasDarkInk(const QImage &picture, const QPoint &center, const int halfBox =
 }
 
 /**
+ * Tells if the whole box around the given point of the target's picture is white. Used for finding
+ * the sighter mark on the black area of a zoomed target, where the mark is the only white area
+ * big enough to fill the box, as the ring lines are much thinner than that.
+ */
+bool isAllWhite(const QImage &picture, const QPoint &center, const int halfBox)
+{
+    for(int x = center.x() - halfBox; x <= center.x() + halfBox; x++)
+        for(int y = center.y() - halfBox; y <= center.y() + halfBox; y++)
+            if(!picture.valid(x, y) || picture.pixelColor(x, y).lightness() < 200)
+                return false;
+
+    return true;
+}
+
+/**
+ * Half the size of the box sampled from a corner of the picture when looking for the sighter mark.
+ * Proportional to the picture, so that the box stays well inside the mark, whose legs are about
+ * a fifth of the picture's width, no matter how much the target is zoomed.
+ */
+int cornerHalfBox(const QImage &picture)
+{
+    return qMax(3, picture.width() / 60);
+}
+
+/**
  * The target's picture as it is shown, in the target image's own scale: the widget is resized to
  * the width of the shown area, so that the picture is not scaled at all and the distances can
  * be checked in the target image's px. Returns the centre point of the target as well.
@@ -117,6 +144,58 @@ void TargetTest::test_ringNumbersAreDrawnInFourDirections()
     QVERIFY(hasDarkInk(picture, center + QPoint(-distance, 0)));   // Left
     QVERIFY(hasDarkInk(picture, center + QPoint(0, distance)));   // Below
     QVERIFY(hasDarkInk(picture, center + QPoint(0, -distance)));   // Above
+}
+
+/**
+ * The sighting shots are marked with a black triangle in the upper left corner of the target, so
+ * that the spectators can tell them from the competition shots. Only that corner is marked and
+ * the mark is removed as soon as the competition begins.
+ */
+void TargetTest::test_sighterMarkIsDrawnIntoTheUpperLeftCorner()
+{
+    Target target(0, "", "", nullptr);
+    QPoint center;
+
+    QImage picture = shownPicture(target, center);
+    const int halfBox = cornerHalfBox(picture);
+    const QPoint insideMark(halfBox + 1, halfBox + 1);
+    QVERIFY(!target.sighterMarkVisible());
+    QVERIFY(!hasDarkInk(picture, insideMark, halfBox));   // Without the mark the corner is left as it is
+
+    target.setSighterMarkVisible(true);
+    picture = shownPicture(target, center);
+    QVERIFY(target.sighterMarkVisible());
+    QVERIFY(hasDarkInk(picture, insideMark, halfBox));   // The whole target is shown, so the mark is black
+
+    // The other corners are not marked
+    QVERIFY(!hasDarkInk(picture, QPoint(picture.width() - insideMark.x(), insideMark.y()), halfBox));
+    QVERIFY(!hasDarkInk(picture, QPoint(insideMark.x(), picture.height() - insideMark.y()), halfBox));
+
+    target.setSighterMarkVisible(false);
+    picture = shownPicture(target, center);
+    QVERIFY(!hasDarkInk(picture, insideMark, halfBox));   // The mark is removed once the competition begins
+}
+
+/**
+ * Once a shot has been fired, the target may be zoomed so much that only its black area is shown.
+ * The mark has to be drawn in white there, so that it stays visible.
+ */
+void TargetTest::test_sighterMarkIsWhiteOnTheBlackAreaOfTheTarget()
+{
+    Target target(0, "", "", nullptr);
+    target.setSighterMarkVisible(true);
+
+    Lask shot = shotAt(1.0f, -1.0f);   // Zooms the target well inside its black area
+    target.drawAShot(shot);
+
+    QPoint center;
+    const QImage picture = shownPicture(target, center);
+    const int halfBox = cornerHalfBox(picture);
+    const QPoint insideMark(halfBox + 1, halfBox + 1);
+
+    QVERIFY(isAllWhite(picture, insideMark, halfBox));
+    // The rest of the picture is left black, so the mark is the only white area of that size
+    QVERIFY(!isAllWhite(picture, QPoint(picture.width() - insideMark.x(), insideMark.y()), halfBox));
 }
 
 void TargetTest::test_wholeTargetIsShownWithoutShots()

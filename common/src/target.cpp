@@ -2,7 +2,7 @@
 
 namespace {
 
-// Style of the shot markers, matching the target view of ../Inband/Inband_scoring: a semi-transparent
+// Style of the shot markers, a semi-transparent
 // fill colour with a darker, more opaque edge, and the shot number shown in white at the centre.
 // The latest shot is red, all the other shots turn green once a newer shot has been drawn.
 const double kShotEdgeWidthRatio = 0.15;   // Edge width as a fraction of the marker's outer radius
@@ -19,6 +19,9 @@ const int kShotsPerSeries = 10;
 // for the biggest font used for the ring numbers.
 const int kRingNumberBoxSize = 40;
 
+// Length of the sighter mark's legs, as a fraction of the width of the shown area of the target.
+// The mark is drawn into the corner of the picture, so it scales together with the target.
+const double kSighterMarkSizeRatio = 0.2;
 }
 
 // old
@@ -32,6 +35,7 @@ Target::Target(QWidget* parent)
     m_active = true;
     m_farthestShot = 0;
     m_infoBoxesVisible = true;
+    m_sighterMarkVisible = false;
     m_zoomEnabled = true;
     //    lehetuubid << QString::fromLatin1("Air Rifle") << QString::fromLatin1("Air Pistol") << QString::fromLatin1("50m Rifle");
 }
@@ -44,6 +48,7 @@ Target::Target(int relv, QString n, QString r, QWidget* parent)
     m_active = true;
     m_farthestShot = 0;
     m_infoBoxesVisible = true;
+    m_sighterMarkVisible = false;
     m_zoomEnabled = true;
     setName(n);
     setTargetNo(r);
@@ -59,6 +64,11 @@ Target::~Target()
 bool Target::infoBoxesVisible()
 {
     return m_infoBoxesVisible;
+}
+
+bool Target::sighterMarkVisible()
+{
+    return m_sighterMarkVisible;
 }
 
 bool Target::zoomEnabled()
@@ -206,6 +216,52 @@ void Target::drawShotMarker(const QPointF &center, double fillRadius, double edg
     m_targetPainter->setPen(Qt::white);
     const QRectF numberBox(center.x() - fillRadius, center.y() - fillRadius, fillRadius * 2, fillRadius * 2);
     m_targetPainter->drawText(numberBox, Qt::AlignCenter, QString::number(shotNumber));
+}
+
+/**
+ * Tells if the area the sighter mark is about to cover is dark, so that the mark can be drawn in
+ * the colour that stands out on it. The brightness is averaged over a grid of points inside
+ * the triangle, so that a single ring line drawn across the corner does not decide the colour.
+ */
+bool Target::isDarkCorner(const QImage &picture, const double markSize)
+{
+    const int step = qMax(1, qRound(markSize / 16));   // About a hundred points inside the triangle
+    int lightnessSum = 0;
+    int points = 0;
+
+    for(int x = 0; x < markSize; x += step)
+        for(int y = 0; x + y < markSize; y += step)
+            if(picture.valid(x, y)){
+                lightnessSum += picture.pixelColor(x, y).lightness();
+                points++;
+            }
+
+    return points > 0 && lightnessSum / points < 128;
+}
+
+/**
+ * Draws the sighter mark into the upper left corner of the target's picture: a triangle with its
+ * right angle in the corner, telling the spectators that the shots on the target are sighting shots
+ * and do not count yet. The mark is drawn onto the already zoomed picture, so that it keeps its
+ * size and place in the corner no matter how much the target is zoomed. A zoomed target may show
+ * nothing but its black area, so the mark is drawn in white there and in black on the white area,
+ * to stay visible on both.
+ */
+void Target::drawSighterMark(QImage &picture)
+{
+    const double size = picture.width() * kSighterMarkSizeRatio;   // Length of the triangle's legs
+
+    QPainterPath triangle;
+    triangle.moveTo(0, 0);
+    triangle.lineTo(size, 0);
+    triangle.lineTo(0, size);
+    triangle.closeSubpath();
+
+    QPainter markPainter(&picture);
+    markPainter.setRenderHint(QPainter::Antialiasing);
+    markPainter.setPen(Qt::NoPen);
+    markPainter.setBrush(isDarkCorner(picture, size) ? Qt::white : Qt::black);
+    markPainter.drawPath(triangle);
 }
 
 void Target::drawTarget()
@@ -426,6 +482,21 @@ void Target::setInfoBoxesVisible(bool newInfoBoxesVisible)
         zoomAndUpdate();
 }
 
+/**
+ * Shows or hides the sighter mark, which tells the spectators that the shots on the target are
+ * sighting shots and do not count yet. As the mark is drawn onto the target itself, it is shown
+ * whether the target's own information boxes are used or not.
+ */
+void Target::setSighterMarkVisible(bool newSighterMarkVisible)
+{
+    if (newSighterMarkVisible == m_sighterMarkVisible)
+        return;   // No need to redraw the picture if the mark is already in the right state
+
+    m_sighterMarkVisible = newSighterMarkVisible;
+    if (m_targetImage != nullptr)  // If the target has not been initialized yet, it is drawn later anyway
+        zoomAndUpdate();
+}
+
 void Target::setName(QString n)
 {
     m_name = n;
@@ -485,6 +556,9 @@ void Target::zoomAndUpdate()
     if (y < 0) y = 0;
 
     QImage copy = m_targetImage->copy(x, y, w, h);
+
+    if (m_sighterMarkVisible)
+        drawSighterMark(copy);
 
     if (!m_infoBoxesVisible) {  // The information is shown around the target instead, for example in a duel match's view
         this->setPixmap(QPixmap::fromImage(copy.scaled(this->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation)));
