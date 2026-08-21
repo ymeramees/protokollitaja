@@ -1008,7 +1008,7 @@ Võimalik, et tegu on uuema programmi versiooni failiga.
         <translation>Punktid</translation>
     </message>
     <message>
-        <location filename="../leht.cpp" line="586"/>
+        <location filename="../leht.cpp" line="588"/>
         <source>This shooter already exists!</source>
         <translation>Selline laskur on juba olemas!</translation>
     </message>

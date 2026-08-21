@@ -370,16 +370,18 @@ void Leht::setFinalsData(QJsonObject finalsData)
 
 void Leht::setMaxTimeMs(const int newTime)
 {
-    if (newTime < 10000)
-        m_maxTime = 10000;
+    if (newTime < m_minTime)
+        m_maxTime = m_minTime;
+    else if (newTime < 2000)
+        m_maxTime = 2000;
     else
         m_maxTime = newTime;
 }
 
 void Leht::setMinTimeMs(const int newTime)
 {
-    if (newTime < 10000)
-        m_minTime = 10000;
+    if (newTime < 2000)
+        m_minTime = 2000;
     else
         m_minTime = newTime;
 }

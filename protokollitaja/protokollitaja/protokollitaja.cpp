@@ -2448,7 +2448,7 @@ void Protokollitaja::muudaTab(const QModelIndex &indeks)
         case 2: {
                 uusNimi = QString("%1").arg(QInputDialog::getInt(this, tr("Enter new minimum showing time"),
                                 tr("Time in seconds:"), seaded->ui.sakid->currentItem()->text(2).toInt(),
-                                1, seaded->ui.sakid->currentItem()->text(3).toInt(), 1, &ok));
+                                2, seaded->ui.sakid->currentItem()->text(3).toInt(), 1, &ok));
                 break;
         }
         case 3: {

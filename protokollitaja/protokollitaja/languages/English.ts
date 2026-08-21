@@ -980,7 +980,7 @@ It could be a newer version&apos;s file.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../leht.cpp" line="586"/>
+        <location filename="../leht.cpp" line="588"/>
         <source>This shooter already exists!</source>
         <translation></translation>
     </message>

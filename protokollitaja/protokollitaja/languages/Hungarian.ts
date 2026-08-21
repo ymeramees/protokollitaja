@@ -1082,7 +1082,7 @@ Lehet, hogy ez egy újabb programverzióval készült fájl.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../leht.cpp" line="586"/>
+        <location filename="../leht.cpp" line="588"/>
         <source>This shooter already exists!</source>
         <translation>Ez a versenyző már létezik!</translation>
     </message>
