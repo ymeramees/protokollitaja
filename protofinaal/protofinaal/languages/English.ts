@@ -27,8 +27,8 @@
     </message>
     <message>
         <location filename="../competitor.cpp" line="71"/>
-        <location filename="../competitor.cpp" line="430"/>
-        <location filename="../competitor.cpp" line="441"/>
+        <location filename="../competitor.cpp" line="432"/>
+        <location filename="../competitor.cpp" line="443"/>
         <source>Error!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -53,36 +53,36 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="430"/>
-        <location filename="../competitor.cpp" line="431"/>
-        <location filename="../competitor.cpp" line="441"/>
-        <location filename="../competitor.cpp" line="442"/>
+        <location filename="../competitor.cpp" line="432"/>
+        <location filename="../competitor.cpp" line="433"/>
+        <location filename="../competitor.cpp" line="443"/>
+        <location filename="../competitor.cpp" line="444"/>
         <source>More shots than possible! Shot was not recorded!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="453"/>
+        <location filename="../competitor.cpp" line="455"/>
         <source>Competitor ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="460"/>
+        <location filename="../competitor.cpp" line="462"/>
         <source>Competitor name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="461"/>
+        <location filename="../competitor.cpp" line="463"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="469"/>
-        <location filename="../competitor.cpp" line="470"/>
+        <location filename="../competitor.cpp" line="471"/>
+        <location filename="../competitor.cpp" line="472"/>
         <source>Result</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../competitor.cpp" line="477"/>
+        <location filename="../competitor.cpp" line="479"/>
         <source>Number by which Sius shots are offset</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1023,12 +1023,12 @@ Make sure you have write access to the folder.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spectatorwindow.cpp" line="158"/>
+        <location filename="../spectatorwindow.cpp" line="159"/>
         <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spectatorwindow.cpp" line="158"/>
+        <location filename="../spectatorwindow.cpp" line="159"/>
         <source>Spectator view template file not found!
 The program created a new one with default settings.</source>
         <translation type="unfinished"></translation>

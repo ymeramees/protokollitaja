@@ -6,6 +6,7 @@ qt_add_executable(SheetTest
     ../../protokollitaja/leht.cpp ../../protokollitaja/leht.h
     ../../protokollitaja/liikmetevalikkast.cpp ../../protokollitaja/liikmetevalikkast.h ../../protokollitaja/liikmetevalikkast.ui
     ../../protokollitaja/lisalaskudeaken.cpp ../../protokollitaja/lisalaskudeaken.h ../../protokollitaja/lisalaskudeaken.ui
+    ../../protokollitaja/spectatorpage.cpp ../../protokollitaja/spectatorpage.h
     ../../protokollitaja/voistkond.cpp ../../protokollitaja/voistkond.h
     tst_sheet.cpp
 )

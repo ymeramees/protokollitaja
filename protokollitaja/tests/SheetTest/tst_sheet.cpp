@@ -1,6 +1,9 @@
 #include <QtTest>
 
+#include <memory>
+
 #include "leht.h"
+#include "spectatorpage.h"
 //#include "protokollitaja.h"
 
 bool verbose = false;
@@ -21,6 +24,13 @@ private slots:
     void test_duelExportJson();
     void test_duelIsNotSorted();
     void test_duelFileRoundTrip();
+    void test_sheetsOnPageUsesFreeRows();
+    void test_sheetsOnPageRequiresSameLayout();
+    void test_sheetsOnPageStopsAtUnsuitableSheet();
+    void test_sheetsOnPageFirstSheetTooBig();
+    void test_combinedPageRows();
+    void test_combinedPageSkipsHiddenSheets();
+    void test_combinedPageFallsBackToSingleSheet();
 
 };
 
@@ -41,6 +51,37 @@ void setSeries(Laskur *competitor, const QStringList &series)
     for (int i = 0; i < series.count() && i < competitor->seeriad.count(); i++)
         competitor->seeriad[i]->setText(series[i]);
     competitor->liida();
+}
+
+SpectatorPage::SheetInfo combinableSheet(int competitorRows, int seriesCount = 4, int subtotalStep = 0)
+{
+    SpectatorPage::SheetInfo info;
+    info.combinable = true;
+    info.seriesCount = seriesCount;
+    info.subtotalStep = subtotalStep;
+    info.competitorRows = competitorRows;
+    return info;
+}
+
+struct SheetFactory {
+    Andmebaas dataBase;
+    LiikmeteValikKast membersBox;
+    bool writeAssistant = false;
+    int sorting = 0;
+
+    std::unique_ptr<Leht> sheet(const QString &name, int competitors)
+    {
+        auto sheet = std::make_unique<Leht>(&dataBase, 4, 0, 1, &writeAssistant, name, TargetTypes::AirRifle, QualificationEvents::AirRifle40, false, &sorting, nullptr, Leht::Individual, &membersBox, 1, 10);
+        for (int i = 0; i < competitors; i++)
+            sheet->uusLaskur(i + 1);
+        return sheet;
+    }
+};
+
+void setCompetitor(Laskur *competitor, const QString &lastName, const QStringList &series)
+{
+    competitor->perekNimi->setText(lastName);
+    setSeries(competitor, series);
 }
 
 }
@@ -301,6 +342,118 @@ void SheetTest::test_duelFileRoundTrip()
     QCOMPARE(loaded.duelPairs[1]->rightPoints(), sheet.duelPairs[1]->rightPoints());
     QCOMPARE(loaded.leftMatchPoints(), sheet.leftMatchPoints());
     QCOMPARE(loaded.rightMatchPoints(), sheet.rightMatchPoints());
+}
+
+void SheetTest::test_sheetsOnPageUsesFreeRows()
+{
+    // 9 rows for the first sheet, then 11 rows with the separator and heading, 5 rows are left
+    QCOMPARE(SpectatorPage::sheetsOnPage({combinableSheet(9), combinableSheet(9), combinableSheet(3)}, 25), (QList<int>{0, 1, 2}));
+    QCOMPARE(SpectatorPage::sheetsOnPage({combinableSheet(9), combinableSheet(9), combinableSheet(4)}, 25), (QList<int>{0, 1}));
+    QCOMPARE(SpectatorPage::sheetsOnPage({combinableSheet(9), combinableSheet(15)}, 25), (QList<int>{0}));
+    QCOMPARE(SpectatorPage::sheetsOnPage({combinableSheet(9), combinableSheet(14)}, 25), (QList<int>{0, 1}));
+    // The next sheet is not skipped for a smaller one after it, to keep the order of the sheets
+    QCOMPARE(SpectatorPage::sheetsOnPage({combinableSheet(9), combinableSheet(15), combinableSheet(1)}, 25), (QList<int>{0}));
+}
+
+void SheetTest::test_sheetsOnPageRequiresSameLayout()
+{
+    QCOMPARE(SpectatorPage::sheetsOnPage({combinableSheet(2, 4), combinableSheet(2, 6)}, 25), (QList<int>{0}));
+    QCOMPARE(SpectatorPage::sheetsOnPage({combinableSheet(2, 4, 0), combinableSheet(2, 4, 1)}, 25), (QList<int>{0}));
+    QCOMPARE(SpectatorPage::sheetsOnPage({combinableSheet(2, 4, 1), combinableSheet(2, 4, 1)}, 25), (QList<int>{0, 1}));
+}
+
+void SheetTest::test_sheetsOnPageStopsAtUnsuitableSheet()
+{
+    SpectatorPage::SheetInfo teamSheet;    // Not combinable
+    SpectatorPage::SheetInfo hiddenSheet = combinableSheet(2);
+    hiddenSheet.shown = false;
+
+    QCOMPARE(SpectatorPage::sheetsOnPage({combinableSheet(2), teamSheet, combinableSheet(2)}, 25), (QList<int>{0}));
+    QCOMPARE(SpectatorPage::sheetsOnPage({combinableSheet(2), hiddenSheet, combinableSheet(2)}, 25), (QList<int>{0, 2}));
+}
+
+void SheetTest::test_sheetsOnPageFirstSheetTooBig()
+{
+    // 25 competitors take the whole page
+    QCOMPARE(SpectatorPage::sheetsOnPage({combinableSheet(25), combinableSheet(0)}, 25), (QList<int>{0}));
+    QCOMPARE(SpectatorPage::sheetsOnPage({combinableSheet(30), combinableSheet(1)}, 25), (QList<int>{0}));
+
+    SpectatorPage::SheetInfo teamSheet;
+    QCOMPARE(SpectatorPage::sheetsOnPage({teamSheet, combinableSheet(1)}, 25), (QList<int>{0}));
+}
+
+void SheetTest::test_combinedPageRows()
+{
+    SheetFactory factory;
+    auto first = factory.sheet("AR Men", 3);
+    auto second = factory.sheet("AR Women", 3);
+
+    setCompetitor(first->laskurid[0], "Slow", {"90", "90", "90", "90"});
+    setCompetitor(first->laskurid[1], "Fast", {"99", "98", "99", "98"});
+    setCompetitor(first->laskurid[2], "Middle", {"95", "95", "95", "95"});
+    setCompetitor(second->laskurid[0], "Lower", {"92", "92", "92", "92"});
+    setCompetitor(second->laskurid[1], "Higher", {"97", "97", "97", "97"});
+    // The third competitor has no results, so is not shown
+
+    const auto page = SpectatorPage::combinedPage({first.get(), second.get()}, 25);
+
+    QCOMPARE(page.sheetIndexes, (QList<int>{0, 1}));
+    QCOMPARE(page.consumedSheets, 2);
+    QCOMPARE(page.competitorRows, 5);
+    QCOMPARE(page.maxTimeMs, first->maxTime());
+    QCOMPARE(page.rows.count(), 25);
+    QCOMPARE(page.title, QString("AR Men"));
+    QCOMPARE(page.headingRows, (QSet<int>{4}));
+
+    QCOMPARE(page.rows[0][0], QString("1."));
+    QCOMPARE(page.rows[0][2], QString("Fast"));
+    QCOMPARE(page.rows[0][7], QString("99"));
+    QCOMPARE(page.rows[0][14], first->laskurid[1]->getSumma());
+    QCOMPARE(page.rows[1][2], QString("Middle"));
+    QCOMPARE(page.rows[2][0], QString("3."));
+    QCOMPARE(page.rows[2][2], QString("Slow"));
+
+    QStringList blankRow;
+    blankRow.fill(" ", SpectatorPage::ColumnCount);
+    QCOMPARE(page.rows[3], blankRow);
+
+    QCOMPARE(page.rows[4][1], QString("AR Women"));
+    QCOMPARE(page.rows[5][0], QString("1."));
+    QCOMPARE(page.rows[5][2], QString("Higher"));
+    QCOMPARE(page.rows[6][0], QString("2."));
+    QCOMPARE(page.rows[6][2], QString("Lower"));
+    QCOMPARE(page.rows[7], blankRow);
+    QCOMPARE(page.rows[24], blankRow);
+}
+
+void SheetTest::test_combinedPageSkipsHiddenSheets()
+{
+    SheetFactory factory;
+    auto first = factory.sheet("First", 2);
+    auto hidden = factory.sheet("Hidden", 2);
+    auto third = factory.sheet("Third", 2);
+    hidden->naidata = false;
+
+    const auto page = SpectatorPage::combinedPage({first.get(), hidden.get(), third.get()}, 25);
+
+    QCOMPARE(page.sheetIndexes, (QList<int>{0, 2}));
+    QCOMPARE(page.consumedSheets, 3);
+    QCOMPARE(page.title, QString("First"));
+    QCOMPARE(page.rows[2][1], QString(" "));
+    QCOMPARE(page.rows[3][1], QString("Third"));
+}
+
+void SheetTest::test_combinedPageFallsBackToSingleSheet()
+{
+    SheetFactory factory;
+    auto first = factory.sheet("Small", 3);
+    auto big = factory.sheet("Big", 30);
+    auto last = factory.sheet("Last", 1);
+
+    QCOMPARE(SpectatorPage::combinedPage({first.get(), big.get(), last.get()}, 25).sheetIndexes, (QList<int>{0}));
+    QCOMPARE(SpectatorPage::combinedPage({big.get(), first.get()}, 25).sheetIndexes, (QList<int>{0}));
+    QCOMPARE(SpectatorPage::combinedPage({first.get()}, 25).sheetIndexes, (QList<int>{0}));
+    QVERIFY(SpectatorPage::combinedPage({big.get(), first.get()}, 25).rows.isEmpty());
 }
 
 QTEST_MAIN(SheetTest)

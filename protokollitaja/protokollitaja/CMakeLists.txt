@@ -37,6 +37,7 @@ qt_add_executable(Protokollitaja WIN32 MACOSX_BUNDLE
     seadedkast.cpp seadedkast.h seadedkast.ui
     sifriseade.cpp sifriseade.h sifriseade.ui
     simplekllfilerw.cpp simplekllfilerw.h
+    spectatorpage.cpp spectatorpage.h
     startlistwriter.cpp startlistwriter.h
     tabwidgetwithsettings.h
     tulemuseaken.cpp tulemuseaken.h

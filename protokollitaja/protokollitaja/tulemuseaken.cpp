@@ -170,6 +170,11 @@ void TulemuseAken::joonista()
         painter->drawText(800, 50, 700, 50, Qt::AlignRight, aegKoht);
         painter->drawText(75, 125, pealKiri);
         for(int i = 0; i < ridadeArv; i++){
+                if(headingRows.contains(i)){
+                        painter->setFont(kirjaFont);
+                        painter->drawText(75, 175 + i * 41, read[i][1]);
+                        continue;
+                }
                 painter->drawText(20, 175 + i * 41, read[i][0]);
                 painter->drawText(70, 175 + i * 41, read[i][1]);
                 painter->drawText(255, 175 + i * 41, read[i][2]);

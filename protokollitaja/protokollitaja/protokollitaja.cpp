@@ -1,5 +1,9 @@
 ﻿#include <QtGui>
 #include "protokollitaja.h"
+#include "spectatorpage.h"
+
+#include <algorithm>
+#include <iterator>
 //#include "libxl.h"
 //using namespace libxl;
 
@@ -2562,6 +2566,7 @@ void Protokollitaja::naitaTul()
     static bool naidatud = false;
     tulemus->ind = true;
     tulemus->showResults();   //Duel matches switch to their own view below
+    tulemus->headingRows.clear();
     if(tulemus->windowState() == Qt::WindowMaximized)
         tulemus->fullScreen();
         //tulemus->loplik = false;
@@ -2702,34 +2707,34 @@ void Protokollitaja::naitaTul()
                 naitaja->setInterval(100);  //Et kiiremini uut lehte näitaks, muidu jääb vahepeal paus väga pikaks
                 return;
             }
+            if(reaNr == 0){   //A new page starts, so the following sheets may fit on it as well
+                auto sheetAt = [this](int index){
+                    return dynamic_cast<Leht*>(dynamic_cast<QScrollArea*>(tabWidget->widget(index))->widget());
+                };
+                QList<Leht*> followingSheets;
+                std::generate_n(std::back_inserter(followingSheets), tabWidget->count() - leheNr, [&sheetAt, index = leheNr]() mutable {
+                    return sheetAt(index++);
+                });
+                const SpectatorPage::CombinedPage page = SpectatorPage::combinedPage(followingSheets, tulemus->getRidadeArv());
+                if(page.sheetIndexes.count() > 1){
+                    tulemus->voistluseNimi = m_competitionName;
+                    tulemus->aegKoht = timeAndPlaceString();
+                    tulemus->pealKiri = page.title;
+                    tulemus->read = page.rows;
+                    tulemus->headingRows = page.headingRows;
+                    tulemus->loplik = false;
+                    naitaja->setInterval(qMin(10000 + 2000 * page.competitorRows, page.maxTimeMs));
+                    tulemus->joonista();
+                    leheNr += page.consumedSheets;
+                    areaNr = 0;
+                    reaNr = 0;
+                    naidatud = false;
+                    return;
+                }
+            }
             if(verbose)
                 QTextStream(stdout) << "Protokollitaja::naitaTul(): individual" << Qt::endl;
-            bool kasOnRajaNr = false;
-            bool kasOnSummasid = false;
-            for(int i = 0; i < seeLeht->laskurid.count(); i++){
-                if(seeLeht->laskurid[i]->getSumma() != "0" && seeLeht->laskurid[i]->getSumma() != "0,0")
-                    kasOnSummasid = true;
-                if(!seeLeht->laskurid[i]->rajaNr->text().isEmpty())
-                    kasOnRajaNr = true;
-            }
-            if(kasOnRajaNr && !kasOnSummasid){   //Kui on raja numbreid ja ei ole veel tulemusi, siis sorteerida rajanumbrite järgi
-                if(verbose)
-                    QTextStream(stdout) << "Protokollitaja::naitaTul(): Sorting by target numbers" << Qt::endl;
-                seeLeht->sorteeri(3);
-            }else{
-                if(verbose)
-                    QTextStream(stdout) << "Protokollitaja::naitaTul(): Sorting by results" << Qt::endl;
-                seeLeht->sorteeri(0);
-            }
-            if(verbose)
-                QTextStream(stdout) << "Protokollitaja::naitaTul(): Sorted" << Qt::endl;
-
-            int tulemusegaArv = 0;
-            for(int i = 0; i < seeLeht->laskurid.count(); i++)
-                if(seeLeht->laskurid[i]->getSumma() != "0" && seeLeht->laskurid[i]->getSumma() != "0,0")
-                    tulemusegaArv++;
-            if(tulemusegaArv == 0)
-                tulemusegaArv = seeLeht->laskurid.count();
+            int tulemusegaArv = SpectatorPage::sortAndCount(seeLeht);
             if(tulemusegaArv > 25){
                 if(tulemusegaArv - reaNr > 25){
                     areaNr = reaNr;
@@ -2762,65 +2767,14 @@ void Protokollitaja::naitaTul()
                 for(int k = 0; k < 16; k++)
                     tulemus->read[j][k] = " ";
             if(seeLeht->seeriateArv <= 6 && seeLeht->vSummadeSamm < 2){ // Diciplines with 1 stage and 1 series stages
-                if(tulemusegaArv > 1 && (reaNr - areaNr) > 1){  //Kui on mitu laskurit lehel
-                    if(verbose)
-                        QTextStream(stdout) << "Protokollitaja::naitaTul(): tulemusegaArv > 1 && (reaNr - areaNr) > 1" << Qt::endl;
-                    for(int i = areaNr; i < reaNr; i++){
-                        tulemus->read[i-areaNr][0] = QString("%1.").arg(i + 1);
-                        tulemus->read[i-areaNr][1] = seeLeht->reasLaskurid[i]->eesNimi->text();
-                        tulemus->read[i-areaNr][2] = seeLeht->reasLaskurid[i]->perekNimi->text();
-                        tulemus->read[i-areaNr][3] = seeLeht->reasLaskurid[i]->sunniAasta->text();
-                        tulemus->read[i-areaNr][4] = seeLeht->reasLaskurid[i]->klubi->text();
-                        for(int j = 0; j < seeLeht->seeriateArv && j < 6; j++)
-                            tulemus->read[i-areaNr][7 + j] = seeLeht->reasLaskurid[i]->seeriad[j]->text();
-                        tulemus->read[i-areaNr][14] = seeLeht->reasLaskurid[i]->getSumma();
-                        if(seeLeht->reasLaskurid[i]->markus->text().isEmpty() || seeLeht->reasLaskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive)){
-                            tulemus->read[i-areaNr][15] = QString("%1").arg(float(seeLeht->reasLaskurid[i]->keskmLask) / 10000);
-                            tulemus->read[i-areaNr][15].replace('.', ',');
-                        }else tulemus->read[i-areaNr][15] = seeLeht->reasLaskurid[i]->markus->text();
-                        if(seeLeht->reasLaskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive))
-                            tulemus->read[i-areaNr][0] = "v.a.";
-                        else if(seeLeht->reasLaskurid[i]->markus->text().contains("DNF", Qt::CaseInsensitive))
-                            tulemus->read[i-areaNr][0] = "DNF";
-                        else if(seeLeht->reasLaskurid[i]->markus->text().contains("DSQ", Qt::CaseInsensitive))
-                            tulemus->read[i-areaNr][0] = "DSQ";
-                        if(tulemus->loplik)
-                            tulemus->read[i-areaNr][15] = "";
-                        if(!seeLeht->reasLaskurid[i]->finaal->text().isEmpty()){
-                            //Enam kogusummat koos finaaliga ei näidata:
-                            tulemus->read[i-areaNr][15] = seeLeht->reasLaskurid[i]->finaal->text()/* + " " + seeLeht->reasLaskurid[i]->koguSumma->text()*/;
-                            tulemus->loplik = true;
-                        }
+                std::transform(
+                    seeLeht->reasLaskurid.begin() + areaNr,
+                    seeLeht->reasLaskurid.begin() + reaNr,
+                    tulemus->read.begin(),
+                    [&, place = areaNr](Laskur *competitor) mutable {
+                        return SpectatorPage::resultRow(competitor, QString("%1.").arg(++place), seeLeht->seeriateArv, tulemus->loplik);
                     }
-                }else{  //Kui on ainult üks laskur lehel
-                    if(verbose)
-                        QTextStream(stdout) << "Protokollitaja::naitaTul(): One shooter on the page" << Qt::endl;
-                    tulemus->read[0][0] = QString("%1.").arg(areaNr + 1);
-                    tulemus->read[0][1] = seeLeht->reasLaskurid[areaNr]->eesNimi->text();
-                    tulemus->read[0][2] = seeLeht->reasLaskurid[areaNr]->perekNimi->text();
-                    tulemus->read[0][3] = seeLeht->reasLaskurid[areaNr]->sunniAasta->text();
-                    tulemus->read[0][4] = seeLeht->reasLaskurid[areaNr]->klubi->text();
-                    for(int j = 0; j < seeLeht->seeriateArv && j < 6; j++)
-                        tulemus->read[0][7 + j] = seeLeht->reasLaskurid[areaNr]->seeriad[j]->text();
-                    tulemus->read[0][14] = seeLeht->reasLaskurid[areaNr]->getSumma();
-                    if(seeLeht->reasLaskurid[areaNr]->markus->text().isEmpty() || seeLeht->reasLaskurid[areaNr]->markus->text().contains("V.A", Qt::CaseInsensitive)){
-                        tulemus->read[0][15] = QString("%1").arg(float(seeLeht->reasLaskurid[areaNr]->keskmLask)	/ 10000);
-                        tulemus->read[0][15].replace('.', ',');
-                    }else tulemus->read[0][15] = seeLeht->laskurid[areaNr]->markus->text();
-                    if(seeLeht->reasLaskurid[areaNr]->markus->text().contains("V.A", Qt::CaseInsensitive))
-                        tulemus->read[0][0] = "v.a.";
-                    else if(seeLeht->reasLaskurid[areaNr]->markus->text().contains("DNF", Qt::CaseInsensitive))
-                        tulemus->read[0][0] = "DNF";
-                    else if(seeLeht->reasLaskurid[areaNr]->markus->text().contains("DSQ", Qt::CaseInsensitive))
-                        tulemus->read[0][0] = "DSQ";
-                    if(tulemus->loplik)
-                        tulemus->read[0][15] = "";
-                    if(!seeLeht->reasLaskurid[areaNr]->finaal->text().isEmpty()){
-                        //Enam kogusummat koos finaaliga ei näidata:
-                        tulemus->read[0][15] = seeLeht->reasLaskurid[areaNr]->finaal->text()/* + " " + seeLeht->reasLaskurid[areaNr]->koguSumma->text()*/;
-                        tulemus->loplik = true;
-                    }
-                }
+                );
             }else{	//kui on tegu vahesummadega, mis muidu ekraanile ära ei mahu
                 if(seeLeht->vSummadeSamm == 0){
                     QMessageBox::critical(this, tr("Error!"), tr("It is not possible to show an event with so big number of series, but without subtotals."), QMessageBox::Ok);
@@ -2885,25 +2839,7 @@ void Protokollitaja::naitaTul()
                                 }
                             }
                         }
-                        tulemus->read[i-areaNr][14] = seeLeht->reasLaskurid[i]->getSumma();
-                        if(seeLeht->reasLaskurid[i]->markus->text().isEmpty() || seeLeht->reasLaskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive)){
-                            tulemus->read[i-areaNr][15] = QString("%1").arg(float(seeLeht->reasLaskurid[i]->keskmLask) / 10000);
-                            tulemus->read[i-areaNr][15].replace('.', ',');
-                        }else tulemus->read[i-areaNr][15] = seeLeht->reasLaskurid[i]->markus->text();
-                        if(seeLeht->reasLaskurid[i]->markus->text().contains("V.A", Qt::CaseInsensitive))
-                            tulemus->read[i-areaNr][0] = "v.a.";
-                        else if(seeLeht->reasLaskurid[i]->markus->text().contains("DNF", Qt::CaseInsensitive))
-                            tulemus->read[i-areaNr][0] = "DNF";
-                        else if(seeLeht->reasLaskurid[i]->markus->text().contains("DSQ", Qt::CaseInsensitive))
-                            tulemus->read[i-areaNr][0] = "DSQ";
-                        if(tulemus->loplik)
-                            tulemus->read[i-areaNr][15] = "";
-                        if(!seeLeht->reasLaskurid[i]->finaal->text().isEmpty()){
-                            //Enam kogusummat koos finaaliga ei näidata:
-                            tulemus->read[i-areaNr][15] = seeLeht->reasLaskurid[i]->finaal->text() /*+ " " +
-                                    seeLeht->reasLaskurid[i]->koguSumma->text()*/;
-                            tulemus->loplik = true;
-                        }
+                        SpectatorPage::fillResult(tulemus->read[i-areaNr], seeLeht->reasLaskurid[i], tulemus->loplik);
 
                     }
                 }else{
@@ -2946,24 +2882,7 @@ void Protokollitaja::naitaTul()
                             }
                         }
                     }
-                    tulemus->read[0][14] = seeLeht->reasLaskurid[areaNr]->getSumma();
-                    if(seeLeht->reasLaskurid[areaNr]->markus->text().isEmpty() || seeLeht->reasLaskurid[areaNr]->markus->text().contains("V.A", Qt::CaseInsensitive)){
-                        tulemus->read[0][15] = QString("%1").arg(float(seeLeht->reasLaskurid[areaNr]->keskmLask)	/ 10000);
-                        tulemus->read[0][15].replace('.', ',');
-                    }else tulemus->read[0][15] = seeLeht->laskurid[areaNr]->markus->text();
-                    if(seeLeht->reasLaskurid[areaNr]->markus->text().contains("V.A", Qt::CaseInsensitive))
-                        tulemus->read[0][0] = "v.a.";
-                    else if(seeLeht->reasLaskurid[areaNr]->markus->text().contains("DNF", Qt::CaseInsensitive))
-                        tulemus->read[0][0] = "DNF";
-                    else if(seeLeht->reasLaskurid[areaNr]->markus->text().contains("DSQ", Qt::CaseInsensitive))
-                        tulemus->read[0][0] = "DSQ";
-                    if(tulemus->loplik)
-                        tulemus->read[0][15] = "";
-                    if(!seeLeht->reasLaskurid[areaNr]->finaal->text().isEmpty()){
-                        //Enam kogusummat koos finaaliga ei näidata:
-                        tulemus->read[0][15] = seeLeht->reasLaskurid[areaNr]->finaal->text()/* + " " + seeLeht->reasLaskurid[areaNr]->koguSumma->text()*/;
-                        tulemus->loplik = true;
-                    }
+                    SpectatorPage::fillResult(tulemus->read[0], seeLeht->reasLaskurid[areaNr], tulemus->loplik);
                 }
             }
             tulemus->joonista();
@@ -4842,6 +4761,7 @@ void Protokollitaja::uus()
         for(int j = 0; j < tulemus->getRidadeArv(); j++)
                 for(int k = 0; k < 12; k++)
                         tulemus->read[j][k] = " ";
+        tulemus->headingRows.clear();
         tulemus->joonista();
         valik->ui.indBox->setCurrentIndex(0);
         if(aValik->exec() == QDialog::Accepted){

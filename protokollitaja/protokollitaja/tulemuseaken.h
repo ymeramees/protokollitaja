@@ -19,6 +19,7 @@
 #include <QtGui/QSpacerItem>
 #include <QtGui/QMenu>
 #endif
+#include <QSet>
 #include <QShortcut>
 #include <QFontDialog>
 #include <QtCore/QVariant>
@@ -54,6 +55,7 @@ public:
 	QString aegKoht;
 	QString pealKiri;
 	QList<QStringList> read;
+	QSet<int> headingRows;   //Rows of the read table, which are shown as event headings
 	QLocale *est;
 	QMenu *popup;
 	QTimer *timer;
