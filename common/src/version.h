@@ -2,10 +2,10 @@
 #define VERSION_H
 
 #define VER_FILEVERSION             0,9,4,0
-#define VER_FILEVERSION_STR         "0.9.4-test3\0"
+#define VER_FILEVERSION_STR         "0.9.4\0"
 
 #define VER_PRODUCTVERSION          0,9,4,0
-#define VER_PRODUCTVERSION_STR      "0.9.4-test3\0"
+#define VER_PRODUCTVERSION_STR      "0.9.4\0"
 
 #define VER_COMPANYNAME_STR         "Ymeramees"
 #define VER_LEGALCOPYRIGHT_STR      "Copyright © 2026 Ymeramees"
