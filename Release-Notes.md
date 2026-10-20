@@ -6,6 +6,7 @@
 - Show targets and shots in Protofinaal and in duel matches
 - Use English as a base language instead of Estonian
 - Range Control to send Inband broadcast to all available networks
+- Show multiple short events to same spectator screen view
 - Improve reliability
 
 ### 0.9.3
