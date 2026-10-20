@@ -138,7 +138,7 @@ artifacts:
 deploy:
 - provider: GitHub
   auth_token:
-    secure: P/zUL3ViagnDmZ3ZTc3mOmXgb88FOvmq1vr2xxOIr0zTO335YaWPkNEVu8w2hDse
+    secure: 0MDs2jLDuCzBGZoU6az3OaT/+cFaODYLlArYU42ruN6QLo7mrCzP5re24C1HUVuYAs0o5zmkz/nzZkrvBgLtgrOd69IRhgwn/dKN+8pahBkQZqgnut14+yAOGE1siKpM
   artifact: Protokollitaja
   draft: true
   force_update: true
